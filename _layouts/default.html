@@ -3,16 +3,36 @@
 <html>
 
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-      <link rel="stylesheet" href="/files/ag.css" type="text/css" />
-	<link rel="shortcut icon" href="/files/fp.ico" />
-	  <title>Funktionale Programmierung - {{ page.title }}</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css" type="text/css" />
+  <link rel="shortcut icon" href="/img/fp.ico" />
+  <title>Funktionale Programmierung - {{ page.title }}</title>
 </head>
 
 <body>
-<div id="main">
-		<h1>{{ page.title }}</h1>
-		{{ content }}
-</div>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div id="navbar" class="span12">
+	{% include navbar.html %}
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div id="main" class="span9">
+	{{ content }}
+      </div>
+      <div id="sidebar" class="span3">
+	<aside>
+	  {% include sidebar.html %}
+	</aside>
+      </div>
+    </div>
+  </div>
+
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
 </body>
+
 </html>

@@ -1,9 +1,9 @@
 ---
 layout: default
-title: Blog Archive
+title: Blog Archiv
 ---
-<h2>Archives</h2>
-<ul>
+<h1>Archiv</h1>
+<div>
   {% for post in site.posts %}
 
     {% unless post.next %}
@@ -16,7 +16,9 @@ title: Blog Archive
       {% endif %}
     {% endunless %}
 
-    <li>{{ post.date | date:"%b" }} <a href="{{ post.url }}">{{ post.title }}</a></li>
+    <ul>
+    <li><span class="post-date">{{ post.date | date:"%Y-%m-%d" }}</span>&nbsp;-&nbsp;<a href="{{ post.url }}">{{ post.title }}</a></li>
+    </ul>
   {% endfor %}
-</ul>
+</div>
 

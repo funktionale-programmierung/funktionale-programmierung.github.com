@@ -1,9 +1,12 @@
-<aside>
-<h2>Kürzlich gepostet</h2>
-<ul class='posts'>
-	{% for post in site.posts limit:4 %}
-	<li><h3><a href="{{ post.url }}">{{ post.title }}</a></h3></li>
-	{% endfor %}
-	<li><h3><a href="/">Der gesamte Rest...</a></h3></li>
-</ul>
-</aside>
+<div id="recent-posts">
+  <h2>Kürzlich gepostet</h2>
+  <ul>
+    {% for post in site.posts limit:4 %}
+    <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
+    <!--li><a href="/">Der gesamte Rest...</a></li-->
+  </ul>
+  <h2>Kürzlich kommentiert</h2>
+  <h2>Archive</h2>
+
+</div>

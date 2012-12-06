@@ -1,0 +1,61 @@
+body {
+  font-family: georgia, serif;
+  margin-left: 0;
+}
+
+p,h1,h2,h3,h4,h5,h6,ul,ol,li,div,td,th,address,blockquote,nobr,b,i
+     { font-family: 'DejaVu Serif', georgia, serif; }
+
+p,ul,ol,li,div,td,th,address,nobr,b,i { font-size:16px; }
+
+h1 { font-size:1.5em; color:#000000; font-weight:bold; }
+
+h2 { font-size:1.1875em; color:#640201; font-weight:normal; }
+
+h3 { font-size:1.1875em; color:#000000; font-weight:bold; }
+
+h4 { font-size:1em; color:#94152a; font-weight:bold; }
+
+h5 { font-size:1em; color:#000000; font-weight:bold; }
+
+h6 { font-size:0.7em; color:#000000; font-weight:normal; }
+
+hr { color:#94152a; }
+
+
+a:link { color:#94152a; text-decoration:none; }
+a:hover { color:#333333; text-decoration:none; }
+a:visited { color:#7f7f7f; text-decoration:none; }
+a:active { color:#000000; text-decoration:none; }
+
+img { border: 0 }
+
+#navbar {
+}
+
+#main {
+}
+
+#sidebar {
+}
+
+#recent-posts ul {
+  font-size: 1.5em;
+}
+
+.post {
+
+}
+
+.post-tags {
+  margin-top: 3em;
+}
+
+.post-content > h1 {
+    font-size: 1.3em;
+}
+
+hr.post-divider {
+    border-top: 2px solid #EEE;
+    border-bottom: 1px solid white;
+}
