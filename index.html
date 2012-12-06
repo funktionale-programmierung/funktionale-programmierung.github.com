@@ -1,0 +1,37 @@
+---
+layout: default
+title: Blog Index
+---
+
+<a href="tags-archive.html">Tags Archive</a>
+
+<a href="archive.html">Archive</a>
+
+<!-- http://spparker.com/posts/2011-04-26-keeping-jekyll-classy -->
+
+<h1>Paginated</h1>
+
+{% for post in paginator.posts %}
+  <section class="post">
+  <h2><a href="{{ post.url }}">{{ post.title }} </a></h2>
+    <section class="post-date">{{ post.date | date: "%A, %B %d, %Y") }}</section>
+      {{ post.content | truncate: 450 }}
+  </section>
+  <section class="divider"></section>
+{% endfor %}
+
+<section id="paging">
+  {% if paginator.previous_page %}
+    {% if paginator.previous_page == 1 %}
+      <a href="/">&lArr; Previous Page</a>
+    {% else %}
+      <a href="/page">&lArr; Previous Page</a>
+    {% endif %}
+  {% endif %}
+
+  Page {{ paginator.page }} of {{ paginator.total_pages }}
+
+  {% if paginator.next_page %}
+    <a href="/page">Next Page &rArr;</a>
+  {% endif %}
+</section>
