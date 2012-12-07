@@ -5,12 +5,10 @@ title: Blog Index
 
 <!-- http://spparker.com/posts/2011-04-26-keeping-jekyll-classy -->
 
-<h1>Blog Funktionale Programmierung</h1>
-
 {% for post in paginator.posts %}
 <div class="post">
-  <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-  <div class="post-date">{{ post.date | date: "%A, %B %d, %Y" }}</div>
+  <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
+  <div class="post-date">{{ post.date | date: "%Y-%m-%d" }}</div>
   <div class="post-content">
     {{ post.content | replace:'more start -->','' | replace:'<!-- more end -->','-->' }}
     <!-- TODO: Nur wenn es noch mehr gibt... nur wie? -->
