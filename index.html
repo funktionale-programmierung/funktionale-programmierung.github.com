@@ -18,18 +18,41 @@ title: Blog Index
 <hr class="post-divider" />
 {% endfor %}
 
-<section id="paging">
-  {% if paginator.previous_page %}
-    {% if paginator.previous_page == 1 %}
-      <a href="/">&lArr; Previous Page</a>
+<div id="paging" class="pagination" style="text-align: center">
+  <ul>
+    {% if paginator.previous_page %}
+      <li>
+      {% if paginator.previous_page == 1 %}
+        <a href="/">&larr; Zurück</a>
+      {% else %}
+        <a href="/page{{ paginator.previous_page }}">&larr; Zurück</a>
+      {% endif %}
+      </li>
     {% else %}
-      <a href="/page">&lArr; Previous Page</a>
+      <li class="disabled"><span>&larr; Zurück</span></li>
     {% endif %}
-  {% endif %}
 
-  Page {{ paginator.page }} of {{ paginator.total_pages }}
+    <!-- nur eine Anzeige der aktuellen Seite: <li><span>Seite {{ paginator.page }} von {{ paginator.total_pages }}</span></li> -->
+    <!-- oder alle als Zahlen -->
+    {% if paginator.page == 1 %}
+    <li class="active"><a href="/">1</a></li>
+    {% else %}
+    <li><a href="/">1</a></li>
+    {% endif %}
 
-  {% if paginator.next_page %}
-    <a href="/page">Next Page &rArr;</a>
-  {% endif %}
-</section>
+    {% for i in (2..paginator.total_pages) %}
+      {% if paginator.page == i %}
+      <li class="active"><a href="/page{{ i }}">{{ i }}</a></li>
+      {% else %}
+      <li><a href="/page{{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if paginator.next_page %}
+      <li><a href="/page{{ paginator.next_page }}">Weiter &rarr;</a><li>
+    {% else %}
+      <li class="disabled"><span>Weiter &rarr;</span></li>
+    {% endif %}
+ </ul>
+</div>
+
