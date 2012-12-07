@@ -1,12 +1,16 @@
-<div id="recent-posts">
-  <h2>Kürzlich gepostet</h2>
-  <ul>
-    {% for post in site.posts limit:4 %}
-    <li><a href="{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
-    <!--li><a href="/">Der gesamte Rest...</a></li-->
-  </ul>
-  <h2>Kürzlich kommentiert</h2>
-  <h2>Archive</h2>
+<h2>Kürzlich gepostet</h2>
+<ul>
+  {% for post in site.posts limit:4 %}
+  <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+  <!--li><a href="/">Der gesamte Rest...</a></li-->
+</ul>
 
-</div>
+<h2>Betreiber</h2>
+<div class="logo"><a href="http://www.active-group.de/">
+<!--img src="/img/active-group-logo.png" /-->
+Active-Group GmbH
+</a></div>
+<div class="logo"><a href="http://www.factisresearch.com">Factis Research GmbH</a></div>
+
+<div>&nbsp;</div>

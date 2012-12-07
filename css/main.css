@@ -8,9 +8,18 @@ p,h1,h2,h3,h4,h5,h6,ul,ol,li,div,td,th,address,blockquote,nobr,b,i
 
 p,ul,ol,li,div,td,th,address,nobr,b,i { font-size:16px; }
 
-h1 { font-size:1.5em; color:#000000; font-weight:bold; }
+h1 {
+    font-size:1.5em;
+    color: #3e606f;
+    font-weight:bold;
+}
 
-h2 { font-size:1.1875em; color:#640201; font-weight:normal; }
+h2 {
+    font-size:1.1875em;
+    /* ag weinrot color:#640201; hell rot: #994844 */
+    color: #3e606f;
+    font-weight:normal;
+}
 
 h3 { font-size:1.1875em; color:#000000; font-weight:bold; }
 
@@ -20,23 +29,36 @@ h5 { font-size:1em; color:#000000; font-weight:bold; }
 
 h6 { font-size:0.7em; color:#000000; font-weight:normal; }
 
-hr { color:#94152a; }
-
-
-a:link { color:#94152a; text-decoration:none; }
-a:hover { color:#333333; text-decoration:none; }
-a:visited { color:#7f7f7f; text-decoration:none; }
-a:active { color:#000000; text-decoration:none; }
+a { text-decoration: none; }
+a:hover, .navbar-fp .nav > li > a:hover {
+    color:#994844;
+}
 
 img { border: 0 }
 
-#navbar {
+.navbar-fp .navbar-inner {
+    border-top: 6px solid #994844;
+    /* factis mint grün: #91aa9d, factis hellrot #ff5400 */
+    background: #193441;
+}
+.navbar-fp .nav > li > a {
+    text-shadow: 0 0 0;
+    color: #f2f2f2;
 }
 
 #main {
+    padding-top: 30px;
+    padding-left: 10px;
 }
 
 #sidebar {
+    /*border: 1px solid #E3E5E4;*/
+    border-top: 0;
+    /*background: #F3F4EE;
+    line-height: 160%;
+    */
+    margin-bottom: 20px;
+    padding-left: 20px;
 }
 
 #recent-posts ul {
@@ -47,12 +69,27 @@ img { border: 0 }
 
 }
 
+.post-title {
+    border-left: 4px solid #994844;
+    padding-left: 10px;
+    font-size: 1.5em;
+    line-height: 1.55em;
+}
+
 .post-tags {
-  margin-top: 3em;
 }
 
 .post-content > h1 {
     font-size: 1.3em;
+}
+
+.hn iframe {
+    border: none;
+    position: relative;
+    top: -8px;
+}
+.fb div {
+    padding-right: 30px;
 }
 
 hr.post-divider {
