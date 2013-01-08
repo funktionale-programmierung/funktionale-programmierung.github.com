@@ -1,0 +1,26 @@
+---
+layout: default
+title: Suchergebnisse
+---
+
+<h1>Suchergebnisse</h1>
+
+<div id="search_results"></div>
+
+<!-- Noch eine alternative: http://joevennix.com/2011/05/25/How-I-Implement-Static-Site-Search.html -->
+
+<!-- force reindex (add to site generation?):
+http://tapirgo.com/api/1/ping.json?token=50ec3c5d3f61b015ee000370
+-->
+
+<script src="/js/jquery-tapir.js"></script>
+<script>
+  $('#search_results').tapir({
+  'token': '50ec3c5d3f61b015ee000370',
+  'complete': function () {
+    if ($('#search_results .result').length == 0) {
+      $('#search_results').append('<div class="noresults"><h3>Keine passenden Einträge gefunden</h3></div>');
+    }
+  }
+  });
+</script>
