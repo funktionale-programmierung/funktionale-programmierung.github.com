@@ -112,19 +112,24 @@ img { border: 0 }
 	margin: 0 auto;
 }
 
+.navbar-fp .nav > li {
+}
+
 .navbar-fp .nav > li > a {
     //text-shadow: 0 0 0;
     color: #f2f2f2;
     text-shadow: rgb(0,0,0) 1px 1px;
+    line-height: 130%;
+    padding-bottom: 0px;
 }
 
 #navbar #logo {
 	position: absolute;
-	top: 26px;
+	top: 24px;
 }
 
 .navbar .brand {
-    font-size: 24px;
+    font-size: 14pt;
 }
 
 .navbar-search {
