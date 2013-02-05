@@ -1,5 +1,6 @@
 permalink: date
 paginate: 3
+pygments: true
 
 # Settings for sharing 
 # Sharing is for things like tweet, plusone, hn upvotes, like, linkedin
