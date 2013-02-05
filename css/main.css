@@ -1,12 +1,28 @@
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(http://themes.googleusercontent.com/static/fonts/sourcesanspro/v5/ODelI1aHBYDBqgeIAH2zlNHq-FFgoDNV3GTKpHwuvtI.woff) format('woff');
+}
+
 body {
-  font-family:  'Minion Pro', 'DejaVu Serif', georgia, serif, helvetica, arial;
+  font-family: 'Source Sans Pro', Helvetica, arial, sans-serif;
   margin-left: 0;
 }
 
 p,h1,h2,h3,h4,h5,h6,ul,ol,li,div,td,th,address,blockquote,nobr,b,i
-     { font-family: 'DejaVu Serif', georgia, serif, helvetica, arial; }
+     { font-family: 'Source Sans Pro', Helvetica, arial, sans-serif; }
 
-p,ul,ol,li,div,td,th,address,nobr,b,i { font-size:16px; }
+p,ul,ol,li,div,td,th,address,nobr,b,i { font-size:14pt; }
+
+p {
+    margin-bottom: 0;
+}
+
+p + p {
+    text-indent: 2em;
+    margin-top: 0;
+}
 
 h1 {
     font-size:1.5em;
@@ -38,6 +54,7 @@ a {
 }
 a:hover {
     color: rgb(110,45,42);
+    text-decoration: none;
 }
 
 img { border: 0 }
@@ -45,21 +62,18 @@ img { border: 0 }
 #navbar {
 	padding: 50px 0;
 	margin-bottom: 20px;
-	background: url(/img/header-bg.png) center 3px repeat-x #dfdfdf;
+	background: url(/img/header-bg.png) center 2px #dfdfdf;
 	
 	box-shadow: 0 1px 2px rgba(0,0,0,.5);
     -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.5);
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.5);
 }
-.navbar-fp .navbar-inner {
-	height: 38px;
+.navbar-fp {
 	border-top: 1px solid rgb(32,45,61);
 	border-bottom: 5px solid rgb(110,45,42);
-    padding-top: 5px;
-    box-shadow: 0 1px 0 rgb(74,35,34);
-    -webkit-box-shadow: 0 1px 0 rgb(74,35,34);
-    -moz-box-shadow: 0 1px 0 rgb(74,35,34);
-
+    padding-top: 4px;
+    margin-bottom: 0;
+	
 	background: -moz-linear-gradient( /* Verlauftyp */
         top, /* Startpunkt */
         rgb(33,80,105), /* Startfarbe */
@@ -76,10 +90,28 @@ img { border: 0 }
     background: -ms-linear-gradient(top, rgb(33,80,105), rgb(32,56,79));
 	/* aktueller W3C working draft */
 	background: linear-gradient(top, rgb(33,80,105), rgb(32,56,79));
+	
+	box-shadow: 0 1px 0 rgb(74,35,34);
+    -webkit-box-shadow: 0 1px 0 rgb(74,35,34);
+    -moz-box-shadow: 0 1px 0 rgb(74,35,34);
+
+}
+.navbar-fp .navbar-inner {
+	background: transparent;
+	border: 0;	
 
     /* factis mint grün: #91aa9d, factis hellrot #ff5400 */
     //background: #193441;
 }
+.navbar-fp .navbar-inner .nav-pills {
+	height: auto;
+    left: 65px;
+}
+.container-fluid .row-fluid, .navbar-fp .navbar-inner {
+	max-width: 1024px;
+	margin: 0 auto;
+}
+
 .navbar-fp .nav > li > a {
     //text-shadow: 0 0 0;
     color: #f2f2f2;
@@ -87,9 +119,16 @@ img { border: 0 }
 }
 
 #navbar #logo {
-	position: relative;
-	margin: -19px 0;
-	top: -5px;
+	position: absolute;
+	top: 26px;
+}
+
+.navbar .brand {
+    font-size: 24px;
+}
+
+.navbar-search {
+	margin-bottom: 5px;
 }
 
 .navbar-search .search-query {
@@ -115,10 +154,7 @@ img { border: 0 }
     /*background: #F3F4EE;
     line-height: 160%;
     */
-    margin-bottom: 20px;
-    margin-top: 4px;
-    padding-left: 20px;
-    float: left;
+    overflow: hidden;
     
     border-radius: 0;
     background-color: #ffffff;
@@ -127,7 +163,9 @@ img { border: 0 }
     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.5);
 }
 #sidebar h2 {
-	color: #000;
+	color: #222;
+	line-height: 1em;
+	margin: 16px 0;
 }
 
 #recent-posts ul {
@@ -137,17 +175,28 @@ img { border: 0 }
 .post {
 	background: url(/img/post-bg.png) no-repeat;
 	padding: 12px 25px;
+	color: #444;
+}
+
+.post-content {
+ line-height: 1.3em;
+}
+.post-author {
+	margin-bottom: 0.5em
 }
 
 .post-title {
     //border-left: 4px solid #994844;
     //padding-left: 10px;
-    font-weight: normal;
-    font-size: 1.5em;
-    line-height: 1.55em;
+    font-weight: bold;
+    font-size: 1.4em;
+    line-height: 1.2em;
 }
 .label {
 	background-color: rgb(33,80,108);
+	font-size: 0.8em;
+	margin-top: 1em;
+	padding: 6px;
 }
 
 .post-tags {
@@ -169,4 +218,8 @@ img { border: 0 }
 hr.post-divider {
     border-top: 2px solid #EEE;
     border-bottom: 1px solid white;
+}
+
+#paging li, .pager li {
+	font-size: 0.8em;
 }
