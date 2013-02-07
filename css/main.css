@@ -13,15 +13,15 @@ body {
 p,h1,h2,h3,h4,h5,h6,ul,ol,li,div,td,th,address,blockquote,nobr,b,i
      { font-family: 'Source Sans Pro', Helvetica, arial, sans-serif; }
 
-p,ul,ol,li,div,td,th,address,nobr,b,i { font-size:14pt; }
+p,ul,ol,li,div,td,th,address,nobr,b,i { font-size:15px; }
 
 p {
-    margin-bottom: 0;
+    margin-bottom: 1.5ex;
 }
 
 p + p {
-    text-indent: 2em;
-    margin-top: 0;
+    text-indent: 0;
+    margin-top: 1.5ex;
 }
 
 h1 {
@@ -119,6 +119,7 @@ img { border: 0 }
     //text-shadow: 0 0 0;
     color: #f2f2f2;
     text-shadow: rgb(0,0,0) 1px 1px;
+    font-size: 17px;
     line-height: 130%;
     padding-bottom: 0px;
 }
@@ -129,7 +130,7 @@ img { border: 0 }
 }
 
 .navbar .brand {
-    font-size: 14pt;
+    font-size: 14px;
 }
 
 .navbar-search {
