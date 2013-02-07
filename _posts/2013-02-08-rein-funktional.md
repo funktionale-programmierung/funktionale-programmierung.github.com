@@ -3,7 +3,7 @@ layout: post
 description: Rein funktionale Programmierung
 title: "Eine kleine Einführung in die rein funktionale Programmierung"
 author: <a href="https://www.active-group.de/unternehmen/sperber.html">Michael Sperber</a>
-tags: rein funktional, Racket
+tags: [Einführung, Rein funktional, Racket]
 ---
 
 In Verbindung mit der funktionalen Programmierung taucht oft der
