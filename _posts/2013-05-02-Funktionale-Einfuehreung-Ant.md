@@ -483,6 +483,15 @@ def globMapper(fromPat : String, toPat : String) = {
 
 ## Zusammenfassung
 
+Der Artikel hat an einem konkreten Beispiel aus der Praxis gezeigt wie
+man ein Java Programm einfacher in der funktionalen Sprache Scala
+programmieren kann, und dabei einige Grundelemente der funktionale
+Programmierung erklärt, nämlich:
 
+- Wenige Typen, viele Operationen
+- Funktionen als Parameter
+- Closures
+- Iteration über Listen mit map und fold
+- Mehrere Rückgabewerte durch Tupel
 
 <!-- more end -->
