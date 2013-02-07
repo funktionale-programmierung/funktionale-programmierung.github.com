@@ -69,13 +69,13 @@ einführt, wenn man ihn wirklich benötigt. Wenn sich eine Operation als
 Funktion über bestehenden Datentypen ausdrücken lässt, dann sollte man
 das tun.
 
-Das hat Alan J. Perlis, der ersten Gewinner des Touring-Award schon
+<!---Das hat Alan J. Perlis, der ersten Gewinner des Touring-Award schon
 vor über 30 Jahren aufgegriffen:
 
 > It is better to have 100 functions operate on one data structure
 > than 10 functions on 10 data structures.
 > <small>Alan J. Perlis in <cite title="Epigrams in Programming">Epigrams in Programming, 1982</cite></small>
-
+-->
 Dementsprechend ist in unserem Java-Code ein Mapper ein Objekt daß
 folgenden Interface-Typ implementiert:
 
