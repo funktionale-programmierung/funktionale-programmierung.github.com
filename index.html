@@ -11,9 +11,11 @@ title: Blog Index
   <div class="post-date">{{ post.date | date: "%Y-%m-%d" }}</div>
   <div class="post-author">Autor: {{ post.author }}</div>
   <div class="post-content">
-    {{ post.content | replace:'more start -->','' | replace:'<!-- more end -->','-->' }}
-    <!-- TODO: Nur wenn es noch mehr gibt... nur wie? -->
+    {% capture intro %}{{ post.content | split:'<!-- more start -->' | first }}{% endcapture %}
+    {{ intro }}
+    {% if intro != post.content %}
     <a href="{{ post.url }}"><span class="label label-info">Weiterlesen...</span></a>
+    {% endif %}
   </div>
 </div>
 <hr class="post-divider" />
