@@ -19,8 +19,9 @@ schneller zu entwickeln.
 
 In diesem Blog berichten wir über Aspekte der funktionalen
 Programmierung, die für unser Arbeitsleben von Bedeutung sind.
-Ansonsten gehen wir davon aus, dass die Artikel bunt gemischt sein
-werden:
+Zielgruppe sind alle, die funktionale Programmierung in der Praxis
+einsetzen oder einsetzen wollen.  Entsprechend gehen wir davon aus,
+dass die Artikel bunt gemischt sein werden:
 
 - einführende Artikel zur funktionalen Programmierung und funktionalen
   Programmiersprachen
