@@ -19,6 +19,8 @@ Kräfte: Darum wird es auf diesem Blog später noch gehen.  Dieser
 Beitrag beschäftigt sich erst einmal damit, wie das überhaupt geht
 mit der rein funktionalen Programmierung.
 
+<!-- more start -->
+
 Zu diesem Zweck nehmen wir uns ein konkretes Beispiel vor: Es geht um
 die Simulation und Visualisierung einer Welt (vielleicht für ein
 Videospiel), in der sich *Schnecken* bewegen, entlehnt einer
@@ -278,3 +280,4 @@ Für heute soll es erst einmal genug sein!
 Den Code zu diesem Beitrag können Sie übrigens
 [hier](/files/2013-02-08-rein-funktional/snail.rkt) herunterladen.
 
+<!-- more end -->
