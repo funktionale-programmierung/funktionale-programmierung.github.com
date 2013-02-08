@@ -69,7 +69,7 @@ Zustand unter Zuhilfenahme des jeweils nächsten Listenelement in einen
 neuen Zustand.
 
 In diesem Fall beginnt `foldl` mit der leeren Szene, die von
-`(empty-scene width height)s` erzeugt wird, schnappt sich das erste
+`(empty-scene width height)` erzeugt wird, schnappt sich das erste
 Listenelement der Schneckenliste `(snail-world-snails sw)` und wendet
 auf beides `draw-snail` an.  Dabei kommt wiederum eine Szene heraus,
 in der jetzt die erste Schnecke plaziert ist.  Die `foldl`-Funktion
