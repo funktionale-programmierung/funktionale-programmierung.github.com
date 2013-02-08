@@ -105,7 +105,7 @@ img { border: 0 }
 }
 .navbar-fp .navbar-inner .nav-pills {
 	height: auto;
-    left: 65px;
+    left: 80px;
 }
 .container-fluid .row-fluid, .navbar-fp .navbar-inner {
 	max-width: 1024px;
@@ -126,7 +126,7 @@ img { border: 0 }
 
 #navbar #logo {
 	position: absolute;
-	top: 24px;
+	top: 32px;
 }
 
 .navbar .brand {
