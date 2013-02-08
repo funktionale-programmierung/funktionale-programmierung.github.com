@@ -19,7 +19,7 @@ landen dann beispielsweise im Tag selbst.
 Verkürzung des Artikels für die Übersicht
 ===
 
-Das Verkürzen muß manuell passieren, und geschieht mithilfe von zwei HTML-Kommentaren im Artikel:
+Das Verkürzen muß manuell passieren, und geschieht mithilfe von eines HTML-Kommentars im Artikel:
 
     <h1>Mein Artikel</h1>
 
@@ -29,7 +29,5 @@ Das Verkürzen muß manuell passieren, und geschieht mithilfe von zwei HTML-Komm
 
     Die Details sind folgende...
 
-    <!-- more end -->
-
-Der Teil zwsichen `more start` und `more end` ist dann auf der Übersichtsseite nicht sichtbar.
+Der Teil nach dem Kommentar erscheint dann nicht auf der Übersichtsseite, sondern stattdessen ein "Weiterlesen"-Button.
 
