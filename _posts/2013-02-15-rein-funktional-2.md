@@ -3,7 +3,7 @@ layout: post
 description: Rein funktionale Programmierung - Teil 2
 title: "Eine kleine Einführung in die rein funktionale Programmierung - Teil 2"
 author: <a href="https://www.active-group.de/unternehmen/sperber.html">Michael Sperber</a>
-tags: rein funktional, Racket, Schneckenwelt
+tags: ["rein funktional", "Racket", "Schneckenwelt"]
 ---
 
 Im [einem vorigen Beitrag](2013/02/08/rein-funktional.html) haben wir das Vorhaben begonnen,
