@@ -49,6 +49,11 @@ a {
 	text-decoration: none;
 	color: rgb(33,80,108);
 }
+
+#center { 
+  text-align:center;
+}
+
 .navbar-fp .nav > li > a:hover {
 	color: #bbb;
 }

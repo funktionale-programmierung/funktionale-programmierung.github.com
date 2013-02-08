@@ -3,7 +3,7 @@ layout: post
 description: Rein funktionale Programmierung
 title: "Eine kleine Einführung in die rein funktionale Programmierung"
 author: <a href="https://www.active-group.de/unternehmen/sperber.html">Michael Sperber</a>
-tags: [Einführung, Rein funktional, Racket]
+tags: ["rein funktional", "Racket", "Schneckenwelt"]
 ---
 
 In Verbindung mit der funktionalen Programmierung taucht oft der
@@ -19,10 +19,27 @@ Kräfte: Darum wird es auf diesem Blog später noch gehen.  Dieser
 Beitrag beschäftigt sich erst einmal damit, wie das überhaupt geht
 mit der rein funktionalen Programmierung.
 
+<!-- more start -->
+
 Zu diesem Zweck nehmen wir uns ein konkretes Beispiel vor: Es geht um
 die Simulation und Visualisierung einer Welt (vielleicht für ein
 Videospiel), in der sich *Schnecken* bewegen, entlehnt einer
 [Live-Coding-Session von der OOP 2013](http://www.sigs-datacom.de/oop2013/konferenz/sessiondetails.html?tx_mwconferences_pi1[showUid]=1101&tx_mwconferences_pi1[anchor]=#Ndo3&tx_mwconferences_pi1[s]=0).
+Die Schneckenwelt ist zweidimensional, und wir fangen mit sehr sturen
+Schnecken an, die sich stets in die gleiche Richtung bewegen und sich
+nicht davon abhalten lassen.  
+
+In diesem Posting kümmern wir uns erst einmal um die individuellen
+Schnecken, die wir in einem späteren Posting dann in der Schneckenwelt
+anordnen.  In einem dritten Posting werden wir das Programm so
+erweitern, daß die Schnecken *Schleimspuren* hinterlassen und den
+Schleimspuren anderer Schnecken ("die stinken") ausweichen.  Das ganze
+visualisieren wir dann dergestallt, daß es so aussieht:
+
+<div id="center">
+<img src="/files/2013-02-08-rein-funktional/snailworld.gif">
+</img>
+</div>
 
 Wir programmieren das
 ganze in [Racket](http://www.racket-lang.org/), das sich jeder
@@ -41,9 +58,7 @@ implementiert wird; wir nehmen die Standard-Racket-Basissprache:
 #lang racket/base
 {% endhighlight %}
 
-Die Schneckenwelt ist zweidimensional, und wir fangen mit sehr sturen
-Schnecken an, die sich stets in die gleiche Richtung bewegen und sich
-nicht davon abhalten lassen.  Zu diesem Zweck beschreiben wir eine
+Zu diesem Zweck beschreiben wir eine
 Schnecke durch ihre *Position* und ihre *Bewegungsrichtung*.  Fangen
 wir also mit einer Datendefinition und einer Struct-Definition für
 den Datentyp an:
@@ -194,31 +209,11 @@ Zeit*.  Ein `snail`-Objekt ist also eine Momentaufnahme der Schnecke,
 die sich nicht dadurch verändert, daß die Schnecke sich bewegt: Es
 spricht nichts dagegen, daß ein Programm weiß, wo sich die Schnecke in
 der Vergangenheit befundet hat.  Häufig ist dieser Zugriff auf die
-Vergangenheit sehr nützlich, wir werden aber noch weitere Vorteile
-dieses Programmiermodells kennenlernen.  Dazu ordnen wir die Schnecken
-in einer *Schneckenwelt an*:
+Vergangenheit sehr nützlich, wir werden aber in einem weiteren Posting
+noch weitere Vorteile dieses Programmiermodells kennenlernen.
 
-{% highlight scheme %}
-; Eine Schneckenwelt besteht aus:
-; - Schnecken
-(struct snail-world (snails))
-
-(define sw1 (snail-world (list s1 s2 s3)))
-{% endhighlight %}
-
-Das `snails`-Feld der Schneckenwelt besetzen wir mit einer *Liste*
-aller Schnecken.  Die eingebaute `list`-Funktion macht aus den
-Schnecken `s1`, `s2` und `s3` eine Liste - `sw1` ist dann die
-Schneckenwelt daraus.
-
-Was können wir mit so einer Schneckenwelt anfangen?  Zwei Sachen wären
-nett:
-
-- die Schneckenwelt grafisch anzeigen
-- die Schneckenwelt animieren, so daß die Schnecken sich bewegen
-
-Machen wir erst einmal die grafische Anzeige.  Dazu brauchen wir zwei
-Libraries, die bei Racket dabei sind -
+Zunächst einmal kümmern wir uns noch um die grafische Darstellung.
+Dazu brauchen wir zwei Libraries, die bei Racket dabei sind -
 [`2htdp/universe`](http://docs.racket-lang.org/teachpack/2htdpuniverse.html)
 und
 [`2htdp/image`](http://docs.racket-lang.org/teachpack/2htdpimage.html).
@@ -226,11 +221,10 @@ Diese binden wir mit einer `require`-Form am Anfang unseres Programms
 ein, unterhalb von `#lang racket/base`:
 
 {% highlight scheme %}
-(require 2htdp/universe
-         2htdp/image)
+(require 2htdp/image)
 {% endhighlight %}
 
-Für die Anzeige der Schneckenwelt benutzen wir
+Für die Anzeige der Schnecken benutzen wir
 [`2htdp/image`](http://docs.racket-lang.org/teachpack/2htdpimage.html),
 welche die rein funktionale Manipulation von Bildern erlaubt.  Für die
 Darstellung einer Schnecke benutzen wir einen einfachen Kreis:
@@ -271,100 +265,19 @@ Umgang etwas.)  Dafür schreiben wir eine Funktion `draw-snail`:
 Die Funktion
 [`place-image`](http://docs.racket-lang.org/teachpack/2htdpimage.html?q=place-image&q=circle#%28def._%28%28lib._2htdp%2Fimage..rkt%29._place-image%29%29)
 setzt also die Schnecke an ihrer eigenen
-Position in die Szene hinein.  Dazu müssen wir mit einer leeren Szene
-anfangen und sukzessive mit `draw-snail` eine Schnecke nach der
-nächsten in die Szene plazieren.  Bei jeder Schnecke kommt dabei
-wieder eine neue Szene heraus, bis schließlich alle Schnecken in der
-Szene untergekommen sind.  Hier ist die Funktion, die das macht:
+Position in die Szene hinein.  In der REPL ist schön zu sehen, wie die
+Funktion funktioniert:
 
-{% highlight scheme %}
-; Schneckenwelt malen
-; draw-snail-world: snail-world -> scene
-(define draw-snail-world
-  (lambda (sw)
-    (foldl draw-snail
-           (empty-scene width height)
-           (snail-world-snails sw))))
-{% endhighlight %}
+<img src="/files/2013-02-08-rein-funktional/draw-snail.png">
+</img>
 
-Diese Funktion benutzt die eingebaute [`foldl`-Funktion](http://docs.racket-lang.org/reference/pairs.html#%28def._%28%28lib._racket/private/list..rkt%29._foldl%29%29), eine der
-[Eckpfeiler der funktionalen
-Programmierung](https://twitter.com/PLT_Borat/status/173024002376339456).
-Die
-[`foldl`-Funktion](http://docs.racket-lang.org/reference/pairs.html#%28def._%28%28lib._racket/private/list..rkt%29._foldl%29%29)
-iteriert über einer Liste und transformiert bei jedem Schritt einen
-Zustand unter Zuhilfenahme des jeweils nächsten Listenelement in einen
-neuen Zustand.
+(Die
+[`empty-scene`-Funktion](http://docs.racket-lang.org/teachpack/2htdpimage.html?q=empty-scene#%28def._%28%28lib._2htdp%2Fimage..rkt%29._empty-scene%29%29)
+macht eine leere rechteckige Szene mit der angegebenen Breite und Höhe.)
 
-In diesem Fall beginnt `foldl` mit der leeren Szene, die von
-`(empty-scene width height)` erzeugt wird, schnappt sich das erste
-Listenelement der Schneckenliste `(snail-world-snails sw)` und wendet
-auf beides `draw-snail` an.  Dabei kommt wiederum eine Szene heraus,
-in der jetzt die erste Schnecke plaziert ist.  Die `foldl`-Funktion
-schnappt sich jetzt die nächste Schnecke, und ruft wieder `draw-snail`
-auf, und wieder kommt eine Szene heraus, und so weiter bis die Liste
-zu Ende ist.  Am Ende kommt dann eine Szene heraus, in der alle
-Schnecken plaziert sind.
-
-Der obige Code benötigt noch Definitionen für die Breite `width` und
-die Höhe `height` der Szene:
-
-{% highlight scheme %}
-(define width 640)
-(define height 480)
-{% endhighlight %}
-
-Damit ist die grafische Darstellung fertig; es fehlt noch die
-Animation.  Dazu bewegen wir einfach alle Schnecken einer
-Schneckenwelt mit Hilfe der schon geschriebenen Funktion `move-snail`:
-
-{% highlight scheme %}
-; Schneckenwelt bewegen
-; next-snail-world: snail-world -> snail-world
-(define next-snail-world
-  (lambda (sw)
-    (snail-world
-     (map move-snail
-          (snail-world-snails sw)))))
-{% endhighlight %}
-
-Diese Funktion füttert die Schneckenliste der Schneckenwelt in die
-eingebaute Funktion
-[`map`](http://docs.racket-lang.org/reference/pairs.html?q=map#%28def._%28%28lib._racket%2Fprivate%2Fmap..rkt%29._map%29%29).
-Diese wendet eine gegebene Funktion auf jedes Element einer Liste an
-und macht aus den Ergebnissen wieder eine Liste.  In diesem Fall
-wendet sie die Funktion `move-snail` auf jede Schnecke der
-Schneckenwelt an und macht aus den resultierenden bewegten Schnecken
-wieder eine Liste; `next-snail-world` macht daraus dann eine neue
-Schneckenwelt.
-
-Zu gutzer letzt können wir das ganze mit der
-[`big-bang`-Form](http://docs.racket-lang.org/teachpack/2htdpuniverse.html?q=big-bang&q=big-bang%23&q=struct&q=place-image&q=circle#%28form._world._%28%28lib._2htdp%2Funiverse..rkt%29._big-bang%29%29):
-
-{% highlight scheme %}
-(big-bang sw1
-          (on-tick next-snail-world 0.2)
-          (to-draw draw-snail-world width height))
-{% endhighlight %}
-
-Das Argument `sw1` ist die Anfangs-Schneckenwelt.  Die Animation läßt
-nun eine getaktete Uhr laufen, und bei jedem Taktschlag (alle 0.2
-Sekunden) wendet sie die Funktion `next-snail-world` auf die
-Schneckenwelt an - das besagt die `on-tick`-Klausel.  Nach jedem
-Taktschlag wird die aktuelle Schneckenwelt angezeigt durch die
-Funktion `draw-snail-world`, was die `to-draw`-Klausel besagt.
-
-Zum Schluß lohnt es sich, die rein funktionale Programmierung noch
-einmal in Perspektive zu setzen: Die Funktion `next-snail-world`
-bewegt *alle Schnecken gleichzeitig*.  Angenommen,
-`move-snail` würde imperativ funktionieren, also die Schnecke in situ
-modifizieren.  Beim aktuellen `next-snail-world` würde das keinen
-Unterschied machen, da die Schnecken alle unabhängig voneinander
-wären.  Was aber, wenn die Schnecken aufeinander achten müßten, also
-z.B. anderen Schnecken oder deren Schleimspuren ausweichen müßten?
-Dazu mehr in einem zukünftigen Beitrag.
+Für heute soll es erst einmal genug sein!
 
 Den Code zu diesem Beitrag können Sie übrigens
-[hier](/files/2013-02-08-rein-funktional/snailworld.rkt) herunterladen.
+[hier](/files/2013-02-08-rein-funktional/snail.rkt) herunterladen.
 
-
+<!-- more end -->
