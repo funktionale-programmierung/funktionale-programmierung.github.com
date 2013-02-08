@@ -20,6 +20,8 @@ Wir erweitern [den Code vom letzten
 Mal](/files/2013-02-08-rein-funktional/snail.rkt) und ordnen Schnecken
 in einer *Schneckenwelt* an:
 
+<!-- more start -->
+
 {% highlight scheme %}
 ; Eine Schneckenwelt besteht aus:
 ; - Schnecken
@@ -147,3 +149,4 @@ Dazu mehr in einem zukünftigen Beitrag.
 Den Code zu diesem Beitrag können Sie übrigens
 [hier](/files/2013-02-15-rein-funktional-2/snailworld.rkt) herunterladen.
 
+<!-- more end -->
