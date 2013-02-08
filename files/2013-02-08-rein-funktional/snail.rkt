@@ -1,7 +1,6 @@
 #lang racket/base
 
-(require 2htdp/universe
-         2htdp/image)
+(require 2htdp/image)
 
 ; Eine Position besteht aus:
 ; - X-Koordinate
@@ -50,12 +49,6 @@
   (lambda (s)
     (move-snail-in-dir s (snail-dir s))))
 
-; Eine Schneckenwelt besteht aus:
-; - Schnecken
-(struct snail-world (snails))
-
-(define sw1 (snail-world (list s1 s2 s3)))
-
 ; Schnecke malen
 ; draw-snail: snail scene -> scene
 (define draw-snail
@@ -64,26 +57,3 @@
                  (pos-x (snail-pos s))
                  (pos-y (snail-pos s))
                  scene)))
-
-(define width 640)
-(define height 480)
-
-; Schneckenwelt malen
-; draw-snail-world: snail-world -> scene
-(define draw-snail-world
-  (lambda (sw)
-    (foldl draw-snail
-           (empty-scene width height)
-           (snail-world-snails sw))))
-
-; Schneckenwelt bewegen
-; next-snail-world: snail-world -> snail-world
-(define next-snail-world
-  (lambda (sw)
-    (snail-world
-     (map move-snail
-          (snail-world-snails sw)))))
-
-(big-bang sw1
-          (on-tick next-snail-world 0.2)
-          (to-draw draw-snail-world width height))
