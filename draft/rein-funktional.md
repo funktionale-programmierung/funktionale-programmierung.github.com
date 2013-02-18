@@ -280,4 +280,7 @@ Für heute soll es erst einmal genug sein!
 Den Code zu diesem Beitrag können Sie übrigens
 [hier](/files/2013-02-08-rein-funktional/snail.rkt) herunterladen.
 
+*Zum Autor:*
+{% include author/michael-sperber.md %}
+
 <!-- more end -->

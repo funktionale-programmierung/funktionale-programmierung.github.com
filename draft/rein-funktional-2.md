@@ -149,4 +149,7 @@ Dazu mehr in einem zukünftigen Beitrag.
 Den Code zu diesem Beitrag können Sie übrigens
 [hier](/files/2013-02-15-rein-funktional-2/snailworld.rkt) herunterladen.
 
+*Zum Autor:*
+{% include author/michael-sperber.md %}
+
 <!-- more end -->
