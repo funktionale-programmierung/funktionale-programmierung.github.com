@@ -5,10 +5,12 @@ author: <a href="http://active-group.de/unternehmen/frese.html">David Frese</a>
 tags: Scala Einführung
 ---
 
-Die Vorteile der funktionalen Programmierung kann man immer wieder
-aufzählen und erläutern, aber wesentlich anschaulicher wird es doch,
-wenn man mal die gleiche Funktionalität in einer imperativen und einer
-funktionalen Sprache gegenüberstellt.
+Die Vorteile der funktionalen Programmierung bei der
+Code-Wiederverwendung, Test- und Beweisbarkeit oder der
+Parallelisierung kann man abstrakt aufzählen und erläutern, aber
+wesentlich anschaulicher wird es doch, wenn man mal die gleiche
+Funktionalität in einer imperativen und einer funktionalen Sprache
+gegenüberstellt.
 
 In diesem konkreten Beispiel nehmen wir einen kleinen Teil eines
 reellen Java-Programms, und zeigen wie dieser mit rein funktionalen
@@ -93,8 +95,9 @@ einen String auf eine Liste von Strings abbildet. Jede Funktion mit
 dieser Signatur kann als Mapper verwendet werden. Um dieser Art von
 Funktionen dennoch einen Namen geben zu können, der den Code lesbarer
 und leichter zu schreiben macht, gibt es in Scala sogenannte
-Typ-Aliase. Der folgende Code definiert, dass der Typ `Mapper` ein
-Alias des Typs von Funktionen von String nach Liste von Strings ist:
+Typ-Aliase. Der folgende Code definiert `Mapper` als Alias (als
+Abkürzung) für den Typ von Funktionen, die einen String nehmen und
+eine Liste von Strings zurückgeben:
 
 {% highlight scala %}
 type Mapper = String => List[String];
@@ -133,17 +136,17 @@ def identityMapper =
   (sourceFileName : String) => List(sourceFileName)
 {% endhighlight %}
 
-Was hier nach kurzem überlegen auffällt, ist dass es nur einen
+Was hier nach kurzem Überlegen auffällt, ist dass es nur einen
 `identityMapper` gibt; *der* IdentityMapper ist ein einzelner,
-eindeutiger Wert im Programm. Es besteht keine Notwendigkeit, und es
-gibt auch gar keine Möglichkeit einen zweiten zu erzeugen.
+eindeutiger Wert im Programm. Es ist nicht notwendig und auch nicht
+möglich einen Zweiten zu erzeugen.
 
 Auch mit der obigen Java-Implementierung könnte man ein und dieselbe
 Instanz der Klasse IdentityMapper wiederverwenden, da sie keinen
-inneren Zustand besitzt. Aber das umzusetzen ist zusätzlicher
-Programmieraufwand, und ist im originalen Ant-Quellcode auch nicht
-umgesetzt - dort werden immer wieder neue Objekte der Klasse
-IdentityMapper erzeugt.
+inneren Zustand besitzt. Aber das umzusetzen, ist erheblicher
+zusätzlicher Programmieraufwand, und ist im originalen Ant-Quellcode
+auch nicht gemacht worden - dort werden immer wieder neue Objekte der
+Klasse IdentityMapper erzeugt.
 
 Um die Definition von Funktionen noch einfacher zu machen, bietet
 Scala noch knappere Möglichkeiten, die aber alle zum gleichen Ergebnis
@@ -160,6 +163,11 @@ noch die Definition.
 Nun aber weiter zum `CompositeMapper`.
 
 ## CompositeMapper -- Closures
+
+Der CompositeMapper kombiniert mehrere untergeordnete Mapper. Der
+Dateiname wird dabei an jeden Mapper übergeben, und alle Ergebnisse in
+eine gemeinsame Liste gesteckt, die dann das Ergebnis des CompositeMapper
+darstellt.
 
 Die Java-Implementierung besteht aus folgender Klasse:
 
@@ -210,10 +218,10 @@ Für die Implementierung ("..."), können wir also direkt die Liste
 `mappers` und den Dateinamen `sourceFileName` verwenden. Und was
 sollen wir damit machen? Zunächst brauchen wir das Ergebnis jedes
 Mappers in der Liste, wenn man ihn mit dem Dateinamen füttert. Für
-diese Kategorie von Abbildungen gibt es in Scala bereits eine Funktion
+diese Kategorie von Abbildungen gibt es in Scala bereits eine Funktion,
 die das Iterieren über eine Eingangsliste und Zusammensetzen der
 Ergebnisliste gleicher Länge übernimmt. Diese Funktion heißt `map`,
-und das einzige was man ihr noch zusätzlich übergeben muß, ist eine
+und das einzige was man ihr noch zusätzlich übergeben muss, ist eine
 Funktion die ein einzelnes Element der Liste abbildet. Nennen wir sie
 einfach `f`:
 
@@ -251,7 +259,14 @@ innerhalb der Klammern. Ein `return` ist nicht notwendig.
 
 ## ChainedMapper -- Listen falten
 
-Am Beispiel des ChainedMapper läßt sich die Verwendung von `foldLeft`
+Auch der ChainedMapper kombiniert mehrere untergeordnete Mapper,
+jedoch anders als der CompositeMapper. Der Dateiname wird dabei
+zunächst an den ersten untergeordneten Mapper übergeben. Dessen
+Ausgaben dienen, eine nach der anderen, als Eingabe für den zweiten
+Mapper, usw. Die Ausgabe des letzten Mappers ist dann die Ausgabe des
+kombinierten ChainedMapper.
+
+Am Beispiel des ChainedMapper lässt sich die Verwendung von `foldLeft`
 gut demonstrieren, einer weiteren sehr häufig verwendbaren Funktion
 zum Verarbeiten von Listen. Zunächst aber wieder der Java-Code, in dem
 die verschiedenen Listen alle mit `for`-Schleifen und `addAll`
@@ -333,11 +348,12 @@ durchführt.
 
 ## GlobMapper -- Tupel
 
-Zum Abschluß noch den GlobMapper, der einige Zeilen mehr Code
-benötigt. Er zeigt aber unter anderem sehr schön, warum die
-Wiederverwendung von Code insbesondere in Java so schwierig ist. Sie
-ist so schwierig, dass man sehr oft auf Copy&Paste zurückgreift, wie hier
-bei den Methoden `setTo` und `setFrom`:
+Zum Abschluss noch den GlobMapper, der einen Dateinamen anhand eines
+einfachen Musters auf einen anderen Dateinamen abbildet. Seine
+Implementierung benötigt einige Zeilen mehr Code, aber sie zeigt sehr
+schön, warum die Wiederverwendung von Code insbesondere in Java so
+schwierig ist. Sie ist so schwierig, dass man sehr oft auf Copy&Paste
+zurückgreift, wie hier bei den Methoden `setTo` und `setFrom`:
 
 {% highlight java %}
 class GlobMapper implements Mapper {
@@ -414,7 +430,7 @@ einer "Prefix" und einer "Postfix" Variable gespeichert. Das
 Duplizieren von Code hat dabei nicht nur zur Folge dass der Code
 länger wird, sondern auch dass man den Fehler, der sich in diese
 Methoden eingeschlichen hat (wer hat ihn entdeckt?), an zwei Stellen
-korrigieren muß.
+korrigieren muss.
 
 In einer funktionalen Implementierung können wir diesen gemeinsamen
 Code sehr leicht als eine Funktion implementieren, die ein sogenanntes
@@ -454,7 +470,7 @@ def globMapper(fromPat : String, toPat : String) = {
 
 Die Tupel sind dabei streng typisiert, was bedeutet, dass man für eine
 Funktion die wie hier ein Tupel mit 2 Elementen zurückgibt auch genau
-zwei Namen angeben muß. Außerdem kann der Scala-Kompiler ableiten,
+zwei Namen angeben muss. Außerdem kann der Scala-Kompiler ableiten,
 dass beide Werte vom Typ String sind. Im allgemeinen können Tupel aber
 auch Werte unterschiedlichen Typs enthalten, zum Beispiel einen String
 und einen Integer.
@@ -501,4 +517,8 @@ Programmierung erklärt, nämlich:
 - Iteration über Listen mit map und fold
 - Mehrere Rückgabewerte durch Tupel
 
-<!-- more end -->
+Der Scala-Code zu diesem Beitrag kann
+[hier](/files/beispiel-ant/Mappers.scala) heruntergeladen werden.
+
+Ich hoffe der Artikel hat Interesse an funktionalem Programmieren
+geweckt. Teilen und Kommentieren ist ausdrücklich erwünscht!
