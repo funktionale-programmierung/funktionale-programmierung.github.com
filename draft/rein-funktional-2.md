@@ -16,6 +16,20 @@ eine Schneckenwelt zu implementieren.  Zur Erinnerung:
 > Schnecken an, die sich stets in die gleiche Richtung bewegen und sich
 > nicht davon abhalten lassen.  
 
+> In diesem Posting kümmern wir uns erst einmal um die individuellen
+> Schnecken, die wir in einem späteren Posting dann in der Schneckenwelt
+> anordnen.  In einem dritten Posting werden wir das Programm so
+> erweitern, daß die Schnecken *Schleimspuren* hinterlassen und den
+> Schleimspuren anderer Schnecken ("die stinken") ausweichen.  Das ganze
+> visualisieren wir dann dergestallt, daß es so aussieht:
+
+<div id="center">
+<img src="/files/2013-02-08-rein-funktional/snailworld.gif">
+</img>
+</div>
+
+<br/>
+
 Wir erweitern [den Code vom letzten
 Mal](/files/2013-02-08-rein-funktional/snail.rkt) und ordnen Schnecken
 in einer *Schneckenwelt* an:
@@ -110,7 +124,7 @@ Schneckenwelt an und macht aus den resultierenden bewegten Schnecken
 wieder eine Liste; `next-snail-world` macht daraus dann eine neue
 Schneckenwelt.
 
-Zu gutzer letzt können wir das ganze noch animieren.  Dazu benutzen
+Zu guter letzt können wir das ganze noch animieren.  Dazu benutzen
 wir eine weitere Library, die bei Racket dabei ist, nämlich
 [`2htdp/universe`](http://docs.racket-lang.org/teachpack/2htdpuniverse.html).
 Um sie einzubinden, müssen wir am Anfang noch eine `require`-Form
