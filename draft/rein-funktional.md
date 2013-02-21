@@ -2,7 +2,7 @@
 layout: post
 description: Rein funktionale Programmierung
 title: "Eine kleine Einführung in die rein funktionale Programmierung"
-author: <a href="https://www.active-group.de/unternehmen/sperber.html">Michael Sperber</a>
+author: michael-sperber
 tags: ["rein funktional", "Racket", "Schneckenwelt"]
 ---
 
@@ -279,7 +279,5 @@ Für heute soll es erst einmal genug sein!
 
 Den Code zu diesem Beitrag können Sie übrigens
 [hier](/files/2013-02-08-rein-funktional/snail.rkt) herunterladen.
-
-{% include author/michael-sperber.md %}
 
 <!-- more end -->

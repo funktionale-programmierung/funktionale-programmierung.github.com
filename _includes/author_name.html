@@ -1,0 +1,16 @@
+<!-- Definiert was für den jeweiligen Autor unterhalb des Post-Titels erscheint:
+Autor: xyz
+-->
+
+{% case page.author %}
+
+{% when 'david-frese' %}
+<a href="http://www.active-group.de/unternehmen/frese.html">David Frese</a>
+
+{% when 'michael-sperber' %}
+<a href="http://www.active-group.de/unternehmen/sperber.html">Michael Sperber</a>
+
+{% else %}
+{{ page.author }}
+
+{% endcase %}

@@ -1,0 +1,27 @@
+<!-- Definiert was über den Autor Autor am Ende des Postings gesagt wird -->
+
+{% capture about %}
+{% case page.author %}
+
+{% when 'david-frese' %}
+{% include author/david-frese.html %}
+
+{% when 'michael-sperber' %}
+{% include author/michael-sperber.html %}
+
+{% else %}
+{% assign author_undefined = true %}
+
+{% endcase %}
+{% endcapture %}
+
+{% if author_undefined != true %}
+<hr/>
+<div class="author-info">
+<div class="author-picture"><img src="/author/{{ page.author }}.jpg"></div>
+<div markdown="1" class="author-text">
+<em><p>Zum Autor:</p></em>
+<p>{{ about }}</p>
+</div>
+</div>
+{% endif %}

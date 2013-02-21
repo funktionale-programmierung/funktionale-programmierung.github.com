@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Funktional Programmieren am konkreten Beispiel (Ant)"
-author: <a href="http://active-group.de/unternehmen/frese.html">David Frese</a>
+author: david-frese
 tags: Scala Einführung
 ---
 
