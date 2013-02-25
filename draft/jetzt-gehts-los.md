@@ -10,7 +10,7 @@ startet mit den ersten Beiträgen!
 
 Zum Hintergrund:
 
-Wir bei [Active Group](http://www.active-group.de/) und [factis
+Wir bei [Active Group](http://www.active-group.de/) und [Factis
 Research](http://www.factisresearch.com/) setzen in unseren
 kommerziellen Produkten gern und erfolgreich funktionale
 Programmierung ein.  Dies ermöglicht uns, gegenüber traditioneller
