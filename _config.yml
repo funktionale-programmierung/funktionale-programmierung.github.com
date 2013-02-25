@@ -30,3 +30,8 @@ sharing :
     annotation : bubble
   linkedin :
     counter : right
+
+analytics :
+  provider : google
+  google :
+      tracking_id : 'UA-38774259-1'
