@@ -169,10 +169,11 @@ img { border: 0 }
     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.5);
 }
 
-#sidebar h2 {
-	color: #222;
-	line-height: 1em;
-	margin: 16px 0;
+#sidebar .sidehead {
+    font-size:1.1875em;
+    color: #222;
+    line-height: 1em;
+    margin: 16px 0;
 }
 
 #recent-posts ul {

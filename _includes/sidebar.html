@@ -1,4 +1,4 @@
-<h2>Kürzlich gepostet</h2>
+<div class="sidehead">Kürzlich gepostet</div>
 <ul>
   {% for post in site.posts limit:4 %}
   <li><a href="{{ post.url }}">{{ post.title }}</a></li>
@@ -6,7 +6,7 @@
   <!--li><a href="/">Der gesamte Rest...</a></li-->
 </ul>
 
-<h2>Unterstützt von:</h2>
+<div class="sidehead">Unterstützt von:</div>
 <div class="logo"><a target="_blank" href="http://www.active-group.de/">
 <!--img src="/img/active-group-logo.png" /-->
 Active Group GmbH

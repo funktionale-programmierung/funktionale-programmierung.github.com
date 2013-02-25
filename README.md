@@ -11,8 +11,9 @@ Hier ein Beispiel für einen Post-Header:
 	title: "Eine kleine Einführung in die rein funktionale Programmierung - Teil 2"
 	author: michael-sperber
 	tags: ["rein funktional", "Racket", "Schneckenwelt"]
-        meta_description: >
-          Mehrzeiliger Text bei dem der Whitespace entfernt wird.
+	meta_description: >
+	  Mehrzeiliger Text bei dem der Whitespace entfernt wird.
+	page_title: "Einführung rein funktionale Programmierung 2"
 
 Zu beachten besonders die Syntax für den Tags-Eintrag:  Es
 funktionieren auch Leerzeichen-separierte Wortlisten, aber Kommata
@@ -21,6 +22,12 @@ landen dann beispielsweise im Tag selbst.
 Zum Feld `author` siehe Abschnitt "Autoren".
 
 Das Feld meta-description ist auch sehr wichtig, es enthält eine Zusammenfassung für Suchmachschinen.
+
+Das Feld `page_title` ermöglicht die Angabe eines anderen Textes für
+den HTML-Titel der Seite; ohne diese Angabe wird das Feld `title`
+verwendet, das aber oft zu lang für den Seitentitel ist. Der Text
+"Funktionale Programmierung - " wird dem Titel immer noch voran
+gestellt.
 
 Verkürzung des Artikels für die Übersicht
 ===
