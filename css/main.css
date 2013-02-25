@@ -25,9 +25,13 @@ p + p {
 }
 
 h1 {
-    font-size:1.5em;
+    font-size:1.2em;
     color: #3e606f;
     font-weight:bold;
+}
+
+h1 a {
+    color: #3e606f;
 }
 
 h2 {
@@ -37,7 +41,7 @@ h2 {
     font-weight:normal;
 }
 
-h3 { font-size:1.1875em; color:#000000; font-weight:bold; }
+h3 { font-size:1.10em; color:#3e606f; font-weight:normal; }
 
 h4 { font-size:1em; color:#94152a; font-weight:bold; }
 
@@ -230,6 +234,10 @@ hr.post-divider {
 
 #paging li, .pager li {
 	font-size: 0.8em;
+}
+
+.post-share li {
+    width: 100px;
 }
 
 .author-info {
