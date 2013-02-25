@@ -1,11 +1,11 @@
 ---
 layout: post
 description: Blog-Start
-title: "Das Blog \"Funktionale Programmierung\" startet!"
+title: "Das Blog 'Funktionale Programmierung' startet!"
 author: <a href="https://www.active-group.de/unternehmen/sperber.html">Michael Sperber</a>
 ---
 
-Jetzt geht es endlich los: Unser Blog "Funktionale Programmierung"
+Jetzt geht es endlich los: Unser Blog 'Funktionale Programmierung'
 startet mit den ersten Beiträgen!
 
 Zum Hintergrund:
@@ -33,4 +33,3 @@ Es kommt bestimmt noch weitere Kategorien dazu.
 
 Wir wünschen viel Freude bei der Lektüre und freuen uns stets über
 Feedback, am einfachsten über die Kommentarfunktion des Blogs!
-
