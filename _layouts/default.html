@@ -15,7 +15,13 @@
   <link rel="stylesheet" href="/css/pygments.css" type="text/css" />
   <link rel="alternate" type="application/rss+xml" href="http://funktionale-programmierung.de/rss.xml" title="RSS-Feed der Beitr&auml;ge" />
   <link rel="shortcut icon" href="/img/fp.ico" />
-  <title>Funktionale Programmierung - {{ page.title }}</title>
+  <title>Funktionale Programmierung - 
+{% if page.page_title %}
+{{ page.page_title }}
+{% else %}
+{{ page.title }}
+{% endif %}
+  </title>
 
   <script src="http://code.jquery.com/jquery-latest.js"></script>
 </head>
