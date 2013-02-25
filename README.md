@@ -11,12 +11,16 @@ Hier ein Beispiel für einen Post-Header:
 	title: "Eine kleine Einführung in die rein funktionale Programmierung - Teil 2"
 	author: michael-sperber
 	tags: ["rein funktional", "Racket", "Schneckenwelt"]
+        meta_description: >
+          Mehrzeiliger Text bei dem der Whitespace entfernt wird.
 
 Zu beachten besonders die Syntax für den Tags-Eintrag:  Es
 funktionieren auch Leerzeichen-separierte Wortlisten, aber Kommata
 landen dann beispielsweise im Tag selbst.
 
 Zum Feld `author` siehe Abschnitt "Autoren".
+
+Das Feld meta-description ist auch sehr wichtig, es enthält eine Zusammenfassung für Suchmachschinen.
 
 Verkürzung des Artikels für die Übersicht
 ===
@@ -54,3 +58,11 @@ abgelegt werden.
 Ist unter _includes nichts definiert, dann erscheint der unter
 `author` definierte Text am Anfang des Artikels, und es gibt keinen
 "Zum Autor" Abschnitt am Ende.
+
+Search-Engine-Optimization
+==
+
+Artikel dazu:
+
+http://blog.shareaholic.com/2012/01/how-to-optimize-your-blog-posts-for-seo/
+http://www.seomoz.org/blog/perfecting-keyword-targeting-on-page-optimization
