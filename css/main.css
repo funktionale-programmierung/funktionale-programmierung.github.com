@@ -45,11 +45,6 @@ h5 { font-size:1em; color:#000000; font-weight:bold; }
 
 h6 { font-size:0.7em; color:#000000; font-weight:normal; }
 
-a {
-	text-decoration: none;
-	color: rgb(33,80,108);
-}
-
 #center { 
   text-align:center;
 }
