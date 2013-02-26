@@ -2,7 +2,13 @@
 Autor: xyz
 -->
 
-{% case page.author %}
+{% if post.author %}
+{% assign the_author = post.author %}
+{% else %}
+{% assign the_author = page.author %}
+{% endif %}
+
+{% case the_author %}
 
 {% when 'david-frese' %}
 <a href="http://www.active-group.de/unternehmen/frese.html">David Frese</a>
@@ -11,6 +17,6 @@ Autor: xyz
 <a href="http://www.active-group.de/unternehmen/sperber.html">Michael Sperber</a>
 
 {% else %}
-{{ page.author }}
+{{ the_author }}
 
 {% endcase %}
