@@ -236,7 +236,8 @@ hr.post-divider {
 	font-size: 0.8em;
 }
 
-.post-share li {
+.post-share li span {
+    float: left;
     width: 100px;
 }
 
