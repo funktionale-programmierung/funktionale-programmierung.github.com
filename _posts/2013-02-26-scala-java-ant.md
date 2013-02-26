@@ -523,6 +523,3 @@ Programmierung erklärt, nämlich:
 
 Der Scala-Code zu diesem Beitrag kann
 [hier](/files/beispiel-ant/Mappers.scala) heruntergeladen werden.
-
-Ich hoffe der Artikel hat Interesse an funktionalem Programmieren
-geweckt. Teilen und Kommentieren ist ausdrücklich erwünscht!
