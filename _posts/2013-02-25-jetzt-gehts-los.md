@@ -29,7 +29,7 @@ dass die Artikel bunt gemischt sein werden:
 - fortgeschrittene Entwicklungstechniken
 - interessante Implementierungsaspekte bei funktionalen Sprachen.
 
-Es kommt bestimmt noch weitere Kategorien dazu.
+Es kommen bestimmt noch weitere Kategorien dazu.
 
 Wir wünschen viel Freude bei der Lektüre und freuen uns stets über
 Feedback, am einfachsten über die Kommentarfunktion des Blogs!
