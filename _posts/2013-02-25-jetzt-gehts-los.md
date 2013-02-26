@@ -12,7 +12,8 @@ Zum Hintergrund:
 
 Wir bei [Active Group](http://www.active-group.de/) und [Factis
 Research](http://www.factisresearch.com/) setzen in unseren
-kommerziellen Produkten gern und erfolgreich funktionale
+kommerziellen Produkten und open-source Projekten
+gern und erfolgreich funktionale
 Programmierung ein.  Dies ermöglicht uns, gegenüber traditioneller
 objektorientierter Programmierung flexiblere und robustere Software
 schneller zu entwickeln.
