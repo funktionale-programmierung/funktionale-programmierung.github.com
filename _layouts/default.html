@@ -9,6 +9,10 @@
   <meta name="description" content="{{ page.meta_description }}" />
 {% endif %}
 
+{% if page.url == "/index.html" %}
+  <link rel="canonical" href="http://funktionale-programmierung.de/" />
+{% endif %}
+
   <link href="/css/bootstrap.min.css" rel="stylesheet" />
   <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/css/main.css" type="text/css" />
