@@ -35,6 +35,8 @@ das falsche Ergenbis berechnet wird und es auf vier Kernen hin und wieder
 zu einem Deadlock kommt. Haskell Kentnisse sind zum Verständnis des
 Artikels nicht nötig.
 
+FIXME: chart
+
 <!-- more start -->
 
 Bevor wir richtig loslegen, noch eine kurze Abgrenzung von Parallelität
