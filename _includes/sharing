@@ -5,7 +5,7 @@
 <!-- Twitter -->
 <li class="tw">
 <span>
-<a href="https://twitter.com/share" class="twitter-share-button" data-url="{{ post_url }}" data-text="{{ page.title }}" data-via="{{ site.sharing.twitter.via }}" data-related="{{ site.author.twitter }}" data-count="{{ site.sharing.twitter.count }}" data-size="{{ site.sharing.twitter.size }}">Tweet</a>
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="{{ post_url }}" data-text="{{ post_title }}" data-via="{{ site.sharing.twitter.via }}" data-related="{{ site.author.twitter }}" data-count="{{ site.sharing.twitter.count }}" data-size="{{ site.sharing.twitter.size }}">Tweet</a>
 </span>
 </li>
 

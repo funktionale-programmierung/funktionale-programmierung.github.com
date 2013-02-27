@@ -13,6 +13,7 @@ title: Blog Index
   <div class="post-content">
     {% capture intro %}{{ post.content | split:'<!-- more start -->' | first }}{% endcapture %}
     {% capture post_url %}http://funktionale-programmierung.de{{ post.url }}{% endcapture %}
+    {% capture post_title %}{{ post.title }}{% endcapture %}
     {% include sharing %}
     {{ intro }}
     {% if intro != post.content %}
