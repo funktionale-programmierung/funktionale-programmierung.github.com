@@ -5,21 +5,21 @@
 <!-- Twitter -->
 <li class="tw">
 <span>
-<a href="https://twitter.com/share" class="twitter-share-button" data-text="{{ page.title }}" data-via="{{ site.sharing.twitter.via }}" data-related="{{ site.author.twitter }}" data-count="{{ site.sharing.twitter.count }}" data-size="{{ site.sharing.twitter.size }}">Tweet</a>
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="{{ post_url }}" data-text="{{ page.title }}" data-via="{{ site.sharing.twitter.via }}" data-related="{{ site.author.twitter }}" data-count="{{ site.sharing.twitter.count }}" data-size="{{ site.sharing.twitter.size }}">Tweet</a>
 </span>
 </li>
 
 <!-- Google+ -->
 <li class="gp">
 <span>
-<div class="g-plusone" data-size="{{ site.sharing.googleplus.size }}" data-annotation="{{ site.sharing.googleplus.annotation }}" data-width="{{ site.sharing.googleplus.width }}"></div>
+<div class="g-plusone" data-href="{{ post_url }}" data-size="{{ site.sharing.googleplus.size }}" data-annotation="{{ site.sharing.googleplus.annotation }}" data-width="{{ site.sharing.googleplus.width }}"></div>
 </span>
 </li>
 
 <!-- Facebook -->
 <li class="fb">
 <span>
-<div class="fb-like" data-send="false" data-layout="{{ site.sharing.facebook.layout }}" data-width="{{ site.sharing.facebook.width }}" data-show-faces="{{ site.sharing.facebook.faces }}" data-font="{{ site.sharing.facebook.font }}">
+<div class="fb-like" data-send="false" href="{{ post_url }}" data-layout="{{ site.sharing.facebook.layout }}" data-width="{{ site.sharing.facebook.width }}" data-show-faces="{{ site.sharing.facebook.faces }}" data-font="{{ site.sharing.facebook.font }}">
 </div>
 </span>
 </li>

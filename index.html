@@ -12,6 +12,8 @@ title: Blog Index
   <div class="post-author">Autor: {% include author_name.html %}</div>
   <div class="post-content">
     {% capture intro %}{{ post.content | split:'<!-- more start -->' | first }}{% endcapture %}
+    {% capture post_url %}http://funktionale-programmierung.de{{ post.url }}{% endcapture %}
+    {% include sharing %}
     {{ intro }}
     {% if intro != post.content %}
     <a href="{{ post.url }}"><span class="label label-info">Weiterlesen...</span></a>

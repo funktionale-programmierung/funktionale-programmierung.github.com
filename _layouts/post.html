@@ -7,6 +7,7 @@ layout: default
     <div class="post-date">{{ page.date | date: "%d.%m.%Y" }}</div>
     <div class="post-author">Autor: {% include author_name.html %}</div>
     <div class="post-sharing">
+     {% capture post_url %}http://funktionale-programmierung.de{{ page.url }}{% endcapture %}
      {% include sharing %}
     </div>
     <div class="post-content">{{ content }}</div>
