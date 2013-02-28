@@ -1,0 +1,5 @@
+> png("speedup.png")
+> barplot(c(1, 1.96, 2.88, 3.71), col="darkblue", ylim=c(0,4),
+> ylab="Speedup", names.arg=c("1 Kern", "2 Kerne", "3 Kerne", "4 Kerne"),
+> space=1)
+> dev.off()
