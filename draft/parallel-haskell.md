@@ -6,14 +6,14 @@ author: stefan-wehr
 tags: ["parallel", "Haskell"]
 ---
 
-Computerprozessoren werden heutzutage leider nicht mehr mit jeder neue Generation
+Computerprozessoren werden heutzutage nicht mehr mit jeder neue Generation
 schneller und schneller. Stattdessen konzentrieren sich die Chiphersteller
 darauf mehr Prozessorkerne in unsere Rechner einzubauen.  Für die
 Softwareentwicklung bedeutet dies dass Software nicht mehr automatisch mit
 jeder Prozessorgeneration schneller läuft sondern dass die Entwickler
 dafür etwas tun müssen.
 
-Das Zauberwort heißt daher _parallele Programmierung_. Damit ist gemeint
+Ein Zauberwort heißt daher _parallele Programmierung_. Damit ist gemeint
 dass verschiedene Teile eines Programms gleichzeitg ablaufen können, somit
 mehrere Prozessorkerne auslasten und im Endeffekt schneller an's Ziel
 kommen. Die automatische Parallelisierung von Software ist allerdings
@@ -25,17 +25,21 @@ Hindernis für Parallelität von Grund auf vermeiden.
 
 Dieser Artikel demonstriert, wie man in der funktionalen Sprache
 [Haskell](http://haskell.org) sehr einfach und elegant parallele Programme
-schreiben kann. Insbesondere sind parallele Haskell Programme
-*deterministisch*, d.h. sie liefern garantiert dasselbe
-Ergebnis, egal ob sie auf einem, zwei oder 32 Prozessorkernen laufen.
-In traditionellen Sprachen ist im Gegensatz dazu Parallelität häufig nicht-deterministisch.
+schreiben kann. Dazu stelle ich eine Haskell-Bibliothek vor, die Parallelität
+ermöglicht ohne dabei auf ein *deterministisches* Programmverhalten zu verzichten.
+Das bedeutet dass ein mit der Bibliothek entwickeltes paralleles Programm
+garantiert dasselbe Ergebnis liefert, egal ob es auf einem, zwei oder 32 
+Prozessorkernen läuft (sofern das Programm keine anderen, nicht-deterministischen
+Teile enthält).
+In anderen Sprachen ist im Gegensatz dazu Parallelität häufig nicht-deterministisch.
 Damit werden Programme deutlicher schwerer zu debuggen,
 da sie beispielsweise auf einem Kern wunderbar funktionieren, auf zwei Kernen aber
 das falsche Ergenbis berechnen und es auf vier Kernen hin und wieder
 zu einem Deadlock kommt.
 
-Als kleine Vorausblick hier der Speedup, den wir mit Parallelität in Haskell
-durch eine sehr einfach Modifikation eines ursprünglich sequentiellen Programms
+Als kleine Vorausblick hier der Speedup in Relation zur Anzahl der Kerne, 
+den wir mit Parallelität in Haskell
+durch eine sehr einfache Modifikation eines ursprünglich sequentiellen Programms
 erzielen können:
 
 <div id="center">
@@ -44,6 +48,8 @@ erzielen können:
 </div>
 <br/>
 
+Zum Verständnis des Artikels sind Grundkenntnisse in Haskell sowie Bekanntschaft
+mit der do-Notation hilfreich.
 
 <!-- more start -->
 
@@ -53,7 +59,7 @@ Programm schneller zu machen. *Nebenläufigkeit* hingegen ist eine inherente
 Eigenschaft eines Programm und dient dazu, gleichzeitig mehrere
 Interaktionen mit der Außenwelt führen zu können. Ein nebenläufiges Programm
 ist damit zwangsläufig nicht-deterministisch, wohingegen parallele Programme
-durchaus deterministisch sein können und es in Haskell auch sind.
+durchaus deterministisch sein können und es in diesem Artikel auch sind.
 
 So, jetzt aber zu unserem konkreten Beispiel. Ich möchte in diesem Artikel
 zeigen wie man in Haskell ein paralleles Programm zum Lösen von Sudokurätseln
@@ -64,9 +70,13 @@ von Simon Marlow. Ich habe den Code mit dem [Glasgow Haskell Compiler](http://ha
 in Version 7.6.2 getestet.
 
 In einem ersten Schritt schreiben wir ein sequentielles Programm. Wir
-importieren zunächst das Module `Sudoko`, welches eine Funktion `solve`
-zum Lösen eines Sudokus bereitstellt. Außerdem importieren wir ein Drivermodule
-sowie ein Standardmodule.
+importieren zunächst das Modul `Sudoko`, welches eine Funktion `solve`
+zum Lösen eines Sudokus bereitstellt. Da es in diesem Artikel nicht um Algorithmen
+zum Lösen von Sudokurätsel geht und alle Parallelisierungsarbeit außerhalb
+des Solvers stattfinden wird, spielt die eigentliche Implementierung des `Sudoku`-Moduls
+keine Rolle. Außerdem importieren wir ein 
+spezielles Drivermodul
+sowie ein Standardmodul.
 
 {% highlight haskell %}
 -- Datei SudokuSeq.hs
@@ -75,20 +85,13 @@ import Driver
 import Data.Maybe
 {% endhighlight %}
 
-Ein Sudokurätsel der Dimension 9x9 wird als ein 81 Zeichen langer String
-repräsentiert, wobei ein Punkt für ein initial leeres Feld steht und eine Zahl
-die entsprechende Vorbelegung darstellt. Mehrere Sudokurätsel werden zeilenweise
-in einer Datei abgelegt, etwa so:
-
-    .......2143.......6........2.15..........637...........68...4.....23........7....
-    .......241..8.............3...4..5..7.....1......3.......51.6....2....5..3...7...
-    .......24....1...........8.3.7...1..1..8..5.....2......2.4...6.5...7.3...........
-
-Das Drivermodule stellt eine Funktion `driver` zur Verfügung.
+Das Drivermodul, dessen Implementierung an dieser Stelle irrelevant ist,
+stellt eine Funktion `driver` zur Verfügung.
 Diese Funktion übernimmt für uns das Parsen der Kommandozeilenargumente,
 das Einlesen der Eingabedatei sowie das Extrahieren der einzelnen Rätsel
 aus dieser Datei. Wir müssen `driver` lediglich mit einer Funktion zum
-Lösen aller Sudokurätsel aufrufen.
+Lösen aller Sudokurätsel aufrufen. Die `driver` Funktion berechnet dann die
+Lösungen und gibt die Anzahl der gelösten Rätsel aus.
 
 Das restliche sequentielle Programme sieht dann wie folgt aus:
 
@@ -99,20 +102,18 @@ main = driver computeSolutions
         filter isJust (map solve puzzles)
 {% endhighlight %}
 
-Das Argument `puzzles` von `computeSolutions` ist eine Liste von Strings, also
+Das Argument `puzzles` von `computeSolutions` ist 
 eine Liste von Sudokurätseln.
-Der Ausdruck `map solve puzzles` wendet die `solve` Funktion auf jedes dieser Rätsel an.
+Der Ausdruck `map solve puzzles` wendet die `solve`-Funktion auf jedes dieser Rätsel an.
 Mit `filter isJust` können wir
-aus der Ergebnisliste die echten Lösungen herausfiltern. Da wir hier nicht
-an den Lösungen an sich interessiert sind sondern nur die Zeit verbessern wollen die
-es zum Berechnen der Lösungen braucht, geben wir ganz am Ende lediglich die
-Anzahl der Lösungen aus. Jetzt können wir das Programm mit folgendem Befehl kompilieren:
+aus der Ergebnisliste die echten Lösungen herausfiltern. 
+Jetzt können wir das Programm mit folgendem Befehl kompilieren:
 
     ghc --make -O2 -threaded -rtsopts SudokuSeq.hs
 
 Der komplette Code zu diesem Artikeln kann auch
 [heruntergeladen](/files/parallel-haskell/parallel-haskell.zip) werden.
-In dem .zip Archiv befindet sich auch eine Datei `sudoku17.1000.txt` welche 1000
+In dem .zip-Archiv befindet sich auch eine Datei `sudoku17.1000.txt`, welche 1000
 Rätseln mit jeweils 17 vorbelegten Feldern enthält. Wenn wir nun das kompilierte
 `SudokuSeq` mit dieser Datei aufrufen erhalten wir als Ausgabe tatsächlich `1000`.
 Da wir an der Laufzeit interessiert sind müssen wir dem Aufruf noch ein paar
@@ -120,33 +121,8 @@ extra Argumente spendieren:
 
     ./SudokuSeq +RTS -s -RTS sudoku17.1000.txt
 
-Jetzt erhalten wir vom Laufzeitsystem des Haskell Programms noch folgende Zusatzinformationen:
-
-       2,362,896,368 bytes allocated in the heap
-          38,873,144 bytes copied during GC
-             241,816 bytes maximum residency (15 sample(s))
-              79,912 bytes maximum slop
-                   2 MB total memory in use (0 MB lost due to fragmentation)
-
-                                        Tot time (elapsed)  Avg pause  Max pause
-      Gen  0      4573 colls,     0 par    0.06s    0.07s     0.0000s    0.0001s
-      Gen  1        15 colls,     0 par    0.00s    0.00s     0.0002s    0.0002s
-
-      TASKS: 3 (1 bound, 2 peak workers (2 total), using -N1)
-
-      SPARKS: 0 (0 converted, 0 overflowed, 0 dud, 0 GC'd, 0 fizzled)
-
-      INIT    time    0.00s  (  0.00s elapsed)
-      MUT     time    1.46s  (  1.46s elapsed)
-      GC      time    0.06s  (  0.07s elapsed)
-      EXIT    time    0.00s  (  0.00s elapsed)
-      Total   time    1.52s  (  1.53s elapsed)
-
-      Alloc rate    1,622,000,569 bytes per MUT second
-
-      Productivity  96.0% of total user, 95.4% of total elapsed
-
-Das meist davon können wir ignorieren, interessant ist vorerst eigentlich nur die Zeile
+Der Text zwischen `+RTS` und `-RTS` sind Parameter für das Laufzeitsystem. Damit 
+erhalten wir u.a. folgende Zusatzinformationen:
 
       Total   time    1.52s  (  1.53s elapsed)
 
@@ -156,15 +132,17 @@ sequentielles Programm.
 
 Wir möchten nun dieses Programm parallelisieren. In Haskell stehen dazu mehrere Möglichkeiten
 zur Verfügung. Wir beschäftigen uns in diesem Artikel mit einer Möglichkeit welche Parallelität
-explizit einführt und Datenabhängigkeiten über spezielle _Boxen_ repräsentiert. In einem
-späteren Artikel werde ich auch noch auf eine weitere Möglichkeit eingehen.
+explizit einführt und Datenabhängigkeiten über spezielle _Boxen_ repräsentiert.
 
 Wenn Sie die folgenden Beispiel ausprobieren möchten, müssten Sie zunächst das
 Paket `monad-par` installieren. Am einfachsten geschieht dies über den Befehl
 
     cabal install monad-par-0.3
 
-Unsere erste Version des parallelen Sudoku Solvers sieht so aus:
+Nun zu unserer ersten Version des parallelen Sudoku-Solvers. Damit sie die Grundlagen
+des `monad-par` Bibliothek besser kennenlernen, benutzt diese Version die Primitivoperationen
+der Bibliothek. Wir werden dann in einer zweiten Version sehen, wie man das Problem
+einfacher und effizienter mit von der Bibliothek bereitgestellten Abstraktionen lösen kann.
 
 {% highlight haskell %}
 -- Datei SudokuPar1.hs
@@ -191,7 +169,7 @@ von `Control.Monad.Par` hinzugekommen. Außerdem ist die Funktion `computeSoluti
 komplizierter geworden. Mittels `splitAt` teilen wir zunächst die Eingabe in zwei
 etwa gleich große Teile `as` und `bs` auf. Auf diesen beiden Teilen soll
 nun die Lösung parallel berechnet werden. Dazu bedienen wir uns folgender
-Konstrukte aus dem `Control.Monad.Par` Modul:
+primitiven Operationen aus dem `Control.Monad.Par` Modul:
 
  * `new` Legt eine neue "Box" an in der später das Ergebnis einer parallelen Berechnung
    gespeichert wird. Da wir zwei Berechnungen parallel ausführen möchten legen
@@ -209,11 +187,11 @@ Konstrukte aus dem `Control.Monad.Par` Modul:
    warten wir mittels `get` bis die Ergebnisse in `b1` und `b2` vorliegen.
 
  * `runPar` Um aus der Welt der parallelen Berechnungen das Ergebnis in die Welt der "normalen"
-   Haskell Berechnungen zurückzureichen, müssen wir die parallele Berechnung auf oberster
+   Haskell-Berechnungen zurückzureichen, müssen wir die parallele Berechnung auf oberster
    Ebene in ein `runPar` einpacken.
 
 Schauen wir uns nun mal die sequentielle Performance unserer ersten parallelen Version an.
-Dies ist immer eine gute Prüfung um sich zu vergewissern dass man nicht völligen
+Dies ist immer eine gute Prüfung um sich zu vergewissern, dass man nicht völligen
 Blödsinn programmiert hat:
 
     ./SudokuPar1 +RTS -s -RTS sudoku17.1000.txt
@@ -254,8 +232,9 @@ zu analysieren. Hier ist ein Screenshot des Hauptfensters von threadscope:
 </div>
 <br/>
 
-Offensichtlich laufen die zwei Kerne nach einer kurzen Startphase schön parallel,
-wie die unteren beiden, etwas dünneren grünen Streifen zeigen.
+Richtig interessant am obigen Screenshot sind eigentlich nur die unteren beiden,
+etwas dünneren, grünen Streifen. Diese zeigen die Aktivitäten der Prozessorkerne an.
+Offensichtlich laufen die zwei Kerne nach einer kurzen Startphase schön parallel.
 Aber nach etwas mehr als der Hälfte der Zeit geht einem Kern offensichtlich die Arbeit aus
 und es ist nur noch ein Kern aktiv. Das Problem ist, dass
 das Lösen zweier Sudokurätsel unterschiedlich lange dauern kann und dass unsere
@@ -271,7 +250,7 @@ zur Verfügung stellen:
 Oh, die Performance ist sogar ein klein wenig schlechter geworden, obwohl meine Maschine
 vier echte Kerne hat. Die etwas schlechtere Performance liegt am größeren Overhead
 der durch die Verteilung auf mehrere Kerne entsteht.
-Es sollte aber auch einleuchtend sein dass wir mit unserer
+Es sollte aber auch einleuchtend sein, dass wir mit unserer
 fixen Aufteilung der Sudokurätsel in zwei Teile niemals mehr als zwei Kerne
 beschäftigen können.
 
@@ -304,12 +283,17 @@ main = driver computeSolutions
           filter isJust (runPar (parMap solve puzzles))
 {% endhighlight %}
 
-Der einzige Unterschied zur ursprünglichen, sequentiellen Version ist dass wir anstelle von
+Der einzige Unterschied zur ursprünglichen, sequentiellen Version ist, dass wir anstelle von
 `map solve puzzles` nun `runPar (parMap solve puzzles)` schreiben. Die Funktion
 `parMap` kommt dabei aus dem Modul `Control.Monad.Par`. Der Aufruf
 `parMap solve puzzles` ruft nun `solve` für jedes Rätsel in `puzzles` auf und
 zwar so dass dem Laufzeitsystem Gelegenheit gegeben wird die Aufrufe von `solve`
-geeignet zu parallelisieren. Wir werden uns am Ende des Artikels auch noch die
+geeignet zu parallelisieren. Sie sehen also: Parallelisierung ist in Haskell sehr einfach
+und die `monad-par` Bibliothek garantiert, dass alles deterministisch abläuft
+und dass keine Deadlocks oder sonstige, bei nebenläufigen Programmen typischen Probleme
+auftreten.
+
+Wir werden uns am Ende des Artikels auch noch die
 Implementierung von `parMap` anschauen, wollen jetzt aber zunächst sehen welche
 Performance unsere verbesserte parallele Version mit dynamischer Partitionierung
 liefert:
@@ -353,7 +337,7 @@ parMap f xs =
              return b
 {% endhighlight %}
 
-Die Funktion `g` legt für jedes Listenelement mit `new` einen neue Box and
+Die Funktion `g` legt für jedes Listenelement mit `new` eine neue Box and
 und benutzt dann `fork` um `f x` parallel zu berechnen und das Ergebnis
 in der Box zu speichern. Der Aufruf `mapM g xs` wendet nun `g` auf jedes Element
 von `xs` an, so dass wir danach in `bs` die Boxen für die Ergebnisse von `f`
