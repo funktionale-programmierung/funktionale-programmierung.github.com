@@ -1,7 +1,3 @@
-<!-- Definiert was für den jeweiligen Autor unterhalb des Post-Titels erscheint:
-Autor: xyz
--->
-
 {% if post.author %}
 {% assign the_author = post.author %}
 {% else %}
@@ -11,14 +7,19 @@ Autor: xyz
 {% case the_author %}
 
 {% when 'david-frese' %}
-<a href="http://www.active-group.de/unternehmen/frese.html">David Frese</a>
+{% assign the_author_name = "David Frese" %}
+{% assign the_author_href = "http://www.active-group.de/unternehmen/frese.html" %}
 
 {% when 'michael-sperber' %}
-<a href="http://www.active-group.de/unternehmen/sperber.html">Michael Sperber</a>
+{% assign the_author_name = "Michael Sperber" %}
+{% assign the_author_href = "http://www.active-group.de/unternehmen/sperber.html" %}
 
 {% when 'stefan-wehr' %}
-<a href="http://www.factisresearch.com/company.html#swehr">Stefan Wehr</a>
+{% assign the_author_name = "Stefan Wehr" %}
+{% assign the_author_href = "http://www.factisresearch.com/company.html#swehr" %}
+
 {% else %}
-{{ the_author }}
+{% assign the_author_name = the_author %}
+{% assign the_author_href = "" %}
 
 {% endcase %}
