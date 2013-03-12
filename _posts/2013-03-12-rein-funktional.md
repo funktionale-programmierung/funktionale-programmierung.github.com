@@ -37,7 +37,7 @@ Schleimspuren anderer Schnecken ("die stinken") ausweichen.  Das ganze
 visualisieren wir dann dergestallt, daß es so aussieht:
 
 <div id="center">
-<img src="/files/2013-02-08-rein-funktional/snailworld.gif">
+<img src="/files/rein-funktional/snailworld.gif">
 </img>
 </div>
 
@@ -242,7 +242,7 @@ beliebig weiterverarbeiten können.  Das können Sie nachvollziehen,
 indem Sie obige Form in die DrRacket-REPL eintippen, das sieht dann so
 aus:
 
-<img src="/files/2013-02-08-rein-funktional/circle.png">
+<img src="/files/rein-funktional/circle.png">
 </img>
 
 Für die Visualisierung der Schnecke in der Schneckenwelt müssen wir
@@ -268,7 +268,7 @@ setzt also die Schnecke an ihrer eigenen
 Position in die Szene hinein.  In der REPL ist schön zu sehen, wie die
 Funktion funktioniert:
 
-<img src="/files/2013-02-08-rein-funktional/draw-snail.png">
+<img src="/files/rein-funktional/draw-snail.png">
 </img>
 
 (Die
@@ -278,6 +278,6 @@ macht eine leere rechteckige Szene mit der angegebenen Breite und Höhe.)
 Für heute soll es erst einmal genug sein!
 
 Den Code zu diesem Beitrag können Sie übrigens
-[hier](/files/2013-02-08-rein-funktional/snail.rkt) herunterladen.
+[hier](/files/rein-funktional/snail.rkt) herunterladen.
 
 <!-- more end -->
