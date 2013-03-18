@@ -17,14 +17,14 @@ Dieses Blog gibt auf diese Fragen jede Woche eine neue Antwort. Wir hoffen
 mit unseren Antworten Softwareentwickler und Manager von funktionaler
 Programmierung zu überzeugen. Uns ist aber auch klar dass nicht in jedem
 Projekt eine funktionale Sprache zum Einsatz kommen kann, sei es aus
-politischen Gründen oder aus externen Zwängen. So werden beispielsweise
+politischen Gründen oder aufgrund externer Zwängen. So werden beispielsweise
 iOS Apps typischerweise in Objective-C geschrieben und eine moderene
 Webanwendung wird mit großer Wahrscheinlichkeit in Javascript entwickelt.
 
-Heute möchte ich meine ganz persönliche Antwort auf die Frage "warum
-programmiere ich funktional?" anhand eines Beispiels geben. Das Beispiel
-stammt aus meiner alltäglichen Praxis und zeigt, wie man auch in einer
-imperativen Sprache wie Objective-C durch die
+Heute möchte ich meine ganz persönliche Antwort auf die Frage "warum programmiere ich funktional?"
+anhand eines Beispiels aus der Praxis geben. Das Beispiel
+stammt aus meiner alltäglichen Arbeit und zeigt, wie man auch in einer
+imperativen Sprache wie Objective-C durch 
 funktionale Denkweise und die Prinzipien der funktionalen Programmierung
 einfacheren, besser wartbaren Code schreiben kann.
 
@@ -37,11 +37,11 @@ Resourcen. Bei der Entwicklung eines Projekts oder Produkts gilt es viele
 Punkte im Auge zu behalten: Anforderungen des Kunden, Korrektheit,
 Performance, Usability und und und. Da bin ich sehr froh dass funktionale
 Programme typischerweise auf Seiteneffekte verzichten und ich daher über
-eine ganze Kategorien von Problemen gar nicht erst nachdenken muss.
+eine ganze Kategorien von weiteren Problemen gar nicht erst nachdenken muss.
 
 Erst kürzlich ist mir wieder deutlich geworden, wieviel geistige Resourcen
 das Nachdenken über veränderbare Datenstrukturen, Zuweisungen oder
-Variablenaliasing kostet. Meine Aufgabe war es, für unsere iPad App eine
+Variablenaliasing kostet. Meine Aufgabe war es, für unsere iOS-App eine
 Komponente zu entwickeln, die grob gesagt beim Auftreten gewisser
 Ereignisse eine vorhandene Menge von IDs verändert und diese
 Änderung als Diff in einem Baum propagiert.
@@ -55,7 +55,7 @@ relativ viel Zeit kostet über alle solche Auswirkungen einer destruktiven
 Operation nachzudenken, ohne dass man dabei dem eigentlichen Ziel wirklich näher
 kommt. Daher habe ich mich nach kurzer Zeit entschieden *persistente
 Datenstrukturen* zu verwenden. Solche Datenstrukturen sind aus der
-funktionalen Programmierung wohlbekannt und habe die schöne Eigenschaft,
+funktionalen Programmierung wohlbekannt und haben die schöne Eigenschaft,
 dass Änderungsoperationen nie die Datenstruktur selbst ändern, sondern
 eine neue, geänderte Sicht zurückliefern und die alte Datenstruktur
 unberührt lassen.
@@ -65,8 +65,8 @@ Komponente zeigen, an der das Diff zwischen der alten und der neuen Menge
 von IDs berechnet wird. Unter dem Diff zweier Menge `old` und `new`
 verstehe ich dabei die Information, die nötig ist, um Änderungen
 zwischen `old` und `new` im Baum propagieren zu können.  In
-meinem Anwendungsfall sind die Menge selbst typischerweise relativ groß,
-die Änderungen zwischen den Menge aber ziemlich klein. Daher liegt es
+meinem Anwendungsfall sind die Mengen selbst typischerweise relativ groß,
+die Änderungen zwischen den Mengen aber ziemlich klein. Daher liegt es
 nahe, das Diff zwischen `old` und `new` als ein Paar `(toAdd, toRemove)`
 zu repräsentieren, so dass bei Anwenden des Diffs auf eine Menge `s` die
 Elemente aus `toAdd` zu `s` hinzugefügt werden, während die Elemente aus
@@ -174,7 +174,7 @@ zum Einsatz kommen.
 
 Neben `PersistentSetDiff` habe ich bei der Implementierung meiner
 Komponente auch noch an vielen anderen Stellen persistente Datenstrukturen
-anstatt von destruktiver verwendet. Dadurch konnte ich die Komponente
+anstatt destruktiver verwendet. Dadurch konnte ich die Komponente
 schneller entwickeln da weniger Nachdenken über mögliche Auswirkungen
 destruktiver Operationen nötig war. Außerdem wurde der Code dadurch besser
 wartbar und weniger fehleranfällig.
