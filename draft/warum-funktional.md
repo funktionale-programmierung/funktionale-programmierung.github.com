@@ -7,21 +7,19 @@ tags: []
 meta_description:
 ---
 
-Warum programmiere ich die meisten Zeit und wenn immer möglich in einer
-funktionalen Sprache? Und zwar nicht nur für private Hobbyprojekte sondern
-vor allem im professionellen Bereich. Warum haben wir als Firma
-entschieden Softwareentwicklung fast ausschließlich in funktionalen
-Programmiersprachen durchzuführen?
-
-Dieses Blog gibt auf diese Fragen jede Woche eine neue Antwort. Wir hoffen
+Warum haben wir als Firma entschieden Softwareentwicklung fast
+ausschließlich in funktionalen Programmiersprachen durchzuführen?  Dieses
+Blog gibt auf diese Fragen jede Woche eine neue Antwort. Und wir hoffen
 mit unseren Antworten Softwareentwickler und Manager von funktionaler
-Programmierung zu überzeugen. Uns ist aber auch klar dass nicht in jedem
+Programmierung zu überzeugen.
+
+Uns ist aber auch klar dass nicht in jedem
 Projekt eine funktionale Sprache zum Einsatz kommen kann, sei es aus
 politischen Gründen oder aufgrund externer Zwängen. So werden beispielsweise
-iOS Apps typischerweise in Objective-C geschrieben und eine moderene
+iOS-Apps typischerweise in Objective-C geschrieben und eine moderene
 Webanwendung wird mit großer Wahrscheinlichkeit in Javascript entwickelt.
 
-Heute möchte ich meine ganz persönliche Antwort auf die Frage "warum programmiere ich funktional?"
+Heute möchte ich eine Antwort auf die Frage "warum funktional?"
 anhand eines Beispiels aus der Praxis geben. Das Beispiel
 stammt aus meiner alltäglichen Arbeit und zeigt, wie man auch in einer
 imperativen Sprache wie Objective-C durch 
@@ -30,7 +28,7 @@ einfacheren, besser wartbaren Code schreiben kann.
 
 <!-- more start -->
 
-Warum also funktional?
+### Warum also funktional?
 
 Der für mich wichtigste Grund ist die Begrenztheit meiner geistigen
 Resourcen. Bei der Entwicklung eines Projekts oder Produkts gilt es viele
@@ -53,8 +51,9 @@ eine Datenstruktur ändert obwohl man zu einem späteren Zeitpunkt noch den
 alten Zustand benötigt. Beim Entwickeln habe ich dann gemerkt dass es
 relativ viel Zeit kostet über alle solche Auswirkungen einer destruktiven
 Operation nachzudenken, ohne dass man dabei dem eigentlichen Ziel wirklich näher
-kommt. Daher habe ich mich nach kurzer Zeit entschieden *persistente
-Datenstrukturen* zu verwenden. Solche Datenstrukturen sind aus der
+kommt. Daher habe ich mich nach kurzer Zeit entschieden 
+[*persistente Datenstrukturen*](http://en.wikipedia.org/wiki/Persistent_data_structure)
+zu verwenden. Solche Datenstrukturen sind aus der
 funktionalen Programmierung wohlbekannt und haben die schöne Eigenschaft,
 dass Änderungsoperationen nie die Datenstruktur selbst ändern, sondern
 eine neue, geänderte Sicht zurückliefern und die alte Datenstruktur
@@ -100,22 +99,85 @@ Mein erster, destruktiver Ansatz sah in etwa so aus:
 @end
 {% endhighlight %}
 
-Beachten Sie, dass in der mit `(*)` markierten Zeile ein Kopie der Menge
-`new` erstellt wird. Dies ist nötig um Korrektheit sicherzustellen. Die
-beiden anderen Parameter `old` und `set` werden hingegen
-destruktiv modifiziert. Eine Inspektion meines übrigen Codes
-hatte mich zunächst davon überzeugt dass diese destruktiven Modifikationen
+Wie in Objective-C üblich steht zwischen `@interface` und `@end` die
+Deklarationen der öffentlichen Eigenschaften und Methoden der Klasse
+`DestructiveSetDiff`, während der `@implementation` Block dann die
+Methoden implementiert.  Beachten Sie, dass in der mit `(*)` markierten
+Zeile ein Kopie der Menge `new` erstellt wird. Dies ist nötig, um
+Korrektheit sicherzustellen. Die beiden anderen Parameter `old` und `set`
+werden hingegen destruktiv modifiziert, zum einen aus Gründen der
+Effizienz zum anderen einfach weil eine imperative Sprache wie Objective-C
+diese Implementierung nahe legt. Eine Inspektion meines übrigen Codes
+hatte mich zunächst davon überzeugt, dass diese destruktiven Modifikationen
 in Ordnung sind.
 
 Allerdings habe ich dann später noch Änderungen vorgenommen und plötzlich
 hatten die destruktiven Änderungen fatale Folgen, da die dort modifizierten
 Mengen an anderer Stelle mit Annahme des alten Zustands verwendet
-wurden.
+wurden. Konkret ist dieses Problem aufgetreten als ich eine Optimierung
+an der Serialisierung vorgenommen hatte. 
 
-Ich habe mich dann an meine funktionalen Wurzeln erinnert und eine
+Mit jedem Knoten im Baum sind nämlich mehrere Mengen von IDs assoziert,
+die Auswahl der richtigen Menge geschieht über einen Schlüssel
+vom Typ `NSString`.
+Vor der Optimierung hatte ich einfach alle mit einem Knoten assozierten
+Mengen serialisiert und auf Platte geschrieben.  Da es aber auch durchaus
+vorkommen kann, dass sich gewisse Menge nicht ändern, wollte ich diesen
+Umstand ausnützen und nur die veränderten Mengen speichern.  Dazu habe ich
+eine Klasse `SerializableNodeData` eingeführt, der man explizit mitteilen
+muss, dass sich eine Menge geändert hat, und die bei der
+Serialisierung nur die tatsächlich geänderten Mengen speichert.  Die
+Schnittstelle der Klasse sieht in etwa so aus:
+
+{% highlight objective-c %}
+@interface SerializableNodeData
+- (NSMutableSet *)valueForKey:(NSString *)key;
+- (void)setValue:(NSSet *)set forKey:(NSString *)key;
+- (void)serialize;
+@end
+{% endhighlight %}
+
+Die Implementierung von `setValue:forKey:` hat folgende Form, wobei
+`self.dirtyKeys` die Menge der Schlüssel repräsentiert, deren Werte verändert wurden,
+und `self.values` die aktuellen Werte speichert.
+
+{% highlight objective-c %}
+- (void)setValue:(NSSet *)set forKey:(NSString *)key
+{
+    NSSet *old = [self.values objectForKey:key];
+    if (![set isEqualToSet:old]) {
+        [self.dirtyKeys addObject:key];
+        [self.values setObject:set forKey:key];
+    }
+}
+{% endhighlight %}
+
+Bei der Serialisierung werden dann nur die Schlüssel gespeichert die
+in `self.dirtyKeys` enthalten sind. Mein Code zum Anwenden des Diffs und zum
+Speichern des neuen Werts sah dann nach der Optimierung in etwa so aus:
+
+{% highlight objective-c %}
+    SerializableNodeData *nd;
+    NSString *key;
+    DestructiveSetDiff *diff;
+    // ...
+    NSMutableSet *old = [nd valueForKey:key];
+    [diff applyDiff:old];
+    [nd setValue:old forKey:key];
+    [nd serialize];
+{% endhighlight %}
+
+In dieser kompakten Darstellung und mit etwas Abstand ist offensichtlich was hier schiefgeht:
+keiner der Schlüssel von `SerializableNodeData` wird jemals als "dirty" markiert werden,
+denn der Vergleich `[set isEqualToSet:old]` in der Methode `setValue:forKey:` liefert immer `true`
+da `set` und `old` Aliase für dasselbe Objekt sind. Daher passierte mit meiner
+Optimierung bei der Serialisierung gar nichts.
+
+Nach dieser Einsicht habe ich mich dann an meine funktionalen Wurzeln erinnert und eine
 persistente Version `PersistentSetDiff` geschrieben. In dieser Version
-werden keine Parameter destruktiv modifiziert und die `applyDiff:` Methode
-liefert ihr Ergebnis als Rückgabewert.
+werden keine Parameter destruktiv modifiziert und die Methode `applyDiff:`
+liefert ihr Ergebnis als Rückgabewert. Damit war der oben geschilderte Bug auch sofort
+behoben.
 
 {% highlight objective-c %}
 @interface PersistentSetDiff : NSObject
@@ -166,7 +228,7 @@ einem `NSMutableSet`, das an den richtigen Stellen kopiert wird. Falls es
 mit der naiven Implementierung irgendwann mal Performanceprobleme geben
 sollte, könnte ich die naive Implementierung durch eine deutlich
 performantere ersetzen.  Dazu bieten sich z.B. ["Hash Tries"](http://lampwww.epfl.ch/papers/idealhashtrees.pdf) an, wie sie
-beispielsweise auch in [clojure](http://clojure.org/)
+beispielsweise auch in [Clojure](http://clojure.org/)
 ([Blogartikel](http://blog.higher-order.net/2009/09/08/understanding-clojures-persistenthashmap-deftwice/))
 oder [Scala](http://scala-lang.org)
 ([Sourcecode](https://github.com/scala/scala/blob/v2.10.1/src/library/scala/collection/immutable/HashSet.scala#L1))
@@ -175,7 +237,7 @@ zum Einsatz kommen.
 Neben `PersistentSetDiff` habe ich bei der Implementierung meiner
 Komponente auch noch an vielen anderen Stellen persistente Datenstrukturen
 anstatt destruktiver verwendet. Dadurch konnte ich die Komponente
-schneller entwickeln da weniger Nachdenken über mögliche Auswirkungen
+schneller entwickeln, da weniger Nachdenken über mögliche Auswirkungen
 destruktiver Operationen nötig war. Außerdem wurde der Code dadurch besser
 wartbar und weniger fehleranfällig.
 
