@@ -310,7 +310,7 @@ Wir definieren `>=>` mit Hilfe von `>>=` wie folgt
 f >=> g = \ x -> f x >>= g
 {% endhighlight %}
 
-Randnotiz: In Haskell98 enthält die Monad-Klasse noch zwei weitere
+In Haskell98 enthält die Monad-Klasse noch zwei weitere
 Funktionen `>>` und `fail`
 
 {% highlight haskell %}
@@ -327,7 +327,7 @@ Haskell-Community als Designfehler angesehen. Die Funktion wird bei
 benötigt. Wir werden diese Operationen in den folgenden Beispielen
 nicht weiter verwenden.
 
-Randnotiz: In den Monaden-Tutorien, die es im Haskell-Wiki und an
+In den Monaden-Tutorien, die es im Haskell-Wiki und an
 anderen Stellen in reichlicher Anzahl gibt, werden die
 Monaden-Gesetzte meistens für `>>=` und `return` formuliert. Aber
 dadurch, dass `>>=` im Gegensatz zu `>=>` eine unsymmetrische Signatur
@@ -361,7 +361,7 @@ idMaybe x = Just x
 und es gilt
 
 {% highlight haskell %}
-idMaybe >=> f
+  idMaybe >=> f
 =
   f
 =
@@ -372,9 +372,9 @@ idMaybe >=> f
 
 {% highlight haskell %}
   idMaybe x = Just x
-<=>
+=
   idMaybe x = return x
-<=>
+=
   idMaybe = return . id
 {% endhighlight %}
 
@@ -382,7 +382,7 @@ Wir sehen an der dritten Form, dass `idMaybe` nicht mehr von Maybe
 abhängt, `return . id` ist also nicht nur für Maybe, sondern für alle
 Monaden das gesuchte neutrale Element bezüglich `>=>`.
 
-Randnotiz: Die Monaden-Instanz für `Maybe` ist im [Haskell Prelude][Maybe]
+Die Monaden-Instanz für `Maybe` ist im [Haskell Prelude][Maybe]
 vordefiniert. Wir können diese also direkt verwenden.
 
 
@@ -419,14 +419,13 @@ throwError msg = Exc msg
 throwError = Exc
 {% endhighlight %}
 
-Randnotiz: Damit die Funktion `throwError` überladen und so auch von
+Damit die Funktion `throwError` überladen und so auch von
 anderen Fehlermonaden genutzt werden kann, gibt es im Paket
 [mtl][mtl] im Modul [Control.Monad.Error][ControlMonadError] die
 Klasse [MonadError][MonadError], in der `throwError` und eine
 Funktion zum Behandeln von Ausnahmen, `catchError` deklariert sind.
 
-
-Randnotiz: Für `Either` gibt es inzwischen eine vordefinierte
+Für `Either` gibt es inzwischen eine vordefinierte
 [Monadeninstanz][DataEither]. Unter Verwendung dieser hätten wir
 unseren `Exc`-Datentyp nicht neu definieren müssen, sondern weiter mit
 `Either` arbeiten können.
@@ -517,10 +516,10 @@ aber nur der Anfang. In [Real-Word-Haskell][rwh]-Programmen stehen wir
 fast immer vor der Aufgabe, Fehlerbehandlung, Zustands-behaftete
 Berechnungen, Ein- und Ausgabe und weitere Anwendungs-spezifische
 Aspekte zu kombinieren. Wir werden also vor der Aufgabe stehen, die
-oben diskutierten einfachen Monaden zu kombiniert, um mehrere Aspekte
+oben diskutierten einfachen Monaden zu kombinieren, um mehrere Aspekte
 gleichzeitig zu berücksichtigen.
 
-Im nächsten Teil dieses Blogs werden wir eine kleine
+Im zweiten Teil dieser Übersicht über Monaden werden wir eine kleine
 Domänen-spezifische Sprache entwickeln. Wir werden mit einer sehr
 einfachen Sprache beginnen und diese schrittweise um neue Aspekte,
 Fehlerbehandlung, Variablen, Nichtdeterminismus und I/O erweitern.
