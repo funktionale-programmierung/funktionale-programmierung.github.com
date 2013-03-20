@@ -8,19 +8,19 @@ tags: ["Haskell", "Monaden"]
 
 # Monaden in Aktion #
 
-Im letzten Artiken über Monaden haben wir die Grundlagen
+Im letzten Artikel über Monaden haben wir die Grundlagen
 diskutiert. Hier soll es darum gehen, eigene Monaden zur Lösung
-Software-technischer Aufgaben zu entwickeln.  Wir werden sehen, wie
-ein Stück Software modular und durch lokale Erweiterungen um neue
+Software-technischer Aufgaben selbst zu entwickeln.  Wir werden sehen,
+wie ein Stück Software modular und durch lokale Erweiterungen um neue
 Funktionalität ergänzt werden kann, ohne bestehende Teile zu verändern
 oder zu refaktorisiern.
 
 Als laufendes Beispiel werden wir die klassische Aufgabe der
 Auswertung von Ausdrücken behandeln. Wir werden mit einfachen
 arithmetischen Ausdrücken und Konstanten beginnen.  Hierfür werden wir
-einen *rein funktional* geschriebenen Interpretierer angeben. Diesen
-werden wir in eine *monadische* Form transformieren, ohne die
-Funktionalität zu verändern.
+einen *rein funktional* geschriebenen Interpretierer angeben. Dieser
+wird in einem ersten Schritt in eine *monadische* Form transformiert,
+ohne dass die Funktionalität verändert wird.
 
 Den ersten Aspekt, den wir hinzu fügen möchten, ist eine sinnvolle
 Fehlerbehandlung.  Der Interpretierer wird also nicht mehr
@@ -28,27 +28,27 @@ Fehlerbehandlung.  Der Interpretierer wird also nicht mehr
 oder eine aussagekräftige Fehlermeldung.  Diesen Aspekt werden wir mit
 der Fehler-Monade in den Griff bekommen.
 
-Anschließend werden wir die Ausdruckssprache in unterschiedliche
-Richtungen erweitern.  Eine erste Erweiterung wird die Hinznahme von
-Operatoren sein, die bei der Auswertung mehrere Resultate liefern
-können. In der Mathematik ist das Wurzel ziehen ein Beispiel für eine
-solche Operation. In der Haskell-Gemeinde wird für diese mehrfachen
-Resultate häufig der Begrif der nicht deterministischen Berechnung
-verwendet.  Hierfür werden wir die Listen-Monade nutzen.
+Anschließend wird die Ausdruckssprache in unterschiedliche Richtungen
+erweitert.  Eine erste Erweiterung ist die Hinzunahme von Operatoren,
+die bei der Auswertung mehrere Resultate liefern können. In der
+Mathematik ist das Wurzelziehen ein Beispiel für eine solche
+Operation. In der Haskell-Gemeinde wird für diese mehrfachen Resultate
+häufig der Begriff der nichtdeterministischen Berechnung
+verwendet. Für diese Erweiterung werden wir die Listen-Monade nutzen.
 
 Die zweite Erweiterung werden Ausdrücke mit Variablen sein. Zur
 Auswertung solcher Ausdrücke benötigt man eine Belegung der Variablen
-mit Werten, man hat also wärend der Auswertung ein *Environment*,
-einen Kontext, über den die Werte zugreifbar werden. Hier kommt die
+mit Werten, man hat also während der Auswertung ein *Environment*,
+eine Umgebung, über die die Werte zugreifbar werden. Hier kommt die
 sogenannte [Reader]-Monade zum Einsatz.
 
 In der folgenden Erweiterung werden wir die Variable zu
-Programmvariablen machen.  Die Menge der Ausdrücke wir um Zuweisungen,
-Verzweigungen und Schleifen erweitert.  Die [Zustands][State]-Monade
-kommt hier zum Einsatz.
+Programm-Variablen machen.  Die Menge der Ausdrücke wird um
+Zuweisungen, Verzweigungen und Schleifen erweitert. Es wird hierzu die
+[Zustands][State]-Monade verwendet.
 
-Als letzten Schritt werden wir Operatione für die Ein- und Ausgabe
-hinzu nehmen.  Die IO-Monade muss also irgendwie in unsere eigene
+Als letzten Schritt werden wir Operationen für die Ein- und Ausgabe
+hinzu nehmen.  Die `IO`-Monade muss also irgendwie in unsere eigene
 Monade integriert werden.
 
 ## Rein funktionaler Code versus I/O-behafteter Code ##
@@ -58,19 +58,20 @@ bei den heutigen Mainstream-Sprachen nicht auftritt. Funktionen mit
 I/O können nicht innerhalb von *puren* Funktionen verwendet
 werden. Dieses wird vom Typsystem verhindert.
 
-Wenn im Laufe eines Projekt vestgestellt wird, dass in einer
+Wenn im Laufe eines Projekt festgestellt wird, dass in einer
 elementaren Funktion `f` Ein- und/oder Ausgabe notwendig ist, so
 müssen alle Funktionen die dieses `f` direkt oder indirekt nutzen, so
-umgeschrieben werden, dass sie in der IO-Monade laufen.  Dieses kann
+umgeschrieben werden, dass sie in der `IO`-Monade laufen.  Dieses kann
 in heißen Projektphasen manchmal schlicht nicht machbar sein. Als
 Notlösung wird dann leicht in eine Kiste mit schmutzigen Tricks
-gegriffen und Funktionen, die `unsave???` heißen genutzt. Diese ist
-üblicherweise der erste Schritt zu einem *verwarzten* System.
+gegriffen und Funktionen, die `unsave???` heißen, genutzt. Diese ist
+üblicherweise der erste Schritt zu einem unzuverlässigen und
+unwartbaren System.
 
 Mit dem hier vorgestellten monadischem Programmierstil werden wir
-nicht in dieses hässliche Problem hinein laufen.
+nicht in diese hässliche Falle laufen.
 
-## Auswertung arithmetischer Ausdücke ##
+## Auswertung arithmetischer Ausdrücke ##
 
 Wir beginnen in unserem Beispiel mit der Auswertung arithmetischer
 Ausdrücke mit den 5 Grundrechenarten ``+, -, *, div, mod`` und
@@ -118,15 +119,16 @@ mft = [ (Add, (+))
 {% endhighlight %}
 
 Ein Ausdruck `Expr` besitzt zwei Ausprägungen, ganzzahlige Konstante
-`Const` und 2-stellige Operationen `Binary`. Binäre Ausdrücke enhalten
-einen Operator `BinOp` und 2 Teilausdrücke.  Der Interpretierer `eval`
-berechnet aus einem Ausdruck einen Wert vom Typ `Result`.  Die
-Auswertung der Konstanten ist trivial, binäre Ausdrücke werden
-ausgewertet, indem die Teilausdrücke durch rekursive Aufrufe von eval
-ausgewertet werden, die Bedeutungsfunktion der Operatoren wird aus
-einer Tabelle `mft` mit `lookupMft` ausgelesen und auf auf die
-Teilergebnisse angewendet. Der `Mod`-Operator feht mit Absicht noch in
-der Tabelle, damit wir den Fehlerfall in `lookupMft` testen können.
+`Const` und 2-stellige Operationen `Binary`. Binäre Ausdrücke
+enthalten einen Operator `BinOp` und 2 Teilausdrücke.  Der
+Interpretierer `eval` berechnet aus einem Ausdruck einen Wert vom Typ
+`Result`.  Die Auswertung der Konstanten ist trivial, binäre Ausdrücke
+werden ausgewertet, indem die Teilausdrücke durch rekursive Aufrufe
+von `eval` ausgewertet werden, die Bedeutungsfunktion der Operatoren
+wird aus einer Tabelle `mft` mit `lookupMft` ausgelesen und auf auf
+die Teilergebnisse angewendet. Der `Mod`-Operator feht mit Absicht
+noch in der Tabelle, damit wir den Fehlerfall in `lookupMft` testen
+können.
 
 Einige Testausdrücke:
 
@@ -139,7 +141,7 @@ e2 = Binary Div (Const 1) (Const 0)
 e3 = Binary Mod (Const 1) (Const 0)
 {% endhighlight %}
 
-und eine *ghci*-Session
+und eine *ghci-Session*
 
 > zwiebel> ghci Expr0.hs
 > ...
@@ -172,7 +174,7 @@ von der `eval`-Funktion behandelt wird.
 Wir werden die mangelhafte Fehlerbehandlung noch einen Moment
 ignorieren und die `eval`-Funktion in eine gleichwertige *monadische*
 Form bringen. Dazu werden wir die allereinfachste Monade, die
-Identitätsmonade, nutzen. Wir müssen dazu allerdings den
+Identitäts-Monade, nutzen. Wir müssen dazu allerdings den
 `Result`-Datentyp, für den wir die Monade instanziieren möchten,
 verallgemeinern, da Monaden für Typkonstruktoren, und nicht für
 einfache Typen, definiert werden können.
@@ -258,8 +260,8 @@ Ein Testlauf
 > *** Exception: operation not implemented
 
 Die Funktionalität ist identisch zu der aus *Expr0*. In diesem ersten
-Schritt haben wir das Beispiel nur kompilizerter gemacht, wir haben
-nichts gewonnen, *NUR* in die Erweiterbarkeit investiert.
+Schritt haben wir das Beispiel nur komplizierter gemacht, wir haben
+nichts gewonnen, sondern *NUR* in die Erweiterbarkeit investiert.
 
 ## Erweiterung um Fehlerbehandlung ##
 
@@ -267,9 +269,9 @@ Sollen Fehler in der Anwendung selbst behandelt werden, so müssen die
 Fehler im `Result`-Datentyp repräsentiert werden. Nur so kann im
 Interpretierer unterschieden werden, ob eine Auswertung einen Fehler
 oder einen *normalen* Wert liefert. `Result` wird also zu einem
-Summen-Datentyp erweitert. Der Code-Auschnitt zeigt die Erweiterungen,
-der Rest bleibt unverändert. Die vollständige Quelle steht unter
-[Expr2.hs][Expr2].
+Summen-Datentyp erweitert. Der Code-Ausschnitt zeigt die
+Erweiterungen, der Rest bleibt unverändert. Die vollständige Quelle
+steht unter [Expr2.hs][Expr2].
 
 {% highlight haskell %}
 module Expr2 where
@@ -316,8 +318,8 @@ div' x y
 `Result` arbeitet mit der Fehler-Monade. Berechnungen werden im
 Fehlerfall sofort abgebrochen. `lookupMft` war eine der partiellen
 Funktionen, hier wird nur `error` durch `throwError` ausgewechselt.
-`div` war die andere Schwachstelle. In `div''` wird die Vorbedingung
-`y /= 0` geprüft, bevor die eigentliche Division ausgeführt wird.
+`div` war die andere Schwachstelle. In `div'` wird die Vorbedingung `y
+/= 0` geprüft, bevor die eigentliche Division ausgeführt wird.
 
 Der Testlauf von oben ergibt jetzt folgende Resultate
 
@@ -332,37 +334,38 @@ Der Testlauf von oben ergibt jetzt folgende Resultate
 > *Expr2> eval e3
 > Exc {exc = "operation not implemented"}
 
-Wir sehen, dass nur durch Hinzufügen weniger Zeilen der Aspekt der Fehlererkennung
-in den bestehenden Interpretierer integriert werden konnte. Und nur dort, wo Fehler
-auftreten konnten, `lookupMft` und `div`, sind lokale Veränderungen vorgenommen worden.
-Die `eval`-Funktion wurde an keiner Stelle angefasst.
+Wir sehen, dass nur durch Hinzufügen weniger Zeilen der Aspekt der
+Fehlererkennung in den bestehenden Interpretierer integriert werden
+konnte. Und nur dort, wo Fehler auftreten konnten, `lookupMft` und
+`div`, sind lokale Veränderungen vorgenommen worden.  Die
+`eval`-Funktion wurde an keiner Stelle angefasst.
 
 In einem nicht monadischen Stil hätten wir an jeder Stelle, an der ein
 `Result`-Wert berechnet wird, die Verzweigung `Val`/`Exc` einfügen
 müssen, alleine beim Auswerten binärer Ausdrücke hätten wir diesen
-Test 3 mal einzufügen.  Die Investition in [Expr1.hs][Expr1] hat sich
-also schon ausgezahlt.
+Test drei mal einzufügen.  Die Investition in [Expr1.hs][Expr1] hat
+sich also schon ausgezahlt.
 
-Randnotiz: `throwError` möchte man natürlich in allen Ausnahme-Monaden
-nutzen.  Es ist also sinnvoll, `throwError` in einer Typklasse zu
-deklarieren. Die Klasse `MonadError` ist im Modul
+`throwError` möchte man natürlich in allen Ausnahme-Monaden nutzen.
+Es ist also sinnvoll, `throwError` in einer Typklasse zu
+deklarieren. Die Klasse `MonadError` im Modul
 [Control.Monad.Error][ControlMonadError] übernimmt diese Aufgabe.
 Außerdem enthält sie auch eine Funktion `catchError` zum Abfangen und
-Behandeln von Fehlern, was in unserem Beispiel nicht benötigt wird.
-Da `MonadError` eine Multi-Parameter-Klasse ist, werden bei ihrer
-Verwendung einige Haskell-Spracherweiterungen benötigt. Der
+Behandeln von Fehlern, die in unserem Beispiel aber nicht benötigt
+wird.  Da `MonadError` eine Multi-Parameter-Typklasse ist, werden bei
+ihrer Verwendung einige Haskell-Spracherweiterungen benötigt. Der
 vollständige Code hierfür findet sich im Beispiel [Expr2a.hs][Expr2a].
 
 ## Erweiterung um Nichtdeterminismus mit der Listen-Monade ##
 
-In dem folgenden Beispiel werden wir die Menge der Operatoren um einen
-etwas ungewöhnlichen Operator `PlusMinus` erweitern. Dieser soll es
-uns ermöglichen, eine Art Intervall-Arithmetik zu machen. ``2
-`plusMinus` 1`` soll als Resultat die beiden Werte `1` und `3`
-ergeben.
+In dem folgenden Beispiel werden wir die Menge der Operatoren
+beispielhaft um einen etwas ungewöhnlichen Operator `PlusMinus`
+erweitern. Dieser soll es uns ermöglichen, eine Art
+Intervall-Arithmetik zu machen. ``2 +/- 1`` soll als Resultat die
+beiden Werte `1` und `3` ergeben.
 
 Wir haben also einen Operator, der mehrere Werte als Resultat
-liefert. Dieses Arbeiten mit Funktionen mit mehreren Resultaten wird
+liefert. Das Arbeiten mit Funktionen mit mehreren Resultaten wird
 manchmal etwas unpräzise als Nichtdeterminismus bezeichnet. Man
 arbeitet anstatt mit Funktionen mit Relationen. Funktionen vom Typ `a
 -> b` werden zu Funktionen vom Typ `a -> [b]` verallgemeinert.
@@ -397,7 +400,7 @@ newtype Result a
 instance Monad Result where     -- erweitert
     return x       = Val [x]
     (Val xs) >>= g = Val $
-	                 concat [val (g x) | x <- xs]
+                     concat [val (g x) | x <- xs]
 
 ...
 
@@ -431,10 +434,10 @@ instance Monad [] where
   xs >>= g = concat [g x | x <- xs]
 {% endhighlight %}
 
-Nur kommt noch das Aus- und Einwickelen mit `val` und `Val` dazu. Es wird
-auf alle Elemente aus `xs` die Funktion `g` angewendet, anschließend
-wird die resultierende Liste von Listen mit `concat` zu einer
-einfachen Liste zusammen gefasst.
+Nur kommt noch das Aus- und Einwickeln mit `val` und `Val` dazu. Es
+wird auf alle Elemente aus `xs` die Funktion `g` angewendet,
+anschließend wird die resultierende Liste von Listen mit `concat` zu
+einer einfachen Liste zusammen gefasst.
 
 Zum Ausprobieren benötigen wir einige neue Testausdrücke:
 
@@ -475,8 +478,9 @@ Eine *ghci-Session*
 
 <!-- ] hack für emacs markdown mode, Klammer zu fehlt -->
 
-Wir sehen, dass die *alten* Ausdrücke, `e1`, wie bisher ausgewertet
-werden, sie sind nur in eine einelementigen Liste eingewickelt.
+Wir sehen, dass die *alten* Ausdrücke, z.B. `e1`, wie bisher
+ausgewertet werden, sie sind nur in eine einelementige Liste
+eingewickelt.
 
 Die Intervalle bestehen aus Listen mit 2 Werten. Wird eine 2-stellige
 Operation ausgeführt, so bekommt man eine Liste der Länge `n1 * n2`
@@ -494,7 +498,7 @@ data Result a
 {% endhighlight %}
 
 Spannend hierbei wird die Erweiterung der Monade für `Result`, die wir
-hier folgendermaßen realisieren:
+folgendermaßen realisieren:
 
 {% highlight haskell %}
 instance Monad Result where
@@ -511,15 +515,15 @@ instance Monad Result where
 {% endhighlight %}
 
 `return` bleibt unverändert. In einem Fehlerfall wird die Berechnung
-abgebrochen. Sonst wird auf jedes Element aus `g` angewendet. Dieses
-Resultat wird mit `partition` in Fehler- und Werte-Liste
-partitioniert. Wenn in keinem Fall ein Fehler aufgetreten ist, werden
-die Resultate wie bisher konkateniert und in `Val` eingewickelt, sonst
-bildet der erste Fehler das Resultat. Die Berechnung wird also beim
-ersten Fehler abgebrochen. Das vollständige Programm steht unter
-[Expr3a.hs][Expr3a]
+abgebrochen. Sonst wird auf jedes Element aus `xs` `g`
+angewendet. Dieses Resultat wird mit `partition` in Fehler- und
+Werte-Liste partitioniert. Wenn in keinem Fall ein Fehler aufgetreten
+ist, werden die Resultate wie bisher konkateniert und in `Val`
+eingewickelt, sonst bildet der erste Fehler das Resultat. Die
+Berechnung wird also beim ersten Fehler abgebrochen. Das vollständige
+Programm steht unter [Expr3a.hs][Expr3a]
 
-Ein Testlauf zeigt, dass die Fehlerbehandlung wie gewünscht funktioniert:
+Ein Testlauf zeigt, dass die Fehlerbehandlung jetzt wie gewünscht funktioniert:
 
 > zwiebel> ghci Expr3a.hs
 > ...
@@ -541,12 +545,12 @@ Ein Testlauf zeigt, dass die Fehlerbehandlung wie gewünscht funktioniert:
 > *Expr3a> eval $ Binary Div i2 i1
 > Exc {exc = "division by zero"}
 
-Dieses muss nicht die einzige sinnvolle Definition von `>>=`
-sein. Denkbar wäre auch eine etwas liberalere Handhabung der Fehler,
-bei der man die Fehler ignoriert, solange man wenigstens ein richtiges
-Resulat hat. Das Software-technisch entscheidende ist, dass für die
-Art der Interpretation nur lokale Änderungen in der Monade notwendig
-sind.
+Die gewählte Definition von `>>=` muss nicht die einzige sinnvolle
+Definition sein. Denkbar wäre auch eine etwas liberalere Handhabung
+der Fehler, bei der man die Fehler ignoriert, solange man wenigstens
+ein richtiges Resultat hat. Das Software-technisch entscheidende ist,
+dass für die Art der Interpretation nur lokale Änderungen in der
+Monade notwendig sind.
 
 Der modifizierte Code ([Expr3b.hs][Expr3b]):
 
@@ -581,49 +585,52 @@ folgendes Fehlerverhalten:
 > *Expr3a> eval $ Binary Div i2 i1
 > Val {val = [4,2]}
 
-Die Fehler bei ``8 `div` 0`` und ``4 `div` 0`` werden ignoriert,
-da ``8 `div` 2`` und ``4 `div` 2`` zu `[4, 2]` ausgewertet werden.
+Die Fehler bei ``8 `div` 0`` und ``4 `div` 0`` werden ignoriert, da
+``8 `div` 2`` und ``4 `div` 2`` zu `[4, 2]` ausgewertet werden.
 
 Was haben wir bisher erreicht? Durch das Umschreiben des
 ursprünglichen Programms [Expr0.hs][Expr0] in eine monadische Form
 [Expr1.hs][Expr1] konnten wir den Aspekt der Fehlererkennung auf
 einfache Weise und mit ausschließlich lokalen Änderungen und
-Erweiterungen integrieren ([Expr2.hs][Expr2]). Das gleiche war möglich bei der Erweiterung
-durch *nichtdeterminischtische* Funktionen ([Expr3b.hs][Expr3b]).  Und schließlich haben wir
-in [Expr3a.hs][Expr3a] und [Expr3b.hs][Expr3b] gesehen, wie die beiden
-Aspekte Fehlererkennung und Nichtdeterminismus nur durch
-lokale Erweiterung der Monade kombiniert werden konnten.
+Erweiterungen integrieren ([Expr2.hs][Expr2]). Das gleiche war möglich
+bei der Erweiterung durch *nichtdeterministische* Funktionen
+([Expr3b.hs][Expr3b]).  Und schließlich haben wir in
+[Expr3a.hs][Expr3a] und [Expr3b.hs][Expr3b] gesehen, wie die beiden
+Aspekte Fehlererkennung und Nichtdeterminismus nur durch lokale
+Erweiterung der Monade kombiniert werden konnten.
 
 ## Ausdrücke mit Variablen ##
 
-Im folgenden Schritt werden wir die Ausdruckssprache um Variablen erweitern.
-Dazu wird die abstrakte Syntax, der Datentyp `Expr` auf zwei Arten erweitert.
-Als einfache Ausdrücke werden Variablen zugelassen. Außerdem sollen, wie in Haskell auch,
-lokale Variablen durch `let`-Ausdrücke eingeführt werden können.
+Im folgenden Schritt werden wir die Ausdruckssprache um Variablen
+erweitern.  Dazu wird die abstrakte Syntax, der Datentyp `Expr` auf
+zwei Arten erweitert.  Als einfache Ausdrücke werden Variablen
+zugelassen. Außerdem sollen, wie in Haskell auch, lokale Variablen
+durch `let`-Ausdrücke eingeführt werden können.
 
-Es stellt sich dann natürlich die Frage, ob, und wenn ja, wie diese Erweiterung
-zu der existierenden Lösung hinzugefügt werden kann. Wir werden, um die Beispiele
-übersichtlich zu halten, den Nichtdeterminismus nicht weiter betrachten, sondern von
+Es stellt sich dann natürlich die Frage, ob, und wenn ja, wie diese
+Erweiterung zu der existierenden Lösung hinzugefügt werden kann. Wir
+werden, um die Beispiele übersichtlich zu halten, den
+Nichtdeterminismus nicht weiter betrachten, sondern von wieder von
 [Expr2.hs][Expr2] ausgehen.
 
 Der Datentyp `Expr` erweitert um die beiden neuen Varianten:
 
 {% highlight haskell %}
-data Expr  = Const  Int
-           | Binary BinOp Expr Expr
-           | Var    Id
-           | Let    Id    Expr Expr
+data Expr  = ...
+           | Var Id
+           | Let Id Expr Expr
 		   
 type Id    = String
 {% endhighlight %}
 
-Was ist die Bedeutung eines Audruck mit freien Variablen?  Zur
-Auswertung solcher Ausdrücke brauchen wir eine Zuordnug von Werten zu
-den freien Variablen, eine sogennate Umgebung, ein `Env`-ironment. Die
-Bedeutung eines Ausdrucks kann als eine Funktion aufgefasst
-werden, die eine Umgebung auf einen Resultatwert abbildet.
-`eval` wird also einen Ausdruck (`Expr`) nehmen, und daraus eine Funktion
-berechnen. Erst wenn diese Funktion auf eine Umbegung angewendet wird,
+Was ist die Bedeutung eines Ausdrucks mit freien Variablen?  Zur
+Auswertung solcher Ausdrücke brauchen wir eine Zuordnung von Werten zu
+den freien Variablen, eine Belegung. Diese Belegung werden wir in
+einer sogenannten Umgebung, engl. `Env`-ironment gehalten. Die
+Bedeutung eines Ausdrucks kann als eine Funktion aufgefasst werden,
+die eine Umgebung auf einen Resultatwert abbildet.  `eval` wird also
+einen Ausdruck (`Expr`) nehmen, und daraus eine Funktion
+berechnen. Erst wenn diese Funktion auf eine Umgebung angewendet wird,
 bekommen wir einen konkreten Wert, eine Zahl oder eine Fehlermeldung.
 
 {% highlight haskell %}
@@ -638,16 +645,18 @@ data ResVal a
              deriving (Show)
 {% endhighlight %}
 
-Der `Result`-Typ wird ein Funktionstyp `Env -> ResultVal a`, der wegen
-der `Monad`-Instanz in einen `newtype` verpackt werden muss. Damit
-berechnet `eval` aus einem Ausdruck eine Funktion, die aus einem `Env`
-ein `ResVal Int`. Dieser entspricht dem alten `Result` aus
+Der `Result`-Typ wird zu einem Funktionstyp `Env -> ResultVal a`, der
+wegen der `Monad`-Instanz in einen `newtype` verpackt werden
+muss. Damit berechnet `eval` aus einem Ausdruck eine Funktion, die aus
+einem `Env` ein `ResVal Int`. Dieser entspricht dem alten `Result` aus
 [Expr2.hs][Expr2]. Für die Umgebung wird hier eine einfache
 Schlüssel-Wert-Liste genommen.  Bei praktischen Anwendungen werden
-üblicherweise effizentere Container-Implementierungen, z.B. `Data.Map` genutzt.
+üblicherweise effizientere Container-Implementierungen, z.B. aus
+`Data.Map` genutzt.
 
-Um eine Auswertung von Ausdrücken mit Variablen zu starten (`runEval`),
-benötigen wir also neben dem Ausdruck auch noch eine Belegung der Variablen.
+Um eine Auswertung von Ausdrücken mit Variablen zu starten
+(`runEval`), benötigen wir also neben dem Ausdruck auch noch eine
+Belegung der Variablen.
 
 {% highlight haskell %}
 runEval :: Expr -> Env -> ResVal Int
@@ -674,19 +683,20 @@ Bei `>>=` müssen wir wieder eine Funktion konstruieren. In dieser wird
 als erstes `f` auf die Umgebung angewendet, was entweder einen Fehler
 `e` liefert oder eine Wert `v`. Dieser kann auf `g` angewendet werden,
 was uns eine weitere Funktion liefert, die ebenfalls auf die Umgebung
-`env` angewendet wird. Sowohl `f` als auch `g v` nutzen die gleiche
-Umgebung.
+`env` angewendet wird. Sowohl `f` als auch `g v` nutzen also die
+gleiche Umgebung.
 
 Wir haben aber noch keine direkten Funktionen, die das `env` nutzen,
-was aber bei der Auswertung von `Var ident` notwendig ist. Hierfür definieren
-wir eine Funktion `ask` zum Auslesen der gesamten Umgebung.
+was aber bei der Auswertung von `Var ident` notwendig ist. Hierfür
+definieren wir eine Funktion `ask` zum Auslesen der gesamten Umgebung.
 
 {% highlight haskell %}
 ask :: Result Env
 ask = Res $ \ env -> Val env
 {% endhighlight %}
 
-Mit `ask` kann jetzt die `eval`-Funktion für Variablenzugriff erstellt werden.
+Mit `ask` kann jetzt die `eval`-Funktion für Variablenzugriff erstellt
+werden.
 
 {% highlight haskell %}
 eval (Var ident)
@@ -699,27 +709,27 @@ eval (Var ident)
            Just v  -> return v
 {% endhighlight %}
 
-Es wird das Environment ausgelesen und mit `lookup ident env` der Wert der Variablen
-in der Umgebung gesucht. Dieser bildet das Resultat. Im Fehlerfall wird eine
-entsprechende Fehlermeldung generiert.
+Es wird das Environment ausgelesen und mit `lookup ident env` der Wert
+der Variablen in der Umgebung gesucht. Dieser bildet das Resultat. Im
+Fehlerfall wird eine entsprechende Fehlermeldung generiert.
 
-Mit der Erweiterung der Monade und dieser Erweiterung von `eval`
-ist die Erweiterung der Ausdrücke um freie Variablen abgeschlossen.
+Mit der Redefinition der Monade und dieser Erweiterung von `eval` ist
+die Erweiterung der Ausdrücke um *freie* Variablen abgeschlossen.
 
-Was noch fehlt, sind die lokalen, mit `Let` eingeführten Variablen für Zwischenergebnisse.
-Hierfür muss das Environment lokal erweitert und für die lokale Auswertung der Ausdrücke
-genutzt werden.
+Was noch fehlt, sind die lokalen, mit `Let` eingeführten Variablen für
+Zwischenergebnisse.  Hierfür muss das Environment lokal erweitert und
+für die lokale Auswertung der Ausdrücke genutzt werden.
 
-Diese lokale Veränderung kann man, wie bei `ask`, allgemeingültig implementieren
-mit `local` genannten Funktion
+Diese lokale Veränderung kann man, wie bei `ask`, allgemeingültig
+implementieren mit einer `local` genannten Funktion
 
 {% highlight haskell %}
 local :: (Env -> Env) -> Result a -> Result a
 local f (Res g) = Res $ \ env -> g (f env)
 {% endhighlight %}
 
-Mit Hilfe von `local` können lokal gebundene Variablen auf folgende Art
-implementiert werden:
+Mit Hilfe von `local` können lokal gebundene Variablen auf folgende
+Art implementiert werden:
 
 {% highlight haskell %}
 eval (Let ident e1 e2)
@@ -730,15 +740,18 @@ eval (Let ident e1 e2)
       addEnv i v env = (i, v) : env
 {% endhighlight %}
 
-Der Ausdruck `e1` bestimmt den Wert, der lokalen Variablen `ident`. Dieses Paar wird
-vorne vor die `env`-Liste eingefügt, so dass es in einer Suche als erstes gefunden wird.
-Mit diesem neuen Environment wird der Ausdruck `e2` ausgewertet.
+Der Ausdruck `e1` bestimmt den Wert der lokalen Variablen `ident`.  Er
+wird hier in dem bisherigen `env` ausgewertet. Das Paar `(ident, v1)`
+wird vorne vor die `env`-Liste eingefügt, so dass es in einer Suche
+als erstes gefunden wird.  Mit diesem neuen Environment wird der
+Ausdruck `e2` ausgewertet.
 
-Damit ist die Erweiterung der Ausdruckssprache um freie und um lokal gebundene
-Variablen abgeschlossen. Wieder waren nur Veränderungen an der Monade und Erweiterungen
-um die neuen Sprachelemente notwendig. Nichts Bestehendes musste refaktorisiert werden.
+Damit ist die Erweiterung der Ausdruckssprache um freie und um lokal
+gebundene Variablen vollständig. Wieder waren nur Veränderungen an der
+Monade und Erweiterungen um die neuen Sprachelemente notwendig. Nichts
+Bestehendes musste refaktorisiert werden.
 
-Es fehlen noch einige einfache Ausdrücke
+Es fehlen noch einige einfache Ausdrücke für einen Testlauf:
 
 {% highlight haskell %}
 x  = Var "x"
@@ -755,7 +768,7 @@ v3 = runEval l2 [("y",5)]
 v4 = runEval l3 []
 {% endhighlight %}
 
-und ein Testlauf
+und eine *ghci-Session*
 
 > zwiebel> ghci Expr4.hs
 > ...
@@ -791,16 +804,17 @@ um Konfigurations-Parameter an den unterschiedlichtsten Stellen
 zugreifbar zu machen, ohne diese explizit durch Funktionen durch zu
 reichen.
 
-## Ausdrücke mit Programmvariablen und Zuweisungen ##
+## Ausdrücke mit Programm-Variablen und Zuweisungen ##
 
 In der folgenden Erweiterung der Ausdruckssprache werden wir
-Programmvariablen, Zuweisungen, Sequenzen, Schleifen und Verzweigungen hinzu
-nehmen. Um das Beispiel übersichtlich zu halten, werden wir nicht, wie
-es in realen Anwendungen sinnvoll wäre, syntaktisch zwischen
-Ausdrücken und Anweisungen unterscheiden. Auch werden wir, wie es in
-vielen Skriptsprachen (leider) üblich ist, auf die Deklaration von
-Variable verzichten.  Variablen entstehen bei der ersten Zuweisung.
-Die Zuweisungen werden, wie in C, als Ausdrücke mit Seiteneffekten behandelt.
+Programm-Variablen, Zuweisungen, Sequenzen, Schleifen und
+Verzweigungen hinzu nehmen. Um das Beispiel übersichtlich zu halten,
+werden wir nicht, wie es in realen Anwendungen sinnvoll wäre,
+syntaktisch zwischen Ausdrücken und Anweisungen unterscheiden. Auch
+werden wir, wie es in vielen Skriptsprachen (leider) üblich ist, auf
+die Deklaration von Variable verzichten.  Variablen entstehen bei der
+ersten Zuweisung.  Die Zuweisungen werden, wie in C, als Ausdrücke mit
+Seiteneffekten behandelt.
 
 Die abstrakte Syntax hat folgende Gestalt:
 
@@ -818,11 +832,11 @@ data BinOp = Add | Sub | Mul | Div | Mod
 
 Die Berechnungen finden also wie in dem letzten Beispiel in einer
 Umgebung statt. Diese speichert die Belegung der Variablen. Der
-entscheidende Unterschied ist aber, dass die Belegung sich wärend der
+entscheidende Unterschied ist aber, dass die Belegung sich während der
 Berechnung ändern kann.  Diese sich ständig ändernde Umgebung
 bedeutet, dass neben dem eigentlichen Wert immer noch der
 möglicherweise veränderte Zustand als zusätzliches Resultat zurück
-geliefert wird. Wir werden hierfür die Zustandsmonade nutzen.
+geliefert wird. Wir werden hierfür die Zustands-Monade nutzen.
 
 
 {% highlight haskell %}
@@ -842,8 +856,8 @@ Schlüssel-Wert-Paaren realisiert. Die entscheidende Veränderung
 gegenüber [Expr4.hs][Expr4] ist das Tupel `(ResVal a, VarState)` als
 Resultattyp.
 
-Die Monade für `Result` wird als Kombination der Fehler- und der Zustandsmonade
-realisiert:
+Die Monade für `Result` wird als Kombination der Fehler- und der
+Zustands-Monade realisiert:
 
 {% highlight haskell %}
 instance Monad Result where
@@ -856,8 +870,9 @@ instance Monad Result where
                                 f2 st1
 {% endhighlight %}
 
-`return` konstruiert aus einem Wert eine Funktion, die den Zustand unverändert durchreicht.
-In `>>=` wird in der Funktion `st0` über `st1` bis zum Endergebnis *durchgefädelt*.
+`return` konstruiert aus einem Wert eine Funktion, die den Zustand
+unverändert durch reicht.  In `>>=` wird in der Funktion `st0` über
+`st1` bis zum Endergebnis *durchgefädelt*.
 
 Wir benötigen aber noch, analog zu `ask` Funktionen zum lesenden und
 schreibenden Zugriff (`get` und `put`).
@@ -874,7 +889,7 @@ put new = Res $ \ old  -> (Val (), new)
 wechselt den alten gegen diesen aus. Das eigentliche Resultat dieser
 Aktion `()` ist hier unwesentlich.
 
-Wie werden die neuen Sprachelemente implementiert. Beginnen wir mit
+Wie werden die neuen Sprachelemente implementiert? Beginnen wir mit
 der Zuweisung:
 
 {% highlight haskell %}
@@ -887,12 +902,13 @@ eval (Assign ident e1)
       setVar i v s = (i, v) : filter ((/= i) . fst) s
 {% endhighlight %}
 
-Die rechte Seite der Zuweisung wird ausgewertet, der Zustand ausgelesen (`get`),
-der modifizierte Zustand berechnet (`setVar`) und geschrieben. Wie in der Sprache C
-ist hier das Resultat der Zuweisung der Wert der rechten Seite.
+Die rechte Seite der Zuweisung wird ausgewertet, der Zustand
+ausgelesen (`get`), der modifizierte Zustand berechnet (`setVar`) und
+geschrieben. Wie in der Sprache C ist hier das Resultat der Zuweisung
+der Wert der rechten Seite.
 
-Für die häufig auftretende Codefolge `get >>= \ x -> put (f x)` gibt es eine
-Bequemlichkeitsfunktion
+Für die häufig auftretende Codefolge `get >>= \ x -> put (f x)` gibt
+es eine Bequemlichkeitsfunktion
 
 {% highlight haskell %}
 modify :: (s -> s) -> Result s
@@ -922,9 +938,9 @@ eval st@(While c b)
 
 Es bleibt die Sequenz. Diese ist nichts anderes, als ein 2-stelliger
 Operator (in der Sprache C das `,`). Bei der Auswertung wird der erste
-Teilausdruck ausgewertet und das Ergebnis vergessen. Die
-Funktionstabelle für die Operatoren muss also nur um eine Zeile
-erweitert werden.
+Teilausdruck ausgewertet und das Ergebnis vergessen. Nur der Effekt
+auf den Zustand ist von Interesse. Die Funktionstabelle für die
+Operatoren muss also nur um eine Zeile erweitert werden.
 
 {% highlight haskell %}
 mft :: [(BinOp, MF)]
@@ -933,8 +949,8 @@ mft = [ ...
       ]
 {% endhighlight %}
 
-Es bleibt noch der Start einer Berechnung mittels `runEval`.
-Diese Funktion liefert jetzt zwei Werte, ein Resultat und einen Endzustand.
+Es bleibt noch der Start einer Berechnung mittels `runEval`.  Diese
+Funktion liefert jetzt zwei Werte, ein Resultat und einen Endzustand.
 
 {% highlight haskell %}
 runEval :: Expr -> VarState -> (ResVal Int, VarState)
@@ -965,8 +981,8 @@ p2 = While
       x = Var "x"
 {% endhighlight %}
 
-Im ersten Programm `p1` werden zwei Variablen `x` und `y` vertauscht, in `p2`
-wird bis `100` gezählt.
+Im ersten Programm `p1` werden zwei Variablen `x` und `y` vertauscht,
+in `p2` wird bis `100` gezählt.
 
 > zwiebel> ghci Expr5.hs
 > ...
@@ -978,35 +994,36 @@ wird bis `100` gezählt.
 
 ## Programme mit Ein- und Ausgabe ##
 
-Einer der größsten Entwurfsfehler beim Entwickeln in Haskell ist die
+Einer der größten Entwurfsfehler beim Entwickeln in Haskell ist eine
 fehlende Überlegung, in welchen Funktionen Ein- und/oder Ausgabe
 gemacht werden muss. Solche Fehler sind bei späteren Erweiterungen
-häufing nicht mehr zu auszubessen, ohne große Teile eines Systems zu
-refaktorisieren.
+häufig nicht mehr zu auszubessern, ohne große Teile eines Systems neu
+zu schreiben.
 
 In den bisher entwickelten Beispielen haben wir genau diesen Fehler
 gemacht.  Was passiert, wenn wir für [Expr5.hs][Expr5] im zweiten
 Release die Anforderung bekommen, bei der Auswertung von Ausdrücken
-Werte einlesen oder Zwischenergebnisse ausgeben zu können?
+Werte einlesen oder Zwischenergebnisse ausgeben zu müssen?
 
-Dieses bedeutet, das wärend der Auswertung nicht nur der interne Zustand
-mit den Programmvariablen verändert wird sondern auch der Weltzustand in der IO-Monade.
-Wir müssen also die `Result`-Monade mit der IO-Monade kombinieren.
-Nur dadurch, dass wir bisher in einem monadischen Stil entwickelt haben, werden
-wir wieder auf einfache Weise den Aspekt der Ein- und Ausgabe in das bisherige System
+Dieses bedeutet, das während der Auswertung nicht nur der interne
+Zustand mit den Programm-Variablen verändert wird sondern auch der
+Weltzustand in der `IO`-Monade.  Wir müssen also die `Result`-Monade
+mit der `IO`-Monade kombinieren.  Nur dadurch, dass wir bisher in
+einem monadischen Stil entwickelt haben, werden wir wieder auf
+einfache Weise den Aspekt der Ein- und Ausgabe in das bisherige System
 integrieren können.
 
 Der `Result`-Datentyp wird so verändert, dass die Funktionen
-in der IO-Monade laufen:
+in der `IO`-Monade laufen:
 
 {% highlight haskell %}
 newtype Result a
            = Res { unRes :: VarState -> IO (ResVal a, VarState) }
-           --                           ^^
+           --                          ^^^^
 {% endhighlight %}
 
-Entsprechend müssen `return` und `>>=` sowie `throwError`, `get` und `put`
-so verändert werden, dass sie in der `IO`-Monade laufen:
+Entsprechend müssen `return` und `>>=` sowie `throwError`, `get` und
+`put` so verändert werden, dass sie in der `IO`-Monade laufen:
 
 {% highlight haskell %}
 instance Monad Result where
@@ -1025,9 +1042,9 @@ instance MonadState VarState Result where
   put new        = Res $ \ _  -> return (Val (), new)
 {% endhighlight %}
 
-Um auf den Weltzustand mit den vordefinierten `IO`-behafteten Laufzeitsystem-Funktionen
-in der `Result`-Monade zu arbeiten, benötigen wir noch eine *Lift*-Funktion
-`liftIO`
+Um auf den Weltzustand mit den vordefinierten `IO`-behafteten
+Laufzeitsystem-Funktionen in der `Result`-Monade zu arbeiten,
+benötigen wir noch eine *lift*-Funktion `liftIO`
 
 {% highlight haskell %}
 liftIO :: IO a -> Result a
@@ -1039,8 +1056,8 @@ liftIO a  = Res $ \ st ->
 Für `liftIO` gibt es wieder eine vordefinierte Klasse [MonadIO].
 
 Mit dieser Erweiterung der `Result`-Monade können wir beginnen, die
-Ein- und Ausgabeoperationen zu implementieren.  Wir benötigen zwei neue
-syntaktische Konstrukte für das Lesen und Schreiben von Werten.
+Ein- und Ausgabeoperationen zu implementieren.  Wir benötigen zwei
+neue syntaktische Konstrukte für das Lesen und Schreiben von Werten.
 
 {% highlight haskell %}
 data Expr  = ...
@@ -1048,9 +1065,10 @@ data Expr  = ...
            | Write String Expr
 {% endhighlight %}
 
-`Read` wird zum Einlesen einer Zahl genutzt, `Write` zur Ausgabe eines Strings
-und dem Resultat eines Ausdrucks. Die eigentliche Schnittstelle zum I/O-System
-bilden hier die Hilfsfunktionen `readInt` und `writeInt`.
+`Read` wird zum Einlesen einer Zahl genutzt, `Write` zur Ausgabe eines
+Strings und dem Resultat eines Ausdrucks. Die eigentliche
+Schnittstelle zum I/O-System bilden hier die Hilfsfunktionen `readInt`
+und `writeInt`.
 
 {% highlight haskell %}
 eval Read
@@ -1087,7 +1105,8 @@ p2 = While
       x = Var "x"
 {% endhighlight %}
 
-Eine *ghci-Session* mit zwei Testläufen zeigt die erwarteten Ergebnisse:
+Eine *ghci-Session* mit zwei Testläufen zeigt die erwarteten
+Ergebnisse:
 
 > zwiebel> ghci Expr6.hs
 > ...
@@ -1105,49 +1124,58 @@ Eine *ghci-Session* mit zwei Testläufen zeigt die erwarteten Ergebnisse:
 > x = 100
 > (Val {val = 0},[("x",100)])
 
-Die Integration von Ein- und Ausgabe konnte, dank des monadischen Stils, wieder
-duch lokale Änderung der Monade und lokale Erweiterungen realisiert werden.
-Alle anderen existierenden Codeteile konnten unveändert weiter verwendet werden.
+Die Integration von Ein- und Ausgabe konnte, dank des monadischen
+Stils, wieder duch lokale Änderung der Monade und lokale Erweiterungen
+realisiert werden.  Alle anderen existierenden Codeteile konnten
+unverändert weiter verwendet werden.
 
 ## Zusammenfassung und Ausblick ##
 
-Wir haben in den Beispielen [Expr1.hs][Expr1] bis [Expr6.hs][Expr6],
-dass wir die einfache Ausdrucksauswertung in unterschiedliche
-Richtungen erweitern konnten, ohne dass existierende Funktionalität
-überarbeitet werden musste. Neue Aspekte konnten alleine durch die
-Erweiterung des `Result`-Datentyps und der monadischen Operationen
-`return` und `>>=` und deren Verwandten integriert werden.
+Wir haben in den Beispielen [Expr1.hs][Expr1] bis [Expr6.hs][Expr6]
+gesehen, dass wir die einfache Ausdrucksauswertung in unterschiedliche
+Richtungen erweitern konnten, ohne existierende Funktionalität zu
+überarbeiten. Neue Aspekte konnten alleine durch die Erweiterung des
+`Result`-Datentyps und der monadischen Operationen `return` und `>>=`
+und deren Verwandten integriert werden.
 
-In einem nicht-monadischen Stil hätten wir für jeden neuen Aspekt die
+In einem nichtmonadischen Stil hätten wir für jeden neuen Aspekt die
 Schnittstellen und die Implementierungen vieler über das gesamte
 Programm verstreuter Funktionen erweitern müssen.
 
-Wir haben in den Beispielen alle Monaden *per Hand* gebaut und auch *per Hand*
-kombiniert. Für das Verständnis von Monaden ist diese eine sehr sinnvolle Übung.
-Aber die verwendeten Monaden und deren Kombination wiederholen sich.
-In vielen etwas anspruchsvolleren Projekten muss man IO, Fehlerbehandlung und einen
-internen Zustand verwalten, meist kommt noch die Notwendigkeit einer Konfigurierbarkeit
-dazu, d.h. man muss wiederholt eine *IO-Exception-Reader-State*-Monade entwickeln.
+Wir haben in den Beispielen alle Monaden *per Hand* gebaut und auch
+*per Hand* kombiniert. Für das Verständnis von Monaden ist dieses ein
+sehr sinnvolles Vorgehen.  Aber die verwendeten Monaden und deren
+Kombinationen wiederholen sich.  In vielen etwas anspruchsvolleren
+Projekten muss man IO, Fehlerbehandlung und einen internen Zustand
+verwalten, meist kommt noch die Notwendigkeit einer Konfigurierbarkeit
+dazu, d.h. man muss wiederholt eine *IO-Exception-Reader-State*-Monade
+entwickeln, was spätestens nach dem zweiten Mal langweilig wird.
 
-Dieses ruft nach einem Werkzeugkasten, mit dem man *Standard*-Monaden auf
-flexible Art zu einem Monaden-Stapel (*monad stack*) zusammen setzten kann.
-Hierzu gibt es die sogennanten Monaden-Transformatoren (*monad transformer*),
-mit denen man aus einer gegebenen Basis-Monade eine neue Monade erzeugen kann,
-die dann um einen neuen Aspekt angereichert worden ist.
+Dieses ruft nach einem Werkzeugkasten, mit dem man *Standard*-Monaden
+auf flexible Art zu einem Monaden-Stapel (*monad stack*) zusammen
+setzten kann.  Hierzu gibt es die sogenannten Monaden-Transformatoren
+(*monad transformer*), mit denen man aus einer gegebenen Basis-Monade
+eine neue Monade erzeugen kann, die dann um einen neuen Aspekt
+angereichert worden ist.
 
-Die meisten, der hier diskutierten Monaden, könnte man mit den
+Die meisten, der hier diskutierten Monaden, könnte man mit diesen
 Monaden-Transformatoren zusammen setzten, so auch unsere letzte
 *IO-Exception-State*-Monade.  Auf [hackage] findet man zum Beispiel
 die [mtl]-und [transformers]-Bibliotheken, die im Moment überwiegend
-eingesetzt werden.  Unter anderem werden im
-[Real-World-Haskell][rwh]-Buch einige Beispiele für den Einsatz von
-Monaden-Transformatoren behandelt.
+für diesen Zweck eingesetzt werden.  Unter anderem werden im
+[Real-World-Haskell][rwh]-Buch einige in der Praxis bedeutsame
+Beispiele für den Einsatz von Monaden-Transformatoren behandelt.
 
-Monaden sind inzwischen nicht mehr eine Domäne von Haskell.
-Auch in anderen Sprachen, wie Scala, Javascript, Ruby, ...
-wird dieser Ansatz des programmierbaren Semikolons eingesetzt.
+Monaden sind inzwischen nicht mehr nur eine Domäne von Haskell.  Auch
+in anderen Sprachen, wie Scala, Javascript, Ruby, ...  wird versucht,
+diesen Ansatz des programmierbaren Semikolons einzusetzen.
 Insbesondere bei eingebetteten Domänen-spezifischen Sprachen (DSLs)
 bietet dieser Stil Software-technisch viele Vorteile.
+
+Die hier vorgestellten Beispiele sind also nicht das Ende der
+Geschichte, sondern erst der Anfang.
+
+Viel Spaß beim Ausprobieren der [Beispiele].
 
 [Expr0]:  </code/monaden2/Expr0.hs>  "Ausdrucksauswertung im rein funktionalen Stil"
 [Expr1]:  </code/monaden2/Expr1.hs>  "Ausdrucksauswertung im monadischen Stil"
@@ -1157,8 +1185,9 @@ bietet dieser Stil Software-technisch viele Vorteile.
 [Expr3a]: </code/monaden2/Expr3a.hs> "Ausdrucksauswertung mit Nichtdeterminismus"
 [Expr3b]: </code/monaden2/Expr3b.hs> "Ausdrucksauswertung mit Nichtdeterminismus"
 [Expr4]:  </code/monaden2/Expr4.hs>  "Ausdrucksauswertung mit freien und gebundenen Variablen"
-[Expr5]:  </code/monaden2/Expr5.hs>  "Ausdrucksauswertung mit Programmvariablen"
-[Expr6]:  </code/monaden2/Expr6.hs>  "Ausdrucksauswertung mit Programmvariablen und IO"
+[Expr5]:  </code/monaden2/Expr5.hs>  "Ausdrucksauswertung mit Programm-Variablen"
+[Expr6]:  </code/monaden2/Expr6.hs>  "Ausdrucksauswertung mit Programm-Variablen und IO"
+[Beispiele]: </code/monaden2/Expr.zip> ".zip Archiv für die Beispiele"
 
 [ControlMonad]:	<http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html>
                 "Control.Monad"
@@ -1175,3 +1204,4 @@ bietet dieser Stil Software-technisch viele Vorteile.
 [mtl]:         <http://hackage.haskell.org/package/mtl>
 [transformers]: <http://hackage.haskell.org/package/transformers>
 [rwh]:         <http://www.realworldhaskell.org/> "Real World Haskell"
+
