@@ -24,12 +24,16 @@ Einer der prominentesten Entwicker der Sprache Haskell,
 *Wie würden Sie einem Nicht-Haskeller erklären, was eine Monade ist?*
 geantwortet: *Ein programmierbares Semikolon*.
 
-Diese Antwort bedarf ein wenig Erklärung. Alle Programmiersprachen
-benötigen die Konzepte Sequenz, Verzweigung und Wiederholung. In der
-funktionalen Welt werden Verzweigungen durch bedingte Ausdrücke und
-Wiederholungen durch Rekursion realisiert. Die Sequenz, das
-Hintereinander-Ausführen von Berechnungen geschieht durch die
-Funktionskomposition dargestellt durch den 2-stelligen Operator `.`
+Diese Antwort bedarf ein wenig Erklärung.
+
+<!-- more start -->
+
+Alle Programmiersprachen benötigen die Konzepte Sequenz, Verzweigung
+und Wiederholung. In der funktionalen Welt werden Verzweigungen durch
+bedingte Ausdrücke und Wiederholungen durch Rekursion realisiert. Die
+Sequenz, das Hintereinander-Ausführen von Berechnungen geschieht durch
+die Funktionskomposition dargestellt durch den 2-stelligen Operator
+`.`
 
 {% highlight haskell %}
 (.) :: (b -> c) -> (a -> b) -> (a -> c)
@@ -360,23 +364,19 @@ idMaybe x = Just x
 
 und es gilt
 
-{% highlight haskell %}
-  idMaybe >=> f
-=
-  f
-=
-  f >=> idMaybe
-{% endhighlight %}
+       idMaybe >=> f
+     =
+       f
+     =
+       f >=> idMaybe
 
 `idMaybe` kann man aber formulieren, ohne Eigenschaften von Maybe direkt zu nutzen
 
-{% highlight haskell %}
-  idMaybe x = Just x
-=
-  idMaybe x = return x
-=
-  idMaybe = return . id
-{% endhighlight %}
+       idMaybe x = Just x
+     =
+       idMaybe x = return x
+     =
+       idMaybe = return . id
 
 Wir sehen an der dritten Form, dass `idMaybe` nicht mehr von Maybe
 abhängt, `return . id` ist also nicht nur für Maybe, sondern für alle

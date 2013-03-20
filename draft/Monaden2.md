@@ -143,25 +143,25 @@ e3 = Binary Mod (Const 1) (Const 0)
 
 und eine *ghci-Session*
 
-> zwiebel> ghci Expr0.hs
-> ...
-> *Expr0> e1
-> Binary Mul (Binary Add (Const 2) (Const 4)) (Const 7)
->
-> *Expr0> eval e1
-> 42
->
-> *Expr0> e2
-> Binary Div (Const 1) (Const 0)
->
-> *Expr0> eval e2
-> *** Exception: divide by zero
->
-> *Expr0> e3
-> Binary Mod (Const 1) (Const 0)
->
-> *Expr0> eval e3
-> *** Exception: operation not implemented
+    zwiebel> ghci Expr0.hs
+    ...
+    *Expr0> e1
+    Binary Mul (Binary Add (Const 2) (Const 4)) (Const 7)
+    
+    *Expr0> eval e1
+    42
+    
+    *Expr0> e2
+    Binary Div (Const 1) (Const 0)
+    
+    *Expr0> eval e2
+    *** Exception: divide by zero
+    
+    *Expr0> e3
+    Binary Mod (Const 1) (Const 0)
+    
+    *Expr0> eval e3
+    *** Exception: operation not implemented
 
 Der Interpretierer liefert für `e1` das erwartete Ergebnis. Er besitzt
 aber den groben Software-technischen Mangel, dass in Fehlerfällen,
@@ -248,16 +248,16 @@ vordefiniert in [Control.Monad][ControlMonad].
 
 Ein Testlauf
 
-> zwiebel> ghci Expr1.hs
-> ...
-> *Expr1> eval e1
-> Val {val = 42}
->
-> *Expr1> eval e2
-> Val {val = *** Exception: divide by zero
->
-> *Expr1> eval e3
-> *** Exception: operation not implemented
+    zwiebel> ghci Expr1.hs
+    ...
+    *Expr1> eval e1
+    Val {val = 42}
+    
+    *Expr1> eval e2
+    Val {val = *** Exception: divide by zero
+    
+    *Expr1> eval e3
+    *** Exception: operation not implemented
 
 Die Funktionalität ist identisch zu der aus *Expr0*. In diesem ersten
 Schritt haben wir das Beispiel nur komplizierter gemacht, wir haben
@@ -323,16 +323,16 @@ Funktionen, hier wird nur `error` durch `throwError` ausgewechselt.
 
 Der Testlauf von oben ergibt jetzt folgende Resultate
 
-> zwiebel> ghci Expr2.hs
-> ...
-> *Expr2> eval e1
-> Val {val = 42}
-> 
-> *Expr2> eval e2
-> Exc {exc = "division by zero"}
-> 
-> *Expr2> eval e3
-> Exc {exc = "operation not implemented"}
+    zwiebel> ghci Expr2.hs
+    ...
+    *Expr2> eval e1
+    Val {val = 42}
+    
+    *Expr2> eval e2
+    Exc {exc = "division by zero"}
+    
+    *Expr2> eval e3
+    Exc {exc = "operation not implemented"}
 
 Wir sehen, dass nur durch Hinzufügen weniger Zeilen der Aspekt der
 Fehlererkennung in den bestehenden Interpretierer integriert werden
@@ -453,28 +453,28 @@ e7 = Binary Div i2 i1
 
 Eine *ghci-Session*
 
-> zwiebel> ghci Expr3.hs
-> ...
-> *Expr3> eval e1
-> Val {val = [42]}
-> 
-> *Expr3> eval i1
-> Val {val = [2,0]}
-> 
-> *Expr3> eval i2
-> Val {val = [8,4]}
-> 
-> *Expr3> eval e4
-> Val {val = [14,0]}
-> 
-> *Expr3> eval e5
-> Val {val = [10,6,8,4]}
-> 
-> *Expr3> eval e6
-> Val {val = [24,4,20,8,22,6,18,10,10,-10,6,-6,8,-8,4,-4]}
-> 
-> *Expr3> eval e7
-> Val {val = [4*** Exception: division by zero
+    zwiebel> ghci Expr3.hs
+    ...
+    *Expr3> eval e1
+    Val {val = [42]}
+    
+    *Expr3> eval i1
+    Val {val = [2,0]}
+    
+    *Expr3> eval i2
+    Val {val = [8,4]}
+    
+    *Expr3> eval e4
+    Val {val = [14,0]}
+    
+    *Expr3> eval e5
+    Val {val = [10,6,8,4]}
+    
+    *Expr3> eval e6
+    Val {val = [24,4,20,8,22,6,18,10,10,-10,6,-6,8,-8,4,-4]}
+    
+    *Expr3> eval e7
+    Val {val = [4*** Exception: division by zero
 
 <!-- ] hack für emacs markdown mode, Klammer zu fehlt -->
 
@@ -525,25 +525,25 @@ Programm steht unter [Expr3a.hs][Expr3a]
 
 Ein Testlauf zeigt, dass die Fehlerbehandlung jetzt wie gewünscht funktioniert:
 
-> zwiebel> ghci Expr3a.hs
-> ...
-> *Expr3a> eval e1
-> Val {val = [42]}
-> 
-> *Expr3a> eval e2
-> Exc {exc = "division by zero"}
-> 
-> *Expr3a> eval e6
-> Val {val = [24,4,20,8,22,6,18,10,10,-10,6,-6,8,-8,4,-4]}
-> 
-> *Expr3a> eval i1
-> Val {val = [2,0]}
-> 
-> *Expr3a> eval i2
-> Val {val = [8,4]}
-> 
-> *Expr3a> eval $ Binary Div i2 i1
-> Exc {exc = "division by zero"}
+    zwiebel> ghci Expr3a.hs
+    ...
+    *Expr3a> eval e1
+    Val {val = [42]}
+    
+    *Expr3a> eval e2
+    Exc {exc = "division by zero"}
+    
+    *Expr3a> eval e6
+    Val {val = [24,4,20,8,22,6,18,10,10,-10,6,-6,8,-8,4,-4]}
+    
+    *Expr3a> eval i1
+    Val {val = [2,0]}
+    
+    *Expr3a> eval i2
+    Val {val = [8,4]}
+    
+    *Expr3a> eval $ Binary Div i2 i1
+    Exc {exc = "division by zero"}
 
 Die gewählte Definition von `>>=` muss nicht die einzige sinnvolle
 Definition sein. Denkbar wäre auch eine etwas liberalere Handhabung
@@ -571,19 +571,19 @@ instance Monad Result where
 Durch die Änderung `null es` in `not (null vs)` in `>>=` ergibt sich
 folgendes Fehlerverhalten:
 
-> zwiebel> ghci Expr3b.hs
-> ...
-> *Expr3a> eval e2
-> Exc {exc = "division by zero"}
-> 
-> *Expr3a> eval i1
-> Val {val = [2,0]}
-> 
-> *Expr3a> eval i2
-> Val {val = [8,4]}
-> 
-> *Expr3a> eval $ Binary Div i2 i1
-> Val {val = [4,2]}
+    zwiebel> ghci Expr3b.hs
+    ...
+    *Expr3a> eval e2
+    Exc {exc = "division by zero"}
+    
+    *Expr3a> eval i1
+    Val {val = [2,0]}
+    
+    *Expr3a> eval i2
+    Val {val = [8,4]}
+    
+    *Expr3a> eval $ Binary Div i2 i1
+    Val {val = [4,2]}
 
 Die Fehler bei ``8 `div` 0`` und ``4 `div` 0`` werden ignoriert, da
 ``8 `div` 2`` und ``4 `div` 2`` zu `[4, 2]` ausgewertet werden.
@@ -770,31 +770,31 @@ v4 = runEval l3 []
 
 und eine *ghci-Session*
 
-> zwiebel> ghci Expr4.hs
-> ...
-> *Expr4> l1
-> Binary Mul (Var "x") (Var "y")
-> 
-> *Expr4> runEval l1 []
-> Exc {exc = "free variable 'x' found"}
-> 
-> *Expr4> runEval l1 [("x",2),("y",3)]
-> Val {val = 6}
-> 
-> *Expr4> [("x",4),("y",5)]
-> Val {val = 20}
-> 
-> *Expr4> l2
-> Let "x" (Const 6) (Binary Mul (Var "x") (Var "y"))
-> 
-> *Expr4> runEval l2 [("y",5)]
-> Val {val = 30}
-> 
-> *Expr4> l3
-> Let "y" (Const 7) (Let "x" (Const 6) (Binary Mul (Var "x") (Var "y")))
-> 
-> *Expr4> runEval l3 []
-> Val {val = 42}
+    zwiebel> ghci Expr4.hs
+    ...
+    *Expr4> l1
+    Binary Mul (Var "x") (Var "y")
+    
+    *Expr4> runEval l1 []
+    Exc {exc = "free variable 'x' found"}
+    
+    *Expr4> runEval l1 [("x",2),("y",3)]
+    Val {val = 6}
+    
+    *Expr4> [("x",4),("y",5)]
+    Val {val = 20}
+    
+    *Expr4> l2
+    Let "x" (Const 6) (Binary Mul (Var "x") (Var "y"))
+    
+    *Expr4> runEval l2 [("y",5)]
+    Val {val = 30}
+    
+    *Expr4> l3
+    Let "y" (Const 7) (Let "x" (Const 6) (Binary Mul (Var "x") (Var "y")))
+    
+    *Expr4> runEval l3 []
+    Val {val = 42}
 
 Die Monade mit dem Environment und den Funktionen `ask` und `local`
 ist die sogenannte *Reader*-Monade. `ask` und `local` sind deklariert
@@ -984,13 +984,13 @@ p2 = While
 Im ersten Programm `p1` werden zwei Variablen `x` und `y` vertauscht,
 in `p2` wird bis `100` gezählt.
 
-> zwiebel> ghci Expr5.hs
-> ...
-> *Expr5> runEval p1 [("x", 42), ("y",23)]
-> (Val {val = 42},[("y",42),("x",23),("t",42)])
-> 
-> *Expr5> runEval p2 [("x", 1)]
-> (Val {val = 0},[("x",100)])
+    zwiebel> ghci Expr5.hs
+    ...
+    *Expr5> runEval p1 [("x", 42), ("y",23)]
+    (Val {val = 42},[("y",42),("x",23),("t",42)])
+    
+    *Expr5> runEval p2 [("x", 1)]
+    (Val {val = 0},[("x",100)])
 
 ## Programme mit Ein- und Ausgabe ##
 
@@ -1108,21 +1108,21 @@ p2 = While
 Eine *ghci-Session* mit zwei Testläufen zeigt die erwarteten
 Ergebnisse:
 
-> zwiebel> ghci Expr6.hs
-> ...
-> *Expr6> runEval p1 []
-> give a number: 6
-> give a number: 7
-> Result is: 42
-> (Val {val = 42},[])
-> 
-> *Expr6> runEval p2 [("x", 1)]
-> x = 2
-> x = 3
-> ...
-> x = 99
-> x = 100
-> (Val {val = 0},[("x",100)])
+    zwiebel> ghci Expr6.hs
+    ...
+    *Expr6> runEval p1 []
+    give a number: 6
+    give a number: 7
+    Result is: 42
+    (Val {val = 42},[])
+    
+    *Expr6> runEval p2 [("x", 1)]
+    x = 2
+    x = 3
+    ...
+    x = 99
+    x = 100
+    (Val {val = 0},[("x",100)])
 
 Die Integration von Ein- und Ausgabe konnte, dank des monadischen
 Stils, wieder duch lokale Änderung der Monade und lokale Erweiterungen
