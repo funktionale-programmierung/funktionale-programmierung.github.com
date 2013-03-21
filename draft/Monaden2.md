@@ -1151,10 +1151,10 @@ verwalten, meist kommt noch die Notwendigkeit einer Konfigurierbarkeit
 dazu, d.h. man muss wiederholt eine *IO-Exception-Reader-State*-Monade
 entwickeln, was spätestens nach dem zweiten Mal langweilig wird.
 
-Dieses ruft nach einem Werkzeugkasten, mit dem man *Standard*-Monaden
-auf flexible Art zu einem Monaden-Stapel (*monad stack*) zusammen
+Dieses ruft nach einem Werkzeugkasten, mit dem man Standard-Monaden
+auf flexible Art zu einem Monaden-Stapel ( *monad stack* ) zusammen
 setzten kann.  Hierzu gibt es die sogenannten Monaden-Transformatoren
-(*monad transformer*), mit denen man aus einer gegebenen Basis-Monade
+( *monad transformer* ), mit denen man aus einer gegebenen Basis-Monade
 eine neue Monade erzeugen kann, die dann um einen neuen Aspekt
 angereichert worden ist.
 
@@ -1177,17 +1177,17 @@ Geschichte, sondern erst der Anfang.
 
 Viel Spaß beim Ausprobieren der [Beispiele].
 
-[Expr0]:  </code/monaden2/Expr0.hs>  "Ausdrucksauswertung im rein funktionalen Stil"
-[Expr1]:  </code/monaden2/Expr1.hs>  "Ausdrucksauswertung im monadischen Stil"
-[Expr2]:  </code/monaden2/Expr2.hs>  "Ausdrucksauswertung mit Fehlererkennung"
-[Expr2a]: </code/monaden2/Expr2a.hs> "Ausdrucksauswertung mit Fehlererkennung"
-[Expr3]:  </code/monaden2/Expr3.hs>  "Ausdrucksauswertung mit Nichtdeterminismus"
-[Expr3a]: </code/monaden2/Expr3a.hs> "Ausdrucksauswertung mit Nichtdeterminismus"
-[Expr3b]: </code/monaden2/Expr3b.hs> "Ausdrucksauswertung mit Nichtdeterminismus"
-[Expr4]:  </code/monaden2/Expr4.hs>  "Ausdrucksauswertung mit freien und gebundenen Variablen"
-[Expr5]:  </code/monaden2/Expr5.hs>  "Ausdrucksauswertung mit Programm-Variablen"
-[Expr6]:  </code/monaden2/Expr6.hs>  "Ausdrucksauswertung mit Programm-Variablen und IO"
-[Beispiele]: </code/monaden2/Expr.zip> ".zip Archiv für die Beispiele"
+[Expr0]:  </code/Monaden2/Expr0.hs>  "Ausdrucksauswertung im rein funktionalen Stil"
+[Expr1]:  </code/Monaden2/Expr1.hs>  "Ausdrucksauswertung im monadischen Stil"
+[Expr2]:  </code/Monaden2/Expr2.hs>  "Ausdrucksauswertung mit Fehlererkennung"
+[Expr2a]: </code/Monaden2/Expr2a.hs> "Ausdrucksauswertung mit Fehlererkennung"
+[Expr3]:  </code/Monaden2/Expr3.hs>  "Ausdrucksauswertung mit Nichtdeterminismus"
+[Expr3a]: </code/Monaden2/Expr3a.hs> "Ausdrucksauswertung mit Nichtdeterminismus"
+[Expr3b]: </code/Monaden2/Expr3b.hs> "Ausdrucksauswertung mit Nichtdeterminismus"
+[Expr4]:  </code/Monaden2/Expr4.hs>  "Ausdrucksauswertung mit freien und gebundenen Variablen"
+[Expr5]:  </code/Monaden2/Expr5.hs>  "Ausdrucksauswertung mit Programm-Variablen"
+[Expr6]:  </code/Monaden2/Expr6.hs>  "Ausdrucksauswertung mit Programm-Variablen und IO"
+[Beispiele]: </files/Monaden2/Monaden2.zip> ".zip Archiv für die Beispiele"
 
 [ControlMonad]:	<http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html>
                 "Control.Monad"
