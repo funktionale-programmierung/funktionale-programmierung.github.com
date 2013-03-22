@@ -2,26 +2,27 @@
 layout: post
 description: Eine Java-Performance-Challenge zum Anlass für übersichtlichen und doch performanten Java-Code
 title: "Übersichtlicher und Performanter Code mit Scala"
-author: Andreas Bernauer
+author: andreas-bernauer
 tags: Scala Java Performance Übersichtlichkeit
+meta_description: Dieser Artikel vergleicht Java-Code mit seinem Scala-Pendant.
+page_title: "Übersichtlicher und Performanter Code mit Scala"
 ---
 
-Auf der [OOP](http://www.sigs-datacom.de/konferenzen/oop.html) hat
-[dynatrace](http://www.compuware.com/application-performance-management/dynatrace-enterprise.html)
+Auf der [OOP](http://www.sigs-datacom.de/konferenzen/oop.html) hat die
+Firma
+[dynatrace](http://www.compuware.com/application-performance-management/dynatrace-enterprise.html),
+welche sich auf die Analyse von Java Performance spezialisiert hat,
 eine "Java Performance Challenge" abgehalten: welcher von zwei
 dargestellten Stück Java-Code läuft schneller?
 
-Als ich mir die Stücke Java-Code anschaute, fiel mir wieder auf, wie
-langatmig ich Java fand, wie schlecht man hinschreiben kann, was man
-meint und wie fehleranfällig der Code dadurch wird.  Und natürlich
-habe ich mir überlegt, wie das funktionale Pendant aussehen würde und
-ob das Performance-Problem dort auch auftauchen würde.
+Als ich mir die Stücke Java-Code anschaute, überlegte ich mir, wie das
+funktionale Pendant aussehen würde, ob es lesbarer ist und ob das
+Performance-Problem dort auch auftauchen würde.
 
 <!-- more start -->
 
 Zunächst zum ersten Stück Java-Code, das aus einer Applikation stammt,
-die zu langsam lief, und zu der dynatrace gerufen wurde, um sie
-schneller zu machen:
+die zu langsam lief:
 
 {% highlight java %}
 public class GetRoutingDetailsA {
@@ -55,53 +56,15 @@ Der Code enthält zwei verschachtelte Schleifen, welche mittels eines
 `StringBuilder` eine Route erzeugen und eine Anzahl von Knoten
 berechnen.
 
-Das zweite Stück Java-Code ist die schnellere Version und sieht wie
-folgt aus:
-
-{% highlight java %}
-public class GetRoutingDetailsB {
-  public static void main(String[] args) {
-    StringBuilder strRouteList = new StringBuilder();
-    int totalNodeCount = 0;
-    for(int routeNumber = 0; routeNumber < 126; routeNumber++) {
-      int nodeCount = 0;
-      for(int infoNumber = 0; infoNumber < 125; infoNumber++) {
-        String fromLocation = "YYZ";
-        String toLocation = ""+infoNumber;
-        if (nodeCount != 0) {
-          if (totalNodeCount == 1)
-            strRouteList.append(fromLocation + toLocation);
-          else if (totalNodeCount > 1)
-            strRouteList.append("|" + fromLocation + toLocation);
-          strRouteList.append("\n");
-        }
-        nodeCount++;
-        totalNodeCount++;
-      }
-    }
-    System.err.print(strRouteList.toString());
-    System.out.format("Node Count: %d", totalNodeCount);
-  }
-}
-{% endhighlight %}
-
-Der Unterschied zum ersten Stück Java-Code ist auf den ersten Blick
-kaum auszumachen: statt `strRouteList.toString().isEmpty()` prüft das
-zweite Stück Java-Code die Variable `totalNodeCount == 1`. Damit
-vermeidet es, dass ständig ein (potentieller langer) String erst
-erzeugt wird und dann nur geprüft wird, ob er überhaupt etwas enthält.
-Das erste Stück Java-Code läuft daher etwa 100 Mal langsamer als das
-das zweite Stück Java-Code.
-
 Wie sieht das funktional Pendant aus? Da das Original in Java ist,
 bietet sich Scala an:
 
 {% highlight scala %}
 object GetRoutingDetailsScala1 extends App {
-  val subRoutes = (0 until 126).map({routeNumber =>
-    val nodes = (1 until 125).map({infoNumber => "YYZ" + infoNumber})
+  val subRoutes = (0 until 126).map { routeNumber =>
+    val nodes = (1 until 125).map {infoNumber => "YYZ" + infoNumber}
     (nodes.size + 1, nodes.mkString("\n|"))
-   })
+   }
   val route = subRoutes.map(x => x._2).mkString("\n|") ++ "\n";
   val totalNodeCount = subRoutes.map(x => x._1).sum
 
@@ -110,11 +73,9 @@ object GetRoutingDetailsScala1 extends App {
 }
 {% endhighlight %}
 
-Wie zu erwarten, fällt der Scala-Code viel kürzer aus.  (Java war ja
-nie berühmt dafür, dass man darin besonders knapp programmieren
-kann...)
+Zunächst stellt man fest, dass der Scala-Code viel kürzer ausfällt.
 
-Außerdem fällt auf, dass es keine `for`-Schleifen gibt. Stattdessen
+Außerdem fällt auf, dass er keine `for`-Schleifen enthält. Stattdessen
 bevorzuge ich Operatoren wie zum Beispiel `map`: das erste
 `map({routeNumber => ...})` liefert die Subrouten, das zweite
 `map({infoNumber => ...})` liefert die Länge einer Subroute und die
@@ -179,6 +140,47 @@ Java-Code).
 
 Mit Scala erhält man also für das ursprüngliche Problem
 übersichtlichen Code, der auf Anhieb schnell genug ist.
+
+Das zweite Stück Java-Code ist die schnellere Version und sieht wie
+folgt aus:
+
+{% highlight java %}
+public class GetRoutingDetailsB {
+  public static void main(String[] args) {
+    StringBuilder strRouteList = new StringBuilder();
+    int totalNodeCount = 0;
+    for(int routeNumber = 0; routeNumber < 126; routeNumber++) {
+      int nodeCount = 0;
+      for(int infoNumber = 0; infoNumber < 125; infoNumber++) {
+        String fromLocation = "YYZ";
+        String toLocation = ""+infoNumber;
+        if (nodeCount != 0) {
+          if (totalNodeCount == 1)
+            strRouteList.append(fromLocation + toLocation);
+          else if (totalNodeCount > 1)
+            strRouteList.append("|" + fromLocation + toLocation);
+          strRouteList.append("\n");
+        }
+        nodeCount++;
+        totalNodeCount++;
+      }
+    }
+    System.err.print(strRouteList.toString());
+    System.out.format("Node Count: %d", totalNodeCount);
+  }
+}
+{% endhighlight %}
+
+Der Unterschied zum ersten Stück Java-Code ist auf den ersten Blick
+kaum auszumachen: statt `strRouteList.toString().isEmpty()` prüft das
+zweite Stück Java-Code die Variable `totalNodeCount == 1`. Damit
+vermeidet es, dass ständig ein (potentieller langer) String erst
+erzeugt wird und dann nur geprüft wird, ob er überhaupt etwas enthält.
+Das erste Stück Java-Code läuft daher etwa 100 Mal langsamer als das
+das zweite Stück Java-Code.
+
+[Hier kann man den Scala-Code zu diesem
+Beitrag](/files/2013-03-27-scala-java/GetRoutingDetails.zip) herunterladen.
 
 Zum Schluss möchte ich mich bei dynatrace bedanken, welche mir die
 Idee zu diesem Blogbeitrag lieferten und mir freundlicherweise völlig
