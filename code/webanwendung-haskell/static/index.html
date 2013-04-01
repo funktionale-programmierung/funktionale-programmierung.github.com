@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Haskell Blog</title>
+    <script src="/jquery.min.js" type="text/javascript"></script>
+    <script src="/soyutils.js" type="text/javascript"></script>
+    <script src="/templates.js" type="text/javascript"></script>
+    <script src="/app.js" type="text/javascript"></script>
+
+    <style type="text/css">
+    body {
+        font: 9pt Verdana;
+    }
+    #container {
+        width: 800px;
+        margin: 10px auto;
+    }
+
+    .newsBit {
+        border: 1px solid black;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .newsBit h2 {
+        margin: 0;
+    }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h1>Haskell Blog</h1>
+    <div id="main">
+        Lade ...
+    </div>
+
+    <h1>Neuer Beitrag</h1>
+    <form id="newNews">
+        <label for="author">
+            Dein Name:
+        </label>
+        <input type="text" placeholder="Autor" id="author" /> <br />
+        <label for="author">
+            Überschrift:
+        </label>
+        <input type="text" placeholder="Titel" id="title" /> <br />
+        <label for="content">
+            Beitrag:
+        </label> <br />
+        <textarea id="content"></textarea> <br />
+
+        <label for="tags">
+            Tags:
+        </label>
+        <input type="text" placeholder="Tags (mit Komma trennen)" id="tags" /> <br />
+        <input type="submit" value="Speichern" />
+    </form>
+</div>
+
+</body>
+</html>

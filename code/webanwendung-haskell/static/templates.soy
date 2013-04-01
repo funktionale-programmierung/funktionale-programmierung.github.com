@@ -1,0 +1,83 @@
+{namespace BlogUI autoescape="true"}
+
+/**
+ * Render a list of news
+ *
+ * @param news
+ */
+{template .news}
+{foreach $entry in $news}
+    {call .newsBit data="$entry" /}
+{/foreach}
+{if (length($news) == 0)}
+<i>Keine Beiträge vorhanden.</i>
+{/if}
+{/template}
+
+/**
+ * Render a news entry
+ *
+ * @param id
+ * @param title
+ * @param content
+ * @param tags
+ * @param author
+ */
+{template .newsBit}
+<div class="newsBit">
+    <h2>{$title}</h2>
+    <p>
+        <i>geschreiben von {$author}</i> <br />
+        {$content|changeNewlineToBr}
+    </p>
+    <span class="tags">
+        Tags: {foreach $tag in $tags}{$tag}{if (not isLast($tag))}, {/if}{/foreach}
+    </span>
+    <h3>Kommentar verfassen:</h3>
+    <form id="addCommentFor{$id}">
+        <input type="text" placeholder="Ihr Name" id="commentAuthor{$id}" /> <br />
+        <textarea id="commentText{$id}"></textarea> <br />
+        <input type="submit" value="Speichern" />
+    </form>
+    <br />
+    <a href="javascript:Blog.showCommentsClick({$id});" id="commentLink{$id}" class="showComments commentsClosed">
+        Kommentare anzeigen
+    </a>
+    <div id="commentsFor{$id}" style="display:none;"></div>
+</div>
+
+<script>
+{literal}$('#addCommentFor{/literal}{$id}{literal}').submit(function (e) {
+   e.preventDefault();
+   Blog.addComment({/literal}{$id}{literal});
+});{/literal}
+</script>
+{/template}
+
+/**
+ * Render a list of comments
+ *
+ * @param comments
+ */
+{template .comments}
+{foreach $comment in $comments}
+    {call .commentBit data="$comment" /}
+{/foreach}
+{if (length($comments) == 0)}
+<i>Keine Kommentare vorhanden.</i>
+{/if}
+{/template}
+
+/**
+ * Render a comment
+ *
+ * @param comment
+ * @param author
+ */
+{template .commentBit}
+<div class="commentBit">
+    <p>
+        <b>{$author}:</b> {$comment|changeNewlineToBr}
+    </p>
+</div>
+{/template}
