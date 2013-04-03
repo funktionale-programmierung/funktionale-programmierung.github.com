@@ -208,16 +208,23 @@ Hier führen wir die *persistent*-Datenbank-Migrationen aus. Persistent legt als
 
 Jetzt werden die Routen definiert. *scotty* orientiert sich dabei sehr an [sinatra (Ruby)](http://www.sinatrarb.com/): eine Routen-Definition sieht
 zum Beispiel wie folgt aus:
+{% highlight haskell %}
     [get/post/put/delete] "/ein/pfad/:parameter" $ do
         v <- param "parameter"
         text v
+{% endhighlight %}
 
 Zunächst wählen wir die passende Funktion zu unseren HTTP-Request-Type, dann geben wir den Pfad an. Für Parameter schreiben wir `:parameterName`. Diese können wir dann auf zwei Arten auslesen:
+{% highlight haskell %}
     get "/ein/beispiel/:p" $ \p -> do
         ...
+{% endhighlight %}
+
 oder:
+{% highlight haskell %}
     get "/ein/beispiel/:p" $ do
         p <- param "p"
+{% endhighlight %}
 
 Die `param` Funktion sucht übrigens bei *POST*-Requests auch in FormData nach einem entsprechend benannten Parameter. Um etwas an den Browser zurück zu geben können wir eine der folgenden Funktionen wählen:
 
