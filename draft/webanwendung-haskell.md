@@ -9,16 +9,17 @@ Derzeit sind viele Webanwendungen in PHP geschrieben. Die Gründe dafür liegen 
 PHP ist einfach zu erlernen und fast alle Webhoster haben mittlerweile Webserver mit PHP-Unterstützung installiert. Allerdings bringt die Verwendung
 von PHP auch einige Probleme mit sich. Damit eine PHP-Anwendung gut skaliert, sind viele aufwendige Optimierungen notwendig (siehe zB [HipHop von Facebook](https://github.com/facebook/hiphop-php)).
 Außerdem ist PHP eine dynamische Sprache, und damit ist die Validierung und das Escapen von Ausgaben dem Programmierer selbst überlassen: SQL-Injections, XSS (Einschleusen von Code in fremde Webseiten durch Dritte), und andere Sicherheitslücken werden nicht auf Ebene der Programmiersprache verhindert. (siehe zum Beispiel [hier](http://www.tizag.com/mysqlTutorial/mysql-php-sql-injection.php)) Deshalb möchte ich an einem kleinen Beispiel erläutern, wie man mit [Haskell](http://haskell.org) relativ einfach eine performante,
-sichere und moderne Webanwendung schreibt. Hierzu werde ich ein einfaches Blog implementieren.
+sichere und moderne Webanwendung schreibt. Hierzu werde ich ein einfaches Blog implementieren. Das Blog wird das erstellen und anzeigen von Beiträgen, sowie das kommentieren von Beiträgen unterstützen.
 
 Um dem Artikel gut folgen zu können sind Grundlagen zu JavaScript, HTML, HTTP und Haskell hilfreich.
 
 <!-- more start -->
 
-Dank breiter AJAX-Unterstützung in den gängigen Browsern möchte ich die Views und die Controller des Blogs clientseitig implementieren. Daher müssen wir in Haskell nur das Modell, dh. eine Komponente entwickeln die Daten akzeptiert und ausgibt (über eine *REST-API*: HTTP-GET um Objekte zu laden, HTTP-POST um neue Objekte anzulegen.). Für die Views verwenden wir die funktionale
-[(Google) Soy-Templates Sprache](https://developers.google.com/closure/templates/), diese wird dann nach JavaScript kompiliert sodass wir unsere Views mit unserer JavaScript-Controller Logik ansteuern können.
+Bei einer modernen Webanwendung ist möglichst viel Logik direkt im Client, also im Browser in JavaScript, implementiert. Dank breiter AJAX-Unterstützung in den gängigen Browsern ist eine Kommunikation die ausschließlich Daten zwischen Server und Client überträgt auch problemlos möglich. Auch in unserem Blog werden wir deshalb alle Views und Controller in JavaScript implementieren. In Haskell müssen wir dann nur nur das Modell, eine Komponente die die Daten akzeptiert und ausgibt (über eine *REST-API*: HTTP-GET um Objekte zu laden, HTTP-POST um neue Objekte anzulegen.), entwickeln. Für die Views verwenden wir die funktionale
+[(Google) Soy-Templates-Sprache von Google](https://developers.google.com/closure/templates/), diese wird dann nach JavaScript kompiliert sodass wir unsere Views mit unserer JavaScript-Controller Logik ansteuern können.
 
-Beginnen wir nun mit der *REST-API*, die in Haskell geschrieben wird. Als Web-framework verwenden wir [scotty](http://hackage.haskell.org/packages/archive/scotty/0.4.6/doc/html/Web-Scotty.html), als Datenbankabstraktionsschicht [persistent(-mysql)](http://hackage.haskell.org/packages/archive/persistent/1.1.5.1/doc/html/Database-Persist.html). Die Blogeinträge und Kommentare werden nach *JSON* ([aeson](http://hackage.haskell.org/packages/archive/aeson/0.6.1.0/doc/html/Data-Aeson.html)) serialisiert. Die entsprechenden Haskell Pakete sollten in den entsprechenden Versionen installiert sein (siehe *cabal* Datei unten). Für *persistent* gibt es noch weitere Datenbankbackends neben mySQL, hier könnte man also ebenfalls sqlite oder postgre verwenden.
+Beginnen wir nun mit der Haskell Komponente, dem Modell. Als Web-framework verwenden wir [scotty](http://hackage.haskell.org/packages/archive/scotty/0.4.6/doc/html/Web-Scotty.html), als Datenbankabstraktionsschicht [persistent(-mysql)](http://hackage.haskell.org/packages/archive/persistent/1.1.5.1/doc/html/Database-Persist.html). Die Blogeinträge und Kommentare werden nach *JSON* ([aeson](http://hackage.haskell.org/packages/archive/aeson/0.6.1.0/doc/html/Data-Aeson.html)) serialisiert. Die entsprechenden Haskell-Pakete sollten in den entsprechenden Versionen installiert sein (siehe *cabal*-Datei unten). Für *persistent* gibt es noch weitere Datenbankbackends neben MySQL, hier könnte man also ebenfalls SQLite oder PostgreSQL verwenden.
+
 Definieren wir zunächst unsere Typen und deren Serialisierung:
 
 {% highlight haskell %}
@@ -28,7 +29,7 @@ Definieren wir zunächst unsere Typen und deren Serialisierung:
 {-# OPTIONS_GHC -fwarn-unused-matches -fwarn-unused-binds -fwarn-unused-imports #-}
 {% endhighlight %}
 
-Die LANGUAGE-Pragmas sind notwendig, damit fortgeschrittene Sprachefeatures angeschaltet sind damit persistent und scotty funktionieren.
+Die LANGUAGE-Pragmas sind notwendig, damit fortgeschrittene Sprachfeatures angeschaltet sind, damit *persistent* und *scotty* richtig funktionieren.
 
 {% highlight haskell %}
 module Types where
@@ -40,14 +41,13 @@ import Data.Aeson
 
 import qualified Data.Text as T
 
-import Control.Applicative
 import Control.Monad
 
 import Web.PathPieces (fromPathPiece)
 import Data.Maybe (fromJust)
 {% endhighlight %}
 
-Hier importieren wir die Module aus *persistent*, damit wir mit Hilfe von *TemplateHaskell* später neben den Typ-Definitionen automatisch auch die entsprechenden Instanzen für die Verwendung mit *persistent* generiert bekommen. Das *aeson* Modul verwenden um Instanzen für die JSON serialisierung definieren zu können. Da wir diese im applicative-Style definieren, benötigen wir die entsprechenden Operatoren aus `Control.Applicative`. *text* verwenden wir für die Representation von Texten.
+Hier importieren wir die Module aus *persistent*, damit wir mit Hilfe von [TemplateHaskell](http://www.haskell.org/haskellwiki/Template_Haskell) später neben den Typ-Definitionen automatisch auch die entsprechenden Instanzen für die Verwendung mit *persistent* generiert bekommen. Das *aeson*-Modul verwenden um Instanzen für die JSON-Serialisierung definieren zu können. *text* verwenden wir für die Representation von Texten.
 
 {% highlight haskell %}
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistUpperCase|
@@ -66,7 +66,8 @@ NewsComment
 |]
 {% endhighlight %}
 
-Das Datenmodell ist denkbar einfach: Ein Blogbeitrag hat einen Titel, einen Inhalt, Tags und einen Autor. Ein Kommentar hat einen Autor, einen Inhalt und referenziert auf einen Blogbeitrag.
+Das Datenmodell ist denkbar einfach: Ein Blogbeitrag hat einen Titel, einen Inhalt, Tags und einen Autor. Ein Kommentar hat einen Autor, einen Inhalt und referenziert einen Blogbeitrag. Das `mkMigrate` generiert zusätzlich noch eine Migrationsfunktion, dazu später mehr. `persistUpperCase` benennt die Felder, indem der Name der Tabelle mit dem Namen des Feldes konkateniert wird, und der erste Buchstabe des Feldnamen wird groß geschrieben. (zB
+*NewsItemTitle*) Mehr Informationen über was hier genau von *TemplateHaskell* generiert wird findet man [hier (Abschnitt Code Generation)](http://www.yesodweb.com/book/persistent)
 
 {% highlight haskell %}
 instance ToJSON (Entity NewsItem) where
@@ -81,10 +82,11 @@ instance ToJSON (Entity NewsItem) where
 
 instance FromJSON NewsItem where
     parseJSON (Object v) =
-        NewsItem <$> v .: "title"
-                 <*> v .: "content"
-                 <*> v .: "tags"
-                 <*> v .: "author"
+        do title <- v .: "title"
+           content <- v .: "content"
+           tags <- v .: "tags"
+           author <- v .: "author"
+           return $ NewsItem title content tags author
     parseJSON _ = mzero
 
 instance ToJSON (Entity NewsComment) where
@@ -100,19 +102,18 @@ parseNewsId :: T.Text -> NewsItemId
 parseNewsId =
     fromJust . fromPathPiece
 
-mkNewsComment author comment newsId = NewsComment author comment (parseNewsId newsId)
-
 instance FromJSON NewsComment where
     parseJSON (Object v) =
-        mkNewsComment <$> v .: "author"
-                      <*> v .: "comment"
-                      <*> v .: "news"
+        do author <- v .: "author"
+           comment <- v .: "comment"
+           newsId <- v .: "news"
+           return $ NewsComment author comment (parseNewsId newsId)
     parseJSON _ = mzero
 {% endhighlight %}
 
 Damit wir später unsere Haskell-Typen einfach nach JSON serialisieren und von JSON deserialisieren können, müssen wir die Instanzen `FromJSON` und `ToJSON` aus *aeson*
 implementieren. Die `ToJSON` Instanzen beziehen sich allerdings nicht direkt auf den eigentlichen Typ, sondern auf die entsprechende Datenbank-Entity mit ID. Der Grund hierfür liegt
-auf der Hand: Das *persistent* Framework liefert als Antwort auf zum Beispiel `selectList` eine Liste von solchen Entities. Da *aeson* bereits mit einer Serialisierung für `[a]` kommt, können wir also unsere Liste von Entities dann ganz einfach serialisieren. Da wir beim Erzeugen von Kommentaren/Beiträgen dessen ID noch nicht kennen, und wir zum Einfügen (`insert`) in *persistent* den "rohen" Typ benötigen, schreiben wir hierfür eine `FromJSON` Instanz. Wir können nun also zum Beispiel folgendes Parsen:
+auf der Hand: Das *persistent*-Framework liefert als Antwort auf zum Beispiel `selectList` eine Liste von solchen Entities. Da *aeson* bereits mit einer Serialisierung für `[a]` kommt, können wir also unsere Liste von Entities dann ganz einfach serialisieren. Da wir beim Erzeugen von Kommentaren/Beiträgen dessen ID noch nicht kennen, und wir zum Einfügen (`insert`) in *persistent* den "rohen" Typ benötigen, schreiben wir hierfür eine `FromJSON` Instanz. Wir können nun also zum Beispiel folgendes parsen:
 {% highlight javascript %}
 {
   "title": "Hallo Blog",
@@ -153,7 +154,11 @@ import Data.Maybe (fromJust)
 import Network.Wai.Middleware.RequestLogger
 {% endhighlight %}
 
-Ich denke die Imports sind an dieser Stelle relativ selbsterklärend.
+Die meisten Module sind bereits aus *Types.hs* bekannt. `Web.Scotty` ist das Hauptmodul des *scotty*-Webframeworks.
+`Web.PathPieces` benötigen wir später um Parameter in eine Datenbank-Id zu parsen. Der *RequestLogger* aus
+`Network.Wai.Middleware.RequestLogger` ist zu Debug-Zwecken: Es ist eine [Middleware](http://de.wikipedia.org/wiki/Middleware), die
+alle HTTP-Requests, die an unseren Server gehen, in die Konsole loggt. Da die SQL-Verbindung aus *persistent* in der `ResourceT` Monade
+laufen muss, benötigen wir die Funktion `runResourceT` aus *Control.Monad.Trans.Resource*.
 
 {% highlight haskell %}
 instance Parsable T.Text where parseParam = Right . TL.toStrict
@@ -169,7 +174,7 @@ ctToLText CtHtml = "text/html"
 ctToLText CtJavaScript = "text/javascript"
 {% endhighlight %}
 
-Hier definieren wir eine Hilfsfunktion, um einfach den HTML *Content-Type* für statische
+Hier definieren wir eine Hilfsfunktion, um einfach den HTML-*Content-Type* für statische
 Dateien angeben zu können.
 
 {% highlight haskell %}
@@ -182,7 +187,7 @@ mysqlInfo = SQL.defaultConnectInfo
             }
 {% endhighlight %}
 
-Die Konfiguration für die Datenbank - mySQL Benutzername, Passwort, Host und Datenbank.
+Die Konfiguration für die Datenbank - MySQL-Benutzername, Passwort, Host und Datenbank.
 
 {% highlight haskell %}
 runDB x = liftIO $ do runResourceT $ SQL.withMySQLConn mysqlInfo $ SQL.runSqlConn x
@@ -200,6 +205,28 @@ launchServer port =
 
 Hier führen wir die *persistent*-Datenbank-Migrationen aus. Persistent legt als automatisch nicht existierende Tabellen und Felder an. Gibt es eine Migration, die
 *persistent* nicht selbst durchführen kann, so beendet sich der Server mit einer Fehlermeldung.
+
+Jetzt werden die Routen definiert. *scotty* orientiert sich dabei sehr an [sinatra (Ruby)](http://www.sinatrarb.com/): eine Routen-Definition sieht
+zum Beispiel wie folgt aus:
+    [get/post/put/delete] "/ein/pfad/:parameter" $ do
+        v <- param "parameter"
+        text v
+
+Zunächst wählen wir die passende Funktion zu unseren HTTP-Request-Type, dann geben wir den Pfad an. Für Parameter schreiben wir `:parameterName`. Diese können wir dann auf zwei Arten auslesen:
+    get "/ein/beispiel/:p" $ \p -> do
+        ...
+oder:
+    get "/ein/beispiel/:p" $ do
+        p <- param "p"
+
+Die `param` Funktion sucht übrigens bei *POST*-Requests auch in FormData nach einem entsprechend benannten Parameter. Um etwas an den Browser zurück zu geben können wir eine der folgenden Funktionen wählen:
+
+ * `text` einfach Text
+ * `html` Text, den der Browser als HTML interpretieren soll
+ * `file` Eine Datei auf dem Server laden und an den Browser schicken
+ * `json` Ein beliebiges Haskell-Record senden, welches eine ToJSON-Instanz hat
+
+Mehr dazu findet man in der [scotty Dokumentation](http://hackage.haskell.org/packages/archive/scotty/0.4.6/doc/html/Web-Scotty.html)
 
 {% highlight haskell %}
        scotty port $ do
@@ -256,11 +283,11 @@ Hier führen wir die *persistent*-Datenbank-Migrationen aus. Persistent legt als
             file f
 {% endhighlight %}
 
-Der Code ist eigentlich relativ selbsterklärend: In der *scotty*-Monade definieren wir zu sogenannten Routes eine Action. Zuerst fügen wir ein paar Routes
+In der *scotty*-Monade definieren wir zu sogenannten Routes eine Action. Zuerst fügen wir ein paar Routes
 hinzu um die statischen *HTML*/*JavaScript*-Dateien zu laden. Dann kommt die *REST-API*: Zunächst definieren wir zwei GET-Routes `/news` und `/comments/:id` um
-aus der Datenbank News-Einträge und deren Kommentare abzufragen. Mit `selectList` aus Persistent können wir sehr einfach entsprechende Anfrage durchführen.
+aus der Datenbank News-Einträge und deren Kommentare abzufragen. Mit `selectList` aus *persistent* können wir sehr einfach entsprechende Anfrage durchführen.
 Die Funktion nimmt als ersten Parameter `Filter` und als zweiten weitere Optionen wie zum Beispiel sortieren oder Limits. Bei den Kommentaren beispielsweise
-suchen wir nach allen Kommentaren, die zu der News mit der ID `newsId` gehören. Mit `fromPathPiece` wandeln wir die Eingabe in eine Datenbank ID um - das
+suchen wir nach allen Kommentaren, die zu der News mit der ID `newsId` gehören. Mit `fromPathPiece` wandeln wir die Eingabe in eine Datenbank-ID um - das
 `fromJust` ist an dieser Stelle auch nicht gefährlich, da jedes Request in seinem eigenen Thread lebt, und falls dieser per Exception beendet wird bekommt
 unser *JavaScript* später einen HTTP-Fehlercode. Der Server läuft einfach weiter.
 
@@ -269,7 +296,7 @@ dann eine Antwort.
 
 Nun implementieren wir noch das Hinzufügen von News und Kommentaren. Hierzu sind zwei neue POST-Routes notwendig: `/news` und `/comments`. Die `parseComment`/`parseNews`
 Funktion nimmt den POST-Body und parst diesen als *JSON* in unsere Datentypen. Mit `insert` aus *persistent* speichern wir dann den Kommentar bzw. den Newsbeitrag.
-Ein *Forein-Key Constraint* sorgt dafür, dass wir nur Kommentare zu existierenden News speichern können. Wenn das JSON-Parsen oder das Speichern fehlschlägt,
+Ein *Foreign-Key-Constraint* sorgt dafür, dass wir nur Kommentare zu existierenden News speichern können. Wenn das JSON-Parsen oder das Speichern fehlschlägt,
 dann wird der Thread wieder beendet und unser JavaScript erhält einen Fehlercode. Für unsere *REST*-Schnittstelle gilt also: Wenn der Server ein Request
 beantwortet, gab es keine Fehler. Ansonsten ist etwas mit der Eingabe falsch. Das ist zugegebenermaßen nicht optimal, da man zum Beispiel keine näheren
 Informationen zum Fehler bekommt, aber genauere Fehlerbehandlung würde an dieser Stelle den Rahmen sprengen.
@@ -324,8 +351,7 @@ Dann starten wir den Server:
 dist/build/Blog/Blog
 {% endhighlight %}
 
-Rufen wir im Browser nun `http://localhost:8085` auf, bekommen wir *File not found*. Den JavaScript/HTML-Client implementieren wir
-in einem Teil 2.
+Rufen wir im Browser nun `http://localhost:8085` auf, bekommen wir *File not found*.
 
 Zum Schluss noch ein kleiner Test unseres Servers mit `curl`:
 {% highlight bash %}
@@ -344,4 +370,4 @@ $ curl http://localhost:8085/news
 [{"title":"Test","author":"Alex","tags":["a","b"],"id":5,"content":"Test Beitrag"}]
 {% endhighlight %}
 
-Das war's für heute!
+Das war's für heute, den JavaScript/HTML-Client implementieren wir in Teil 2!
