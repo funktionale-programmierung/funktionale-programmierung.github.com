@@ -326,3 +326,22 @@ dist/build/Blog/Blog
 
 Rufen wir im Browser nun `http://localhost:8085` auf, bekommen wir *File not found*. Den JavaScript/HTML-Client implementieren wir
 in einem Teil 2.
+
+Zum Schluss noch ein kleiner Test unseres Servers mit `curl`:
+{% highlight bash %}
+$ curl http://localhost:8085/news
+[]
+{% endhighlight %}
+Keine Blogbeiträge vorhanden, da noch keiner in die Datenbank eingetragen wurde.
+Wir können mit CURL einen Beitrag hinzufügen:
+{% highlight bash %}
+$ curl --data '{"title": "Test", "author": "Alex", "tags": ["a", "b"], "content": "Test Beitrag"}' http://localhost:8085/news
+true
+{% endhighlight %}
+Nun können wir diesen in unserer Liste von Beiträgen sehen:
+{% highlight bash %}
+$ curl http://localhost:8085/news
+[{"title":"Test","author":"Alex","tags":["a","b"],"id":5,"content":"Test Beitrag"}]
+{% endhighlight %}
+
+Das war's für heute!
