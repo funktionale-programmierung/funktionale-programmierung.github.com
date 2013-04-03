@@ -7,7 +7,7 @@ tags: ["web", "Haskell", "JavaScript", "SOY", "HTTP", "PHP"]
 ---
 Derzeit sind viele Webanwendungen in PHP geschrieben. Die Gründe dafür liegen auf der Hand: Die Entwicklung geht meist sehr schnell,
 PHP ist einfach zu erlernen und fast alle Webhoster haben mittlerweile Webserver mit PHP-Unterstützung installiert. Allerdings bringt die Verwendung
-von PHP auch einige Probleme mit sich. Damit eine PHP-Anwendung gut skaliert, sind viele aufwendige Optimierungen notwendig (siehe zB *HipHop* von Facebook [https://github.com/facebook/hiphop-php]).
+von PHP auch einige Probleme mit sich. Damit eine PHP-Anwendung gut skaliert, sind viele aufwendige Optimierungen notwendig (siehe zB *HipHop* von Facebook https://github.com/facebook/hiphop-php).
 Außerdem ist PHP eine dynamische Sprache, und damit ist die Validierung und das Escapen von Ausgaben dem Programmierer selbst überlassen: SQL-Injections, XSS (Einschleusen von Code in fremde Webseiten durch Dritte), und andere Sicherheitslücken werden nicht auf Ebene der Programmiersprache verhindert. (siehe zum Beispiel http://www.tizag.com/mysqlTutorial/mysql-php-sql-injection.php) Deshalb möchte ich an einem kleinen Beispiel erläutern, wie man mit Haskell (http://haskell.org) relativ einfach eine performante,
 sichere und moderne Webanwendung schreibt. Hierzu werde ich ein einfaches Blog implementieren.
 
@@ -126,11 +126,11 @@ Nun können wir den eigentlichen Server implementieren. Hierzu habe ich als Fram
 geeignet ist um einen einfachen Server mit *REST-API* zu implementieren.
 
 {% highlight haskell %}
--- Datei App.hs
+-- Datei ServerApp.hs
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, DoAndIfThenElse, GADTs,
              TypeFamilies, BangPatterns, NoMonomorphismRestriction #-}
 {-# OPTIONS_GHC -fwarn-unused-matches -fwarn-unused-binds -fwarn-unused-imports #-}
-module App
+module ServerApp
     ( launchServer
     )
 where
@@ -151,15 +151,28 @@ import Web.PathPieces (fromPathPiece)
 import Data.Maybe (fromJust)
 
 import Network.Wai.Middleware.RequestLogger
+{% endhighlight %}
 
+Ich denke die Imports sind an dieser Stelle relativ selbsterklärend.
+
+{% highlight haskell %}
 instance Parsable T.Text where parseParam = Right . TL.toStrict
+{% endhighlight %}
 
+Diese Instanz ist notwendig, damit *scotty* Parameter in *text* parsen kann.
+
+{% highlight haskell %}
 data ContentType = CtHtml | CtJavaScript deriving (Show, Eq, Enum)
 
 ctToLText :: ContentType -> TL.Text
 ctToLText CtHtml = "text/html"
 ctToLText CtJavaScript = "text/javascript"
+{% endhighlight %}
 
+Hier definieren wir eine Hilfsfunktion, um einfach den HTML *Content-Type* für statische
+Dateien angeben zu können.
+
+{% highlight haskell %}
 mysqlInfo = SQL.defaultConnectInfo
             { SQL.connectDatabase = "blog"
             , SQL.connectPassword = ""
@@ -167,11 +180,28 @@ mysqlInfo = SQL.defaultConnectInfo
             , SQL.connectHost = "127.0.0.1"
             , SQL.connectPort = 3306
             }
+{% endhighlight %}
 
+Die Konfiguration für die Datenbank - mySQL Benutzername, Passwort, Host und Datenbank.
+
+{% highlight haskell %}
 runDB x = liftIO $ do runResourceT $ SQL.withMySQLConn mysqlInfo $ SQL.runSqlConn x
+{% endhighlight %}
 
+Das `runDB` sorgt dafür, dass unsere *persistent*-Aktionen in der richtigen Monade laufen - letztendlich wird pro Request eine neue Datenbankverbindung geöffnet
+und dann wieder beendet. Man könnte hier übrigens noch eine Optimierung durchführen und einige Verbindungen bereits beim Start des Servers öffnen und offen
+halten (*ConnectionPool*, ist mit *persistent* relativ einfach möglich), sodass dann bei einem Request zur Antwortzeit nicht noch die Verbindungszeit zur Datenbank hinzukommt.
+
+{% highlight haskell %}
 launchServer port =
-    do runResourceT $ SQL.withMySQLConn mysqlInfo $ SQL.runSqlConn $ SQL.runMigrationUnsafe migrateAll
+    do runResourceT $ SQL.withMySQLConn mysqlInfo $
+                      SQL.runSqlConn $ SQL.runMigrationUnsafe migrateAll
+{% endhighlight %}
+
+Hier führen wir die *persistent*-Datenbank-Migrationen aus. Persistent legt als automatisch nicht existierende Tabellen und Felder an. Gibt es eine Migration, die
+*persistent* nicht selbst durchführen kann, so beendet sich der Server mit einer Fehlermeldung.
+
+{% highlight haskell %}
        scotty port $ do
          middleware logStdoutDev -- just for debugging
 
@@ -188,8 +218,13 @@ launchServer port =
              json response
 
          get "/comments/:id" $ \newsId -> do
-             response <- runDB $ do comments <- SQL.selectList [NewsCommentNews SQL.==. ((fromJust $ fromPathPiece newsId) :: NewsItemId)]
-                                                               [SQL.Desc NewsCommentId]
+             response <- runDB $ do comments <- SQL.selectList
+                                                [
+                                                 NewsCommentNews
+                                                   SQL.==.
+                                                 ((fromJust $ fromPathPiece newsId) :: NewsItemId)
+                                                ]
+                                                [SQL.Desc NewsCommentId]
                                     return comments
 
              json response
@@ -229,10 +264,6 @@ suchen wir nach allen Kommentaren, die zu der News mit der ID `newsId` gehören.
 `fromJust` ist an dieser Stelle auch nicht gefährlich, da jedes Request in seinem eigenen Thread lebt, und falls dieser per Exception beendet wird bekommt
 unser *JavaScript* später einen HTTP-Fehlercode. Der Server läuft einfach weiter.
 
-Das `runDB` sorgt dafür, dass unsere *persistent*-Aktionen in der richtigen Monade laufen - letztendlich wird pro Request eine neue Datenbankverbindung geöffnet
-und dann wieder beendet. Man könnte hier übrigens noch eine Optimierung durchführen und einige Verbindungen bereits beim Start des Servers öffnen und offen
-halten (*ConnectionPool*, ist mit *persistent* relativ einfach möglich), sodass dann bei einem Request zur Antwortzeit nicht noch die Verbindungszeit zur Datenbank hinzukommt.
-
 `json` serialisiert dann das Ergebnis unserer Datenbank-Abfrage (was Dank unseren oben definierten Instanzen ohne Probleme möglich ist) und erzeugt
 dann eine Antwort.
 
@@ -252,7 +283,7 @@ module Main
 ( main )
 where
 
-import App
+import ServerApp
 
 main = launchServer 8085
 {% endhighlight %}
