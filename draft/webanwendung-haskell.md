@@ -7,8 +7,8 @@ tags: ["web", "Haskell", "JavaScript", "SOY", "HTTP", "PHP"]
 ---
 Derzeit sind viele Webanwendungen in PHP geschrieben. Die Gründe dafür liegen auf der Hand: Die Entwicklung geht meist sehr schnell,
 PHP ist einfach zu erlernen und fast alle Webhoster haben mittlerweile Webserver mit PHP-Unterstützung installiert. Allerdings bringt die Verwendung
-von PHP auch einige Probleme mit sich. Damit eine PHP-Anwendung gut skaliert, sind viele aufwendige Optimierungen notwendig (siehe zB *HipHop* von Facebook https://github.com/facebook/hiphop-php).
-Außerdem ist PHP eine dynamische Sprache, und damit ist die Validierung und das Escapen von Ausgaben dem Programmierer selbst überlassen: SQL-Injections, XSS (Einschleusen von Code in fremde Webseiten durch Dritte), und andere Sicherheitslücken werden nicht auf Ebene der Programmiersprache verhindert. (siehe zum Beispiel http://www.tizag.com/mysqlTutorial/mysql-php-sql-injection.php) Deshalb möchte ich an einem kleinen Beispiel erläutern, wie man mit Haskell (http://haskell.org) relativ einfach eine performante,
+von PHP auch einige Probleme mit sich. Damit eine PHP-Anwendung gut skaliert, sind viele aufwendige Optimierungen notwendig (siehe zB [HipHop von Facebook](https://github.com/facebook/hiphop-php)).
+Außerdem ist PHP eine dynamische Sprache, und damit ist die Validierung und das Escapen von Ausgaben dem Programmierer selbst überlassen: SQL-Injections, XSS (Einschleusen von Code in fremde Webseiten durch Dritte), und andere Sicherheitslücken werden nicht auf Ebene der Programmiersprache verhindert. (siehe zum Beispiel [hier](http://www.tizag.com/mysqlTutorial/mysql-php-sql-injection.php)) Deshalb möchte ich an einem kleinen Beispiel erläutern, wie man mit [Haskell](http://haskell.org) relativ einfach eine performante,
 sichere und moderne Webanwendung schreibt. Hierzu werde ich ein einfaches Blog implementieren.
 
 Um dem Artikel gut folgen zu können sind Grundlagen zu JavaScript, HTML, HTTP und Haskell hilfreich.
@@ -16,9 +16,9 @@ Um dem Artikel gut folgen zu können sind Grundlagen zu JavaScript, HTML, HTTP u
 <!-- more start -->
 
 Dank breiter AJAX-Unterstützung in den gängigen Browsern möchte ich die Views und die Controller des Blogs clientseitig implementieren. Daher müssen wir in Haskell nur das Modell, dh. eine Komponente entwickeln die Daten akzeptiert und ausgibt (über eine *REST-API*: HTTP-GET um Objekte zu laden, HTTP-POST um neue Objekte anzulegen.). Für die Views verwenden wir die funktionale
-(Google) Soy-Templates Sprache (https://developers.google.com/closure/templates/), diese wird dann nach JavaScript kompiliert sodass wir unsere Views mit unserer JavaScript-Controller Logik ansteuern können.
+[(Google) Soy-Templates Sprache](https://developers.google.com/closure/templates/), diese wird dann nach JavaScript kompiliert sodass wir unsere Views mit unserer JavaScript-Controller Logik ansteuern können.
 
-Beginnen wir nun mit der *REST-API*, die in Haskell geschrieben wird. Als Web-framework verwenden wir *scotty*, als Datenbankabstraktionsschicht *persistent(-mysql)*. Die Blogeinträge und Kommentare werden nach *JSON* serialisiert. Die entsprechenden Haskell Pakete sollten in den entsprechenden Versionen installiert sein (siehe *cabal* Datei unten). Für *persistent* gibt es noch weitere Datenbankbackends neben mySQL, hier könnte man also ebenfalls sqlite oder postgre verwenden.
+Beginnen wir nun mit der *REST-API*, die in Haskell geschrieben wird. Als Web-framework verwenden wir [scotty](http://hackage.haskell.org/packages/archive/scotty/0.4.6/doc/html/Web-Scotty.html), als Datenbankabstraktionsschicht [persistent(-mysql)](http://hackage.haskell.org/packages/archive/persistent/1.1.5.1/doc/html/Database-Persist.html). Die Blogeinträge und Kommentare werden nach *JSON* ([aeson](http://hackage.haskell.org/packages/archive/aeson/0.6.1.0/doc/html/Data-Aeson.html)) serialisiert. Die entsprechenden Haskell Pakete sollten in den entsprechenden Versionen installiert sein (siehe *cabal* Datei unten). Für *persistent* gibt es noch weitere Datenbankbackends neben mySQL, hier könnte man also ebenfalls sqlite oder postgre verwenden.
 Definieren wir zunächst unsere Typen und deren Serialisierung:
 
 {% highlight haskell %}
