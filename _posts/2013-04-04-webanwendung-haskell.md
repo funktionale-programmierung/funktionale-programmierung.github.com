@@ -18,7 +18,7 @@ Um dem Artikel gut folgen zu können sind Grundlagen zu JavaScript, HTTP und Has
 
 <!-- more start -->
 
-Bei einer modernen Webanwendung ist möglichst viel Logik direkt im Client, also im Browser in JavaScript, implementiert. Dank breiter AJAX-Unterstützung in den gängigen Browsern ist eine Kommunikation die ausschließlich Daten zwischen Server und Client überträgt auch problemlos möglich. Auch in unserem Blog werden wir deshalb alle Views und Controller in JavaScript implementieren. In Haskell müssen wir dann nur nur das Modell entwickeln, eine Komponente die die Daten akzeptiert und ausgibt (über eine *REST-API*: HTTP-GET um Objekte zu laden, HTTP-POST um neue Objekte anzulegen.). Für die Views verwenden wir die funktionale
+Bei einer modernen Webanwendung ist möglichst viel Logik direkt im Client, also im Browser in JavaScript, implementiert. Dank breiter AJAX-Unterstützung in den gängigen Browsern ist eine Kommunikation die ausschließlich Daten zwischen Server und Client überträgt auch problemlos möglich. Auch in unserem Blog werden wir deshalb alle Views und Controller in JavaScript implementieren. In Haskell müssen wir dann nur nur das Modell, eine Komponente die, die Daten akzeptiert und ausgibt (über eine *REST-API*: HTTP-GET um Objekte zu laden, HTTP-POST um neue Objekte anzulegen.), entwickeln. Für die Views verwenden wir die funktionale
 [(Google) Soy-Templates-Sprache von Google](https://developers.google.com/closure/templates/), diese wird dann nach JavaScript kompiliert so dass wir unsere Views mit unserer JavaScript-Controller Logik ansteuern können.
 
 Beginnen wir nun mit der Haskell-Komponente, dem Modell. Als Web-Framework verwenden wir [scotty](http://hackage.haskell.org/packages/archive/scotty/0.4.6/doc/html/Web-Scotty.html), als Datenbankabstraktionsschicht [persistent(-mysql)](http://hackage.haskell.org/packages/archive/persistent/1.1.5.1/doc/html/Database-Persist.html). Die Blogeinträge und Kommentare werden nach *JSON* ([aeson](http://hackage.haskell.org/packages/archive/aeson/0.6.1.0/doc/html/Data-Aeson.html)) serialisiert. Die entsprechenden Haskell-Pakete sollten in den entsprechenden Versionen installiert sein (siehe *cabal*-Datei unten). Für *persistent* gibt es noch weitere Datenbankbackends neben MySQL, hier könnte man also ebenfalls SQLite oder PostgreSQL verwenden.
@@ -32,7 +32,10 @@ Definieren wir zunächst unsere Typen und deren Serialisierung:
 {-# OPTIONS_GHC -fwarn-unused-matches -fwarn-unused-binds -fwarn-unused-imports #-}
 {% endhighlight %}
 
-Die LANGUAGE-Pragmas sind notwendig, damit fortgeschrittene Sprachfeatures angeschaltet sind, damit *persistent* und *scotty* richtig funktionieren.
+Die LANGUAGE-Pragmas sind notwendig, damit fortgeschrittene Sprachfeatures angeschaltet sind, damit *persistent* und *scotty* richtig funktionieren. Nun
+kommen die Imports der benötigten Module: `Database.Persist` und `Database.Persist.TH` aus *persistent* für den Datenbankzugriff, `Data.Aeson` aus *aeson*
+um Instanzen für die JSON-Serialisierung zu definieren, `Data.Text` aus *text* um Texte effizient zu representieren und `Control.Monad` um `mzero` benutzen zu können.
+Die anderen Beiden Module werden weiter unten erklärt.
 
 {% highlight haskell %}
 module Types where
@@ -50,7 +53,7 @@ import Web.PathPieces (fromPathPiece)
 import Data.Maybe (fromJust)
 {% endhighlight %}
 
-Hier importieren wir die Module aus *persistent*, damit wir mit Hilfe von [TemplateHaskell](http://www.haskell.org/haskellwiki/Template_Haskell) später neben den Typ-Definitionen automatisch auch die entsprechenden Instanzen für die Verwendung mit *persistent* generiert bekommen. Das *aeson*-Modul verwenden um Instanzen für die JSON-Serialisierung definieren zu können. *text* verwenden wir für die Representation von Texten.
+Mit Hilfe von [TemplateHaskell](http://www.haskell.org/haskellwiki/Template_Haskell) erzeugen wir nun neben den Typ-Definitionen automatisch auch die entsprechenden Instanzen für die Verwendung mit *persistent*:
 
 {% highlight haskell %}
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistUpperCase|
@@ -70,7 +73,7 @@ NewsComment
 {% endhighlight %}
 
 Das Datenmodell ist denkbar einfach: Ein Blogbeitrag hat einen Titel, einen Inhalt, Tags und einen Autor. Ein Kommentar hat einen Autor, einen Inhalt und referenziert einen Blogbeitrag. Das `mkMigrate` generiert zusätzlich noch eine Migrationsfunktion, dazu später mehr. `persistUpperCase` benennt die Felder, indem der Name der Tabelle mit dem Namen des Feldes konkateniert wird, und der erste Buchstabe des Feldnamen wird groß geschrieben. (zB
-*NewsItemTitle*) Mehr Informationen über was hier genau von *TemplateHaskell* generiert wird findet man [hier (Abschnitt Code Generation)](http://www.yesodweb.com/book/persistent)
+*NewsItemTitle*) Mehr Informationen über das, was hier genau von *TemplateHaskell* generiert wird, findet man [hier (Abschnitt "Code Generation")](http://www.yesodweb.com/book/persistent)
 
 {% highlight haskell %}
 instance ToJSON (Entity NewsItem) where
@@ -116,7 +119,8 @@ instance FromJSON NewsComment where
 
 Damit wir später unsere Haskell-Typen einfach nach JSON serialisieren und von JSON deserialisieren können, müssen wir die Instanzen `FromJSON` und `ToJSON` aus *aeson*
 implementieren. Die `ToJSON` Instanzen beziehen sich allerdings nicht direkt auf den eigentlichen Typ, sondern auf die entsprechende Datenbank-Entity mit ID. Der Grund hierfür liegt
-auf der Hand: Das *persistent*-Framework liefert als Antwort auf zum Beispiel `selectList` eine Liste von solchen Entities. Da *aeson* bereits mit einer Serialisierung für `[a]` kommt, können wir also unsere Liste von Entities dann ganz einfach serialisieren. Da wir beim Erzeugen von Kommentaren/Beiträgen dessen ID noch nicht kennen, und wir zum Einfügen (`insert`) in *persistent* den "rohen" Typ benötigen, schreiben wir hierfür eine `FromJSON` Instanz. Wir können nun also zum Beispiel folgendes parsen:
+auf der Hand: Das *persistent*-Framework liefert als Antwort auf zum Beispiel `selectList` eine Liste von solchen Entities. Da *aeson* bereits mit einer Serialisierung für `[a]` kommt, können wir also unsere Liste von Entities dann ganz einfach serialisieren. Da wir beim Erzeugen von Kommentaren/Beiträgen dessen ID noch nicht kennen, und wir zum Einfügen (`insert`) in *persistent* den "rohen" Typ benötigen, schreiben wir hierfür eine `FromJSON` Instanz. Die `obj .: "key"` Funktion holt aus einem JSON `Object` das Element mit dem Schlüssel `"key"` (siehe [hier](http://hackage.haskell.org/packages/archive/aeson/0.6.0.2/doc/html/Data-Aeson.html#v:.:)).
+Wir können nun also zum Beispiel folgendes parsen:
 {% highlight javascript %}
 {
   "title": "Hallo Blog",
