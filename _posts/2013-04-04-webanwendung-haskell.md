@@ -7,8 +7,11 @@ tags: ["web", "Haskell", "JavaScript", "SOY", "HTTP", "PHP"]
 ---
 Derzeit sind viele Webanwendungen in PHP geschrieben. Die Gründe dafür liegen auf der Hand: Die Entwicklung geht meist sehr schnell,
 PHP ist einfach zu erlernen und fast alle Webhoster haben mittlerweile Webserver mit PHP-Unterstützung installiert. Allerdings bringt die Verwendung
-von PHP auch einige Probleme mit sich. Damit eine PHP-Anwendung gut skaliert, sind viele aufwendige Optimierungen notwendig (siehe zB [HipHop von Facebook](https://github.com/facebook/hiphop-php)).
-Außerdem ist PHP eine dynamische Sprache, und damit ist die Validierung und das Escapen von Ausgaben dem Programmierer selbst überlassen: SQL-Injections, XSS (Einschleusen von Code in fremde Webseiten durch Dritte), und andere Sicherheitslücken werden nicht auf Ebene der Programmiersprache verhindert. (siehe zum Beispiel [hier](http://www.tizag.com/mysqlTutorial/mysql-php-sql-injection.php)) Deshalb möchte ich an einem kleinen Beispiel erläutern, wie man mit [Haskell](http://haskell.org) relativ einfach eine performante,
+von PHP auch einige Probleme mit sich. Damit eine PHP-Anwendung gut skaliert, sind viele aufwendige Optimierungen notwendig (siehe z.B. [HipHop von Facebook](https://github.com/facebook/hiphop-php)).
+Außerdem ist PHP eine dynamische Sprache, und damit treten viele Fehler erst zur Laufzeit auf.
+Schließlich ist auch die Validierung und das Escapen von Ausgaben zumeist dem Programmierer selbst überlassen: SQL-Injections, XSS (Einschleusen von Code in fremde Webseiten durch Dritte) und andere Sicherheitslücken werden nicht auf Ebene der Programmiersprache verhindert (siehe zum Beispiel [hier](http://www.tizag.com/mysqlTutorial/mysql-php-sql-injection.php)).
+
+Deshalb möchte ich an einem kleinen Beispiel erläutern, wie man mit [Haskell](http://haskell.org) relativ einfach eine performante,
 sichere und moderne Webanwendung schreibt. Hierzu werde ich ein einfaches Blog implementieren. Das Blog wird das erstellen und anzeigen von Beiträgen, sowie das kommentieren von Beiträgen unterstützen.
 
 Um dem Artikel gut folgen zu können sind Grundlagen zu JavaScript, HTML, HTTP und Haskell hilfreich.
