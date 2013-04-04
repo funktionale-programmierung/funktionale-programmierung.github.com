@@ -12,7 +12,7 @@ Außerdem ist PHP eine dynamische Sprache, und damit treten viele Fehler erst zu
 Schließlich ist auch die Validierung von Eingaben und das Escapen von Ausgaben zumeist dem Programmierer selbst überlassen: SQL-Injections, XSS (Einschleusen von Code in fremde Webseiten durch Dritte) und andere Sicherheitslücken werden nicht auf Ebene der Programmiersprache verhindert (siehe zum Beispiel [hier](http://www.tizag.com/mysqlTutorial/mysql-php-sql-injection.php)).
 
 Deshalb möchte ich an einem kleinen Beispiel erläutern, wie man mit [Haskell](http://haskell.org) relativ einfach eine performante,
-sichere und moderne Webanwendung schreibt. Hierzu werde ich ein einfaches Blog implementieren. Das Blog wird das Erstellen und Anzeigen von Beiträgen, sowie das Kommentieren von Beiträgen unterstützen.
+sichere und moderne Webanwendung schreibt. Hierzu werde ich ein einfaches Blog implementieren. Das Blog wird das Erstellen, Anzeigen sowie das Kommentieren von Beiträgen unterstützen.
 
 Um dem Artikel gut folgen zu können sind Grundlagen zu JavaScript, HTML, HTTP und Haskell hilfreich.
 
