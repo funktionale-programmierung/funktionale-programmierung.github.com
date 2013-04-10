@@ -1,6 +1,6 @@
 ---
 layout: post
-description: Monaden: Das programmierbare Semikolon
+description: "Monaden: Das programmierbare Semikolon"
 title: "Monaden: Das programmierbare Semikolon"
 author: uwe-schmidt
 tags: ["Haskell", "Monaden"]
