@@ -275,7 +275,7 @@ Funktion funktioniert:
 [`empty-scene`-Funktion](http://docs.racket-lang.org/teachpack/2htdpimage.html?q=empty-scene#%28def._%28%28lib._2htdp%2Fimage..rkt%29._empty-scene%29%29)
 macht eine leere rechteckige Szene mit der angegebenen Breite und Höhe.)
 
-Für heute soll es erst einmal genug sein!
+Für heute soll es erst einmal genug sein!  Weiter geht es [in Teil 2]({% post_url 2013-04-10-rein-funktional-2 %}).
 
 Den Code zu diesem Beitrag können Sie übrigens
 [hier](/files/rein-funktional/snail.rkt) herunterladen.
