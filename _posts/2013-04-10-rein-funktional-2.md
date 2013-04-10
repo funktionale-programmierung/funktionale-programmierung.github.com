@@ -6,7 +6,7 @@ author: michael-sperber
 tags: ["rein funktional", "Racket", "Schneckenwelt"]
 ---
 
-Im [einem vorigen Beitrag](2013/02/08/rein-funktional.html) haben wir das Vorhaben begonnen,
+Im [einem vorigen Beitrag]({% post_url 2013-03-12-rein-funktional.html %}) haben wir das Vorhaben begonnen,
 eine Schneckenwelt zu implementieren.  Zur Erinnerung:
 
 > \[...\] nehmen wir uns ein konkretes Beispiel vor: Es geht um
@@ -31,7 +31,7 @@ eine Schneckenwelt zu implementieren.  Zur Erinnerung:
 <br/>
 
 Wir erweitern [den Code vom letzten
-Mal](/files/2013-02-08-rein-funktional/snail.rkt) und ordnen Schnecken
+Mal](/files/rein-funktional/snail.rkt) und ordnen Schnecken
 in einer *Schneckenwelt* an:
 
 <!-- more start -->
@@ -55,7 +55,7 @@ nett:
 - die Schneckenwelt grafisch anzeigen
 - die Schneckenwelt animieren, so daß die Schnecken sich bewegen
 
-Im [letzten Beitrag](2013/02/08/rein-funktional.html) hatten wir bereits eine einzelne Schnecke
+Im [letzten Beitrag]({$ post_url 2013-03-12-rein-funktional.html %}) hatten wir bereits eine einzelne Schnecke
 in einer Szene plaziert. Um die ganze Schnecke anzuzeigen,
 müssen wir mit einer leeren Szene
 anfangen und sukzessive mit `draw-snail` eine Schnecke nach der
@@ -161,6 +161,6 @@ z.B. anderen Schnecken oder deren Schleimspuren ausweichen müßten?
 Dazu mehr in einem zukünftigen Beitrag.
 
 Den Code zu diesem Beitrag können Sie übrigens
-[hier](/files/2013-02-15-rein-funktional-2/snailworld.rkt) herunterladen.
+[hier](/files/ein-funktional-2/snailworld.rkt) herunterladen.
 
 <!-- more end -->
