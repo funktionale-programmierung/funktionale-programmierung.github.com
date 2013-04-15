@@ -31,8 +31,8 @@ Diese Antwort bedarf ein wenig Erklärung.
 Alle Programmiersprachen benötigen die Konzepte Sequenz, Verzweigung
 und Wiederholung. In der funktionalen Welt werden Verzweigungen durch
 bedingte Ausdrücke und Wiederholungen durch Rekursion realisiert. Die
-Sequenz, das Hintereinander-Ausführen von Berechnungen geschieht durch
-die Funktionskomposition dargestellt durch den 2-stelligen Operator
+Sequenz, das Hintereinander-Ausführen von Berechnungen, geschieht durch
+die Funktionskomposition dargestellt, durch den 2-stelligen Operator
 `.`
 
 {% highlight haskell %}
@@ -55,7 +55,7 @@ UNIX schreiben
 f1 >=> f2 >=> ... >=> fn
 {% endhighlight %}
 
-Der Operator `>=>` ist assoziativ und besitzt die Identität `id` als
+Der Operator `>=>` ist assoziativ und besitzt die Identitätsfunktion `id` als
 neutrales Element. Mathematiker kennen solche Strukturen unter dem
 Namen Monoid.
 
@@ -70,17 +70,19 @@ Komposition von Funktionen im mathematischen Sinn.
 Betrachten wir als Beispiel einen Methodenaufruf in Java
 `x.f()`. Dieser funktioniert nur dann, wenn die Variable `x` nicht die
 `null`-Referenz enthält. Bei der Ausführung würde in diesem Fall kein
-Wert berechnet werden, sondern eine Ausnahme ausgelost werden. Nach
+Wert berechnet werden, sondern eine Ausnahme ausgelöst werden. Nach
 Haskell übertragen, hätte `f` also den Typ
 
 {% highlight haskell %}
 f :: a -> Maybe b
 {% endhighlight %}
 
-wobei `a` der Typ von x ist und `b` der Resultattyp von `f`. `Nothing`
-repräsentiert den Fehlerfall `NullPointerException`.
+wobei `a` der Typ von x ist und `b` der Resultattyp von `f`. Für das
+Ergebnis von `f` gibt es zwei Alternativen: `Just y` falls der Aufruf 
+erfolgreich war und `y` das Ergebnis ist, oder `Nothing`
+für den Fehlerfall `NullPointerException`.
 
-Wenn wir in Haskell solche partiellen Funktionen - Funktionen, die
+Wenn wir in Haskell solche partiellen Funktionen - also Funktionen, die
 nicht immer funktionieren - hintereinander ausführen möchten, so
 müssen wir die Funktionskomposition `>=>` definieren als
 
@@ -100,6 +102,7 @@ einfachen Komposition, zu einer Pipe zusammen setzten
 {% highlight haskell %}
 f1 :: a   -> Maybe b
 f2 :: b   -> Maybe ...
+...
 fn :: ... -> Maybe c
 
 f1 >=> f2 >=> ... >=> fn :: a -> Maybe c
@@ -121,11 +124,12 @@ Etwas freundlicher und flexibler ist es, wenn die Fehlerart mindestens
 durch einen Text als Fehlermeldung beschrieben werden kann.
 
 {% highlight haskell %}
-type Exc a = Either Err a
-type Err   = String      -- oder etwas Allgemeineres
+type Exc a = Either Err a -- (Left Err) für den Fehlerfall, (Right a) bei Erfolg
+type Err   = String       -- oder etwas Allgemeineres
 
 f1 :: a   -> Exc b
 f2 :: b   -> Exc ...
+...
 fn :: ... -> Exc c
 {% endhighlight %}
 
@@ -174,6 +178,7 @@ type Value    = Int      -- oder etwas Kompexeres
 
 f1 :: a   -> State -> (b,   State)
 f2 :: b   -> State -> (..., State)
+...
 fn :: ... -> State -> (c,   State)
 {% endhighlight %}
 
@@ -190,6 +195,7 @@ type ST a = State -> (a, State)
 
 f1 :: a   -> ST b
 f2 :: b   -> ST ...
+...
 fn :: ... -> ST c
 {% endhighlight %}
 
@@ -278,7 +284,7 @@ auch bezüglich `>=>` ist. Man kann einfach nachrechnen, dass die
 anderen vier Implementierungen von `>=>` ebenfalls assoziativ sind,
 und für alle gibt es auch ein neutrales Element (Übung).
 
-Um von einer korrekten Instanz der `Monad`-Klasse zu spechen, sollten
+Um von einer korrekten Instanz der `Monad`-Klasse zu sprechen, sollten
 die Operationen so implementiert sein, dass die Assoziativität für
 `>=>` gilt und und dass ein neutrales Element für `>=>` exisitiert.
 
@@ -462,8 +468,7 @@ instance Monad ST where
 {% endhighlight %}
 
 Möchten wir einen einfachen Wert in eine Zustandstransformation liften
-(`return`), so wird in dieser Funktion der Zustand `s` nur durch
-gereicht.
+(`return`), so wird in dieser Funktion der Zustand `s` nur durchgereicht.
 
 Bei `>>=` konstruieren wir eine Zustandstransformation, in der `f1`
 auf den Anfangszustand `s0` angewendet wird, die zweite
@@ -529,12 +534,18 @@ oder weg geworfen werden muss. Die Erweiterungen werden alle von
 lokaler Natur sein und bestehende Programmteile können ohne Änderung
 weiter verwendet werden.
 
-[ControlMonadError]:	<http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Error.html> "Control.Monad.Error"
-[DataEither]:           <http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either> "Data.Either"
-[IO]:					<http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:IO> "IO"
-[MonadError]:			<http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Error.html#t:MonadError> "MonadError"
-[Maybe]:				<http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Maybe> "Maybe"
-[mtl]:					<http://hackage.haskell.org/package/mtl> "mtl"
-[rwh]:                  <http://www.realworldhaskell.org/> "Real World Haskell"
-[wadler]:				<http://homepages.inf.ed.ac.uk/wadler/> "Philip Wadler"
+[ControlMonadError]: <http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Error.html> "Control.Monad.Error"
 
+[DataEither]: <http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either> "Data.Either"
+
+[IO]: <http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:IO> "IO"
+
+[MonadError]: <http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Error.html#t:MonadError> "MonadError"
+
+[Maybe]: <http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Maybe> "Maybe"
+
+[mtl]: <http://hackage.haskell.org/package/mtl> "mtl"
+
+[rwh]: <http://www.realworldhaskell.org/> "Real World Haskell"
+
+[wadler]: <http://homepages.inf.ed.ac.uk/wadler/> "Philip Wadler"
