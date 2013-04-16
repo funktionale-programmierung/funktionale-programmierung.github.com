@@ -14,10 +14,18 @@ achte mal darauf, wie viele Minuten es dauert, bis das Wort Monade
 fällt*. Manche Entwickler schließen daraus voreilig, dass man mit
 Haskell nur arbeiten kann, wenn man weiß, was eine Monade ist.
 
-Dieses ist natürlich nicht richtig, aber insbesondere für
+Viele Haskell-Entwickler nutzen Monaden, ohne viel darüber
+nachzudenken. Die intuitive `do`-Notation, die das Arbeiten mit
+Monaden sehr einfach macht, wird sowohl für die Ein- und Ausgabe als
+auch z.B. in der häufig verwendeten Parser-Bibliothek `parsec` und in
+vielen anderen Bibliotheken genutzt. Monaden nutzen ist eine sehr
+einfache und bequeme Sache.
+
+Man kann in Haskell also sehr wohl Programme entwickeln, ohne Monaden
+bis in alle Einzelheiten zu verstehen, aber insbesondere für
 [Real-World-Haskell][rwh]-Projekte bilden Monaden ein wichtiges
-Software-technisches Konzept, mit dem modular erweiterbare Software
-konstruiert werden kann.
+Software-technisches Konzept, mit dem wiederverwendbare und modular
+erweiterbare Software konstruiert werden kann.
 
 Einer der prominentesten Entwicker der Sprache Haskell,
 [Philip Wadler][wadler], hat in einer Vortragsdiskussion auf die Frage
