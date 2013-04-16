@@ -182,7 +182,7 @@ umsetzen:
 {% highlight haskell %}
 type State    = Map Variable Value
 type Variable = String
-type Value    = Int      -- oder etwas Kompexeres
+type Value    = Int      -- oder etwas Komplexeres
 
 f1 :: a   -> State -> (b,   State)
 f2 :: b   -> State -> (..., State)
