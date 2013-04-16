@@ -17,7 +17,7 @@ Haskell nur arbeiten kann, wenn man weiß, was eine Monade ist.
 Viele Haskell-Entwickler nutzen Monaden, ohne viel darüber
 nachzudenken. Die intuitive `do`-Notation, die das Arbeiten mit
 Monaden sehr einfach macht, wird sowohl für die Ein- und Ausgabe als
-auch z.B. in der häufig verwendeten Parser-Bibliothek `parsec` und in
+auch z.B. in der häufig verwendeten Parser-Bibliothek [parsec][parsec] und in
 vielen anderen Bibliotheken genutzt. Monaden nutzen ist eine sehr
 einfache und bequeme Sache.
 
@@ -36,8 +36,8 @@ Diese Antwort bedarf ein wenig Erklärung.
 
 <!-- more start -->
 
-Alle Programmiersprachen benötigen die Konzepte Sequenz, Verzweigung
-und Wiederholung. In der funktionalen Welt werden Verzweigungen durch
+Alle Programmiersprachen benötigen die Konzepte _Sequenz_, _Verzweigung_
+und _Wiederholung_. In der funktionalen Welt werden Verzweigungen durch
 bedingte Ausdrücke und Wiederholungen durch Rekursion realisiert. Die
 Sequenz, das Hintereinander-Ausführen von Berechnungen, geschieht durch
 die Funktionskomposition dargestellt, durch den 2-stelligen Operator
@@ -63,9 +63,9 @@ UNIX schreiben
 f1 >=> f2 >=> ... >=> fn
 {% endhighlight %}
 
-Der Operator `>=>` ist assoziativ und besitzt die Identitätsfunktion `id` als
-neutrales Element. Mathematiker kennen solche Strukturen unter dem
-Namen Monoid.
+Der Operator `>=>` ist [assoziativ][assoziativ] und besitzt die Identitätsfunktion `id` als
+[neutrales Element][neutralesElement]. Mathematiker kennen solche Strukturen unter dem
+Namen [Monoid][monoid].
 
 Bei vielen imperativen Programmiersprachen, einschließlich der
 objektorientierten, wird eine Folge von Berechnungen mit Hilfe des `;`
@@ -105,7 +105,7 @@ Sowie eine Funktion `Nothing` als Resultat liefert, wird die
 Berechnung mit dem Resultat `Nothing` beendet.
 
 Wir können die Funktionen `f1` bis `fn` also wieder, wie bei der
-einfachen Komposition, zu einer Pipe zusammen setzten
+einfachen Komposition, zu einer Pipe zusammen setzen
 
 {% highlight haskell %}
 f1 :: a   -> Maybe b
@@ -123,8 +123,8 @@ führt.
 
 ## Berechnungen mit Ausnahmen ##
 
-Fehlersituationen mit `Maybe`-Datentypen zu modellieren, ist die
-einfachste Möglichkeit. Sie ist Software-technisch aber nur dann
+Die Modellierung mit dem `Maybe`-Datentypen ist die
+einfachste Möglichkeit mit Fehlern umzugehen. Sie ist Software-technisch aber nur dann
 sinnvoll, wenn es in einem Kontext nur eine Fehlerart gibt, oder wenn
 die Fehlerart unwesentlich ist.
 
@@ -162,7 +162,7 @@ beendet und dieser Wert bildet das Endresultat.
 
 ## Zustands-behaftete Berechnungen ##
 
-Zurück zur imperativen Welt. Die wichtigste Operation dort ist die
+Zurück zur imperativen Welt. Die häufigste Operation dort ist die
 Zuweisung, `:=` in Pascal, `=` in C und Java. Diese Zuweisung arbeitet
 auf Programmvariablen. Programmvariablen können, im Gegensatz zu
 Variablen im mathematischen Sinn, während der Ausführung eines
@@ -306,7 +306,7 @@ class Monad m where
   (>>=)  :: m b -> (b -> m c) -> m c
 {% endhighlight %}
 
-`return` ermöglicht es, einfache Werte, also auch *pure* Berechnungen,
+`return` ermöglicht es, einfache Werte
 zu monadischen Werten anzuheben, zu *liften*.
 
 Warum `>>=` und nicht `>=>`?  Man erkennt, das die Signatur von `>>=`
@@ -557,3 +557,11 @@ weiter verwendet werden.
 [rwh]: <http://www.realworldhaskell.org/> "Real World Haskell"
 
 [wadler]: <http://homepages.inf.ed.ac.uk/wadler/> "Philip Wadler"
+
+[parsec]: <http://hackage.haskell.org/package/parsec> "parsec"
+
+[neutralesElement]: <http://de.wikipedia.org/wiki/Neutrales_Element> "neutrales Element"
+
+[assoziativ]: <http://de.wikipedia.org/wiki/Assoziativgesetz> "assoziativ"
+
+[monoid]: <http://de.wikipedia.org/wiki/Monoid> "Monoid"
