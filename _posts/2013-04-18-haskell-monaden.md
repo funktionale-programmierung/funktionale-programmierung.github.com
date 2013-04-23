@@ -6,8 +6,6 @@ author: uwe-schmidt
 tags: ["Haskell", "Monaden"]
 ---
 
-# Monaden: Das programmierbare Semikolon #
-
 Unter den Software-Entwicklern gibt es einige, die über die
 Haskell-Anhänger witzeln: *Wenn du mit einem Haskell-Fan sprichst,
 achte mal darauf, wie viele Minuten es dauert, bis das Wort Monade
