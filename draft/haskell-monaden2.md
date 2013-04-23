@@ -8,12 +8,12 @@ tags: ["Haskell", "Monaden"]
 
 # Monaden in Aktion #
 
-Im letzten Artikel über Monaden haben wir die Grundlagen
+Im [letzten Artikel](http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html) über Monaden haben wir die Grundlagen
 diskutiert. Hier soll es darum gehen, eigene Monaden zur Lösung
 Software-technischer Aufgaben selbst zu entwickeln.  Wir werden sehen,
 wie ein Stück Software modular und durch lokale Erweiterungen um neue
 Funktionalität ergänzt werden kann, ohne bestehende Teile zu verändern
-oder zu refaktorisiern.
+oder zu refaktorisieren.
 
 Als laufendes Beispiel werden wir die klassische Aufgabe der
 Auswertung von Ausdrücken behandeln. Wir werden mit einfachen
@@ -42,7 +42,7 @@ mit Werten, man hat also während der Auswertung ein *Environment*,
 eine Umgebung, über die die Werte zugreifbar werden. Hier kommt die
 sogenannte [Reader]-Monade zum Einsatz.
 
-In der folgenden Erweiterung werden wir die Variable zu
+In der folgenden Erweiterung werden wir die Variablen zu
 Programm-Variablen machen.  Die Menge der Ausdrücke wird um
 Zuweisungen, Verzweigungen und Schleifen erweitert. Es wird hierzu die
 [Zustands][State]-Monade verwendet.
@@ -64,7 +64,7 @@ müssen alle Funktionen die dieses `f` direkt oder indirekt nutzen, so
 umgeschrieben werden, dass sie in der `IO`-Monade laufen.  Dieses kann
 in heißen Projektphasen manchmal schlicht nicht machbar sein. Als
 Notlösung wird dann leicht in eine Kiste mit schmutzigen Tricks
-gegriffen und Funktionen, die `unsave???` heißen, genutzt. Diese ist
+gegriffen und Funktionen, die `unsafe???` heißen, genutzt. Diese ist
 üblicherweise der erste Schritt zu einem unzuverlässigen und
 unwartbaren System.
 
@@ -88,7 +88,6 @@ data Expr  = Const  Int
 data BinOp = Add | Sub | Mul | Div | Mod
              deriving (Eq, Show)
 
-
 type Result = Int
 
 eval :: Expr -> Result
@@ -99,7 +98,6 @@ eval (Binary op l r)
     = let mf = lookupMft op
       in
         mf (eval l) (eval r)
-
 
 type MF = Result -> Result -> Result
 
@@ -133,11 +131,14 @@ können.
 Einige Testausdrücke:
 
 {% highlight haskell %}
+-- (2 + 4) * 7
 e1 = Binary Mul (Binary Add (Const 2)
                             (Const 4)
                 )
                 (Const 7)
+-- 1 / 0
 e2 = Binary Div (Const 1) (Const 0)
+-- 1 % 0
 e3 = Binary Mod (Const 1) (Const 0)
 {% endhighlight %}
 
@@ -191,7 +192,6 @@ data Expr  = Const  Int
 data BinOp = Add | Sub | Mul | Div | Mod
              deriving (Eq, Show)
 
-
 newtype Result a
     = Val { val :: a }
       deriving (Show)
@@ -199,7 +199,6 @@ newtype Result a
 instance Monad Result where
     return        = Val
     (Val v) >>= g = g v
-
 
 eval :: Expr -> Result Int
 eval (Const i)
@@ -209,9 +208,7 @@ eval (Binary op l r)
     = do mf <- lookupMft op
          mf (eval l) (eval r)
 
-
-type MF = Result Int -> Result Int ->
-          Result Int
+type MF = Result Int -> Result Int -> Result Int
 
 lookupMft :: BinOp -> Result MF
 lookupMft op
@@ -419,7 +416,6 @@ plusMinus (Val xs1) (Val xs2)
                    ]
 
 -- smart constructor
-
 interval :: Int -> Int -> Expr
 interval mid rad
     = Binary PlusMinus (Const mid) (Const rad)
@@ -652,7 +648,7 @@ einem `Env` ein `ResVal Int`. Dieser entspricht dem alten `Result` aus
 [Expr2.hs][Expr2]. Für die Umgebung wird hier eine einfache
 Schlüssel-Wert-Liste genommen.  Bei praktischen Anwendungen werden
 üblicherweise effizientere Container-Implementierungen, z.B. aus
-`Data.Map` genutzt.
+[`Data.Map`][DataMap] genutzt.
 
 Um eine Auswertung von Ausdrücken mit Variablen zu starten
 (`runEval`), benötigen wir also neben dem Ausdruck auch noch eine
@@ -871,7 +867,7 @@ instance Monad Result where
 {% endhighlight %}
 
 `return` konstruiert aus einem Wert eine Funktion, die den Zustand
-unverändert durch reicht.  In `>>=` wird in der Funktion `st0` über
+unverändert durchreicht.  In `>>=` wird in der Funktion `st0` über
 `st1` bis zum Endergebnis *durchgefädelt*.
 
 Wir benötigen aber noch, analog zu `ask` Funktionen zum lesenden und
@@ -914,7 +910,7 @@ es eine Bequemlichkeitsfunktion
 modify :: (s -> s) -> Result s
 modify f
     = do s <- get
-	     put (f s)
+         put (f s)
 {% endhighlight %}
 
 Die Verzweigung und die Schleife werden nach dem üblichen Muster
@@ -936,7 +932,7 @@ eval st@(While c b)
            else return v
 {% endhighlight %}
 
-Es bleibt die Sequenz. Diese ist nichts anderes, als ein 2-stelliger
+Es bleibt die Sequenz. Diese ist nichts anderes als ein 2-stelliger
 Operator (in der Sprache C das `,`). Bei der Auswertung wird der erste
 Teilausdruck ausgewertet und das Ergebnis vergessen. Nur der Effekt
 auf den Zustand ist von Interesse. Die Funktionstabelle für die
@@ -1050,7 +1046,7 @@ benötigen wir noch eine *lift*-Funktion `liftIO`
 liftIO :: IO a -> Result a
 liftIO a  = Res $ \ st ->
             do v <- a
-	           return (Val v, st)
+               return (Val v, st)
 {% endhighlight %}
 
 Für `liftIO` gibt es wieder eine vordefinierte Klasse [MonadIO].
@@ -1091,12 +1087,10 @@ diesen mit zwei keinen Beispielen ausprobieren:
 
 {% highlight haskell %}
 -- read 2 numbers and display product
-
 p1 = Write "Result is: "
      (Binary Mul Read Read)
 
 -- count to 100 with trace
-
 p2 = While
        (Binary Sub x (Const 100))
        (Write "x = "
@@ -1177,31 +1171,43 @@ Geschichte, sondern erst der Anfang.
 
 Viel Spaß beim Ausprobieren der [Beispiele].
 
-[Expr0]:  </code/Monaden2/Expr0.hs>  "Ausdrucksauswertung im rein funktionalen Stil"
-[Expr1]:  </code/Monaden2/Expr1.hs>  "Ausdrucksauswertung im monadischen Stil"
-[Expr2]:  </code/Monaden2/Expr2.hs>  "Ausdrucksauswertung mit Fehlererkennung"
+
+[Expr0]: </code/Monaden2/Expr0.hs>  "Ausdrucksauswertung im rein funktionalen Stil"
+
+[Expr1]: </code/Monaden2/Expr1.hs>  "Ausdrucksauswertung im monadischen Stil"
+
+[Expr2]: </code/Monaden2/Expr2.hs>  "Ausdrucksauswertung mit Fehlererkennung"
+
 [Expr2a]: </code/Monaden2/Expr2a.hs> "Ausdrucksauswertung mit Fehlererkennung"
-[Expr3]:  </code/Monaden2/Expr3.hs>  "Ausdrucksauswertung mit Nichtdeterminismus"
+
+[Expr3]: </code/Monaden2/Expr3.hs>  "Ausdrucksauswertung mit Nichtdeterminismus"
+
 [Expr3a]: </code/Monaden2/Expr3a.hs> "Ausdrucksauswertung mit Nichtdeterminismus"
+
 [Expr3b]: </code/Monaden2/Expr3b.hs> "Ausdrucksauswertung mit Nichtdeterminismus"
-[Expr4]:  </code/Monaden2/Expr4.hs>  "Ausdrucksauswertung mit freien und gebundenen Variablen"
-[Expr5]:  </code/Monaden2/Expr5.hs>  "Ausdrucksauswertung mit Programm-Variablen"
-[Expr6]:  </code/Monaden2/Expr6.hs>  "Ausdrucksauswertung mit Programm-Variablen und IO"
+
+[Expr4]: </code/Monaden2/Expr4.hs>  "Ausdrucksauswertung mit freien und gebundenen Variablen"
+
+[Expr5]: </code/Monaden2/Expr5.hs>  "Ausdrucksauswertung mit Programm-Variablen"
+
+[Expr6]: </code/Monaden2/Expr6.hs>  "Ausdrucksauswertung mit Programm-Variablen und IO"
+
 [Beispiele]: </files/Monaden2/Monaden2.zip> ".zip Archiv für die Beispiele"
 
-[ControlMonad]:	<http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html>
-                "Control.Monad"
+[ControlMonadError]: <http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Error.html> "Control.Monad.Error"
 
-[ControlMonadError]:	<http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Error.html>
-               "Control.Monad.Error"
+[Reader]: <http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Reader.htm> "Control.Monad.Reader"
 
-[Reader]:		<http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Reader.htm>
-               "Control.Monad.Reader"
-[MonadIO]:     <http://hackage.haskell.org/packages/archive/basic-prelude/latest/doc/html/CorePrelude.html#t:MonadIO>
-               "MonadIO"
+[MonadIO]: <http://hackage.haskell.org/packages/archive/basic-prelude/latest/doc/html/CorePrelude.html#t:MonadIO> "MonadIO"
 			   
-[hackage]:     <http://hackage.haskell.org/>
-[mtl]:         <http://hackage.haskell.org/package/mtl>
-[transformers]: <http://hackage.haskell.org/package/transformers>
-[rwh]:         <http://www.realworldhaskell.org/> "Real World Haskell"
+[hackage]: <http://hackage.haskell.org/>
 
+[mtl]: <http://hackage.haskell.org/package/mtl>
+
+[transformers]: <http://hackage.haskell.org/package/transformers>
+
+[rwh]: <http://www.realworldhaskell.org/> "Real World Haskell"
+
+[DataMap]: <http://www.haskell.org/ghc/docs/latest/html/libraries/containers/Data-Map.html> "Data.Map"
+
+[ControlMonad]: <http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html> "Control.Monad"
