@@ -9,8 +9,8 @@ tags: ["rein funktional", "Racket", "Schneckenwelt"]
 Im [einem vorigen Beitrag]({% post_url 2013-04-10-rein-funktional-2 %})
 haben wir aus einzelnen Schnecken eine Schneckenwelt
 zusammengesetzt und grafisch dargestellt.  Bisher haben sich die
-Schnecken einfach nur in stur in gerader Linie bewegt; in diesem
-Posting wollen wir es etwas interessanter Machen und jede Schnecke mit
+Schnecken einfach nur stur in gerader Linie bewegt; in diesem
+Posting wollen wir es etwas interessanter machen und jede Schnecke mit
 einer *Schleimspur* ausstatten, und schließlich dafür sorgen, daß
 andere Schnecken dieser Schleimspur ausweichen.  ("Der Schleim der
 anderen Schnecken stinkt!")  Am Ende soll das dann so aussehen:
@@ -21,22 +21,23 @@ anderen Schnecken stinkt!")  Am Ende soll das dann so aussehen:
 </div>
 <br/>
 
-Diese Erweiterungen verdeutlichen noch einige Aspekte und auch noch zu
-lösende Probleme im Zusammenhang mit der rein funktionalen
-Programmierung.
+Diese Erweiterungen verdeutlichen weitere Aspekte im Zusammenhang mit
+der rein funktionalen Programmierung: darunter der Umgang mit Zustand,
+und Identität und die Problematik des "Fädelns" von Zustand.
 
 <!-- more start -->
 
-Zunächst einmal brauchen wir eine Daten- und eine Record-Definition
+Um den Schleim zu repräsentieren, schreiben wir eine Daten- und eine
+Record-Definition
 für Schleim.  Die Schleimspur hat eine feste Position ... und sie ist
 einer bestimmten Schnecke zugeordnet.  (Wenn eine Schnecke auch ihrem
 eigenen Schleim ausweichen würde, würde es problematisch mit der
-Bewegung, da der Schleim *unter* der Schnecke entsteht.)  Der erste
+Bewegung werden, da der Schleim *unter* der Schnecke entsteht.)  Der erste
 Versuch einer Definition für Schleimspuren könnte also so aussehen:
 
 {% highlight scheme %}
 ; Eine Schleimspur besteht aus:
-; - die zugehörigen Schnecke
+; - der zugehörigen Schnecke
 ; - der Position der Schleimspur
 (struct slime (snail pos))
 {% endhighlight %}
@@ -85,7 +86,7 @@ class Slime {
 
 Dieser Ansatz macht OO-Programme allerdings oft schwer zu debuggen, da
 die Identität nicht direkt sichtbar gemacht werden kann.  ("Sind zwei
-Schnecken an der gleich Position dieselbe Schnecke?")
+Schnecken an der gleichen Position dieselbe Schnecke?")
 
 In der rein funktionalen Programmierung ist es gar nicht möglich, die
 Objektreferenz als Identität zu benutzen.  Darum machen wir die
@@ -192,7 +193,7 @@ auch noch die Schleimspuren malen:
 {% endhighlight %}
 
 Das `let*` ist ähnlich `let` und macht zwei Bindungen von lokalen
-Variablen hintereinander: `sc1` ist die Szene mit den Schecken drin,
+Variablen hintereinander: `sc1` ist die Szene mit den Schnecken drin,
 in `sc2` sind zusätzlich die Schleimspuren eingezeichnet.
 
 Allerdings sind bisher noch keine Schleimspuren da, die wir
@@ -214,7 +215,7 @@ dann bekommen wir eine Liste der Schleimspuren so:
 Hier benutzen wir die eingebaute Funktion `map`: `map` akzeptiert eine
 Funktion und eine Liste - sie wendet die Funktion auf jedes
 Listenelement einzeln an und macht aus den Ergebnissen wieder eine
-Liste.  Hier lassen wir `map` auf die Liste der Schecken los und
+Liste.  Hier lassen wir `map` auf die Liste der Schnecken los und
 wenden die Funktion `(lambda (s) ...)` aus jedes Element an - diese
 macht aus Schneckenidentität und -position eine Schleimspur.  Heraus
 kommt also eine Liste der Schleimspuren.
@@ -246,7 +247,7 @@ Das Programm liefert jetzt immerhin schon dieses Ergebnis:
 
 Allerdings war ja noch geplant, daß die Schnecken den Schleimspuren
 anderer Schnecken ausweichen: Die Funktion `move-snail` muß noch den
-Schleim berücksichtigen und ggf. die Richtung ändern.  Dafür müssen
+Schleim berücksichtigen und gegebenenfalls die Richtung ändern.  Dafür müssen
 wir erst einmal die Signatur von `move-snail` um die Liste der
 Schleimspuren erweitern:
 
@@ -264,7 +265,7 @@ bewegt:
 (move-snail-in-dir s (snail-dir s))
 {% endhighlight %}
 
-Das geht jetzt u.U. nicht mehr, wenn in der Bewegungsrichtung Schleim
+Das geht jetzt unter Umständen nicht mehr, wenn in der Bewegungsrichtung Schleim
 liegt.  Das müssen wir erst einmal feststellen.  Dazu definieren wir
 eine Hilfsfunktion `slime-in-direction?`, die feststellt, ob in einer
 bestimmten Richtung von der Schnecke aus gesehen Schleim ist.  Die
@@ -339,7 +340,7 @@ Mit ihrer Hilfe können wir `move-snail` vervollständigen:
 {% endhighlight %}
 
 Wieder benutzen wir `ormap`, diesmal, um über alle möglichen
-Alternativrichtungen zu iterieren und einer Richtung zu suchen, in der
+Alternativrichtungen zu iterieren und eine Richtung zu suchen, in der
 kein Schleim ist.  Falls die Funktion im `ormap`-Aufruf eine Richtung
 findet, in der *kein* Schleim ist (gut!), dann liefert sie diese
 Richtung, sonst `#false`.  Diese Richtung wird dann auch von `ormap`
@@ -369,7 +370,7 @@ vielleicht gar nicht mehr klar, welche Vorteile die rein funktionale
 Programmierung hier bringt.  Aber schauen Sie noch einmal `move-snail`
 an: Die Funktion bewegt nur eine einzige Schnecke, nimmt dabei aber
 Bezug auf die sie umgebende Schneckenwelt über die Liste `slimes`.
-Diese Liste ist für alle Schecken gleich: Alle Schnecken treffen ja
+Diese Liste ist für alle Schnecken gleich: Alle Schnecken treffen ja
 ihre Bewegungsentscheidung gleichzeitig.
 
 In einem imperativen Programm würde aber `move-snail` einerseits die
