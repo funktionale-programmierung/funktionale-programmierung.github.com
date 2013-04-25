@@ -93,7 +93,7 @@
     (let ((d
            (ormap (lambda (d)
                     (if (slime-in-direction? s slimes d)
-                        #f
+                        #false
                         d))
                   (alternative-directions (snail-dir s)))))
       (if d
