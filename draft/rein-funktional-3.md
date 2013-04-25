@@ -384,6 +384,26 @@ objektorientierten imperativen Programmen außerordentlich schwierig,
 während wir im rein funktionalen Programm darüber kaum nachdenken
 müssen.
 
+Es gibt noch weitere Vorteile:
+
+* Dadurch, daß alle Abhängigkeiten zwischen Werten durch den Datenfluß
+  explizit aufgeschrieben sind, ist die Reihenfolge der Auswertung
+  weitestgehend egal.  Es kann also keine Fehler dadurch geben, daß
+  zwei Anweisungen vertauscht oder parallel ausgeführt werden, was in
+  imperativen Programmen häufig schwer zu findende Fehler produziert.
+  
+* Es ist viel einfacher, Unit-Tests (und andere Tests, beispielsweise
+  [spezifikationsgetriebene
+  Tests](http://en.wikipedia.org/wiki/QuickCheck)) zu schreiben, da
+  reine Funktionen nur die richtige Eingabe bekommen müssen, um die
+  richtige Ausgabe zu produzieren: Es ist nicht nötig, aufwendig einen
+  definierten Zustand zu erzeugen bzw. nach erfolgtem Test
+  wiederherzustellen.
+  
+* Die explizite Repräsentation von allem erleichtert das Debugging,
+  da Zwischenzustände *Objekte* sind, die inspiziert und ausgedruckt
+  werden können.
+
 Auf der anderen Seite ist die rein funktionale Programmierung manchmal
 umständlich: Häufig muß Zustand durch das Programm "gefädelt" werden,
 wie hier die Schneckenwelt.  Aber hierfür gibt es Abhilfe:
