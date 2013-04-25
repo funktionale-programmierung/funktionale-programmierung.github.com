@@ -21,9 +21,19 @@ anderen Schnecken stinkt!")  Am Ende soll das dann so aussehen:
 </div>
 <br/>
 
-Diese Erweiterungen verdeutlichen weitere Aspekte im Zusammenhang mit
-der rein funktionalen Programmierung: darunter der Umgang mit Zustand,
-und Identität und die Problematik des "Fädelns" von Zustand.
+Diese Erweiterungen verdeutlichen weitere Vorteile der rein
+funktionalen Programmierung:
+
+* Die explizite Angabe von Abhängigkeiten macht Zusammenhänge zwischen
+  Werten im Programm deutlich und dessen Bedeutung unabhängig von der
+  Auswertungsreihenfolge.
+
+* Der explizite Umgang mit Zeit ermöglicht eine akkurate Simulation
+  der Schneckenwelt.
+
+* Der explizite Umgang mit Identität macht Programme weniger
+  fehleranfällig und einfacher zu debuggen gegenüber imperativen
+  Programmen.
 
 <!-- more start -->
 
