@@ -58,7 +58,7 @@ anderen Worten: Wenn die Schnecke sich bewegt - neues Schneckenobjekt.
 Dieses Objekt taugt also nicht, um eine Schleimspur einer bestimmten
 Schnecke zuzuordnen, u.a., weil sie dann den eigenen Schleim aus der
 Vergangenheit nicht mehr als ihren eigenen erkennen würde.  Wir wollen
-aber die Schleimspur der "der Schnecke im allgemeinen" zuordnen - also
+aber die Schleimspur "der Schnecke im allgemeinen" zuordnen - also
 ihrer *Identität*.  Eine Identität muß ein Wert sein, der die
 Schneckenzustände durch die Zeit verbindet - und den wir mit anderen
 Identitäten vergleichen können, um zu prüfen, ob sie zur selben
@@ -148,7 +148,7 @@ bindet eine lokale Variable `p` an die Position des Schleims - die
 dann mehrfach verwendet wird.
 
 Wir brauchen dafür noch eine Hilfsdefinition für `snail-radius`, die
-wir auch anderswo - beispielsweise in `draw-snail` verwenden können:
+wir auch anderswo - beispielsweise in `draw-snail` - verwenden können:
 
 {% highlight scheme %}
 ; Radius einer Schnecke
@@ -156,7 +156,7 @@ wir auch anderswo - beispielsweise in `draw-snail` verwenden können:
 {% endhighlight %}
 
 Jetzt müssen wir die Schleimspuren noch in der Schneckenwelt
-plazieren.  Dazu erweitern wir die Definition der
+plazieren.  Dazu erweitern wir die Definition des
 `snail-world`-Records:
 
 {% highlight scheme %}
