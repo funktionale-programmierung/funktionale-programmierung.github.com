@@ -163,4 +163,6 @@ Dazu mehr in einem zukünftigen Beitrag.
 Den Code zu diesem Beitrag können Sie übrigens
 [hier](/files/rein-funktional-2/snailworld.rkt) herunterladen.
 
+Weiter geht es [in Teil 3]({% post_url 2013-04-25-rein-funktional-3 %}).
+
 <!-- more end -->
