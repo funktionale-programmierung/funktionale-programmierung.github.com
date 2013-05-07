@@ -8,11 +8,15 @@ tags: ["Performance", "Haskell", "NodeJS", "Netzwerk", "Sockets"]
 
 Das Javascript Framework [node.js](http://nodejs.org/) ist eine auf Googles
 [V8 Engine](https://code.google.com/p/v8/) basierende Platform
-zur Erstellung von performanten und skalierbaren Netzwerkprogrammen. Die gute
+zur Erstellung von performanten und skalierbaren Netzwerkprogrammen. 
+Dabei laufen node.js Programme, anders als mit Javascript sonst üblich, 
+auf der Serverseite.
+Die gute
 Performance von node.js bei Netzwerkoperationen beruht vor allem auf der
 Nutzung von asynchronen Programmierschnittstellen.
 Allerdings machen solche Programmierschnittstellen den Entwicklern das Leben
 unnötigerweise schwer und tragen nicht gerade zur guten Wartbarkeit des Codes bei.
+Wir werden im Verlauf des Artikels noch sehen warum dem so ist.
 
 Der heutige Blogartikel zeigt, dass sich mit der funktionalen Programmiersprache
 [Haskell](http://haskell.org) Netzwerkprogramme mit
@@ -22,9 +26,9 @@ Stattdessen wird im üblichen, sequenziellen Stil programmiert und das
 Laufzeitsystem kümmert sich um die performante Umsetzung auf
 asynchrone Primitivoperationen.
 
-Der verwendete Benchmark ist eine einfach Serverapplikation, die jede vom Client 
+Der verwendete Benchmark ist eine einfache Serverapplikation, die jede vom Client 
 geschickte Zahl verdoppelt und das Ergebnis an den Client zurückschickt. Mit diesem
-Benchmark ist das vorgestellte Haskellprogramm im Durchschnitt um Faktor 1,67
+Benchmark ist das vorgestellte Haskellprogramm im Durchschnitt um Faktor 1,6
 schneller als das entsprechende node.js Programm. Am Ende des Artikels lesen Sie,
 mit welchen Tricks das Haskell-Laufzeitsystem diesen Speedup erzielt.
 
@@ -220,28 +224,35 @@ processLine =
                     return ()
              | otherwise ->
                  do case parseInt (T.decodeUtf8 bs) of
-                      Right i -> yield (BSC.pack (show (2 * i) ++ "\n"))
-                      Left _ -> yield (BSC.pack "not an integer\n")
+                      Just i -> yield (BSC.pack (show (2 * i) ++ "\n"))
+                      Nothing -> yield (BSC.pack "not an integer\n")
                     processLine
     where
       parseInt x =
           case T.decimal x of
-            Left err -> Left err
+            Left err -> Nothing
             Right (i, rest) ->
                 if T.null rest
-                then Right i
-                else Left ("parse error: " ++ T.unpack rest)
+                then Just i
+                else Nothing
 {% endhighlight %}
 
-Der Typ von `processLine` weißt die Funktion als einen Conduit aus, der ByteStrings (also ein Array von rohen Bytes)
-als Eingabe nimmt und auch einen ByteString als Ausgabe produziert. Der Rumpf von `processLine` ist komplett
+Der Typ von `processLine` besagt dass die Funktion ein Conduit ist, 
+der ByteStrings (also ein Array von rohen Bytes)
+als Eingabe nimmt und auch einen ByteString als Ausgabe produziert. 
+Der Rumpf von `processLine` ist komplett
 im sequenziellen Stil geschrieben. Dies sieht man gut an der Verwendung von
 `await`, was solange blockiert bis Daten für den Conduit verfügbar sind.
+Die Funktion `yield` ist das Gegenstück von `await`, denn damit werden Daten
+an den Client zurückgeschickt. Die Aufruf von `BSC.pack` sind nötig, um einen
+Unicode-String in ein UTF-8 kodiertes Array von Bytes zu konvertieren. Die Funktion
+`T.deocdeUtf8` kümmert sich um die entgegengesetzte Richtung. Schließlich
+konvertiert die `parseInt` Funktion einen String in einen Wert vom Typ `Maybe Int`.
 
 ## Benchmarkergebnisse ##
 
 Ich habe die Performance der beiden nun vorliegenden Implementierungen des Benchmarks mit einem selbst geschriebenen
-Programm gemessen. In einem Lauf des Messprogramms werden dabei gleichzeit 500 Verbindungen zum Server erstellt
+Programm gemessen. In einem Lauf des Messprogramms werden dabei gleichzeitig 500 Verbindungen zum Server erstellt
 und in jeder Verbindung 10 Anfragen gestellt. Dabei werden bis zu 3 Anfragen gleichzeitig abgeschickt. Um den
 Server ein bißchen mehr unter Last zu setzen, habe ich auf verschiedenen Rechnern gleichzeitig 10 Instanzen des
 Messprogramms gestartet. Insgesamt wurden also quasi gleichzeitig 5000 Verbindungen von Clients an den Server gerichtet,
@@ -255,9 +266,9 @@ node.js 0.10.5,
 conduit                                                  1.0.5,
 network-conduit                                          1.0.0.
 
-Die durchschnittliche Laufzeit des Messprogramms gegen den Haskell-Server lag bei 5,30 Sekunden, mit dem
+Die durchschnittliche Laufzeit eines Aufrufs des Messprogramms gegen den Haskell-Server lag bei 5,30 Sekunden, mit dem
 node.js Server hingegen bei durchschnittlich 8,94 Sekunden. Die Varianz der unterschiedlichen Instanzen des Messprogramms
-war jeweils vernachlässigbar. Das bedeutet dass die Haskell-Variente um *Faktor 1,67 schneller* ist als
+war jeweils vernachlässigbar. Das bedeutet dass die Haskell-Variente um den *Faktor 1,6 schneller* ist als
 die node.js Variante. Nicht schlecht, vor allem wenn man bedenkt dass der Code auch noch besser lesbar
 und wartbar ist.
 
@@ -276,7 +287,7 @@ green Threads zu erzeugen.
 
 Die zweite wichtige Komponente für gute Performance ist Haskells
 [IO-Manager](http://johantibell.com/files/hask17ape-sullivan.pdf). Der IO-Manager sorgt dafür, dass ein blockierender Aufruf
-intern asynchron behandelt wird, z.B. wird unter Linux zum Lesen von einem Socket der effiziente
+intern asynchron behandelt wird, z.B. wird unter neueren Linux-System zum Lesen von einem Socket der effiziente
 `epoll` Systemcall verwendet.
 
 Zusammenfassend lässt sich also sagen: Intern verwendet Haskell ein ähnliches, asynchrones Modell wie node.js. Durch die 
@@ -286,7 +297,7 @@ bequem mit blockierenden Aufrufen sequenziell programmieren darf.
 
 ## Fazit ##
 
-Der Artikel zeigt, dass man mit Haskell Netzwerkanwendungen schreiben kann, die bessere Performance (Faktor 1,67) 
+Der Artikel zeigt, dass man mit Haskell Netzwerkanwendungen schreiben kann, die bessere Performance (Faktor 1,6) 
 bei weniger Komplexität (keine "inversion of control")
 als die entsprechenden node.js Anwendungen liefern. Der gesamt Code zum Artikel kann
 [hier](/files/haskell-nodejs/haskell-nodejs.zip) heruntergeladen werden.
