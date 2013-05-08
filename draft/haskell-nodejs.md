@@ -29,7 +29,10 @@ asynchrone Primitivoperationen.
 Der verwendete Benchmark ist eine einfache Serverapplikation, die jede vom Client 
 geschickte Zahl verdoppelt und das Ergebnis an den Client zurückschickt. Mit diesem
 Benchmark ist das vorgestellte Haskellprogramm im Durchschnitt um Faktor 1,6
-schneller als das entsprechende node.js Programm. Am Ende des Artikels lesen Sie,
+schneller als das entsprechende node.js Programm, bei Rückgriff auf eine experimentelle
+node.js Erweiterung zur Nutzung mehrerer Prozessorkerne schmilzt der Vorsprung
+der Haskell Version auf Faktor 1,04, allerdings bringt die diese Erweiterung von node.js
+andere Nachteile mit sich. Am Ende des Artikels lesen Sie,
 mit welchen Tricks das Haskell-Laufzeitsystem diesen Speedup erzielt.
 Ein paar grundlegende Haskell-Kenntnisse schaden zum Verständnis des Artikels
 nicht, vielleicht möchten Sie sich ja mal unseren Einführungsartikel zu
@@ -281,8 +284,18 @@ und wartbar ist.
 Bei den Benchmarks läuft der in Haskell geschriebene Server auf mehreren Kernen. Um Unterstützung
 für mehrere Kerne zu aktivieren muss man das Haskell-Programm lediglich mit den Optionen `+RTS -N -RTS`
 starten. Hingegen läuft node.js per Default nur auf einem Kern. Es gibt jedoch experimentelle Unterstützung
-für [mehrere Kerne](http://nodejs.org/api/cluster.html), allerdings muss man dazu wohl etwas Programmierarbeit
-leisten. Doch auch wenn man den Haskell-Server nur auf einem Kern laufen lässt ergibt sich hierfür
+für [mehrere Kerne](http://nodejs.org/api/cluster.html), allerdings muss man dazu etwas Programmierarbeit
+leisten. Im [Code zum Artikel](/files/haskell-nodejs/haskell-nodejs.zip) ist auch eine für mehrere Kerne
+geeignete node.js Variante enthalten. Damit verbessert sich die Laufzeit mit node.js auf durchschnittlich
+5,50 Sekunden, womit die Haskell Version dann nur noch ca. 4% schneller ist. Allerdings muss man
+beachten dass in der parallelen node.js Variante ein *Prozess* pro Kern läuft. Für unseren hier vorgestellten
+Benchmark spielt das keine Rolle, da es keine von mehreren Clients gemeinsam genutzten Daten gibt.
+Für realistische Serveranwendungen ist die Verteilung verschiedener Clients auf verschiedene Prozesse aber eine
+durchaus beachtliche Einschränkung, da es mit dieser Architektur z.B. relativ schwierig ist von mehreren Clients
+gemeinsam genutzte Daten im RAM zu halten.
+
+Um den Benchmark vollständig zu machen habe ich auch testweise den Haskell-Server nur auf einem Kern laufen lässt.
+Damit ergibt sich 
 eine durchschnittliche Laufzeit von nur 8,0 Sekunden, also immer noch etwa 10% besser als node.js.
 
 ## Die Tricks des Haskell-Laufzeitsystems ##
@@ -310,7 +323,7 @@ bequem mit blockierenden Aufrufen sequenziell programmieren darf.
 
 ## Fazit ##
 
-Der Artikel zeigt, dass man mit Haskell Netzwerkanwendungen schreiben kann, die bessere Performance (Faktor 1,6) 
+Der Artikel zeigt, dass man mit Haskell Netzwerkanwendungen schreiben kann, die bessere Performance (Faktor 1,04 bis 1,6) 
 bei weniger Komplexität (keine "inversion of control")
 als die entsprechenden node.js Anwendungen liefern. Der gesamt Code zum Artikel kann
 [hier](/files/haskell-nodejs/haskell-nodejs.zip) heruntergeladen werden.
