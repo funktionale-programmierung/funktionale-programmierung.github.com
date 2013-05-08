@@ -31,8 +31,10 @@ geschickte Zahl verdoppelt und das Ergebnis an den Client zurückschickt. Mit di
 Benchmark ist das vorgestellte Haskellprogramm im Durchschnitt um Faktor 1,6
 schneller als das entsprechende node.js Programm, bei Rückgriff auf eine experimentelle
 node.js Erweiterung zur Nutzung mehrerer Prozessorkerne schmilzt der Vorsprung
-der Haskell Version auf Faktor 1,04, allerdings bringt die diese Erweiterung von node.js
-andere Nachteile mit sich. Am Ende des Artikels lesen Sie,
+der Haskell Version auf Faktor 1,04, allerdings bringt diese Erweiterung von node.js
+andere Nachteile mit sich. 
+
+Am Ende des Artikels lesen Sie,
 mit welchen Tricks das Haskell-Laufzeitsystem diesen Speedup erzielt.
 Ein paar grundlegende Haskell-Kenntnisse schaden zum Verständnis des Artikels
 nicht, vielleicht möchten Sie sich ja mal unseren Einführungsartikel zu
@@ -288,7 +290,7 @@ für [mehrere Kerne](http://nodejs.org/api/cluster.html), allerdings muss man da
 leisten. Im [Code zum Artikel](/files/haskell-nodejs/haskell-nodejs.zip) ist auch eine für mehrere Kerne
 geeignete node.js Variante enthalten. Damit verbessert sich die Laufzeit mit node.js auf durchschnittlich
 5,50 Sekunden, womit die Haskell Version dann nur noch ca. 4% schneller ist. Allerdings muss man
-beachten dass in der parallelen node.js Variante ein *Prozess* pro Kern läuft. Für unseren hier vorgestellten
+beachten dass in der parallelen node.js Variante ein *Betriebssystemprozess* pro Kern läuft. Für unseren hier vorgestellten
 Benchmark spielt das keine Rolle, da es keine von mehreren Clients gemeinsam genutzten Daten gibt.
 Für realistische Serveranwendungen ist die Verteilung verschiedener Clients auf verschiedene Prozesse aber eine
 durchaus beachtliche Einschränkung, da es mit dieser Architektur z.B. relativ schwierig ist von mehreren Clients
