@@ -429,6 +429,6 @@ machen können.  Ich wünsche viel Spaß und Erfolg beim Einsatz in Ihrer
 eigenen Software!
 
 Den vollständigen Code können Sie übrigens
-[hier](/files/rein-funktional-3/snailworld-slime.gif) herunterladen.
+[hier](/files/rein-funktional-3/snailworld.rkt) herunterladen.
 
 <!-- more end -->
