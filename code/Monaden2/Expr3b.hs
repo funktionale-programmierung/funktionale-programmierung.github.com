@@ -26,10 +26,10 @@ instance Monad Result where
 
     (Exc e) >>= _  = (Exc e)
     (Val xs) >>= g = if not (null vs)
-                     then Val $ concat . map val $ vs
+                     then Val (concat (map val vs))
                      else head es
         where
-          (vs, es) = partition isVal . map g $ xs
+          (vs, es) = partition isVal (map g xs)
               where
                 isVal (Val _) = True
                 isVal (Exc _) = False
@@ -46,25 +46,26 @@ eval (Const i)
     = return i
 
 eval (Binary op l r)
-    = do mf <- lookupMft op
-         mf (eval l) (eval r)
+    = do f <- lookupFtab op
+         f (eval l) (eval r)
 
-type MF = Result Int -> Result Int -> Result Int
+type BinFct = Result Int -> Result Int -> Result Int
 
-lookupMft :: BinOp -> Result MF
-lookupMft op
-    = case lookup op mft of
+lookupFtab :: BinOp -> Result BinFct
+lookupFtab op
+    = case lookup op ftab of
         Nothing -> throwError
                    "operation not implemented"
-        Just mf -> return mf
+        Just f  -> return f
 
-mft :: [(BinOp, MF)]
-mft = [ (Add, liftM2 (+))
-      , (Sub, liftM2 (-))
-      , (Mul, liftM2 (*))
-      , (Div, \ x y -> join  (liftM2 div' x y))
-      , (PlusMinus, plusMinus)
-      ]
+ftab :: [(BinOp, BinFct)]
+ftab = [ (Add,       liftM2 (+))
+       , (Sub,       liftM2 (-))
+       , (Mul,       liftM2 (*))
+       , (Div,       \ x y ->
+                     join  (liftM2 div' x y))
+       , (PlusMinus, plusMinus)
+       ]
 
 div' :: Int -> Int -> Result Int
 div' x y
@@ -72,7 +73,7 @@ div' x y
                 "division by zero"
   | otherwise = return (x `div` y)
 
-plusMinus :: MF
+plusMinus :: BinFct
 plusMinus (Val xs1) (Val xs2)
     = Val $ concat [ [x1 + x2, x1 - x2]
                    | x1 <- xs1

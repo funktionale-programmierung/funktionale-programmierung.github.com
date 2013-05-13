@@ -68,8 +68,8 @@ eval (Const i)
     = return i
 
 eval (Binary op l r)
-    = do mf <- lookupMft op
-         mf (eval l) (eval r)
+    = do f <- lookupFtab op
+         f (eval l) (eval r)
 
 eval (Var ident)
     = do st <- get
@@ -104,22 +104,22 @@ eval st@(While c b)
 
 -- ----------------------------------------
 
-type MF = Result Int -> Result Int -> Result Int
+type BinFct = Result Int -> Result Int -> Result Int
 
-lookupMft :: BinOp -> Result MF
-lookupMft op
-    = case lookup op mft of
+lookupFtab :: BinOp -> Result BinFct
+lookupFtab op
+    = case lookup op ftab of
         Nothing -> throwError
                    "operation not yet implemented"
-        Just mf -> return mf
+        Just f  -> return f
 
-mft :: [(BinOp, MF)]
-mft = [ (Add, liftM2 (+))
-      , (Sub, liftM2 (-))
-      , (Mul, liftM2 (*))
-      , (Div, \ x -> join . liftM2 div' x)
-      , (Seq, liftM2 (\ x y -> y))
-      ]
+ftab :: [(BinOp, BinFct)]
+ftab = [ (Add, liftM2 (+))
+       , (Sub, liftM2 (-))
+       , (Mul, liftM2 (*))
+       , (Div, \ x -> join . liftM2 div' x)
+       , (Seq, liftM2 (\ x y -> y))
+       ]
 
 div' :: Int -> Int -> Result Int
 div' x y
@@ -132,8 +132,8 @@ div' x y
 
 runEval :: Expr -> VarState -> (ResVal Int, VarState)
 runEval e st0
-    = let (Res mf) = eval e in
-      mf st0
+    = let (Res f) = eval e in
+      f st0
 
 eval'   :: Expr -> ResVal Int
 eval' e =  fst $ runEval e []
