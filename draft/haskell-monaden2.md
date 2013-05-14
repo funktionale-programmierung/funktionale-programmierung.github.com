@@ -263,16 +263,16 @@ Vergleich zu diesem Beispiel noch um Größenordnungen höher werden.
 ## Auswertung arithmetischer Ausdücke in monadischem Stil ##
 
 Zurück zu den Monaden.  Wir werden die mangelhafte Fehlererkennung
-noch einen Moment ignorieren und das erste Beispiel `Expr0` in eine
+noch einen Moment ignorieren und das erste Beispiel [`Expr0.hs`][Expr0] in eine
 gleichwertige monadische Form bringen.  Dazu werden wir die
 allereinfachste Monade, die Identitäts-Monade, nutzen. Wir müssen dazu
 allerdings den `Result`-Datentyp, für den wir die Monade instanziieren
 möchten, verallgemeinern, da Monaden für Typkonstruktoren, und nicht
 für einfache Typen definiert werden können. Diese Verallgemeinerung
-haben wir auch schon im zweiten Beispiel `Expr0a` nutzbringend
+haben wir auch schon im zweiten Beispiel [`Expr0a.hs`][Expr0a] nutzbringend
 eingesetzt.
 
-Das Ausgangsbeispiel `Expr0` in monadischer Form [`Expr1.hs`][Expr1]:
+Das Ausgangsbeispiel [`Expr0.hs`][Expr0] in monadischer Form [`Expr1.hs`][Expr1]:
 
 {% highlight haskell %}
 module Expr1 where
@@ -349,19 +349,19 @@ Ein Testlauf
     *Expr1> eval e3
     *** Exception: operation not implemented
 
-Die Funktionalität ist identisch zu der aus `Expr0`. In diesem ersten
+Die Funktionalität ist identisch zu der aus [`Expr0.hs`][Expr0]. In diesem ersten
 Schritt haben wir das Beispiel nur komplizierter gemacht, wir haben
 nichts gewonnen, sondern *nur* in die Erweiterbarkeit investiert.
 
 ## Erweiterung der monadischen Form um Fehlererkennung ##
 
 Wie Fehler in dem Interpretierer repräsentiert werden können, haben
-wir im Beispiel `Expr0a` gesehen. Wir werden den gleichen
+wir im Beispiel [`Expr0a.hs`][Expr0a] gesehen. Wir werden den gleichen
 Summen-Datentyp `Result` nutzen. Aber die wiederholten Test auf
 `Exc`/`Val` werden in die `Monad`-Instanz gezogen und tauchen so nur
 ein einziges Mal im Code auf.  Der Code-Ausschnitt zeigt die
-Erweiterungen zu `Expr1`, der Rest bleibt unverändert. Die
-vollständige Quelle steht unter [Expr2.hs][Expr2].
+Erweiterungen zu [`Expr1.hs`][Expr1], der Rest bleibt unverändert. Die
+vollständige Quelle steht unter [`Expr2.hs`][Expr2].
 
 {% highlight haskell %}
 module Expr2 where
@@ -434,7 +434,7 @@ In dem nicht monadischen Stil mussten wir an jeder Stelle, an der ein
 `Result`-Wert berechnet wird, die Verzweigung `Val`/`Exc` einfügen.
 Alleine beim Auswerten binärer Ausdrücke trat diese Fallunterscheidung
 drei mal auf.  Die Investition des Umschreibens in monadische Form in
-[Expr1.hs][Expr1] hat sich also schon ausgezahlt.
+[`Expr1.hs`][Expr1] hat sich also schon ausgezahlt.
 
 `throwError` möchte man natürlich in allen Monaden mit Fehlererkennung
 nutzen.  Es ist also sinnvoll, `throwError` in einer Typklasse zu
@@ -444,7 +444,7 @@ Außerdem enthält sie auch eine Funktion `catchError` zum Abfangen und
 Behandeln von Fehlern, die in unserem Beispiel aber nicht benötigt
 wird.  Da `MonadError` eine Multi-Parameter-Typklasse ist, werden bei
 ihrer Verwendung einige Haskell-Spracherweiterungen benötigt. Der
-vollständige Code hierfür findet sich im Beispiel [Expr2a.hs][Expr2a].
+vollständige Code hierfür findet sich im Beispiel [`Expr2a.hs`][Expr2a].
 
 ## Erweiterung um Nichtdeterminismus mit der Listen-Monade ##
 
@@ -469,10 +469,10 @@ newtype Result a
 {% endhighlight %}
 
 Der Einfachheit halber lassen wir die Fehlerbehandlung im ersten
-Versuch außer Acht und nehmen [Expr1.hs][Expr1] als Ausgangspunkt. Die
+Versuch außer Acht und nehmen [`Expr1.hs`][Expr1] als Ausgangspunkt. Die
 Erweiterung besteht aus dem neuen Operator, der Veränderung der
 Monaden-Definition und der Implemetierung der `+/-`-Operation. Der
-Rest bleibt unverändert.  [Expr3.hs][Expr3] enthält das vollständige
+Rest bleibt unverändert.  [`Expr3.hs`][Expr3] enthält das vollständige
 Programm.
 
 {% highlight haskell %}
@@ -610,7 +610,7 @@ Werte-Liste partitioniert. Wenn in keinem Fall ein Fehler aufgetreten
 ist, werden die Resultate wie bisher konkateniert und in `Val`
 eingewickelt, sonst bildet der erste Fehler das Resultat. Die
 Berechnung wird also beim ersten Fehler abgebrochen. Das vollständige
-Programm steht unter [Expr3a.hs][Expr3a]
+Programm steht unter [`Expr3a.hs`][Expr3a]
 
 Ein Testlauf zeigt, dass die Fehlerbehandlung jetzt wie gewünscht funktioniert:
 
@@ -641,7 +641,7 @@ ein richtiges Resultat hat. Das Software-technisch Entscheidende ist,
 dass für die Art der Interpretation nur lokale Änderungen in der
 Monade notwendig sind.
 
-Der modifizierte Code ([Expr3b.hs][Expr3b]):
+Der modifizierte Code ([`Expr3b.hs`][Expr3b]):
 
 {% highlight haskell %}
 instance Monad Result where
@@ -678,20 +678,20 @@ Die Fehler bei ``8 `div` 0`` und ``4 `div` 0`` werden ignoriert, da
 ``8 `div` 2`` und ``4 `div` 2`` zu `[4, 2]` ausgewertet werden.
 
 Was haben wir bisher erreicht? Durch das Umschreiben des
-ursprünglichen Programms [Expr0.hs][Expr0] in eine monadische Form
-[Expr1.hs][Expr1] konnten wir den Aspekt der Fehlererkennung auf
+ursprünglichen Programms [`Expr0.hs`][Expr0] in eine monadische Form
+[`Expr1.hs`][Expr1] konnten wir den Aspekt der Fehlererkennung auf
 einfache Weise und mit ausschließlich lokalen Änderungen und
-Erweiterungen integrieren ([Expr2.hs][Expr2]). Das gleiche war möglich
+Erweiterungen integrieren ([`Expr2.hs`][Expr2]). Das gleiche war möglich
 bei der Erweiterung durch *nichtdeterministische* Funktionen
-([Expr3b.hs][Expr3b]).  Und schließlich haben wir in
-[Expr3a.hs][Expr3a] und [Expr3b.hs][Expr3b] gesehen, wie die beiden
+([`Expr3b.hs`][Expr3b]).  Und schließlich haben wir in
+[`Expr3a.hs`][Expr3a] und [`Expr3b.hs`][Expr3b] gesehen, wie die beiden
 Aspekte Fehlererkennung und Nichtdeterminismus nur durch lokale
 Erweiterung der Monade kombiniert werden konnten.
 
 
 ## Zusammenfassung und Ausblick: Teil 1 ##
 
-Wir haben in den Beispielen [Expr1.hs][Expr1] bis [Expr3b.hs][Expr3b]
+Wir haben in den Beispielen [`Expr1.hs`][Expr1] bis [`Expr3b.hs`][Expr3b]
 gesehen, dass wir die einfache Ausdrucksauswertung in unterschiedliche
 Richtungen erweitern konnten, ohne existierende Funktionalität zu
 überarbeiten. Neue Aspekte konnten alleine durch die Erweiterung des
@@ -699,7 +699,7 @@ Richtungen erweitern konnten, ohne existierende Funktionalität zu
 und deren Verwandten integriert werden.
 
 In einem nichtmonadischen Stil hätten wir, wie am Beispiel zur
-Fehlererkennung ([Expr0a.hs][Expr0a]) demonstriert, für jeden neuen Aspekt die
+Fehlererkennung ([`Expr0a.hs`][Expr0a]) demonstriert, für jeden neuen Aspekt die
 Schnittstellen und die Implementierungen vieler über das gesamte
 Programm verstreuter Funktionen erweitern müssen.
 
