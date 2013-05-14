@@ -6,7 +6,7 @@ author: stefan-wehr
 tags: ["Performance", "Haskell", "NodeJS", "Netzwerk", "Sockets"]
 ---
 
-Das Javascript Framework [node.js](http://nodejs.org/) ist eine auf Googles
+Das Javascript-Framework [node.js](http://nodejs.org/) ist eine auf Googles
 [V8 Engine](https://code.google.com/p/v8/) basierende Platform
 zur Erstellung von performanten und skalierbaren Netzwerkprogrammen. 
 Dabei laufen node.js Programme, anders als mit Javascript sonst üblich, 
@@ -31,7 +31,7 @@ geschickte Zahl verdoppelt und das Ergebnis an den Client zurückschickt. Mit di
 Benchmark ist das vorgestellte Haskellprogramm im Durchschnitt um Faktor 1,6
 schneller als das entsprechende node.js Programm, bei Rückgriff auf eine experimentelle
 node.js Erweiterung zur Nutzung mehrerer Prozessorkerne schmilzt der Vorsprung
-der Haskell Version auf Faktor 1,04, allerdings bringt diese Erweiterung von node.js
+der Haskell-Version auf Faktor 1,04, allerdings bringt diese Erweiterung von node.js
 andere Nachteile mit sich. 
 
 Am Ende des Artikels lesen Sie,
@@ -63,11 +63,11 @@ Abfolge von Ereignissen möglichen:
             <----- 4 --------
             ----- end ------->
 
-## Die Javascript Version ##
+## Die Javascript-Version ##
 
 Schauen wir uns zunächst die Umsetzung des Benchmarks in node.js an. Ich habe
 dabei die aktuelle Version 0.10.5 von node.js verwendet. Der entsprechende
-Javascript Code sieht so aus:
+Javascript-Code sieht so aus:
 
 {% highlight javascript %}
 var net = require('net');
@@ -111,12 +111,12 @@ var server = net.createServer(function (socket) {
 server.listen(44444);
 {% endhighlight %}
 
-Das Entscheidende am obigen Javascript Code ist der Eventhandler (die Funktion
+Das Entscheidende am obigen Javascript-Code ist der Eventhandler (die Funktion
 `function(data) { ... }`), der beim Eintreffen von neuen Netzwerkdaten asynchron aufgerufen
 wird. Man bezeichnet diese Art zu programmieren auch häufig als ["inversion of control"](http://de.wikipedia.org/wiki/Inversion_of_Control),
 da nicht mehr der Code selbst entscheidet, wann neue Daten gelesen werden sollen (durch
 Aufruf einer blockierenden Funktion), sondern
-diese Entscheidung von außen (in diesem Fall durch das node.js Framework) getroffen
+diese Entscheidung von außen (in diesem Fall durch das node.js-Framework) getroffen
 wird. Das Programm muss dann mit den neuen Daten umgehen können, auch wenn es eigentlich
 gerade mit etwas anderem beschäftigt ist. Um eine gute Performance mit node.js zu erzielen
 ist es erforderlich, dass der Eventhandler niemals blockiert und dass er
@@ -171,7 +171,7 @@ bißchen komplexer wird, merkt man schnell, dass das asynchrone Programmieren
 mit Eventhandlern sich rasch ziemlich kompliziert und unübersichtlich darstellt.
 Mit deutlichereren Worten: ein Albtraum hinsichtlich Verständlichkeit und Wartbarkeit.
  
-## Die Haskell Version ##
+## Die Haskell-Version ##
 
 In Haskell kann man ohne Verwendung von asynchronen Programmierkonstrukten performante Netzwerkanwendungen
 schreiben. Das sich so ergebende Programm ist lesbarer und besser wartbar und, wie der vorliegende
@@ -289,7 +289,7 @@ starten. Hingegen läuft node.js per Default nur auf einem Kern. Es gibt jedoch 
 für [mehrere Kerne](http://nodejs.org/api/cluster.html), allerdings muss man dazu etwas Programmierarbeit
 leisten. Im [Code zum Artikel](/files/haskell-nodejs/haskell-nodejs.zip) ist auch eine für mehrere Kerne
 geeignete node.js Variante enthalten. Damit verbessert sich die Laufzeit mit node.js auf durchschnittlich
-5,50 Sekunden, womit die Haskell Version dann nur noch ca. 4% schneller ist. Allerdings muss man
+5,50 Sekunden, womit die Haskell-Version dann nur noch ca. 4% schneller ist. Allerdings muss man
 beachten dass in der parallelen node.js Variante ein *Betriebssystemprozess* pro Kern läuft. Für unseren hier vorgestellten
 Benchmark spielt das keine Rolle, da es keine von mehreren Clients gemeinsam genutzten Daten gibt.
 Für realistische Serveranwendungen ist die Verteilung verschiedener Clients auf verschiedene Prozesse aber eine
