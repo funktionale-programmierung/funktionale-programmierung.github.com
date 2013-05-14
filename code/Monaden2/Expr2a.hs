@@ -36,25 +36,25 @@ eval (Const i)
     = return i
 
 eval (Binary op l r)
-    = do mf <- lookupMft op
-         mf (eval l) (eval r)
+    = do f <- lookupFtab op
+         f (eval l) (eval r)
 
-type MF = Result Int -> Result Int -> Result Int
+type BinFct = Result Int -> Result Int -> Result Int
 
-lookupMft :: BinOp -> Result MF
-lookupMft op
-    = case lookup op mft of
+lookupFtab :: BinOp -> Result BinFct
+lookupFtab op
+    = case lookup op ftab of
         Nothing -> throwError
                    "operation not implemented"
-        Just mf -> return mf
+        Just f  -> return f
 
-mft :: [(BinOp, MF)]
-mft = [ (Add, liftM2 (+))
-      , (Sub, liftM2 (-))
-      , (Mul, liftM2 (*))
-      -- , (Div, div')
-      , (Div, \ x y -> join  (liftM2 div'' x y))
-      ]
+ftab :: [(BinOp, BinFct)]
+ftab = [ (Add, liftM2 (+))
+       , (Sub, liftM2 (-))
+       , (Mul, liftM2 (*))
+       -- , (Div, div')
+       , (Div, \ x y -> join  (liftM2 div'' x y))
+       ]
 
 -- join    :: Monad m => m (m a) -> m a
 -- join x  = x >>= id

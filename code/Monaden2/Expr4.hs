@@ -56,8 +56,8 @@ eval (Const i)
     = return i
 
 eval (Binary op l r)
-    = do mf <- lookupMft op
-         mf (eval l) (eval r)
+    = do f <- lookupFtab op
+         f (eval l) (eval r)
 
 eval (Var ident)
     = do env <- ask
@@ -76,21 +76,21 @@ eval (Let ident e1 e2)
       addEnv i v = ((i, v) :)
 
 
-type MF = Result Int -> Result Int -> Result Int
+type BinFct = Result Int -> Result Int -> Result Int
 
-lookupMft :: BinOp -> Result MF
-lookupMft op
-    = case lookup op mft of
+lookupFtab :: BinOp -> Result BinFct
+lookupFtab op
+    = case lookup op ftab of
         Nothing -> throwError
                    "operation not yet implemented"
-        Just mf -> return mf
+        Just f  -> return f
 
-mft :: [(BinOp, MF)]
-mft = [ (Add, liftM2 (+))
-      , (Sub, liftM2 (-))
-      , (Mul, liftM2 (*))
-      , (Div, \ x -> join . liftM2 div' x)
-      ]
+ftab :: [(BinOp, BinFct)]
+ftab = [ (Add, liftM2 (+))
+       , (Sub, liftM2 (-))
+       , (Mul, liftM2 (*))
+       , (Div, \ x -> join . liftM2 div' x)
+       ]
 
 div' :: Int -> Int -> Result Int
 div' x y
@@ -100,8 +100,8 @@ div' x y
 
 runEval :: Expr -> Env -> ResVal Int
 runEval e env
-    = let (Res mf) = eval e in
-      mf env
+    = let (Res f) = eval e in
+      f env
 
 -- ----------------------------------------
 {- tests
