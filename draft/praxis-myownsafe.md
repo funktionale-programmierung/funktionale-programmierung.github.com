@@ -17,19 +17,23 @@ Krankheitsfall bestimmten Personen zugänglich zu machen.
 
 Dieser Artikel beschreibt das Projekt und seine Architektur,
 Hintergründe zu den Entscheidungen die dabei getroffen wurde, sowie
-den Erfahrungen die damit gemacht wurden.
+den Erfahrungen die damit gemacht wurden. Die technischen "Pfeiler",
+auf denen die Anwendung fusst, sind dabei die Programmiersprachen
+OCaml und JavaScript ("HTML 5"), Cloud-Computing, NoSQL-Datenbanken
+und Webservices.
 
 <!-- more start -->
 
 ## Idee und Vorgaben
 
-Der hatte die persönliche Erfahrung gemacht, dass der Nachlass einer
-Person häufig sehr schlecht geregelt ist, und die Angehörigen sehr
-viel Arbeit damit haben, überhaupt erstmal in Erfahrung zu bringen was
-zu tun ist. Versicherungen müssen gekündigt oder umgeschrieben werden,
-Konten aufgelöst, Verträge geändert werden. Auch im "digitalen Leben"
-eines Verstorbenen muss viel geregelt werden, wie zuletzt auch Google
-mit seiner Nachlass-Automatik gezeigt hat.
+Der Auftraggeber hatte die persönliche Erfahrung gemacht, dass der
+Nachlass einer Person häufig sehr schlecht geregelt ist, und die
+Angehörigen sehr viel Arbeit damit haben, überhaupt erstmal in
+Erfahrung zu bringen was zu tun ist. Versicherungen müssen gekündigt
+oder umgeschrieben werden, Konten aufgelöst, Verträge geändert werden.
+Auch im "digitalen Leben" eines Verstorbenen muss viel geregelt
+werden, wie zuletzt auch Google mit seiner Nachlass-Automatik gezeigt
+hat.
 
 Die einzige technische Vorgabe für das Projekt war dabei, dass es ein
 Online-Dienst sein sollte, der über eine leicht zugängliche
@@ -86,6 +90,8 @@ Browser wird dabei nicht genutzt um über Hyperlinks von einer Webseite
 zur nächsten zu navigieren, sondern die integrierte JavaScript-Engine
 wird als komplette Programmier-Plattform für die grafische
 Benutzeroberfläche und die Benutzerführung der Anwendung genutzt.
+Diese neuen Möglichkeiten werden häufig unter dem Begriff "HTML 5"
+zusammengefasst.
 
 Die Kommunikation zwischen Client und Server besteht dann nur noch aus
 einfachen _Remote-Procedure-Calls_, die sich allein auf die
@@ -112,7 +118,7 @@ Web- und Netzwerkprogrammierung, und der Compiler erzeugt sehr
 performanten nativen Code. Letzteres gab auch den Ausschlag zu der
 Entscheidung für diese Sprache in diesem Projekt.
 
-## Cloud
+## Die "Cloud"
 
 Höchste Vertraulichkeit dieser sehr sensiblen Daten der Kunden ist in
 dieser Architektur bereits durch die Client-seitige RSA- und
@@ -132,7 +138,7 @@ virtuellen Servern, die "Simple DB" eine flexible NoSQL-Datenbank, und
 "Simple Storage Service" einen nahezu unbegrenzten "Container" für
 größere Datenpakete.
 
-## NoSQL
+## NoSQL-Datenbanken
 
 Sowohl die "Simple DB" als auch der "Simple Storage Service" von
 Amazon fallen in die Kategorie der "NoSQL"-Datenbanken, wobei ersteren
