@@ -1,6 +1,4 @@
-module Expr2 where
-
-import           Control.Monad (liftM2)
+module Expr0a where
 
 data Expr  = Const  Int
            | Binary BinOp Expr Expr
@@ -9,55 +7,53 @@ data Expr  = Const  Int
 data BinOp = Add | Sub | Mul | Div | Mod
              deriving (Eq, Show)
 
+
 data Result a
            = Val { val :: a }
            | Exc { exc :: String }
              deriving (Show)
 
-instance Monad Result where
-    return        = Val
-    (Exc e) >>= _ = (Exc e)
-    (Val v) >>= g = g v
-
-throwError :: String -> Result a
-throwError = Exc
-
 eval :: Expr -> Result Int
 eval (Const i)
-    = return i
+    = Val i
 
 eval (Binary op l r)
-    = do f <- lookupFtab op
-         f (eval l) (eval r)
+    = case lookupFtab op of
+        Exc s -> Exc s
+        Val f ->
+            case eval l of
+              Exc s -> Exc s
+              Val x ->
+                  case eval r of
+                    Exc s -> Exc s
+                    Val y -> f x y
 
-type BinFct = Result Int -> Result Int -> Result Int
+type BinFct = Int -> Int -> Result Int
 
 lookupFtab :: BinOp -> Result BinFct
 lookupFtab op
     = case lookup op ftab of
-        Nothing -> throwError
+        Nothing -> Exc
                    "operation not implemented"
-        Just f  -> return f
+        Just f  -> Val f
 
 ftab :: [(BinOp, BinFct)]
-ftab = [ (Add, liftM2 (+))
-       , (Sub, liftM2 (-))
-       , (Mul, liftM2 (*))
-       , (Div, div'')
+ftab = [ (Add, lift2 (+))
+       , (Sub, lift2 (-))
+       , (Mul, lift2 (*))
+       , (Div, div')
        ]
+    where
+      lift2 f = \ x y -> Val $ f x y
 
-div''   :: Result Int -> Result Int -> Result Int
-div'' x y
-    = do x1 <- x
-         y1 <- y
-         if y1 == 0
-           then throwError
-                "division by zero"
-           else return (x1 `div` y1)
+div' :: Int -> Int -> Result Int
+div' x y
+    | y == 0    = Exc "division by zero"
+    | otherwise = Val $ x `div` y
 
 -- ----------------------------------------
 
-{- some tests
+-- {- some tests
 
 e1 = Binary Mul (Binary Add (Const 2)
                             (Const 4)
@@ -66,6 +62,9 @@ e1 = Binary Mul (Binary Add (Const 2)
 e2 = Binary Div (Const 1) (Const 0)
 e3 = Binary Mod (Const 1) (Const 0)
 
--- -}
+v1 = eval e1
+v2 = eval e2
+v3 = eval e3
 
+-- -}
 -- ----------------------------------------

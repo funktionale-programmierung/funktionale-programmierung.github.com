@@ -15,26 +15,26 @@ eval (Const i)
     = i
 
 eval (Binary op l r)
-    = let mf = lookupMft op
+    = let f = lookupFtab op
       in
-        mf (eval l) (eval r)
+        f (eval l) (eval r)
 
 
-type MF = Result -> Result -> Result
+type BinFct = Result -> Result -> Result
 
-lookupMft :: BinOp -> MF
-lookupMft op
-    = case lookup op mft of
+lookupFtab :: BinOp -> BinFct
+lookupFtab op
+    = case lookup op ftab of
         Nothing -> error
                    "operation not implemented"
-        Just mf -> mf
+        Just f  -> f
 
-mft :: [(BinOp, MF)]
-mft = [ (Add, (+))
-      , (Sub, (-))
-      , (Mul, (*))
-      , (Div, div)
-      ]
+ftab :: [(BinOp, BinFct)]
+ftab = [ (Add, (+))
+       , (Sub, (-))
+       , (Mul, (*))
+       , (Div, div)
+       ]
 
 
 -- ----------------------------------------

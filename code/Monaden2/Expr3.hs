@@ -16,34 +16,35 @@ newtype Result a
 
 instance Monad Result where
     return x       = Val [x]
-    (Val vs) >>= g = Val $ concat [val (g x) | x <- vs]
+    (Val vs) >>= g = Val $
+                     concat [val (g x) | x <- vs]
 
 eval :: Expr -> Result Int
 eval (Const i)
     = return i
 
 eval (Binary op l r)
-    = do mf <- lookupMft op
-         mf (eval l) (eval r)
+    = do f <- lookupFtab op
+         f (eval l) (eval r)
 
-type MF = Result Int -> Result Int -> Result Int
+type BinFct = Result Int -> Result Int -> Result Int
 
-lookupMft :: BinOp -> Result MF
-lookupMft op
-    = case lookup op mft of
+lookupFtab :: BinOp -> Result BinFct
+lookupFtab op
+    = case lookup op ftab of
         Nothing -> error
                    "operation not implemented"
-        Just mf -> return mf
+        Just f  -> return f
 
-mft :: [(BinOp, MF)]
-mft = [ (Add, liftM2 (+))
-      , (Sub, liftM2 (-))
-      , (Mul, liftM2 (*))
-      , (Div, div'')
-      , (PlusMinus, plusMinus)
-      ]
+ftab :: [(BinOp, BinFct)]
+ftab = [ (Add,       liftM2 (+))
+       , (Sub,       liftM2 (-))
+       , (Mul,       liftM2 (*))
+       , (Div,       div'')
+       , (PlusMinus, plusMinus)
+       ]
 
-div''   :: MF
+div''   :: BinFct
 div'' x y
     = do x1 <- x
          y1 <- y
@@ -51,7 +52,7 @@ div'' x y
            then error "division by zero"
            else return (x1 `div` y1)
 
-plusMinus :: MF
+plusMinus :: BinFct
 plusMinus (Val xs1) (Val xs2)
     = Val $ concat [ [x1 + x2, x1 - x2]
                    | x1 <- xs1
