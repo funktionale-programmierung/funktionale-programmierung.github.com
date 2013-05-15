@@ -3,7 +3,7 @@ layout: post
 description: 
 title: "MyOwnSafe - Funktionale Programmierung in der Praxis"
 author: david-frese
-tags: ["Praxis", "MyOwnSafe", "OCaml"]
+tags: ["Praxis", "MyOwnSafe", "OCaml", "HTML 5", "NoSQL"]
 ---
 
 Die Active Group hat die Webanwendung
@@ -11,16 +11,19 @@ Die Active Group hat die Webanwendung
 entwickelt. MyOwnSafe ist ein "intelligenter Tresor mit
 Nachlassfunktion". Der Anwender kann in dieser Anwendung Informationen
 und Dokumente zu seinen Versicherungen, und seinem Vermögen, sowie
-sonstige persönlichen Informationen ablegen und pflegen. Außerdem kann
+sonstige persönliche Informationen ablegen und pflegen. Außerdem kann
 er Vorkehrungen treffen um diese Informationen im Todes- oder
 Krankheitsfall bestimmten Personen zugänglich zu machen.
 
 Dieser Artikel beschreibt das Projekt und seine Architektur,
-Hintergründe zu den Entscheidungen die dabei getroffen wurde, sowie
-den Erfahrungen die damit gemacht wurden. Die technischen "Pfeiler",
-auf denen die Anwendung fusst, sind dabei die Programmiersprachen
-OCaml und JavaScript ("HTML 5"), Cloud-Computing, NoSQL-Datenbanken
-und Webservices.
+Hintergründe zu den Entscheidungen die dabei getroffen wurden, sowie
+den Erfahrungen die wir damit gemacht haben. Die technischen "Pfeiler",
+auf denen die Anwendung fußt, sind dabei die Programmiersprachen OCaml
+und JavaScript ("HTML 5"), Cloud-Computing, NoSQL-Datenbanken und
+Webservices. Eine Schematische Darstellung der Architektur von
+MyOwnSafe zeigt folgendes Bild:
+
+![Schematische Darstellung der Architektur von MyOwnSafe](/files/praxis-myownsafe.png)
 
 <!-- more start -->
 
@@ -42,15 +45,15 @@ Webanwendung bedienbar ist.
 ## Verschlüsselung
 
 Zentrales Element eines _Tresors_ oder _Schließfachs_ ist, dass der
-Inhalt _vertraulich_ bleibt. Das bedeutet, dass niemand ausser den
+Inhalt _vertraulich_ bleibt. Das bedeutet, dass niemand außer den
 vorgesehenen Personen Einsicht in die Informationen erlangen kann. Es
-war daher schnell klar, dass nur eine Client-seitige Verschlüsselung
-der Daten mit einem Public-Private-Key-Verfahren das notwendige Mass
-an Vertraulichkeit sicherstellen kann.
+war uns daher schnell klar, dass nur eine Client-seitige
+Verschlüsselung der Daten mit einem Public-Private-Key-Verfahren das
+notwendige Maß an Vertraulichkeit sicherstellen kann.
 
 Das Verschlüsselungsverfahren selbst ist dabei nichts Neues, sondern
 eine übliche Kombination von symmetrischer und asymmetrischer
-Verschlüsselung mit den etablierten und standartisierten Verfahren
+Verschlüsselung mit den etablierten und standardisierten Verfahren
 [AES](http://de.wikipedia.org/wiki/Advanced_Encryption_Standard) und
 [RSA](http://de.wikipedia.org/wiki/RSA-Kryptosystem). Außergewöhnlich
 ist allerdings, dass diese Verschlüsselung der Informationen und
@@ -75,7 +78,7 @@ MyOwnSafe müssen sich die Kunden sicherlich erst gewöhnen.
 
 Da klar war, dass innerhalb des Browsers ohnehin eine so komplexe
 Rechenleistung wie die Verschlüsselung von Daten geleistet werden
-muss, war es keine weitere Einschränkung die Anwendung mit einem
+muss, war es keine weitere Einschränkung die Anwendung als einen
 sogenannten "Fat-Client" umzusetzen.
 
 Bis vor einigen Jahren waren Webanwendungen meist so realisiert, dass
@@ -100,14 +103,14 @@ Darstellung und Navigation bleibt ganz dem Client überlassen.
 
 ## Einfacher Server
 
-Die gewählte Client-Server-Architektur machte es auch möglich, den
+Die gewählte Client-Server-Architektur machte es uns auch möglich, den
 Server mit einfachen und "kleinen" Programmen zu realisieren. Er
 besteht aus einer Fast-CGI-Anwendung hinter dem
 [Lighttpd-Webserver](http://www.lighttpd.net/). Durch diese "kleine
 Oberfläche" des Webservers bietet er auch keine große Angriffsfläche
 für Hacker-Angriffe.
 
-Zur Implementierung der Fast-CGI-Anwendung wurde die funktionale
+Zur Implementierung der Fast-CGI-Anwendung haben wir die funktionale
 Programmiersprache OCaml gewählt. OCaml ist eine bereits seit über
 fünfzehn Jahren etablierte und gefestigte Variante aus der
 ML-Sprachfamilie. Sie unterstützt neben dem funktionalen Programmieren
@@ -123,7 +126,7 @@ Entscheidung für diese Sprache in diesem Projekt.
 Höchste Vertraulichkeit dieser sehr sensiblen Daten der Kunden ist in
 dieser Architektur bereits durch die Client-seitige RSA- und
 AES-Verschlüsselung hergestellt. Nicht einmal der Betreiber selbst
-kann die Informationen also einsehen. Dies machte die Entscheidung für
+kann die Informationen einsehen. Dies machte die Entscheidung für
 ein Cloud-basiertes Hosting und Datenhaltung leichter, das zwar nicht
 ganz so gut absicherbar ist wie ein eigenes Rechenzentrum, aber immens
 niedriegere Kosten verursacht und gleichzeitig gut skalierbar auf eine
@@ -144,11 +147,11 @@ Sowohl die "Simple DB" als auch der "Simple Storage Service" von
 Amazon fallen in die Kategorie der "NoSQL"-Datenbanken, wobei ersteren
 ein sogenannter Document-Storage, und letzterer ein Key-Value-Storage
 darstellt. Diese Datenbanken benötigen keine starre Definition der
-abzuspeichernden Daten (ein sogenanntes Schema), sondern erlauben dass
+abzuspeichernden Daten (ein sogenanntes Schema), sondern erlauben, dass
 jeder Eintrag in der Datenbank andere Felder besitzt.
 
 Diese Freiheit hat sich als sehr positiv für die Entwicklung der
-Anwendung herausgestellt, da sie es erlaubt die Migration der
+Anwendung herausgestellt, da sie es uns erlaubt die Migration der
 Datenbestände "nebenbei" zu programmieren und auszuführen. Wenn man
 die Funktionen zum Lesen der Daten so programmiert, dass sie
 Datensätze im alten und neuen Format lesen können, dann bekommt man
@@ -157,7 +160,7 @@ einen erheblichen Aufwand und Fehlerrisiko darstellt.
 
 ## Zahlungsdienstleister
 
-Ein weiterer Baustein der Architektur der die Kosten für den Kunden
+Ein weiterer Baustein der Architektur, der die Kosten für den Kunden
 stark reduziert hat, ist die Nutzung eines externen Dienstleisters für
 die Abwicklung von Konto- und Kreditkartenabbuchung. Nicht zuletzt
 aufgrund des immer wieder vorkommenden Diebstahls von
@@ -177,13 +180,13 @@ teure Zertifizierung notwendig.
 
 ## Fazit
 
-Diese sehr moderne Anwendung mit komplexen Anforderungen konnte von
-der Active Group extrem kostengünstig und termingerecht umgesetzt
-werden. Entscheidend dafür war der Einsatz moderner Techniken, wie die
-funktionaler Programmierung in der Sprache [OCaml](http://ocaml.org/)
-und den flexiblen NoSQL-Datenbanken, sowie klar getrennte
-Aufgabenverteilung zwischen Client und Server, und die sinnvolle
-Nutzung externer Serviceanbieter.
+Diese sehr moderne Anwendung mit komplexen Anforderungen konnten wir
+extrem kostengünstig und termingerecht umgesetzen. Entscheidend
+dafür war der Einsatz moderner Techniken, wie die funktionale
+Programmierung in der Sprache [OCaml](http://ocaml.org/) und den
+flexiblen NoSQL-Datenbanken, sowie klar getrennte Aufgabenverteilung
+zwischen Client und Server, und die sinnvolle Nutzung externer
+Serviceanbieter.
 
 Die Active Group setzt daher auch weiterhin auf OCaml und andere
 mächtige funktionale Programmiersprachen, um robuste Programme so
