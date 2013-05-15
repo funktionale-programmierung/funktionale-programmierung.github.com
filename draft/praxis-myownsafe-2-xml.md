@@ -16,12 +16,12 @@ bestimmten Personen zugänglich zu machen.
 
 Durch den Einsatz funktionaler Programmierung in der Sprache
 [OCaml](http://ocaml.org/) konnte das Projekt extrem kostengünstig und
-stets termingerecht umgesetzt werden. Die Kernentwicklung wurde von
-einer Person in gerade einmal sechs Monaten abgeschlossen.
+termingerecht umgesetzt werden. Die Kernentwicklung wurde von einer
+Person in gerade einmal sechs Monaten abgeschlossen.
 
 Dieser Artikel zeigt an einem kleinen Ausschnitt der Software, wie
-funktionale Programmierung in OCaml die Entwicklung vereinfachen und damit auch
-beschleunigen konnte.
+funktionale Programmierung in OCaml die Entwicklung vereinfachen und
+damit auch beschleunigen konnte.
 
 <!-- more start -->
 
@@ -31,7 +31,7 @@ dem funktionalen Programmieren auch imperative und objekt-orientierte
 Paradigmen, ein statisches Typsystem mit besonders mächtiger
 Typinferenz, sowie ein gutes Modulsystem. Es gibt eine Vielzahl von
 Bibliotheken, insbesondere zur Web- und Netzwerkprogrammierung, und
-der Compiler erzeugt sehr performanten Nativecode. Letzteres gab auch
+der Compiler erzeugt sehr performanten nativen Code. Letzteres gab auch
 den Ausschlag zu der Entscheidung für diese Sprache in diesem Projekt,
 da ein Betrieb des Servers als einfache CGI-Anwendung hinter einem
 simplen Webserver einen deutlichen Sicherheitsgewinn gegenüber einer
@@ -170,9 +170,9 @@ sogenannte _Pattern-Matching_:
       | _ -> failwith "HTTP call failed"
 {% endhighlight %}
 
-Zur Erklärung noch ein Wort zu Funktionen: `let f p1 p2 = ...`
-definiert eine Funktion `f` mit zwei Parametern, und der Ausruck `f 1
-2` ruft diese Funktion mit den beiden Zahlen als Argumente auf.
+Zur Erklärung ein Wort zu Funktionen: `let f p1 p2 = ...` definiert
+eine Funktion `f` mit zwei Parametern, und der Ausruck `f 1 2` ruft
+diese Funktion mit den beiden Zahlen als Argumente auf.
 
 Das Pattern-Matching selbst ist der Ausdruck `match ... with ...`
 innerhalb der Funktion `do_payment`. Er definiert eine sehr mächtige
@@ -244,9 +244,9 @@ Mit dieser Liste der Kind-Knoten führen wir ein _map_ aus, d.h. wir
 werten die Funktion `xml_field` auf jeden einzelnen Kind-Knoten aus,
 und sammeln die Ergebnisse in einer neuen Liste. Diese Liste wird dann
 aus Tupeln bestehen, und ist damit eine sogenannte Assoziations-Liste,
-einer einfachen Art von Dictionary, in dem man mit der Funktion
-`assoc` aus dem Modul `List` nach dem ersten Teil der Tupel suchen
-kann und den zweiten Teil zurück erhält.
+eine einfachen Art von Dictionary, in dem man mit der Funktion `assoc`
+aus dem Modul `List` nach dem ersten Teil der Tupel suchen kann und
+den zweiten Teil zurück erhält.
 
 In der Funktion `xml_field` geschieht eine weitere Art von
 Pattern-Matching, und zwar auf eine Liste von Werten. In diesem Fall
@@ -259,7 +259,7 @@ soll.
 ## Fazit
 
 Das Zerlegen von Datenstrukturen, sowie das Überprüfen und
-Weiterverarbeiten einzelner Bestandteile davon, ist eine immer
+Weiterverarbeiten einzelner Bestandteile, ist eine immer
 wiederkehrende häufige Aufgabe von Programmen bzw. deren
 Programmierern. In Sprachen ohne Pattern-Matching benötigt man für so
 eine Zerlegung in der Regel sehr viele Zeilen Code, mit entsprechnd
