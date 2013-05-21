@@ -1,12 +1,12 @@
 ---
 layout: post
 description: Monaden in Aktion
-title: "Monaden in Aktion: Teil 2"
+title: "Mehr Monaden in Aktion"
 author: uwe-schmidt
 tags: ["Haskell", "Monaden"]
 ---
 
-# Monaden in Aktion: Teil 2 #
+# Monaden in Aktion#
 
 <!--- hier muss eine Einleitung hin -->
 
@@ -36,7 +36,7 @@ type Id    = String
 
 Was ist die Bedeutung eines Ausdrucks mit freien Variablen?  Zur
 Auswertung solcher Ausdrücke brauchen wir eine Zuordnung von Werten zu
-den freien Variablen. Diese Zuurdnung werden wir in
+den freien Variablen. Diese Zuordnung werden wir in
 einer sogenannten Umgebung, engl. `Env`-ironment speichern. Die
 Bedeutung eines Ausdrucks kann als eine Funktion aufgefasst werden,
 die eine Umgebung auf einen Resultatwert abbildet.  `eval` wird also
@@ -58,8 +58,8 @@ data ResVal a
 
 Der `Result`-Typ wird zu einem Funktionstyp `Env -> ResultVal a`, der
 wegen der `Monad`-Instanz in einen `newtype` verpackt werden
-muss. Damit berechnet `eval` aus einem Ausdruck eine Funktion, die aus
-einem `Env` ein `ResVal Int`. Dieser entspricht dem alten `Result` aus
+muss. Damit berechnet `eval` aus einem Ausdruck eine Funktion vom Typ
+`Env -> ResVal Int`. Dieser entspricht dem alten `Result` aus
 [Expr2.hs][Expr2]. Für die Umgebung wird hier eine einfache
 Schlüssel-Wert-Liste genommen.  Bei praktischen Anwendungen werden
 üblicherweise effizientere Container-Implementierungen, z.B. aus
@@ -567,7 +567,7 @@ setzten kann.  Hierzu gibt es die sogenannten Monaden-Transformatoren
 eine neue Monade erzeugen kann, die dann um einen neuen Aspekt
 angereichert worden ist.
 
-Die meisten, der hier diskutierten Monaden, könnte man mit diesen
+Die meisten der hier diskutierten Monaden, könnte man mit diesen
 Monaden-Transformatoren zusammen setzten, so auch unsere letzte
 *IO-Exception-State*-Monade.  Auf [hackage] findet man zum Beispiel
 die [mtl]-und [transformers]-Bibliotheken, die im Moment überwiegend
