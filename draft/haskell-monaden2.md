@@ -1,19 +1,22 @@
 ---
 layout: post
 description: Monaden in Aktion
-title: "Monaden in Aktion: Teil 1"
+title: "Monaden in Aktion"
 author: uwe-schmidt
 tags: ["Haskell", "Monaden"]
 ---
 
-# Monaden in Aktion: Teil 1#
+# Monaden in Aktion#
 
 Im [letzten Artikel][fp1] über Monaden haben wir die Grundlagen
 diskutiert. Hier soll es darum gehen, eigene Monaden zur Lösung
 Software-technischer Aufgaben selbst zu entwickeln.  Wir werden sehen,
 wie ein Stück Software modular und durch lokale Erweiterungen um neue
 Funktionalität ergänzt werden kann, ohne bestehende Teile zu verändern
-oder zu refaktorisieren.
+oder zu refaktorisieren. Unter *modular* verstehen wir dabei die
+Eigenschaft, bestimmte Funktionalität in einem klar abgegrenzten
+Bereich implementieren und mit anderen Erweiterungen kombinieren
+zu können.
 
 Als laufendes Beispiel werden wir die klassische Aufgabe der
 Auswertung von Ausdrücken behandeln. Wir werden mit einfachen
@@ -29,13 +32,13 @@ nichtdeterministische Berechnungen ermöglichen, Variablen in den
 Ausdrücken zulassen und zum Schluss die Sprache um Zuweisungen,
 Schleifen und Ein- und Ausgabe erweitern.
 
-In diesem Teil über Monaden in Aktion werden wir nur die ersten
+In diesem Teil über *Monaden in Aktion* werden wir nur die ersten
 Schritte entwickeln.  Die Erweiterungen um Variablen, Zuweisungen und
 E/A werden im Teil 2 diskutiert werden.
 
 ## Rein funktionaler Code versus I/O-behafteter Code ##
 
-In einem guten Design für ein etwas komlexeres Software-System ist es
+In einem guten Design für ein etwas komplexeres Software-System ist es
 nicht nur in Haskell-Projekten wichtig, das System so zu
 modularisieren, dass die Teile, in denen Ein- und Ausgaben gemacht
 werden, sauber getrennt werden von den Teilen, in denen reine
@@ -43,18 +46,24 @@ Verarbeitung von Daten gemacht werden.  Insbesondere für die
 Sicherheit eines Systems ist es von Bedeutung, die Ein- und
 Ausgabe-Teile zu isolieren, möglichst kein und übersichtlich zu
 halten, und die Menge der zulässigen I/O-Operationen und deren
-Argumente genau zu kontrollieren. Haskell bietet gegenüber anderen
+Argumente genau zu kontrollieren. Aber auch aus anderen Gründen
+ist es sinnvoll sich vorab Gedanken zu machen, in welchen Teilen
+einer Anwendung welche Arten von Seiteneffekten auftreten sollen:
+wir hatten hier im Blog als Beispiele schon die [bessere Parallelisierbarkeit](/2013/03/06/parallel-haskell.html)
+und die [reduzierte Komplexität](2013/03/20/warum-funktional.html)
+gesehen.
+Haskell bietet gegenüber anderen
 Sprachen den Vorteil, vom Typsystem überprüfen zu lassen, in welchen
-Teilen eines Systems Ein- und Ausgabe gemacht werden.
+Teilen eines Systems Ein- und Ausgabe bzw. Seiteneffekte gemacht werden.
 
 Dieses ist ein großes Software-technisches Plus, aber es erfordert
 auch doppelte Sorgfalt beim Entwurf. Funktionen mit I/O können nicht
-innerhalb von *puren* Funktionen verwendet werden. Dieses wird vom
-Typsystem verhindert.
+innerhalb von [*reinen* oder *puren* Funktionen](2013/03/12/rein-funktional.html)
+verwendet werden. Dieses wird vom Typsystem verhindert.
 
 Wenn im Laufe eines Projekt festgestellt wird, dass in einer
 elementaren Funktion `f` Ein- und/oder Ausgabe notwendig ist, so
-müssen alle Funktionen die dieses `f` direkt oder indirekt nutzen, so
+müssen alle Funktionen, die dieses `f` direkt oder indirekt nutzen, so
 umgeschrieben werden, dass sie in der `IO`-Monade laufen.  Dieses kann
 in heißen Projektphasen manchmal schlicht nicht machbar sein. Als
 Notlösung wird dann leicht in eine Kiste mit schmutzigen Tricks
