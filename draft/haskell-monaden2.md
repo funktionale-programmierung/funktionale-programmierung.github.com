@@ -35,10 +35,22 @@ E/A werden im Teil 2 diskutiert werden.
 
 ## Rein funktionaler Code versus I/O-behafteter Code ##
 
-Bei der Entwicklung von Haskell-Programmen gibt es ein Problem, dass
-bei den heutigen Mainstream-Sprachen nicht auftritt. Funktionen mit
-I/O können nicht innerhalb von *puren* Funktionen verwendet
-werden. Dieses wird vom Typsystem verhindert.
+In einem guten Design für ein etwas komlexeres Software-System ist es
+nicht nur in Haskell-Projekten wichtig, das System so zu
+modularisieren, dass die Teile, in denen Ein- und Ausgaben gemacht
+werden, sauber getrennt werden von den Teilen, in denen reine
+Verarbeitung von Daten gemacht werden.  Insbesondere für die
+Sicherheit eines Systems ist es von Bedeutung, die Ein- und
+Ausgabe-Teile zu isolieren, möglichst kein und übersichtlich zu
+halten, und die Menge der zulässigen I/O-Operationen und deren
+Argumente genau zu kontrollieren. Haskell bietet gegenüber anderen
+Sprachen den Vorteil, vom Typsystem überprüfen zu lassen, in welchen
+Teilen eines Systems Ein- und Ausgabe gemacht werden.
+
+Dieses ist ein großes Software-technisches Plus, aber es erfordert
+auch doppelte Sorgfalt beim Entwurf. Funktionen mit I/O können nicht
+innerhalb von *puren* Funktionen verwendet werden. Dieses wird vom
+Typsystem verhindert.
 
 Wenn im Laufe eines Projekt festgestellt wird, dass in einer
 elementaren Funktion `f` Ein- und/oder Ausgabe notwendig ist, so
@@ -46,12 +58,13 @@ müssen alle Funktionen die dieses `f` direkt oder indirekt nutzen, so
 umgeschrieben werden, dass sie in der `IO`-Monade laufen.  Dieses kann
 in heißen Projektphasen manchmal schlicht nicht machbar sein. Als
 Notlösung wird dann leicht in eine Kiste mit schmutzigen Tricks
-gegriffen und Funktionen, die `unsafe???` heißen, genutzt. Dieses ist
-üblicherweise der erste Schritt zu einem unzuverlässigen und
-unwartbaren System.
+gegriffen und Funktionen, die `unsafe???` heißen,
+genutzt. Üblicherweise ist das der erste Schritt zu einem
+unzuverlässigen und unwartbaren System.
 
 Mit dem hier vorgestellten monadischem Programmierstil werden wir
-nicht in diese hässliche Falle laufen.
+nicht in diese hässliche Falle laufen, wir werden aber trotzdem
+die Kontrolle über die IO-behafteten Operationen behalten.
 
 ## Auswertung arithmetischer Ausdrücke ##
 
