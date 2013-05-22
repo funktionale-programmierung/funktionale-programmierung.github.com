@@ -34,7 +34,9 @@ Schleifen und Ein- und Ausgabe erweitern.
 
 In diesem Teil über *Monaden in Aktion* werden wir nur die ersten
 Schritte entwickeln.  Die Erweiterungen um Variablen, Zuweisungen und
-E/A werden im Teil 2 diskutiert werden.
+E/A werden in einem weiteren Teil diskutiert werden.
+
+<!-- more start -->
 
 ## Rein funktionaler Code versus I/O-behafteter Code ##
 
