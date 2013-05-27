@@ -33,7 +33,7 @@ Zur Entwicklung der Fragebögen verwenden wir eine Monade, welche die
 Darstellung des Fragebogens beschreibt und die Antworten einsammelt.
 Wieso eine Monade?  Wir sehen folgende Vorteile:
 
-- **Komponierbarkeit** Die Seiten des Fragebogens lassen sich unabhängig
+- **Komponierbarkeit** Die Elemente des Fragebogens lassen sich unabhängig
   voneinander beschreiben und anschließend beliebig miteinander
   kombinieren.  Damit lassen sich unterschiedliche Logiken im
   Ablauf eines Fragebogens darstellen, z.B. wenn Frage 1 mit 'ja'
@@ -65,8 +65,11 @@ am Montag Zeit hat:
      put(1, 3, Button("Nein", addAnswer(montagZeitQ, ChosenOne(Nein))))
 {% endhighlight %}
 
-Diese vier Zeilen setzen in die erste Zeile den Fragetext,
-gefolgt von zwei Knöpfen für "Ja" und "Nein".
+Diese vier Scala-Zeilen setzen in die erste Zeile den Fragetext,
+gefolgt von zwei Knöpfen für "Ja" und "Nein":
+
+![Erste Seite der Umfrage](/files/gui-monade/seite1.png "Erste Seite der
+ Umfrage")
 
 Die `put`-Methode setzt das Inhaltselement in die angegebene Zeile und
 Spalte.  Das zugrunde liegende Layoutmodell zur Darstellung des
@@ -74,7 +77,8 @@ Fragebogens basiert auf Swings'
 [GridBagLayout](http://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html),
 welches in Scala mit einem Panel zu einem
 [GridBagPanel](http://www.scala-lang.org/api/2.10.0/scala/swing/GridBagPanel.html)
-kombiniert ist.
+kombiniert ist.  Anderer Render-Möglichkeiten sind durchaus denkbar
+(z.B. als HTML-Seite), doch die haben wir bisher nicht umgesetzt.
 
 Die `>>`-Methode ist eine der beiden `bind`-Methoden der Monade: sie
 verknüpft zwei Monaden, wobei sie das Ergebnis der ersten verwirft.
@@ -99,7 +103,7 @@ werden die Swing-Elemente erzeugt.
 
 Als Callback verwenden wir im obigen Beispiel `addAnswer`.  Die
 `addAnswer`-Methode fügt der Monade eine Antwort hinzu.  Ich habe also
-di GUI-Monade um die Funktionalität erweitert, sich Antworten auf
+die GUI-Monade um die Funktionalität erweitert, sich Antworten auf
 Fragen zu merken.  Im obigen Beispiel geschieht dies für die Frage
 `montagZeitQ`.  `montagZeitQ` ist als Auswahlfrage definiert mit den
 Auswahlmäglichkeiten `Ja` und `Nein`:
@@ -131,10 +135,8 @@ Monaden-Operator) und teilen der Monade mit `ask` mit, dass wir nun
 fertig mit der Beschreibung sind und die GUI aktualisert und
 dargestellt werden kann.  `showSurvey` macht auch genau dies: sie
 wertet die Manipulationen aus, welche wir mit `put` und `setTitle` an
-der Monade vorgenommen haben und stellt die resultierende GUI dar:
+der Monade vorgenommen haben und stellt die resultierende GUI dar.
 
-![Erste Seite der Umfrage](/files/gui-monade/seite1.png "Erste Seite der
- Umfrage")
 
 ## Logik im Ablauf eines Fragebogens
 
@@ -223,7 +225,7 @@ oder, wie im folgenden Beispiel, auf der Konsole ausgeben:
 
 Mit `getAnswers` erhalten wir alle Antworten als eine `Map` von Frage
 auf Antwort.  Dabei ist `>>=` der `bind`-Operator der Monade, welche
-das Ergebins der vorherigen Monade liefert.  Falls die Antwort auf die
+das Ergebnis der vorherigen Monade liefert.  Falls die Antwort auf die
 erste Frage, ob man am Montag Zeit habe, mit "Ja" beantwortet wurde,
 holen wir uns die eingegebene Uhrzeit von Seite zwei mit
 `answers(uhrzeitQ)` und geben einen entsprechenden Text aus.
@@ -244,9 +246,9 @@ Therapiemaßnahmen vier weitere Fragebögen hinzugefügt, die teilweise
 Fragebögen haben wir dabei von "unten nach oben" aufgebaut: die
 einzelnen Seiten werden programmatisch sowohl erzeugt als auch
 anschließend zum gesamten Fragebogen zusammengesetzt.  Obschon wir MVC
-nicht klassisch umgesetzt haben, sind das Modell, die Präsentation und
-die Kontrolle voneinander getrennt und lassen sich relativ einfach
-erweitern. 
+nicht klassisch umgesetzt haben, sind das Modell (in der Monade), die
+Präsentation (GridBagLayout) und die Kontrolle (Callbacks und `>>=`)
+voneinander getrennt und lassen sich relativ einfach erweitern.
 
 Mit dem vereinfachten Beispiel aus der Praxis habe ich den Vorteil der
 Komponierbarkeit unserer Architektur mit GUI-Monaden illustriert.
