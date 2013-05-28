@@ -20,7 +20,7 @@ links: [text](link)
 -->
 
 Dieser Artikel zeigt den Einsatz von
-[Monaden](http://funktionale-programmierung.de/2013/05/22/haskell-monaden2.html)
+[Monaden](http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html)
 in der Praxis um GUI-Fenster zu beschreiben.
 
 Für einen Kunden, der in der Sozialpädagogik tätig ist, entwickelt die
