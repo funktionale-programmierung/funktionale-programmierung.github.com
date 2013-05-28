@@ -256,5 +256,7 @@ Komponierbarkeit unserer Architektur mit GUI-Monaden illustriert.
 Falls gewünscht, kann ich in späteren Artikeln noch auf die
 Testbarkeit und die Implementierung eingehen.  Wer Lust hat, kann
 gerne in den Kommentaren eine alternative Architektur in der
-Programmiersprache seiner Wahl vorstellen.
+Programmiersprache seiner Wahl skizzieren.  Über Fragen, Anregungen
+oder Anmerkungen freue ich mich ebenfalls, sei es per Kommentar oder
+per Email.
 
