@@ -6,19 +6,6 @@ author: andreas-bernauer
 tags: ["Praxis", "Monade", "Scala"]
 ---
 
-<!-- Kommentare
-links: [text](link)
-
-    Code1
-    Code2
-
-{% highlight xml %}
-   <payresult>
-     <rc>300</rc>
-   </payresult>
-{% endhighlight %}
--->
-
 Dieser Artikel zeigt den Einsatz von
 [Monaden](http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html)
 in der Praxis um GUI-Fenster zu beschreiben.
