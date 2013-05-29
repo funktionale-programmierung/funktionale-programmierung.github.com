@@ -13,7 +13,7 @@ in der Praxis um GUI-Fenster zu beschreiben.
 Für einen Kunden, der in der Sozialpädagogik tätig ist, entwickelt die
 ActiveGroup eine Software zur Dokumentation von Therapiemaßnahmen.
 Die Software erfasst die Stammdaten von Personen, die sich einer
-Therapie unterziehen, lässt die Personen Fragebägen ausfüllen, um den
+Therapie unterziehen, lässt die Personen Fragebögen ausfüllen, um den
 aktuellen Zustand und die Fortschritte der Therapie zu dokumentieren,
 und erlaubt das Erstellen zahlreicher Berichte.
 
