@@ -6,95 +6,31 @@ author: alexander-thiemann
 tags: ["web", "Haskell", "JavaScript", "SOY", "HTTP", "PHP"]
 ---
 
-Im letzten Teil des Artikels haben wir einen einfachen Server mit Rest-API in Haskell geschrieben.
+Im [letzten Teil](http://funktionale-programmierung.de/2013/04/04/webanwendung-haskell.html) des Artikels haben wir einen einfachen Server mit Rest-API in Haskell geschrieben.
 Nun möchten wir noch ein einfaches Frontend dafür bauen. Wie bereits erwähnt wollen wir hier unter
 anderem die [Soy-Templates-Sprache von Google](https://developers.google.com/closure/templates/) und deren
 Kompiler verwenden, um über Templates mit JavaScript HTML zu erzeugen. Außerdem werden wir einen einfachen Controller in JavaScript schreiben, der die entsprechenden zusammenfügt und mit Daten versorgt.
 
 <!-- more start -->
 
-Beginnen wir also mit einer einfachen Index-Datei `index.html`, die alle benötigten JavaScripts lädt und statische HTML Elemente beschreibt.
+Zunächst möchte ich mich nocheinmal kurz auf den letzten Teil beziehen: Mit Hilfe von TemplateHaskell und der JSON-Biliothek haben für unsere
+Datentypen Persistenz und JSON Serialisierung erzeugt. Dann haben wir mit `scotty` auf einfache Art und Weise HTTP-Routen erzeugt um auf unsere persitenten serialisierten Objekte zugreifen zu können. Zum Schluss hatten wir einen fertigen Server mit REST-API, den man wie folgt ansteuern konnte:
 
-{% highlight html %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Haskell Blog</title>
-    <script src="/jquery.min.js" type="text/javascript"></script>
-    <script src="/soyutils.js" type="text/javascript"></script>
-    <script src="/templates.js" type="text/javascript"></script>
-    <script src="/app.js" type="text/javascript"></script>
-{% endhighlight %}
-`jquery.min.js`  ist die bekannt jQuery-Bibliothek für JavaScript, die DOM Manipulationen sehr einfach macht ([jQuery](http://jquery.com)). `soyutils.js` ist eine Hilfsfunktionsbiliothek von Soy-Templates, die mit dem Google-Soy-Compiler geliefert wird (siehe [hier](https://developers.google.com/closure/templates/)). Nach `templates.js` werden später unsere Soy-Templates kompiliert, und in `app.js` werden wir unseren Controller schreiben.
-
-{% highlight html %}
-    <style type="text/css">
-    body {
-        font: 9pt Verdana;
-    }
-    #container {
-        width: 800px;
-        margin: 10px auto;
-    }
-
-    .newsBit {
-        border: 1px solid black;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-
-    .newsBit h2 {
-        margin: 0;
-    }
-    </style>
-</head>
+Beiträge hinzufügen:
+{% highlight bash %}
+$ curl --data '{"title": "Test", "author": "Alex", "tags": ["a", "b"], "content": "Test Beitrag"}' http://localhost:8085/news
+true
 {% endhighlight %}
 
-Nur ein bisschen CSS, damit das ganze am Ende nicht zu langweilig aussieht.
-
-{% highlight html%}
-<body>
-
-<div id="container">
-    <h1>Haskell Blog</h1>
-    <div id="main">
-        Lade ...
-    </div>
+Liste aller Beiträge anzeigen:
+{% highlight bash %}
+$ curl http://localhost:8085/news
+[{"title":"Test","author":"Alex","tags":["a","b"],"id":5,"content":"Test Beitrag"}]
 {% endhighlight %}
 
-Wir erzeugen ein DIV mit der id `main`, in das später vom Controller die Blogposts und Kommentare geladen werden sollen.
+Beginnen wir nun mit den HTML Frontend für unsere Anwendung. Ich denke das statische HTML und CSS Grundgerüst muss an dieser stelle nicht weiter erläutert werden, es ist im [GitHub Repository des Mini Blogs](https://github.com/agrafix/HaskellBlog/blob/master/static/index.html) zu finden.
 
-{% highlight html %}
-    <h1>Neuer Beitrag</h1>
-    <form id="newNews">
-        <label for="author">
-            Dein Name:
-        </label>
-        <input type="text" placeholder="Autor" id="author" /> <br />
-        <label for="author">
-            Überschrift:
-        </label>
-        <input type="text" placeholder="Titel" id="title" /> <br />
-        <label for="content">
-            Beitrag:
-        </label> <br />
-        <textarea id="content"></textarea> <br />
-
-        <label for="tags">
-            Tags:
-        </label>
-        <input type="text" placeholder="Tags (mit Komma trennen)" id="tags" /> <br />
-        <input type="submit" value="Speichern" />
-    </form>
-</div>
-
-</body>
-</html>
-{% endhighlight %}
-
-Zum Schluss noch HTML-Code, der das statische Formular zum Hinzufügen weiterer Blogbeiträge enthält. Wie bereits erwähnt haben wir keinerlei Benutzerauthentifizierung, das heißt Momentan kann jeder Besucher des Blogs auch neue Beiträge schreiben. Dieses "Problem" werden wir dann in einem dritten Teil behandeln.
-
-Schreiben wir nun mit der SOY-Template Sprache unsere Templates:
+Schreiben wir nun also mit der SOY-Template Sprache unsere Templates:
 
 {% highlight html %}
 {namespace BlogUI autoescape="true"}
@@ -119,7 +55,18 @@ Der Namespace, dass heißt das JavaScript Objekt/"Modul", in dem später alle Te
 {% endhighlight %}
 
 Unser erstes Template erzeugt eine Seite mit Blogbeiträgen. Zunächst ist vor jedem Template ein Kommentar notwendig. Dieser enthält eine optionale Beschreibung des Templates, und die Liste aller Parameter. Mit `{template .news}` beginnen wir nun ein neues Template im aktuellem Namespace
-und nennen es `news`. Die foreach-Syntax ist an die von JavaScript angelehnt, in obiger Form kann man die Schleife als ein Haskell `map` verstehen: Auf alle Elemente in der Liste `$news` wird das Template `newsBit` angewendet. Zum Schluss prüfen wir noch, ob es überhaupt Beiträge gibt, und wenn nicht geben wir die Meldung "Keine Beiträge vorhanden" aus - damit der Blog nicht komplett leer ist.
+und nennen es `news`. Die foreach-Syntax ist an die von JavaScript angelehnt, in obiger Form kann man die Schleife als ein Haskell `map` verstehen: Auf alle Elemente in der Liste `$news` wird das Template `newsBit` angewendet. Zum Schluss prüfen wir noch, ob es überhaupt Beiträge gibt, und wenn nicht geben wir die Meldung "Keine Beiträge vorhanden" aus - damit der Blog nicht komplett leer ist. Zur Erinnerung: die JSON-Struktur eines Beitrags sieht wie folgt aus:
+
+{% highlight javascript %}
+{ "title":"Test",
+  "author":"Alex",
+  "tags":["a","b"],
+  "id":5,
+  "content":"Test Beitrag"
+}
+{% highlight javascript %}
+
+Das werden wir nun zum Rendern von Beiträgen ausnutzen:
 
 {% highlight html %}
 /**
@@ -164,7 +111,7 @@ $('#addCommentFor{$id}').submit(function (e) /*{literal}*/{/*{/literal}*/
 {% endhighlight %}
 
 Das Template für einen einzelnden Blogbeitrag zeigt weitere Funktionen der SOY-Templates: Mit `{$variable}` liest man den Inhalt einer
-Variable und zeigt ihn an - hier kommt dann auch unser autoescape ins Spiel! Enthält die Variable `$title` etwa den Wert `<script>alert('alert');</script>`, escaped das SOY automatisch bei der Ausgabe für uns. Außerdem kann man der Anzeige von Variablen noch so genannte [Print Directives](https://developers.google.com/closure/templates/docs/functions_and_directives#print_directives) mitgeben, wie zum Beispiel bei `{$content|changeNewlineToBr}`. In diesem Fall wird aus einem `\n` Zeilenumbruch ein HTML `<br>`.  Alles weitere ist einfach HTML und JavaScript, bis auf den `{literal}`-Blocks. Diese sorgen dafür, dass der SOY-Kompiler dessen Inhalt ignoriert, und es keine Probleme mit den geschweiften Klammern gibt.
+Variable und zeigt ihn an - hier kommt dann auch unser autoescape ins Spiel! Enthält die Variable `$title` etwa den Wert `<script>alert('alert');</script>`, escaped das SOY automatisch bei der Ausgabe für uns. Außerdem kann man der Anzeige von Variablen noch so genannte [Print Directives](https://developers.google.com/closure/templates/docs/functions_and_directives#print_directives) mitgeben, wie zum Beispiel bei `{$content|changeNewlineToBr}`. In diesem Fall wird aus einem `\n` Zeilenumbruch ein HTML `<br>`.  Alles weitere ist einfach HTML und JavaScript, bis auf den `{literal}`-Blocks. Diese sorgen dafür, dass der SOY-Kompiler dessen Inhalt ignoriert, und es keine Probleme mit den geschweiften Klammern gibt. Mit der jQuery Notation `$('...')` kann man den DOM-Baum traversieren und ein Element wählen. Mehr zu der Syntax findet man [hier](http://api.jquery.com/category/selectors/). Das `Blog` Objekt ist unser Controller, dieser wird weiter unten erklärt.
 
 {% highlight html %}
 /**
@@ -217,6 +164,9 @@ var Blog = {};
 
 Wir erzeugen mithilfe von einem Objekt einen "Namespace" `Blog` für unsere Funktionen.
 
+Mit `$.get("url", function () {})` laden wir unsere JSON-Newsliste vom Server und generieren mit unseren Templates
+dann dessen HTML-Repräsentation. Diese wird dann in unser `<div id="main">` geladen:
+
 {% highlight javascript %}
 Blog.loadEntries = function () {
     $.get("/news", function (n) {
@@ -226,101 +176,35 @@ Blog.loadEntries = function () {
 };
 {% endhighlight %}
 
-Mit `$.get("url", function () {})` laden wir unsere JSON-Newsliste vom Server und generieren mit unseren Templates
-dann dessen HTML-Repräsentation. Diese wird dann in unser `<div id="main">` geladen.
-
+Weitere Funktionen unseres Controllers sind:
 {% highlight javascript %}
 Blog.addEntry = function (author, title, content, tags) {
-    $.ajax({
-        type: "POST",
-        url: "/news",
-        data: JSON.stringify({
-            author: author,
-            title: title,
-            content: content,
-            tags: tags
-        }),
-        success: function () {
-            Blog.resetAddForm();
-            Blog.loadEntries();
-        },
-        error: function () {
-            alert("Beitrag konnte nicht angelegt werden");
-        }
-    });
+    // ...
 };
 
 Blog.storeComment = function (newsId, author, text, onOk) {
-    $.ajax({
-        type: "POST",
-        url: "/comments",
-        data: JSON.stringify({
-            author: author,
-            comment: text,
-            news: "" + newsId
-        }),
-        success: onOk,
-        error: function () {
-            alert("Kommentar konnte nicht gespeichert werden");
-        }
-    });
+    // ...
 };
-{% endhighlight %}
 
-Einfache Wrapperfunktionen, die mit einen `POST` Request an unseren Server das Hinzufügen von Kommentaren und Beiträgen ermöglicht.
-
-{% highlight javascript %}
 Blog.resetAddForm = function () {
-    $('#author').val(""); $('#title').val(""); $('#content').val(""); $('#tags').val("");
+    // ...
 };
-{% endhighlight %}
 
-Diese Funktion setzt das "Beitrag hinzufügen"-Formular zurück. Mit `$("[SELECTOR]")` findet man ein Element im DOM-Baum, mit `.val("[WERT]")` kann
-man `<input>` und `<textarea>` Elementen neue Werte zuweisen.
-
-{% highlight javascript %}
 Blog.showComments = function (id) {
-    $.get("/comments/" + id, function (c) {
-        var html = BlogUI.comments({"comments": c});
-        $('#commentsFor' + id).html(html).slideDown();
-    });
+   // ...
 };
-{% endhighlight %}
 
-Hier laden wir die Kommentare zu einem Beitrag mit der ID `id` vom Server und zeigen sie im richtigen `div` unter dem Beitrag an.
-
-{% highlight javascript %}
 Blog.showCommentsClick = function (id) {
-    var el = $('#commentLink' + id);
-
-    if (el.hasClass('commentsClosed')) {
-        Blog.showComments(id);
-        el.text("Kommentare verbergen");
-        el.removeClass('commentsClosed');
-    } else {
-        el.text("Kommentare anzeigen");
-        $('#commentsFor' + id).slideUp();
-        el.addClass('commentsClosed');
-    }
+    // ...
 };
-{% endhighlight %}
 
-Eine weitere Hilfsfunktion zum ein- und ausblenden von Kommentaren. Mit `.text("[TEXT]")` kann man den Inhalt von HTML-Elementen ändern. Alles wird escaped, dh. wir können kein HTML-Markup übergeben. `.slideDown()` und `.slideUp()` sind übrigens zwei Funktionen, mit denen man HTML-Elemente mit einem Schiebeffekt ein- und ausblenden kann.
-
-{% highlight javascript %}
 Blog.addComment = function (id) {
-    var authorEl = $('#commentAuthor' + id);
-    var textEl = $('#commentText' + id);
-
-    Blog.storeComment(id, authorEl.val(), textEl.val(), function () {
-        authorEl.val(""); textEl.val("");
-        Blog.showComments(id);
-    });
+    // ...
 
 };
 {% endhighlight %}
 
-Wir lesen hier aus dem Formular zum Hinzufügen von Kommentaren und schicken den Kommentar an den Server zum Speichern. Dann laden wir alle Kommentare neu.
+Wie diese genau funktionieren kann man sich im [GitHub Repository](https://github.com/agrafix/HaskellBlog/blob/master/static/app.js) ansehen.
 
 {% highlight javascript %}
 $(function () {
@@ -338,4 +222,8 @@ $(function () {
 
 Zum Schluss registrieren wir einen `onload` Handler, also eine Funktion die nach dem Laden der Seite aufgerufen wird, die alle Blogbeiträge lädt und mit `.submit()` abfängt wenn das "Neuen Beitrag anlegen" Formular abgeschickt wird. Wir lesen dann die Felder aus und schicken sie mit unserer Hilfsfunktion an den Server.
 
-Nun wäre das Grundgerüst für den Blog fertig! Wir haben also mit rund 200 Zeilen *Haskell*, etwa 100 Zeilen *JavaScript* und 150 Zeilen *HTML* einen kleinen Blog implementiert, der gut skaliert und sicher gegen XSS und SQL-Injections ist. Dass das ganze noch kürzer geht und wie Benutzerauthentifizierung und Sessions funktionieren, werde ich in weiteren Beiträgen erklären.
+Nun wäre das Grundgerüst für den Blog fertig! Wir haben also mit rund 200 Zeilen *Haskell*, etwa 100 Zeilen *JavaScript* und 150 Zeilen *HTML* einen kleinen Blog implementiert, der gut skaliert und sicher gegen XSS und SQL-Injections ist. Versuchen wir etwa HTML-Code in einen Kommentar zu schmuggeln, sorgt das AutoEscaping der SOY-Templates dafür, dass aus beispielsweise `<script>alert("HALLO!");</script>` `&lt;script&gt;alert("HALLO!");&lgt;</script&gt;` wird. Wenn wir einen Kommentar schreiben, mit dem wir versuchen das eigentliche SQL-Query was dahinter steckt zu manipulieren (zB: `', NULL, NULL, 'ASDF') --`, schlägt das ebenfalls fehl: Das persistent Framework kennt nämlich die Typen unserer SQL-Felder und escaped die Eingaben entsprechend.
+
+Den gesammten Code für den Blog findet man im Bereits erwähten [GitHub Repository](https://github.com/agrafix/HaskellBlog/) mit entsprechender Cabal-Datei. Den Blog kann man also einfach mit `cabal configure && cabal build` bauen und dann starten.
+
+Natürlich kann man einen Blog mit noch weniger Haskell-Code schreiben. Wie das geht und wie man dem Blog noch Benutzerauthentifizierung und Sessions spendiert werde ich in einem weiteren Beitrag erklären.
