@@ -127,7 +127,7 @@ AdjList* get_friends(Graph& g, int a) {
 Graph* add_friendship(Graph& old, int a, int b) {
     if (contains(*get_friends(old, a), b))
         return &old;
-    // alten Graph kopieren
+    // alten Graph kopieren (wir benutzen hier den Kopierkonstruktor!)
     Graph* g = new Graph(old);
     // Adjazenzlisten von a und b kopieren
     (*g)[a] = new AdjList(*old[a]);
@@ -237,10 +237,10 @@ int main() {
 
     // wir legen 10^6 Benutzer an
     for (int i = BLOCK_SIZE; i > 0; --i) {
-      GraphLevel2* block = new GraphLevel2;
-      for (int j = BLOCK_SIZE; j > 0; --j)
-        block->push_back(new AdjList);
-      g.push_back(block);
+        GraphLevel2* block = new GraphLevel2;
+        for (int j = BLOCK_SIZE; j > 0; --j)
+            block->push_back(new AdjList);
+        g.push_back(block);
     }
     // der Rest bleibt genau gleich
 }

@@ -49,10 +49,10 @@ int main() {
 
     // wir legen 10^6 Benutzer an
     for (int i = BLOCK_SIZE; i > 0; --i) {
-      GraphLevel2* block = new GraphLevel2;
-      for (int j = BLOCK_SIZE; j > 0; --j)
-        block->push_back(new AdjList);
-      g.push_back(block);
+        GraphLevel2* block = new GraphLevel2;
+        for (int j = BLOCK_SIZE; j > 0; --j)
+            block->push_back(new AdjList);
+        g.push_back(block);
     }
 
     // wir legen ein paar verschiedene Versionen an

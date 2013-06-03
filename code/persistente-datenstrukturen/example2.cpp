@@ -19,7 +19,7 @@ AdjList* get_friends(Graph& g, int a) {
 Graph* add_friendship(Graph& old, int a, int b) {
     if (contains(*get_friends(old, a), b))
         return &old;
-    // alten Graph kopieren
+    // alten Graph kopieren (wir benutzen hier den Kopierkonstruktor!)
     Graph* g = new Graph(old);
     // Adjazenzlisten von a und b kopieren
     (*g)[a] = new AdjList(*old[a]);
