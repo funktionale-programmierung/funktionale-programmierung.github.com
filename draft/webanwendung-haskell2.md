@@ -64,7 +64,7 @@ und nennen es `news`. Die foreach-Syntax ist an die von JavaScript angelehnt, in
   "id":5,
   "content":"Test Beitrag"
 }
-{% highlight javascript %}
+{% endhighlight %}
 
 Das werden wir nun zum Rendern von Beiträgen ausnutzen:
 
