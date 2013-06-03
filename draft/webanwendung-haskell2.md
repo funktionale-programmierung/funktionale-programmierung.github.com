@@ -1,7 +1,7 @@
 ---
 layout: post
-description: Moderne Webanwendungen mit Haskell und Javascript clientseite Implementierung
-title: "Moderne Webanwendungen mit Haskell und Javascript: clientseite Implementierung"
+description: Moderne Webanwendungen mit Haskell und Javascript clientseitige Implementierung
+title: "Moderne Webanwendungen mit Haskell und Javascript: clientseitige Implementierung"
 author: alexander-thiemann
 tags: ["web", "Haskell", "JavaScript", "SOY", "HTTP", "PHP"]
 ---
