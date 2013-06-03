@@ -40,9 +40,8 @@ int main() {
   vector<Graph*> versions;
 
   // wir legen 10^6 Benutzer an
-  for (int i = 0; i < 1000000; ++i) {
+  for (int i = 0; i < 1000000; ++i) 
     g.push_back(new AdjList);
-  }
   // wir legen ein paar verschiedene Versionen an
   versions.push_back(&g);                                 // Version 0
   versions.push_back(add_friendship(g, 0, 1));            // Version 1
