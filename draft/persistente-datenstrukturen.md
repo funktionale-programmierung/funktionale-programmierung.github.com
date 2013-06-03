@@ -73,34 +73,31 @@ vector<AdjList*> friends_by_user;
 // ein Helfer, der bestimmt ob ein Element in einem
 // Array enthalten ist
 bool contains(vector<int>& v, int x) {
-  return v.end() != find(v.begin(), v.end(), x);
+    return v.end() != find(v.begin(), v.end(), x);
 }
 
 void add_friendship(int a, int b) {
-  // ist a schon mit b befreundet?
-  if (!contains(*friends_by_user[a], b)) {
-    friends_by_user[a]->push_back(b);
-  }
+    // ist a schon mit b befreundet?
+    if (!contains(*friends_by_user[a], b))
+        friends_by_user[a]->push_back(b);
 }
 
 vector<int>* get_friends(int a) {
-  return friends_by_user[a];
+    return friends_by_user[a];
 }
 
 int main() {
-  // wir legen 10^6 Benutzer an
-  for (int i = 0; i < 1000000; ++i) {
-    friends_by_user.push_back(new AdjList);
-  }
-  // wir fügen einige Freundschaftsbeziehungen hinzu
-  add_friendship(0,1);
-  add_friendship(0,2);
-  add_friendship(1,2);
-  // gib die Freunde von 0 aus
-  vector<int> friends_of_0 = *get_friends(0);
-  for (int i = 0; i < friends_of_0.size(); ++i) {
-    cout << friends_of_0[i] << endl;
-  }
+    // wir legen 10^6 Benutzer an
+    for (int i = 0; i < 1000000; ++i)
+        friends_by_user.push_back(new AdjList);
+    // wir fügen einige Freundschaftsbeziehungen hinzu
+    add_friendship(0,1);
+    add_friendship(0,2);
+    add_friendship(1,2);
+    // gib die Freunde von 0 aus
+    vector<int> friends_of_0 = *get_friends(0);
+    for (int i = 0; i < friends_of_0.size(); ++i)
+        cout << friends_of_0[i] << endl;
 }
 {% endhighlight %}
 
@@ -123,46 +120,46 @@ verändern nur die Kopie. Der veränderte Code könnte dann z.B. so aussehen:
 typedef vector<AdjList*> Graph;
 
 AdjList* get_friends(Graph& g, int a) {
-  return g[a];
+    return g[a];
 }
 
 // legt eine neue Version des Graphen an
 Graph* add_friendship(Graph& old, int a, int b) {
-  if (contains(*get_friends(old, a), b))
-    return &old;
-  // alten Graph kopieren
-  Graph* g = new Graph(old);
-  // Adjazenzlisten von a und b kopieren
-  (*g)[a] = new AdjList(*old[a]);
-  (*g)[a]->push_back(b);
-  return g;
+    if (contains(*get_friends(old, a), b))
+        return &old;
+    // alten Graph kopieren
+    Graph* g = new Graph(old);
+    // Adjazenzlisten von a und b kopieren
+    (*g)[a] = new AdjList(*old[a]);
+    (*g)[a]->push_back(b);
+    return g;
 }
 
 void print_friends(Graph& g, int a) {
-  AdjList friends = *get_friends(g, a);
-  for (size_t i = 0; i < friends.size(); ++i)
-    cout << friends[i] << " ";
-  cout << endl;
+    AdjList friends = *get_friends(g, a);
+    for (size_t i = 0; i < friends.size(); ++i)
+        cout << friends[i] << " ";
+    cout << endl;
 }
 
 int main() {
-  Graph g;
-  // bildet Versionsnummern auf Zustände des Graphen ab
-  vector<Graph*> versions;
+    Graph g;
+    // bildet Versionsnummern auf Zustände des Graphen ab
+    vector<Graph*> versions;
 
-  // wir legen 10^6 Benutzer an
-  for (int i = 0; i < 1000000; ++i)
-    g.push_back(new AdjList);
-  // wir legen ein paar verschiedene Versionen an
-  versions.push_back(&g);                                 // Version 0
-  versions.push_back(add_friendship(g, 0, 1));            // Version 1
-  versions.push_back(add_friendship(*versions[1], 0, 2)); // Version 2
-  versions.push_back(add_friendship(*versions[2], 2, 3)); // Version 3
+    // wir legen 10^6 Benutzer an
+    for (int i = 0; i < 1000000; ++i)
+        g.push_back(new AdjList);
+    // wir legen ein paar verschiedene Versionen an
+    versions.push_back(&g);                                 // Version 0
+    versions.push_back(add_friendship(g, 0, 1));            // Version 1
+    versions.push_back(add_friendship(*versions[1], 0, 2)); // Version 2
+    versions.push_back(add_friendship(*versions[2], 2, 3)); // Version 3
 
-  // Freunde von 0 zum Zeitpunkt 1
-  print_friends(*versions[1], 0);
-  // Freunde von 0 zum Zeitpunkt 2
-  print_friends(*versions[2], 0);
+    // Freunde von 0 zum Zeitpunkt 1
+    print_friends(*versions[1], 0);
+    // Freunde von 0 zum Zeitpunkt 2
+    print_friends(*versions[2], 0);
 }
 {% endhighlight %}
 
@@ -214,44 +211,43 @@ typedef vector<AdjList*> GraphLevel2;
 typedef vector<GraphLevel2*> Graph;
 
 AdjList* get_friends(Graph& g, int a) {
-  // Indirektion auflösen
-  return (*g[a / BLOCK_SIZE])[a % BLOCK_SIZE];
+    // Indirektion auflösen
+    return (*g[a / BLOCK_SIZE])[a % BLOCK_SIZE];
 }
 
 Graph* add_friendship(Graph& old, int a, int b) {
-  if (contains(*get_friends(old, a), b))
-    return &old;
-  // kopiere Level 1
-  Graph* g = new Graph(old);
-  // kopiere Level 2
-  GraphLevel2* new_lvl2 = new GraphLevel2(*old[a / BLOCK_SIZE]);
-  // kopiere Adjazenzliste
-  AdjList* new_adjlst = new AdjList(*(*new_lvl2)[a % BLOCK_SIZE]);
-  new_adjlst->push_back(b);
-  (*new_lvl2)[a % BLOCK_SIZE] = new_adjlst;
-  (*g)[a / BLOCK_SIZE] = new_lvl2;
-  return g;
+    if (contains(*get_friends(old, a), b))
+        return &old;
+    // kopiere Level 1
+    Graph* g = new Graph(old);
+    // kopiere Level 2
+    GraphLevel2* new_lvl2 = new GraphLevel2(*old[a / BLOCK_SIZE]);
+    // kopiere Adjazenzliste
+    AdjList* new_adjlst = new AdjList(*(*new_lvl2)[a % BLOCK_SIZE]);
+    new_adjlst->push_back(b);
+    (*new_lvl2)[a % BLOCK_SIZE] = new_adjlst;
+    (*g)[a / BLOCK_SIZE] = new_lvl2;
+    return g;
 }
 
 int main() {
-  Graph g;
-  // bildet Versionsnummern auf Zustände des Graphen ab
-  vector<Graph*> versions;
+    Graph g;
+    // bildet Versionsnummern auf Zustände des Graphen ab
+    vector<Graph*> versions;
 
-  // wir legen 10^6 Benutzer an
-  for (int i = BLOCK_SIZE; i > 0; --i) {
-    GraphLevel2* block = new GraphLevel2;
-    for (int j = BLOCK_SIZE; j > 0; --j) {
-      block->push_back(new AdjList);
+    // wir legen 10^6 Benutzer an
+    for (int i = BLOCK_SIZE; i > 0; --i) {
+      GraphLevel2* block = new GraphLevel2;
+      for (int j = BLOCK_SIZE; j > 0; --j)
+        block->push_back(new AdjList);
+      g.push_back(block);
     }
-    g.push_back(block);
-  }
-  // Rest bleibt genau gleich
+    // der Rest bleibt genau gleich
 }
 {% endhighlight %}
 
 Wir haben nun also durch die Indirektion sowohl die Update-Zeit als auch den
-Speicherverbrauch unserer Datenstruktur um den Faktor <span>\(\sqrt(n)\)</span> verbessert, ohne
+Speicherverbrauch unserer Datenstruktur um den Faktor <span>\(\sqrt{n}\)</span> verbessert, ohne
 die konstante Zugriffszeit auf die Freundesliste zu beeinflussen. Ein echter Erfolg!
 Aber können wir es noch besser?
 
