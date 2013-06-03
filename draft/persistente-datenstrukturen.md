@@ -3,7 +3,7 @@ layout: post
 description: Zeitreisen mit persistenten Datenstrukturen
 title: "Zeitreisen mit persistenten Datenstrukturen"
 author: niklas-baumstark
-tags: ["Persistent", "C++"]
+tags: ["Persistente Datenstrukturen", "C++"]
 ---
 
 # Zeitreisen mit persistenten Datenstrukturen
@@ -14,7 +14,7 @@ der Kommunikation ist für die Ewigkeit auf Servern gespeichert und kann jederze
 abgerufen werden.
 
 In einem Anflug von Nostalgie erinnern wir uns an die guten alten Zeiten um das Jahr
-2013 und fragen wir uns, warum unsere Lieblingsplattform es uns nicht erlaubt,
+2013 und fragen uns, warum unsere Lieblingsplattform es uns nicht erlaubt,
 abzufragen wer denn damals unsere "Freunde" und Freundesfreunde waren.
 
 Sicherlich nicht, weil das nicht möglich ist. Virtuelle "Zeitreisen" wie diese
@@ -30,7 +30,13 @@ wir im Kontext dieses Blogartikels darunter verstehen, ist eine Datenstruktur
 mit Lese- und Update-Operationen und der Eigenschaft, dass alle Update-Operationen
 die *alte Version* der Datenstruktur zusätzlich zur Verfügung stellen. Das erlaubt
 uns, auch nach einem Update noch in die Vergangenheit zu blicken und alle alten
-Zustände, also die komplette Historie der Datenstruktur einzusehen.
+Zustände, also die komplette Historie der Datenstruktur einzusehen. Neben dieser 
+Rückblick-Funktionalität erlauben persistente Datenstrukturen vor allem, ohne 
+destruktive Update-Operationen zu arbeiten. In einem 
+[vorigen Artikel](http://funktionale-programmierung.de/2013/03/20/warum-funktional.html)
+haben wir erklärt, warum eine solche Programmierweise einfacher zu verstehen ist und einfacher
+zu korrektem und besser wartbarem Code führt. Außerdem führt die Abwesenheit von Seiteneffekten
+zu leichter parallelisierbarem Code.
 
 Nach dieser theoretischen Definition wollen wir uns wieder unserem Fallbeispiel
 zuwenden: Als Programmiersprache verwenden wir hier beispielhaft C++11, die Ideen
@@ -41,17 +47,20 @@ auch in imperativen Sprachen nützlich sein können.
 
 Unsere Aufgabenstellung ist die folgende:
 
-* Verwalte einen Freundschaftsgraphen mit Benutzern und Freundesbeziehungen
+* Verwalte einen Freundschaftsgraphen mit Benutzern und Freundesbeziehungen.
 * stelle eine Funktion `get_friends(user)` bereit, die die Freundesliste eines Benutzers
-  zurückgibt
-* stelle eine Funktion `add_friendship(user1, user2)`, die eine Freundschaftsbeziehung einleitet
-* Erlaube den Zugriff auf alte Versionen des Graphen möglichst effizient
+  zurückgibt.
+* stelle eine Funktion `add_friendship(user1, user2)` bereit, die eine Freundschaftsbeziehung einleitet
+  und dabei den vorhanden Graphen nicht modifiziert sondern auf effiziente Weise eine aktualisierte
+  Kopie zurückliefert.
+* Erlaube den Zugriff auf alte Versionen des Graphen möglichst effizient.
 
 Zunächst stellt sich natürlich die Frage, wie wir ganz unabhängig von jeglichem Zeitreisen
 unseren Graphen im Speicher repräsentieren wollen. Wir werden dazu unsere `n` Benutzer
 von `0` bis `n - 1` durchnummerieren und eine
 [Adjazenzlistendarstellung](http://de.wikipedia.org/wiki/Repr%C3%A4sentation_von_Graphen_im_Computer#Adjazenzliste_.28Nachbarschaftsliste.29)
-verwenden. Eine ganz einfache Implementierung, die allerdings *keine* Versionierung
+verwenden. Eine ganz einfache Implementierung, die allerdings imperativ implementiert ist
+und daher *keine* Versionierung
 unterstützt, könnte zum Beispiel wie folgt aussehen:
 
     // Typalias: Eine Liste befreundeter Benutzer
@@ -94,7 +103,7 @@ unterstützt, könnte zum Beispiel wie folgt aussehen:
       }
     }
 
-Die Aussage ist wie erwartet:
+Die Ausgabe ist wie erwartet:
 
     1
     2
@@ -278,7 +287,8 @@ Nicht nur Graphen lassen sich mithilfe effizient persistent implementieren.
 Praktisch alle wichtigen Datenstrukturen, wie Listen, sortierte Folgen, Suchbäume
 und hashbasierte assoziative Datenstrukten besitzen persistente Analoga. Sie kommen
 vor allem in funktionalen Sprachen zum Einsatz und bieten Vorteile in der parallelen
-Programmierung, da Seiteneffekte vermieden werden.
+Programmierung, da Seiteneffekte vermieden werden. Die Abwesenheit von Seiteneffekten
+führt ebenfalls zu besser verständlichem Code.
 
 Für weitere Informationen dazu sei zum Beispiel auf
 einen [Blogartikel von Debasish Ghoshs](http://debasishg.blogspot.de/2010/05/grokking-functional-data-structures.html)
