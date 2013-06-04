@@ -14,7 +14,7 @@ Kompiler verwenden, um über Templates mit JavaScript HTML zu erzeugen. Außerde
 <!-- more start -->
 
 Zunächst möchte ich mich nocheinmal kurz auf den letzten Teil beziehen: Mit Hilfe von [TemplateHaskell](http://www.haskell.org/ghc/docs/7.0.2/html/users_guide/template-haskell.html) und der JSON-Biliothek [aeson](https://github.com/bos/aeson) haben für unsere
-Datentypen Persistenz und JSON Serialisierung erzeugt. Dann haben wir mit [scotty](https://github.com/xich/scotty) auf einfache Art und Weise HTTP-Routen erzeugt um auf unsere persitenten serialisierten Objekte zugreifen zu können. Zum Schluss hatten wir einen fertigen Server mit REST-API, den man wie folgt ansteuern konnte:
+Datentypen Persistenz und JSON-Serialisierung erzeugt. Dann haben wir mit [scotty](https://github.com/xich/scotty) auf einfache Art und Weise HTTP-Routen erzeugt um auf unsere persistent serialisierten Objekte zugreifen zu können. Zum Schluss hatten wir einen fertigen Server mit REST-API, den man wie folgt ansteuern konnte:
 
 Beiträge hinzufügen:
 {% highlight bash %}
@@ -28,15 +28,17 @@ $ curl http://localhost:8085/news
 [{"title":"Test","author":"Alex","tags":["a","b"],"id":5,"content":"Test Beitrag"}]
 {% endhighlight %}
 
-Beginnen wir nun mit den HTML Frontend für unsere Anwendung. Ich denke, das statische HTML und CSS Grundgerüst muss an dieser Stelle nicht weiter erläutert werden, es ist im [GitHub Repository des Mini Blogs](https://github.com/agrafix/HaskellBlog/blob/master/static/index.html) zu finden.
+Beginnen wir nun mit den HTML-Frontend für unsere Anwendung. Ich denke, das statische HTML und CSS Grundgerüst muss an dieser Stelle nicht weiter erläutert werden, es ist im [GitHub Repository des Mini-Blogs](https://github.com/agrafix/HaskellBlog/blob/master/static/index.html) zu finden.
 
-Schreiben wir nun also mit der SOY-Template Sprache unsere Templates:
+Nun kommen die bereits erwähnten SOY-Templates ins Spiel. Die SOY-Template Sprache ist eine Mischung aus so genannten "SOY-Commands" und einfachem HTML. Daraus kompiliert der SOY-Compiler dann eine JavaScript-Datei, in der alle Templates eine JavaScript-Funktion darstellen. Die Funktion nimmt als Parameter unter Anderem die Template-Parameter (s.u.) und gibt dann das gerenderte Template als String zurück. Der Kompiliervorgang geschieht wärend dem Deployment, sodass man in seinem JavaScript-Controller dann ganz einfach auf die Templates zugreifen kann. 
+
+Schreiben wir nun also unser erstes Template:
 
 {% highlight html %}
 {namespace BlogUI autoescape="true"}
 {% endhighlight %}
 
-Der Namespace (in Wirklichkeit einfach ein JavaScript Objekt), in dem später alle Templates als JavaScript Funktionen definiert sind, wird `BlogUI` genannt. Mit `autoescape="true"` aktivieren wir die sehr nützlichen autoescape Features von SOY-Templates. Wie diese genau funktioniert, kann man [hier](https://developers.google.com/closure/templates/docs/security) nachlesen.
+Der Namespace (in Wirklichkeit einfach ein JavaScript-Objekt), in dem später alle Templates als JavaScript-Funktionen definiert sind, wird `BlogUI` genannt. Mit `autoescape="true"` aktivieren wir die sehr nützlichen autoescape Features von SOY-Templates. Wie diese genau funktioniert, kann man [hier](https://developers.google.com/closure/templates/docs/security) nachlesen. Weiter geht's mit dem ersten Template:
 
 {% highlight html %}
 /**
@@ -55,7 +57,7 @@ Der Namespace (in Wirklichkeit einfach ein JavaScript Objekt), in dem später al
 {% endhighlight %}
 
 Unser erstes Template erzeugt eine Seite mit Blogbeiträgen. Zunächst ist vor jedem Template ein Kommentar notwendig. Dieser enthält eine optionale Beschreibung des Templates, und die Liste aller Parameter. Mit `{template .news}` beginnen wir nun ein neues Template im aktuellem Namespace
-und nennen es `news`. Die foreach-Syntax ist an die von JavaScript angelehnt, in obiger Form kann man die Schleife als ein Haskell `map` verstehen: Auf alle Elemente in der Liste `$news` wird das Template `newsBit` angewendet. Zum Schluss prüfen wir noch, ob es überhaupt Beiträge gibt, und wenn nicht geben wir die Meldung "Keine Beiträge vorhanden" aus - damit der Blog nicht komplett leer ist. Zur Erinnerung: die JSON-Struktur eines Beitrags sieht wie folgt aus:
+und nennen es `news`. Die foreach-Syntax ist an die von JavaScript angelehnt, in obiger Form kann man die Schleife als ein Haskell `map` verstehen: Auf alle Elemente in der Liste `$news` wird das Template `newsBit` angewendet. Zum Schluss prüfen wir noch, ob es überhaupt Beiträge gibt, und wenn, nicht geben wir die Meldung "Keine Beiträge vorhanden" aus - damit der Blog nicht komplett leer ist. Zur Erinnerung: die JSON-Struktur eines Beitrags sieht wie folgt aus:
 
 {% highlight javascript %}
 { "title":"Test",
@@ -66,7 +68,7 @@ und nennen es `news`. Die foreach-Syntax ist an die von JavaScript angelehnt, in
 }
 {% endhighlight %}
 
-Das werden wir nun zum Rendern von Beiträgen ausnutzen:
+Das werden wir nun zum Rendern von Beiträgen im nächsten Template ausnutzen:
 
 {% highlight html %}
 /**
@@ -113,7 +115,7 @@ $('#addCommentFor{$id}').submit(function (e) /*{literal}*/{/*{/literal}*/
 {% endhighlight %}
 
 Das Template für einen einzelnden Blogbeitrag zeigt weitere Funktionen der SOY-Templates: Mit `{$variable}` liest man den Inhalt einer
-Variable und zeigt ihn an - hier kommt dann auch unser autoescape ins Spiel! Enthält die Variable `$title` etwa den Wert `<script>alert('alert');</script>`, wird die Ausgabe automatisch "escaped". Außerdem kann man der Anzeige von Variablen noch so genannte [Print Directives](https://developers.google.com/closure/templates/docs/functions_and_directives#print_directives) mitgeben, wie zum Beispiel bei `{$content|changeNewlineToBr}`. In diesem Fall wird aus einem `\n` Zeilenumbruch ein HTML `<br>`.  Alles weitere ist einfach HTML und JavaScript, bis auf den `{literal}`-Blocks. Diese sorgen dafür, dass der SOY-Kompiler dessen Inhalt ignoriert, und es keine Probleme mit den geschweiften Klammern gibt. Mit der jQuery Notation `$('...')` kann man den DOM-Baum traversieren und ein Element wählen. Mehr zu der Syntax findet man [hier](http://api.jquery.com/category/selectors/). Das `Blog` Objekt ist unser Controller, welcher weiter unten erklärt wird.
+Variable und zeigt ihn an - hier kommt dann auch unser autoescape ins Spiel! Enthält die Variable `$title` etwa den Wert `<script>alert('alert');</script>`, wird die Ausgabe automatisch "escaped". Außerdem kann man der Anzeige von Variablen noch so genannte [Print Directives](https://developers.google.com/closure/templates/docs/functions_and_directives#print_directives) mitgeben, wie zum Beispiel bei `{$content|changeNewlineToBr}`. In diesem Fall wird aus einem `\n` Zeilenumbruch ein HTML `<br>`.  Alles weitere ist einfach HTML und JavaScript, bis auf den `{literal}`-Blocks. Diese sorgen dafür, dass der SOY-Kompiler dessen Inhalt ignoriert, und es keine Probleme mit den geschweiften Klammern gibt. Mit der jQuery Notation `$('...')` kann man den DOM-Baum traversieren und ein Element wählen. Mehr zu der Syntax findet man [hier](http://api.jquery.com/category/selectors/). Das `Blog`-Objekt ist unser Controller, welcher weiter unten erklärt wird.
 
 {% highlight html %}
 /**
@@ -180,7 +182,7 @@ Blog.loadEntries = function () {
 
 Folgende weitere Funktionen unterstützt unserer Controller. Da die Implementierung relativ einfach ist
 haben wir sie hier aus Gründen der Übersichtlichkeit weggelassen. Sie finde aber den kompletten Code
-im [GitHub Repository des Mini Blogs](https://github.com/agrafix/HaskellBlog/blob/master/static/app.js).
+im [GitHub Repository des Mini-Blogs](https://github.com/agrafix/HaskellBlog/blob/master/static/app.js).
 {% highlight javascript %}
 Blog.addEntry = function (author, title, content, tags) { /* ... */ }
 Blog.storeComment = function (newsId, author, text, onOk) { /* ... */ }
@@ -210,4 +212,4 @@ Nun wäre das Grundgerüst für den Blog fertig! Wir haben also mit rund 200 Zei
 
 Den gesammten Code für den Blog findet man im bereits erwähten [GitHub Repository](https://github.com/agrafix/HaskellBlog/) mit entsprechender Cabal-Datei. Den Blog kann man also einfach mit `cabal configure && cabal build` bauen und dann starten.
 
-Natürlich kann man einen Blog mit noch weniger Haskell-Code schreiben. Wie das geht und wie man dem Blog noch Benutzerauthentifizierung und Sessions spendiert werde ich in einem weiteren Beitrag erklären.
+Natürlich kann man einen Blog mit noch weniger Haskell-Code schreiben. Wie das geht und wie man dem Blog noch Benutzerauthentifizierung und Sessions spendiert, werde ich in einem weiteren Beitrag erklären.
