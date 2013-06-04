@@ -3,7 +3,7 @@ layout: post
 description:
 title: "Warum funktional?"
 author: stefan-wehr
-tags: []
+tags: ["persistente Datenstrukturen"]
 meta_description: Der Artikel beschreibt die Vorzüge funktionaler Programmierprinzipien für nicht-funktionale Sprachen. Dazu wird Objective-C Code aus der Praxis als Beispiel verwendet.
 ---
 
