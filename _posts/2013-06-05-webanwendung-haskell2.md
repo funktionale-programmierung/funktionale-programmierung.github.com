@@ -6,14 +6,15 @@ author: alexander-thiemann
 tags: ["web", "Haskell", "JavaScript", "SOY", "HTTP", "PHP"]
 ---
 
-Im [letzten Teil](http://funktionale-programmierung.de/2013/04/04/webanwendung-haskell.html) des Artikels haben wir einen einfachen Server mit Rest-API in Haskell geschrieben.
+Im [ersten Teil](http://funktionale-programmierung.de/2013/04/04/webanwendung-haskell.html) des Artikels haben wir in Haskkel einen einfachen Server mit Rest-API 
+für eine Blogging-Software geschrieben.
 Nun möchten wir noch ein einfaches Frontend dafür bauen. Wie bereits erwähnt wollen wir hier unter
 anderem die [Soy-Templates-Sprache von Google](https://developers.google.com/closure/templates/) und deren
 Kompiler verwenden, um über Templates mit JavaScript HTML zu erzeugen. Außerdem werden wir einen einfachen Controller in JavaScript schreiben, der die entsprechenden Funktionen zusammenfügt und mit Daten versorgt.
 
 <!-- more start -->
 
-Zunächst möchte ich mich nocheinmal kurz auf den letzten Teil beziehen: Mit Hilfe von [TemplateHaskell](http://www.haskell.org/ghc/docs/7.0.2/html/users_guide/template-haskell.html) und der JSON-Biliothek [aeson](https://github.com/bos/aeson) haben für unsere
+Zunächst möchte ich mich nocheinmal kurz auf den ersten Teil beziehen: Mit Hilfe von [TemplateHaskell](http://www.haskell.org/ghc/docs/7.0.2/html/users_guide/template-haskell.html) und der JSON-Biliothek [aeson](https://github.com/bos/aeson) haben für unsere
 Datentypen Persistenz und JSON-Serialisierung erzeugt. Dann haben wir mit [scotty](https://github.com/xich/scotty) auf einfache Art und Weise HTTP-Routen erzeugt um auf unsere persistent serialisierten Objekte zugreifen zu können. Zum Schluss hatten wir einen fertigen Server mit REST-API, den man wie folgt ansteuern konnte:
 
 Beiträge hinzufügen:
