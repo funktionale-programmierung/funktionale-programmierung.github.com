@@ -6,7 +6,7 @@ author: alexander-thiemann
 tags: ["web", "Haskell", "JavaScript", "SOY", "HTTP", "PHP"]
 ---
 
-Im [ersten Teil](http://funktionale-programmierung.de/2013/04/04/webanwendung-haskell.html) des Artikels haben wir in Haskkel einen einfachen Server mit Rest-API 
+Im [ersten Teil](http://funktionale-programmierung.de/2013/04/04/webanwendung-haskell.html) des Artikels haben wir in Haskell einen einfachen Server mit Rest-API 
 für eine Blogging-Software geschrieben.
 Nun möchten wir noch ein einfaches Frontend dafür bauen. Wie bereits erwähnt wollen wir hier unter
 anderem die [Soy-Templates-Sprache von Google](https://developers.google.com/closure/templates/) und deren
