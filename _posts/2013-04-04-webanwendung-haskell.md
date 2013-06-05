@@ -384,4 +384,4 @@ $ curl http://localhost:8085/news
 [{"title":"Test","author":"Alex","tags":["a","b"],"id":5,"content":"Test Beitrag"}]
 {% endhighlight %}
 
-Das war's für heute, den JavaScript/HTML-Client implementieren wir in Teil 2!
+Das war's für heute, den JavaScript/HTML-Client implementieren wir in [Teil 2](http://funktionale-programmierung.de/2013/06/05/webanwendung-haskell2.html)!
