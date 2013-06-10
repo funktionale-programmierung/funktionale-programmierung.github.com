@@ -3,7 +3,7 @@ layout: post
 description: Zeitreisen mit persistenten Datenstrukturen
 title: "Zeitreisen mit persistenten Datenstrukturen"
 author: niklas-baumstark
-tags: ["Persistente Datenstrukturen", "C++"]
+tags: ["persistente Datenstrukturen", "C++"]
 ---
 
 # Zeitreisen mit persistenten Datenstrukturen
@@ -14,8 +14,8 @@ der Kommunikation ist für die Ewigkeit auf Servern gespeichert und kann jederze
 abgerufen werden.
 
 In einem Anflug von Nostalgie erinnern wir uns an die guten alten Zeiten um das Jahr
-2013 und fragen uns, warum unsere Lieblingsplattform es uns nicht erlaubt,
-abzufragen wer denn damals unsere "Freunde" und Freundesfreunde waren.
+2013 und fragen uns, warum unsere Lieblingsplattform es uns nicht erlaubt abzufragen,
+wer denn damals unsere "Freunde" und Freundesfreunde waren.
 
 Sicherlich nicht, weil das nicht möglich ist. Virtuelle "Zeitreisen" wie diese
 sind durchaus möglich und in vielen Fällen sogar effizient realisierbar. Am
@@ -112,7 +112,7 @@ nächstes Ziel ist es, diese Datenstruktur persistent zu machen.
 
 ## Ein erster Versuch
 
-Die triviale Art und Weise, Persistenz zu erzielen ist sehr einfach zu
+Wir können eine einfache Art von Persistenz tatsächlich ganz einfach
 implementieren: Wir kopieren bei jedem Update die komplette Datenstruktur und
 verändern nur die Kopie. Der veränderte Code könnte dann z.B. so aussehen:
 
@@ -189,7 +189,7 @@ stattdessen dafür, unser Array in <span>\(k\)</span> gleichgroße Teile aufzute
 welche wiederum von einem höhergeordneten Array der Größe <span>\(k\)</span> aus referenziert
 werden (Level 1):
 
-    [TODO Abb.]
+![Indirektion bei persistentem Array](/files/persistente-datenstrukturen/indirection.png)
 
 Klar ist, dass wir noch immer in konstanter Zeit Freundesabfragen machen können,
 wir benötigen diesmal eben zwei anstatt wie zuvor nur eine Pointerauflösung.
@@ -201,7 +201,7 @@ auf die geänderten Blöcke ändern. Die Blockgröße beträgt ungefähr <span>\
 insgesamt müssen wir also Speicher der Größenordnung <span>\(\mathcal{O}(k + \frac{n}{k})\)</span> kopieren.
 
 Idealerweise wählen wir daher <span>\(k = \sqrt{n}\)</span>, sodass bei jedem Update nur noch
-<span>\(\mathcal{O}(\sqrt{n})\)</span> Speicher kopiert werden muss. Da in unserem Beispiel <span>\(1000000\)</span> Benutzer
+<span>\(\mathcal{O}(\sqrt{n})\)</span> Speicher kopiert werden muss. Da in unserem Beispiel <span>\(10^6\)</span> Benutzer
 vorkommen, entscheiden wir uns für die Blockgröße <span>\(1000\)</span>:
 
 {% highlight cpp %}
@@ -279,9 +279,9 @@ genau einmal.
 "Echte" Implementierungen von persistenten Arrays, wie sie hier kurz vorgestellt
 wurden, benutzen verschiedene Kompromisse und Tricks, um die Laufzeit der wichtigen
 Operationen in der Realität möglichst gering zu halten. Als Beispiel sei hier auf
-die [Clojure-Implementierung von PersistentVector](http://blog.higher-order.net/2009/02/01/understanding-clojures-persistentvector-implementation/)
+die [Clojure-Implementierung von `PersistentVector`](http://blog.higher-order.net/2009/02/01/understanding-clojures-persistentvector-implementation/)
 verwiesen, die mit <span>\(m = \log_{32} n\)</span> arbeitet und damit die
-Parallelverarbeitung der CPU auf Wortebene und auch den CPU-Cache optimal
+Parallelverarbeitung der CPU auf Wortebene und auch den schenllen CPU-Cache optimal
 ausnutzt.
 
 ## Ausblick
@@ -297,3 +297,6 @@ Für weitere Informationen dazu sei zum Beispiel auf
 einen [Blogartikel von Debasish Ghoshs](http://debasishg.blogspot.de/2010/05/grokking-functional-data-structures.html)
 verwiesen und auf die [exzellente Vorlesung](http://courses.csail.mit.edu/6.851/spring12/lectures/L01.html)
 von MIT-Professor Erik Demaine zum Thema persistente Datenstrukturen.
+
+Den gesamten Code der oben gezeigten Beispiele kann natürlich wie immer
+[zum Ausprobieren heruntergeladen werden](/files/persistente-datenstrukturen/persistent.zip)!
