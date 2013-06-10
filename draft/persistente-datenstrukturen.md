@@ -197,7 +197,7 @@ wir benötigen diesmal eben zwei anstatt wie zuvor nur eine Pointerauflösung.
 Interessanter ist die Frage, was wir bei einem Update nun alles tun müssen.
 Zunächst müssen wir den betroffenen Block im Level-2-Array
 kopieren. Wir müssen zudem das Level-1-Array kopieren, da sich die Zeiger
-auf die geänderten Blöcke ändern. Die Blockgröße beträgt ungefähr <span>\(\frac{n}{k}\)</span>
+auf die geänderten Blöcke ändern. Die Blockgröße beträgt ungefähr <span>\(\frac{n}{k}\)</span>,
 insgesamt müssen wir also Speicher der Größenordnung <span>\(\mathcal{O}(k + \frac{n}{k})\)</span> kopieren.
 
 Idealerweise wählen wir daher <span>\(k = \sqrt{n}\)</span>, sodass bei jedem Update nur noch
@@ -281,7 +281,7 @@ wurden, benutzen verschiedene Kompromisse und Tricks, um die Laufzeit der wichti
 Operationen in der Realität möglichst gering zu halten. Als Beispiel sei hier auf
 die [Clojure-Implementierung von `PersistentVector`](http://blog.higher-order.net/2009/02/01/understanding-clojures-persistentvector-implementation/)
 verwiesen, die mit <span>\(m = \log_{32} n\)</span> arbeitet und damit die
-Parallelverarbeitung der CPU auf Wortebene und auch den schenllen CPU-Cache optimal
+Parallelverarbeitung der CPU auf Wortebene und auch den schnellen CPU-Cache optimal
 ausnutzt.
 
 ## Ausblick
