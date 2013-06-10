@@ -27,12 +27,11 @@ entwickeln.
 <!-- more start -->
 
 Im Folgenden werden wir den Begriff der *persistenten Datenstruktur* verwenden. Er
-ist nicht zu verwechseln mit dem Persistenzbegriff aus der Datenhaltung. Was
-wir im Kontext dieses Blogartikels darunter verstehen, ist eine Datenstruktur
-mit Lese- und Update-Operationen und der Eigenschaft, dass alle Update-Operationen
-die *alte Version* der Datenstruktur zusätzlich zur Verfügung stellen. Das erlaubt
-uns, auch nach einem Update noch in die Vergangenheit zu blicken und alle alten
-Zustände, also die komplette Historie der Datenstruktur einzusehen.
+ist nicht zu verwechseln mit dem Persistenzbegriff aus der Datenhaltung. Man versteht
+darunter eine Datenstruktur mit Lese- und Update-Operationen und der Eigenschaft,
+dass alle Update-Operationen die *alte Version* der Datenstruktur zusätzlich zur
+Verfügung stellen. Das erlaubt uns, auch nach einem Update noch in die Vergangenheit
+zu blicken und alle alten Zustände, also die komplette Historie der Datenstruktur einzusehen.
 
 Neben dieser Rückblick-Funktionalität erlauben persistente Datenstrukturen vor allem, ohne
 destruktive Update-Operationen zu arbeiten. In einem
