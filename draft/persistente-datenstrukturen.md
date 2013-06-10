@@ -286,12 +286,10 @@ ausnutzt.
 
 ## Ausblick
 
-Nicht nur Graphen lassen sich mithilfe effizient persistent implementieren.
+Natürlich lassen sich nicht nur Graphdatenstrukturen persistent implementieren.
 Praktisch alle wichtigen Datenstrukturen, wie Listen, sortierte Folgen, Suchbäume
 und hashbasierte assoziative Datenstrukten besitzen persistente Analoga. Sie kommen
-vor allem in funktionalen Sprachen zum Einsatz und bieten Vorteile in der parallelen
-Programmierung, da Seiteneffekte vermieden werden. Die Abwesenheit von Seiteneffekten
-führt ebenfalls zu besser verständlichem Code.
+vor allem in funktionalen Sprachen zum Einsatz.
 
 Für weitere Informationen dazu sei zum Beispiel auf
 einen [Blogartikel von Debasish Ghoshs](http://debasishg.blogspot.de/2010/05/grokking-functional-data-structures.html)
