@@ -14,7 +14,7 @@ Texten.
 
 JasperReports bietet nun unter anderem eine API an, mit der man
 programmatisch einen Report zusammenbauen kann. Diese API lässt aber
-einiges zu wünschen übrig, was uns dazu veranlasst hat eine
+einiges zu wünschen übrig, was uns dazu veranlasst hat eine rein
 funktionale API in Scala davor zu schalten, die dem Prinzip der
 _Kompositionalität_ folgt.
 
@@ -56,7 +56,7 @@ def myReport() = {
 }
 {% endhighlight %}
 
-Das Beispiel definiert zunächst eine Funktion die ein sogenanntes
+Der Code definiert zunächst eine Funktion die ein sogenanntes
 _Band_ mit dem Schriftzug unserer Beispiel-Firma erzeugt und
 zurückgibt. Ein Band ist in JasperReports eine Art Abschnitt des
 Reports, der immer die volle Seitenbreite, aber nur eine bestimmte
@@ -67,32 +67,34 @@ Firmen-Banner als Kopfzeile eines ansonsten leeren Reports.
 ## CRUD vs. Nicht-Mutierbarkeit
 
 Wie man sieht ist die JasperReports-API sehr imperativ gestaltet,
-indem alle Elemente dem sogenannten _CRUD_-Pattern folgen: CRUD steht
+indem die Komponenten dem sogenannten _CRUD_-Pattern folgen: CRUD steht
 für Create-Read-Update-Delete, und zeigt sich hier darin dass alle
 Objekte zunächst "leer" erzeugt werden, und anschließend mit vielen
-Set- und Add-Funktionen mit dem Inhalt gefüllt werden müssen den wir
+Set- und Add-Funktionen mit dem Inhalt gefüllt werden müssen, den wir
 haben wollen.
 
 Das ist, für einen funktionalen Programmierer, aber zunächst mal nur
-lästig. Allerdings wird das in sehr vielen APIs dieser Art an der
-einen oder anderen Stelle zum Problem. Entweder dadurch dass
-"Back-References" hinzugefügt werden: ein Beispiel dafür ist in der
-weit verbreiteten API [XML-DOM](http://www.w3schools.com/dom/) zu
-finden. Jedes XML-Element hat dort eine Referenz auf den Vater-Knoten
-im XML-Baum. Dadurch kann man selbe XML-Element-Objekt nicht an
-mehrere Stellen in den XML-Baum hängen. Hat man die Erstellung von
-Teilbäumen in Funktionen ausgelagert, ist man quasi gezwungen immer
-erst noch eine tiefe Kopie dieser Teilbäume zu erzeugen, bevor man sie
-verwenden kann.
+lästig und fördert einen unübersichtlichen "flachen" Code (siehe auch
+[hier](http://code.jaspersoft.com/svn/repos/jasperreports/tags/jr-5-1-0/jasperreports/demo/samples/noxmldesign/src/NoXmlDesignApp.java)
+für ein längeres Beispiel in den JasperReport Sourcen). Allerdings
+wird das in sehr vielen APIs dieser Art an der einen oder anderen
+Stelle zum Problem. Entweder dadurch, dass "Back-References"
+hinzugefügt werden: ein Beispiel dafür ist in der weit verbreiteten
+API [XML-DOM](http://www.w3schools.com/dom/) zu finden. Jedes
+XML-Element hat dort eine Referenz auf den Vater-Knoten im XML-Baum.
+Dadurch kann man das selbe XML-Element-Objekt nicht an mehrere Stellen
+in den XML-Baum hängen. Das führt zu umständlichen Abstraktionen und
+dazu, dass viel zu oft tiefe Kopien und "Imports" von Knoten gemacht
+werden, um auf "Nummer sicher" zu gehen.
 
-Eine andere Folge des CRUD-Pattern ist, dass Bibliotheks-Entwickler
+Eine andere Folge des CRUD-Patterns ist, dass Bibliotheks-Entwickler
 offenbar zu gerne noch weiteren interen Zustand in die (ohnehin schon)
 mutierbaren Objekte einfügen. Das sieht man den Klassen und Objekten
 dann überhaupt nicht mehr an, und führt im besten Fall noch zu einem
 Kommentar in der Referenz-Dokumentation, wie beispielsweise in der
 Klasse
 [GridData](http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fswt%2Flayout%2FGridData.html)
-aus dem Eclipse-Projekt.
+aus dem Eclipse-Projekt, oft aber zu obskuren Fehlern.
 
 Diese Problemen für die Nutzer einer API, beziehungsweise
 Fettnäpfchen für die Weiterentwicklung einer Bibliothek, kann man sehr
@@ -151,9 +153,9 @@ Text-Elements die Eigenschaften des Style-Objekts, das an `setStyle`
 übergeben wird, überhaupt keine Rolle spielen! Die einzige Eigenschaft
 die er davon nutzt ist der `Name` des Stils. Der Gesamt-Report, das
 `JasperDesign`-Objekt, hat dann wiederum eine "globale" Liste von
-Stilen; in diesem sucht die JasperReports-Engine nach einem
-Stil-Objekt mit dem selben Namen und nimmt dessen Eigenschaften um das
-Text-Element auszugestalten.
+Style-Objekten. In diesem sucht die JasperReports-Engine nach einem
+Objekt mit dem selben Namen und nur dessen Eigenschaften sind dann
+relevant um das Text-Element auszugestalten.
 
 Man kann also diese Styles nicht verwenden, wenn man gleichzeitig die
 konkrete Gestalt des Firmen-Banners in einer Funktion "verstecken"
@@ -208,10 +210,10 @@ können.
 
 Was in obigem Beispiel schon zu sehen ist, ist die Erweiterung um
 die Möglichkeit Positionen und Größen nicht nur in Pixeln anzugeben.
-Weitere Möglichkeiten vordefinierte sind `mm`, `cm` und `inch`. Eine
+Weitere vordefinierte Möglichkeiten sind `mm`, `cm` und `inch`. Eine
 größere Erleichterung für die Komponierbarkeit ist allerdings die
-Möglichkeit für Breite und horizontale Position prozentuale Angaben zu
-machen:
+Möglichkeit für Breite und horizontale Position prozentuale Angaben
+machen zu können:
 
 {% highlight scala %}
 StaticText(
