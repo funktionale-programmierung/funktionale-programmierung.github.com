@@ -14,8 +14,11 @@ Texten.
 
 JasperReports bietet nun unter anderem eine API an, mit der man
 programmatisch einen Report zusammenbauen kann. Diese API lässt aber
-einiges zu wünschen übrig, was uns dazu veranlasst hat eine rein
-funktionale API in Scala davor zu schalten, die dem Prinzip der
+einiges zu wünschen übrig, was auch die Macher der Bibliothek
+[DynamicJasper](http://dynamicjasper.com/) erkannt haben, die aber
+immer noch sehr imperativ ist. Das hat uns dazu veranlasst eine rein
+funktionale API in Scala zu implementieren, die auf JasperReports
+aufbaut, aber den Prinzipien der Nicht-Mutierbarkeit und der
 _Kompositionalität_ folgt.
 
 In diesem Beitrag demonstriere ich die Probleme mit der
@@ -27,32 +30,32 @@ Grundprinzipien beim Design von APIs beachtet werden sollten.
 Als Einstieg direkt ein kleines Beispiel für die Verwendung der
 JasperReports-API, in der Programmiersprache [Scala]:
 
-{% highlight scala %}
-def myCompanyBanner() = {
-  val band = new JRDesignBand()
-  band.setHeight(30)
+{% highlight java %}
+JRDesignBand myCompanyBanner() {
+  JRDesignBand band = new JRDesignBand();
+  band.setHeight(30);
   
-  val t = new JRDesignStaticText()
-  t.setFontName("Helvetica")
-  t.setFontSize(12)
-  t.setHeight(12)
-  t.setWidth(200)
-  t.setX(0)
-  t.setY(0)
-  t.setText("My Company")
-  band.addElement(t)
+  JRDesignStaticText t = new JRDesignStaticText();
+  t.setFontName("Helvetica");
+  t.setFontSize(12);
+  t.setHeight(12);
+  t.setWidth(200);
+  t.setX(0);
+  t.setY(0);
+  t.setText("My Company");
+  band.addElement(t);
 
-  band
+  return band;
 }
 
-def myReport() = {
-  val d = new JasperDesign()
-  d.setName("myreport")
+JasperDesign myReport() {
+  JasperDesign d = new JasperDesign();
+  d.setName("myreport");
 
-  val banner = myCompanyBanner()  
-  d.setPageHeader(banner)
+  JRDesignBand banner = myCompanyBanner();
+  d.setPageHeader(banner);
 
-  d
+  return d;
 }
 {% endhighlight %}
 
@@ -110,25 +113,25 @@ public void setStyle(JRDesignStyle style)
 
 Und die Klasse [`JRDesignStyle`](http://jasperreports.sourceforge.net/api/net/sf/jasperreports/engine/design/JRDesignStyle.html) scheint alles zu enthalten was wir
 brauchen, also schreiben wir doch eine Funktion die ein solches
-Style-Objekt erzeugt, and ändern unsere Funktion `mkCompanyBanner`
+Style-Objekt erzeugt, and ändern unsere Funktion `myCompanyBanner`
 folgendermaßen:
 
-{% highlight scala %}
-def boldSmallText() = {
-  val st = new JRDesignStyle()
-  st.setName("bold-small")
-  st.setFontName("Helvetica")
-  st.setFontSize(12)
-  st.setBold(true)
-  st
+{% highlight java %}
+JRDesignStyle boldSmallText() {
+  JRDesignStyle st = new JRDesignStyle();
+  st.setName("bold-small");
+  st.setFontName("Helvetica");
+  st.setFontSize(12);
+  st.setBold(true);
+  return st;
 }
 
-def myCompanyBanner() = {
+JRDesignBand myCompanyBanner() {
   ...
-  val t = new JRDesignStaticText()
-  val st = boldSmallText()
-  t.setStyle(st)
-  t.setHeight(12)
+  JRDesignStaticText t = new JRDesignStaticText();
+  JRDesignStyle st = boldSmallText();
+  t.setStyle(st);
+  t.setHeight(12);
   ...
 }
 {% endhighlight %}
@@ -168,7 +171,39 @@ Verständnis der API, ermöglicht eine freie (Wieder-) Verwendung der
 Objekte, erleichtert Tests und ermöglicht nicht zuletzt den Zugriff
 auf die Objekte aus mehreren Threads heraus.
 
-FIXME: Hier fehlt noch eine allgemeine Einführung in die API
+Eine weitere Eigenschaft der Nicht-Mutierbarkeit ist, dass über die
+Konstruktoren bereits alle Eigenschaften eines Objekts gesetzt werden
+können. Dadurch ergibt sich eine Verschachtelung des Codes, die direkt
+die resultierende Baum-Struktur der Report-Elemente wiederspiegelt.
+Dies ist wesentlich lesbarer und verständlicher als die flache
+Struktur des Java-Codes:
+
+{% highlight scala %}
+val myCompanyBanner = Band(
+  height = 30 px,
+  content = StaticText(
+    x = 0 px,
+    y = YPos.float(0 px),
+    width = 200 px,
+    height = Height.fixed(12 px),
+    text = "My Company"
+  )
+)
+
+val myReport = Report(
+  name = "myreport",
+  page = Page(
+    header = Some(myCompanyBanner)
+  )
+)
+{% endhighlight %}
+
+Diese Beschreibung des Reports und seiner Elemente, transformiert
+unsere Bibliothek anschließend in ein Report-Objekt aus der
+Jasper-Bibliothek, das dann weiter verarbeitet werden kann.
+
+Der obige Beispielcode ignoriert noch das Thema der Schriftart, bzw.
+der Stils, was wir in folgendem Abschnitt nachholen.
 
 ## Styles
 
@@ -188,52 +223,43 @@ val boldSmallText = Style(
 
 val myCompanyBanner = Band(
   height = 30 px,
-  splitType = SplitTypeEnum.STRETCH,
   content = StaticText(
-    x = 0 px,
-    y = YPos.float(0 px),
-    width = 200 px,
-    height = Height.fixed(12 px),
+    ...
     style = boldSmallText,
     text = "My Company"
   )
 )
-
-def myReport() = Report(
-  name = "myreport",
-  page = Page(header = Some(myCompanyBanner))
-)
 {% endhighlight %}
 
-Entscheidend ist die sogenannte _Komponierbarkeit_ der Elemente. Der
-Darstellungsstil ist durch das Text-Element selbst definiert, und
-hängt nicht davon ab in welchen Report es eingebaut wird. Das
-ermöglicht dann auch die Abstraktion, in dem Sinn dass man hier nicht
-wissen muss aus was `myCompanyBanner` besteht, um es benutzen zu
-können.
+Entscheidend ist die sogenannte _Komponierbarkeit_ oder
+_Kompositionalität_ der Elemente. Der Darstellungsstil ist durch das
+Text-Element selbst definiert, und hängt nicht davon ab in welchen
+Report es eingebaut wird. Das ermöglicht dann auch die Abstraktion, in
+dem Sinn dass man hier nicht wissen muss aus was `myCompanyBanner`
+besteht, um es benutzen zu können.
 
-## Positionen und Größen
+## Kompositionalität
 
-Was in obigem Beispiel schon zu sehen ist, ist die Erweiterung um
-die Möglichkeit Positionen und Größen nicht nur in Pixeln anzugeben.
-Weitere vordefinierte Möglichkeiten sind `mm`, `cm` und `inch`. Eine
-größere Erleichterung für die Komponierbarkeit ist allerdings die
-Möglichkeit für Breite und horizontale Position prozentuale Angaben
-machen zu können:
+Zum Abschluss noch etwas theoretischer Hintergrund:
 
-{% highlight scala %}
-StaticText(
-  width = 100 percent,
-  height = Height.fixed(12 px),
-  style = boldSmallText,
-  text = "My Company"
-)
-{% endhighlight %}
+Der Begriff Kompositionalität stammt aus der Semantikforschung Anfang
+des 20. Jahrhunderts, und ist dort auch als das
+[Frege-Prinzip](http://de.wikipedia.org/wiki/Frege-Prinzip) bekannt.
+Er steht dafür, dass sich die Bedeutung eines komplexen Ausdrucks allein aus
+den Bedeutungen der Teilausdrücke und den Kombinatoren zusammensetzt,
+mit denen diese Teilausdrücke zum Gesamtausdruck zusammengefügt sind.
 
-Ein solches Text-Element nimmt immer die komplette zur Verfügung
-stehende Breite ein, egal was der Report für Seitenränder definiert,
-ob Hoch- oder Querformat oder das Text-Element in einer kleinen
-Tabellenspalte verwendet wird.
+Andersherum bedeutet es damit auch, dass sich die Bedeutung eines
+Ausdrucks nicht ändert, wenn er in verschiedenen Kontexten in größeren
+Ausdrücken verwendet wird.
+
+Daraus folgt eine wichtige Eigenschaft für das Programmieren, nämlich
+dass man "Gleiches durch gleiches ersetzen" kann. Bei einer
+kompositionalen API macht es keinen Unterschied, ob man ein neues
+Objekt mit gewissen Eigenschaften erzeugt, oder ein bestehendes
+_gleiches_ Objekt wiederverwendet. Dies ist das Sprungbrett für
+mächtige Funktionen und Tools, die einem das Erstellen von Reports
+noch weiter erleichtern können.
 
 ## ScalaJasper
 
@@ -242,6 +268,6 @@ Diese und weitere Probleme der JasperReports-API haben wir mit
 aber genauso auch durch Entfernen von "Irrwegen" aus der
 JasperReports-API.
 
-Der Sourcecode der Bibliothek ist seit kurzem frei zugänglich, wobei
-sich bis zum ersten Release (hoffentlich in den nächsten Wochen) noch
-immer viel verändern kann - wozu auch der Name gehört.
+Der Sourcecode der Bibliothek ist seit kurzem frei zugänglich bei
+GitHub, wobei sich bis zum ersten Release (hoffentlich in den nächsten
+Wochen) noch immer viel verändern kann - wozu auch der Name gehört.
