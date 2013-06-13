@@ -264,9 +264,9 @@ noch weiter erleichtern können.
 ## ScalaJasper
 
 Diese und weitere Probleme der JasperReports-API haben wir mit
-[ScalaJasper] bereinigt; teils durch Erweiterung um neue Features,
-aber genauso auch durch Entfernen von "Irrwegen" aus der
-JasperReports-API.
+[ScalaJasper](https://github.com/active-group/ScalaJasper) bereinigt;
+teils durch Erweiterung um neue Features, aber genauso auch durch
+Entfernen von "Irrwegen" aus der JasperReports-API.
 
 Der Sourcecode der Bibliothek ist seit kurzem frei zugänglich bei
 GitHub, wobei sich bis zum ersten Release (hoffentlich in den nächsten
