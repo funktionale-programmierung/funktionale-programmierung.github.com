@@ -8,7 +8,7 @@ tags: ["API Design", "JasperReports", "Scala"]
 
 [JasperReports](http://www.jaspersoft.com/reporting) ist eine beliebte
 Java-Bibliothek zur Erstellung von Reports, in der Regel in PDF oder
-HTML Form. Reports sind Auszüge oder Zusammenfassung aus größeren
+HTML-Form. Reports sind Auszüge oder Zusammenfassung aus größeren
 Datenbeständen in Form von Tabellen, Diagrammen und begleitenden
 Texten.
 
@@ -66,8 +66,8 @@ Firmen-Banner als Kopfzeile eines ansonsten leeren Reports.
 
 ## CRUD vs. Nicht-Mutierbarkeit
 
-Wie man sieht ist die JasperReports-API sehr imperativ gestaltet,
-indem die Komponenten dem sogenannten _CRUD_-Pattern folgen: CRUD steht
+Wie man sieht ist die JasperReports-API imperativ gestaltet,
+indem die Komponenten dem sogenannten [_CRUD_-Pattern](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) folgen: CRUD steht
 für Create-Read-Update-Delete, und zeigt sich hier darin dass alle
 Objekte zunächst "leer" erzeugt werden, und anschließend mit vielen
 Set- und Add-Funktionen mit dem Inhalt gefüllt werden müssen, den wir
@@ -76,7 +76,7 @@ haben wollen.
 Das ist, für einen funktionalen Programmierer, aber zunächst mal nur
 lästig und fördert einen unübersichtlichen "flachen" Code (siehe auch
 [hier](http://code.jaspersoft.com/svn/repos/jasperreports/tags/jr-5-1-0/jasperreports/demo/samples/noxmldesign/src/NoXmlDesignApp.java)
-für ein längeres Beispiel in den JasperReport Sourcen). Allerdings
+für ein längeres Beispiel in den JasperReport-Sourcen). Allerdings
 wird das in sehr vielen APIs dieser Art an der einen oder anderen
 Stelle zum Problem. Entweder dadurch, dass "Back-References"
 hinzugefügt werden: ein Beispiel dafür ist in der weit verbreiteten
@@ -96,28 +96,19 @@ Klasse
 [GridData](http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fswt%2Flayout%2FGridData.html)
 aus dem Eclipse-Projekt, oft aber zu obskuren Fehlern.
 
-Diese Problemen für die Nutzer einer API, beziehungsweise
-Fettnäpfchen für die Weiterentwicklung einer Bibliothek, kann man sehr
-leicht vermeiden, indem man die Schnittstellen _rein funktional_
-gestaltet. Objekte sollten nicht mutierbar sein, also nach der
-Erzeugung nicht mehr verändert werden können. Dies erleichtert das
-Verständnis der API, ermöglicht eine freie (Wieder-) Verwendung der
-Objekte, erleichtert Tests und ermöglicht nicht zuletzt den Zugriff
-auf die Objekte aus mehreren Threads heraus.
-
 ## Beispiel: Styles
 
 In jedem erzeugten Report-Element immer wieder neu die Schriftarten,
 Abstände, Rahmen und viele weitere Eigenschaften, die das Aussehen
 betreffen, zu setzen ist selbstverständlich nicht praktikabel. Was wäre
 zum Beispiel, wenn wir über den Stil abstrahieren möchten. Wenn man in
-die API-Referenz guckt, findet man:
+die [API-Referenz](http://jasperreports.sourceforge.net/api/net/sf/jasperreports/engine/JRPrintElement.html#setStyle%28net.sf.jasperreports.engine.JRStyle%29) guckt, findet man:
 
 {% highlight java %}
 public void setStyle(JRDesignStyle style)
 {% endhighlight %}
 
-Und die Klasse 'JRDesignStyle' scheint alles zu enthalten was wir
+Und die Klasse [`JRDesignStyle`](http://jasperreports.sourceforge.net/api/net/sf/jasperreports/engine/design/JRDesignStyle.html) scheint alles zu enthalten was wir
 brauchen, also schreiben wir doch eine Funktion die ein solches
 Style-Objekt erzeugt, and ändern unsere Funktion `mkCompanyBanner`
 folgendermaßen:
@@ -166,10 +157,25 @@ Programmierung - man ruft eine Funktion auf die ein Band erzeugt, und
 kann dieses Band frei verwenden ohne sich darüber Sorgen machen zu
 müssen wie es entstanden ist, oder wo es sonst noch verwendet wird.
 
-In der funktionalen Bibliothek, die wir entwickelt haben, gibt es
-dieses Problem nicht. Man kann Styles frei definieren, kombinieren und
-verwenden, ohne sich darüber Gedanken zu machen wo, wie oft, und in
-welchen Reports sie verwendet werden:
+# Eine kompositionale API
+
+Diese Problemen für die Nutzer einer API, beziehungsweise
+Fettnäpfchen für die Weiterentwicklung einer Bibliothek, kann man sehr
+leicht vermeiden, indem man die Schnittstellen _rein funktional_
+gestaltet. Objekte sollten nicht mutierbar sein, also nach der
+Erzeugung nicht mehr verändert werden können. Dies erleichtert das
+Verständnis der API, ermöglicht eine freie (Wieder-) Verwendung der
+Objekte, erleichtert Tests und ermöglicht nicht zuletzt den Zugriff
+auf die Objekte aus mehreren Threads heraus.
+
+FIXME: Hier fehlt noch eine allgemeine Einführung in die API
+
+## Styles
+
+In der funktionalen Bibliothek, die wir entwickelt haben, gibt es das
+oben erwähnte Problem mit den Styles nicht. Man kann Styles frei
+definieren, kombinieren und verwenden, ohne sich darüber Gedanken zu
+machen wo, wie oft, und in welchen Reports sie verwendet werden:
 
 {% highlight scala %}
 val boldSmallText = Style(
