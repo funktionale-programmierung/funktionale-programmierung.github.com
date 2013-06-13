@@ -1,7 +1,7 @@
 ---
 layout: post
 description: Design funktionaler APIs am Beispiel JasperReports
-title: "Funktionale APIs"
+title: "Funktionale API für JasperReports"
 author: david-frese
 tags: ["API Design", "JasperReports", "Scala"]
 ---
