@@ -17,9 +17,10 @@ programmatisch einen Report zusammenbauen kann. Diese API lässt aber
 einiges zu wünschen übrig, was auch die Macher der Bibliothek
 [DynamicJasper](http://dynamicjasper.com/) erkannt haben, die aber
 immer noch sehr imperativ ist. Das hat uns dazu veranlasst eine rein
-funktionale API in Scala zu implementieren, die auf JasperReports
-aufbaut, aber den Prinzipien der Nicht-Mutierbarkeit und der
-_Kompositionalität_ folgt.
+[funktionale API in
+Scala](https://github.com/active-group/ScalaJasper) zu implementieren,
+die auf JasperReports aufbaut, aber den Prinzipien der
+Nicht-Mutierbarkeit und der _Kompositionalität_ folgt.
 
 In diesem Beitrag demonstriere ich die Probleme mit der
 JasperReports-API, wie sie gelöst wurden, und welche funktionalen
@@ -28,7 +29,7 @@ Grundprinzipien beim Design von APIs beachtet werden sollten.
 <!-- more start -->
 
 Als Einstieg direkt ein kleines Beispiel für die Verwendung der
-JasperReports-API, in der Programmiersprache [Scala]:
+JasperReports-API, in Java:
 
 {% highlight java %}
 JRDesignBand myCompanyBanner() {
