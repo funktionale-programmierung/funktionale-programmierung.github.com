@@ -6,13 +6,32 @@ author: uwe-schmidt
 tags: ["Haskell", "Monaden"]
 ---
 
-# Monaden in Aktion#
+# Mehr Monaden in Aktion#
 
-<!--- hier muss eine Einleitung hin -->
+Im [letzen Artikel über Monaden in Aktion][fp2] haben wir die
+Fehler-Monade und die Listen-Monade kennen gelernt. Dieses sind die
+beiden wohl am häufigsten verwendeten Monaden.
+
+Die Mächtigkeit der Ausdruckssprache ist aber noch sehr beschränkt.
+Wir werden die Sprache als erstes um freie und gebundene Variablen
+erweitern.  Zur Verarbeitung hierfür wird die sogenannte Reader-Monade
+eingesetzt werden.
+
+Im folgenden Schritt werden Zuweisungen, Sequenzen, Verzweigungen und
+Schleifen hinzu kommen. Damit bekommen wir schon eine
+Turing-vollständige Programmiersprache. Die Reader-Monade wird
+durch die Zustands-Monade ersetzt werden.
+
+Die letzte Erweiterung wird die Ein- und Ausgabe betreffen. Der
+Interpretierer muss dann also in der IO-Monade laufen. Dieses
+Software-technisch für Haskell höchst gefährliche Vorgehen, erst am
+Schluss eines Entwicklungsprozesses an Ein- und Ausgabe zu denken,
+wird uns in diesem Fall durch den monadischen Programmierstil keinerlei
+Schwierigkeiten bereiten.
 
 ## Ausdrücke mit Variablen ##
 
-Im folgenden Schritt werden wir die Ausdruckssprache um Variablen
+Im diesem ersten Schritt werden wir die Ausdruckssprache um Variablen
 erweitern.  Dazu wird die abstrakte Syntax, der Datentyp `Expr` auf
 zwei Arten erweitert.  Als einfache Ausdrücke werden Variablen
 zugelassen. Außerdem sollen, wie in Haskell auch, lokale Variablen
@@ -630,39 +649,5 @@ Viel Spaß beim Ausprobieren der [Beispiele].
 [ControlMonad]: <http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html> "Control.Monad"
 
 [fp1]: <http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html>
-[rf]: <http://funktionale-programmierung.de/2013/03/12/rein-funktional.html>
-
-
-
-<!---
-Einleitung  Ich würde die Ankündigung späterer Erweiterungen stark zusammenkürzen auf "Wir werden später Erweiterungen machen, die in einem herkömmlichen Interpreter nur schwer möglich sind, und zwar Fehlerbehandlung, nichtdeterministische Ergebnisse …"
-
-Den ersten Aspekt, den wir hinzu fügen möchten, ist eine sinnvolle
-Fehlerbehandlung.  Der Interpretierer wird also nicht mehr
-*abstürzen*, sondern immer ein Resultat liefern, entweder ein Ergebnis
-oder eine aussagekräftige Fehlermeldung.  Diesen Aspekt werden wir mit
-der Fehler-Monade in den Griff bekommen.
-
-Anschließend wird die Ausdruckssprache in unterschiedliche Richtungen
-erweitert.  Eine erste Erweiterung ist die Hinzunahme von Operatoren,
-die bei der Auswertung mehrere Resultate liefern können. In der
-Mathematik ist das Wurzelziehen ein Beispiel für eine solche
-Operation. In der Haskell-Gemeinde wird für diese mehrfachen Resultate
-häufig der Begriff der nichtdeterministischen Berechnung
-verwendet. Für diese Erweiterung werden wir die Listen-Monade nutzen.
-
-Die zweite Erweiterung werden Ausdrücke mit Variablen sein. Zur
-Auswertung solcher Ausdrücke benötigt man eine Belegung der Variablen
-mit Werten, man hat also während der Auswertung ein *Environment*,
-eine Umgebung, über die die Werte zugreifbar werden. Hier kommt die
-sogenannte [Reader]-Monade zum Einsatz.
-
-In der folgenden Erweiterung werden wir die Variablen zu
-Programm-Variablen machen.  Die Menge der Ausdrücke wird um
-Zuweisungen, Verzweigungen und Schleifen erweitert. Es wird hierzu die
-[Zustands][State]-Monade verwendet.
-
-Als letzten Schritt werden wir Operationen für die Ein- und Ausgabe
-hinzu nehmen.  Die `IO`-Monade muss also irgendwie in unsere eigene
-Monade integriert werden.
--->
+[fp2]: <http://funktionale-programmierung.de/2013/05/22/haskell-monaden2.html
+[rf]:  <http://funktionale-programmierung.de/2013/03/12/rein-funktional.html>
