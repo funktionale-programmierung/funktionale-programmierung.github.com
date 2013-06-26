@@ -271,7 +271,7 @@ einen liefert:
 {% highlight clojure %}
 (defn >>>
   [sp1 sp2]
-   ...
+   ...)
 {% endhighlight %}
 
 Nun gibt es für `sp1` als auch für `sp2` jeweils die drei
@@ -341,7 +341,7 @@ so geschrieben werden:
 
 {% highlight clojure %}
 (def sp1 (stream-processor (put 5) (put 3)))
-(def sp2 (stream-processor (get x) (get y) (put x y)))
+(def sp2 (stream-processor (get x) (get y) (put (+ x y))))
 {% endhighlight %}
 
 Die Definition des Makros fängt so an:
