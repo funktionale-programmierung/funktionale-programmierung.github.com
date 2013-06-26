@@ -51,7 +51,7 @@ Vorteilen:
 Der EDSL-Ansatz ist prinzipiell in vielen Sprachen zugänglich.  In
 funktionalen Sprachen funktioniert er oft besonders gut, weil dort
 typische Sprachmittel wie Higher-Order-Funktionen, Makros,
-nicht-strikte Auswertung und Typklassen bei vielen EDSLs ganz
+nicht-strikte Auswertung und Typklassen ganz
 natürliche Einsatzgebiete finden.
 
 In diesem Artikel demonstrieren wir den EDSL-Einsatz am Beispiel einer
