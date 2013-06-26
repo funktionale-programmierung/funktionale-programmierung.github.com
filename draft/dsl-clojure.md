@@ -9,17 +9,17 @@ tags: ["Clojure", "DSL", "EDSL"]
 In letzter Zeit sind in der Software-Entwicklung [domänenspezifische
 Sprachen](http://de.wikipedia.org/wiki/Dom%C3%A4nenspezifische_Sprache)
 - kurz als *DSL* für "domain-specific language" bezeichnet -
-populär geworden: Das Versprechen einer DSL ist es, für ein bestimmtes
+[populär](http://www.linkedin.com/skills/skill/Domain_Specific_Languages) geworden: Das Versprechen einer DSL ist es, für ein bestimmtes
 Anwendungsgebiet besonders kompakte und verständliche
 Programme zu ermöglichen.  Diese Programme können außerdem auf
 technische Details verzichten, die nichts direkt mit dem
 Anwendungsgebiet zu tun haben.
 
 Das Entwickeln einer konventionellen DSL ist aufwendig, da zur
-Implementierung DSL alles dazugehört, was zu einer "normalen"
-Programmiersprachenimplementierung auch fällig ist: Lexer, Parser,
-Compiler oder Interpreter, IDE-Support.  Aus diesem Grund sind in
-letzer Zeit substantielle Frameworks für die schnelle Entwicklung von
+Implementierung DSL alles dazugehört, was bei einer "normalen"
+Programmiersprachenimplementierung ebenfalls fällig ist: Lexer, Parser,
+Compiler oder Interpreter sowie IDE-Support.  Aus diesem Grund sind 
+substantielle Frameworks für die schnelle Entwicklung von
 DSLs entstanden, z.B. [Spoofax](http://strategoxt.org/Spoofax), das
 [Eclipse Modeling Project](http://www.eclipse.org/resources/resource.php?id=493) oder
 [Xtext](http://www.eclipse.org/Xtext/).
@@ -27,8 +27,8 @@ DSLs entstanden, z.B. [Spoofax](http://strategoxt.org/Spoofax), das
 In funktionalen Sprachen gibt es allerdings häufig einen einfacheren
 Weg: die Entwicklung einer sogenannten *eingebetteten* DSL (kurz
 [EDSL](http://c2.com/cgi/wiki?EmbeddedDomainSpecificLanguage) für
-"embedded DSL").  Dabei werden die Abstraktionen der sogenannten
-*Host-Sprache* so eingesetzt, daß es so *aussieht*, als ob innerhalb
+"embedded DSL").  Dabei wird die
+*Host-Sprache* so eingesetzt, dass es so *aussieht*, als ob innerhalb
 der Host-Sprache eine DSL entsteht.  Dies hat eine Reihe von
 Vorteilen:
 
@@ -37,7 +37,7 @@ Vorteilen:
 - Die Entwicklung der DSL ist deutlich einfacher: Entwickler müssen
   kein komplettes Compiler-Frontend implementieren, und können schon
   die bestehenden Sprachmittel der Host-Sprache für die
-  Implementierung und ggf. auch in der DSL verwenden.
+  Implementierung und gegebenenfalls auch in der DSL verwenden.
 
 - Entwickler haben schon einen syntaktischen und semantischen Rahmen
   und müssen nicht das komplette Design der Sprache stemmen: Nicht nur
@@ -48,7 +48,7 @@ Vorteilen:
 
 <!-- more end -->
 
-Der EDSL-Ansatz ist prinzipiell in vielen Sprachen zugänglich.  In
+Der EDSL-Ansatz ist prinzipiell vielen Sprachen zugänglich.  In
 funktionalen Sprachen funktioniert er oft besonders gut, weil dort
 typische Sprachmittel wie Higher-Order-Funktionen, Makros,
 nicht-strikte Auswertung und Typklassen ganz
@@ -59,14 +59,14 @@ kleinen in [Clojure](http://clojure.org/) eingebetteten Sprache für
 "Stream-Prozessoren".  Clojure punktet innerhalb der funktionalen
 Sprachen in ihrer Eigenschaft als Lisp-Variante bei der
 EDSL-Implementierung besonders: Die Sprache erlaubt durch das
-leistungsfähige Makro-System, bei EDSL-Design und
+leistungsfähige Makro-System, beim EDSL-Design und
 Implementierung *systematisch* vorzugehen.
 
 Ein Stream-Prozessor ist ein kleines Programm, das einen Strom von
 Objekten als Eingabe einliest und einen Strom von Objekten als Ausgabe
 produziert.  (Beide Ströme können potentiell unendlich lang gehen.)
 Die Einlese-Operation heißt `get`, die Ausgabe-Operation `put`.  Der
-Clou ist, daß zwei Stream-Prozessoren wie Gartenschläuche aneinander
+Clou ist, dass zwei Stream-Prozessoren wie Gartenschläuche aneinander
 angeschlossen oder *komponiert* werden können: Des ersten Prozessors
 Ausgabe ist des nächsten Prozessors Eingabe.
 
@@ -100,7 +100,7 @@ die etwa so aussehen:
 (defn get [var] ...)
 {% endhighlight %}
 
-Ganz so einfach ist es leider nicht aus drei Gründen:
+Ganz so einfach ist es leider nicht, und zwar aus drei Gründen:
 
 1. Die `get`-Form soll *eine Variable binden*, die nach der `get`-Form
    verwendbar ist.  Das geht nicht mit einem Funktionsaufruf.
@@ -184,7 +184,9 @@ Jetzt können wir die ersten Beispiele aufschreiben:
 Auch hier sind `Put.` und `Get.` Konstruktor-Aufrufe.  Die `fn`-Formen
 machen Funktionen - ähnlich wie `lambda` in anderen Lisp-Dialekten.
 
-Der Prozessor `sp2` entspricht dabei dem Beispiel von oben.
+Der Prozessor `sp1` gibt die Zahlen 5 und 3 aus.  Der Prozessor `sp2`
+entspricht dabei dem Beispiel von oben, gibt also die Summe zweier
+eingelesener Zahlen aus.
 
 Wir können auch einen Prozessor definieren, der einen unendlichen Strom
 generiert:
@@ -219,7 +221,7 @@ Wert ein, das `fn` nennt ihn `x`, das `if` prüft das Kriterium - bei
 `true` gibt das `Put.` den gelesenen Wert aus, ansonsten geht es ohne
 den Wert rekursiv weiter.
 
-(Erfahrene Leser erkennen jetzt, daß die Stream-Prozessoren in
+(Erfahrene Leser erkennen jetzt, dass die Stream-Prozessoren in
 [Continuation-Passing-Style](http://matt.might.net/articles/by-example-continuation-passing-style/)
 geschrieben sind.)
 
@@ -291,7 +293,7 @@ gegenseitig auf:
 {% endhighlight %}
 
 Der erste Zweig in der `cond`-Fallunterscheidung testet zunächst auf
-genau diesen den Fall - also daß `sp1` ein `put` und `sp2` ein `get`
+genau diesen den Fall - also dass `sp1` ein `put` und `sp2` ein `get`
 ist.  In diesem Fall können wir den ausgegebenen Wert vom `put` - das
 ist `(:value sp1)` - in die `consume`-Funktion vom `get` stecken.  Auf
 der linken Seite machen wir mit der `next`-Funktion vom `put` weiter.
@@ -314,7 +316,7 @@ Bei zwei `Get`s hintereinander ziehen wir das `>>>` nach innen:
 {% endhighlight %}
 
 Damit haben wir alle Kombinationen von `Put` und `Get` abgedeckt.  Es
-bleibt noch `Stop`.  `Stop` vorn heißt, daß der erste Prozessor fertig
+bleibt noch `Stop`.  `Stop` vorn heißt, dass der erste Prozessor fertig
 ist - wir machen mit dem zweiten weiter:
    
 {% highlight clojure %}
@@ -340,7 +342,7 @@ ausprobieren:
 {% endhighlight %}
 
 Es bleibt also nur noch die umständliche Syntax. Hier kommt jetzt ein
-*Makro* ins Spiel.  Dieser Makro definiert die eigentliche DSL.  Dazu
+*Makro* ins Spiel.  Dieses Makro definiert die eigentliche DSL.  Dazu
 müssen wir der EDSL einen Namen geben - in diesem Fall bietet sich
 `stream-processor` an.  Damit könnte die obigen Beispiel-Prozessoren
 so geschrieben werden:
@@ -362,9 +364,9 @@ Die Definition des Makros fängt so an:
     `stop))
 {% endhighlight %}
 
-Der Makro ist nichts anderes als eine Funktion, die vom Compiler auf
+Das Makro ist nichts anderes als eine Funktion, die vom Compiler auf
 alle Formen angewendet wird, die mit `stream-processor` anfangen.  An
-den Beispielen sieht man, daß die Form eine beliebige Anzahl von
+den Beispielen sieht man, dass die Form eine beliebige Anzahl von
 Operanden haben kann: einen für jede "Klausel".  Die Makro-Definition
 steckt diese mit Hilfe der Parameterdeklaration `& ?clauses` in eine
 Liste und nennt diese `?clauses`.  Der Rumpf der Makro-Definition
@@ -394,7 +396,7 @@ Jede Klausel fängt jetzt entweder mit `get` oder `put` an, was wir mit
     `stop))
 {% endhighlight %}
 
-Innerhalb der Backquotes fügt `~?var` z.B. die Variable
+Innerhalb der Backquotes fügt `~?var` die Variable
 ein bzw. `~@?rest` die restlichen Klauseln.  Das Muster der obigen
 Beispiele ist hoffentlich erkennbar.
 
@@ -406,7 +408,7 @@ rekursiven Aufruf, müßte also so aussehen:
 (defn sp-from [n] (stream-processor (put n) (sp-from (+ n 1))))
 {% endhighlight %}
 
-Der `stream-processor`-Makro kennt aber bisher nur `put`- und
+Das `stream-processor`-Makro kennt aber bisher nur `put`- und
 `get`-Klauseln.  Wir müssen also noch einen Default-Fall einfügen:
 
 {% highlight clojure %}
