@@ -6,7 +6,10 @@ author: michael-sperber
 tags: ["rein funktional", "Racket", "Schneckenwelt"]
 ---
 
-Im [einem vorigen Beitrag]({% post_url 2013-03-12-rein-funktional %}) haben wir das Vorhaben begonnen,
+In 
+<a href="{% post_url 2013-03-12-rein-funktional %}">einem vorigen Beitrag
+</a>
+haben wir das Vorhaben begonnen,
 eine Schneckenwelt zu implementieren.  Zur Erinnerung:
 
 > \[...\] nehmen wir uns ein konkretes Beispiel vor: Es geht um

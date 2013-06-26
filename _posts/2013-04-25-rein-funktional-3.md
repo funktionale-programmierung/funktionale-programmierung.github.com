@@ -6,7 +6,9 @@ author: michael-sperber
 tags: ["rein funktional", "Racket", "Schneckenwelt"]
 ---
 
-In [einem vorigen Beitrag]({% post_url 2013-04-10-rein-funktional-2 %})
+In
+<a href="{% post_url 2013-04-10-rein-funktional-2 %}">einem vorigen Beitrag
+</a>
 haben wir aus einzelnen Schnecken eine Schneckenwelt
 zusammengesetzt und grafisch dargestellt.  Bisher haben sich die
 Schnecken einfach nur stur in gerader Linie bewegt; in diesem
