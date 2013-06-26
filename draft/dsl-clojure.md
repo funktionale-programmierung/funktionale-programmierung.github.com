@@ -255,7 +255,7 @@ Damit können wir schon zwei Beispiele aufrufen:
 
 {% highlight clojure %}
 > (run sp1)
-(5 3
+(5 3)
 > (take 5 (run nats))
 (0 1 2 3 4)
 {% endhighlight %}
