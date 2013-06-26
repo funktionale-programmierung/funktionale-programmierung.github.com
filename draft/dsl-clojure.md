@@ -71,7 +71,7 @@ angeschlossen oder *komponiert* werden können: Des ersten Prozessors
 Ausgabe ist des nächsten Prozessors Eingabe.
 
 <div id="center">
-<img src="/files/dsl-clojure/stream-processors.png>
+<img src="/files/dsl-clojure/stream-processors.png">
 </img></div>
 
 Ich würde gern einen Stream-Prozessor etwa so beschreiben:
