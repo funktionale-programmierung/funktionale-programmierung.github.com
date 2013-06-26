@@ -390,7 +390,7 @@ Jede Klausel fängt jetzt entweder mit `get` oder `put` an, was wir mit
 
 Innerhalb der Backquotes fügt `~?var` z.B. die Variable
 ein bzw. `~@?rest` die restlichen Klauseln.  Das Muster der obigen
-Beispiele ist offenbar erkennbar.
+Beispiele ist hoffentlich erkennbar.
 
 Mit dieser Definition funktionieren schon einmal die Beispiele `sp1`
 und `sp2`.  Was ist aber mit `sp-from`?  Das enthält ja noch einen
