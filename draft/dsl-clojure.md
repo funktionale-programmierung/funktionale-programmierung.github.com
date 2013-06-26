@@ -10,8 +10,8 @@ In letzter Zeit sind in der Software-Entwicklung [domänenspezifische
 Sprachen](http://de.wikipedia.org/wiki/Dom%C3%A4nenspezifische_Sprache)
 - kurz als *DSL* für "domain-specific language" bezeichnet -
 populär geworden: Das Versprechen einer DSL ist es, für ein bestimmtes
-Anwendungsgebiete zu ermöglichen, besonders kompakte und verständliche
-Programme zu schreiben.  Diese Programme können außerdem auf
+Anwendungsgebiet besonders kompakte und verständliche
+Programme zu ermöglichen.  Diese Programme können außerdem auf
 technische Details verzichten, die nichts direkt mit dem
 Anwendungsgebiet zu tun haben.
 
@@ -58,8 +58,8 @@ In diesem Artikel demonstrieren wir den EDSL-Einsatz am Beispiel einer
 kleinen in [Clojure](http://clojure.org/) eingebetteten Sprache für
 "Stream-Prozessoren".  Clojure punktet innerhalb der funktionalen
 Sprachen in ihrer Eigenschaft als Lisp-Variante bei der
-EDSL-Implementierung besonders, da die Sprache es durch das
-leistungsfähige Makro-System erlaubt, bei EDSL-Design und
+EDSL-Implementierung besonders: Die Sprache erlaubt durch das
+leistungsfähige Makro-System, bei EDSL-Design und
 Implementierung *systematisch* vorzugehen.
 
 Ein Stream-Prozessor ist ein kleines Programm, das einen Strom von
@@ -163,7 +163,7 @@ abzugrenzen, benennen wir sie in `consume` um:
 {% endhighlight %}
 
 Durch diese Darstellung entsteht ein kleines Problem: Es gibt keine
-Möglichkeit, anzuhalten: Jedes `Put` bzw. `Get` braucht eine Funktion,
+Möglichkeit, den Stream-Prozessor zu beenden: Jedes `Put` bzw. `Get` braucht eine Funktion,
 um weiterzumachen.  Wir legen darum einen Singleton-Record-Typ für's
 Anhalten an:
 
@@ -186,7 +186,7 @@ machen Funktionen - ähnlich wie `lambda` in anderen Lisp-Dialekten.
 
 Der Prozessor `sp2` entspricht dabei dem Beispiel von oben.
 
-Wir können auch einen Prozesso definieren, der einen unendlichen Strom
+Wir können auch einen Prozessor definieren, der einen unendlichen Strom
 generiert:
 
 {% highlight clojure %}
@@ -211,7 +211,7 @@ Hier ist eine Funktion für etwas komplexere Prozessoren, sogenannte
        (sp-filter p)))))
 {% endhighlight %}
 
-Die Funktion `sp-filter` reicht die Eingaben an die Ausgabe durch, die
+Die Funktion `sp-filter` reicht diejenigen Eingaben an die Ausgabe durch, die
 ein bestimmtes Kriterium erfüllen: Sie akzeptiert ein Prädikat `p` (also eine
 Funktion, die einen Wert akzeptiert und `true` oder `fals` liefert)
 und konstruiert den dazugehörigen Prozessor: Das `Get.` liest einhen
@@ -248,7 +248,7 @@ Fangen wir mit Punkt 2 an, das geht recht einfach:
 Die `run`-Funktion akzeptiert einen Stream-Prozessor und unterscheidet
 dann nach den drei Record-Typen (`(instance? Put sp)` testet z.B., ob
 `sp` ein `Put`-Record ist): Bei jedem `Put` steckt `run` den
-ausgegebenen Wert in eine *lazy sequence*, also Folge, die auch
+ausgegebenen Wert in eine *lazy sequence*, also eine Folge, die auch
 unendlich sein kann: `(:value sp)` extrahiert den ausgegebenen Wert,
 und `(run ((:next sp)))` macht weiter.  `cons` konstruiert die Folge.
 Damit können wir schon zwei Beispiele aufrufen:
@@ -289,6 +289,12 @@ gegenseitig auf:
    (and (instance? Put sp1) (instance? Get sp2))
    (>>> ((:next sp1)) ((:consume sp2) (:value sp1)))
 {% endhighlight %}
+
+Der erste Zweig in der `cond`-Fallunterscheidung testet zunächst auf
+genau diesen den Fall - also daß `sp1` ein `put` und `sp2` ein `get`
+ist.  In diesem Fall können wir den ausgegebenen Wert vom `put` - das
+ist `(:value sp1)` - in die `consume`-Funktion vom `get` stecken.  Auf
+der linken Seite machen wir mit der `next`-Funktion vom `put` weiter.
 
 Wir müssen noch die anderen Fälle abdecken: In allen Fällen, wo `sp2`
 ein `Put` ist, können wir den angegebenen Wert direkt ausgeben:
@@ -352,7 +358,7 @@ Die Definition des Makros fängt so an:
   (if (seq? ?clauses)
     (let [?clause (first ?clauses)
           ?rest (rest ?clauses)]
-      ...
+      ...)
     `stop))
 {% endhighlight %}
 
@@ -466,6 +472,14 @@ das benötigte `if` generiert:
         
         ?clause))
     `stop))
+{% endhighlight %}
+
+Und Tatsache, auch die viel schönere Definition von `sp-filter`
+funktioniert:
+
+{% highlight clojure %}
+> (take 5 (run (>>> nats (sp-filter odd?))))
+(1 3 5 7 9)
 {% endhighlight %}
 
 Fertig!
