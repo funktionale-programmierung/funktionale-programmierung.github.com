@@ -13,15 +13,12 @@ Monaden in Haskell.
 Im [ersten Artikel][fp1] der Serie haben wir die Grundlagen
 diskutiert. Dann haben wir begonnen, eigene Monaden zur Lösung
 Software-technischer Aufgaben selbst zu entwickeln.  Im 
-[zweiten Teil der Serie][fp2] haben wir die
+[zweiten Teil der Serie][fp2] haben wir dabei die
 Fehler-Monade und die Listen-Monade kennen gelernt.
 Wir haben dabei gesehen
 wie ein Stück Software modular und durch lokale Erweiterungen um neue
 Funktionalität ergänzt werden kann, ohne bestehende Teile zu verändern
-oder zu refaktorisieren. (Unter *modular* verstehen wir dabei die
-Eigenschaft, bestimmte Funktionalität in einem klar abgegrenzten
-Bereich implementieren und mit anderen Erweiterungen kombinieren
-zu können.)
+oder zu refaktorisieren. 
 
 Als laufendes Beispiel haben wir die klassische Aufgabe der Auswertung von 
 Ausdrücken behandelt.
