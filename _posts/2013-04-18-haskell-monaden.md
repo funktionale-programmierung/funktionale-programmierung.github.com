@@ -506,7 +506,7 @@ sollte aber nicht mit einer Zuweisungen aus den imperativen Sprachen
 gleich gesetzt werden.
 
 {% highlight haskell %}
-f x0 = do x1 <- f1 x1
+f x0 = do x1 <- f1 x0
           x2 <- f2 x1
           x3 <- f3 x3
           return $ x1 + x2 + x3
