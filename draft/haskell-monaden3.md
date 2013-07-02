@@ -8,12 +8,25 @@ tags: ["Haskell", "Monaden"]
 
 # Mehr Monaden in Aktion#
 
-Im [letzen Artikel über Monaden in Aktion][fp2] haben wir die
-Fehler-Monade und die Listen-Monade kennen gelernt. Dieses sind die
-beiden wohl am häufigsten verwendeten Monaden.
+Dieser Artikel ist der dritte einer Serie von Artikeln über
+Monaden in Haskell.
+Im [ersten Artikel][fp1] der Serie haben wir die Grundlagen
+diskutiert. Dann haben wir begonnen, eigene Monaden zur Lösung
+Software-technischer Aufgaben selbst zu entwickeln.  Im 
+[zweiten Teil der Serie][fp2] haben wir die
+Fehler-Monade und die Listen-Monade kennen gelernt.
+Wir haben dabei gesehen
+wie ein Stück Software modular und durch lokale Erweiterungen um neue
+Funktionalität ergänzt werden kann, ohne bestehende Teile zu verändern
+oder zu refaktorisieren. (Unter *modular* verstehen wir dabei die
+Eigenschaft, bestimmte Funktionalität in einem klar abgegrenzten
+Bereich implementieren und mit anderen Erweiterungen kombinieren
+zu können.)
 
-Die Mächtigkeit der Ausdruckssprache ist aber noch sehr beschränkt.
-Wir werden die Sprache als erstes um freie und gebundene Variablen
+Als laufendes Beispiel haben wir die klassische Aufgabe der Auswertung von 
+Ausdrücken behandelt.
+Die Mächtigkeit der Ausdruckssprache war bisher aber noch sehr beschränkt.
+Wir werden nun die Sprache als erstes um freie und gebundene Variablen
 erweitern.  Zur Verarbeitung hierfür wird die sogenannte Reader-Monade
 eingesetzt werden.
 
@@ -28,6 +41,8 @@ Software-technisch für Haskell höchst gefährliche Vorgehen, erst am
 Schluss eines Entwicklungsprozesses an Ein- und Ausgabe zu denken,
 wird uns in diesem Fall durch den monadischen Programmierstil keinerlei
 Schwierigkeiten bereiten.
+
+<!-- more start -->
 
 ## Ausdrücke mit Variablen ##
 
