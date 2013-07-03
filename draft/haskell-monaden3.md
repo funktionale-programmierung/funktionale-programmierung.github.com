@@ -10,15 +10,21 @@ tags: ["Haskell", "Monaden"]
 
 Dieser Artikel ist der dritte einer Serie von Artikeln über
 Monaden in Haskell.
-Im [ersten Artikel][fp1] der Serie haben wir die Grundlagen
-diskutiert. Dann haben wir begonnen, eigene Monaden zur Lösung
-Software-technischer Aufgaben selbst zu entwickeln.  Im 
-[zweiten Teil der Serie][fp2] haben wir dabei die
-Fehler-Monade und die Listen-Monade kennen gelernt.
-Wir haben dabei gesehen
-wie ein Stück Software modular und durch lokale Erweiterungen um neue
+
+* Im [ersten Artikel][fp1] der Serie haben wir die Grundlagen
+  diskutiert.
+* Im [zweiten Teil der Serie][fp2] haben wir begonnen, eigene 
+  Monaden zur Lösung Software-technischer Aufgaben zu entwickeln
+  und haben dabei die
+  Fehler-Monade und die Listen-Monade kennen gelernt.
+  
+Im heutigen Teil möchten wir diesen Aspekt vertiefen und erneut
+demonstrieren, wie durch Monaden
+ein Stück Software modular und durch lokale Erweiterungen um neue
 Funktionalität ergänzt werden kann, ohne bestehende Teile zu verändern
 oder zu refaktorisieren. 
+
+<!-- more start -->
 
 Als laufendes Beispiel haben wir die klassische Aufgabe der Auswertung von 
 Ausdrücken behandelt.
@@ -34,12 +40,10 @@ durch die Zustands-Monade ersetzt werden.
 
 Die letzte Erweiterung wird die Ein- und Ausgabe betreffen. Der
 Interpretierer muss dann also in der IO-Monade laufen. Dieses
-Software-technisch für Haskell höchst gefährliche Vorgehen, erst am
+oftmals schwierig Vorgehen, nämlich erst am
 Schluss eines Entwicklungsprozesses an Ein- und Ausgabe zu denken,
 wird uns in diesem Fall durch den monadischen Programmierstil keinerlei
 Schwierigkeiten bereiten.
-
-<!-- more start -->
 
 ## Ausdrücke mit Variablen ##
 
@@ -465,10 +469,13 @@ newtype Result a
 {% endhighlight %}
 
 Entsprechend müssen `return` und `>>=` sowie `throwError`, `get` und
-`put` so verändert werden, dass sie in der `IO`-Monade laufen:
+`put` so verändert werden, dass sie in der `IO`-Monade laufen.
 
 {% highlight haskell %}
 instance Monad Result where
+  -- Das return auf der linken Seite des = ist das zu definierende der
+  -- Result-Monade. Das return auf der rechten Seite kommt aus der
+  -- IO-Monade.
   return x       = Res $ \ st0 -> return (Val x, st0)
   (Res f1) >>= g = Res $ \ st0 ->
                    do (r1, st1) <- f1 st0
