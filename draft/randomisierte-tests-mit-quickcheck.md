@@ -154,20 +154,3 @@ fehlt es an manchmal an Determinismus oder Parallelisierbarkeit), doch
 die Testabdeckung erhöhen können die Bibliotheken allemal.
 
 
-<!-- comments
-{
-
-
-        Erklären, woraus es besteht und wie man es benutzt, z.B. in Racket.
-
-        Am Ende erwähnen Problem in Scala
-
-        zufällige Werte
-        zufällige Listen von zufälligen Werten
-        zufällige Prozeduren
-
-        Haskell QuickCheck
-        ScalaCheck: Zufallszahlengenerator falsch
-        Clojure
-}
--->
