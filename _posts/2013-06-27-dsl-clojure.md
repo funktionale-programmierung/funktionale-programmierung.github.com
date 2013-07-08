@@ -248,7 +248,7 @@ Fangen wir mit Punkt 2 an, das geht recht einfach:
 {% endhighlight %}
 
 Die `run`-Funktion akzeptiert einen Stream-Prozessor und unterscheidet
-dann nach den drei Record-Typen (`(instance? Put sp)` testet z.B., ob
+dann nach den drei Record-Typen `(instance? Put sp)` testet z.B., ob
 `sp` ein `Put`-Record ist): Bei jedem `Put` steckt `run` den
 ausgegebenen Wert in eine *lazy sequence*, also eine Folge, die auch
 unendlich sein kann: `(:value sp)` extrahiert den ausgegebenen Wert,
