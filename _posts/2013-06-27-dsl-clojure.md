@@ -90,7 +90,7 @@ Das sollte sinngemäß heißen: lies eine Zahl ein und nenne sie `x`,
 lies eine weitere Zahl ein und nenne sie `y`
 und gib schließlich das Produkt von `x` und `y` aus.
 
-In Clojure (und jeder anderen Sprache) wäre es jetzt am einfachen,
+In Clojure (und jeder anderen Sprache) wäre es jetzt am einfachsten,
 wenn wir Funktionsdefinitionen für `get` und `put` schreiben könnten,
 die etwa so aussehen:
 
@@ -127,7 +127,7 @@ Record-Definitionen an:
 {% endhighlight %}
 
 Bei den `...` müssen wir noch Felder eintragen.  Bei `Put` brauchen
-wir auf jeden Fall den auszugebenenden Wert:
+wir auf jeden Fall den auszugebenden Wert:
 
 {% highlight clojure %}
 (defrecord Put [value ...])
@@ -215,8 +215,8 @@ Hier ist eine Funktion für etwas komplexere Prozessoren, sogenannte
 
 Die Funktion `sp-filter` reicht diejenigen Eingaben an die Ausgabe durch, die
 ein bestimmtes Kriterium erfüllen: Sie akzeptiert ein Prädikat `p` (also eine
-Funktion, die einen Wert akzeptiert und `true` oder `fals` liefert)
-und konstruiert den dazugehörigen Prozessor: Das `Get.` liest einhen
+Funktion, die einen Wert akzeptiert und `true` oder `false` liefert)
+und konstruiert den dazugehörigen Prozessor: Das `Get.` liest einen
 Wert ein, das `fn` nennt ihn `x`, das `if` prüft das Kriterium - bei
 `true` gibt das `Put.` den gelesenen Wert aus, ansonsten geht es ohne
 den Wert rekursiv weiter.
