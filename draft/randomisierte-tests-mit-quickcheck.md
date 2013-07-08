@@ -159,3 +159,8 @@ fehlt es an manchmal an Determinismus oder Parallelisierbarkeit), doch
 die Testabdeckung erhöhen können die Bibliotheken allemal.
 
 
+
+<!-- Local Variables: --
+<!-- mode: text -->
+<!-- End: -->
+
