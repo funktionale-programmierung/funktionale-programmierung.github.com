@@ -149,7 +149,7 @@ aber auch für
 [Java](https://github.com/pholser/junit-quickcheck/),
 [Clojure](https://bitbucket.org/kotarak/clojurecheck) und
 [Scala](https://github.com/rickynils/scalacheck).
-Zwar variiert die Qualität der Implementierung etwas (zum Beispiel
+Zwar variiert die Qualität der Implementierungen etwas (zum Beispiel
 fehlt es an manchmal an Determinismus oder Parallelisierbarkeit), doch
 die Testabdeckung erhöhen können die Bibliotheken allemal.
 
