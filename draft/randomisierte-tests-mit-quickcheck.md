@@ -69,7 +69,8 @@ Möchte man statt Fließkommazahlen nur exakte Zahlen prüfen, verwendet
 man den Generator `rational`.  Alternativ erlaubt `expect-within`
 statt `=` die Angabe einer tolerierten Abweichung. So erlaubt etwa
 `(expect-within (add a b) (add b a) 0.001)`, dass die Additionen um
-0.001 voneinander abweichen dürfen.
+0.001 voneinander abweichen dürfen.  Generell kann im Rumpf des
+`for-all` jeder Ausdruck stehen, der ein Bool liefert.
 
 <!-- more complex examples such as distributivity? -->
 
@@ -85,7 +86,9 @@ die von einer Bedingung abhängen. Zum Beispiel beschreibt
          (= a c))))
 {% endhighlight %}
 
-dass wenn `a` = `b` und `b` = `c`, auch `a` = `c` sein soll.
+dass wenn `a` = `b` und `b` = `c`, auch `a` = `c` sein soll.  In
+anderen Worten: die eigentliche Eigenschaft wird nur dann geprüft,
+wenn für eine zufällige Belegung die Bedingung erfüllt ist.
 
 ## Testen über randomisierte Strukturen ##
 
