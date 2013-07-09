@@ -6,8 +6,6 @@ author: uwe-schmidt
 tags: ["Haskell", "Monaden"]
 ---
 
-# Mehr Monaden in Aktion#
-
 Dieser Artikel ist der dritte einer Serie von Artikeln über
 Monaden in Haskell.
 
