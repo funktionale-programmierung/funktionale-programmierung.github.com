@@ -12,7 +12,7 @@ bekannt als MzScheme) kommt mit einer QuickCheck-Bibliothek zum
 randomisierten Testen, mit der sich die Testabdeckung in Programmen
 erhöhen lässt: statt dass sich der Programmierer zahlreiche Tests
 überlegt und ausprogrammiert, generiert die Bibliothek anhand einer
-Spezifkation zufällige Testfälle, testet sie gegen definierte
+Spezifikation zufällige Testfälle, testet sie gegen definierte
 Eigenschaften und berichtet Gegenbeispiele, falls welche gefunden
 werden.
 
