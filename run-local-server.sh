@@ -1,3 +1,3 @@
 #!/bin/bash
 
-jekyll serve
+jekyll serve -w
