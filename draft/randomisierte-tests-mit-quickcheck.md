@@ -24,7 +24,8 @@ Angenommen, wir wollen testen, ob für die Additionsfunktion
  `add(a,b) == add(b,a)` gilt (also Kommutativität).  Statt von Hand einige mehr
 oder weniger interessante Fälle zu testen, können wir mit QuickCheck
 die Eigenschaft definieren und gegen zahlreiche (pseudo-zufällig
-gewählte) Testfälle testen lassen:
+gewählte) Testfälle testen lassen (hier in der Lehrsprache des Buchs
+ ["Die Macht der Abstraktion"](http://www.deinprogramm.de/dmda/)):
 
 {% highlight scheme %}
 (define property-commutative-add
