@@ -158,10 +158,3 @@ Firma, die auf QuickCheck spezialisiert ist.
 Zwar variiert die Qualität der Implementierungen etwas (zum Beispiel
 fehlt es an manchmal an Determinismus oder Parallelisierbarkeit), doch
 die Testabdeckung erhöhen können die Bibliotheken allemal.
-
-
-
-<!-- Local Variables: --
-<!-- mode: text -->
-<!-- End: -->
-
