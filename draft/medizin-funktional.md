@@ -36,9 +36,9 @@ Nachvollziehbarkeit genießen.
 ## Checkpad MED, eine mobile Krankenakte ##
 
 Checkpad MED ist eine digitale, mobile Krankenakte, die Ärzten im
-Krankheithaus jederzeit und überall Zugriff auf die relevanten
+Krankenhaus jederzeit und überall Zugriff auf die relevanten
 Patientendaten, wie etwa die Krankengeschichte, Arztbriefe, Laborwerte,
-Röntgenbilder, OP Berichte und vieles mehr erlaubt. Darüberhinaus bietet
+Röntgenbilder, OP-Berichte und vieles mehr erlaubt. Darüberhinaus bietet
 die Anwendung durch ein Aufgaben- und Notizsystem die Möglichkeit,
 Arbeitsabläufe im Klinikalltag besser zu organisieren.
 Der Client für Checkpad MED ist als iOS-App realisiert, die auf iPad,
@@ -73,7 +73,7 @@ Daten in die Krankenhaus-IT zurückfließen.
 Die Pipeline basiert auf dem Push-Prinzip, d.h. neue Daten werden von einer
 Komponente in die nächste geschoben. Im Gegensatz zu einem Pull-System, in
 dem eine Komponente die Daten bei der vorhergehenden Komponente abfragt, ergibt
-sich damit eine schnellere Propagation von neue Daten bei geringerer Last.
+sich damit für neue Daten ein schnelleres Durchlaufen der Pipeline bei geringerer Last.
 Für die Nutzer des Systems (d.h. die Ärzte) liegt der Vorteil dieses
 Ansatzes auf der Hand, denn sie sehen nun neue Daten direkt und schnell
 auf ihrem iPad oder iPhone, ohne ständig die Ansicht manuell aktualisieren
@@ -88,18 +88,19 @@ hier nur
 [DICOM](http://de.wikipedia.org/wiki/Digital_Imaging_and_Communications_in_Medicine)
 zur Übertragung von Radiologiebildern, sowie
 [HL7](http://de.wikipedia.org/wiki/HL7) zur Übertragung von Patienten- und
-Befunddaten genannt. Einige Krankenhäuser setzen aber auch propriätere
-Schnittstellen wie z.B. der Direktzugriff auf SQL-Datenbanken ein.
+Befunddaten genannt. Einige Krankenhäuser setzen aber auch proprietäre
+Schnittstellen wie z.B. den Direktzugriff auf SQL-Datenbanken ein.
 
 Import
-: Die Import-Komponenten stellt Konnectoren für die verschiedenen
+: Die Import-Komponenten stellt Adapter für die verschiedenen
 Krankhausschnittstellen zur Verfügung und bringt die Daten in eine
-standardisierte Form. Die standardisierten Daten werden der nächsten
-Komponente in einem XML-Format zur Verfügung gestellt.
-Da für viele Schnittstellen bereits Java APIs zur
+standardisierte Form. Die standardisierten Daten werden der
+Dokumentengenerierung, also der nächsten Komponente der Pipeline,
+in einem XML-Format zur Verfügung gestellt.
+Da für viele Schnittstellen bereits Java-APIs zur
 Verfügung stehen, haben wir die Import-Komponente in der
 funktional-objektorientierten Sprache [Scala](http://scala-lang.org)
-implementiert. Durch den Einsatz von Scala können wir alle Java APIs
+implementiert. Durch den Einsatz von Scala können wir alle Java-APIs
 problemlos und einfach wiederverwenden.
 
 Dokumentengenerierung
@@ -114,11 +115,11 @@ Die Dokumentengenerierung ist
 komplett in Haskell geschrieben.
 
 Synchronisation
-: Die Synchronisiations-Komponente ist im wesentlichen ein TCP-Server, der
+: Die Synchronisations-Komponente ist im wesentlichen ein TCP-Server, der
 über eine sichere Verbindung die erzeugten Dokumente auf die mobilen Geräte
-synchronisiert. Die mobilen Geräte sind komplett offline fähig. Daher
+synchronisiert. Die mobilen Geräte sind komplett offline-fähig. Daher
 verwaltet die Synchronisations-Komponente für jeden mobilen Client dessen
-aktuellen Synchronisationsstand und pusht neue Dokumente auf den Client
+aktuellen Synchronisationsstand und pusht neue Dokumente auf den Client,
 sobald dieser online ist. Auch der Synchronisations-Server ist in
 Haskell geschrieben
 
@@ -138,11 +139,13 @@ Prinzipien leiten lassen:
 * Push statt Pull.
 * Alle Komponenten arbeiten *idempotent*, d.h. sie erzeugen bei gleicher
   Eingabe dieselbe Ausgabe.
-* Die Historie der Ein- und Ausgabedaten wird wo immer möglich erhalten,
+* Die Historie der Ein- und Ausgabedaten wird, wo immer möglich, erhalten,
   d.h. Daten werden nicht überschrieben sondern es wird immer eine neue
   Version angelegt.
 
-Leser unseres Blogs erkennen in den letzten beiden Punkten ein typisches
+Das erste dieser Prinzipien ist sicher kein funktionales Prinzip.
+Aufmerksame Leser unseres Blogs erkennen in den anderen beiden Punkten
+jedoch sicherlich ein typisches
 Designmuster von funktionalen Programmen: Seiteneffekte vermeiden, alle
 Abhängkeiten explizit machen!
 
@@ -150,7 +153,7 @@ Die Vorteile dieses Vorgehens sind klar:
 
 * Alte Systemzustände und damit mögliche Fehlerkonstellationen können
   leicht geprüft und getestet werden.
-* Es ist jederzeit ersichtlich was welcher Arzt wann auf seinem iPad oder
+* Es ist jederzeit ersichtlich, was welcher Arzt wann auf seinem iPad oder
   iPhone gesehen hat.
 * Die Implementierung eines verteilten Systems wird durch Idempotenz enorm
   erleichtert.
