@@ -21,8 +21,9 @@ eine digitale und mobile Krankenakte für Krankenhausärzte
 [Homepage](http://www.lohmann-birkner.de/de/Checkpad-MED/index.php)).
 Checkpad MED
 wird unter technischer Federführung der [factis research
-GmbH](http://www.factisresearch.com/) fast ausschließlich
-in funktionalen Programmiersprachen entwickelt.
+GmbH](http://www.factisresearch.com/) zu einem großen Teil
+in funktionalen Programmiersprachen entwickelt, im restlichen
+Teil setzen wir zumindest auf funktionale Paradigmen und Techniken.
 
 In diesem Artikel
 soll es erstmal weniger um technische Details gehen sondern
@@ -71,7 +72,7 @@ gibt es noch einen Rückkanal, auf dem mit den mobilen Clients erfasste
 Daten in die Krankenhaus-IT zurückfließen.
 
 Die Pipeline basiert auf dem Push-Prinzip, d.h. neue Daten werden von einer
-Komponente in die nächste geschoben. Im Gegensatz zu einem Pull-System, in
+Komponente in die nächste geschoben. Im Gegensatz zu einem Poll-System, in
 dem eine Komponente die Daten bei der vorhergehenden Komponente abfragt, ergibt
 sich damit für neue Daten ein schnelleres Durchlaufen der Pipeline bei geringerer Last.
 Für die Nutzer des Systems (d.h. die Ärzte) liegt der Vorteil dieses
@@ -131,12 +132,12 @@ verschlüsselt im persistenten Speicher und rendert die Dokumente
 mittels nativer iOS-UI-Komponenten. Die Client-App ist in Objective-C
 realisiert.
 
-## Funktionale Prinzipien der Systemarchitektur ##
+## Funktionale Prinzipien ##
 
 Wir haben uns bei der Architektur des Systems von drei wesentlichen
 Prinzipien leiten lassen:
 
-* Push statt Pull.
+* Push statt Poll.
 * Alle Komponenten arbeiten *idempotent*, d.h. sie erzeugen bei gleicher
   Eingabe dieselbe Ausgabe.
 * Die Historie der Ein- und Ausgabedaten wird, wo immer möglich, erhalten,
@@ -157,6 +158,14 @@ Die Vorteile dieses Vorgehens sind klar:
   iPhone gesehen hat.
 * Die Implementierung eines verteilten Systems wird durch Idempotenz enorm
   erleichtert.
+
+Auch im Objective-C Code der Client-App machen wir Gebrauch von
+funktionalen Paradigmen und Techniken, obwohl Objective-C wahrlich keine
+funktionale Sprache ist. In einem [vorigen
+Blogartikel](http://funktionale-programmierung.de/2013/03/20/warum-funktional.html)
+ist z.B. nachzulesen welche Vorteile es hat [persistente
+Datenstrukturen](http://funktionale-programmierung.de/2013/06/21/persistente-datenstrukturen.html)
+in Objective-C zu verwenden.
 
 ## Ausblick ##
 
