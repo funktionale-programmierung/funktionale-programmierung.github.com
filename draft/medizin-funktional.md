@@ -135,7 +135,7 @@ realisiert.
 Wir haben uns bei der Architektur des Systems von drei wesentlichen
 Prinzipien leiten lassen:
 
-* Pull statt Push.
+* Push statt Pull.
 * Alle Komponenten arbeiten *idempotent*, d.h. sie erzeugen bei gleicher
   Eingabe dieselbe Ausgabe.
 * Die Historie der Ein- und Ausgabedaten wird wo immer möglich erhalten,
