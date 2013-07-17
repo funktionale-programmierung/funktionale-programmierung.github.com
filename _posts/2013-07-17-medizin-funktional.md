@@ -6,7 +6,7 @@ author: stefan-wehr
 tags: ["Haskell", "Medizin", "Praxis", "kommerziell", "Scala", "funktional"]
 ---
 
-Funktionale Programmierung ist längst den Kinderschuhe entwachsen.
+Funktionale Programmierung ist längst den Kinderschuhen entwachsen.
 Inzwischen setzen auch Firmen wie
 z.B. [Twitter](http://cufp.org/conference/sessions/2011/large-scale-internet-services-scala-twitter)
 oder [Microsoft](http://research.microsoft.com/en-us/projects/fsharp/)
@@ -93,7 +93,7 @@ Befunddaten genannt. Einige Krankenhäuser setzen aber auch proprietäre
 Schnittstellen wie z.B. den Direktzugriff auf SQL-Datenbanken ein.
 
 Import
-: Die Import-Komponenten stellt Adapter für die verschiedenen
+: Die Import-Komponente stellt Adapter für die verschiedenen
 Krankhausschnittstellen zur Verfügung und bringt die Daten in eine
 standardisierte Form. Die standardisierten Daten werden der
 Dokumentengenerierung, also der nächsten Komponente der Pipeline,
