@@ -1,13 +1,10 @@
 ---
 layout: post
 description: Beschreibung
-title: "Titel"
+title: "Imperatives Programmieren in Haskell"
 author: joachim-breitner
 tags: ["Haskell", "imperativ", "takeR"]
 ---
-
-Imperatives Programmieren in Haskell
-====================================
 
 Die wohl wichtigste Datenstruktur in Haskell ist die Liste. Da sie als
 einfach verkette Liste implementiert ist, arbeitet man meist nur am
