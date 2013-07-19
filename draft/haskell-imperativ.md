@@ -276,7 +276,7 @@ gibt.
 Benchmarks
 ----------
 
-Um die Benchmarks nachzuvollziehen kompiliert man diese an Artikel mit
+Um die Benchmarks nachzuvollziehen kompiliert man den Code in diesem Artikel mit
 `ghc -O2 --make TakeR.lhs -main-is TakeR` und der folgenden
 `main`-Funktion:
 
