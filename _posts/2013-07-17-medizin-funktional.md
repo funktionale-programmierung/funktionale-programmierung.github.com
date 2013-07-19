@@ -6,7 +6,7 @@ author: stefan-wehr
 tags: ["Haskell", "Medizin", "Praxis", "kommerziell", "Scala", "funktional"]
 ---
 
-Funktionale Programmierung ist längst den Kinderschuhe entwachsen.
+Funktionale Programmierung ist längst den Kinderschuhen entwachsen.
 Inzwischen setzen auch Firmen wie
 z.B. [Twitter](http://cufp.org/conference/sessions/2011/large-scale-internet-services-scala-twitter)
 oder [Microsoft](http://research.microsoft.com/en-us/projects/fsharp/)
@@ -20,7 +20,8 @@ eine digitale und mobile Krankenakte für Krankenhausärzte
 ([Film](http://www.youtube.com/watch?v=yvq_EuEmQrk),
 [Homepage](http://www.lohmann-birkner.de/de/Checkpad-MED/index.php)).
 Checkpad MED
-wird unter technischer Federführung der [factis research
+wird in Kooperation mit [Lohmann & Birkner](http://www.lohmann-birkner.de/)
+unter technischer Federführung der [factis research
 GmbH](http://www.factisresearch.com/) zu einem großen Teil
 in funktionalen Programmiersprachen entwickelt, im restlichen
 Teil setzen wir zumindest auf funktionale Paradigmen und Techniken.
@@ -66,7 +67,7 @@ Folgendes Diagramm zeigt die Gesamtarchitekur des Systems:
 </div>
 <br/>
 
-Das System ist im wesentliche eine Pipeline, die Daten aus dem Krankenhaus
+Das System ist im wesentlichen eine Pipeline, die Daten aus dem Krankenhaus
 importiert, verarbeitet und auf die mobilen Clients überträgt. Zusätzlich
 gibt es noch einen Rückkanal, auf dem mit den mobilen Clients erfasste
 Daten in die Krankenhaus-IT zurückfließen.
@@ -93,7 +94,7 @@ Befunddaten genannt. Einige Krankenhäuser setzen aber auch proprietäre
 Schnittstellen wie z.B. den Direktzugriff auf SQL-Datenbanken ein.
 
 Import
-: Die Import-Komponenten stellt Adapter für die verschiedenen
+: Die Import-Komponente stellt Adapter für die verschiedenen
 Krankhausschnittstellen zur Verfügung und bringt die Daten in eine
 standardisierte Form. Die standardisierten Daten werden der
 Dokumentengenerierung, also der nächsten Komponente der Pipeline,
@@ -172,7 +173,7 @@ in Objective-C zu verwenden.
 Dieser Artikel hat Ihnen einen ersten Eindruck über ein großes, fast
 komplett mit funktionalen Sprachen realisiertes System gegeben. (Das
 System besteht aus fast 100.000 Zeilen Haskell Code, etwa 35.000 Zeilen
-Scala Code und etwas 56.000 Zeilen Objective-C Code.)
+Scala Code und etwa 56.000 Zeilen Objective-C Code.)
 In späteren Artikeln werden wir dann auf dieser Grundlage
 auch technische Details und die Vorzüge der
 funktionalen Programmierung beim Lösen spezifischer Probleme erklären.
