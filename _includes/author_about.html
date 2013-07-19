@@ -27,6 +27,7 @@
 
 {% when 'joachim-breitner' %}
 {% include author/joachim-breitner.html %}
+{% assign author_image = "joachim-breitner.png" %}
 
 {% else %}
 {% assign author_undefined = true %}
@@ -40,7 +41,11 @@
 <div class="author-info">
 {% if author_no_image != true %}
 <div class="author-picture">
-  <img alt="{{ page.author }}" src="/author/{{ page.author }}.jpg">
+  {% if author_image %}
+    <img alt="{{ page.author }}" src="/author/{{ author_image }}">
+  {% else %}
+    <img alt="{{ page.author }}" src="/author/{{ page.author }}.jpg">
+  {% endif %}
 </div>
 {% endif %}
 <div markdown="1" class="author-text">
