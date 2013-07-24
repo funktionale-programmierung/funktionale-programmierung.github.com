@@ -46,11 +46,12 @@ Abstraktion bis Kompositialität finden ihr Pendant in der Kochkunst.
 
 Dieses Gimmick hat mich bei der Lektüre allerdings erst einmal
 abgelenkt: Immer, wenn ich mich mental auf technische
-Erläuterungen zur Programmierung eingestellt hatte, bracht ein
+Erläuterungen zur Programmierung eingestellt hatte, brach ein
 Kochrezept den Lesefluss.  Tatsächlich ist das Buch auch keine
 stringente Einführung in die funktionale Programmierung.
 JavaScript-Programmierer sollten also nicht erwarten, nach der Lektüre
-zu FP-Meistern gereift zu sein.  Was die Qualität des Buchs eigentlich
+zu Meistern der funktionalen Programmierung gereift zu sein. 
+Was die Qualität des Buchs eigentlich
 ausmacht, wurde mir erst klar, als ich mich abends aufs Sofa fläzte
 und dort weiterlas:  Plötzlich fühlte ich mich blendend unterhalten.
 
@@ -59,19 +60,22 @@ wichtigsten Perlen der funktionalen Programmierung.  Dabei geht es um
 klassische Anwendungen der Higher-Order-Programmierung, systematische
 Abstraktion, Maps und Folds, Rekursion und Monaden.  Eine Einführung
 in den Lambda-Kalkül und eine Betrachtung des "Typsystems" von
-JavaScript (die allerdings wenig mit FP zu tun hat) sind auch dabei.
+JavaScript (die allerdings wenig mit funktionaler Programmierung zu
+tun hat) sind auch dabei.
 Alles unterhaltsam aufbereitet mit Hintergrund-Erläuterungen und eben
 den Parallelen zur indischen Küche.  Die Beispiele zeigen gut,
 wie sich idiomatischer JavaScript-Code mit funktionaler Programmierung
 verträgt - und zwar ohne dass erst irgendwelche dicken Frameworks
-dazuinstalliert werden müssen.  Viele Verweise auf Artikel im Internet
+dazuinstalliert werden müssen.  Viele Verweise auf Artikel im
+Internet, andere funktionale Sprachen und Paraadigmen
 und hilfreiche JavaScript-Frameworks runden das Gesamtbild ab.
 
 Insofern ist das Buch als schöner Appetizer zu sehen: Ebensowenig wie
 ein Kochanfänger erwarten darf, nach Lektüre eines Rezeptbuchs
 plötzlich zum Meisterkoch abseits der präsentierten Rezepte zu werden,
-wäre es zuviel erwartet, eine systematische konstruktive Einführung in
-die FP vom Curry-Buch zu erwarten.  (Dafür gibt es andere, wenn auch
+wäre es zuviel erwartet, eine systematische und konstruktive Einführung in
+die funktionale Programmierung vom Curry-Buch zu finden.
+(Dafür gibt es andere, wenn auch
 langweiligere Bücher.)  Kleine Ungenauigkeiten ("zusätzliche
 Überprüfungen, etwa ob eine Funktion tail-rekursiv ist, erfordern mehr
 Rechenzeit") und ein streckenweise etwas schlampiges Lektorat trüben
