@@ -14,8 +14,8 @@ Ohlig und Stefanie Schirmer, gerade erschienen bei O'Reilly, um die
 30€).  Hannes bin ich immer mal wieder bei der
 [ICFP](http://www.icfpconference.org/) über den Weg gelaufen - dort
 hat er sich beim [ICFP Programming
-Contest](http://icfpc.plt-scheme.org/) als einer der weltbesten
-Programmierer zu erkennen gegeben.  Für uns ist das Buch eine gute
+Contest](http://icfpc.plt-scheme.org/) als 
+Weltklasse-Programmierer zu erkennen gegeben.  Für uns ist das Buch eine gute
 Gelegenheit, das Repertoire unseres Blogs um die Kategorie
 "Buchbesprechungen" zu erweitern.
 
@@ -25,10 +25,9 @@ Das Buch richtet sich an aktive JavaScript-Programmierer. Dass
  JavaScript Wurzeln in der funktionalen Programmierung hat (auch
 wenn diese unter dem dicht belaubten Baum anderer Features der Sprache
 manchmal schwer zu sehen ist) ist [hinlänglich
-bekannt](https://brendaneich.com/2008/04/popularity/), ebenso, dass
-JavaScript funktionale Programmierung unterstützt und [in Zukunft noch
-besser unterstützen
-wird](http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls).
+bekannt](https://brendaneich.com/2008/04/popularity/).  Entsprechend
+unterstützt JavaScript die funktionale Programmierung und wird sie [in Zukunft noch
+besser unterstützen](http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls).
 Da JavaScript sich wohl noch lange großer Popularität erfreuen wird,
 ist es begrüßenswert, dass sich die Autoren dieses speziellen Themas
 annehmen.
@@ -76,8 +75,9 @@ die FP vom Curry-Buch zu erwarten.  (Dafür gibt es andere, wenn auch
 langweiligere Bücher.)  Kleine Ungenauigkeiten ("zusätzliche
 Überprüfungen, etwa ob eine Funktion tail-rekursiv ist, erfordern mehr
 Rechenzeit") und ein streckenweise etwas schlampiges Lektorat trüben
-das Gesamtbild nur unwesentlich.  Wer dies beherzt, wird den Kauf des
-Buchs nicht bereuen.
+das Gesamtbild nur unwesentlich.  JavaScript-Programmierer mit
+Interesse an der funktionalen Programmierung werden den Kauf des Buchs
+also nicht bereuen.
 
 <!-- more end -->
 
