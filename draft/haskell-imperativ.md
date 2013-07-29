@@ -14,9 +14,11 @@ Liste zurück gibt, aber kein entsprechendes Gegenstück, dass die letzten
 *n* Elemente zurück gibt.
 
 In diesem Artikel betrachten wir drei verschiedene Implementierungen
-einer solchen Funktion: Eine naive, eine effiziente imperative und eine
-effiziente funktionale. Dabei sehen wir insbesondere wie man imperative
-Algorithmen in Haskell umsetzen kann.
+einer solchen Funktion: Wir beginnen mit einer naiven funktionalen
+Implementierung, die sich aber als ineffizient herausstellen wird. Um hier
+Abhilfe zu schaffen greifen wir auf einen imperativen Algorithmus zurück und
+sehen dabei, wie man in Haskell imperativ programmieren kann. Zuletzt finden
+wir dann noch eine effiziente, funktionale Implementierung.
 
 <!-- more start -->
 
@@ -51,8 +53,10 @@ Dieser Code ist zweifelsfrei korrekt, allerdings zeigt er recht
 schlechtes Performance-Verhalten: Die übergebene Liste wird komplett
 kopiert und im Speicher gehalten, bis alle Elemente ausgegeben sind.
 Wenn der Programmierer sich auf das Speicherverhalten von Haskells
-Bedarfsauswertung (*Lazy Evaluation*) verlässt ist das nicht in Ordnung,
-und wir müssen nach besseren Alternativen suchen.
+Bedarfsauswertung (*Lazy Evaluation*) verlässt und erwartet, dass stets nur die
+aktuell betrachtete Stelle der Liste tatsächlich im Speicher vorgehalten wird,
+dann würde er hier böse überrascht werden. Wir müssen also nach besseren
+Alternativen suchen.
 
 Im Folgenden werden wir unsere Implementierungen mit einem einfachen
 Benchmark vergleichen: Wir messen, wie lange die Berechnung von
@@ -63,22 +67,29 @@ Die imperative Implementierung
 ------------------------------
 
 Auch langjährige funktionale Programmierer denken manchmal in Schleifen
-und Arrays statt in Rekursion und Listen, und so kam ich erst auf einen
-imperativen Algorithmus. Da *n* Elemente zurückgegeben werden sollen,
+und Arrays statt in Rekursion und Listen, und so bietet sich folgender
+imperative Algorithmus direkt an. Da *n* Elemente zurückgegeben werden sollen,
 arbeiten wir mit einem Array der Länge *n*. Diesen befüllen wir mit den
-Elementen der Liste. Wenn wir hinten ankommen, machen wir vorne weiter
+Elementen der Liste, während wir diese der Reihe nach durchgehen.
+Wenn wir beim Array hinten ankommen, machen wir vorne weiter
 und überschreiben damit genau die Elemente, die wir sicher nicht mehr
 brauchen. Sobald wir am Ende der Liste ankommen stehen genau die letzten
 *n* Elemente im Array, und wir müssen sie nur noch in der richtigen
 Reihenfolge auslesen.
 
-Für solchen imperativen Code bietet sich die *ST-Monade* an; darin
-lassen sich – wie auch in der IO-Monade – veränderliche Variablen
-(`STRef`) und veränderliche Arrays (`MArray`) anlegen und bearbeiten.
-Ein eleganter Trick des Typsystems garantiert, dass dabei die „Reinheit“
-von Haskell erhalten bleibt: Die Funktion `runST` beschränkt die
+Für solchen imperativen Code bietet sich die
+[*ST-Monade*](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad-ST.html)
+an; darin lassen sich – wie auch in der IO-Monade – veränderliche Variablen
+([`STRef`](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-STRef.html)
+und veränderliche Arrays
+([`MArray`](http://www.haskell.org/ghc/docs/latest/html/libraries/array/Data-Array-MArray.html)
+anlegen und bearbeiten.  Ein eleganter Trick des Typsystems garantiert, dass
+dabei die „Reinheit“ von Haskell erhalten bleibt: Die Funktion `runST`
+beschränkt die
 Seiteneffekte auf diesen einen Aufruf, verschiedene Aufrufe von `runST`
-können sich nicht gegenseitig beeinflussen.
+können sich nicht gegenseitig beeinflussen. Details zur Theorie dahinter stehen
+im Paper „[Lazy Functional State Threads](http://dx.doi.org/10.1145/178243.178246)“
+von John Launchbury und Simon Peyton Jones.
 
 {% highlight haskell %}
 takeRArray :: forall a. Int -> [a] -> [a]
@@ -101,7 +112,7 @@ beschriebene Schleife und befüllt das Array, wobei der Modulo-Operator
 dafür sorgt, dass wir nach dem Ende des Arrays wieder an den Anfang
 springen. Zuletzt bauen wir aus dem Array wieder die Ergebnisliste.
 
-Der Code ist viel komplizierter als der für `takeRNavie`, und es gibt
+Der Code ist viel komplizierter als der für `takeRNaive`, und es gibt
 etliche Stellen, an denen sich Off-By-One-Fehler oder ähnliche
 Unachtsamkeiten hätten einschleichen können. Zum Glück erlaubt es uns
 der QuickCheck-Ansatz (welchen wir für die Sprache Racket schon in einem
@@ -122,9 +133,9 @@ daran dass mit `takeRArray` die Elemente vom Anfang der Liste, von denen
 man schon weiß dass sie nicht benötigt werden, freigegeben werden
 können.
 
-Aber warum haben sind wir uns im ersten Fall sogar verschlechtert? Will
+Aber warum haben wir uns im ersten Fall sogar verschlechtert? Will
 man solchen Performance-Fragen auf den Grund gehen bietet es sich an,
-den Computer mittels `-ddump-simpl` nach dem optimierten Code in der
+den Compiler mittels `-ddump-simpl` nach dem optimierten Code in der
 Zwischensprache *Core* zu fragen. Dort kann man, mit etwas Übung,
 erkennen dass der Aufruf von `mod` in `go` in *jeder* Iteration der
 Schleife prüft, ob `n` vielleicht -1 oder 0 ist, um diese Sonderfälle
@@ -206,7 +217,13 @@ Implementierung die
 Eingabeliste an zwei Stellen gleichzeitig betrachtet: Zum einen schaut
 der Code, ob die Liste schon fertig ist, zum anderen hält er
 gleichzeitig die Stelle der Liste fest, die er zurückgeben muss, wenn
-die Liste tatsächlich fertig ist. So kommt man auf folgenden Code:
+die Liste tatsächlich fertig ist. Dabei ist die erste Stelle genau `n`
+Positionen vor der zweiten Stelle, und beide werden im Takt weitergerückt, bis
+das Ende der Liste erreicht ist.
+
+Die Liste `l`, um `n` Stellen vorgerückt, ist `drop n l`, und das gleichzeitig
+weiterrücken erledigt eine rekursive Hilfsfunktion `go` für uns. So kommt man
+auf folgenden Code:
 
 {% highlight haskell %}
 takeRIdiomatic n l = go (drop n l) l
@@ -223,7 +240,7 @@ schlägt sogar alle oben gezeigten Varianten: 0,9 ms für die lange und
 0,4 ms für die kurze Ausgabe. Mit dieser Funktionsdefinition können wir
 nun zufrieden sein.
 
-Doch wie funktioniert das eigentlich? Um das zu verdeutlichen
+Doch wie funktioniert das eigentlich im Detail? Um das zu verdeutlichen
 visualisieren wir hier einen Aufruf von `takeRIdiomatic 4 [1..7]` mit
 ASCII-Art:
 
