@@ -31,9 +31,5 @@ Links mit [Text](http://URL).
 Hervorhebungen *mit Stern* oder _Unterstrich_.  **Doppelt** für mehr
 __Druck__.  Geht auch mitt*endr*in in einem Wort.
 
-
-
-<!-- Local Variables: -->
-<!-- mode: text -->
-<!-- End: -->
+<!-- more end -->
 
