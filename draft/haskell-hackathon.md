@@ -1,13 +1,14 @@
 ---
 layout: post
-title: "Zurich FP Afternoon / Haskell Hackathon"
+title: "Zurich FP Afternoon / Haskell-Hackathon"
 author: stefan-wehr
 tags: ["haskell", "hackathon", "event", "workshop", "konferenz"]
 ---
 
 Wie schon letzte Woche mit der [Ankündigung](/2013/08/07/cufp-2013.html) des CUFP-Workshops möchten wir
 auch diese Woche interessante Veranstaltungen vorstellen, die sich mit funktionaler Programmierung
-beschäftigt. Diese Mal geht es um den *Zurich FP Afternoon* und den *ZuriHac 2013*. Beide 
+beschäftigt. Diese Mal geht es um den [Zurich FP Afternoon](http://www.haskell.org/haskellwiki/ZuriHac2013)
+und den [ZuriHac 2013](http://www.haskell.org/haskellwiki/ZuriHac2013). Beide 
 Veranstaltung finden von Donnerstag, 29.8. 2013 bis Sonntag, 1.9. 2013 in Zürich statt,
 sind also insbesondere aus dem süddeutschen Raum gut erreichbar.
 
@@ -20,7 +21,7 @@ GHC. Einen weiteren Vortrag hält von Eric Hesselink von [Silk](http://www.silka
 wird es sicherlich um die Anwendung von Haskell in der industriellen Softwareentwicklung gehen.
 
 Der *ZuriHac 2013* geht am nächsten Tag (30.8.2013) los. Dann wird drei Tage lang zusammen Haskell
-programmiert und darüber diskutiert! Aus meiner Erfahrung von inzwischen drei Haskell Hackathons nehme ich stark
+programmiert und darüber diskutiert! Aus meiner Erfahrung von inzwischen drei Haskell-Hackathons nehme ich stark
 an, dass sich auch dieses Mal wieder ein bunte Mischung aus Haskell Programmierern zusammenfinden wird (siehe
 auch die [Teilnehmerliste](http://www.haskell.org/haskellwiki/ZuriHac2013/Attendees)).
 Man trifft auf einem solchen Hackathon die Top-Haskell-Programmierer, kann sich aber auch mit Leuten austauschen
