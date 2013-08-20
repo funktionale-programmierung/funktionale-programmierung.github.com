@@ -124,7 +124,7 @@ pure int square(int x) {
 }
 {% endhighlight %}
 
-Der D-Compiler stellt hier sicher, dass die Funktion `square` keine
+Der D-Compiler stellt hier sicher, dass die Funktion `square` auf keine
 globalen Variablen zugreift und nur andere reine Funktionen aufruft.
 
 Rekursion
