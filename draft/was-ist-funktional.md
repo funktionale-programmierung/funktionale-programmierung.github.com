@@ -118,7 +118,7 @@ Minimum zu redizieren und besonders kenntlich zu machen.
 
 Beispiel in D:
 
-{% highlight d %}
+{% highlight c %}
 pure int square(int x) {
   return x * x;
 }
