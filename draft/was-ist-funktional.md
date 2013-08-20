@@ -152,12 +152,6 @@ Hier rufen sich zwei Funktionen, `ping` und `pong` bis in alle
 Ewigkeit gegenseitig auf (ohne dass dem Programm irgendwann der
 Speicher ausgehen würde).
 
-<!--Beispiel in Haskell:
-{% highlight haskell %}
-numbers = 1 : map (+1) numbers
-{% endhighlight %}
--->
-
 Lazy evaluation, oder nicht-strikte Auswertung
 -----------------
 
@@ -175,15 +169,6 @@ Auswertungsstrategie von Funktionsaufrufen, aber z.B. fast immer eine
 nicht-strikte Auswertung bei Operatoren wie dem logisches Oder, oder
 bei bedingten Ausdrücken.
 
-<!-- TODO
-Beispiel in Hakell:
-{% highlight haskell %}
-getOrElse [] default = default
-getOrElse (x : _) default = x
-
-{% endhighlight %}
--->
-
 Typinferenz
 -----------
 
@@ -194,15 +179,6 @@ vorhanden.
 
 Die neueste Forschung an der nächsten Generation von Typsystemen (z.B.
 Dependent types) findet ebenfalls in funktionalen Sprachen statt.
-
-<!--
-Ein Wort zur Objekt-Orientierung
-===
-Smalltalk ist funktional (?)
---
-    Actually I made up the term "object-oriented", and I can tell you I did not have C++ in mind.
-    Alan Kay, OOPSLA 97
--->
 
 Zusammenfassung
 ==============
