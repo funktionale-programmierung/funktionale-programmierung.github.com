@@ -14,6 +14,16 @@ Titel dieses Blogs einmal grundlegend zu erklären.
 
 <!-- more start -->
 
+Der Begriff funktionale Programmierung ist nicht eindeutig definiert,
+aber man kann sich ihm aus drei verschiedenen Richtungen nähern. Der
+Begriff kann für das sogenannte Funktionale Paradigma stehen, was
+soetwas wie eine Minimalanforderung ist. Oder er steht für das
+Programmieren in funktionalen Sprachen, was schon eine sehr viel
+restriktivere Definition darstellt. Schließlich kann er auch als
+Oberbegriff für "typisch funktionale" Programmierkonzepte stehen, die
+auch in anderen Sprachen Verbreitung finden. Zunächst zum Begriff des
+Funktionalen Paradigmas.
+
 Das Funktionale Paradigma
 =========================
 
@@ -43,18 +53,20 @@ Anwendung von Funktionen (die _Applikation_) sind.
 
 Der Ausdruck zur Erzeugung von Funktionen wird meist als
 "Lambda-Ausdruck" bezeichnet, und als Beispiel oft die
-Programmiersprache Scheme gewählt, da hier das Wort Lambda direkt
-vorkommt:
+Programmiersprache Scheme gewählt, vielleicht weil hier das Wort
+_Lambda_ direkt vorkommt. Hier eine Funktion die zu einer Zahl 2
+addiert:
 
 {% highlight scheme %}
-   (lambda (x) (+ x 2))
+(lambda (x) (+ x 2))
 {% endhighlight %}
 
 Die nächste Version von Java, Java 8, wird aber zum Beispiel auch
-Lambda-Ausdrücke enthalten, die dann so notiert werden können:
+Lambda-Ausdrücke enthalten. Die gleiche Funktion kann dann dort so
+notiert werden:
 
 {% highlight java %}
-   (x) -> x + 2
+(x) -> x + 2
 {% endhighlight %}
 
 In der breitesten Auslegung ist funktionales Programmieren ist also
@@ -81,8 +93,9 @@ Funktionale Konzepte
 ====================
 
 Es gibt eine Reihe von Konzepten die typisch für funktionale Sprachen
-sind, beziehungsweise das relativ grobe Konzept des funktionalen Paradigmas
-in verschiedene Richtungen weiter untergliedern. Zu ihnen gehören:
+sind, beziehungsweise das relativ grobe Konzept des funktionalen
+Paradigmas in verschiedene Richtungen weiter untergliedern. Hier kann
+nur eine kleine Auswahl aufgelistet werden:
 
 Funktionen höherer Ordnung
 --------------------------
@@ -97,7 +110,7 @@ wie Zahlen oder Strings auftauchen können.
 Beispiel in Scala:
 
 {% highlight scala %}
-  def twice(f: Int => Int): Int => Int = { x => f(f(x)) }
+def twice(f: Int => Int): Int => Int = { x => f(f(x)) }
 {% endhighlight %}
 
 Die Funktion `twice` nimmer eine Funktion `f` und gibt eine neue
@@ -155,19 +168,45 @@ Speicher ausgehen würde).
 Lazy evaluation, oder nicht-strikte Auswertung
 -----------------
 
-Bei einer strikten Auswertung, werden für eine Funktionsanwendung
+Bei einer strikten Auswertung werden für eine Funktionsanwendung
 zunächst die Argumente ausgewertet, bevor die Funktion aufgerufen,
 d.h. mit der Auswertung des Funktionsrumpfes forgefahren wird.
 
 Dies ist aber insbesondere dann nicht notwendig, wenn es nur reine
 Ausdrücke gibt. Dann kann man die Auswertung der Argumente an die
-Stelle verschieben, an der der Wert benötigt wird (wenn überhaupt),
-ohne dass sich das Ergebnis dadurch ändern könnte.
+Stelle verschieben, an der deren Wert benötigt wird, ohne dass sich
+das Ergebnis dadurch ändern könnte. Außerdem kann auf die Auswertung
+auch komplett verzichtet werden, wenn der Wert überhaupt nicht
+gebraucht wird.
 
 Die meisten funktionalen Sprachen verfolgen dennoch eine strikte
 Auswertungsstrategie von Funktionsaufrufen, aber z.B. fast immer eine
 nicht-strikte Auswertung bei Operatoren wie dem logisches Oder, oder
 bei bedingten Ausdrücken.
+
+Ein Beispiel in Haskell, einer Sprache mit nicht-strikter Auswertung
+ist folgendes. Angenommen wir haben schon eine Funktion die Quick-Sort
+implementiert, also einen Sortieralgorithmus, bei dem das erste
+Element einer Liste genommen wird, dann rekursiv die beiden Listen
+aller Elemente die kleiner bzw. größer sind sortiert werden, und diese
+drei Teile dann wieder passend aneinander gehängt werden:
+
+{% highlight haskell %}
+quickSort [] = []
+quickSort (x:xs) = quickSort (filter (< x) xs) ++ [x] ++ quickSort (filter (>= x) xs)
+{% endhighlight %}
+
+Möchten wir nun eine Funktion definieren, die das kleinste Elemente
+einer Liste zurückgibt, dann können wir einfach schreiben, dass wir
+das erste Element der sortierten Liste haben wollen:
+
+{% highlight haskell %}
+minimum xs = head (quickSort xs)
+{% endhighlight %}
+
+Die Funktion `quickSort` wird dabei dann automatisch nur so
+weit ausgewertet, wie es notwendig ist, um zu ermitteln welches das
+erste Element ist.
 
 Typinferenz
 -----------
@@ -177,8 +216,17 @@ meisten) Ausdrücke inferiert, d.h. automatisch hergeleitet werden
 können, ist seit den 1970er Jahren in vielen funktionalen Sprachen
 vorhanden.
 
-Die neueste Forschung an der nächsten Generation von Typsystemen (z.B.
-Dependent types) findet ebenfalls in funktionalen Sprachen statt.
+An dem Beispiel von gerade eben, der Funktionen `miminum` und
+`quickSort` kann man das schon gut erkennen:
+
+{% highlight haskell %}
+minimum xs = head (quickSort xs)
+{% endhighlight %}
+
+Es ist nicht nötig hier die Typen der Parameter oder des Rückgabewerts
+zu deklarieren. Der Compiler inferiert den allgemeinsten Typ für die
+Funktion `minimum` und würde eine Fehlermeldung ausgeben, wenn man sie
+beispielsweise mit einer Zahl aufrufen wollte.
 
 Zusammenfassung
 ==============
@@ -188,3 +236,11 @@ Programmieren mit Lambda-Ausdrücken, hat aber in seiner langen
 Geschichte viele ausgereifte Konzepte hervorgebracht, die nicht nur in
 diesem Blog jede Woche erläutert werden, sondern auch in der Industrie
 immer größere Verwendung finden.
+
+Hier noch ein paar Links auf frühere Blog-Artikel, die diese und
+weitere Konzepte besonders beleuchten:
+
+- [Eine kleine Einführung in die rein funktionale Programmierung]({% post_url 2013-03-12-rein-funktional %})
+- [Warum funktional?]({% post_url 2013-03-20-warum-funktional %})
+- [Funktionale API für JasperReports]({% post_url 2013-06-13-funktionale-api-jasper %})
+- [Zeitreisen mit persistenten Datenstrukturen]({% post_url 2013-06-21-persistente-datenstrukturen %})
