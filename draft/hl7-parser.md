@@ -41,7 +41,7 @@ nicht viel Wert. So gibt es z.B. nicht einmal Einigkeit bezüglich der [Zeitzone
 Zeit- und Datumswerten](http://www.hl7standards.com/blog/2008/07/25/hl7-time-zone-qualification/).
 
 Doch selbst bei der Spezifikation der Syntax bzw. bei der Umsetzung davon gibt es Lücken, 
-was sich z.B. in der fehlenden Spezifikation für das Encoding von HL-Nachrichten oder der fehlenden
+was sich z.B. in der fehlenden Spezifikation für das Encoding von HL7-Nachrichten oder der fehlenden
 Unterstützung für [Escape-Sequenzen](http://www.hl7standards.com/blog/2006/11/02/hl7-escape-sequences/) 
 in vielen Implementierungen äußert.
 
@@ -49,25 +49,23 @@ Nichtsdestotrotz stellen wir Ihnen heute einen in Haskell geschrieben HL7-Parser
 der mit Nachrichten in beliebigen Encodings umgehen kann und auch Escape-Sequenzen unterstützt.
 
 Zunächst mal zum Aufbau von HL7-Nachrichten. Eine solche Nachricht besteht aus
-mehreren durch `\r` getrennte *Segmenten*, wobei jedes Segment einen Namen und beliebig viele
+mehreren durch `\r` getrennte *Segmente*, wobei jedes Segment einen Namen und beliebig viele
 *Felder* hat. Der Name eines Segments steht am Anfang des Segments und ist typischerweise
 ein dreizeichiger Buchstabencode.  Ein Feld kann mehrere *Feldwiederholungen* enthalten,
 eine Wiederholung besteht aus *Komponenten*, welche wiederum
-in *Subkomponenten* unterteilt werden können. Die Trennzeichnen zwischen Feldern,
+in *Subkomponenten* unterteilt werden können. Die Trennzeichen zwischen Feldern,
 Wiederholungen, Komponenten und Subkomponenten sind am Anfang der Nachricht festgelegt,
 es wird aber typischerweise immer `|` zur Feldtrennung, `~` zur Abgrenzung von Wiederholungen,
 `^` zur Trennung von Komponenten und `&` zur Trennungen von Subkomponenten verwendet.
 
 Schauen wir uns ein einfaches Beispiel an (ich ersetze dabei `\r` durch das Symbol für "neue Zeile"):
 
-~~~
-MSH|^~\&|EPIC|EPICADT|SMS|SMSADT|199912271408|CHARRIS|ADT^A04|1817457|D|2.5|
-PID||0493575^^^2^ID 1|454721||DOE^JOHN^^^^
-PV1||O|168 ~219~C~PMA^^^^^^^^^||||277^ALLEN MYLASTNAME^BONNIE^
-~~~
+    MSH|^~\&|EPIC|EPICADT|SMS|SMSADT|199912271408|CHARRIS|ADT^A04|1817457|D|2.5|
+    PID||0493575^^^2^ID 1|454721||DOE^JOHN^^^^
+    PV1||O|168 ~219~C~PMA^^^^^^^^^||||277^ALLEN MYLASTNAME^BONNIE^
 
 Das erste Segment trägt immer den Namen `MSH`, was für "Message Header" steht. Direkt nach dem
-Namen werden dann die Trennzeichen sowie das Escapesymbol `\` definiert. Das MSH-Segment
+Namen werden dann die Trennzeichen sowie das Escapesymbol, hier `\`, definiert. Das MSH-Segment
 enthält Information über den Absender und den Adressaten der Nachricht sowie über die Nachricht selbst.
 So steht z.B. in Feld 9 der Typ der Nachricht `ADT^A04`, also ein Feldinhalt mit zwei Komponenten
 `ADT` und `A04`. ADT steht dabei für "Admission Discharge Transfer", es handelt sich also
@@ -78,7 +76,7 @@ zu einem Krankenhausaufenthalt (PV1 Segment).
 Beginnen wir nun mit der Modellierung von HL7-Nachrichten als Haskell Datentyp (der komplette
 Quellcode inklusiver alle Import-Statements ist [hier](/files/hl7-parser/Hl7Parser.hs) erhältlich):
 
-~~~haskell
+{% highlight haskell %}
 newtype Message
     = Message
     { msg_segments :: Vector Segment
@@ -118,7 +116,7 @@ data Value
     = TextValue !T.Text
     | EscapeValue!T.Text
       deriving (Show, Eq)
-~~~
+{% endhighlight %}
 
 Aus Effizienzgründen verwenden wir `Vector` statt Listen, `Text` statt `String` und versehen 
 jedes Feld mit einer Striktheitsannotation `!`. Ebenfalls aus Effizienzgründen sind die Typen
@@ -133,7 +131,7 @@ zum anderen entfernen sie leere Felder, leere Feldwiederholungen, leere Komponen
 falls diese ganz am Ende vorkommen. Das ist konsistent mit dem HL7-Standard, denn leere Element dürfen
 am Ende beliebig weggelassen oder auch hinzugefügt werden.
 
-~~~haskell
+{% highlight haskell %}
 mkMessage :: Segment -> [Segment] -> Message
 mkMessage x xs = Message (Vector.fromList (x:xs))
 
@@ -166,14 +164,14 @@ mkSubComponent vs = ValueSubComponent (Vector.fromList vs)
 
 mkVector :: Eq a => a -> [a] -> Vector a
 mkVector empty l = Vector.fromList (L.dropWhileEnd (== empty) l)
-~~~
+{% endhighlight %}
 
 So, jetzt aber zum eigentlichen Parser. Wir verwenden dafür die Bibliothek
 [attoparsec](http://hackage.haskell.org/package/attoparsec), eine weitverbreite,
 hochperformante *Bibliothek für Parserkombinatoren*. Was ist denn nun schon wieder
 ein Parserkombinator? Einigen von Ihnen wird sicher der Begriff *Parsergenerator* ein
-Begriff sein. Dieser Ansatz wird in imperativen Sprachen häufig benutzt, um aus einer
-externen Beschreibung einer Grammatik und ein paar Codeschnipseln ein Parser zu generieren.
+geläufig sein. Dieser Ansatz wird in imperativen Sprachen häufig benutzt, um aus einer
+externen Beschreibung einer Grammatik und ein paar Codeschnipseln einen Parser zu generieren.
 
 In funktionalen Sprachen gibt es selbstverständlich auch Parsergeneratoren,
 allerdings werden Parser wesentlich häufiger direkt in der Sprache selbst implementiert.
@@ -188,7 +186,7 @@ Nun aber zum Parser selbst, den ich jetzt schrittweise vorstellen möchte. Der
 Parser ist dabei in [monadischem Stil](http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html)
 geschrieben.
 
-~~~haskell
+{% highlight haskell %}
 parseMessage :: Parser Message
 parseMessage =
     do string "MSH"
@@ -197,7 +195,7 @@ parseMessage =
        repSep <- anyChar
        escChar <- anyChar
        subSep <- anyChar
-~~~
+{% endhighlight %}
 
 Wir beginnen mit dem Parsen des Headers und den Trennzeichnen. Der Kombinator `string`
 ist dabei ein Parser der erfolgreich den angegebenen String wegparst. Findet er den
@@ -210,43 +208,42 @@ aus (schließlich kann ein Segment auch eine beliebige Anzahl von Feldern enthal
 Der Parser `char` ist erfolgreich wenn als nächstes in der Eingabe das angegebene Zeichen, in diesem
 Fall das Feldtrennzeichen, auftaucht.
 
-~~~haskell
+{% highlight haskell %}
        let fields =
                many (do char fieldSep
                         field)
-~~~
+{% endhighlight %}
 
 Als nächstes folgt die Definition des Parsers für ein einzelnes Feld. Wir benutzen dabei
 den Kombinator `sepBy` um auszudrücken dass ein Feld aus
 einzelnen Wiederholungen getrennt durch `repSep` besteht.
 
-~~~haskell
+{% highlight haskell %}
            field =
                do reps <- fieldRep `sepBy` char repSep
                   return (mkField reps)
-~~~
+{% endhighlight %}
 
 Der Inhalt einer Feldwiederholung wird vom `fieldRep`-Parser geparst. Diese funktioniert, genauso
 wie der Parser für Komponenten, analog zum `field`-Parser.
 
-~~~haskell
+{% highlight haskell %}
            fieldRep =
                do comps <- component `sepBy` char compSep
                   return (mkFieldRep comps)
            component =
                do subComps <- subComponent `sepBy` char subSep
                   return (mkComponent subComps)
-
-~~~
+{% endhighlight %}
 
 Der Parser für Subkomponenten ist etwas spannender, den hier müssen wir mit textuellen Inhalten und
-Escapesequenzen umgehen. Um hier eine Auswahl zu treffen, benutzen wir den `choice` Kombinator,
+Escapesequenzen umgehen. Um hier eine Auswahl zu treffen, benutzen wir den `choice`-Kombinator,
 der aus einer Liste von Parsern die einzelnen Parser der Reihe nach ausprobiert und das
 Ergebnis des ersten erfolgreichen zurückliefert (oder fehlschlägt wenn alle fehlschlagen).
-Der `takeWhile1` Kombinator parst solange die Zeichen des Eingabestroms (mindestens aber eines), bis
+Der `takeWhile1`-Kombinator parst solange die Zeichen des Eingabestroms (mindestens aber eines), bis
 das übergebene Prädikat falsch wird.
 
-~~~haskell
+{% highlight haskell %}
            subComponent =
                do xs <- many $ choice [regularValue, escapeSequence]
                   return (mkSubComponent xs)
@@ -260,11 +257,11 @@ das übergebene Prädikat falsch wird.
                   return (EscapeValue x)
            notSpecial x = (x /= fieldSep && x /= compSep && x /= subSep &&
                            x /= lineSep && x /= repSep && x /= escChar)
-~~~
+{% endhighlight %}
 
 So, jetzt können wir den Parser komplettieren:
 
-~~~haskell
+{% highlight haskell %}
        mshFields <- fields
        let segment =
                do name <- takeWhile1 (/= fieldSep)
@@ -276,63 +273,71 @@ So, jetzt können wir den Parser komplettieren:
     where
       lineSep = '\r'
       eol = char lineSep
-~~~
+{% endhighlight %}
 
 Zum Abschluss definieren wir noch eine Funktion, die den soeben definierten Parser auf einen
 Eingabestring anwendet:
 
-~~~haskell
+{% highlight haskell %}
 parseMessageFromText :: T.Text -> Either String Message
 parseMessageFromText = parseOnly parseMessage
-~~~
+{% endhighlight %}
 
 Fertig! Halt, ein Test wäre noch gut, hier kommt er schon:
 
-~~~haskell
+{% highlight haskell %}
 test_parseMessage =
     assertEqual (Right expectedMsg) (parseMessageFromText msg)
     where
       expectedMsg =
           Message (Vector.fromList
-                        [Segment "MSH" (Vector.fromList [TextField "FOO"]),
-                         Segment "PID" (Vector.fromList [EmptyField,
-                                                    EmptyField,
-                                                    TextField "454721",
-                                                    EmptyField,
-                                                    StructuredField (Vector.fromList
-                                                                          [StructuredFieldRep
-                                                                           (Vector.fromList [TextComponent "DOE",
-                                                                                        TextComponent "JOHN"])])]),
-                         Segment "PV1" (Vector.fromList [EmptyField,
-                                                    StructuredField (Vector.fromList
-                                                                          [TextFieldRep "0",
-                                                                           StructuredFieldRep
-                                                                           (Vector.fromList [TextComponent "1",
-                                                                                        TextComponent "2"])]),
-                                                    StructuredField (Vector.fromList
-                                                                          [StructuredFieldRep
-                                                                           (Vector.fromList [StructuredComponent
-                                                                                        (Vector.fromList [EmptySubComponent,
-                                                                                                     TextSubComponent "bar"])])]),
-                                                    StructuredField (Vector.fromList
-                                                                          [StructuredFieldRep
-                                                                           (Vector.fromList [StructuredComponent
-                                                                                        (Vector.fromList [ValueSubComponent
-                                                                                                     (Vector.fromList [TextValue "string",
-                                                                                                                  EscapeValue "F",
-                                                                                                                  TextValue "escape"])])])]),
-                                                    StructuredField (Vector.fromList
-                                                                          [StructuredFieldRep
-                                                                           (Vector.fromList [EmptyComponent,
-                                                                                        TextComponent ""])])])])
+                   [Segment "MSH" (Vector.fromList [TextField "FOO"]),
+                    Segment "PID" 
+                      (Vector.fromList 
+                       [EmptyField,
+                        EmptyField,
+                        TextField "454721",
+                        EmptyField,
+                        StructuredField (Vector.fromList
+                                        [StructuredFieldRep
+                                         (Vector.fromList [TextComponent "DOE",
+                                                          TextComponent "JOHN"])])]),
+                    Segment "PV1" 
+                      (Vector.fromList 
+                        [EmptyField,
+                         StructuredField 
+                           (Vector.fromList
+                             [TextFieldRep "0",
+                              StructuredFieldRep
+                              (Vector.fromList [TextComponent "1", TextComponent "2"])]),
+                         StructuredField 
+                           (Vector.fromList
+                            [StructuredFieldRep
+                              (Vector.fromList [StructuredComponent
+                                                 (Vector.fromList [EmptySubComponent,
+                                                                   TextSubComponent "bar"])])]),
+                         StructuredField 
+                           (Vector.fromList
+                             [StructuredFieldRep
+                               (Vector.fromList 
+                                 [StructuredComponent
+                                   (Vector.fromList [ValueSubComponent
+                                                       (Vector.fromList 
+                                                         [TextValue "string",
+                                                          EscapeValue "F",
+                                                          TextValue "escape"])])])]),
+                         StructuredField (Vector.fromList
+                                          [StructuredFieldRep
+                                             (Vector.fromList [EmptyComponent, 
+                                                               TextComponent ""])])])])
 
       msg = T.intercalate "\r"
             ["MSH|^~\\&|FOO",
              "PID|||454721||DOE^JOHN^",
              "PV1||0~1^2|&bar&|string\\F\\escape|^\"\""]
-~~~
+{% endhighlight %}
 
-Damit haben wir in weniger als 180 Zeilen Code eine kompletten Parser für HL7-Nachrichten inklusive Test geschrieben.
+Damit haben wir in weniger als 180 Zeilen Code einen kompletten Parser für HL7-Nachrichten inklusive Test geschrieben.
 Der Parser hat sich so auch bei uns im produktiven Einsatz bewährt.
 
 Viel Spaß beim Experimentieren mit Haskell und Parserkombinatoren. Ich freue mich über Rückmeldungen jeder Art!
