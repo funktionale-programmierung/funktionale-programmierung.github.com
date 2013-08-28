@@ -110,8 +110,6 @@ parseMessage =
            subComponent =
                do xs <- many $ choice [regularValue, escapeSequence]
                   return (mkSubComponent xs)
-           notSpecial x = (x /= fieldSep && x /= compSep && x /= subSep &&
-                           x /= lineSep && x /= repSep && x /= escChar)
            regularValue =
                do x <- takeWhile1 notSpecial
                   return (TextValue x)
@@ -120,12 +118,13 @@ parseMessage =
                   x <- takeWhile1 notSpecial
                   char escChar
                   return (EscapeValue x)
+           notSpecial x = (x /= fieldSep && x /= compSep && x /= subSep &&
+                           x /= lineSep && x /= repSep && x /= escChar)
        mshFields <- fields
        let segment =
                do name <- takeWhile1 (/= fieldSep)
                   fs <- fields
                   return (mkSegment name fs)
-
        otherSegments <- many (do eol
                                  segment)
        return (mkMessage (mkSegment "MSH" mshFields) otherSegments)

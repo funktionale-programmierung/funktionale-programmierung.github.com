@@ -2,7 +2,7 @@
 layout: post
 title: "Ein Parser für HL7-Nachrichten in weniger als 180 Zeilen Haskell-Code"
 author: stefan-wehr
-tags: ["haskell", "parser", "hl7"]
+tags: ["Haskell", "Parser", "HL7"]
 ---
 
 Ein Argument gegen die Benutzung funktionaler Sprachen in einem kommerziellen Produkt
@@ -16,7 +16,7 @@ zusammenstellen.
 
 Heute wollen wir das anhand eines Parsers für HL7-Nachrichten durchexerzieren.
 HL7 ist ein weitverbreiteter [Standard](http://www.hl7.org/implement/standards/) zum Austausch
-medizinischer Daten. Wir setzen diesen Standard bei uns in der Firma sehr
+medizinischer Daten. Wir setzen diesen Standard bei uns in der Firma 
 oft im Rahmen unseres Produktes [Checkped MED](http://cpmed.de) ein, über das
 wir schon an [anderer Stelle](/2013/07/17/medizin-funktional.html) in diesem
 Blog berichtet haben. Da der Checkpad-Server hauptsächlich in Haskell
@@ -24,7 +24,7 @@ geschrieben ist, benötigen wir in Haskell natürlich auch einen Parser
 für HL7-Nachrichten. Da es einen solchen nicht fertig erhältlich gibt, haben wir
 in kurzerhand selbstgeschrieben. Sie werden in diesem Artikel sehen,
 dass wir eine performante und robuste Implementierung in weniger als 180 Zeilen Haskell-Code
-erstellen können, und diese Zeilen enthalte auch die Datentypdefinition für
+erstellen können, und diese Zeilen enthalten auch die Datentypdefinition für
 die HL7-Nachrichten sowie Tests. Der Code des eigentlichen Parsers ist weniger
 als 50 Zeilen lang.
 
@@ -35,7 +35,7 @@ zu HL7. Wie oben beschrieben ist HL7 ein Standard zum Austausch medizinischer Da
 Solche Daten können z.B. Stammdaten von Patienten (Name, Geburtsdatum, Angehörige, Hausarzt,
 Informationen zur Versicherung usw.) oder auch Daten zu Befunden (Laborergebnisse, 
 Begutachtung von radiologischen Bildern usw.) sein. Obwohl der
-[Hl7-Standard](http://www.hl7.org/implement/standards/) neben der Syntax von Hl7-Nachrichten
+[HL7-Standard](http://www.hl7.org/implement/standards/) neben der Syntax von HL7-Nachrichten
 auch deren Semantik spezifiziert ist dieser Teil der Spezifikation in der Praxis
 nicht viel Wert. So gibt es z.B. nicht einmal Einigkeit bezüglich der [Zeitzone von
 Zeit- und Datumswerten](http://www.hl7standards.com/blog/2008/07/25/hl7-time-zone-qualification/).
@@ -49,7 +49,8 @@ Nichtsdestotrotz stellen wir Ihnen heute einen in Haskell geschrieben HL7-Parser
 der mit Nachrichten in beliebigen Encodings umgehen kann und auch Escape-Sequenzen unterstützt.
 
 Zunächst mal zum Aufbau von HL7-Nachrichten. Eine solche Nachricht besteht aus
-mehreren durch `\r` getrennte *Segmente*, wobei jedes Segment einen Namen und beliebig viele
+mehreren durch `\r` (also das Carriage-Return-Zeichen, ASCII Code 13)
+getrennte *Segmente*, wobei jedes Segment einen Namen und beliebig viele
 *Felder* hat. Der Name eines Segments steht am Anfang des Segments und ist typischerweise
 ein dreizeichiger Buchstabencode.  Ein Feld kann mehrere *Feldwiederholungen* enthalten,
 eine Wiederholung besteht aus *Komponenten*, welche wiederum
@@ -58,7 +59,8 @@ Wiederholungen, Komponenten und Subkomponenten sind am Anfang der Nachricht fest
 es wird aber typischerweise immer `|` zur Feldtrennung, `~` zur Abgrenzung von Wiederholungen,
 `^` zur Trennung von Komponenten und `&` zur Trennungen von Subkomponenten verwendet.
 
-Schauen wir uns ein einfaches Beispiel an (ich ersetze dabei `\r` durch das Symbol für "neue Zeile"):
+Schauen wir uns ein einfaches Beispiel an (die einzelnen Segmente stehen dabei
+in individuellen Zeilen und sind nicht durch `\r` getrennt):
 
     MSH|^~\&|EPIC|EPICADT|SMS|SMSADT|199912271408|CHARRIS|ADT^A04|1817457|D|2.5|
     PID||0493575^^^2^ID 1|454721||DOE^JOHN^^^^
@@ -73,7 +75,7 @@ um eine Stammdatennachricht. Die zweite Komponente `A04` schränkt diesen Typen 
 In den anderen beiden Segmenten finden sich Information zum Patienten selbst (PID Segment) sowie
 zu einem Krankenhausaufenthalt (PV1 Segment).
 
-Beginnen wir nun mit der Modellierung von HL7-Nachrichten als Haskell Datentyp (der komplette
+Beginnen wir nun mit der Modellierung von HL7-Nachrichten als Haskell-Datentyp (der komplette
 Quellcode inklusiver alle Import-Statements ist [hier](/files/hl7-parser/Hl7Parser.hs) erhältlich):
 
 {% highlight haskell %}
@@ -119,10 +121,18 @@ data Value
 {% endhighlight %}
 
 Aus Effizienzgründen verwenden wir `Vector` statt Listen, `Text` statt `String` und versehen 
-jedes Feld mit einer Striktheitsannotation `!`. Ebenfalls aus Effizienzgründen sind die Typen
+jedes Feld mit einer Striktheitsannotation `!`. Wir möchten das Thema "Effizienz durch
+Striktheit" an dieser Stelle nicht allzusehr vertiefen, sondern bemerken nur, dass dadurch
+verhindert wird, dass im Speicher unausgewertete Berechnungen mit Referenzen auf die
+zu parsende Eingabedatei länger als nötig übrig bleiben. Für fortgeschrittene Haskell-Programmierer
+gibt es dazu im Haskell-Wiki eine [Seite](http://www.haskell.org/haskellwiki/Performance/Strictness)
+und zu gegebener Zeit wird es sicher auch in diesem Blog dazu den einen oder anderen Artikel geben.
+
+Ebenfalls aus Effizienzgründen sind die Typen
 `Field`, `FieldRep`, `Component` und `SubComponent` mit Spezialfällen für leeren und rein
-textuellen Inhalt ausgestattet. Dies macht Sinn da diese Fälle sehr häufig in HL7-Nachrichten
-aus der echten Welt vorkommen.
+textuellen Inhalt ausgestattet. Dies macht Sinn da in 
+HL7-Nachrichten aus dem Klinikalltag die allermeisten Felder nur Text
+oder mehrere Komponenten mit rein textuellem Inhalt enthalten.
 
 Als nächstes führen wir Konstrukturfunktionen für die eben definierten Datentypen ein. Die 
 Konstruktorfunktionen kümmern sich um eine normalisierte Darstellung. Zum einen sorgen sie dafür,
@@ -168,14 +178,18 @@ mkVector empty l = Vector.fromList (L.dropWhileEnd (== empty) l)
 
 So, jetzt aber zum eigentlichen Parser. Wir verwenden dafür die Bibliothek
 [attoparsec](http://hackage.haskell.org/package/attoparsec), eine weitverbreite,
-hochperformante *Bibliothek für Parserkombinatoren*. Was ist denn nun schon wieder
+hochperformante Bibliothek für *Parserkombinatoren*. Was ist denn nun schon wieder
 ein Parserkombinator? Einigen von Ihnen wird sicher der Begriff *Parsergenerator* ein
 geläufig sein. Dieser Ansatz wird in imperativen Sprachen häufig benutzt, um aus einer
 externen Beschreibung einer Grammatik und ein paar Codeschnipseln einen Parser zu generieren.
 
 In funktionalen Sprachen gibt es selbstverständlich auch Parsergeneratoren,
 allerdings werden Parser wesentlich häufiger direkt in der Sprache selbst implementiert.
-Zur Beschreibung der Grammatik kommen dabei die Parserkombinatoren zum Einsatz. Wir werden
+Ein Parserkombinator ist dabei eine Funktion, die aus gegebenen Parsefunktionen
+eine neue Parsefunktion konstruiert. Damit können Parserkombinatoren, zusammen mit
+primitiven Parsefunktion zum Parsen von festen Texten, Schlüsserworten, Zahlen etc.,
+verwendet werden, um eine Grammatik direkt in der Programmiersprache deklarativ
+zu spezifizieren. Wir werden
 gleich ein Beispiel sehen, vorher sei mir aber noch erlaubt darauf hinzuweisen, dass
 es in unserem Fall nur schwer möglich wäre, einen Parsergenerator zu verwenden, denn
 schließlich ist die HL7-Grammatik durch die frei konfigurierbaren Trennzeichen
@@ -215,7 +229,7 @@ Fall das Feldtrennzeichen, auftaucht.
 {% endhighlight %}
 
 Als nächstes folgt die Definition des Parsers für ein einzelnes Feld. Wir benutzen dabei
-den Kombinator `sepBy` um auszudrücken dass ein Feld aus
+den Kombinator `sepBy` um auszudrücken, dass ein Feld aus
 einzelnen Wiederholungen getrennt durch `repSep` besteht.
 
 {% highlight haskell %}
