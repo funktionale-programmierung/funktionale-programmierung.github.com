@@ -2,7 +2,7 @@
 layout: post
 title: "Zurich FP Afternoon / Haskell-Hackathon"
 author: stefan-wehr
-tags: ["haskell", "hackathon", "event", "workshop", "konferenz"]
+tags: ["Haskell", "Hackathon", "Event", "Workshop", "Konferenz"]
 ---
 
 Wie schon letzte Woche mit der [Ankündigung](/2013/08/07/cufp-2013.html) des CUFP-Workshops möchten wir
