@@ -52,9 +52,11 @@ vereinfacht wird. Im vorherigen Beispiel ist nur Konversion vom C-Typen
 Datentypen kann das aber mehr Arbeit bedeuten, deshalb setzt dieser Artikel auf
 [c2hs](https://github.com/haskell/c2hs), was solche Konversionen (im weiteren
 "Marshalling" genannt) und die generelle Benutzung von C Funktionen vereinfacht.
+C2hs selbst hat zur Dokumentation ein [Wiki][c2hs-wiki] und einen [User
+Guide][c2hs-guide] der bei weiteren Fragen helfen sollten.
 
 In diesem Blogpost wird eine beispielhafte (aber funktionierende), fragwürdige
-C-Verschlüsslungsbibliothek mit dem Namen `shonky-crypt` an Haskell angebunden.
+C-Verschlüsselungsbibliothek mit dem Namen `shonky-crypt` an Haskell angebunden.
 Weder die C-, noch die Haskell-Version sollten für irgendwelche realen
 Verschlüsselungen eingesetzt werden. Beide existieren nur dieses Blogposts wegen
 und bieten keinerlei Sicherheit. Der Code inklusive einer Cabal-Datei mit der
@@ -63,6 +65,8 @@ man das Gesamt-Projekt in einem Schritt kompilieren kann ist im [GitHub-Projekt
 ist [`src-c/shonky-crypt/shonky-crypt.h`][h] (Dateinamen anklicken um die Datei
 zu sehen) welche die C-API der Bibliothek definiert und dokumentiert. Die
 Haskell-Anbindung der Funktionen soll nun schrittweise durchexerziert werden.
+Die C-Bibliothek wurde mit dem Gedanken entworfen, beispielhaft zu illustrieren
+was bei vielen C-Bibliotheken zur Anbindung notwendig wäre.
 
 ## API-Anbindung ##
 
@@ -79,13 +83,13 @@ wünschenswert:
     entropy :: ByteString -> Double
 
 Die Implementierung sollte einfach die C-Funktion `sc_entropy()` aufrufen.  C2hs
-verlangt dazu eine spezielle c2hs-Datei (Datei-Endung `.chs`), welche normalen
-Haskell-Code als auch speziellen c2hs-Präprozessor-Code enthält. C2hs wandelt
-den Präprozessor-Code dann in normalen Haskell-Code unter Benutzung des FFI um. Die
-`.chs` Datei für die hier angebundene Beispiel-Bibliothek findet sich unter
-[`src-hs/Codec/ShonkyCrypt/ShonkyCryptFFI.chs`][chs]. Das Code-Schnipsel was
-notwendig ist um die `sc_entropy()` Funktion mit c2hs in Haskell benutzen zu
-können ist im folgenden Code-Block zu sehen.
+verlangt dazu eine spezielle c2hs-Datei (Datei-Endung `.chs`), welche sowohl
+normalen Haskell-Code als auch speziellen c2hs-Präprozessor-Code enthält. C2hs
+wandelt den Präprozessor-Code dann in normalen Haskell-Code unter Benutzung des
+FFI um. Die `.chs` Datei für die hier angebundene Beispiel-Bibliothek findet
+sich unter [`src-hs/Codec/ShonkyCrypt/ShonkyCryptFFI.chs`][chs]. Der
+Code-Schnipsel der notwendig ist um die Funktion `sc_entropy()` Funktion mit
+c2hs in Haskell benutzen zu können ist im folgenden Code-Block zu sehen.
 
     #include "shonky-crypt.h"
 
@@ -113,15 +117,13 @@ Aber der Reihe nach:
    bereit zu stellen. In diesem Fall die C-Funktion `sc_entropy`
 4. Die Funktion ist als `pure` deklariert was definiert, dass es sich um eine
    "reine" C-Funktion handelt die also keine Seiteneffekte hat und daher auch
-   nicht in Haskells `IO` Monade laufen muss
-5. `unsafe` bedeutet, dass die Funktion ihrerseits keinen Callback aufruft, der
-   wiederum eine Haskell-Funktion sein könnte. Sollte das der Fall sein, muss
-   die Haskell-Lautzeitumgebung besondere Vorkehrungen treffen, die aber hier
-   nicht notwendig sind.
+   nicht in Haskells `IO`-Monade laufen muss
+5. `unsafe` bedeutet, dass die Funktion ihrerseits keine Haskell-Funktionen
+   aufruft, beispielsweise einen Callback.
 6. `sc_entropy as ^` sorgt dafür, dass c2hs sich automatisch einen Haskell-Namen
    für die Funktion ausdenkt (hier `scEntropy`)
 7. `withByteStringLen *` sorgt dafür, dass für die Konversion von Haskells
-   `ByteString` zu `char *` der `withByteStringLen` Marshaller verwendet wird.
+   `ByteString` zu `char *` der `withByteStringLen`-Marshaller verwendet wird.
    Der Stern in `withByteStringLen *` deklariert, dass der `withByteStringLen`
    Marshaller in der `IO`-Monade ausgeführt werden muss
 8. Das Kaufmannsund (`&`) sorgt dafür, dass dieses Haskell-Argument zu zwei
@@ -131,13 +133,13 @@ Aber der Reihe nach:
    diesen anwendet.
 
 Der Haskell-Code für den Marshaller `withByteStringLen` ist oben angegeben. Er
-ist hier manuell zu implementieren weil die `shonky-crypt` Bibliothek das
+ist hier manuell zu implementieren weil die `shonky-crypt`-Bibliothek das
 Argument vom Typ `size_t` (`unsigned int` oder `unsigned long`) erwartet, die
 [`unsafeUseAsCStringLen`][bytestring-use-cstrlen] Funktion aus dem
-[bytestring][bytestring] Paket einen `CString` samt Länge aber als `type
+[bytestring][bytestring]-Paket einen `CString` samt Länge aber als `type
 CStringLen = (CString, Int)` definiert.
 
-Was natürlich auch noch gesagt werden muss ist, warum hier das scheibar
+Was natürlich auch noch gesagt werden muss ist, warum hier das scheinbar
 unsichere [`unsafeUseAsCStringLen`][bytestring-use-cstrlen] anstatt das sichere
 `useAsCStringLen` verwendet wird: Die Bibliothek verspricht durch den Typen
 `const char *`, dass sie den Speicher nicht modifizieren wird. Das würde man für
@@ -146,12 +148,12 @@ die Eingabe nicht verändert werden muss. Durch `unsafeUseAsCStringLen` wird als
 eine (unnötige) Kopie des ByteStrings verhindert und anstatt dessen direkt der
 Zeiger auf den internen Speicher an die C-Bibliothek weitergegeben. Generell
 gilt aber natürlich Vorsicht bei der Verwendung von "unsafe"-Funktionen weil
-gegenüber der Haskell-Laufzeitumgebung eine Garantie ausgesprochen wird. Sollte
-das eine nicht zutreffende Garantie sein, ist das Verhalten des Programms
+gegenüber der Haskell Laufzeitumgebung eine Garantie ausgesprochen wird.
+Sollte das eine nicht zutreffende Garantie sein, ist das Verhalten des Programms
 undefiniert.
 
 Damit ist die Arbeit zur Anbindung von `sc_entropy` auch schon getan. C2hs
-kompiliert daraus ein Haskell-Modul was nun die Funktion
+kompiliert daraus ein Haskell-Modul, was nun die Funktion
 `scEntropy :: ByteString -> Double` anbietet. Natürlich war die Anbindung
 dieser Funktion denkbar einfach, weil es eine "reine" Funktion
 (ohne Seiteneffekte) ist, die dem funktionalen Paradigma entspricht.
@@ -188,12 +190,14 @@ Die Beispielbibliothek exportiert folgende zwei zusammengesetzte Datentypen
 Der erste Datentyp (`shonky_crypt_key_t`) ist vom Benutzer der Bibliothek
 einsehbar und repräsentiert einen Schlüssel. Der zweite ist ein nicht
 einsehbarer Datentyp. Das bedeutet, dass die Bibliothek nach außen nur mit
-Zeigern auf Speicher arbeitet, ohne zu verraten was intern dahintersteckt. Für
+Zeigern auf Speicher arbeitet, ohne zu verraten, was intern dahintersteckt. Für
 den einsehbaren Datentypen macht es Sinn, einen entsprechenden
 Haskell-Datentypen zu haben, den man in den C-Datentypen verwandeln kann und
 umgekehrt. Wünschenswert wäre also ein Datentyp `data ShonkyCryptKey` welcher
-`instance Storable ShonkyCryptKey` erfüllt und genau dazu bietet und c2hs auch
-Hilfe an:
+`instance Storable ShonkyCryptKey` erfüllt. Datentypen die
+[`Storable`][storable]-Instanzen haben, können in einen Speicherbereich fester
+Größe serialisiert und wieder daraus geladen werden. C2hs bietet einige Helfer
+an um das Schreiben von `Storable`-Instanzen zu erleichtern.
 
     data ShonkyCryptKey = ShonkyCryptKey
         { sckKeyStart :: !Word8
@@ -227,7 +231,7 @@ Zeiger auf eine C-Struktur zu verwandeln und damit C-Funktionen aufzurufen, die
 einen Parameter vom Typen `shonky_crypt_key_t` erwarten.
 
 
-## Anbinden von Funktionen die Zeiger auf allokierten Speicher zurückgeben
+## Anbinden von Funktionen die Zeiger auf allozierten Speicher zurückgeben
 
 Um nun den Marshaller für `ShonkyCryptKey` einsetzen zu können, bietet sich
 folgende Funktion der C-Bibliothek an:
@@ -235,13 +239,14 @@ folgende Funktion der C-Bibliothek an:
     shonky_crypt_context_t sc_alloc_context_with_key(const shonky_crypt_key_t key);
 
 Laut [Dokumentation][h] der C-Bibliothek kann man mit dieser Funktion unter
-Angabe eines `shonky_crypt_key_t` einen durch die Bibliothek allokierten
-`shonky_crypt_context_t` generieren.  Dank der [`Storable`][storable]-Instanz ist die
-Generierung eines `shonky_crypt_key_t`s einfach, allerdings ist der Rückgabetyp
-`shonky_crypt_context_t` bis jetzt noch unbenutzbar. Da die Datenstruktur
-aber ohnehin von außen nicht einsehbar ist, gibt es auch nicht viel an Haskell
-anzubinden. Es genügt c2hs mitzuteilen, dass es sich um einen Zeigertypen
-handelt und c2hs zu bitten dazu einen entsprechenden Haskell-Typen bereitzustellen:
+Angabe eines `shonky_crypt_key_t` einen durch die Bibliothek allozierten
+`shonky_crypt_context_t` generieren.  Dank der [`Storable`][storable]-Instanz
+ist die Generierung eines `shonky_crypt_key_t`s einfach, allerdings ist der
+Rückgabetyp `shonky_crypt_context_t` bis jetzt noch unbenutzbar. Da die
+Datenstruktur aber ohnehin von außen nicht einsehbar ist, gibt es auch nicht
+viel an Haskell anzubinden. Es genügt, c2hs mitzuteilen, dass es sich um einen
+Zeigertypen handelt und c2hs zu bitten, dazu einen entsprechenden Haskell-Typen
+bereitzustellen:
 
     withShonkyCryptContext :: ShonkyCryptContext -> (Ptr ShonkyCryptContext -> IO b) -> IO b
     {#pointer shonky_crypt_context_t as ShonkyCryptContext foreign newtype #}
@@ -261,19 +266,19 @@ später nochmals an die C-Bibliothek weiterzureichen. Folgendes Beispiel stellt
 
 Nun wieder der Reihe nach:
 
-1. `withTrickC2HS` ist eine simple Umbenennung von [`with`][with], da c2hs `with` an
-   verschiedenen Stellen als ein reserviertes Schlüsselwort ansieht was zu
-   Problemen wärend des Parsens der c2hs Direktiven führt
-2. `withTrickC2HS` (aka [`with`][with]) ist der Marshaller für alle Typen die eine
-   [`Storable`][storable]-Instanz besitzen, also auch `ShonkyCryptKey` (siehe
-   oben)
+1. `withTrickC2HS` ist eine simple Umbenennung von [`with`][with], da c2hs
+   `with` an verschiedenen Stellen als ein reserviertes Schlüsselwort ansieht,
+   was zu Problemen wärend des Parsens der c2hs-Direktiven führt
+2. `withTrickC2HS` (aka [`with`][with]) ist der Marshaller für alle Typen die
+   eine [`Storable`][storable]-Instanz besitzen, also auch `ShonkyCryptKey`
+   (siehe oben)
 3. `pure unsafe` ist wie bei der Entropie-Funktion die Garantie, dass diese
    C-Funktion keine Seiteneffekte hat und keine Haskell-Funktionen aufruft.
-4. Der Rückgabewert-Marshaller `newShonkyCryptContextPointer` wird benötigt, weil die
-   C-Bibliothek laut [Dokumentation][h] einen Zeiger auf in der Funktion allokierten
-   Speicher zurück gibt und der Aufrufer nun verantwortlich ist ihn nach Benutzung
-   wieder freizugeben. Der Stern bedeutet wieder, dass der Marshaller in der
-   `IO`-Monade abzulaufen hat
+4. Der Rückgabewert-Marshaller `newShonkyCryptContextPointer` wird benötigt,
+   weil die C-Bibliothek laut [Dokumentation][h] einen Zeiger auf in der
+   Funktion allozierten Speicher zurück gibt und der Aufrufer nun verantwortlich
+   ist ihn nach Benutzung wieder freizugeben. Der Stern bedeutet wieder, dass
+   der Marshaller in der `IO`-Monade abzulaufen hat
 
 Um also keine Speicherlecks zu generieren, muss mittels der
 Haskell-Lautzeitumgebung also dafür gesorgt werden, dass der Garbage Collector auch
@@ -313,7 +318,7 @@ Damit generiert c2hs nun eine Haskell-Funktion des Tys
     scAllocContextWithKey :: ShonkyCryptKey -> ShonkyCryptContext
 
 Diese Funktion verwandelt automatisch den Schlüssel in einen Zeiger auf die
-C-Struktur und gibt nach Aufruf einen Verschlüsslungskontext zurück, der später
+C-Struktur und gibt nach Aufruf einen Verschlüsselungskontext zurück, der später
 noch interessant wird. Außerdem wird dafür gesorgt, dass der Garbage Collector
 den zurückgegebenen Speicher wieder freigibt sobald er nicht mehr benötigt wird.
 
@@ -322,8 +327,8 @@ direkt eine weitere Funktion der C-Bibliothek anbinden:
 
     shonky_crypt_context_t sc_copy_context(const shonky_crypt_context_t ctx);
 
-Diese Funktion kopiert einen vorhandenen Verschlüsslungskontext und gibt
-einen Zeiger auf einen neuen, bereits allokierten Verschlüsslungskontext zurück.
+Diese Funktion kopiert einen vorhandenen Verschlüsselungskontext und gibt
+einen Zeiger auf einen neuen, bereits allozierten Verschlüsselungskontext zurück.
 Die Haskell-Anbindung gelingt wieder mit wenigen Zeilen c2hs:
 
     {#fun pure unsafe sc_copy_context as
@@ -334,9 +339,9 @@ Die bereits bekannten Marshaller `withShonkyCryptContext` und
 `newShonkyCryptContextPointer` sorgen dafür, dass das richtige vor und nach der
 Ausführung der C-Funktion passiert.
 
-## Anbindung der Verschlüsslungsfunktionen
+## Anbindung der Verschlüsselungsfunktionen
 
-Zur eigentlichen Verschlüsslung bietet die C-Bibliothek folgende Funktion an:
+Zur eigentlichen Verschlüsselung bietet die C-Bibliothek folgende Funktion an:
 
     void sc_encrypt_inplace(shonky_crypt_context_t ctx,
                             const char *in_plain,
@@ -344,13 +349,13 @@ Zur eigentlichen Verschlüsslung bietet die C-Bibliothek folgende Funktion an:
                             size_t sz);
 
 Leider passt diese Funktion überhaupt nicht ins funktionale Paradigma und schon
-gar nicht zu Haskell wo man hauptsächlich mit reinen Funktionen arbeitet. Die
+gar nicht zu Haskell, wo man hauptsächlich mit reinen Funktionen arbeitet. Die
 Probleme im Detail:
 
  * Die Funktion hat den Rückgabewert `void` und schreibt einfach in den
    Speicher, auf den `out_scrambled` zeigt
  * Laut [Dokumentation][h] modifiziert die Funktion den übergebenen
-   Verschlüsslungskontext `ctx`
+   Verschlüsselungskontext `ctx`
 
 Der Grund warum die Funktion den Kontext modifiziert ist recht einfach: Das
 bietet eine API an mit der man beispielsweise große Dateien stückweise
@@ -419,7 +424,7 @@ Wieder der Reihe nach:
 5. Wiederum wird [`unsafeUseAsCStringLen`][bytestring-use-cstrlen] benutzt, weil
    die C-Bibliothek den Eingabe-Text nicht modifiziert
 6. Den Ausgabepuffer wird mittels [`mallocBytes`][malloc-bytes] (entspricht
-   `malloc()`) allokiert
+   `malloc()`) alloziert
 7. Außerdem wird [`unsafePackMallocCStringLen`][unsafe-pack-malloc-cstrlen]
    benutzt um mittels des mittlerweile von der C-Bibliothek überschriebenen
    Puffers einen Haskell `ByteString` zu konstruieren. Das ist hier möglich,
@@ -452,7 +457,7 @@ Funktionen.
     encryptS :: ShonkyCryptContext -> ByteString -> (ByteString, ShonkyCryptContext)
     decryptS :: ShonkyCryptContext -> ByteString -> (ByteString, ShonkyCryptContext)
 
-Mit diesen Funktionen lässt sich die Verschlüsslungsbibliothek schon vollständig
+Mit diesen Funktionen lässt sich die Verschlüsselungsbibliothek schon vollständig
 nutzen, da Haskell seine Stärken aber besonders in der
 "high-level"-Programmierung ausspielen kann soll das hier auch in kleinen
 Beispielen demonstriert werden. Auf die Haskell-Implementierung der
@@ -475,7 +480,7 @@ implementiert:
     encryptM :: MonadState ShonkyCryptContext m => ByteString -> m ByteString
     encryptConduit :: MonadResource m => ShonkyCryptKey -> Conduit ByteString m ByteString
 
-Die Funktion `caesar` führt eine "Cäsar-Verschlüsslung" (Rotation um 3
+Die Funktion `caesar` führt eine "Cäsar-Verschlüsselung" (Rotation um 3
 Buchstaben) auf `Text` (Encoding ist UTF-8) durch, was nett zum Ausprobieren der
 Bibliothek ist
 
@@ -486,7 +491,7 @@ Bibliothek ist
 
 Die Funktion `encryptM :: MonadState ShonkyCryptContext m => ByteString -> m
 ByteString` stellt eine monadische Version bereit, die den
-Verschlüsslungskontext in einer `MonadState` hält. Und zu guter letzt
+Verschlüsselungskontext in einer `MonadState` hält. Und zu guter letzt
 `encryptConduit :: MonadResource m => ShonkyCryptKey -> Conduit ByteString m
 ByteString`, ein "Conduit" für das
 [`conduit`](http://hackage.haskell.org/package/conduit-1.0.7.3)-Paket:
@@ -497,8 +502,10 @@ ByteString`, ein "Conduit" für das
 # Ausprobieren
 
 Um das ganze selbst auszuprobieren, sollten die folgenden Kommandos ausreichen.
-Cabal übernimmt dann den c2hs-Schritt, das kompilieren der C-Bibliothek,
-sowie das kompilieren der Haskell-Bibliothek.
+Cabal übernimmt dann den c2hs-Schritt, das Kompilieren der C-Bibliothek, sowie
+das kompilieren der Haskell-Bibliothek. Cabal unterstützt c2hs direkt, ein
+`build-tools: c2hs -any` in der `.cabal`-Datei genügt damit Cabal Haskell-Module
+automatisch mit c2hs vorverarbeitet falls nötig.
 
     git clone https://github.com/weissi/hs-shonky-crypt.git
     cd hs-shonky-crypt
@@ -523,5 +530,7 @@ sowie das kompilieren der Haskell-Bibliothek.
 [storable]: http://hackage.haskell.org/packages/archive/base/4.6.0.1/doc/html/Foreign-Storable.html#t:Storable
 [foreign-ptr]: http://hackage.haskell.org/packages/archive/base/4.6.0.1/doc/html/Foreign-ForeignPtr-Safe.html#t:ForeignPtr
 [github]: https://github.com/weissi/hs-shonky-crypt
+[c2hs-guide]: https://github.com/haskell/c2hs/wiki/User-Guide
+[c2hs-wiki]: https://github.com/haskell/c2hs/wiki
 
 <!-- more end -->
