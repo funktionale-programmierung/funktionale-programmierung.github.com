@@ -3,6 +3,7 @@ layout: post
 description: Was ist funktionale Programmierung?
 title: Was ist funktionale Programmierung?
 author: david-frese
+tags: ["Einführung", "funktional", "imperativ"]
 ---
 
 Was ist überhaupt "Funktionale Programmierung?" Zur Beantwortung
