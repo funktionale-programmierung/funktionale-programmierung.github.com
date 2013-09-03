@@ -1,9 +1,9 @@
 ---
 layout: post
 description: 
-title: "MyOwnSafe - Funktionale Programmierung in der Praxis"
+title: "MyOwnSafe - Funktionale Programmierung in der Praxis - Teil 2"
 author: david-frese
-tags: ["Praxis", "OCaml", "XML"]
+tags: ["Praxis", "OCaml", "XML", "Pattern-Matching"]
 ---
 
 Die Active Group hat die Webanwendung
@@ -14,14 +14,11 @@ persönlichen Informationen ablegen und pflegen, sowie Vorkehrungen
 treffen um diese Informationen im Todes- oder Krankheitsfall
 bestimmten Personen zugänglich zu machen.
 
-Durch den Einsatz funktionaler Programmierung in der Sprache
-[OCaml](http://ocaml.org/) konnte das Projekt extrem kostengünstig und
-termingerecht umgesetzt werden. Die Kernentwicklung wurde von einer
-Person in gerade einmal sechs Monaten abgeschlossen.
-
-Dieser Artikel zeigt an einem kleinen Ausschnitt der Software, wie
-funktionale Programmierung in OCaml die Entwicklung vereinfachen und
-damit auch beschleunigen konnte.
+In einem [vorherigen Artikel]({% post_url 2013-05-16-praxis-myownsafe %})
+ habe ich die Gesamtarchitektur und die eingesetzen Technologien
+beschrieben. Dieser Artikel soll an einem kleinen Ausschnitt der
+Software zeigen, wie die funktionale Programmierung in OCaml die
+Entwicklung vereinfachen und damit auch beschleunigen konnte.
 
 <!-- more start -->
 
@@ -31,24 +28,16 @@ dem funktionalen Programmieren auch imperative und objekt-orientierte
 Paradigmen, ein statisches Typsystem mit besonders mächtiger
 Typinferenz, sowie ein gutes Modulsystem. Es gibt eine Vielzahl von
 Bibliotheken, insbesondere zur Web- und Netzwerkprogrammierung, und
-der Compiler erzeugt sehr performanten nativen Code. Letzteres gab auch
-den Ausschlag zu der Entscheidung für diese Sprache in diesem Projekt,
-da ein Betrieb des Servers als einfache CGI-Anwendung hinter einem
-simplen Webserver einen deutlichen Sicherheitsgewinn gegenüber einer
-komplexeren, und damit fehleranfälligeren Architektur wie PHP oder
-einem Java Application Server verspricht.
+der Compiler erzeugt sehr performanten, nativen Code.
+
+Die funktionale Sprache in Microsoft's Visual-Studio, F#, ist übrigens
+ein "Ableger" von OCaml, und hat dementsprechend sehr viel
+Ähnlichkeit mit OCaml.
 
 ## Hintergrund
 
-Höchste Vertraulichkeit dieser sehr sensiblen Daten der Kunden ist
-durch Client-seitige RSA- und AES-Verschlüsselung bereits im Browser
-sichergestellt - bisher einzigartig in diesem Bereich. Nicht einmal
-der Betreiber selbst kann die Informationen also einsehen, wodurch
-eine kostengünstige und skalierbare Speicherung der Daten in der
-Amazon Cloud (Amazon Webservices) möglich wurde.
-
 Für die Speicherung von Kreditkarten- und Kontodaten der Kunden, und
-die Abbuchung von Beträgen über diese Bezahlverfahren, wurde ebenfalls
+die Abbuchung von Beträgen über diese Bezahlverfahren, wurde
 ein externer Dienstleister in Anspruch genommen, und zwar die Firma
 [ExperCash](http://www.expercash.de). Da ExperCash eine Schnittstelle
 anbietet, bei der MyOwnSafe niemals selbst Kenntnis der
@@ -68,7 +57,7 @@ Konto- oder Kreditkartendaten eingibt, und den Betrag autorisiert. Als
 Ergebnis davon erhält die MyOwnSafe-Software lediglich einen
 eindeutigen Schlüssel, den sogenannten _Payment-Authorization-Key_.
 
-Die eigentliche Ausführung der Abbuchung erfolgt dann vom Server aus
+Die eigentliche Ausführung der Abbuchung erfolgt anschließend vom Server aus
 über einen HTTP-Request, bei dem einer der Parameter dieser
 _Payment-Authorization-Key_ ist:
 
@@ -78,7 +67,7 @@ Als Ergebnis erhält man eine XML-Struktur, aus der man noch ablesen
 muss, ob die Abbuchung erfolgreich war, oder welcher Fehlergrund
 vorliegt. Wenn sie erfolgreich war, erhält man außerdem noch eine
 sogenannte _Payment-Id_, mit der man den Abbuchungsvorgang später
-identifizieren kann:
+identifizieren kann. Die Struktur im Fehlerfall:
 
 {% highlight xml %}
    <payresult>
@@ -124,7 +113,7 @@ Funktion:
   type payment_auth_key = string
 {% endhighlight %}
 
-Die Signatur der zu implementierenden Funktion ist damit also in der
+Die Signatur der zu implementierenden Funktion ist damit also in
 OCaml-Syntax:
 
 {% highlight ocaml %}
@@ -159,9 +148,22 @@ folgende Typen und Funktionen anbietet:
   val parse_xml : string -> xml_node
 {% endhighlight %}
 
+Also einer Funktion die einen String nimmt und den darin kodierten
+XML-Baum als Objekt vom Typ `xml_node` zurückgibt. Der Typ hat
+wiederum drei Konstruktoren, einen für Element-Knoten, einen für
+Attribut-Knoten und einen für Text-Knoten. In einem Element-Knoten ist
+dabei wiederum eine Liste von Knoten enthalten, d.h. `xml_node` ist
+_rekursiv_ definiert.
+
 Das besonders komfortable Feature von OCaml, das einem bei der nun
 folgenden Implementierung der Funktion `do_payment` hilft, ist das
-sogenannte _Pattern-Matching_:
+sogenannte _Pattern-Matching_.
+
+Bevor wir dazu kommen noch ein Wort zu Funktionen: `let f p1 p2 = ...`
+definiert eine Funktion `f` mit zwei Parametern, und der Ausruck `f 1
+2` ruft diese Funktion mit den beiden Zahlen als Argumente auf.
+
+Und jetzt zur Implementierung von `do_payment`:
 
 {% highlight ocaml %}
   let do_payment authkey =
@@ -169,10 +171,6 @@ sogenannte _Pattern-Matching_:
       (200, body) -> parse_ec_body body
       | _ -> failwith "HTTP call failed"
 {% endhighlight %}
-
-Zur Erklärung ein Wort zu Funktionen: `let f p1 p2 = ...` definiert
-eine Funktion `f` mit zwei Parametern, und der Ausruck `f 1 2` ruft
-diese Funktion mit den beiden Zahlen als Argumente auf.
 
 Das Pattern-Matching selbst ist der Ausdruck `match ... with ...`
 innerhalb der Funktion `do_payment`. Er definiert eine sehr mächtige
@@ -184,17 +182,18 @@ Fall der _passt_ wird der Ausdruck rechts vom Pfeil ausgewertet. Das
 Pipe-Symbol `|` trennt dabei zwei Fälle und kann als _oder_ gelesen
 werden.
 
-Pattern-Matching leistet dabei drei Dinge:
+Pattern-Matching leistet dabei viel mehr als ein "normales" if,
+nämlich drei Dinge:
 
 1. Dekonstruktion von Werten: In diesem Fall ist das Ergebnis von
    `http_get` ein Tupel. Mit der gleichen Syntax mit dem Tupel
-   konstruiert werden, können sie innerhalb des Pattern-Matching wieder
-   in die beiden Bestandteile, eine Zahl und einen String,
-   _dekonstruiert_ werden.
+   konstruiert werden, können sie innerhalb des Pattern-Matching
+   wieder in die beiden Bestandteile, in diesem Fall eine Zahl und
+   einen String, _dekonstruiert_ werden.
 
 2. Vergleich mit konstanten Werten: Der Test des ersten Falls besteht
    zum Beispiel aus dem konstanten Ausdruck `200`. Dies bewirkt, dass
-   der Test nur erfolgreich ist, wenn von http_get zurückgegebene
+   der Test nur erfolgreich ist, wenn der von http_get zurückgegebene
    Status-Code gleich 200 ist.
 
 3. Bindung von Bestandteilen an neue Namen: Hier ist das der Rumpf der
@@ -244,9 +243,9 @@ Mit dieser Liste der Kind-Knoten führen wir ein _map_ aus, d.h. wir
 werten die Funktion `xml_field` auf jeden einzelnen Kind-Knoten aus,
 und sammeln die Ergebnisse in einer neuen Liste. Diese Liste wird dann
 aus Tupeln bestehen, und ist damit eine sogenannte Assoziations-Liste,
-eine einfachen Art von Dictionary, in dem man mit der Funktion `assoc`
-aus dem Modul `List` nach dem ersten Teil der Tupel suchen kann und
-den zweiten Teil zurück erhält.
+eine einfachen Art von Dictionary. In dieser kann man mit der Funktion
+`assoc` aus dem Modul `List` nach dem ersten Teil der Tupel suchen,
+und erhält den zweiten Teil davon zurück.
 
 In der Funktion `xml_field` geschieht eine weitere Art von
 Pattern-Matching, und zwar auf eine Liste von Werten. In diesem Fall
