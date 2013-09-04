@@ -109,7 +109,7 @@ img { border: 0 }
 }
 .navbar-fp .navbar-inner .nav-pills {
 	height: auto;
-    left: 80px;
+    margin-left: 80px;
 }
 .container-fluid .row-fluid, .navbar-fp .navbar-inner {
 	max-width: 1024px;
