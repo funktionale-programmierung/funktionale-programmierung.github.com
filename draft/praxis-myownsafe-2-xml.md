@@ -6,11 +6,11 @@ author: david-frese
 tags: ["Praxis", "OCaml", "XML", "Pattern-Matching"]
 ---
 
-Die Active Group hat die Webanwendung
+Die [Active Group](http://www.active-group.de/) hat die Webanwendung
 [MyOwnSafe](http://www.myownsafe.de/) für die MyOwnSafe GmbH
 entwickelt. Der Anwender kann in dieser Anwendung Informationen und
 Dokumente zu seinen Versicherungen, seinem Vermögen und sonstige
-persönlichen Informationen ablegen und pflegen, sowie Vorkehrungen
+persönliche Informationen ablegen und pflegen, sowie Vorkehrungen
 treffen um diese Informationen im Todes- oder Krankheitsfall
 bestimmten Personen zugänglich zu machen.
 
@@ -30,16 +30,16 @@ Typinferenz, sowie ein gutes Modulsystem. Es gibt eine Vielzahl von
 Bibliotheken, insbesondere zur Web- und Netzwerkprogrammierung, und
 der Compiler erzeugt sehr performanten, nativen Code.
 
-Die funktionale Sprache in Microsoft's Visual-Studio, F#, ist übrigens
-ein "Ableger" von OCaml, und hat dementsprechend sehr viel
-Ähnlichkeit mit OCaml.
+Die funktionale Sprache in Microsoft's Visual-Studio,
+[F#](http://fsharp.org/), ist übrigens ein "Ableger" von OCaml, und
+hat dementsprechend sehr viel Ähnlichkeit mit OCaml.
 
 ## Hintergrund
 
 Für die Speicherung von Kreditkarten- und Kontodaten der Kunden, und
 die Abbuchung von Beträgen über diese Bezahlverfahren, wurde
 ein externer Dienstleister in Anspruch genommen, und zwar die Firma
-[ExperCash](http://www.expercash.de). Da ExperCash eine Schnittstelle
+[Expercash](http://www.expercash.de). Da Expercash eine Schnittstelle
 anbietet, bei der MyOwnSafe niemals selbst Kenntnis der
 Kreditkarten-Daten erlangt, ist keine teure Zertifizierung durch die
 Kreditkarten-Unternehmen notwendig. Ein großer Kostenvorteil für ein
@@ -232,9 +232,9 @@ gebrauch macht:
 {% endhighlight %}
 
 Im ersten Pattern-Matching auf das Ergebnis von `parse_xml body` sieht
-man, dass Pattern-Matching nicht nur auf eingebaute Werte wie Tupel
+man, dass Pattern-Matching nicht nur auf eingebauten Werten wie Tupeln
 möglich ist, sondern, ohne weiteren Code schreiben zu müssen, auch auf
-den neu definierten Aufzählungstyp `xml_node`. In diesen Fällen
+dem neu definierten Aufzählungstyp `xml_node`. In diesen Fällen
 _zerlegt_ man die Werte häufig anhand der Konstruktoren des Typs; hier
 interessieren uns allerdings nur Element-Knoten mit dem Namen
 `"payresult"` und deren Liste der Kind-Knoten.
