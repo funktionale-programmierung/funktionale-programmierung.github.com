@@ -10,6 +10,18 @@ body {
   margin-left: 0;
 }
 
+/* portrait phones */
+@media (max-width: 480px) {
+  body {
+    /* remove outmost borders */
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .navbar-static-top {
+    margin-right: 0;
+  }
+}
+
 p,h1,h2,h3,h4,h5,h6,ul,ol,li,div,td,th,address,blockquote,nobr,b,i
      { font-family: 'Source Sans Pro', Helvetica, arial, sans-serif; }
 
