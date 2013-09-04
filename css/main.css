@@ -202,6 +202,14 @@ img { border: 0 }
 	color: #444;
 }
 
+/* on mobiles */
+@media (max-width: 480px) {
+  .post {
+    padding-right: 12px; /* instead of 25px */
+    padding-left: 12px; /* instead of 25px */
+  }
+}
+
 .post-content {
  line-height: 1.3em;
 }
