@@ -211,7 +211,8 @@ img { border: 0 }
 	padding: 6px;
 }
 
-.post-tags {
+.post-tags > span.label {
+  margin-top: 0; /* override .label */
 }
 
 .post-content > h1 {
@@ -242,7 +243,6 @@ hr.post-divider {
 }
 
 .author-info {
-    height: 100px;
     margin-top: 20px;
 }
 
