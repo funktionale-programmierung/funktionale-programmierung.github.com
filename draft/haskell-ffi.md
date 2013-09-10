@@ -8,16 +8,11 @@ tags: ["Haskell", "FFI", "C"]
 
 Obwohl für Haskell auf [Hackage](http://hackage.haskell.org/) eine sehr große
 Menge von Bibliotheken bereit steht, kann es trotzdem vorkommen, dass keine
-Bibliothek das gewünschte leistet. Sollte es eine Bibliothek für eine andere
-Sprache geben, kann man diese nach Haskell portieren oder eine vergleichbare
-Bibliothek für Haskell erschaffen. In manchen Fällen ist das die richtige
-Entscheidung, in anderen Fällen kann das sehr viel Arbeit bedeuten. Auch
-Performanz kann manchmal ein Grund sein bestimmte Funktionen in zum Beispiel in
-C zu implementieren. Und genau das ist das Thema dieses Blogposts: Von Haskell
-aus C-Funktionen aufrufen. Der Post richtet sich hauptsächlich an Programmierer
-die schon etwas Erfahrung in Haskell haben, Spezialkenntnisse oder
-Haskell-Expertenwissen sind jedoch nicht erforderlich.
-
+Bibliothek das gewünschte leistet. In manchen Fällen gibt es aber beispielsweise
+eine C-Bibliothek, die alles geforderte erfüllt. In gewissen Situationen kann
+auch Performanz ein Grund sein einige Teile eines Programms in C zu
+entwickeln.Und genau das ist das Thema dieses Blogposts: Von Haskell aus
+C-Funktionen aufrufen.
 
 <!-- more start -->
 
@@ -26,7 +21,16 @@ auftauchen. -->
 
 ## Generelles ##
 
-Um von Haskell C-Funktionen aufzurufen benutzt man in der Regel das [Haskell
+Dieser Artikel richtet sich hauptsächlich an Programmierer die schon etwas
+Erfahrung in Haskell haben, Spezialkenntnisse oder Haskell-Expertenwissen sind
+jedoch nicht erforderlich. Dateinamen und die meisten Funktionen aus der
+Haskell-Standardbibliothek sind mit Links versehen um schnellen Zugriff auf
+Inhalt bzw. Dokumentation zu haben.
+
+
+## Einführung ##
+
+Um von Haskell C-Funktionen aufzurufen benutzt man üblicherweise das [Haskell
 Foreign Function
 Interface](http://www.haskell.org/haskellwiki/Foreign_Function_Interface), kurz
 FFI. Mit dem FFI lassen sich einige Funktionen schon recht einfach einbinden, zum
@@ -43,30 +47,39 @@ Beispiel die Sinus-Funktion.
     sin :: Double -> Double
     sin d = realToFrac (c_sin (realToFrac d))
 
-Das ist ausreichend um die C-Funktion `sin()` in Haskell benutzbar zu machen. Das
-FFI alleine ist für einige Funktionen schon ausreichend einfach zu nutzen,
-allerdings kann es für kompliziertere Funktionen hilfreich sein, wenn einem auch
-noch Konversion zwischen C- und Haskell-Datentypen abgenommen oder zumindest
-vereinfacht wird. Im vorherigen Beispiel ist nur Konversion vom C-Typen
-`CDouble` (`double` in C) zu Haskells `Double` notwendig. Für nicht-primitive
-Datentypen kann das aber mehr Arbeit bedeuten, deshalb setzt dieser Artikel auf
-[c2hs](https://github.com/haskell/c2hs), was solche Konversionen (im weiteren
-"Marshalling" genannt) und die generelle Benutzung von C Funktionen vereinfacht.
-C2hs selbst hat zur Dokumentation ein [Wiki][c2hs-wiki] und einen [User
-Guide][c2hs-guide] der bei weiteren Fragen helfen sollten.
+Das ist mit GHC ausreichend um die C-Funktion `sin()` in Haskell benutzbar zu
+machen. Das FFI alleine ist für einige Funktionen schon einfach genug zu
+nutzen, allerdings kann es für kompliziertere Funktionen hilfreich sein, wenn
+einem auch noch Konversion zwischen C- und Haskell-Datentypen abgenommen oder
+zumindest vereinfacht wird. Im vorherigen Beispiel ist nur Konversion vom
+C-Typen `CDouble` (`double` in C) zu Haskells `Double` notwendig. Für
+nicht-primitive Datentypen kann das aber mehr Arbeit bedeuten, deshalb setzt
+dieser Artikel auf [c2hs](https://github.com/haskell/c2hs), was solche
+Konversionen (im weiteren "Marshalling" genannt) und die generelle Benutzung von
+C Funktionen vereinfacht.  C2hs selbst hat zur Dokumentation ein
+[Wiki][c2hs-wiki] und einen [User Guide][c2hs-guide], die bei weiterführenden
+Fragen helfen sollten.
 
 In diesem Blogpost wird eine beispielhafte (aber funktionierende), fragwürdige
 C-Verschlüsselungsbibliothek mit dem Namen `shonky-crypt` an Haskell angebunden.
-Weder die C-, noch die Haskell-Version sollten für irgendwelche realen
-Verschlüsselungen eingesetzt werden. Beide existieren nur dieses Blogposts wegen
-und bieten keinerlei Sicherheit. Der Code inklusive einer Cabal-Datei mit der
-man das Gesamt-Projekt in einem Schritt kompilieren kann ist im [GitHub-Projekt
-`hs-shonky-crypt`][github] verfügbar. Eine für dieses Beispiel wichtige Datei
-ist [`src-c/shonky-crypt/shonky-crypt.h`][h] (Dateinamen anklicken um die Datei
-zu sehen) welche die C-API der Bibliothek definiert und dokumentiert. Die
-Haskell-Anbindung der Funktionen soll nun schrittweise durchexerziert werden.
-Die C-Bibliothek wurde mit dem Gedanken entworfen, beispielhaft zu illustrieren
-was bei vielen C-Bibliotheken zur Anbindung notwendig wäre.
+Die Verschlüsselung funktioniert nach einem einfachen Prinzip: `byte + schlüssel
+(mod 256)`. Im einfachsten Modus ist der Schlüssel für jedes Byte gleich. Die
+Bibliothek ermöglicht aber auch den Schlüssel fortlaufend zu ändern, ungefähr
+so: `byte + schlüssel + rot * i (mod 256)` wobei `rot` angibt um wie viel der
+Schlüssel sich fortlaufend ändern soll und `i` ist der Index des aktuellen Bytes
+in der Gesamteingabe.
+
+Selbstverständlich sollten weder die C-, noch die Haskell-Version für
+irgendwelche realen Verschlüsselungen eingesetzt werden. Beide existieren nur
+dieses Blogposts wegen und bieten keinerlei Sicherheit. Der Code inklusive einer
+Cabal-Datei mit der man das Gesamt-Projekt in einem Schritt kompilieren kann ist
+im [GitHub-Projekt `hs-shonky-crypt`][github] verfügbar. Eine für dieses
+Beispiel wichtige Datei ist [`src-c/shonky-crypt/shonky-crypt.h`][h] (Dateinamen
+anklicken um die Datei zu sehen) welche die C-API der Bibliothek definiert und
+dokumentiert. Die Haskell-Anbindung der Funktionen soll nun schrittweise
+durchexerziert werden.  Die C-Bibliothek wurde mit dem Gedanken entworfen,
+beispielhaft zu illustrieren was bei vielen C-Bibliotheken zur Anbindung
+notwendig wäre.
 
 ## API-Anbindung ##
 
@@ -101,14 +114,14 @@ c2hs in Haskell benutzen zu können ist im folgenden Code-Block zu sehen.
     withByteStringLen str f = BSU.unsafeUseAsCStringLen str (\(cstr, len) ->
         f (cstr, fromIntegral len))
 
-    {#fun pure unsafe sc_entropy as
-        ^ { withByteStringLen *`ByteString'& } -> `Double' #}
+    {#fun pure unsafe sc_entropy as ^
+        { withByteStringLen *`ByteString'& } -> `Double' #}
 
 Aber der Reihe nach:
 
-1. `#include "shonky-crypt.h"` tut nichts anderes als das Einbinden der
-   C-Header-Datei, wie aus normalen C-Programmen bekannt. Ab sofort können die
-   Definitionen der Header-Datei in c2hs-Direktiven verwendet werden
+1. `#include "shonky-crypt.h"` tut nichts anderes als die C-Header-Datei
+   einzubinden. Ab sofort können die Definitionen der Header-Datei in
+   c2hs-Direktiven verwendet werden
 2. `type CSizeT = {# type size_t #}` definiert den Haskell-Typen `CSizeT` genau
    so wie `size_t` in C definiert ist (beispielsweise `unsigned int` (also
    `CUInt` in Haskell) für 32-bit Linux und `unsigned long` (`CULong`) für
@@ -122,15 +135,16 @@ Aber der Reihe nach:
    aufruft, beispielsweise einen Callback.
 6. `sc_entropy as ^` sorgt dafür, dass c2hs sich automatisch einen Haskell-Namen
    für die Funktion ausdenkt (hier `scEntropy`)
-7. `withByteStringLen *` sorgt dafür, dass für die Konversion von Haskells
+7. Die Funktionsargumente kommen in den geschweiften Klammern
+8. Die Rückgabe folgt nach `->`
+9. `withByteStringLen *` sorgt dafür, dass für die Konversion von Haskells
    `ByteString` zu `char *` der `withByteStringLen`-Marshaller verwendet wird.
    Der Stern in `withByteStringLen *` deklariert, dass der `withByteStringLen`
    Marshaller in der `IO`-Monade ausgeführt werden muss
-8. Das Kaufmannsund (`&`) sorgt dafür, dass dieses Haskell-Argument zu zwei
-   C-Funktionsargumenten wird (`char *` und `size_t` in diesem Fall).
-9. Für den Rückgabewert (Typ `double` bzw. `Double`) muss kein Marshaller
-   angegeben werden, da c2hs für einige Typen Standard-Marshaller kennt und
-   diesen anwendet.
+10. Das Kaufmannsund (`&`) sorgt dafür, dass dieses Haskell-Argument zu zwei
+    C-Funktionsargumenten wird (`char *` und `size_t` in diesem Fall).
+11. Für den Rückgabewert (Typ `double` bzw. `Double`) muss kein Marshaller
+    angegeben werden, da c2hs für einige Typen Standard-Marshaller kennt
 
 Der Haskell-Code für den Marshaller `withByteStringLen` ist oben angegeben. Er
 ist hier manuell zu implementieren weil die `shonky-crypt`-Bibliothek das
@@ -156,7 +170,10 @@ Damit ist die Arbeit zur Anbindung von `sc_entropy` auch schon getan. C2hs
 kompiliert daraus ein Haskell-Modul, was nun die Funktion
 `scEntropy :: ByteString -> Double` anbietet. Natürlich war die Anbindung
 dieser Funktion denkbar einfach, weil es eine "reine" Funktion
-(ohne Seiteneffekte) ist, die dem funktionalen Paradigma entspricht.
+(ohne Seiteneffekte) ist, die dem funktionalen Paradigma entspricht. Ein
+Beispiel für eine mit Seiteneffekten behaftete Funktion wäre das Schreiben in
+eine Datei oder allgemein eine Funktion deren Rückgabewert nicht ausschließlich
+aus ihren Eingabewerten berechnet werden kann.
 
 ### Anbinden von zusammengesetzten C-Datentypen (`struct`) ###
 
