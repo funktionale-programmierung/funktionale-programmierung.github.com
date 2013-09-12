@@ -1,6 +1,6 @@
 <!-- Definiert was über den Autor Autor am Ende des Postings gesagt wird -->
 
-{% capture about %}
+{% capture about_text %}
 {% case page.author %}
 
 {% when 'david-frese' %}
@@ -54,7 +54,7 @@
 {% endif %}
 <div markdown="1" class="author-text">
 <em><p>Zum Autor:</p></em>
-<p>{{ about }}</p>
+<p>{{ about_text }}</p>
 </div>
 </div>
 {% endif %}
