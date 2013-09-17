@@ -25,7 +25,7 @@ Unterstützung von Funktionen als Objekte erster Klasse.
 
 <!-- more start -->
 
-Eigentlich ist es in Java schon seit jeher möglich, Funktionen als
+Eigentlich war es in Java schon immer möglich, Funktionen als
 Objekte zu behandeln.  Eine klassische Higher-Order-Funktion wie
 `map` können wir z.B. so schreiben:
 
@@ -53,8 +53,8 @@ interface Function<A, B> {
 {% endhighlight %}
 
 Die `map`-Funktion ist nicht wesentlich schwieriger zu implementieren
-als in funktionalen Sprachen.  Allerdings treten bei der *Benutzung*
-das Problem zutage, zumindest in Java vor Version 8: Dort gibt es
+als in funktionalen Sprachen.  Allerdings wird bei der *Benutzung*
+ein Problem sichtbar, zumindest in Java vor Version 8: Dort gibt es
 nämlich keine direkte Notation, um Funktionen-als-Objekte
 hinzuschreiben.  Stattdessen ist die platzsparendste Methode,
 Funktionsobjekte herzustellen, die [anonyme innere
@@ -78,8 +78,8 @@ Programmiermuster aus der funktionalen Programmierung sind damit zwar
 prinzipiell umsetzbar, aber nicht wirklich praktikabel.
 
 Java 8 "Project Lambda" bietet nun eine kürzere Notation für
-Funktionen-als-Objekte über sogenannte Lambda-Audrücke, die es
-erlaubt, den Aufruf von `map` drastisch zu verkürzen:
+Funktionen-als-Objekte über sogenannte *Lambda-Audrücke*, die es
+erlauben, den Aufruf von `map` drastisch zu verkürzen:
 
 {% highlight java %}
         List<Integer> result = map(x -> x + 1, list);
@@ -116,7 +116,7 @@ dafür sogenannte *single-method interfaces* in Frage, also solche
 Interfaces, die genau eine Methode aufweisen.  Dies steht im Gegensatz
 zu funktionalen Sprachen (genauer gesagt den statisch getypten
 funktionalen Sprachen), bei denen Funktionstypen der Form `A -> B`
-schon vorn vorhherein eingebaut sind.  Das heißt insbesondere, dass
+schon vorn vorherein eingebaut sind.  Das heißt insbesondere, dass
 jede Stelligkeit ein eigenes Interface erfordert: Das Interface
 `Function` von oben funktioniert nur für einstellige Funktionen.  Die Unterscheidung
 zwischen primitiven Typen und Referenztypen erfordert außerdem weitere
@@ -150,8 +150,8 @@ Mit anderen Worten: Es gibt in Java 8 nun Lambda-Ausdrücke und
 Funktionsobjekte, aber keine Funktionstypen - 5 von 10 Punkten, könnte
 man sagen.
 
-Diese Einschränkung ist funktionale Programmierer bitter, aus Sicht
-der Java-Macher allerdings verständlich: Sie wollen einerseits Java
+Diese Einschränkung ist für funktionale Programmierer bitter, aus
+Sicht der Java-Macher allerdings verständlich: Sie wollen Java
 weiterentwickeln, ohne den Kern zu verändern.  Die Einführung
 richtiger Funktionstypen würde allerdings massive Änderungen in der
 JVM erfordern, die Oracle bisher noch scheut.  Hoffen wir, dass es
