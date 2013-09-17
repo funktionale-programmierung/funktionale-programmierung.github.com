@@ -78,7 +78,7 @@ Programmiermuster aus der funktionalen Programmierung sind damit zwar
 prinzipiell umsetzbar, aber nicht wirklich praktikabel.
 
 Java 8 "Project Lambda" bietet nun eine kürzere Notation für
-Funktionen-als-Objekte über sogenannte *Lambda-Audrücke*, die es
+Funktionen-als-Objekte über sogenannte *Lambda-Ausdrücke*, die es
 erlauben, den Aufruf von `map` drastisch zu verkürzen:
 
 {% highlight java %}
