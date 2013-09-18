@@ -123,6 +123,8 @@ zwischen primitiven Typen und Referenztypen erfordert außerdem weitere
 Überladung.  Entsprechend kommt Java 8 mit einem ganzen Zoo speziell
 definierter Funktionstypen, zu besichtigen
 [hier](http://download.java.net/jdk8/docs/api/java/util/function/package-summary.html).
+Zu den 42 dort aufgeführten Interfaces gehören solche wohlklingende
+Namen wie `BiConsumer`, `ObjDoubleConsumer` oder `ToDoubleBiFunction`.
 (Da sind noch nicht einmal Funktionen mit mehr als zwei Parametern
 dabei.)
 
@@ -139,9 +141,9 @@ Kompositionsfunktion zu schreiben:
 
 Diese funktioniert - wie `map` - eben nur für `Function`, aber nicht
 für die anderen Interfaces für einstellige Funktionen, die in
-`java.util.function` definiert sind, wie z.B. `Predicate`, `IntPredicate`,
+`java.util.function` definiert sind.  Das allein sind schon `Predicate`, `IntPredicate`,
 `UnaryOperator`, `DoublePredicate`, `DoubleToIntFunction`,
-`DoubleUnaryoperator`, `IntToDoubleFunction`, `IntToLongFunction`,
+`DoubleUnaryOperator`, `IntToDoubleFunction`, `IntToLongFunction`,
 `IntUnaryOperator`, `LongPredicate`,`LongToDoubleFunction`,
 `LongToIntFunction`, `LongUnaryOperator`, `ToDubleFunction`,
 `ToIntFunction` und `ToLongFunction`.
