@@ -6,8 +6,6 @@ author: michael-sperber
 tags: ["Java"]
 ---
 
-Jein.
-
 Java 8 wird erst 2014 fertig, aber die erste Testversion ist seit
 kurzem als [Early Access
 Download](http://www.oracle.com/technetwork/java/javase/downloads/ea-jsp-142245.html)
@@ -73,7 +71,9 @@ Klasse](http://docs.oracle.com/javase/tutorial/java/javaOO/anonymousclasses.html
 Diese Notation ist schon eine Verbesserung gegenüber Java 1.0, wo es
 noch keine inneren Klassen gab. Für die alltägliche Verwendung in dem
 Maß, wie in funktionalen Sprachen üblich, ist diese Notation aber viel
-zu umständlich und noch dazu schwer lesbar.  Typische
+zu umständlich und noch dazu schwer lesbar.  (Und es gibt noch [weitere
+Probleme](http://factisresearch.blogspot.de/2009/04/some-java-fun-becoming-major-pain.html).)
+Typische
 Programmiermuster aus der funktionalen Programmierung sind damit zwar
 prinzipiell umsetzbar, aber nicht wirklich praktikabel.
 
@@ -110,14 +110,14 @@ Der Compiler beschwert sich mit:
 
     Target type of a lambda conversion must be an interface type.
 
-Oder anders formuliert : Funktionen, die durch Lambdas erzeugt werden,
-müssen immer als Typ ein vordefiniertes Interface haben.  Es kommen
+Oder anders formuliert: Funktionen, die durch Lambdas erzeugt werden,
+müssen in Java immer als Typ ein vordefiniertes Interface haben.  Es kommen
 dafür sogenannte *single-method interfaces* in Frage, also solche
 Interfaces, die genau eine Methode aufweisen.  Dies steht im Gegensatz
 zu funktionalen Sprachen (genauer gesagt den statisch getypten
 funktionalen Sprachen), bei denen Funktionstypen der Form `A -> B`
 schon vorn vorherein eingebaut sind.  Das heißt insbesondere, dass
-jede Stelligkeit ein eigenes Interface erfordert: Das Interface
+jede Stelligkeit (also jede mögliche Anzahl von Parametern) ein eigenes Interface erfordert: Das Interface
 `Function` von oben funktioniert nur für einstellige Funktionen.  Die Unterscheidung
 zwischen primitiven Typen und Referenztypen erfordert außerdem weitere
 Überladung.  Entsprechend kommt Java 8 mit einem ganzen Zoo speziell
@@ -149,8 +149,8 @@ für die anderen Interfaces für einstellige Funktionen, die in
 `ToIntFunction` und `ToLongFunction`.
 
 Mit anderen Worten: Es gibt in Java 8 nun Lambda-Ausdrücke und
-Funktionsobjekte, aber keine Funktionstypen - 5 von 10 Punkten, könnte
-man sagen.
+Funktionsobjekte, aber keine Funktionstypen - die Antwort auf die
+Frage im Titel ist damit ein klares "Jein".
 
 Diese Einschränkung ist für funktionale Programmierer bitter, aus
 Sicht der Java-Macher allerdings verständlich: Sie wollen Java
