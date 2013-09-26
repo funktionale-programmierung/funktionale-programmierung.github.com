@@ -98,14 +98,15 @@ Bedarfsauswertung und partiell applizierten Funktionen.
 
 Ein weiterer Vorteil der Unabhängigkeit vom Haskell-Standard ist, daß ein Problem, 
 über das in Haskell-Kreisen 
-[seit vielen Jahren diskutiert wird](http://ghc.haskell.org/trac/haskell-prime/wiki/TypeDirectedNameResolution) 
+[seit vielen Jahren diskutiert wird](http://ghc.haskell.org/trac/ghc/wiki/Records) 
 ohne daß sich eine Lösung abzeichnet, vermieden werden kann: 
-Ich rede von den Neueinsteigern (vor allem solchen, die aus OO-Gefilden kommen) 
-schwer vermittelbaren globalen Feldbezeichnern in Datenstrukturen (record fields).
+Ich rede von den Feldbezeichnern in Datentypen (record fields). 
+In Haskell sind diese Namen global, was mehrere Datentypen im gleichen Modul mit gleichen Feldnamen unmöglich macht.
+
 In Frege hat jeder Datentyp einen eigenen Namensraum, in dem Feldbezeichner, aber auch beliebige weitere Funktionen
 definiert sein können, ohne den globalen Namensraum zu beeinträchtigen. 
-Dazu kommen "syntactic sugar" für Feldzugriffe und (rein funktionale) Feldänderungen 
-sowie Unterstützung vom Typsystem für typgesteuerte Feldnamenauflösung.
+Dazu kommen "syntactic sugar" für Feldzugriffe  
+sowie Unterstützung des Typsystems für typgesteuerte Feldnamenauflösung.
 
 ## Status und Ausblick ##
 
