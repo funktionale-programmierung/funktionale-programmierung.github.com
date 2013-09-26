@@ -1,7 +1,7 @@
 ---
 layout: post
 description: Rein funktionale JVM Sprache Frege
-title: "Titel"
+title: "Frege - rein funktionale Programmierung in der JVM"
 author: ingo-wechsung
 tags: ["Java", "Haskell", "Frege", "JVM"]
 ---
@@ -115,28 +115,15 @@ Frege ist unfertig und in Entwicklung,
 sowohl in Hinblick auf implementierte Bibliotheken, Entwicklungs- und Dokumentationstools als auch die Sprache selbst.
 
 Dennoch ist es kein Spielzeug mehr. 
-Außer dem (zu 99.99% in Frege selbst) geschriebenen Compiler existiert ein Plugin für Eclipse, 
+Außer dem (zu 99.99% in Frege selbst geschriebenen) Compiler existiert ein Plugin für Eclipse, 
 sowie ein Interpreter. Eine Version dieses Interpreters läuft als 
-[Web-Service](http://try.frege-lang.org/).
+[Web-Service](http://try.frege-lang.org/), also nur einen Klick entfernt (möglicherweise jedoch nicht auf Ihrem Telefon).
 
 Meine Hoffnung ist, diesem noch weithin unbekannten Projekt etwas mehr Bekanntheit zu verschaffen.
 Ich lade jeden Interessierten ein, sich die Sache einmal anzuschauen, es an Interessierte weiterzuerzählen
 und im besten Falle etwas beizutragen.
 
- 
-Code: `f(a,b)`. Als Block:
-
-    <-- vier Leerzeichen eingerückt
-
-Codebeispiele einer Programmiersprache:
-
-{% highlight scheme %}
-(repl)
-{% endhighlight %}
-
-Links mit [Text](http://URL).
-
-Hervorhebungen *mit Stern* oder _Unterstrich_.  **Doppelt** für mehr
-__Druck__.  Geht auch mitt*endr*in in einem Wort.
+Quellcode, Downloads inklusive Sprachbeschreibung und weiterführende Verweise sind
+[auf der Projektseite](https://github.com/Frege/frege) zu finden.
 
 <!-- more end -->
