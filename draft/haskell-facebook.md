@@ -63,7 +63,28 @@ zur Entdeckung von Spam ablösen.
 Ich möchte an dieser Stelle nicht auf die technischen Details eingehen, dies sei Simon Marlow
 in seinen
 [Folien zum Vortrag](https://github.com/meiersi/HaskellerZ/blob/master/meetups/20130829-FPAfternoon_The_Haxl_Project_at_Facebook/The%20Haxl%20Project%20at%20Facebook.pdf?raw=true)
-vorbehalten. Stattdessen möchte ich zum Abschluss nochmal bemerken, dass
+vorbehalten. Ich möchte lediglich stichwortartig erwähnen, welche Eigenschaften von
+Haskell bei der Realisierung von Haxl wichtig waren:
+
+* Abstraktion über den Kontrollfluss mittels Monaden. Dazu gab es hier im Blog
+  auch schon einige Artikel, zu finden im [Archiv](http://funktionale-programmierung.de/tags-archive.html).
+
+* Die Implementierung von Haxl setzt außer Monaden auch noch
+  [applikative Funktoren](http://en.wikibooks.org/wiki/Haskell/Applicative_Functors)
+  ein. Die applikativen Funktoren werden benutzt, um unabhängige Zugriffe
+  auf die Persistenzkomponenten einzusammeln und dann später gemeinsam 
+  als Batch-Zugriff abzusetzen.
+
+* Gute Kontrolle über Seiteneffekte erlaubt eine schöne Trennung zwischen den
+  eigentlichen Berechnungen und der Persistenzschicht.
+
+* Leichtgewichtige Threads erlauben eine einfache Implementierung der Zugriffe auf die
+  verschiedenen Persistenzkomponenten. Auch hierzu gab es schon einen
+  [Artikel](http://funktionale-programmierung.de/2013/05/08/haskell-nodejs.html)
+
+## Fazit ##
+
+Das Beispiel Haxl zeigt, dass
 es die funtkionale Programmierung inzwischen soweit gebracht hat,
 dass selbst große Firmen wie Facebook auf das funktionale
 Programmierparadigma setzen. Und wann starten *Sie* mit funktionaler
