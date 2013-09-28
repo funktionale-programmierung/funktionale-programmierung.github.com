@@ -26,11 +26,9 @@ Die Antwort ist recht detailliert, und lautet zusammengefaßt so:
 Es sei ein lohnendes, aber nicht zu unterschätzendes Unterfangen, 
 die größten Schwierigkeiten ergäben sich daraus, daß man letztlich die GHC Laufzeitumgebung 
 samt aller primitiven Operationen für die jeweiligen Umgebungen neu implementieren und dann auch pflegen müßte.
-Diese Herausforderung sei jedoch "mostly broad rather than deep" 
-und mit genügend Ressourcen könne man sie durchaus angehen.
+Diese Herausforderung sei jedoch "mostly broad rather than deep". 
 
-Letzteres ist meiner Auffassung nach eine Fehleinschätzung.
-
+Letzteres ist meiner Auffassung nach eine Fehleinschätzung. 
 Es lauern durchaus schwierige, meines Wissens bisher ungeklärte, technische Probleme,
 beispielsweise im Bereich der Nebenläufigkeit: Das Thread-Modell der JVM ist ein ganz anderes
 als das der GHC-Umgebung. Man denke an GHC-Features wie _green threads_ und _software transactional memory_. 
@@ -51,78 +49,95 @@ wiederum auf der JVM nicht lauffähig. Nur derjenige Teil, der keinerlei Code au
 wäre in beiden Welten nutzbar.
 
 Mit der Programmiersprache [Frege](https://github.com/Frege/frege) wird solch ein "eine Nummer kleiner" Weg beschritten.
-Es wird davon ausgegangen, daß die 100%-ige Kompatibilität schwer herstellbar ist, 
-aus oben angeführten Gründen aber auch der Mühe weniger wert ist als man gemeinhin glaubt, 
-auf jeden Fall aber derzeit schlicht nicht existiert.
+Der Anspruch ist, die Essenz, derentwegen viele Menschen zu Haskell-Freunden wurden, in die JVM-Welt zu holen:
 
-Dennoch glauben wir (der Autor dieses Blog-Artikels ist gleichzeitig der Initiator des Projekts) 
-mit Frege die Essenz, derentwegen viele Menschen zu Haskell-Fans wurden, auf die JVM gebracht zu haben:
-
-  * die geniale (fast unveränderte) Syntax ohne geschweifte Klammern und Semikolons
+  * die geniale Haskell-Syntax ohne geschweifte Klammern und Semikolons (fast unverändert)
   * das Hindley-Milner Typsystem, das vollständige Typinferenz gewährleistet, ergänzt durch Funktionstypen höherer Ordnung und Typklassen (vorerst nur einfache)
-  * das Auswertungsmodell mit Bedarfsauswertung (lazy evaluation)
-  * die Trennung von rein funktionalem Code von solchem, der mit Seiteneffekten behaftet ist über Monaden
+  * das Ausführungsmodell mit Bedarfsauswertung (lazy evaluation)
+  * die Trennung von rein funktionalem Code von solchem, der mit Seiteneffekten behaftet ist mit Hilfe des Typsystems (Monaden)
 
-Im Grunde genommen handelt es sich um eine Sprache etwa im Umfang von Haskell 2010, 
-mit einigen Erweiterungen, die aus GHC bekannt sind,
+Frege ist eine Sprache etwa im Umfang von Haskell 2010, 
+zuzüglich einiger Erweiterungen, die aus GHC bekannt sind,
 allerdings ohne FFI (foreign function interface). 
-An dessen Stelle tritt ein Mechanismus, 
-der speziell auf das Einbinden von JVM-Typen (also Klassen und Interfaces) und JVM-Methoden zugeschnitten ist.
+An dessen Stelle tritt ein ähnlicher Mechanismus, 
+der aber speziell auf das Einbinden von JVM-Typen (also Klassen und Interfaces) und JVM-Methoden zugeschnitten ist.
 
 ## Vorteile der Unabhängigkeit ##
 
 Trotz der bewußt aufgegebenen Haskell-Kompatibilität laufen in Frege die Dinge vielfach genauso wie in Haskell. 
 
-Es gibt jedoch Unterschiede, die aus der grundsätzlichen Entscheidung herrühren, 
-in erster Linie eine praktische Sprache für JVM Anwendungen sein 
-(oder werden) zu wollen und erst in zweiter Linie eine möglichst Haskell-ähnliche. 
+Es gibt jedoch [Unterschiede](https://github.com/Frege/frege/wiki/Differences-between-Frege-and-Haskell), 
+die aus der grundsätzlichen Entscheidung herrühren, 
+in erster Linie eine praktische Sprache für die JVM sein 
+(oder werden) zu wollen und erst in zweiter Linie eine möglichst Haskell-ähnliche.
 
 So werden beispielsweise für die primitiven Datentypen die entsprechenden der JVM verwendet.
-Deshalb ist `Bool` kein algebraischer Datentyp, sondern ein primitiver, und es gibt zwei Literale `true` und `false`
+Folglich ist `Bool` in Frege kein algebraischer Datentyp, sondern ein primitiver, und es gibt zwei Literale `true` und `false`
 anstelle der Konstruktoren `True` und `False`. Ebenso ist `String` nicht dasselbe wie `[Char]`, 
-sondern die eingebundene Klasse `java.lang.String`.
+sondern basiert auf der eingebundenen Klasse `java.lang.String`, 
+die wie alle anderen eingebundenen JVM Typen auf Frege-Ebene als abstrakter Datentyp erscheint.
 
 Die Unterschiede setzen sich fort auf der Ebene der Standardbibliotheken (soweit schon vorhanden), 
 insbesondere in Bezug auf Ein- und Ausgabe, Ausnahmen, Threads und dergleichen. 
-Es wird immer das vorhandene Java-SE API genutzt.
-Zum Beispiel werden `MVar`s durch `java.util.concurrent.LinkedBlockingQueue`s mit maximaler Länge von 1 implementiert.
-Dies hindert nicht, daß bekannte Funktionen wie `getChar`, `putStrLn` oder eben auch `newMVar` existieren 
-und genauso funktionieren wie in Haskell, 
+Es werden hier jeweils die entsprechenden Java-SE API genutzt.
+
+Zum Beispiel nutzen Ein- und Ausgabe in Frege Klassen wie `java.io.BufferedReader` und `java.io.PrintWriter`. 
+Es wäre natürlich möglich gewesen, dem Haskell Standard penibel zu folgen, 
+der Ein- und Ausgabe auf abstrakten Filedeskriptoren (Datentyp `Handle` aus `System.IO`) basieren läßt.
+Dies hätte bedeutet, für Frege eine eigene Ein-/Ausgabeschicht bereitzustellen, 
+die natürlich sämtlichen anderen JVM Sprachen völlig unbekannt wäre. 
+Für die Interoperabilität mit letzteren würde dann doch wieder die von Java bekannte Funktionalität gebraucht, 
+sowie Abbildungen zwischen den verschiedenen Modellen. 
+
+Die unterschiedliche Basis für Ein-/Ausgabe hindert am Ende nicht, 
+daß bekannte Funktionen wie `getChar` oder `putStrLn` existieren 
+und aus Nutzersicht genauso funktionieren wie in Haskell, 
 jedoch gibt es zahlreiche von Haskell 2010 spezifizierten systemnahen Pakete, Datentypen und Funktionen nicht. 
 Auf der anderen Seite haben wir die Erfahrung gemacht, daß rein funktionaler Code praktisch unverändert von Haskell
-übernommen werden konnte, so z.B. Pakete wie `Data.List`.
+übernommen werden konnte, so z.B. Module wie `Data.List`.
 
-Der Vorteil dieser Vorgehensweise liegt u.a. darin, daß Frege kaum ein Laufzeitsystem braucht. 
-Das wenige, was vorhanden ist, beschäftigt sich hauptsächlich mit der Java fremden 
-Bedarfsauswertung und partiell applizierten Funktionen.
+Der Vorteil der Nutzung des Java API liegt u.a. darin, daß Frege nur ein minimales Laufzeitsystem benötigt, 
+das sich hauptsächlich mit Bedarfsauswertung und Funktionen beschäftigt,
+also mit den Dingen, die in Java unbekannt sind.
 
-Ein weiterer Vorteil der Unabhängigkeit vom Haskell-Standard ist, daß ein Problem, 
+Ein weiterer Vorteil der Unabhängigkeit vom Haskell-Standard ist, 
+daß ein Problem von vornherein vermieden werden konnte, 
 über das in Haskell-Kreisen 
-[seit vielen Jahren diskutiert wird](http://ghc.haskell.org/trac/ghc/wiki/Records) 
-ohne daß sich eine Lösung abzeichnet, vermieden werden kann: 
+[seit vielen Jahren diskutiert wird](http://ghc.haskell.org/trac/ghc/wiki/Records), 
+ohne daß eine Lösung absehbar wäre. 
 Ich rede von den Feldbezeichnern in Datentypen (record fields). 
 In Haskell sind diese Namen global, was mehrere Datentypen im gleichen Modul mit gleichen Feldnamen unmöglich macht.
 
 In Frege hat jeder Datentyp einen eigenen Namensraum, in dem Feldbezeichner, aber auch beliebige weitere Funktionen
 definiert sein können, ohne den globalen Namensraum zu beeinträchtigen. 
-Dazu kommen "syntactic sugar" für Feldzugriffe  
+Dazu kommen syntaktische Unterstützung für Feldzugriffe  
 sowie Unterstützung des Typsystems für typgesteuerte Feldnamenauflösung.
+
+Nicht zuletzt erlaubt Freges Eigenständigkeit, Dinge richtig zu machen, 
+die ziemlich unumstritten in Haskell korrekturbedürftig sind. 
+So in einer Frage der mathematisch korrekten Typklassenhierarchie: 
+in Frege war bereits von Anfang an 
+[`Applicative` eine Superklasse von `Monad`](http://ro-che.info/ccc/21), 
+und demnächst wird die Hierarchie gemäß dem Vorschlag in Edward Kmetts 
+[`semigroupoids` Paket](http://hackage.haskell.org/package/semigroupoids) vervollständigt. 
 
 ## Status und Ausblick ##
 
-Frege ist bislang ein Hobbyprojekt des Autors sowie einer Handvoll Unterstützer. 
+Frege ist bislang ein Hobbyprojekt des Autors dieses Artikels sowie einer Handvoll Unterstützer. 
 Der offene Quellcode steht unter BSD Lizenz.
 Frege ist unfertig und in Entwicklung, 
 sowohl in Hinblick auf implementierte Bibliotheken, Entwicklungs- und Dokumentationstools als auch die Sprache selbst.
 
 Dennoch ist es kein Spielzeug mehr. 
-Außer dem (zu 99.99% in Frege selbst geschriebenen) Compiler existiert ein Plugin für Eclipse, 
+Außer dem (in Frege selbst geschriebenen) Compiler existiert ein Plugin für Eclipse, 
 sowie ein Interpreter. Eine Version dieses Interpreters läuft als 
-[Web-Service](http://try.frege-lang.org/), also nur einen Klick entfernt (möglicherweise jedoch nicht auf Ihrem Telefon).
+[Web-Service](http://try.frege-lang.org/), 
+also nur einen Klick entfernt (möglicherweise jedoch nicht auf Telefonen funktionsfähig).
 
-Meine Hoffnung ist, diesem noch weithin unbekannten Projekt etwas mehr Bekanntheit zu verschaffen.
-Ich lade jeden Interessierten ein, sich die Sache einmal anzuschauen, es an Interessierte weiterzuerzählen
-und im besten Falle etwas beizutragen.
+Meine Hoffnung ist, diesem noch weithin unbekannten Projekt zukünftig mehr Bekanntheit verschaffen zu können.
+Jeder ist herzlich eingeladen, sich die Sache einmal näher anzuschauen, 
+mögliche Interessenten darauf aufmerksam zu machen
+oder gar - im besten Falle - etwas beizutragen.
 
 Quellcode, Downloads inklusive Sprachbeschreibung und weiterführende Verweise sind
 [auf der Projektseite](https://github.com/Frege/frege) zu finden.
