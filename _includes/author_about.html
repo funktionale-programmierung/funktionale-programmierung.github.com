@@ -33,6 +33,10 @@
 {% include author/johannes-weiss.html %}
 {% assign author_image = "johannes-weiss.png" %}
 
+{% when 'ingo-wechsung' %}
+{% include author/ingo-wechsung.html %}
+{% assign author_no_image = true %}
+
 {% else %}
 {% assign author_undefined = true %}
 {% assign author_no_image = false %}
