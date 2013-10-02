@@ -3,7 +3,7 @@ layout: post
 description: 
 title: "Die GUI-Monade: Monaden in der Praxis"
 author: andreas-bernauer
-tags: ["Praxis", "Monade", "Scala"]
+tags: ["Praxis", "Monaden", "Scala"]
 ---
 
 Dieser Artikel zeigt den Einsatz von
