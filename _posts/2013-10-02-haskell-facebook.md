@@ -26,8 +26,8 @@ Facebook speichert die verschiedenen Daten seines sozialen Netzwerk in verschied
 Persistenzkomponenten. Jede dieser Persistenzkomponenten ist auf einen bestimmten
 Zweck hin ausgerichtet und funktioniert am besten, wenn Zugriffe einem bestimmten Muster
 folgen. Eine der wichtigsten Persistenzkomponenten ist [TAO ("The Associations and Objects")](https://www.facebook.com/notes/facebook-engineering/tao-the-power-of-the-graph/10151525983993920).
-Diese Komponente repräsentiert u.A. die Verbindungen zwischen den Facebook
-Nutzern. Ein effizienter Zugriff auf TAO sollte
+Diese Komponente repräsentiert u.A. die Verbindungen zwischen den
+Facebook-Nutzern. Ein effizienter Zugriff auf TAO sollte
 dem Batch-Muster folgen, d.h. ein Anwendungsprogrammierer sollte möglichst
 viele Anfragen gleichzeitig absetzen und nicht jede Anfrage einzeln hintereinander.
 Andere Komponenten folgen anderen Zugriffsmustern, so gibt es z.B. Komponenten
@@ -85,7 +85,7 @@ Haskell bei der Realisierung von Haxl wichtig waren:
 ## Fazit ##
 
 Das Beispiel Haxl zeigt, dass
-es die funtkionale Programmierung inzwischen soweit gebracht hat,
+es die funktionale Programmierung inzwischen soweit gebracht hat,
 dass selbst große Firmen wie Facebook auf das funktionale
 Programmierparadigma setzen. Und wann starten *Sie* mit funktionaler
 Programmierung?
