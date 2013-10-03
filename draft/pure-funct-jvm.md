@@ -84,6 +84,22 @@ anstelle der Konstruktoren `True` und `False`. Ebenso ist `String` nicht dasselb
 sondern basiert auf der eingebundenen Klasse `java.lang.String`, 
 die wie alle anderen eingebundenen JVM Typen auf Frege-Ebene als abstrakter Datentyp erscheint.
 
+{% highlight haskell %}
+-- Frege oder Haskell?
+-- Finde die zwei Stellen, die es verraten ...
+
+module Main where
+
+import Data.List
+
+main _ = print $ take 10 pyth
+    where
+        pyth = [ (x, y, m*m+n*n) |
+                    m <- [2..], n <- [1..m-1],
+                    let { x = m*m-n*n; y = 2*m*n },
+                ]
+{% endhighlight %}
+
 Die Unterschiede setzen sich fort auf der Ebene der Standardbibliotheken (soweit schon vorhanden), 
 insbesondere in Bezug auf Ein- und Ausgabe, Ausnahmen, Threads und dergleichen. 
 Es werden hier jeweils die entsprechenden Java-SE API genutzt.
