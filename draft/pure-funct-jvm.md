@@ -84,21 +84,20 @@ anstelle der Konstruktoren `True` und `False`. Ebenso ist `String` nicht dasselb
 sondern basiert auf der eingebundenen Klasse `java.lang.String`, 
 die wie alle anderen eingebundenen JVM Typen auf Frege-Ebene als abstrakter Datentyp erscheint.
 
-{% highlight haskell %}
--- Frege oder Haskell?
--- Finde die zwei Stellen, die es verraten ...
+    -- Frege oder Haskell?
+    -- Finde die zwei Stellen, die es verraten!
+    
+    module Main where
+    
+    import Data.List
+    
+    main _ = print $ take 10 pyth
+        where
+            pyth = [ (x, y, m*m+n*n) |
+                        m <- [2..], n <- [1..m-1],
+                        let { x = m*m-n*n; y = 2*m*n },
+                   ]
 
-module Main where
-
-import Data.List
-
-main _ = print $ take 10 pyth
-    where
-        pyth = [ (x, y, m*m+n*n) |
-                    m <- [2..], n <- [1..m-1],
-                    let { x = m*m-n*n; y = 2*m*n },
-                ]
-{% endhighlight %}
 
 Die Unterschiede setzen sich fort auf der Ebene der Standardbibliotheken (soweit schon vorhanden), 
 insbesondere in Bezug auf Ein- und Ausgabe, Ausnahmen, Threads und dergleichen. 
@@ -118,6 +117,18 @@ und aus Nutzersicht genauso funktionieren wie in Haskell,
 jedoch gibt es zahlreiche von Haskell 2010 spezifizierten systemnahen Pakete, Datentypen und Funktionen nicht. 
 Auf der anderen Seite haben wir die Erfahrung gemacht, daß rein funktionaler Code praktisch unverändert von Haskell
 übernommen werden konnte, so z.B. Module wie `Data.List`.
+
+    --- Reverse the standard input
+    module examples.ReverseStdin where
+    
+    main _ = loop [] (repeat stdin.read) >>= mapM_ stdout.write
+    
+    loop :: (Applicative α, Bind α) => [Int] -> [α Int] -> α [Int] 
+    loop acc (a:as) = do
+        i <- a
+        if i < 0 then return acc    -- end of file
+        else loop (i:acc) as
+
 
 Der Vorteil der Nutzung des Java-API liegt u.a. darin, daß Frege nur ein minimales Laufzeitsystem benötigt, 
 das sich hauptsächlich mit Bedarfsauswertung und Funktionen beschäftigt,
@@ -151,6 +162,13 @@ Der offene Quellcode steht unter BSD-Lizenz.
 Frege ist unfertig und in Entwicklung, 
 sowohl in Hinblick auf implementierte Bibliotheken, Entwicklungs- und Dokumentationstools 
 als auch die Sprache selbst.
+
+    ingo@ubuntu:~/x/dev/frege$ java -jar fregec.jar -d build examples/ReverseStdin.fr 
+    W examples/ReverseStdin.fr:7: function pattern is refutable, consider adding a case for []
+    ingo@ubuntu:~/x/dev/frege$ (echo foo; echo bar) | java -cp fregec.jar:build examples.ReverseStdin 
+    
+    rab
+    oof
 
 Dennoch ist es kein Spielzeug mehr. 
 Außer dem (in Frege selbst geschriebenen) Compiler existiert ein Plugin für Eclipse, 
