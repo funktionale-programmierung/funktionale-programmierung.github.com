@@ -8,9 +8,16 @@ tags: ["Java", "Haskell", "Frege", "JVM"]
 
 Die Auswahl an Programmiersprachen für die JVM ist riesig. 
 Auch für funktionale Programmierer wird einiges geboten, von Scala über verschiedene ML-Dialekte bis hin zu Clojure.
-Eine Nische war jedoch bislang nicht besetzt: 
-die der Haskell-artigen, also rein funktionalen Sprachen mit Bedarfsauswertung und Typinferenz.
-Dabei erfreut sich Haskell außerhalb der JVM-Welt wachsender Beliebtheit.
+Die Nische der Haskell-artigen, also 
+[rein funktionalen Sprachen](http://de.wikipedia.org/wiki/Funktionale_Programmiersprache) mit 
+[Bedarfsauswertung](http://de.wikipedia.org/wiki/Bedarfsauswertung) (_lazy evaluation_) und 
+[Typinferenz](http://de.wikipedia.org/wiki/Typinferenz), 
+blieb jedoch bislang unbesetzt,
+trotz wachsender Beliebtheit von 
+[Haskell](http://www.haskell.org/haskellwiki/Haskell) außerhalb der JVM-Welt.
+Dies soll sich nun mit [Frege](https://github.com/Frege/frege) ändern.
+Der folgende Artikel soll einführend Idee und Motivation des Projekts vorstellen.
+
 
 <!-- more start -->
 
@@ -22,7 +29,7 @@ auftauchen. -->
 Eine häufig gestellte Frage im Haskell-Wiki ist folgende: 
 [_Warum ist GHC nicht für JVM oder .NET verfügbar?_](http://www.haskell.org/haskellwiki/GHC/FAQ#Why_isn.27t_GHC_available_for_.NET_or_on_the_JVM.3F)
 
-Die Antwort ist recht detailliert, und lautet zusammengefaßt so: 
+Die Antwort ist recht detailliert, und lautet zusammengefaßt ungefähr so: 
 Es sei ein lohnendes, aber nicht zu unterschätzendes Unterfangen, 
 die größten Schwierigkeiten ergäben sich daraus, daß man letztlich die GHC Laufzeitumgebung 
 samt aller primitiven Operationen für die jeweiligen Umgebungen neu implementieren und dann auch pflegen müßte.
@@ -42,13 +49,13 @@ geht es dann vielleicht eine Nummer kleiner?
 Ohnehin ist ja voraussehbar, daß Programme in einem fiktivem JVM-Haskell 
 vorrangig der Interoperabilität mit _anderen JVM-Sprachen_ wegen geschrieben würden - 
 diejenigen Programme, die so etwas nicht brauchen, laufen ja bisher auch ohne JVM-Ballast wunderbar.
-Genau solcher JVM-Haskell Code wäre aber mit der restlichen Haskell-Welt unverträglich in dem Sinne,
+Genau solcher JVM-Haskell-Code wäre aber mit der restlichen Haskell-Welt unverträglich in dem Sinne,
 daß er nicht einfach in einer anderen Umgebung übersetzt und ausgeführt werden könnte, und umgekehrt
-gälte dasselbe für Haskell Programme, die C/C++ Bibliotheken via FFI nutzen: ohne weiteres wären diese
+gälte dasselbe für Haskell-Programme, die C/C++ Bibliotheken via FFI nutzen: ohne weiteres wären diese
 wiederum auf der JVM nicht lauffähig. Nur derjenige Teil, der keinerlei Code aus anderen Sprachen nutzt, 
 wäre in beiden Welten nutzbar.
 
-Mit der Programmiersprache [Frege](https://github.com/Frege/frege) wird solch ein "eine Nummer kleiner" Weg beschritten.
+Mit der Programmiersprache [Frege](https://github.com/Frege/frege) wird solch ein eine Nummer kleinerer Weg beschritten.
 Der Anspruch ist, die Essenz, derentwegen viele Menschen zu Haskell-Freunden wurden, in die JVM-Welt zu holen:
 
   * die geniale Haskell-Syntax ohne geschweifte Klammern und Semikolons (fast unverändert)
@@ -96,7 +103,7 @@ jedoch gibt es zahlreiche von Haskell 2010 spezifizierten systemnahen Pakete, Da
 Auf der anderen Seite haben wir die Erfahrung gemacht, daß rein funktionaler Code praktisch unverändert von Haskell
 übernommen werden konnte, so z.B. Module wie `Data.List`.
 
-Der Vorteil der Nutzung des Java API liegt u.a. darin, daß Frege nur ein minimales Laufzeitsystem benötigt, 
+Der Vorteil der Nutzung des Java-API liegt u.a. darin, daß Frege nur ein minimales Laufzeitsystem benötigt, 
 das sich hauptsächlich mit Bedarfsauswertung und Funktionen beschäftigt,
 also mit den Dingen, die in Java unbekannt sind.
 
@@ -119,14 +126,15 @@ So in einer Frage der mathematisch korrekten Typklassenhierarchie:
 in Frege war bereits von Anfang an 
 [`Applicative` eine Superklasse von `Monad`](http://ro-che.info/ccc/21), 
 und demnächst wird die Hierarchie gemäß dem Vorschlag in Edward Kmetts 
-[`semigroupoids` Paket](http://hackage.haskell.org/package/semigroupoids) vervollständigt. 
+[Paket `semigroupoids`](http://hackage.haskell.org/package/semigroupoids) vervollständigt.
 
 ## Status und Ausblick ##
 
 Frege ist bislang ein Hobbyprojekt des Autors dieses Artikels sowie einer Handvoll Unterstützer. 
-Der offene Quellcode steht unter BSD Lizenz.
+Der offene Quellcode steht unter BSD-Lizenz.
 Frege ist unfertig und in Entwicklung, 
-sowohl in Hinblick auf implementierte Bibliotheken, Entwicklungs- und Dokumentationstools als auch die Sprache selbst.
+sowohl in Hinblick auf implementierte Bibliotheken, Entwicklungs- und Dokumentationstools 
+als auch die Sprache selbst.
 
 Dennoch ist es kein Spielzeug mehr. 
 Außer dem (in Frege selbst geschriebenen) Compiler existiert ein Plugin für Eclipse, 
@@ -134,7 +142,7 @@ sowie ein Interpreter. Eine Version dieses Interpreters läuft als
 [Web-Service](http://try.frege-lang.org/), 
 also nur einen Klick entfernt (möglicherweise jedoch nicht auf Telefonen funktionsfähig).
 
-Meine Hoffnung ist, diesem noch weithin unbekannten Projekt zukünftig mehr Bekanntheit verschaffen zu können.
+Meine Hoffnung ist, diesem noch weithin unbekannten Projekt mehr Bekanntheit verschaffen zu können.
 Jeder ist herzlich eingeladen, sich die Sache einmal näher anzuschauen, 
 mögliche Interessenten darauf aufmerksam zu machen
 oder gar - im besten Falle - etwas beizutragen.
