@@ -10,7 +10,7 @@ Die Auswahl an Programmiersprachen für die JVM ist riesig.
 Auch für funktionale Programmierer wird einiges geboten, von Scala über verschiedene ML-Dialekte bis hin zu Clojure.
 Die Nische der Haskell-artigen, also 
 [rein funktionalen Sprachen](http://de.wikipedia.org/wiki/Funktionale_Programmiersprache) mit 
-[Bedarfsauswertung](http://de.wikipedia.org/wiki/Bedarfsauswertung) (_lazy evaluation_) und 
+[Bedarfsauswertung](http://de.wikipedia.org/wiki/Bedarfsauswertung) (lazy evaluation) und 
 [Typinferenz](http://de.wikipedia.org/wiki/Typinferenz), 
 blieb jedoch bislang unbesetzt,
 trotz wachsender Beliebtheit von 
