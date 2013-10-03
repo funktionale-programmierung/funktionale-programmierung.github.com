@@ -15,7 +15,7 @@ Die Nische der Haskell-artigen, also
 blieb jedoch bislang unbesetzt,
 trotz wachsender Beliebtheit von 
 [Haskell](http://www.haskell.org/haskellwiki/Haskell) außerhalb der JVM-Welt.
-Dies soll sich nun mit [Frege](https://github.com/Frege/frege) ändern.
+Dies soll sich nun mit der neuen Programmiersprache [Frege](https://github.com/Frege/frege) ändern.
 Der folgende Artikel soll einführend Idee und Motivation des Projekts vorstellen.
 
 
