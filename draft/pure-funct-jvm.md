@@ -39,7 +39,7 @@ Letzteres ist meiner Auffassung nach eine Fehleinschätzung.
 Es lauern durchaus schwierige, meines Wissens bisher ungeklärte, technische Probleme,
 beispielsweise im Bereich der Nebenläufigkeit: Das Thread-Modell der JVM ist ein ganz anderes
 als das der GHC-Umgebung. Man denke an GHC-Features wie _green threads_ und _software transactional memory_. 
-Ob so etwas 1:1 in der JVM implementiert werden kann ist durchaus nicht klar.
+Ob so etwas 1:1 in der JVM implementiert werden kann, ist durchaus nicht klar.
 
 ## Eine Nummer kleiner ##
 
@@ -58,10 +58,10 @@ wäre in beiden Welten nutzbar.
 Mit der Programmiersprache [Frege](https://github.com/Frege/frege) wird solch ein eine Nummer kleinerer Weg beschritten.
 Der Anspruch ist, die Essenz, derentwegen viele Menschen zu Haskell-Freunden wurden, in die JVM-Welt zu holen:
 
-  * die geniale Haskell-Syntax ohne geschweifte Klammern und Semikolons (fast unverändert)
-  * das Hindley-Milner Typsystem, das vollständige Typinferenz gewährleistet, ergänzt durch Funktionstypen höherer Ordnung und Typklassen (vorerst nur einfache)
-  * das Ausführungsmodell mit Bedarfsauswertung (lazy evaluation)
-  * die Trennung von rein funktionalem Code von solchem, der mit Seiteneffekten behaftet ist mit Hilfe des Typsystems (Monaden)
+* die geniale Haskell-Syntax ohne geschweifte Klammern und Semikolons (fast unverändert)
+* das Hindley-Milner Typsystem, das vollständige Typinferenz gewährleistet, ergänzt durch Funktionstypen höherer Ordnung und Typklassen (vorerst nur einfache)
+* das Ausführungsmodell mit Bedarfsauswertung (lazy evaluation)
+* die Trennung von rein funktionalem Code von solchem, der mit Seiteneffekten behaftet ist mit Hilfe des Typsystems (Monaden)
 
 Frege ist eine Sprache etwa im Umfang von Haskell 2010, 
 zuzüglich einiger Erweiterungen, die aus GHC bekannt sind,
@@ -104,7 +104,7 @@ insbesondere in Bezug auf Ein- und Ausgabe, Ausnahmen, Threads und dergleichen.
 Es werden hier jeweils die entsprechenden Java-SE API genutzt.
 
 Zum Beispiel nutzen Ein- und Ausgabe in Frege Klassen wie `java.io.BufferedReader` und `java.io.PrintWriter`. 
-Es wäre natürlich möglich gewesen, dem Haskell Standard penibel zu folgen, 
+Es wäre natürlich möglich gewesen, dem Haskell-Standard penibel zu folgen, 
 der Ein- und Ausgabe auf abstrakten Filedeskriptoren (Datentyp `Handle` aus `System.IO`) basieren läßt.
 Dies hätte bedeutet, für Frege eine eigene Ein-/Ausgabeschicht bereitzustellen, 
 die natürlich sämtlichen anderen JVM Sprachen völlig unbekannt wäre. 
@@ -144,7 +144,7 @@ In Haskell sind diese Namen global, was mehrere Datentypen im gleichen Modul mit
 
 In Frege hat jeder Datentyp einen eigenen Namensraum, in dem Feldbezeichner, aber auch beliebige weitere Funktionen
 definiert sein können, ohne den globalen Namensraum zu beeinträchtigen. 
-Dazu kommen syntaktische Unterstützung für Feldzugriffe  
+Dazu kommen syntaktische Unterstützung für Feldzugriffe
 sowie Unterstützung des Typsystems für typgesteuerte Feldnamenauflösung.
 
 Nicht zuletzt erlaubt Freges Eigenständigkeit, Dinge richtig zu machen, 
