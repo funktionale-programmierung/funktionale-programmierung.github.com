@@ -19,3 +19,63 @@ sharing :
     annotation : bubble
   linkedin :
     counter : right
+
+authors:
+-
+  id: michael-sperber
+  name: Michael Sperber
+  image: /author/michael-sperber.jpg
+  href: "http://www.active-group.de/unternehmen/sperber.html"
+  about: '<a href="http://www.active-group.de/unternehmen/sperber.html">Dr. Michael Sperber</a> ist CTO der <a href="http://www.active-group.de/">Active Group GmbH</a> und international anerkannter Spezialist für alle Aspekte der funktionalen Programmierung.'
+-
+  id: stefan-wehr
+  name: Stefan Wehr
+  image: /author/stefan-wehr.jpg
+  href: "http://www.factisresearch.com/company.html#swehr"
+  about: '<a href="http://www.factisresearch.com/company.html#swehr">Dr. Stefan Wehr</a> entwirft und entwickelt bei der <a href="http://www.factisresearch.com">factis research GmbH</a> komplexe Anwendungen sowohl in klassischen als auch in funktionalen Sprachen. Er ist international anerkannter Spezialist für funktionale Programmierung.'
+-
+  id: david-frese
+  name: David Frese
+  image: /author/david-frese.jpg
+  href: "http://www.active-group.de/unternehmen/frese.html"
+  about: '<a href="http://www.active-group.de/unternehmen/frese.html">David Frese</a> ist Softwarearchitekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a>, Diplom Informatiker, und verfügt über langjährige Erfahrung in funktionaler aber auch klassischer Programmierung in großen Projekten der Industrie.'
+-
+  id: andreas-bernauer
+  name: Andreas Bernauer
+  image: /author/andreas-bernauer.jpg
+  href: "http://www.active-group.de/unternehmen/bernauer.html"
+  about: '<a href="http://www.active-group.de/unternehmen/bernauer.html">Dr. Andreas Bernauer</a> ist Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a> und beschäftigt sich seit über 10 Jahren mit funktionaler Programmierung.'
+-
+  id: uwe-schmidt
+  name: Uwe Schmidt
+  image: /author/uwe-schmidt.jpg
+  href: "http://www.fh-wedel.de/~si/"
+  about: '<a href="http://www.fh-wedel.de/~si/">Prof. Dr. Uwe Schmidt</a> lehrt an der <a href="http://www.fh-wedel.de">FH Wedel</a> im Fachbereich Informatik Programmiersprachen und Software-Entwicklung, unter anderem seit dem Jahr 2000 <em>Funktionale Programmierung mit Haskell</em> im Master-Studiengang für Informatik. Er ist Autor des bekannten Haskell Pakets <a href="http://www.fh-wedel.de/~si/HXmlToolbox/index.html">HXT</a>, eine standardkonforme und sehr umfangreiche Bibliothek zur XML-Verarbeitung.'
+-
+  id: alexander-thiemann
+  name: Alexander Thiemann
+  image: /author/alexander-thiemann.jpg
+  href: "http://www.factisresearch.com/company.html#nthiemann"
+  about: '<a href="http://www.factisresearch.com/company.html#athiemann">Alexander Thiemann</a> entwirft und entwickelt bei der <a href="http://www.factisresearch.com">factis research GmbH</a> &uuml;berwiegend Webanwendungen.'
+-
+  id: niklas-baumstark
+  name: Niklas Baumstark
+  href: "http://www.factisresearch.com/company.html#nbaumstark"
+  about: '<a href="http://www.factisresearch.com/company.html#nbaumstark">Niklas Baumstark</a> entwickelt neben seinem Studium Software bei der <a href="http://www.factisresearch.com">factis research GmbH</a> im funktionalen Paradigma. Zu seinen Spezialgebieten zählen systemnahe Programmierung und Algorithmen.'
+-
+  id: joachim-breitner
+  name: Joachim Breitner
+  image: /author/joachim-breitner.png
+  href: "http://www.joachim-breitner.de/blog/"
+  about: '<a href="http://www.joachim-breitner.de/">Joachim Breitner</a> ist Doktorand am Karlsruher Institut für Technologie und forscht zur Semantik von Bedarfsauswertung. Seit 6 Jahren programmiert er Haskell und engagiert sich in der Community, etwa als Mitglied des Haskell Core Library Committees.'
+-
+  id: johannes-weiss
+  name: Johannes Weiß
+  image: /author/johannes-weiss.png
+  href: "http://www.johannesweiss.eu/"
+  about: '<a href="http://johannesweiss.eu/">Johannes Weiß</a> arbeitet bei <a href="http://www.bromium.com/">Bromium</a>, einem vielversprechendem IT-Sicherheits-Startup in Cambridge, UK. Seit längerer Zeit interessiert er sich unter anderem für funktionale Programmiersprachen, insbesondere Haskell.'
+-
+  id: ingo-wechsung
+  name: Ingo Wechsung
+  href: "http://www.contexo.de/"
+  about: 'Ingo Wechsung arbeitet als IT-Berater für die Firma contexo GmbH in Reutlingen.'

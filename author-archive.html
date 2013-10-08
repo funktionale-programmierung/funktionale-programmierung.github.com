@@ -1,0 +1,30 @@
+---
+layout: default
+title: Tag Archive
+---
+
+<h1>Autoren</h1>
+<div id="articles">
+    {% for author_ in @site.authors %}
+    <h2>{{ num_posts }}{{ author_.name }}<a name="{{ author_.id }}" class="anchor">&nbsp;</a></h2>
+    <div class="author-info" style="margin-top: 0">
+      {% if author_.image %}
+      <div class="author-picture">
+        <img alt="{{ author_.name }}" src="{{ author_.image }}">
+      </div>
+      {% endif %}
+      <div markdown="1" class="author-text">
+        <p>{{ author_.about }}</p>
+      </div>
+    </div>
+    <ul>
+      {% for post in @site.posts %}
+        {% if post.author == author_.id %}
+          <li>{{ post.date | date: '%Y-%m-%d' }}&nbsp;-&nbsp;
+              <a href="{{ post.url }}">{{ post.title }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    {% endfor %}
+</div>
