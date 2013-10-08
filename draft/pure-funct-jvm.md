@@ -185,7 +185,7 @@ sowie ein Interpreter. Hier ein Screenshot des Eclipse-Plugins:
 </div>
 <br/>
 
-Eine Version dieses Interpreters läuft als 
+Eine Version des Interpreters läuft als 
 [Web-Service](http://try.frege-lang.org/), 
 also nur einen Klick entfernt (möglicherweise jedoch nicht auf Telefonen funktionsfähig).
 
