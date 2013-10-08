@@ -6,6 +6,11 @@ author: ingo-wechsung
 tags: ["Java", "Haskell", "Frege", "JVM"]
 ---
 
+<div class="inline-picture-right">
+<img src="/files/frege/logo_03.png">
+</img>
+</div>
+
 Die Auswahl an Programmiersprachen für die JVM ist riesig. 
 Auch für funktionale Programmierer wird einiges geboten, von Scala über verschiedene ML-Dialekte bis hin zu Clojure.
 Die Nische der Haskell-artigen, also 
@@ -172,7 +177,15 @@ als auch die Sprache selbst.
 
 Dennoch ist es kein Spielzeug mehr. 
 Außer dem (in Frege selbst geschriebenen) Compiler existiert ein Plugin für Eclipse, 
-sowie ein Interpreter. Eine Version dieses Interpreters läuft als 
+sowie ein Interpreter. Hier ein Screenshot des Eclipse-Plugins:
+
+<div id="right">
+<img src="/files/frege/FregIDE-Snapshot.png">
+</img>
+</div>
+<br/>
+
+Eine Version dieses Interpreters läuft als 
 [Web-Service](http://try.frege-lang.org/), 
 also nur einen Klick entfernt (möglicherweise jedoch nicht auf Telefonen funktionsfähig).
 

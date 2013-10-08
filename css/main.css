@@ -272,3 +272,8 @@ hr.post-divider {
   height: auto;
   margin-left: 10px;
 }
+
+.inline-picture-right {
+  float: right;
+  height: auto;
+}
