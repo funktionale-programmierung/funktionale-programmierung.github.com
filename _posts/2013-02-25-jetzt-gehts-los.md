@@ -2,7 +2,7 @@
 layout: post
 description: Blog-Start
 title: "Das Blog 'Funktionale Programmierung' startet!"
-author: <a href="http://www.active-group.de/unternehmen/sperber.html">Michael Sperber</a>
+author: michael-sperber
 ---
 
 Jetzt geht es endlich los: Unser Blog 'Funktionale Programmierung'

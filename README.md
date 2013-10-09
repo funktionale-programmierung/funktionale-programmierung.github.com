@@ -50,21 +50,18 @@ Autoren
 Der Autor eines Artikels muß im Header-Feld `author` mit einem
 Bezeichner, wie z.B. "michael-sperber" angegeben werden.
 
-Für jeden Autor muß in den beiden Dateien
+Für jeden Autor muß in der Dateien
 
-    _includes/author_name.html
-    _includes/author_about.html
+    _config.yml
 
-ein Name für den Anfang eines Artikels, bzw. eine Kurzbeschreibung für
-das Ende des Artikels definiert sein. Außerdem muß ein kleines Bild unter
+im Mapping 'authors' ein Name und eine URL für den Anfang eines
+Artikels, bzw. eine Kurzbeschreibung für das Ende des Artikels
+definiert sein. Außerdem kann ein kleines Bild unter
 
-    author/<name>.jpg
+    author/...
 
-abgelegt werden.
-
-Ist unter _includes nichts definiert, dann erscheint der unter
-`author` definierte Text am Anfang des Artikels, und es gibt keinen
-"Zum Autor" Abschnitt am Ende.
+abgelegt werden und die URL in obigem Mapping unter 'image' definiert
+werden.
 
 Search-Engine-Optimization
 ==

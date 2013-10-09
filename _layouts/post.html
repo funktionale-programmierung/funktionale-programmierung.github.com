@@ -5,15 +5,26 @@ layout: default
   <article>
     <h1 class="post-title">{{ page.title }}</h1>
     <div class="post-date">{{ page.date | date: "%d.%m.%Y" }}</div>
-    {% include author_name.html %}
-    <div class="post-author">Autor: <a href="{{ the_author_href }}">{{ the_author_name }}</a></div>
+    {% assign author_ = site.authors[page.author] %}
+    <div class="post-author">Autor: <a href="{{ author_.href }}">{{ author_.name }}</a></div>
     <div class="post-sharing">
      {% capture post_url %}http://funktionale-programmierung.de{{ page.url }}{% endcapture %}
      {% capture post_title %}{{ page.title }}{% endcapture %}
      {% include sharing %}
     </div>
     <div class="post-content">{{ content }}</div>
-    {% include author_about.html %}
+    <hr/>
+    <div class="author-info">
+      {% if author_.image %}
+      <div class="author-picture">
+        <img alt="{{ page.author }}" src="{{ author_.image }}">
+      </div>
+      {% endif %}
+      <div markdown="1" class="author-text">
+        <em><p>Zum Autor:</p></em>
+        <p>{{ author_.about }}</p>
+      </div>
+    </div>
     <hr />
     <div class="post-tags">
       <span class="label label-info">Tags</span>

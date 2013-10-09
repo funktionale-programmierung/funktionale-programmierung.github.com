@@ -14,12 +14,12 @@ layout: nil
     <lastBuildDate>{{ site.time | date: "%a, %d %b %Y %H:%M:%S %Z" }}</lastBuildDate>
 
     {% for post in site.posts %}
-    {% include author_name.html %}
+    {% assign author_ = site.authors[post.author] %}
       <item>
         <title>{{ post.title }}</title>
         <link>http://funktionale-programmierung.de{{ post.url }}</link>
         <pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %Z" }}</pubDate>
-        <author>{{ the_author_name }}</author>
+        <author>{{ author_.name }}</author>
         <guid>http://funktionale-programmierung.de{{ post.url }}</guid>
         <description>{{ post.content | xml_escape }}</description>
       </item>

@@ -3,28 +3,30 @@ layout: default
 title: Tag Archive
 ---
 
-<h1>Autoren</h1>
-<div id="articles">
+<h1>Archiv</h1>
+<a href="archive.html">Nach Datum sortiert</a> | Nach Autoren sortiert
+<div>
     {% for author_ in @site.authors %}
-    <h2>{{ num_posts }}{{ author_.name }}<a name="{{ author_.id }}" class="anchor">&nbsp;</a></h2>
+    <h2>{{ author_[1].name }}<a name="{{ author_[0] }}" class="anchor">&nbsp;</a></h2>
     <div class="author-info" style="margin-top: 0">
-      {% if author_.image %}
+      {% if author_[1].image %}
       <div class="author-picture">
-        <img alt="{{ author_.name }}" src="{{ author_.image }}">
+        <img alt="{{ author_[1].name }}" src="{{ author_[1].image }}">
       </div>
       {% endif %}
       <div markdown="1" class="author-text">
-        <p>{{ author_.about }}</p>
+        <p>{{ author_[1].about }}</p>
       </div>
     </div>
     <ul>
       {% for post in @site.posts %}
-        {% if post.author == author_.id %}
+        {% if post.author == author_[0] %}
           <li>{{ post.date | date: '%Y-%m-%d' }}&nbsp;-&nbsp;
               <a href="{{ post.url }}">{{ post.title }}</a>
           </li>
         {% endif %}
       {% endfor %}
     </ul>
+    <hr/>
     {% endfor %}
 </div>
