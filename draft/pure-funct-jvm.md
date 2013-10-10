@@ -14,7 +14,7 @@ tags: ["Java", "Haskell", "Frege", "JVM"]
 Die Auswahl an Programmiersprachen für die JVM ist riesig. 
 Auch für funktionale Programmierer wird einiges geboten, von Scala über verschiedene ML-Dialekte bis hin zu Clojure.
 Die Nische der Haskell-artigen, also 
-[rein funktionalen Sprachen](http://de.wikipedia.org/wiki/Funktionale_Programmiersprache) mit 
+[rein funktionalen Sprachen](http://funktionale-programmierung.de/2013/08/23/was-ist-funktionale-programmierung.html) mit 
 [Bedarfsauswertung](http://de.wikipedia.org/wiki/Bedarfsauswertung) (lazy evaluation) und 
 [Typinferenz](http://de.wikipedia.org/wiki/Typinferenz), 
 blieb jedoch bislang unbesetzt,
@@ -43,7 +43,7 @@ Diese Herausforderung sei jedoch "mostly broad rather than deep".
 Letzteres ist meiner Auffassung nach eine Fehleinschätzung. 
 Es lauern durchaus schwierige, meines Wissens bisher ungeklärte, technische Probleme,
 beispielsweise im Bereich der Nebenläufigkeit: Das Thread-Modell der JVM ist ein ganz anderes
-als das der GHC-Umgebung. Man denke an GHC-Features wie _green threads_ und _software transactional memory_. 
+als das der GHC-Umgebung. Man denke nur an GHC-Features wie _green threads_. 
 Ob so etwas 1:1 in der JVM implementiert werden kann, ist durchaus nicht klar.
 
 ## Eine Nummer kleiner ##
@@ -63,7 +63,7 @@ wäre in beiden Welten nutzbar.
 Mit der Programmiersprache [Frege](https://github.com/Frege/frege) wird solch ein eine Nummer kleinerer Weg beschritten.
 Der Anspruch ist, die Essenz, derentwegen viele Menschen zu Haskell-Freunden wurden, in die JVM-Welt zu holen:
 
-* die geniale Haskell-Syntax ohne geschweifte Klammern und Semikolons (fast unverändert)
+* die geniale Haskell-Syntax ohne geschweifte Klammern und Semikolons
 * das Hindley-Milner Typsystem, das vollständige Typinferenz gewährleistet, ergänzt durch Funktionstypen höherer Ordnung und Typklassen (vorerst nur einfache)
 * das Ausführungsmodell mit Bedarfsauswertung (lazy evaluation)
 * die Trennung von rein funktionalem Code von solchem, der mit Seiteneffekten behaftet ist mit Hilfe des Typsystems (Monaden)
@@ -73,6 +73,23 @@ zuzüglich einiger Erweiterungen, die aus GHC bekannt sind,
 allerdings ohne FFI (foreign function interface). 
 An dessen Stelle tritt ein ähnlicher Mechanismus, 
 der aber speziell auf das Einbinden von JVM-Typen (also Klassen und Interfaces) und JVM-Methoden zugeschnitten ist.
+
+Wie groß die Ähnlichkeit zwischen Haskell und Frege ist, mag folgendes kleine Beispielprogramm in Frege zeigen.
+Tatsächlich gibt es nur zwei Hinweise darauf, daß dies nicht Haskell ist. 
+Der geneigte Leser wird sicher Spaß dabei haben, sie zu finden.
+    
+    module Main where
+    
+    import Data.List
+    
+    main _ = print $ take 10 pyth
+        where
+            pyth = [ (x, y, m*m+n*n) |
+                        m <- [2..], n <- [1..m-1],
+                        let { x = m*m-n*n; y = 2*m*n },
+                   ]
+    
+
 
 ## Vorteile der Unabhängigkeit ##
 
@@ -89,26 +106,28 @@ anstelle der Konstruktoren `True` und `False`. Ebenso ist `String` nicht dasselb
 sondern basiert auf der eingebundenen Klasse `java.lang.String`, 
 die wie alle anderen eingebundenen JVM Typen auf Frege-Ebene als abstrakter Datentyp erscheint.
 
-    -- Frege oder Haskell?
-    -- Finde die zwei Stellen, die es verraten!
-    
-    module Main where
-    
-    import Data.List
-    
-    main _ = print $ take 10 pyth
-        where
-            pyth = [ (x, y, m*m+n*n) |
-                        m <- [2..], n <- [1..m-1],
-                        let { x = m*m-n*n; y = 2*m*n },
-                   ]
-
-
 Die Unterschiede setzen sich fort auf der Ebene der Standardbibliotheken (soweit schon vorhanden), 
 insbesondere in Bezug auf Ein- und Ausgabe, Ausnahmen, Threads und dergleichen. 
 Es werden hier jeweils die entsprechenden Java-SE API genutzt.
 
-Zum Beispiel nutzen Ein- und Ausgabe in Frege Klassen wie `java.io.BufferedReader` und `java.io.PrintWriter`. 
+Zum Beispiel nutzen Ein- und Ausgabe in Frege Klassen wie `java.io.BufferedReader` und `java.io.PrintWriter`, 
+wie in folgendem Programm, das die Standardeingabe `stdin` zeichenweise liest 
+und die Zeichen in umgekehrter Reihenfolge auf
+der Standardausgabe `stdout` wieder ausgibt. 
+Die Funktionen `read` und `write` sind jeweils IO-Aktionen, die auf die gleichnamigen Java-Methoden zurückgreifen. 
+
+    --- Reverse the standard input
+    module examples.ReverseStdin where
+    
+    main _ = loop []  >>= mapM_ stdout.write
+    
+    loop :: [Int] -> IO [Int] 
+    loop acc  = do
+        ch <- stdin.read            -- read next char (as Int)
+        if i < 0 then return acc    -- end of input?
+        else loop (i:acc)
+
+
 Es wäre natürlich möglich gewesen, dem Haskell-Standard penibel zu folgen, 
 der Ein- und Ausgabe auf abstrakten Filedeskriptoren (Datentyp `Handle` aus `System.IO`) basieren läßt.
 Dies hätte bedeutet, für Frege eine eigene Ein-/Ausgabeschicht bereitzustellen, 
@@ -122,18 +141,6 @@ und aus Nutzersicht genauso funktionieren wie in Haskell,
 jedoch gibt es zahlreiche von Haskell 2010 spezifizierten systemnahen Pakete, Datentypen und Funktionen nicht. 
 Auf der anderen Seite haben wir die Erfahrung gemacht, daß rein funktionaler Code praktisch unverändert von Haskell
 übernommen werden konnte, so z.B. Module wie `Data.List`.
-
-    --- Reverse the standard input
-    module examples.ReverseStdin where
-    
-    main _ = loop [] (repeat stdin.read) >>= mapM_ stdout.write
-    
-    loop :: (Applicative α, Bind α) => [Int] -> [α Int] -> α [Int] 
-    loop acc (a:as) = do
-        i <- a
-        if i < 0 then return acc    -- end of file
-        else loop (i:acc) as
-
 
 Der Vorteil der Nutzung des Java-API liegt u.a. darin, daß Frege nur ein minimales Laufzeitsystem benötigt, 
 das sich hauptsächlich mit Bedarfsauswertung und Funktionen beschäftigt,
@@ -160,6 +167,20 @@ in Frege war bereits von Anfang an
 und demnächst wird die Hierarchie gemäß dem Vorschlag in Edward Kmetts 
 [Paket `semigroupoids`](http://hackage.haskell.org/package/semigroupoids) vervollständigt.
 
+## Anwendung ##
+
+Das folgende Beispiel zeigt Übersetzung und Ausführung des obigen Programms von der Linux-Kommandozeile aus.
+Das JAR-File `fregec.jar` enthält den selbst in Frege geschriebenen Compiler sowie die Standardbibliothek.
+
+    ingo@ubuntu:~/x/dev/frege$ java -jar fregec.jar -d build examples/ReverseStdin.fr 
+    ingo@ubuntu:~/x/dev/frege$ (echo foo; echo bar) | java -cp fregec.jar:build examples.ReverseStdin 
+    
+    rab
+    oof
+
+Dank der Plattformunabhängigkeit der JVM 
+funktioniert dies in völlig gleicher Weise natürlich auch unter Windows-Betriebssystemen.
+
 ## Status und Ausblick ##
 
 Frege ist bislang ein Hobbyprojekt des Autors dieses Artikels sowie einer Handvoll Unterstützer. 
@@ -168,15 +189,9 @@ Frege ist unfertig und in Entwicklung,
 sowohl in Hinblick auf implementierte Bibliotheken, Entwicklungs- und Dokumentationstools 
 als auch die Sprache selbst.
 
-    ingo@ubuntu:~/x/dev/frege$ java -jar fregec.jar -d build examples/ReverseStdin.fr 
-    W examples/ReverseStdin.fr:7: function pattern is refutable, consider adding a case for []
-    ingo@ubuntu:~/x/dev/frege$ (echo foo; echo bar) | java -cp fregec.jar:build examples.ReverseStdin 
-    
-    rab
-    oof
 
 Dennoch ist es kein Spielzeug mehr. 
-Außer dem (in Frege selbst geschriebenen) Compiler existiert ein Plugin für Eclipse, 
+Außer dem  Compiler existiert ein Plugin für Eclipse, 
 sowie ein Interpreter. Hier ein Screenshot des Eclipse-Plugins:
 
 <div id="right">
