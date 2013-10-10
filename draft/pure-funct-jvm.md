@@ -3,7 +3,7 @@ layout: post
 description: Rein funktionale JVM Sprache Frege
 title: "Frege - rein funktionale Programmierung in der JVM"
 author: ingo-wechsung
-tags: ["Java", "Haskell", "Frege", "JVM"]
+tags: ["Java", "Haskell", "Frege", "JVM", "rein funktional"]
 ---
 
 <div class="inline-picture-right">
