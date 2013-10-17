@@ -103,7 +103,7 @@ Anwendungsfälle von Schleifen abdecken:
   Bedingung erfüllen.
 * `count(p)` zählt die Elemente einer Collection, welche eine gegebene
   Bedingung erfüllen.
-* `take(n)` liefert die ersten *n* Elemente einer Collection
+* `take(n)` liefert die ersten *n* Elemente einer Collection.
 * `drop(n)` liefert alle Elemente einer Collection *bis auf die ersten n*.
 * `takeWhile(p)` liefert die ersten Elemente einer Collection, die
   alle der Bedingung p genügen.
@@ -128,11 +128,11 @@ Anwendungsfälle von Schleifen abdecken:
        result
     {% endhighlight %}
 
-    Damit lassen sich praktisch alle for-Schleifen ersetzen.
+   Damit lassen sich praktisch alle for-Schleifen ersetzen.
 
-    In der [Einführung in die rein funktionale
+   In der [Einführung in die rein funktionale
     Programmierung](http://funktionale-programmierung.de/2013/04/10/rein-funktional-2.html)
-    hatten wir `foldLeft` als `foldl` der Programmiersprache Racket vorgestellt.
+   hatten wir `foldLeft` als `foldl` der Programmiersprache Racket vorgestellt.
 
 * `reduceLeft(op)` entspricht `foldl(op0)(op)`, wobei op0 das erste
   Element der Collection ist.
@@ -191,7 +191,7 @@ Aufrufe "an letzter Stelle" kommt, das heißt, das Ergebnis des
 rekursiven Funktionsaufrufs wird nicht weiter in einer Berechnung
 verwendet.
 
-Für das Beispiel des `readCommandLineOpts`, könnte eine endrekursive
+Für das Beispiel des `readCommandLineOpts` könnte eine endrekursive
 Hilfsfunktion `loop` wie folgt aussehen:
 
 {% highlight scala %}
