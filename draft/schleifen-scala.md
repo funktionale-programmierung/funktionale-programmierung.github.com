@@ -99,53 +99,113 @@ möglich.
 Programmiersprachen eine Reihe von Funktionen, welche die üblichen
 Anwendungsfälle von Schleifen ohne Seiteneffekte abdecken:
 
-* `filter(p)` filtert Elemente aus einer Collection, die eine gegebene
+<ul markdown="1">
+<li>
+
+`filter(p)` filtert Elemente aus einer Collection, die eine gegebene
+Bedingung *p* erfüllen.
+
+</li>
+<li>
+
+`count(p)` zählt die Elemente einer Collection, welche eine gegebene
   Bedingung *p* erfüllen.
-* `count(p)` zählt die Elemente einer Collection, welche eine gegebene
-  Bedingung *p* erfüllen.
-* `take(n)` liefert die ersten *n* Elemente einer Collection.
-* `drop(n)` liefert alle Elemente einer Collection *bis auf die ersten n*.
-* `takeWhile(p)` liefert die ersten Elemente einer Collection, die
-  alle der Bedingung p genügen.
-* `dropWhile(p)` liefert alle Element einer Collection, bis auf die
-  ersten, welche der Bedingung p genügen.
-* `forall(p)` prüft, ob eine Bedingung auf alle Element einer
-  Collection zutrifft.
-* `contains(p)` prüft, ob eine Bedingung auf irgend ein Element einer
-  Collection zutrifft.
-* `splitAt(n)` teilt eine Collection an der Position *n* in zwei
-  Teile.
-* `partition(p)` teilt eine Collection in die zwei Teile, welche der
-  Bedingung p genügen oder nicht genügen.
-* `foldLeft(start)(op)` ist quasi das Schweizer Taschenmesser und
-  steht für folgenden Code-Block:
 
-    {% highlight scala %}
-       var result = start
-       for (x <- collection) {
-           result = op(result, x)
-       }
-       result
-    {% endhighlight %}
+</li>
+<li>
 
-   Damit lassen sich praktisch alle for-Schleifen ersetzen.
+`take(n)` liefert die ersten *n* Elemente einer Collection.
 
-   In der [Einführung in die rein funktionale
-    Programmierung](http://funktionale-programmierung.de/2013/04/10/rein-funktional-2.html)
-   hatten wir `foldLeft` als `foldl` der Programmiersprache Racket vorgestellt.
+</li>
+<li>
 
-* `reduceLeft(op)` entspricht `foldl(x0)(op)`, wobei x0 das erste
-  Element der Collection ist.
-* `scanLeft(start)(op)` ist ähnlich zu `foldl`, nur dass es auch alle
-  Zwischenergebnisse liefert statt nur dem Endergebnis.
-* `map(f)` wendet die Funktion *f* auf jedes Element einer Collection
-  an und liefert die Ergebnisse in einer neuen Collection, wobei eine
-  etwaige Reihenfolge erhalten bleibt. 
-* `collect(pf)` wendet die partielle Funktion *pf* nur auf die
-  Elemente einer Collection an, für die *pf* definiert ist und liefert
-  die Ergebnisse in einer neuen Collection, wobei eine etwaige
-  Reihenfolge erhalten bleibt.
+`drop(n)` liefert alle Elemente einer Collection *bis auf die
+ersten n*.
 
+</li>
+<li>
+
+`takeWhile(p)` liefert die ersten Elemente einer Collection, die
+alle der Bedingung p genügen.
+
+</li>
+<li>
+
+`dropWhile(p)` liefert alle Element einer Collection, bis auf die
+ersten, welche der Bedingung p genügen.
+
+</li>
+<li>
+
+`forall(p)` prüft, ob eine Bedingung auf alle Element einer
+Collection zutrifft.
+
+</li>
+<li>
+
+`contains(p)` prüft, ob eine Bedingung auf irgend ein Element einer
+Collection zutrifft.
+
+</li>
+<li>
+
+`splitAt(n)` teilt eine Collection an der Position *n* in zwei
+Teile.
+
+</li>
+<li>
+
+`partition(p)` teilt eine Collection in die zwei Teile, welche der
+Bedingung p genügen oder nicht genügen.
+
+</li>
+<li>
+
+`foldLeft(start)(op)` ist quasi das Schweizer Taschenmesser und
+steht für folgenden Code-Block:
+
+{% highlight scala %}
+   var result = start
+   for (x <- collection) {
+       result = op(result, x)
+   }
+   result
+{% endhighlight %}
+
+Damit lassen sich praktisch alle for-Schleifen ersetzen.
+
+In der [Einführung in die rein funktionale Programmierung](http://funktionale-programmierung.de/2013/04/10/rein-funktional-2.html)
+hatten wir `foldLeft` als `foldl` der Programmiersprache Racket vorgestellt.
+
+</li>
+<li>
+
+`reduceLeft(op)` entspricht `foldl(x0)(op)`, wobei x0 das erste
+Element der Collection ist.
+
+</li>
+<li>
+
+`scanLeft(start)(op)` ist ähnlich zu `foldl`, nur dass es auch alle
+Zwischenergebnisse liefert statt nur dem Endergebnis.
+
+</li>
+<li>
+
+`map(f)` wendet die Funktion *f* auf jedes Element einer Collection
+an und liefert die Ergebnisse in einer neuen Collection, wobei eine
+etwaige Reihenfolge erhalten bleibt. 
+
+</li>
+<li>
+
+`collect(pf)` wendet die partielle Funktion *pf* nur auf die
+Elemente einer Collection an, für die *pf* definiert ist und liefert
+die Ergebnisse in einer neuen Collection, wobei eine etwaige
+Reihenfolge erhalten bleibt.
+
+</li>
+</ul>
 
 Meiner Erfahrung nach lässt sich mit diesem "Arsenal" an Funktionen
 Code lesbarer gestalten: statt lauter for-Schleifen stehen Verben, die
