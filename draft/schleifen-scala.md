@@ -97,12 +97,12 @@ möglich.
 
 Ähnlich zu `foreach` gibt es in Scala und anderen funktionalen
 Programmiersprachen eine Reihe von Funktionen, welche die üblichen
-Anwendungsfälle von Schleifen abdecken:
+Anwendungsfälle von Schleifen ohne Seiteneffekte abdecken:
 
 * `filter(p)` filtert Elemente aus einer Collection, die eine gegebene
-  Bedingung erfüllen.
+  Bedingung *p* erfüllen.
 * `count(p)` zählt die Elemente einer Collection, welche eine gegebene
-  Bedingung erfüllen.
+  Bedingung *p* erfüllen.
 * `take(n)` liefert die ersten *n* Elemente einer Collection.
 * `drop(n)` liefert alle Elemente einer Collection *bis auf die ersten n*.
 * `takeWhile(p)` liefert die ersten Elemente einer Collection, die
@@ -134,17 +134,17 @@ Anwendungsfälle von Schleifen abdecken:
     Programmierung](http://funktionale-programmierung.de/2013/04/10/rein-funktional-2.html)
    hatten wir `foldLeft` als `foldl` der Programmiersprache Racket vorgestellt.
 
-* `reduceLeft(op)` entspricht `foldl(op0)(op)`, wobei op0 das erste
+* `reduceLeft(op)` entspricht `foldl(x0)(op)`, wobei x0 das erste
   Element der Collection ist.
 * `scanLeft(start)(op)` ist ähnlich zu `foldl`, nur dass es auch alle
   Zwischenergebnisse liefert statt nur dem Endergebnis.
 * `map(f)` wendet die Funktion *f* auf jedes Element einer Collection
   an und liefert die Ergebnisse in einer neuen Collection, wobei eine
   etwaige Reihenfolge erhalten bleibt. 
-* `collect(pf)` wendet die Funktion *pf* nur auf die Elemente einer
-  Collection an, für die *pf* definiert ist und liefert die Ergebnisse
-  in einer neuen Collection, wobei eine etwaige Reihenfolge erhalten
-  bleibt.
+* `collect(pf)` wendet die partielle Funktion *pf* nur auf die
+  Elemente einer Collection an, für die *pf* definiert ist und liefert
+  die Ergebnisse in einer neuen Collection, wobei eine etwaige
+  Reihenfolge erhalten bleibt.
 
 
 Meiner Erfahrung nach lässt sich mit diesem "Arsenal" an Funktionen
@@ -179,7 +179,8 @@ Zwischenergebnisse mit einer sehr kurzen Lebensdauer erzeugt werden.
 Das stimmt, in der Praxis ist dies jedoch genauso häufig nicht
 relevant.  Zum Beispiel kann man bei `readCommandLineOpts` davon
 ausgehen, dass es weder viele Kommando-Zeilen Optionen gibt, noch dass
-sie besonders groß sind.
+sie besonders groß sind.  Außerdem können Compiler oder Bibliotheken
+die Zwischenergebnisse bei rein-funktionalem Code wegoptimieren.
 
 Sollte Effizienz dennoch relevant sein, kann man natürlich immer noch
 die Lesbarkeit der Effizienz opfern und Schleifen verwenden.
@@ -229,5 +230,12 @@ mehr.  Der erzeugte Bytecode zeigt, dass der rekursive Aufruf von
      ASTORE 1
      GOTO L0
 
-Damit kann man in der funktionalen Programmierung als Programmier wählen, ob
-man seine Schleifen lesbar oder effizient gestalten will.
+Damit können Programmierer wählen, wie lesbar oder effizient sie ihre
+Schleifen gestalten wollen.  
+
+Wer in die funktionale Programmierung einsteigt, dem kann ich
+empfehlen, womit ich ebenfalls begonnen hatte: bei jeder for- oder
+while-Schleife sich fragen, ob nicht eine der obigen Funktionen
+deutlicher ausdrückt, was der Code erreichen möchte.  Als Ergebnis
+wartet ein leichter lesbarer und wartbarer Code.
+
