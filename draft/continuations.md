@@ -52,13 +52,13 @@ zweimal die Funktion `getImportData`.
 Ein wichtige Eigenschaft des obigen Generatorcodes ist, dass sich die
 Generatorfunktion einzig um das Erzeugen des Ausgabedokuments kümmert.
 Sie sehen nirgends Logik, die sich um das Neuausführen des Generators
-bei Änderung der Eingebadaten kümmert.
+bei Änderung der Eingabedaten kümmert.
 
 Die Verantwortung für die Neuausführung der Generatoren bei Code- oder
 Datenänderungen liegt einzig beim darunterliegenden Framework. Und genau
 an dieser Stelle werden Continuations relevant. Schauen wir uns mal
 die Generatorfunktion genauer an. Zuerst holt sie sich mit 
-`getImportData patId` die Daten zum richtigen Patient. Wenn sich nun
+`getImportData patId` die Daten zum richtigen Patienten. Wenn sich nun
 die Daten des Patienten ändern (weil z.B. jemand in der Verwaltung
 den Namen des Patienten korrigiert) muss der restliche Code
 der Generatorfunktion neu ausgeführt werden.
