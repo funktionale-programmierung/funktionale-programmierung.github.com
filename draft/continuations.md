@@ -49,7 +49,7 @@ ein `LabDoc` erzeugt, welches später in der Patientenakte angezeigt werden
 kann. Um an die benötigten Daten zu kommen benutzt der Generator
 zweimal die Funktion `getImportData`.
 
-Ein wichtige Eigenschaft des obigen Generatorcodes ist, dass sich die
+Eine wichtige Eigenschaft des obigen Generatorcodes ist, dass sich die
 Generatorfunktion einzig um das Erzeugen des Ausgabedokuments kümmert.
 Sie sehen nirgends Logik, die sich um das Neuausführen des Generators
 bei Änderung der Eingabedaten kümmert.
@@ -76,12 +76,16 @@ Ausgeschrieben sieht der Code des Generators wie folgt aus:
         }
 
 Jetzt sieht man deutlich, dass der nach `getImportData patId` ausgeführte
-Teil des Code alles nach `>>= \pat -> ...` ist. Um also bei Aktualisierung
+Teil des Codes, also die Continuation, alles nach `\pat -> ...` ist. 
+Um also bei Aktualisierung
 der unter der `patId` abgelegten Patientendaten das Ausgabedokument
-aktuell zu halten, muss sich das Framework also nur diesen Teils des
-Codes merken und zu den richtigen Zeiten wieder ausführen. Und da die
-Generatorfunktion in einer vom Framework bereitgestellten Monade läuft
-ist der Zugriff auf den Code auch einfach möglich.
+aktuell zu halten, muss sich das Framework nur diese Continuation
+merken und zu den richtigen Zeitpunkten wieder ausführen. Da die
+Generatorfunktion in einer vom Framework bereitgestellten Monade läuft,
+ist der Zugriff auf die Continuation auch einfach möglich. Und das 
+erneute Ausführen der Continuation ist auch einfach, denn schließlich
+handelt es sich nur um eine ganz normale Funktion, die einfach nur
+mit den geänderten Patientendaten gefütter werden muss.
 
 So, das war's für heute. Wir werden uns sicher in einem späteren Artikel
 Continuations nochmal genauer anschauen und dabei auch kennenlernen, dass
