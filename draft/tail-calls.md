@@ -39,7 +39,7 @@ Die meisten Programmierer haben für die Auswertung eines Aufrufs von
 Maschine, die `f` ausführt, zur Ausführung von `g` übergeht, sichert
 sie auf dem Stack eine *Rücksprungadresse* zu dem Code, der die 15
 addiert.  Zusammen mit dieser Rücksprungadresse werden unter Umständen
-noch die Werte lokaler Variablen zu einem *Aktivierungsblock*
+noch die Werte lokaler Variablen zu einem *Aktivierungsblock* (oder "Stack-Frame")
 kombiniert.  (Der funktionale Programmierer spricht gern von
 [*Continuation*]({% post_url 2013-10-31-continuations-praxis %}).)
 Die Maschine springt die Rücksprungadresse an, sobald die Arbeit von
@@ -91,7 +91,13 @@ Optimierung - zumindest nicht in dem Sinne, dass eine Optimierung ein
 Programm nur verbessert, aber sein Verhalten nicht grundlegend
 verändert.  Wenn die Endrekursion vom Sprachstandard garantiert wird,
 verlassen sich Programmierer darauf.  Würde sie entfernt, liefen viele
-Programme nicht mehr bzw. nicht besonders lange.
+Programme nicht mehr bzw. nicht besonders lange.  Neben Scheme sind
+auch
+[F#](http://blogs.msdn.com/b/fsharpteam/archive/2011/07/08/tail-calls-in-fsharp.aspx)
+und
+[Lua](http://www.lua.org/pil/6.3.html) endrekursiv; Endrekursion für
+JavaScript ist hoffentlich [auch nicht mehr
+weit](http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls).
 
 # Endrekursion in der funktionalen Programmierung
 
@@ -113,6 +119,7 @@ einer Liste bildet:
 
 Der rekursive Aufruf von `list-sum-helper` ist ein *tail call* und
 Scheme garantiert, dass er als *proper tail call* ausgeführt wird.
+(Compiler für funktionale Sprachen machen daraus in der Regel einen einfachen Sprung.)<
 Das heißt, dass, egal wie lang die Liste ist, nicht unbegrenzt
 Continuations angelegt werden und den Speicher vollmachen.  Würde
 Scheme nicht Endrekursion unterstützen, müsste die Programmiererin
@@ -132,21 +139,19 @@ aufeinanderfolgenden Schleifendurchläufen sowie aus der Schleife
 heraus geht nur mit Zuweisungen, und auf diese verzichten funktionale
 Programmierer [bekanntermaßen]({% post_url 2013-03-12-rein-funktional %}), wenn irgendmöglich.
 
-Das muss allerdings nicht sein: Das
-[`do`-Schleifenkonstrukt](http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-6.html#node_chap_5)
-in Scheme zeigt, dass es auch ohne Zuweisungen geht.  Außerdem ist es
-so, dass zum Beispiel viele Scheme-Implementierungen (wegen der
+Das muss allerdings nicht sein: Viele Scheme-Implementierungen
+erlauben beispielsweise (wegen der
 Unterstützung von
-[First-Class-Continuations](http://en.wikipedia.org/wiki/Continuation#First-class_continuations))
-erlauben, unbegrenzt viele Continuations anzulegen, ohne also durch
+[First-Class-Continuations](http://en.wikipedia.org/wiki/Continuation#First-class_continuations)),
+unbegrenzt viele Continuations anzulegen, ohne also durch
 einen unterdimensionierten Stack beschränkt zu sein.
 
-Paradoxerweise ist die Endrekursion also in funktionalen Sprachen gar
-nicht von so zentraler Bedeutung und rechtfertigt den Fantismus
-eigentlich nicht.
+Trotzdem ist die Endrekursion von zentraler Bedeutung, da einige
+Programmiertechniken nur damit funktionieren.  Hier einige Beispiele:
 
-Einige coole Beispiele gibt es aber trotzdem:
-
+* In Erlang werden Prozesse in der Regel als endrekursive Funktionen
+  implementiert, die potenziell unendlich lang laufen.  Da hilft auch
+  nicht, wenn der "Stack" den ganzen Speicher füllen darf.
 * Automaten lassen sich mit Endrekursion [deutlich eleganter
   implementieren](http://www.cs.brown.edu/~sk/Publications/Papers/Published/sk-automata-macros/)
   als mit Schleifen.
@@ -172,7 +177,7 @@ Dies führt dazu, dass in den meisten OOP-Sprachen zentrale Konstrukte
 gerade *nicht objektorientiert* sind: So haben sich spezialisierte
 Schleifenkonstruke wie `while` und `for` in vielen OO-Sprachen
 gehalten.  Diese funktionieren allesamt nicht über Methodendispatch
-sondern sind traditionelle Konstrukte.
+sondern sind traditionelle imperative Konstrukte.
 
 Dies ist umso deprimierender, weil es eigentlich einschlägige
 OO-Patterns wie das
@@ -210,7 +215,8 @@ also.
 
 Andere Einschränkungen der JVM verbünden sich mit der fehlenden
 Unterstützung für Endrekursion: So dürfen zum Beispiel Methoden nur
-64k groß werden.  Es ist zwar möglich, eine zu große Methode in
+64k groß werden.  Beim Inlining der der Verwendung von Makros
+entstehen aber gelegntlich größere Methoden.  Es ist zwar möglich, eine zu große Methode in
 mehrere kleinere zu
 [splitten](https://bitbucket.org/sperber/asm-method-size/), das
 funktioniert aber nur unter bestimmten Bedingungen, da für den
