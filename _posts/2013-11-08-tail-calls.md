@@ -240,7 +240,7 @@ Optimierung taugt, argumentiert er, dass "TRE is incompatible with
 nice stack traces" ist.  (TRE = "tail recursion elimination", eine andere
 Bezeichnung für Endrekursion.)
 
-Eine naive Implementierung von Endrekursion generiert in der Tat für
+Eine naive Implementierung von Endrekursion garantiert in der Tat für
 *tail calls* die Abwesenheit von Aktivierungsblöcken, die damit auch nicht im
 Stack-Trace auftauchen.  Dort wären sie allerdings unter Umständen
 beim Debuggen hilfreich.  Allerdings vergisst er anzumerken, dass die
