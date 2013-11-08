@@ -232,7 +232,7 @@ bekannt](https://blogs.oracle.com/jrose/entry/tail_calls_in_the_vm).
 Forderungen nach Endrekursion gibt es in vielen Sprachen, stoßen aber
 leider oft auf Unverständnis.  Ein [viel beachtetes Posting von Guido
 van
-Rossums](http://neopythonic.blogspot.de/2009/04/tail-recursion-elimination.html)
+Rossum](http://neopythonic.blogspot.de/2009/04/tail-recursion-elimination.html)
 argumentiert, warum Python nicht endrekursiv ist.  Dabei stellt van
 Rossum spektakuläres technisches Unverständnis zur Schau: Während er
 verstanden hat, dass Endrekursion nicht als bloße optionale
