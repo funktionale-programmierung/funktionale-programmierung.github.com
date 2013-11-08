@@ -21,7 +21,7 @@ objektorientierten Programmierern eigentlich noch wichtiger sein.
 
 # Was ist Endrekursion?
 
-Das tolle an Funktionsaufrufen ist, dass sie geschachtelt werden können.
+Das Tolle an Funktionsaufrufen ist, dass sie geschachtelt werden können.
 Hier ein Beispiel in Scheme:
 
 {% highlight scheme %}
@@ -72,10 +72,11 @@ Aufrufe wie der von `g` in `f1` - die keinen Kontext haben - heißen
 *tail calls*.  ("Tail", da sie gewissermaßen den Schwanz der
 umschließenden Funktion bilden.)  Im Deutschen hat sich leider noch
 kein griffiger Begriff dafür durchsetzen können.  Wenn bei einem *tail
-call* keine neue neue Continuation angelegt wird, spricht man von
+call* keine neue neue Continuation angelegt wird, spricht man von einem
 *proper tail call*.  Programmiersprachen, die alle *tail calls* als
 *proper tail calls* behandeln, heißen *properly tail-recursive*
-bzw. unterstützen *Endrekursion*.  In der
+bzw. unterstützen *Endrekursion*.  
+In der
 Programmiersprache Scheme ist Endrekursion [die
 fundamentale
 Eigenschaft](http://www.wisdomandwonder.com/article/509/lambda-the-ultimate-goto).
@@ -84,7 +85,14 @@ Ob ein Funktionsaufruf ein *tail call* ist, ist eine syntaktische
 Eigenschaft des Kontextes des Aufrufs.  Hier ist zum Beispiel [die
 Definition dafür im
 Scheme-Standard](http://www.r6rs.org/final/html/r6rs/r6rs-Z-H-14.html#node_sec_11.20).
- 
+
+In Programmiersprachen wie Scheme ist die Endrekursion keine
+Optimierung - zumindest nicht in dem Sinne, dass eine Optimierung ein
+Programm nur verbessert, aber sein Verhalten nicht grundlegend
+verändert.  Wenn die Endrekursion vom Sprachstandard garantiert wird,
+verlassen sich Programmierer darauf.  Würde sie entfernt, liefen viele
+Programme nicht mehr bzw. nicht besonders lange.
+
 # Endrekursion in der funktionalen Programmierung
 
 Endrekursion ist in der funktionalen Programmierung alltäglich.  Hier
@@ -187,7 +195,7 @@ Maschine keine Endrekursion unterstützt.
 Die JVM kombiniert dabei gleich zwei Probleme: Sie unterstützt keine
 Endrekursion und JVM-Stacks sind in der Regel in der Größe stark
 beschränkt, so dass schon kleinere Datenstrukturen, die mit
-Methodenaufrufen durchlaufen werden, zu Stack Overflows führen.
+Methodenaufrufen durchlaufen werden, zu *stack overflows* führen.
 
 Entsprechend müssen alle JVM-Sprachen, die mit anderen JVM-Programmen
 interoperabel bleiben wollen, spezielle Konstrukte für Schleifen
@@ -227,9 +235,9 @@ nice stack traces" ist.  (TRE = "tail recursion elimination", eine andere
 Bezeichnung für Endrekursion.)
 
 Eine naive Implementierung von Endrekursion generiert in der Tat für
-*tail calls* keine Aktivierungsblöcke, die damit auch nicht im Stack
-Trace auftauchen.  Dort wären sie allerdings unter Umständen beim
-Debuggen hilfreich.  Allerdings vergisst er anzumerken, dass die
+*tail calls* die Abwesenheit von Aktivierungsblöcken, die damit auch nicht im
+Stack-Trace auftauchen.  Dort wären sie allerdings unter Umständen
+beim Debuggen hilfreich.  Allerdings vergisst er anzumerken, dass die
 Schleifenkonstrukte in Python, die statt *tail calls* verwendet werden
 müssen, ebenfalls keine Aktivierungsblöcke generieren.  Wenn ihm
 Stack-Traces wichtig wären, könnte er einfach einen größenbeschränkten
@@ -242,9 +250,8 @@ Fall](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.4500).
 
 # Fazit
 
-Funktionale Programmierer schätzen die zentrale Bedeutung von
-Endrekursion korrekt ein.  Objektorientierte Programmierer sollten
-dies auch tun und Endrekursion von ihren Sprachen fordern.
+Endrekursion ist von zentraler Bedeutung in der Definition einer
+Programmiersprache - ob funktional oder objektorientiert.
 
 <!-- more end -->
 
