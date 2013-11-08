@@ -10,18 +10,18 @@ Wer mit funktionalen Programmierern über die Programmierung an sich
 diskutiert, wird früher oder oder später auf das Thema *proper tail
 calls* bzw. im deutschen *Endrekursion* stoßen.  Funktionale
 Programmierer halten dieses Feature bei der Programmierung mit einer
-Selbstverständlichkeit unerlässlich, die Vertreter anderer Sprachen
+Selbstverständlichkeit für unerlässlich, die Vertreter anderer Sprachen
 oft als fanatisch empfinden.
 
-Tatsächlich ist ist Endrekursion in der funktionalen Programmierung
-von zentraler Bedeutung.  Tatsächlich jedoch sollte sie
+Tatsächlich ist Endrekursion in der funktionalen Programmierung
+von zentraler Bedeutung.  Jedoch sollte sie
 objektorientierten Programmierern eigentlich noch wichtiger sein.
 
 <!-- more start -->
 
 # Was ist Endrekursion?
 
-Das tolle an Funktionsaufrufen, dass sie geschachtelt werden können.
+Das tolle an Funktionsaufrufen ist, dass sie geschachtelt werden können.
 Hier ein Beispiel in Scheme:
 
 {% highlight scheme %}
@@ -45,7 +45,7 @@ kombiniert.  (Der funktionale Programmierer spricht gern von
 Die Maschine springt die Rücksprungadresse an, sobald die Arbeit von
 `g` erledigt ist.
 
-Damit ist klar: Ein Funktionaufruf benötigt zur Laufzeit Platz.  In
+Damit ist klar: Ein Funktionsaufruf benötigt zur Laufzeit Platz.  In
 vielen Implementierungen von Programmiersprachen befindet sich dieser
 Platz auf einem *Stack*, für den oft nur sehr begrenzter Platz zur
 Verfügung steht.
@@ -155,10 +155,10 @@ Die objektorientierten Programmierung basiert ja eigentlich auf dem
 Paradigma des *Message-Passing*, bei dem die Programmausführung im
 wesentlichen daraus besteht, dass sich Objekte gegenseitig Nachrichten
 schicken, die dann beim jeweiligen Zielobjekt mit Hilfe des
-objektorientierten Dispatch zur Ausführung einer Methode führt.  Wenn
+objektorientierten Dispatch zur Ausführung einer Methode führen.  Wenn
 die Programmiersprache nicht endrekursiv ist - jedes Versenden einer
 Nachricht kostet also Speicherplatz - so sind alle Nachrichtenketten
-in ihrer Länge widerspricht.
+in ihrer Länge beschränkt.
 
 Dies führt dazu, dass in den meisten OOP-Sprachen zentrale Konstrukte
 gerade *nicht objektorientiert* sind: So haben sich spezialisierte
@@ -170,8 +170,8 @@ Dies ist umso deprimierender, weil es eigentlich einschlägige
 OO-Patterns wie das
 [*Visitor-Pattern*](http://en.wikipedia.org/wiki/Visitor_pattern)
 gibt.  Das Visitor-Pattern ist aber gerade in Sprachen ohne
-Endrekursion oft nur eingeschränkt verwendbar und fristen deshalb in
-vielen Pattern-Handbüchern nur ein (unverdiente)
+Endrekursion oft nur eingeschränkt verwendbar und fristet deshalb in
+vielen Pattern-Handbüchern nur ein (unverdientes)
 Mauerblümchen-Dasein.
 
 Ausführlichere Betrachtungen zu diesem Thema finden sich in [Guy
@@ -185,7 +185,7 @@ Programmiersprachendesign vertan werden, wenn die
 Maschine keine Endrekursion unterstützt.
 
 Die JVM kombiniert dabei gleich zwei Probleme: Sie unterstützt keine
-Endrekursion und JVM-Jacks sind in der Regel in der Größe stark
+Endrekursion und JVM-Stacks sind in der Regel in der Größe stark
 beschränkt, so dass schon kleinere Datenstrukturen, die mit
 Methodenaufrufen durchlaufen werden, zu Stack Overflows führen.
 
@@ -227,7 +227,7 @@ nice stack traces" ist.  (TRE = "tail recursion elimination", eine andere
 Bezeichnung für Endrekursion.)
 
 Eine naive Implementierung von Endrekursion generiert in der Tat für
-*tail calls* keineAktivierungsblöcke, die damit auch nicht im Stack
+*tail calls* keine Aktivierungsblöcke, die damit auch nicht im Stack
 Trace auftauchen.  Dort wären sie allerdings unter Umständen beim
 Debuggen hilfreich.  Allerdings vergisst er anzumerken, dass die
 Schleifenkonstrukte in Python, die statt *tail calls* verwendet werden
