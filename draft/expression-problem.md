@@ -9,13 +9,14 @@ tags: ["Expression Problem", Haskell, Scala, Clojure]
 Das sogenannte 'Expression Problem' ist das Problem, dass sich
 Programme in zwei Richtungen weiterentwickeln können, nämlich:
 
-- neue Operationen auf bestehenden Datentypen, und
+- neue Operationen für bestehende Datentypen, und
 - neue Datentypen für bestehende Operationen,
 
 und dass man sich gerne beide Möglichkeiten offen halten möchte, ohne
-das Programmieren wesentlich komplizierter zu machen. Das heißt zum
-Beispiel, ohne den bestehenden Code ändern oder neu kompilieren zu müssen
-(Phillip Wadler, der den Begriff geprägt hat, formuliert es
+das Programmieren wesentlich komplizierter zu machen. Komplizierter
+wird es zum Beispiel, wenn der bestehenden Code dazu geändert oder
+neu kompiliert werden muss. (Phillip Wadler, der den Begriff geprägt
+hat, formuliert es
 [hier](http://www.daimi.au.dk/~madst/tool/papers/expression.txt) etwas
 enger).
 
@@ -30,9 +31,9 @@ enger).
 
 Der grundlegende Ansatz der objekt-orientierten Programmierung macht
 es leicht neue Datentypen hinzuzufügen und schwer neue Operationen
-hinzuzufügen, dagegen ist es bei _klassischer_ funktionaler
-Programmierung genau umgekeht (siehe z.B.
-[hier](http://stackoverflow.com/questions/2078978/functional-programming-vs-object-oriented-programming))
+hinzuzufügen, während es bei _klassischer_ funktionaler
+Programmierung genau umgekeht ist (siehe z.B.
+[hier](http://stackoverflow.com/questions/2078978/functional-programming-vs-object-oriented-programming)).
 
 Im folgenden möchte ich das Problem anhand einfacher Beispiele
 erläutern, und einige Lösungen auflisten, die in diversen Sprachen
@@ -40,13 +41,13 @@ dafür angeboten werden.
 
 <!-- more start -->
 
-Das objekt-orientierte Expression Problem
+Aus objekt-orientierter Sicht
 ===
 
 Betrachten wir das Problem zunächst am Beispiel einer
 objekt-orientierten Sprache, wie z.B. Java. Beginnen wir mit einem Typ
 für Ausdrücke, `Expr`, zwei Ausprägungen dieses Typs (`Const` und
-`Add`), und einer Operationen `toString` zur hübschen Darstellung des
+`Add`), und einer Operation `toString` zur hübschen Darstellung des
 Ausdrucks als String:
 
 {% highlight java %}
@@ -72,7 +73,7 @@ class Add {
 
 Was nun in einer objekt-orientierten Sprache einfach ist, ist das
 Hinzufügen einer neuen Art von Ausdruck, indem man einfach eine neue
-Ableitung von Expr schreibt, z.B. für Negation:
+Ableitung von `Expr` schreibt, z.B. für Negation:
 
 {% highlight java %}
 class Neg extends Expr {
@@ -88,8 +89,8 @@ der abgeleiteten Klasse einfach eine Implementierung an, wodurch man
 diese Operation auf die neue Art von Ausdruck erweitert hat - und das
 ohne den bestehenden Code geändert zu haben!
 
-Wenn es aber nun darum geht eine neue Operation auf Ausdrücken
-hinzuzufügen, also z.B. eine Funktion `evaluate` die den Wert des
+Wenn es aber nun darum geht eine neue Operation für Ausdrücke
+hinzuzufügen, also z.B. eine Funktion `evaluate` die den Wert eines
 Ausdrucks errechnet, dann geht das in diesem Fall nicht ohne die
 bestehende abstrakte Klasse `Expr` zu modifizieren, genauso wie alle
 Ableitungen davon (oder zumindest viele davon).
@@ -97,7 +98,7 @@ Ableitungen davon (oder zumindest viele davon).
 Wie bereits erwähnt, ist es in funktionalen Sprachen üblicherweise
 genau andersherum, wie der nächste Abschnitt zeigt.
 
-Das funktionale Expression Problem
+Aus funktionaler Sicht
 ===
 
 Um Ausdrücke verschiedener Ausprägung und Operationen darauf zum
@@ -143,9 +144,9 @@ sowie für polymorphe Funktionen die _Einschränkung_ deklarieren, dass
 für einen Typparameter eine Instanz von bestimmten Typklassen
 vorhanden sein muß.
 
-Die Lösung sieht dann zum Beispiel folgendermaßen aus, zunächst die
-beiden Typen für Konstanten und Additionsausdrücke und die erste
-Typklasse für die `toString`-Operation:
+Bevor wir je eine Erweiterung in beide "Richtungen" machen, hier
+zunächst die beiden Typen für Konstanten und Additionsausdrücke und
+die erste Typklasse für die `toString`-Operation:
 
 {% highlight haskell %}
 data ConstExpr = Const Int
@@ -162,8 +163,8 @@ instance (ToString a, ToString b) => ToString (AddExpr a b) where
 {% endhighlight %}
 
 Besonders zu beachten ist dabei, dass der Datentyp für
-Additions-Ausdrücke keinerlei Einschränkungen auf den Typ der beiden
-Teilausdrücke `a` und `b` macht. Man könnte also auch eine `AddExpr`
+Additions-Ausdrücke keinerlei Einschränkungen für die Typen der beiden
+Teilausdrücke (`a` und `b`) macht. Man könnte also auch eine `AddExpr`
 mit zum Beispiel zwei String-Listen bilden. Die Einschränkung kommt
 dann erst in der zugehörigen Implementierung von `ToString` - der Teil
 links vom `=>`. Diesen kann man in etwa so lesen: Wenn die Typklasse
@@ -171,8 +172,9 @@ links vom `=>`. Diesen kann man in etwa so lesen: Wenn die Typklasse
 kann `ToString` auf dem Typ `AddExpr a b` folgendermaßen implementiert
 werden.
 
-Auf diese Art wird dann die Erweiterung möglich, zunächst auf einen
-neuen Typ für Negations-Ausdrücke:
+Jetzt ist es möglich, eine Erweiterung der Ausdrücke auf
+Negations-Ausdrücke zu machen, indem wir einen neuen Typ definieren,
+sowie Instanzen für die bestehende Operation `toString`:
 
 {% highlight haskell %}
 data NegExpr e = Neg e
@@ -186,7 +188,7 @@ für alle Operationen implementieren, die dieser Typ unterstützen soll.
 Der bestehende Code muß nicht modifiziert werden! Also genau das was
 wir erreichen wollten!
 
-Und neue Operationen hinzufügen, geht nach wie vor: Man definiert eine
+Und neue Operationen hinzuzufügen, geht nach wie vor. Man definiert eine
 neue Typklasse, und Implementierungen für jeden bestehenden Typ:
 
 {% highlight haskell %}
@@ -207,7 +209,10 @@ Auch hier muss der bestehende Code nicht angefasst werden!
 
 Nur ein kleiner Wermutstropfen: Vergisst man eine Typklasse zu
 implementieren, bekommt man eine Fehlermeldung eventuell an einer ganz
-anderen Stelle als gehofft - aber man bekommt eine!
+anderen Stelle als gehofft - aber man bekommt eine! Aus diesem und
+anderen Gründen, ist diese Art der Programmierung allerdings in
+Haskell nicht sehr verbreitet, und man sollte sie nur wählen, wenn man
+die Erweiterungsfähigkeit der Typen wirklich benötigt.
 
 Eine ganz ähnliche Lösung ist übrigens in Scala möglich, mit den
 gleichen Eigenschaften wie die Haskell-Lösung mit Typklassen - siehe
@@ -219,10 +224,10 @@ Clojures Protocols
 
 Mit der JVM-Sprache [Clojure](http://clojure.org/) lässt sich das
 Expression Problem ebenfalls gut lösen, und zwar mit dem
-Sprach-Feature _Protocols_. Protocols definieren ebenfalls ein oder
-mehrere Operationen, ähnlich wie Typklassen, und können separat für
-verschiedene Typen implementiert werden - _extend_ nennt sich das in
-Clojure. Da Clojure ein dynamisches Typsystem besitzt, fallen
+Sprach-Feature _Protocols_. Protocols definieren ebenfalls eine oder
+mehrere Operationen, ähnlich wie Typklassen. Sie können dann separat
+für verschiedene Typen implementiert werden - _extend_ nennt sich das
+in Clojure. Da Clojure ein dynamisches Typsystem besitzt, fallen
 gegenüber Haskell die Deklarationen der Einschränkungen weg - man kann
 sie aber in Clojure als Annotation hinzufügen, wenn man das möchte.
 
