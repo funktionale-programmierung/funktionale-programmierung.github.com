@@ -35,7 +35,7 @@ hinzuzufügen, während es bei _klassischer_ funktionaler
 Programmierung genau umgekeht ist (siehe z.B.
 [hier](http://stackoverflow.com/questions/2078978/functional-programming-vs-object-oriented-programming)).
 
-Im folgenden möchte ich das Problem anhand einfacher Beispiele
+Im diesem Artikel möchte ich das Problem anhand einfacher Beispiele
 erläutern, und einige Lösungen auflisten, die in diversen Sprachen
 dafür angeboten werden.
 
@@ -283,7 +283,7 @@ ob sich diese eher in Richtung "mehr Operationen" oder in Richtung
 dann nur noch mit sehr großem Aufwand gehen.
 
 Das Beste ist daher natürlich auf eine moderne (funktionale) Sprache
-zu setzen, in der das Expression Problem gelöst werden kann.
+zu setzen, in der das Expression Problem gelöst werden kann!
 
 <!--
 non-solutions in C#:
