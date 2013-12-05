@@ -6,14 +6,15 @@ tags: ["Objective-C", "Datentypen"]
 ---
 
 Heute geht's mal wieder darum zu zeigen, dass sich die Beschäftigung mit funktionaler 
-Programmierung auch dann lohnt, wenn man oft in imperativen oder objekt-orientierten
+Programmierung auch dann lohnt, wenn man oft in imperativen oder objektorientierten
 Sprache unterwegs ist. Der Artikel zeigt anhand eines Beispiels aus der Praxis,
 wie wir in einer in Objective-C geschriebenen iOS-App Einflüsse aus der funktionalen
 Programmierung aufgenommen und damit eine sehr einfache Datenmodellierung
 ermöglicht haben. Wenn Sie selbst auch mit Objective-C programmieren, können
 Sie unsere Ergebnisse direkt nutzen, denn sie stehen auf github unter einer
 Open-Source-Lizenz [zur Verfügung](https://github.com/skogsbaer/magic-property).
-
+Die Idee kann natürlich auch ohne weiteres für andere objektorientierte
+Sprache wie z.B. Java umgesetzt werden.
 
 <!-- more start -->
 
@@ -49,10 +50,10 @@ automatisch Funktionen zur Umwandlung eines Wert des Datentypens in einen
 String (`show`) und zum Test auf Gleichheit (`==`) generiert. Eine weitere
 schöne Eigenschaft der obigen Datentypen ist, dass alle Werte automatisch
 unveränderbar sind. (Auf englisch heißt das dann "immutable". Auch die
-objekt-orientierten Programmieren wissen diese Eigenschaften zu schätzen,
+objektorientierten Programmieren wissen diese Eigenschaften zu schätzen,
 wie etwa Joshua Bloch in seinem Buchklassiker "Effective Java" demonstriert.)
 
-Was müssen wir tun, um dieselbe Funktionalität in einer objekt-orientieren Sprache
+Was müssen wir tun, um dieselbe Funktionalität in einer objektorientieren Sprache
 wie Objective-C zu implementieren? Hier ist meine Version, dabei verzichte
 ich auf Hinschreiben der Implementierung von `Address`.
 
@@ -150,8 +151,7 @@ ich auf Hinschreiben der Implementierung von `Address`.
 @end
 {% endhighlight %}
 
-Verdammt viel Code, oder? Und ich bin mir sicher, eine vergleichbare Implementierung
-etwa in Java wäre nicht wesentlich kürzer.
+Verdammt viel Code, oder? Die vergleichbare Implementierung in Java wäre nicht wesentlich kürzer.
 
 Solche Art von Boilerplate-Code hat mehrere Nachteile. Man verschwendet viel
 Zeit um den Code hinzuschreiben, was unserer Erfahrung nach häufig zu einer unsauberen
@@ -180,5 +180,5 @@ der Rest wird generiert.
 Einfach, oder? 
 
 Diese Codegenerierung steht auch der Öffentlichkeit zur Verfügung, und
-zwar als github Repository [https://github.com/skogsbaer/magic-property](https://github.com/skogsbaer/magic-property).
-Dort wird auch erklärt, wie sie die Codegenerierung in ihr Projekt einbinden.
+zwar als [github Repository](https://github.com/skogsbaer/magic-property).
+Dort wird auch erklärt, wie Sie die Codegenerierung in ihr Projekt einbinden.
