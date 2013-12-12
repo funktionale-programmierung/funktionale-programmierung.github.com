@@ -12,7 +12,9 @@ funktionaler Programmierung treffen.  Wir hatten sie
 <a href="{% post_url 2013-08-07-cufp-2013 %}">einem vorigen Beitrag
 </a>
 vorgestellt.  Die   Die [diesjährige
-CUFP](http://cufp.org/conference/2013) fand im September in Boston
+CUFP](http://cufp.org/conference/2013) haben [Marius
+Eriksen](http://monkey.org/~marius/) von Twitter und ich organisiert.
+Sie fand im September in Boston
 statt und war (wieder einmal) ein voller Erfolg.
 
 Anlass für dieses Posting ist unter anderem, dass inzwischen
