@@ -1,6 +1,8 @@
 permalink: date
 paginate: 3
 pygments: true
+safe: true
+lsi: false
 
 sharing :
   twitter :

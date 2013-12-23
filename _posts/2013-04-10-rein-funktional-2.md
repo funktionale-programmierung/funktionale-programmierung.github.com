@@ -7,8 +7,7 @@ tags: ["rein funktional", "Racket", "Schneckenwelt"]
 ---
 
 In 
-<a href="{% post_url 2013-03-12-rein-funktional %}">einem vorigen Beitrag
-</a>
+<a href="{% post_url 2013-03-12-rein-funktional %}">einem vorigen Beitrag</a>
 haben wir das Vorhaben begonnen,
 eine Schneckenwelt zu implementieren.  Zur Erinnerung:
 
