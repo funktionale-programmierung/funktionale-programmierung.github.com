@@ -6,27 +6,22 @@ author: stefan-wehr
 tags: ["build system", "make", "shake", "Haskell"]
 ---
 
+Willkommen im Neuen Jahr! Der Blog *Funktionale Programmierung* startet direkt
+durch und beschäftigt sich im ersten Artikel im Jahr 2014 mit einem
+in Haskell geschriebenen Buildsystem namens `shake`.
+
 Größere Softwareprojekte benutzen (fast) alle ein Buildsystem, um aus Quellcode
 automatisch ein fertiges Softwareprodukt zu erstellen. Dazu gehört z.B.
 das Kompilieren von Quelldatein, das Linken von Objektdateien, das Generieren
 von Dokumentation oder das Zusammenstellen von Distributions-Archiven.
 
-Dieser Blogartikel gibt eine Einführung in das in Haskell geschriebenes Buildsystem
+Dieser Blogartikel gibt eine Einführung in das in Haskell geschriebene Buildsystem
 [shake](http://community.haskell.org/~ndm/shake/). Dieses System hat den Vorteil, 
 dass Abhängigkeiten
 zwischen Build-Artefakten dynamisch, d.h. während das Buildsystem läuft, entstehen können.
-Bei [make](...), dem wohl bekanntesten Buildsystem, müssen Abhängigkeiten hingegen
+Bei [make](http://www.gnu.org/software/make/), dem wohl bekanntesten Buildsystem, müssen Abhängigkeiten hingegen
 vor Aufruf des Buildsystems bekannt sein, was in der Praxis häufig zu Einschränkungen
-und Problemen führt. Die Regeln zur Erstellung von Build-Artefkate werden mit
-shake als Haskell-Code aufgeschrieben, was die Formulierung komplexer Regeln 
-cIncludes x =
-    do s <- readFile' x
-       return $ mapMaybe parseInclude (lines s)
-    where
-      parseInclude line =
-          do rest <- List.stripPrefix "#include \"" line
-             return $ takeWhile (/= '"') rest
-vereinfacht.
+und Problemen führt.
 
 Wir benutzen bei uns in der Firma shake, um unser Produkt 
 [Checkpad MED](/2013/07/17/medizin-funktional.html) zu kompilieren. Hier spielt
@@ -96,6 +91,63 @@ Oben stehende Regel beschreibt, wie eine `.o` Datei erstellt wird. Das erste Arg
 ist dabei das Pattern das auf die Ausgabedatei matchen muss, dass zweite Argument ist eine
 Funktion die diese Ausgabedatei erstellt. In der obigen Regel sehen wir, dass dazu die zur `.o`
 gehörende `.c` Datei genommen und mittels `gcc` kompiliert werden. Zuvor wird noch mittels
-`need` Abhängigkeiten auf die in der `.c` Datei referenzierten Header-Files eingeführt.
+`need` dynamisch Abhängigkeiten auf die in der `.c` Datei referenzierten Header-Files 
+eingeführt. Wenn Sie mit `make` vertraut sind, haben Sie sicher bemerkt, dass so etwas in
+`make` nicht direkt sondern nur mit Tricks funktioniert, und diese Tricks haben oftmals 
+ihren Preis.
 
+Abhängigkeit auf Header-Files sind normalerweise trivialerweise erfüllt, denn Header-Files
+werden typischerweise nicht durch das Buildsystem generiert. Für unser Beispiel nehmen wir aber
+an, dass es ein Header-File `Auto.h` gibt, dass von einem Programm `Codegen` erzeugt wird:
+
+{% highlight haskell %}
+       "Auto.h" *> \out ->
+           do need ["Codegen"]
+              system' "./Codegen" [out]
+{% endhighlight %}
+
+Schließlich gibt es noch zwei Regeln für die zwei Binaries `Codegen` und `Main`:
+
+{% highlight haskell %}
+       "Main" *> \out -> buildBinary out ["Hello.c", "Main.c"]
+       "Codegen" *> \out -> buildBinary out ["Codegen.c"]
+{% endhighlight %}
+
+Nachfolgend noch die Funktion `buildBinary` die ein Binary aus gegebenen `.c`-Dateien erstellt.
+Dazu wird zunächst eine Abhängigkeit auf die entsprechenden `.o`-Dateien mittels `need` spezifiziert,
+was dazu führt dass die `.c`-Dateien mit Hilfe der ersten Regel in `.o`-Dateien kompiliert werden.
+Dann werden die `.o`-Dateien durch einen Aufruf von `gcc` gelinkt.
+
+{% highlight haskell %}
+buildBinary :: FilePath -> [FilePath] -> Action ()
+buildBinary out cs =
+    do let os = map (\c -> replaceExtension c "o") cs
+       need os
+       system' "gcc" (["-o", out] ++ os)
+{% endhighlight %}
+
+Zum Abschluss noch die `main`-Funktion, welche im wesentlichen die zu erstellenden Targets
+durch Aufruf der Funktion `want` spezifiziert und den soeben Satz an Regeln an `shake` übergibt.
+
+{% highlight haskell %}
+main :: IO ()
+main =
+    do args <- getArgs
+       shake shakeOptions $
+          do let targets = if null args then ["Main"] else targets
+             rules
+             want targets
+{% endhighlight %}
+
+Wenn Sie unser kleines Buildsystem ausprobieren wollen, finden Sie [hier](/files/build-system-haskell)
+ein Beispielprojekt. Viel Spaß beim Experimentieren!
+
+So, das war's für heute. Wir haben, zumindest ansatzweise, gesehen,
+dass `shake` das Erstellen von sehr mächtigen
+Buildsystem erlaubt. So lange Ihre Projekte keine komplizierten Buildregeln
+benötigen, ist der Einsatz von `shake` sicherlich Overkill. Sobald's aber
+etwas komplizierter wird, kann sich sein Einsatz lohnen. Im bereits
+oben erwähnten [Artikel](http://community.haskell.org/~ndm/downloads/paper-shake_before_building-10_sep_2012.pdf) 
+finden sich viele weitere Details zu `shake`, insbesondere auch ein
+Vergleich mit anderen Buildsystem.
 

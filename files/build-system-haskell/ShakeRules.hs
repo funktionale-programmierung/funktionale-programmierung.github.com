@@ -21,13 +21,13 @@ rules =
               need headers
               system' "gcc" ["-o", out, "-c", c]
 
-       "Main" *> \out -> buildBinary out ["Hello.c", "Main.c"]
-
-       "Codegen" *> \out -> buildBinary out ["Codegen.c"]
-
        "Auto.h" *> \out ->
            do need ["Codegen"]
               system' "./Codegen" [out]
+
+       "Main" *> \out -> buildBinary out ["Hello.c", "Main.c"]
+
+       "Codegen" *> \out -> buildBinary out ["Codegen.c"]
 
 buildBinary :: FilePath -> [FilePath] -> Action ()
 buildBinary out cs =
