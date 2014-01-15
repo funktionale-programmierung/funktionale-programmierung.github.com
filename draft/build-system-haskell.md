@@ -40,10 +40,13 @@ Architektur von shake finden Sie in [diesem Artikel](http://community.haskell.or
 Wir möchten im folgenden beispielhaft ein Buildsystem für ein in der Sprache C geschriebenes
 Projekt entwickeln. Um das Beispiel interessanter zu machen wird eine der beteiligten `.h`-Dateien
 generiert, wobei der Quellcode des Generators selbst wiederum Teil des Projekts
-ist. (Dies entspricht grob dem Setup, welches wir auch im Checkpad Projekt haben.
+ist. Dies entspricht grob dem Setup, welches wir auch im Checkpad-Projekt haben.
 Zur Vereinfachung nehmen wir hier aber ein in C geschriebenes Projekt, da
 die Abhängkeiten bei der Kompilierung von Haskell-Quellcode deutlich komplizierter
-als für C-Quellcode sind.)
+als für C-Quellcode sind. shake selbst hat keinerlei Annahme über die Programmiersprache(n) 
+des zu bauenden Projekts. So ist es z.B. auch möglich, Java-Projekte mit shake zu kompilieren.
+Allerdings würde ein solches Vorhaben dadurch erschwert, dass bei der Kompilierung von Java-Dateien
+nur schwer vorhersehbar ist, welche `.class`-Dateien aus einer `.java`-Datei erzeugt werden.
 
 Beginnen wir mit einer sehr einfachen Hilfsfunktion zum Extrahieren von `#include` Dateien
 aus C-Quelldateien. Die Funktion liest eine `.c`-Datei ein und gibt die Dateiname
@@ -124,8 +127,18 @@ buildBinary out cs =
        system' "gcc" (["-o", out] ++ os)
 {% endhighlight %}
 
+Sie haben es sicherlich gemerkt: anders als etwa `make` benutze `shake` keine eigene Sprache um Abhängigkeiten
+und Buildregeln auszudrücken. Stattdessen wird für beide Zwecke einfach Haskell benutzt! Dabei sind
+zwei Eigenschaften von Haskell besonders hilfreich: [Monaden](/2013/04/18/haskell-monaden.html) und
+benutzerdefinierte Operatoren wie `*>`. Anders ausgedrückt: um Buildregeln und Abhängkeiten zu spezifizieren,
+benutzen wir in `shake` eine in Haskell eingebettete, kleine Spezialsprache, also eine
+[DSL](http://funktionale-programmierung.de/2013/06/27/dsl-clojure.html). Die Spezialsprache ist
+aber nur dahingend speziell als dass sie bestimmte Operatoren und Monaden benutzt, es handelt
+sich dabei immer noch um Haskell. Daher ist es auch problemlos möglich, z.B. das Extrahieren von
+mittels `#include` eingebundener Header-Files mittels "normalem" Haskell zu realisieren.
+
 Zum Abschluss noch die `main`-Funktion, welche im wesentlichen die zu erstellenden Targets
-durch Aufruf der Funktion `want` spezifiziert und den soeben Satz an Regeln an `shake` übergibt.
+durch Aufruf der Funktion `want` spezifiziert und den soeben spezifizierten Satz an Regeln an `shake` übergibt.
 
 {% highlight haskell %}
 main :: IO ()
@@ -139,6 +152,14 @@ main =
 
 Wenn Sie unser kleines Buildsystem ausprobieren wollen, finden Sie [hier](/files/build-system-haskell.zip)
 ein Beispielprojekt. Viel Spaß beim Experimentieren!
+
+Für alle Haskell-Programmierer unter Ihnen, die bis jetzt Ihre Projekte mit `cabal` gebaut haben: bleiben Sie
+bei `cabal`, wenn die Funktionalität von cabal Ihnen bisher ausgereicht hat. Die Einsatzzwecke von shake und cabal
+sind nämlich schon verschieden: cabal kann Haskell-Projekte bauen und kann alle dafür nötigen Tools
+aufrufen. Sie als Entwickler haben damit nur wenig Arbeit, allerdings lassen sich manche Dinge wie Codegenerierung
+mit cabal nur schwer realisieren. shake hingegen ist ein von der Programmiersprache unabhängiges Framework für Buildsysteme, sie müssen
+also die Regeln komplett selbst definieren, was mit cabal überhaupt nicht nötig ist. Dafür haben Sie mit
+shake deutlich mehr Flexibilität als mit cabal.
 
 So, das war's für heute. Wir haben, zumindest ansatzweise, gesehen,
 dass `shake` das Erstellen von sehr mächtigen
