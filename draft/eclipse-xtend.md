@@ -44,19 +44,20 @@ Xtend wirbt damit, dass es eine Erweiterung von Java sei, und man mit
 ihm "Java 10 schon heute" bekommen würde. Eine Behauptung die so nicht
 stimmt, was ich im folgenden näher darlege.
 
-Implementiert ist Xtend als Eclipse-Plugin auf der Basis von Xtext.
-Xtext erlaubt die Definition von neuen Sprachen auf Basis einer
-Grammatik und Übersetzungscode zu beliebigen anderen Sprachen, z.B.
-Java. Es liefert einem außerdem mit relativ wenig Aufwand eine
-Integration dieser Sprache in das Eclipse-Framework. Diese Integration
-ist aber relativ spärlich, insbesondere verglichen mit der Integration
-von Java. Dies muss man auch schon als einen ersten großen
-Negativpunkt aufführen, da Dinge wie "Gehe zu Definition" und "Suche
-Verwendungen" nur deutlich schlechter (z.B. erst nach einem Build), und
-teilweise gar nicht funktionieren (bei sog. Templates).
+Implementiert ist Xtend als Eclipse-Plugin auf der Basis von
+[Xtext](http://www.eclipse.org/Xtext/). Xtext erlaubt die Definition
+von neuen Sprachen auf Basis einer Grammatik und Übersetzungscode zu
+beliebigen anderen Sprachen, z.B. Java. Es liefert einem außerdem mit
+relativ wenig Aufwand eine Integration dieser Sprache in das
+Eclipse-Framework. Diese Integration ist aber relativ spärlich,
+insbesondere verglichen mit der Integration von Java. Dies muss man
+auch schon als einen ersten großen Negativpunkt aufführen, da Dinge
+wie "Gehe zu Definition" und "Suche Verwendungen" nur deutlich
+schlechter (z.B. erst nach einem Build), und teilweise gar nicht
+funktionieren (bei sog. Templates).
 
 Außerdem ist der Xtend-Compiler nicht gerade schnell, bzw. leckt
-irgend eine Schicht der Implementierung offensichtlich Speicher,
+irgendeine Schicht der Implementierung offensichtlich Speicher,
 wodurch die Kompilierung immer langsamer wird und regelmäßig Neustarts
 von Eclipse notwendig werden. Ursprünglich beinhaltete unser Projekt
 ca. 1500 generierte Xtend-Klassen, was die ganze Entwicklung aber
@@ -69,28 +70,28 @@ gehört der deklarative Grundansatz (keine Statements, alles sind
 Expressions), sowie Funktionsliterale der Form
 
 {% highlight java %}
-  [ Type arg | body ]
+[ Type arg | body ]
 {% endhighlight %}
 
-Diese kann der Xtend-Compiler, ähnlich wie Java 8, autmatisch in
-"Single Abstract Method" Typen konvertieren. Für den allgemeinen Fall
+Diese kann der Xtend-Compiler, ähnlich wie Java 8, automatisch in
+"Single-Abstract-Method"-Typen konvertieren. Für den allgemeinen Fall
 sind einige generische Funktionstypen mit enthalten. Listen und
-Map-Literale macht insbesondere das Testen deutlich einfacher.
+Map-Literale machen insbesondere das Testen deutlich einfacher.
 Auch dass alle Parameter per default "final", und "Variablen" per
 default read-only sind, sowie die Typ-Inferenz von Variablen und
-Rückgabetypen, macht das Programmieren in Xtend im allgemeinen schon
+Rückgabetypen, machen das Programmieren in Xtend im allgemeinen schon
 wesentlich angenehmer als in Java. Außerdem kann man Extension Methods
 definieren und die Standardbibliothek tut dies auch reichlich für die
 Java-Collections. Das macht beispielsweise folgenden Code möglich:
 
 {% highlight java %}
-  def static <A> filterFirst(List<A> all, (A) => boolean pred) {
-    val matching = all.filter(pred)
-    if (matching.empty)
-      throw new Exception("...")
-    else
-      matching.get(0)
-  }
+def static <A> filterFirst(List<A> all, (A) => boolean pred) {
+  val matching = all.filter(pred)
+  if (matching.empty)
+    throw new Exception("...")
+  else
+    matching.get(0)
+}
 {% endhighlight %}
 
 Was dann aber wiederum sehr lästig ist, ist dass man keine "anonymen
@@ -111,7 +112,7 @@ verwendet. Immer wieder passiert es, dass der Xtend-Code fehlerfrei zu
 sein scheint und der Compiler den Java-Code generiert hat, dass aber
 anschließend der Java-Compiler einen Fehler im generierten Code
 meldet. Ganz besonders schlimm war das in etwas älteren Versionen
-(2.1), aber selbst in der aktuellsten Version (2.5) kann das immer
+(2.1), aber selbst in der aktuellen Version (2.5) kann das immer
 noch passieren.
 
 Insgesamt hat uns Xtend die Umsetzung des Projekts sicherlich schon
