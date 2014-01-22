@@ -22,7 +22,9 @@ tags: []
 - Extension methods
 -->
 
-Wir haben gerade ein Kundenprojekt im Eclipse- und EMF-Umfeld
+Wir haben gerade ein Kundenprojekt im [Eclipse](http://eclipse.org/)-
+bzw.
+[Eclipse-Modeling-Framework](http://www.eclipse.org/modeling/emf/)-Umfeld
 fertiggestellt, das aus der Erstellung von mehreren Plugins für die
 bestehende Anwendung des Kunden bestand. Wir haben dabei die
 Programmiersprache [Xtend](https://www.eclipse.org/xtend/) eingesetzt.
@@ -33,23 +35,27 @@ sei schon einmal vorweg genommen, eher negativ sind.
 
 Ursprünglich wollten wir das Projekt in
 [Scala](http://www.scala-lang.org/) umsetzten, einer Sprache in der
-man sehr leicht die zwei funktionalen APIs der beiden Hauptkomponenten
-der zu entwickelnden Plugins hätte implementieren können. Der Kunde
-wollte aber lieber bei Sprachen und Bibliotheken bleiben, die bereits
-bei ihm im Einsatz waren. Dazu zählte auch Xtend, eine Sprache die
-zumindest einige Konzepte der funktionalen Programmierung enthält, und
-uns daher immer noch besser erschien als "plain Java".
+man sehr leicht die zwei [funktionalen
+APIs](/2013/06/13/funktionale-api-jasper.html), die den Kern des
+entwickelnten Plugins bilden, hätte implementieren können. Die eine
+API ist eine kompositionale DSL für das Format tabellarischer Daten,
+die andere ist ebenfalls kompositional und dient der Definition von
+Update-Operationen eines EMF-Modell. Der Kunde wollte aber lieber bei
+Sprachen und Bibliotheken bleiben, die bereits bei ihm im Einsatz
+waren. Dazu zählte auch Xtend, eine Sprache die zumindest einige
+Konzepte der funktionalen Programmierung enthält, und uns daher immer
+noch besser erschien als "plain Java".
 
 Xtend wirbt damit, dass es eine Erweiterung von Java sei, und man mit
 ihm "Java 10 schon heute" bekommen würde. Eine Behauptung die so nicht
-stimmt, was ich im folgenden näher darlege.
+stimmt, was ich im Folgenden näher darlege.
 
 Implementiert ist Xtend als Eclipse-Plugin auf der Basis von
 [Xtext](http://www.eclipse.org/Xtext/). Xtext erlaubt die Definition
 von neuen Sprachen auf Basis einer Grammatik und Übersetzungscode zu
 beliebigen anderen Sprachen, z.B. Java. Es liefert einem außerdem mit
 relativ wenig Aufwand eine Integration dieser Sprache in das
-Eclipse-Framework. Diese Integration ist aber relativ spärlich,
+Eclipse-Framework. Diese Integration ist aber eher spärlich,
 insbesondere verglichen mit der Integration von Java. Dies muss man
 auch schon als einen ersten großen Negativpunkt aufführen, da Dinge
 wie "Gehe zu Definition" und "Suche Verwendungen" nur deutlich
@@ -60,9 +66,10 @@ Außerdem ist der Xtend-Compiler nicht gerade schnell, bzw. leckt
 irgendeine Schicht der Implementierung offensichtlich Speicher,
 wodurch die Kompilierung immer langsamer wird und regelmäßig Neustarts
 von Eclipse notwendig werden. Ursprünglich beinhaltete unser Projekt
-ca. 1500 generierte Xtend-Klassen, was die ganze Entwicklung aber
-derart behindert hat, dass wir auf die Generierung von Java-Code für
-diesen Teil umgestiegen sind.
+z.B. circa 1500 von uns generierte Xtend-Klassen. Diese Menge hat die
+ganze Entwicklung aber derart behindert, dass wir für diesen Teil auf
+die Generierung von Java-Code umgestiegen sind. Das hat die Sache
+etwas entschärft.
 
 Die Sprachelemente, die Xtend von Java abgrenzen, waren
 nichtsdestotrotz sehr hilfreich für die Umsetzung des Projekts. Dazu
@@ -76,13 +83,14 @@ Expressions), sowie Funktionsliterale der Form
 Diese kann der Xtend-Compiler, ähnlich wie Java 8, automatisch in
 "Single-Abstract-Method"-Typen konvertieren. Für den allgemeinen Fall
 sind einige generische Funktionstypen mit enthalten. Listen und
-Map-Literale machen insbesondere das Testen deutlich einfacher.
-Auch dass alle Parameter per default "final", und "Variablen" per
-default read-only sind, sowie die Typ-Inferenz von Variablen und
-Rückgabetypen, machen das Programmieren in Xtend im allgemeinen schon
-wesentlich angenehmer als in Java. Außerdem kann man Extension Methods
-definieren und die Standardbibliothek tut dies auch reichlich für die
-Java-Collections. Das macht beispielsweise folgenden Code möglich:
+Map-Literale machen insbesondere das Testen deutlich einfacher. Auch
+dass alle Parameter und "Variablen" per default "final" sind, also
+nicht neu gebunden werden können, sowie die Typ-Inferenz von Variablen
+und Rückgabetypen, machen das Programmieren in Xtend im allgemeinen
+schon wesentlich angenehmer als in Java. Außerdem kann man Extension
+Methods definieren und die Standardbibliothek tut dies auch reichlich
+für die Java-Collections. Das macht beispielsweise folgenden Code
+möglich:
 
 {% highlight java %}
 def static <A> filterFirst(List<A> all, (A) => boolean pred) {
@@ -93,6 +101,9 @@ def static <A> filterFirst(List<A> all, (A) => boolean pred) {
     matching.get(0)
 }
 {% endhighlight %}
+
+Der Typ `List` ist hier die Standard-Java-Collection `java.util.List`,
+und `filter` eine Extension Method die die Xtend-Bibliothek hinzufügt.
 
 Was dann aber wiederum sehr lästig ist, ist dass man keine "anonymen
 Klassen" wie in Java definieren kann. Es gibt keine Expression zur
@@ -115,7 +126,7 @@ meldet. Ganz besonders schlimm war das in etwas älteren Versionen
 (2.1), aber selbst in der aktuellen Version (2.5) kann das immer
 noch passieren.
 
-Insgesamt hat uns Xtend die Umsetzung des Projekts sicherlich schon
+Insgesamt hat uns Xtend die Umsetzung des Projekts sicherlich
 erleichtert, aber nur im Vergleich zu einer Implementierung in Java.
 Mit einer "erwachsenen" Programmiersprache, wie z.B. Scala, kann Xtend
 (noch) nicht mithalten.
