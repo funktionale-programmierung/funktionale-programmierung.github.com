@@ -3,24 +3,8 @@ layout: post
 description: "Erfahrungsbericht zu Eclipse Xtend"
 title: "Eclipse Xtend"
 author: david-frese
-tags: []
+tags: ["Eclipse", "Xtend", "Java"]
 ---
-
-<!--
-- Projekt im Eclipse-Umfeld, Kunde wollte kein Scala, Xtend war möglich, "immer noch besser als Java".
-- Werbung als "Java 10 schon heute", "Erweiterung von Java".
-- Implementiert in Xtext, kompiliert nach Java - sehr an Eclipse gebunden (Versionsprobleme)
-- nicht gerade schnelle; anscheinend Speicherlecks.
-- Integration in Eclipse schlechter als für Java (Find References funktioniert nur wenn man "Automatic build" an hat, und dann auch nicht richtig; Templates findet er gar nicht)
-
-- Pro: Einige funktionale Elemente (Lambdas, Expression-basiert); aber nicht auf dem Level von Scala (keine Collections, Methoden sind keine Funktionen z.B.)
-- Pro: Mehr als ein Element pro Datei; Exceptions müssen nicht deklariert/gefangen werden wie in Java.
-- Con: Leider liegt kein richtiges Modell von Java zugrunde; dadurch kann generierter Java-Quellcode Fehler enthalten (was er auch häufig tut)
-- Con: Leider fehlen einige Dinge die Java kann (es ist keine Erweiterung, sondern eine Nachimplementierung); z.B. anonyme Klassen (mit mehr als einem Member)
-
-- Templates
-- Extension methods
--->
 
 Wir haben gerade ein Kundenprojekt im [Eclipse](http://eclipse.org/)-
 bzw.
