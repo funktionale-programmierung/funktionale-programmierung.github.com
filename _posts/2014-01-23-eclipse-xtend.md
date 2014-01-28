@@ -11,9 +11,10 @@ bzw.
 [Eclipse-Modeling-Framework](http://www.eclipse.org/modeling/emf/)-Umfeld
 fertiggestellt, das aus der Erstellung von mehreren Plugins für die
 bestehende Anwendung des Kunden bestand. Wir haben dabei die
-Programmiersprache [Xtend](https://www.eclipse.org/xtend/) eingesetzt.
-Dieser Artikel geht auf unsere Erfahrungen mit Xtend ein, die, soviel
-sei schon einmal vorweg genommen, eher negativ sind.
+Programmiersprache [Xtend](https://www.eclipse.org/xtend/) in der
+Version 2.4.3 eingesetzt. Dieser Artikel geht auf unsere Erfahrungen
+mit Xtend ein, die, soviel sei schon einmal vorweg genommen, eher
+negativ sind.
 
 <!-- more start -->
 
