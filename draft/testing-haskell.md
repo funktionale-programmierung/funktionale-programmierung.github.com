@@ -22,7 +22,7 @@ verschiedene Testmethoden (Unit-Tests, randomisierte Tests mit
 [QuickCheck](/2013/07/10/randomisierte-tests-mit-quickcheck.html)),
 ermöglicht schnelles Hinzufügen von neuen Testfällen und bereite
 Fehlermeldung so auf, dass die Ursache eines Fehler einfach
-lokalisierbar ist.
+lokalisierbar ist. Das Framework steht unter einer Open-Source-Lizenz.
 
 <!-- more start -->
 
@@ -69,7 +69,7 @@ werden die Testdefinitionen automatisch gefunden. Mit `assertEqual expected real
 wir aus, dass das Ergebnis des Ausdrucks `real` gleich dem Ausdruck `expected` sein 
 muss. Die API von HTF stellt auch noch eine [ganze Reihe](http://hackage.haskell.org/package/HTF-0.11.1.1/docs/Test-Framework-HUnitWrapper.html) 
 weiterer Assertions zur Verfügung, mit denen Erwartungen an die Ergebnisse von
-Funktionsaufrufen ausgedrückt werden können. Benutzern von anderen
+Funktionsaufrufen ausgedrückt werden können. Benutzer anderer
 Unit-Test-Frameworks werden hier viele bekannte Assertions finden.
 
 Die Definition von [QuickCheck](http://hackage.haskell.org/package/QuickCheck)-Eigenschaften ist
@@ -77,7 +77,8 @@ Die Definition von [QuickCheck](http://hackage.haskell.org/package/QuickCheck)-E
 
 {% highlight haskell %}
 prop_reverse :: [Int] -> Bool
-prop_reverse xs = xs == (myReverse (myReverse xs))
+prop_reverse xs = 
+    xs == (myReverse (myReverse xs))
 {% endhighlight %}
 
 Wie bereits in einem [früheren Artikel](/2013/07/10/randomisierte-tests-mit-quickcheck.html) beschrieben, 
@@ -103,7 +104,7 @@ import Test.Framework.TestManager
 {% endhighlight %}
 
 Jetzt können wir die Tests ausführen, z.B. interaktiv mit dem `ghci`. Sie finden
-den kompletten Code auch [hier](files/testing-haskell/Reverse.hs). Das Ausführen produziert folgende
+den kompletten Code des Beispiels auch [hier](files/testing-haskell/Reverse.hs). Das Ausführen produziert folgende
 Ausgabe:
 
 ![Ausgaben von ghci](/files/testing-haskell/HTF.png)
@@ -111,14 +112,14 @@ Ausgabe:
 Oh, es gab Fehler! Wir bemerken zwei Dinge an der Ausgabe von HTF.
 Zum einen wird für fehlgeschlagene Assertions ein Diff zwischen der erwarteten
 und der wirklichen Ausgabe angezeigt. In unserem konkreten Fall brauchen
-wir das Diff wohl kaum um den Unterschied zwischen `[3]` und `[3, 2, 1]` zu
-erkennen, aber bei großen Ausgaben ist ein Diff sehr wertvoll um subtile Unterschiede
+wir das Diff wohl kaum um den Unterschied zwischen `[3, 2, 1]` und `[3]` zu
+erkennen, aber bei großen Ausgaben ist ein Diff sehr wertvoll, um subtile Unterschiede
 schnell zu erkennen. Zum anderen wird bei der fehlgeschlagenen QuickCheck-Eigenschaft
 ein sogenanntes "Replay-Argument" angezeigt. Damit können wir genau den fehlgeschlagenen
-Test deterministisch wiederholen, um ihn z.B. später als Regressiontest in unser 
+Test deterministisch wiederholen, um ihn z.B. später als Regressionstest in unser 
 Repository mit aufzunehmen.
 
-So, jetzt fixen wir aber die Definition von `reverse`:
+So, jetzt korrigieren wir aber die Definition von `reverse`:
 
 {% highlight haskell %}
 myReverse :: [a] -> [a]
@@ -135,8 +136,8 @@ Projekt organisiert. In unserem Beispiel oben haben wir ja alle Tests im selben 
 definiert. Normalerweise sind Tests aber über viele verschiedene Module verstreut.
 HTF macht es einfach, alle diese Tests zu einer großen Testsuite zu vereinigen.
 
-Zunächst müssen wir aus jedem Model, welches Tests definiert, das Symbol
-htf_thisModulesTests exportieren. Dann können wir ein Hauptmodul
+Zunächst müssen wir aus jedem Modul, welches Tests definiert, das Symbol
+`htf_thisModulesTests` exportieren. Dann können wir ein Hauptmodul
 schreiben, welches alle Testmodule importiert und über eine `main`-Funktion
 ausführbar macht:
 
@@ -153,7 +154,29 @@ main = htfMain htf_importedTests
 Hier werden die in `MyPkg.A` und `MyPkg.B` definierten Tests durch das spezielle Pragma `HTF_TESTS`
 importiert. Die `main` Funktion führt dann alle in diesen Modulen definierten Tests aus.
 Über Kommandozeilenoptionen kann man aber auch nur eine bestimmte Menge von Tests
-ausführen.
+ausführen. Hier sind alle unterstützen Kommandozeilenparameter:
+
+    USAGE: COMMAND [OPTION ...] PATTERN ...
+    
+      where PATTERN is a posix regular expression matching
+      the names of the tests to run.
+    
+      -q          --quiet             only display errors
+      -n PATTERN  --not=PATTERN       tests to exclude
+      -l          --list              list all matching tests
+      -j[N]       --threads[=N]       run N tests in parallel, default N=1
+                  --deterministic     do not shuffle tests when executing them in parallel.
+      -o FILE     --output-file=FILE  name of output file
+                  --json              output results in machine-readable JSON format (incremental)
+                  --xml=FILE          output results in junit-style XML format
+                  --split             splits results in separate files to avoid file locking (requires -o/--output-file)
+                  --colors=BOOL       use colors or not
+      -h          --help              display this message
+
+Insbesondere kann man Tests
+auch parallel ausführen oder maschinell lesbare Ausgaben erzeugen. Letzteres benutzen
+wir, um die Ausgaben der Tests in [jenkins](http://jenkins-ci.org/), einem Server für
+Continuous-Integration, einzubetten.
 
 So, das war's für heute. Wir haben einen praktischen und pragmatischen Ansatz kennengelernt,
 im Tests auf Codeebene in Haskell einfach zu organisieren. Das HTF-Tool ist bei uns in
