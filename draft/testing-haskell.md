@@ -88,7 +88,7 @@ einer Liste wieder die Ausgangsliste liefert.
 Jetzt brauchen wir nur noch eine `main`-Funktion, um die Tests in unserem kleinen Beispiel
 auszuführen:
 
-{% hightlight haskell %}
+{% highlight haskell %}
 main =
     do args <- getArgs
        runTestWithArgs args htf_thisModulesTests
