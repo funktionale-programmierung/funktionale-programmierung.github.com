@@ -12,7 +12,13 @@ in Bezug auf Softwarequalität und geringe Fehlerraten berichten,
 gilt dies natürlich auch für mit funktionalen Sprachen realisierte
 Projekte. Um Softwaretests zu realisieren stehen den Entwicklern und Testern 
 in funktionalen Sprachen dieselben
-Mittel wie z.B. in objekt-orientierten Sprachen zur Verfügung.
+Mittel wie z.B. in objekt-orientierten Sprachen zur Verfügung. Allerdings
+gestaltet sich das Testen in funktionalen Sprachen oftmals deutlich einfacher,
+da Zustand [explizit gehandhabt](/2013/03/12/rein-funktional.html) wird 
+(siehe auch folgende Blogartikel: [1](/2013/03/20/warum-funktional.html) 
+[2](/2013/06/21/persistente-datenstrukturen.html), [3](/2013/08/23/was-ist-funktionale-programmierung.html)),
+wodurch Fehler leichter zu reproduzieren
+sind und aufwändiges Initialisieren von zu testenden Objekte oft entfällt.
 
 In diesem Artikel möchte ich ein [Framework](http://hackage.haskell.org/package/HTF) 
 vorstellen, mit dem wir
@@ -21,7 +27,7 @@ Haskell-Software organisieren. Das Framework integriert dabei
 verschiedene Testmethoden (Unit-Tests, randomisierte Tests mit
 [QuickCheck](/2013/07/10/randomisierte-tests-mit-quickcheck.html)),
 ermöglicht schnelles Hinzufügen von neuen Testfällen und bereite
-Fehlermeldung so auf, dass die Ursache eines Fehler einfach
+Fehlermeldung so auf, dass die Ursache eines Fehlers einfach
 lokalisierbar ist. Das Framework steht unter einer Open-Source-Lizenz.
 
 <!-- more start -->
@@ -35,7 +41,8 @@ myReverse [x]    = [x]
 myReverse (x:xs) = myReverse xs
 {% endhighlight %}
 
-Dazu fügen wir ganz oben in die Quelldatei das Pragma 
+Dazu installieren wir zunächst das [HTF-Paket](/2013/08/23/was-ist-funktionale-programmierung.html) mittels
+`cabal install HTF` und fügen dann ganz oben in die Quelldatei das Pragma 
 
 {% highlight haskell %}
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
@@ -64,7 +71,7 @@ test_nonEmpty =
 test_empty = assertEqual ([] :: [Int]) (myReverse [])
 {% endhighlight %}
 
-Per Konvention beginnen Namen von Unit-Tests immer mit `test_`, dadurch
+Die Namen von Unit-Tests beginnen immer mit `test_`, dadurch
 werden die Testdefinitionen automatisch gefunden. Mit `assertEqual expected real` drücken
 wir aus, dass das Ergebnis des Ausdrucks `real` gleich dem Ausdruck `expected` sein 
 muss. Die API von HTF stellt auch noch eine [ganze Reihe](http://hackage.haskell.org/package/HTF-0.11.1.1/docs/Test-Framework-HUnitWrapper.html) 
@@ -73,7 +80,8 @@ Funktionsaufrufen ausgedrückt werden können. Benutzer anderer
 Unit-Test-Frameworks werden hier viele bekannte Assertions finden.
 
 Die Definition von [QuickCheck](http://hackage.haskell.org/package/QuickCheck)-Eigenschaften ist
-ähnlich einfach.
+ähnlich einfach, hier verwenden wir das Präfix `prop_`, damit auch diese vom Testframework
+automatisch gefunden werden.
 
 {% highlight haskell %}
 prop_reverse :: [Int] -> Bool
@@ -152,7 +160,7 @@ main = htfMain htf_importedTests
 {% endhighlight %}
 
 Hier werden die in `MyPkg.A` und `MyPkg.B` definierten Tests durch das spezielle Pragma `HTF_TESTS`
-importiert. Die `main` Funktion führt dann alle in diesen Modulen definierten Tests aus.
+importiert. Die `main`-Funktion führt dann alle in diesen Modulen definierten Tests aus.
 Über Kommandozeilenoptionen kann man aber auch nur eine bestimmte Menge von Tests
 ausführen. Hier sind alle unterstützen Kommandozeilenparameter:
 
