@@ -10,12 +10,12 @@ Tests sind für gute Softwarequalität unerlässlich. Obwohl wir hier
 in diesem Blog immer wieder über die Vorzüge funktionaler Programmierung
 in Bezug auf Softwarequalität und geringe Fehlerraten berichten,
 gilt dies natürlich auch für mit funktionalen Sprachen realisierte
-Projekte. Um Softwaretests zu realisieren stehen den Entwicklern und Testern 
+Projekte. Um Softwaretests zu schreiben stehen den Entwicklern und Testern 
 in funktionalen Sprachen dieselben
 Mittel wie z.B. in objekt-orientierten Sprachen zur Verfügung. Allerdings
 gestaltet sich das Testen in funktionalen Sprachen oftmals deutlich einfacher,
 da Zustand [explizit gehandhabt](/2013/03/12/rein-funktional.html) wird 
-(siehe auch folgende Blogartikel: [1](/2013/03/20/warum-funktional.html) 
+(siehe auch folgende Blogartikel: [1](/2013/03/20/warum-funktional.html),
 [2](/2013/06/21/persistente-datenstrukturen.html), [3](/2013/08/23/was-ist-funktionale-programmierung.html)),
 wodurch Fehler leichter zu reproduzieren
 sind und aufwändiges Initialisieren von zu testenden Objekte oft entfällt.
@@ -25,7 +25,7 @@ vorstellen, mit dem wir
 bei uns in der Firma sämtliche Tests auf Codeebene für unsere
 Haskell-Software organisieren. Das Framework integriert dabei
 verschiedene Testmethoden (Unit-Tests, randomisierte Tests mit
-[QuickCheck](/2013/07/10/randomisierte-tests-mit-quickcheck.html)),
+[QuickCheck](http://hackage.haskell.org/package/QuickCheck), auch diskutiert in [diesem Blogartikel](/2013/07/10/randomisierte-tests-mit-quickcheck.html)),
 ermöglicht schnelles Hinzufügen von neuen Testfällen und bereite
 Fehlermeldung so auf, dass die Ursache eines Fehlers einfach
 lokalisierbar ist. Das Framework steht unter einer Open-Source-Lizenz.
