@@ -78,7 +78,7 @@ exists = getAny . reduce (Any . const True)
     ORDER BY o_orderpriority;
 -}
 
-q4 :: [(String,Int)]
+q4 :: Set (String,Int)
 q4 =
   [ (the o_orderpriority, count o_orderkey) |
     Order { o_orderkey, o_orderdate, o_orderpriority, .. } <- orders,
@@ -90,7 +90,7 @@ q4 =
     ]^exists,
     then group by o_orderpriority using groupWith,
     then sortWith by o_orderpriority
-  ]
+  ]^set
 
 main :: IO ()
 main = do
