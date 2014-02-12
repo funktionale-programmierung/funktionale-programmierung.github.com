@@ -12,17 +12,18 @@
 import           Control.Monad
 import           Data.Monoid
 import           GHC.Exts (sortWith, groupWith, the)
+import           Data.Maybe
 
 import           Data.Set.Monad (Set)
 import qualified Data.Set.Monad as Set
 
-import           Prelude        hiding (all, sum, (^))
+import           Prelude        hiding (all, any, sum, maximum, minimum, (^))
 
 
 -- see
 --  - http://patternsinfp.wordpress.com/2012/01/19/comprehensions/
 --  - http://wisnesky.net/wir11.pdf (Section 4 "Aggregation", "Kleisli form" of monad algebra)
-class MonadPlus m => MonadAlgebra m a where
+class Monad m => MonadAlgebra m a where
   reduce :: Monoid t => (a -> t) -> m a ->  t
 
 instance MonadAlgebra [] a where
@@ -31,21 +32,41 @@ instance MonadAlgebra [] a where
 instance Ord a => MonadAlgebra Set a where
   reduce f = reduce f . Set.toList
 
+data Max a = Minimum | Max a
+  deriving (Eq, Ord, Read, Show)
+
+instance (Ord a) => Monoid (Max a) where
+  mempty = Minimum
+  Minimum `mappend` x = x
+  x `mappend` Minimum = x
+  x `mappend` y       = x `max` y
+
+data Min a = Maximum | Min a
+  deriving (Eq, Ord, Read, Show)
+
+instance (Ord a) => Monoid (Min a) where
+  mempty = Maximum
+  Maximum `mappend` x = x
+  x `mappend` Maximum = x
+  x `mappend` y       = x `min` y
+
 -- Monad algebras
-set :: (Ord a, MonadAlgebra m a) => m a -> Set a
-list :: MonadAlgebra m a => m a -> [a]
-some, all :: MonadAlgebra m Bool => m Bool -> Bool
+distinct :: (Ord a, MonadAlgebra m a) => m a -> Set a
+any, all :: MonadAlgebra m Bool => m Bool -> Bool
 sum :: (Num a, MonadAlgebra m a) => m a -> a
 count :: MonadAlgebra m a => m a -> Int
 exists :: MonadAlgebra m a => m a -> Bool
+maximum :: (Ord a, MonadAlgebra m a) => m a -> Max a
+minimum :: (Ord a, MonadAlgebra m a) => m a -> Min a
 
-set  = reduce Set.singleton
-list = reduce (:[])
-some = getAny . reduce Any
+distinct  = reduce Set.singleton
+any = getAny . reduce Any
 all  = getAll . reduce All
 sum  = getSum . reduce Sum
 count = getSum . reduce (Sum . const 1)
 exists = getAny . reduce (Any . const True)
+maximum = reduce Max
+minimum = reduce Min
 
 (^) :: a -> (a -> b) -> b
 (^) = flip ($)
@@ -90,7 +111,7 @@ q4 =
     ]^exists,
     then group by o_orderpriority using groupWith,
     then sortWith by o_orderpriority
-  ]^set
+  ]^distinct
 
 main :: IO ()
 main = do
