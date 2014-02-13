@@ -12,7 +12,6 @@
 import           Control.Monad
 import           Data.Monoid
 import           GHC.Exts (sortWith, groupWith, the)
-import           Data.Maybe
 
 import           Data.Set.Monad (Set)
 import qualified Data.Set.Monad as Set
@@ -20,9 +19,6 @@ import qualified Data.Set.Monad as Set
 import           Prelude        hiding (all, any, sum, maximum, minimum, (^))
 
 
--- see
---  - http://patternsinfp.wordpress.com/2012/01/19/comprehensions/
---  - http://wisnesky.net/wir11.pdf (Section 4 "Aggregation", "Kleisli form" of monad algebra)
 class Monad m => MonadAlgebra m a where
   reduce :: Monoid t => (a -> t) -> m a ->  t
 
@@ -31,6 +27,7 @@ instance MonadAlgebra [] a where
 
 instance Ord a => MonadAlgebra Set a where
   reduce f = reduce f . Set.toList
+
 
 data Max a = Minimum | Max a
   deriving (Eq, Ord, Read, Show)
@@ -50,7 +47,8 @@ instance (Ord a) => Monoid (Min a) where
   x `mappend` Maximum = x
   x `mappend` y       = x `min` y
 
--- Monad algebras
+-----------------------------------------------------------------------
+-- Useful monad algebras
 distinct :: (Ord a, MonadAlgebra m a) => m a -> Set a
 any, all :: MonadAlgebra m Bool => m Bool -> Bool
 sum :: (Num a, MonadAlgebra m a) => m a -> a
@@ -72,18 +70,8 @@ minimum = reduce Min
 (^) = flip ($)
 
 
--- Sample query comprehensions:
---
--- [ x | x <- [3, 2, 2]^list ]^sum
--- [ x | x <- [True, False, True]^list ]^all
--- [ [ z | z <- y ]^sum | (x,y) <- [(1,10), (2,40), (3,30)]^set, then group by (odd x) using grpWith ]^set
--- []^exists
--- [ x | x <- [3, 1, 2, 1]^list, then sortWith by x ]^list
-
-
-
 {- TPC-H Q4
-   Counts the number of orders ordered in a given half of a given year in
+   Counts the number of orders ordered in the first half of 1995 in
    which at least one lineitem was received by the customer later than its
    committed date.
 
@@ -105,19 +93,22 @@ q4 =
     Order { o_orderkey, o_orderdate, o_orderpriority, .. } <- orders,
     o_orderdate >= "1995-01-01",
     o_orderdate <  "1995-07-01",
-    [ 1 | Lineitem { l_orderkey, l_commitdate, l_receiptdate, .. } <- lineitem,
-          l_orderkey == o_orderkey,
-          l_commitdate < l_receiptdate
+    [ '*' | Lineitem { l_orderkey, l_commitdate, l_receiptdate, .. } <- lineitem,
+            l_orderkey == o_orderkey,
+            l_commitdate < l_receiptdate
     ]^exists,
     then group by o_orderpriority using groupWith,
     then sortWith by o_orderpriority
   ]^distinct
 
-main :: IO ()
-main = do
-  print q4
 
+main :: IO ()
+main = print q4
+
+
+-----------------------------------------------------------------------
 -- An excerpt of TPC-H data
+-- (for the real thing visit http://www.tpc.org/tpch/)
 
 orders   :: [Order]
 lineitem :: [Lineitem]
