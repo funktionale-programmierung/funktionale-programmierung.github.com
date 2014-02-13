@@ -38,7 +38,7 @@ wie mich, die kaum JavaScript können..
 
 # Projektstart
 
-Wie bei Clojure auch ist auch bei der ClojureScript-Entwicklung
+Wie bei Clojure sonst auch ist bei der ClojureScript-Entwicklung
 [Leiningen](https://github.com/technomancy/leiningen) unerlässlich,
 das Standard-Build-Tool für Clojure-Projekte.  Leiningen erlaubt das
 Anlegen eines Projektskeletts mit Hilfe im Internet hinterlegter
