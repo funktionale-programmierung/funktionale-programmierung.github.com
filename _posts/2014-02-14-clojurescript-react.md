@@ -11,7 +11,7 @@ Browser ihre bevorzugte funktionale Sprache nutzen.  Zwar hat
 JavaScript
 <a href="{% post_url 2013-07-25-curry-buch %}">Wurzeln in der funktionalen Programmiererung</a>,
 aber die Sprache hat eben auch noch
-eine objektorientierte und andere hässliche Seiten.  Aus diesem Grund
+eine objektorientierte und verschiedene hässliche Seiten.  Aus diesem Grund
 gibt es inzwischen eine kleine Industrie von Compilern von anderen
 Programmiersprachen nach JavaScript, zum Beispiel für
 [OCaml](http://ocsigen.org/js_of_ocaml/manual/),
@@ -25,7 +25,7 @@ Sprache mit JavaScript als Ziel: [ClojureScript](https://github.com/clojure/cloj
 <!-- more start -->
 
 ClojureScript ist ein Dialekt von [Clojure](http://clojure.org/), und
-damit ein dynamisch getypter Lisp-Dialekt mit besonderer Betonung von
+damit ein dynamisch getypter Lisp-Dialekt mit besonderer Betonung auf
 rein funktionalen Datenstrukturen.  ClojureScript ist nicht identisch
 mit Clojure - es gibt eine Reihe [subtiler
 Unterschiede](https://github.com/clojure/clojurescript/wiki/Differences-from-Clojure),
