@@ -58,7 +58,7 @@ JavaScript compiliert wird und hält danach Ausschau nach Änderungen.
 Wenn er welche feststellt, wird recompiliert.
 
 Wenn `lein cljsbuild` einmal durchgelaufen ist, ist die Datei
-`index.html` (evenfalls von `lein new` generiert)
+`index.html` (ebenfalls von `lein new` generiert)
 im Projekt-Wurzelverzeichnis fertig zum Aufmachen mit dem
 Browser.  Konfiguriert ist das ganze in der Leiningen-Konfiguration
 `project.clj`.
@@ -255,7 +255,7 @@ Text holt.
 
 Aber was tun mit dem neuen Kommentar?  Er sollte natürlich zu einer
 Liste aller Kommentare hinzugefügt werden, die sich aber außerhalb der
-`Newcomment`-Komponente befindet.  Die `handleSubmit`-Funktion geht
+`NewComment`-Komponente befindet.  Die `handleSubmit`-Funktion geht
 deshalb davon aus, dass sich unter den Properties eine Funktion namens
 `newComment` befindet, die diese Aufgabe erledigt.  Die muss dann bei
 der Erzeugung der `NewComment`-Komponente mitgeliefert werden.  Diese
