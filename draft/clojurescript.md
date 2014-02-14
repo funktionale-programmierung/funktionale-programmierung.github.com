@@ -344,7 +344,8 @@ herum entstanden, zum Beispiel [Om](https://github.com/swannodette/om)
 und [Reagent](http://holmsand.github.io/reagent/).  
 
 Der komplette Code für dieses Beispiel befindet sich auf
-[github](https://github.com/funktionale-programmierung/cljs-hello).
+[github](https://github.com/funktionale-programmierung/cljs-hello)
+oder als [Zip-Datei hier](/files/cljs-hello.zip).
 
 Viel Spaß beim Ausprobieren!
 
