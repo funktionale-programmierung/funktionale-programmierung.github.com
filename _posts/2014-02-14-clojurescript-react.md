@@ -304,7 +304,7 @@ Properties die `newComment`-Methode, die auf `render` folgt:
 {% endhighlight %}
 
 Die `newComment`-Methode schließlich benutzt die React-Methode
-`setstate`, um das Kommentarfeld im Zustand um den neuen Kommentar zu
+`setState`, um das Kommentarfeld im Zustand um den neuen Kommentar zu
 erweitern.
 
 Fertig!  Na ja, fast: Um im Browser etwas zu sehen, müssen wir noch eine
