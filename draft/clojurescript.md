@@ -32,7 +32,7 @@ Unterschiede](https://github.com/clojure/clojurescript/wiki/Differences-from-Clo
 z.B. bei der Repräsentation von Zahlen, beim Feld-/Methodenzugriff
 oder bei Makros.  In diesem Beitrag interessiert uns vor allem aber
 ein schneller Einstieg, um ein Gefühl für die Sprache, ihr Ökosystem
-und die Anbindung von JavaScript-Frameworks betrifft.  Programmieren
+und die Anbindung von JavaScript-Frameworks zu entwickeln.  Programmieren
 mit ClojureScript macht nämlich richtig Laune, vor allem für Leute 
 wie mich, die kaum JavaScript können..
 
@@ -60,9 +60,8 @@ Wenn er welche feststellt, wird recompiliert.
 Wenn `lein cljsbuild` einmal durchgelaufen ist, ist die Datei
 `index.html` (evenfalls von `lein new` generiert)
 im Projekt-Wurzelverzeichnis fertig zum Aufmachen mit dem
-Browser.  (Konfiguriert ist das ganze in der Leiningen-Konfiguration
-`project.clj`.  Für die Zwecke dieses Postings reicht allerdings die
-generierte Konfiguration unverändert.
+Browser.  Konfiguriert ist das ganze in der Leiningen-Konfiguration
+`project.clj`.
 
 # Programmieren mit ClojureScript
 
@@ -112,7 +111,7 @@ Konzepten aus der funktionalen Programmierung sehr nah ist:
 React-*Komponenten* sind Objekte mit beliebigem inneren Zustand, den
 sie jederzeit in eine GUI rendern können, indem sie eine
 `render`-Methode spezifizieren.  Diese liefert ein *virtuelles*
-DOM-Objekt, das React dann in die reale DOM überträgt.  Dabei
+DOM-Objekt, das React dann in das reale DOM überträgt.  Dabei
 überträgt React nur die Teile, die sich geändert haben, was das
 Framework [extrem schnell
 macht](http://swannodette.github.io/2013/12/17/the-future-of-javascript-mvcs/).
@@ -150,8 +149,8 @@ eine einzelne Funktion `render`.  Allerdings ist zu beachten, dass
 ClojureScript-Maps nicht direkt als JavaScript-Hashmaps verwendet
 werden können.  (In ClojureScript ist eine Map wie in Clojure auch
 eine persistente Datenstruktur.)  Der Präfix `#js` sorgt aber dafür, dass
-die darauffolgende Map als JavaScript-Hashmap angelegt wird.  Dabei
-wird dabei aus dem Keyword-Schlüssel `:render` der Schlüssel `render`
+die darauffolgende Map als JavaScript-Hashmap angelegt wird.  
+Aus dem Keyword-Schlüssel `:render` wird der Schlüssel `render`
 in der Hashmap.
 
 React schreibt vor, dass es mindestens den `render`-Eintrag geben
@@ -249,7 +248,7 @@ gleichen Namen in das Komponenten-Objekt, so dass `render` mit
 Die `handleSubmit`-Funktion kann dann auf das `refs`-Feld von
 `this`-Zugreifen, in dem alle DOM-Elemente stehen, die ein
 `ref`-Attribut in `render` abbekommen haben.  
-Das Feld `author` ist dasElement mit `ref`-Wert `author`, entsprechend
+Das Feld `author` ist das Element mit `ref`-Wert `author`, entsprechend
 für `text`.  Die Methode `getDOMNode` liefert dann das entsprechende
 echte DOM-Element, in dem das `value`-Feld dann den entsprechenden
 Text holt.
