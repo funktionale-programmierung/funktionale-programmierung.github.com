@@ -33,7 +33,7 @@ z.B. bei der Repräsentation von Zahlen, beim Feld-/Methodenzugriff
 oder bei Makros.  In diesem Beitrag interessiert uns vor allem aber
 ein schneller Einstieg, um ein Gefühl für die Sprache, ihr Ökosystem
 und die Anbindung von JavaScript-Frameworks betrifft.  Programmieren
-mit ClojureScript macht nämlich richtig Laune, vor allem für Leute die
+mit ClojureScript macht nämlich richtig Laune, vor allem für Leute 
 wie mich, die kaum JavaScript können..
 
 # Projektstart
@@ -58,7 +58,8 @@ JavaScript compiliert wird und hält danach Ausschau nach Änderungen.
 Wenn er welche feststellt, wird recompiliert.
 
 Wenn `lein cljsbuild` einmal durchgelaufen ist, ist die Datei
-`index.html` im Projekt-Wurzelverzeichnis fertig zum Aufmachen mit dem
+`index.html` (evenfalls von `lein new` generiert)
+im Projekt-Wurzelverzeichnis fertig zum Aufmachen mit dem
 Browser.  (Konfiguriert ist das ganze in der Leiningen-Konfiguration
 `project.clj`.  Für die Zwecke dieses Postings reicht allerdings die
 generierte Konfiguration unverändert.
@@ -66,7 +67,7 @@ generierte Konfiguration unverändert.
 # Programmieren mit ClojureScript
 
 In der Datei `src/cljs_hello/core.cljs` ist die eigentliche
-Webanwendung.  Vorgefertigt iist da nur das folgende kümmerliche
+Webanwendung.  Vorgefertigt ist da nur das folgende kümmerliche
 Programm:
 
 {% highlight clojure %}
@@ -103,7 +104,7 @@ JavaScript-Code geladen, zusammen mit den benötigten Libraries.
 
 Da die direkte Manipulation des DOM von JavaScript aus wenig Spaß
 macht, empfiehlt sich auch in ClojureScript die Verwendung eines
-GUI-Frameworks.  Besonders gut passt zum Beispiel kürzlich von
+GUI-Frameworks.  Besonders gut passt zum Beispiel das kürzlich von
 Facebook und LinkedIn veröffentliche
 [React](http://facebook.github.io/react/), das insbesondere den
 Konzepten aus der funktionalen Programmierung sehr nah ist:
@@ -208,8 +209,8 @@ Auch hier ist zu beachten, dass ein ClojureScript-Vektor kein
 JavaScript-Array ist - die React-DOM-Konstruktoren wollen aber Arrays
 sehen.  Darum die Konversion mit `into-array`.
 
-Als nächstes machen wir eine Komponente, die das Eingeben einer neuen
-Kommentare erlaubt.  Dafür legen wir ein Formular mit zwei Textfeldern
+Als nächstes machen wir eine Komponente, die das Eingeben eines neuen
+Kommentars erlaubt.  Dafür legen wir ein Formular mit zwei Textfeldern
 an - für Autor und Text des Formulars:
 
 {% highlight clojure %}
@@ -307,7 +308,7 @@ Die `newComment`-Methode schließlich benutzt die React-Methode
 `setstate`, um das Kommentarfeld im Zustand um den neuen Kommentar zu
 erweitern.
 
-Fertig!  Na ja, fast: Um im Browser etwas zu sehen, müssen noch eine
+Fertig!  Na ja, fast: Um im Browser etwas zu sehen, müssen wir noch eine
 `CommentBox`-Komponente im DOM aufhängen:
 
 {% highlight clojure %}
@@ -341,7 +342,7 @@ Aus dem eleganten Modell von React lässt sich durch die Verwendung von
 ClojureScript durch rein funktionale Programmierung noch mehr
 herausholen.  Es sind schon mehrere ClojureScript-Frameworks um React
 herum entstanden, zum Beispiel [Om](https://github.com/swannodette/om)
-und[Reagent](http://holmsand.github.io/reagent/).  
+und [Reagent](http://holmsand.github.io/reagent/).  
 
 Der komplette Code für dieses Beispiel befindet sich auf
 [github](https://github.com/funktionale-programmierung/cljs-hello).
