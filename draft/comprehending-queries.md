@@ -39,7 +39,7 @@ relational calculus*) — dessen sich die Datenbanker zur Darstellung von Anfrag
 bedienen, eigentlich kein Unterschied zu erkennen.  Etwa formuliert der TRC die
 Query "*Finde alle dringlichen Bestellungen, deren Status noch offen ist*" in
 gewohnter Mengenschreibweise (die Beispiele orientieren sich am
-[TPC-H-Benchmark](http://FIXME), den man durchaus als "die Drosophila der
+[TPC-H-Benchmark](http://www.tpc.org/tpch/), den man durchaus als "die Drosophila der
 Datenbankforschung" bezeichnen darf):
 
     { o | o ∈ orders ∧ o.o_orderpriority = '1-URGENT' ∧ o.o_orderstatus = 'O' }
@@ -84,8 +84,8 @@ WHERE  o.o_orderpriority = '1-URGENT'
 AND    o.o_orderstatus = 'O'
 {% endhighlight %}
 
-(Ganz genau genommen ist hier aufgrund SQLs Multimengen-Semantik bereits ein
-dritter Monad im Spiel, `Bag a`.)
+(Ganz genau genommen ist hier aufgrund SQLs Multimengen-Semantik bereits eine
+dritte Monade im Spiel, `Bag a`.)
 
 ## Monoid Comprehensions ##
 
@@ -189,21 +189,21 @@ sehr nahe kommt.  Unsere beiden Beispiele von eben lesen sich jetzt wie folgt:
 [ o_orderstatus o == 'O' | o <- orders ]^any
 {% endhighlight %}
 
-Für einen Datenbanker sieht das schon sehr vertraut und vor allem idiomatisch aus. 
+Für einen Datenbanker sieht das schon sehr vertraut aus. 
 
 ## SQL-Like Comprehensions (Comprehensive Comprehensions) ##
 
 Aber es wird noch besser.  Nachdem Simon Peyton Jones und Phil Wadler ihr
 Proposal zu [Comprehensive Comprehensions](http://research.microsoft.com/en-
 us/um/people/simonpj/papers/list-comp/list-comp.pdf) publiziert hatten, wurden
-Comprehensions in GHC mit syntaktischem Zucker versehen, der es unter anderem
-erlaubt, die Gruppierung und Sortierung von Containern kompakt und elegant zu
-notieren.  Das entspricht direkt den SQL-Klauseln `GROUP BY` bzw. `ORDER BY`.
-Nicht ohne Grund wird diese Spracherweiterung auch als
-[*SQL-like Comprehensions*](https://www.haskell.org/ghc/docs/latest/html/users_guide/syntax-extns.html) bezeichnet.
-Die Aktivierung erfolgt durch das GHC-Pragma `TransformListComp` (nicht der
-beste Name: die Erweiterung funktioniert nämlich für Monad Comprehensions
-generell).
+sowohl List als auch Monad Comprehensions in GHC mit syntaktischem Zucker
+versehen, der es erlaubt, die Gruppierung und Sortierung von Containern kompakt
+und elegant zu notieren.  Das entspricht direkt den SQL- Klauseln `GROUP BY`
+bzw. `ORDER BY`. Nicht ohne Grund wird diese Spracherweiterung auch als [*SQL-
+like Comprehensions*](https://www.haskell.org/ghc/docs/latest/html/users_guide/syntax-extns.html) 
+bezeichnet. Die Aktivierung erfolgt durch das GHC-Pragma
+`TransformListComp` (nicht der beste Name: die Erweiterung funktioniert nämlich
+für Monad Comprehensions generell).
 
 Damit haben wir jetzt alle Bausteine eingesammelt, mit denen sich TRC- oder SQL-Anfragen 
 allein mit Haskell-Sprachmitteln zusammensetzen lassen.  Eine der typischen Anfragen
