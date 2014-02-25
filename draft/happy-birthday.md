@@ -138,6 +138,8 @@ haben jeweils mehr als 1000 Leser. Insgesamt hatte das Blog im letzten Jahr mehr
 mehr als 23.000 Seiten aufgerufen haben. Wir haben 30-40 Besucher pro Tag, an Tagen an den Artikel veröffentlich werden sind es
 mindestens 60 Besucher, oft aber auch 80-120 Besucher.
 
+43 Artikel, 11 Autoren, darunter 5 Gastautoren.
+
 Wir möchten Ihnen, den Leser, an dieser Stelle sehr herzlich für Ihre Treue danken. Wir hoffen, dass Sie auch in Zukunft
 unseren Blog lesen und die Inhalte interessant finden. Damit wir unsere Artikel noch besser auf Ihre Interessen abstimmen können,
 möchten wir Sie an dieser Stelle um Ihr Feedback bitten.
