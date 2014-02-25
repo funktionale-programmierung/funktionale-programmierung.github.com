@@ -17,9 +17,14 @@ noch den einen oder anderen für Sie interessanten Artikel, der Ihnen im Lauf de
 gegangen ist.
 
 Am Schluss des Artikels finden Sie auch einige interessante Zahlen zum Blog und seinen Besuchern.
-Wir möchten Sie an dieser Stelle schon jetzt um Ihr Feedback bitten. Was gefällt Ihnen an diesem Blog?
-Was kann noch verbessert werden? Worüber würden Sie gerne mehr erfahren? Schreiben Sie Antworten
-auf diese Fragen doch einfach in einen kurzem Kommentar am Ende des Artikels. Danke!
+Wir möchten Sie an dieser Stelle schon jetzt um Ihr Feedback bitten. 
+
+* Was gefällt Ihnen an diesem Blog?
+* Was kann noch verbessert werden? 
+* Worüber würden Sie gerne mehr erfahren? 
+
+Schreiben Sie Antworten auf diese Fragen doch einfach in einen kurzem Kommentar am Ende des Artikels. Danke!
+Jetzt aber viel Spaß beim Lesen dieses Überblicks.
 
 <!-- more start -->
 
@@ -31,7 +36,7 @@ Stelle die Artikel des zurückliegenden Jahres daher auch mal inhaltlich einordn
 
 Wir haben einige Artikel, die sich an Einsteiger der funktionalen Programmierung richten.
 So gibt [David Frese](http://www.active-group.de/unternehmen/frese.html) in seinem Artikel
-eine Antwort auf die Frage [Was ist funktionale Programmierung?](http://funktionale-programmierung.de/2013/08/23/was-ist-funktionale-programmierung.html).
+eine Antwort auf die Frage [Was ist funktionale Programmierung?](http://funktionale-programmierung.de/2013/08/23/was-ist-funktionale-programmierung.html)
 Mit vielen Beispielen versehen präsentiert [Michael Sperber](http://www.active-group.de/unternehmen/sperber.html) eine
 dreiteilige [Einführung in die rein funktionale Programmierung](http://funktionale-programmierung.de/2013/03/12/rein-funktional.html),
 hier finden Sie den [2.](http://funktionale-programmierung.de/2013/04/10/rein-funktional-2.html)
@@ -62,7 +67,8 @@ vor, eine [Haskell](http://haskell.org)-Dialekt für die JVM.
 
 Auch wenn Sie selbst in der täglichen Arbeit keine Möglichkeit haben, funktionale Sprachen einzusetzen,
 können Sie in imperativen und objekt-orientierten Sprachen von funktionalen Denk- und Programmiertechniken
-profitieren, wie [Stefan Wehr](http://www.factisresearch.com/company.html#swehr) in [seinem Artikel](http://funktionale-programmierung.de/2013/03/20/warum-funktional.html)
+profitieren, wie [Stefan Wehr](http://www.factisresearch.com/company.html#swehr) in seinem Artikel
+[Warum funktional?](http://funktionale-programmierung.de/2013/03/20/warum-funktional.html)
 zeigt. Auch enthält Java 8 einige längst überfällige
 [funktionale Features](http://funktionale-programmierung.de/2013/09/19/java8.html).
 [Niklas Baumstark](http://www.factisresearch.com/company.html#nbaumstark) demonstriert, dass man selbst in C++ dank
@@ -72,7 +78,7 @@ von funktionaler Programmierung profitieren kann.
 Unveränderbare ("immutable") Datentypen sind eine wichtige Technik der funktionalen Programmierung, so wichtig
 dass wir auch in [Objective-C](http://funktionale-programmierung.de/2013/12/05/datentypen-objectivec.html)
 nicht darauf verzichten möchten. Sollten Sie aber mal in der funktionalen Sprache Haskell des Bedürfnis
-verspüren, imperativ zu programmieren, hilft Ihnen [der Artikel](http://funktionale-programmierung.de/2013/08/01/haskell-imperativ.html)
+verspüren, imperativ zu programmieren, hilft Ihnen [dieser Artikel](http://funktionale-programmierung.de/2013/08/01/haskell-imperativ.html)
 unseres Gastautors [Joachim Breitner](http://www.joachim-breitner.de/blog/) bestimmt weiter.
 
 ## Industrielle Anwendungen ##
@@ -131,7 +137,7 @@ softwaretechnisch dem beliebten Framework [node.js](http://nodejs.org/) überleg
 
 In einem weiteren Beispiel aus der Praxis erklärt unser Gastautor [Johannes Weiß](http://www.johannesweiss.eu/)
 wie einfach die Interaktion zwischen Haskell und Aufrufen von C-Bibliotheksfunktionen realisiert werden kann.
-Außerdem demonstriert [ein Artikel](http://funktionale-programmierung.de/2014/01/16/build-system-haskell.html)
+Außerdem demonstriert [ein anderer Artikel](http://funktionale-programmierung.de/2014/01/16/build-system-haskell.html)
 den Einsatz von Haskell zur Implementierung eines Buildsystems, welches Tag für Tag unsere Software kompiliert.
 Das Für und Wider für die Platform [Eclipse Xtend](http://funktionale-programmierung.de/2014/01/23/eclipse-xtend.html)
 wird ebenfalls aus praktischer Sicht beleuchtet.
@@ -139,13 +145,13 @@ wird ebenfalls aus praktischer Sicht beleuchtet.
 ## Monaden ##
 
 Kein Blog über funktionale Programmiersprachen ohne Monaden! Unser Gastautor [Uwe Schmidt](http://www.fh-wedel.de/~si/)
-bringt den Lesern in einer dreiteiligen, didaktisch hervorragend aufbereitet Artikelserie die Funktionsweise
+bringt den Lesern in einer dreiteiligen, didaktisch hervorragend aufbereiteten Artikelserie die Funktionsweise
 und Vorzüge von Moden bei ([Teil 1](http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html), 
 [Teil 2](http://funktionale-programmierung.de/2013/05/22/haskell-monaden2.html), 
-[Teil 3](http://funktionale-programmierung.de/2013/07/03/haskell-monaden3.html).
+[Teil 3](http://funktionale-programmierung.de/2013/07/03/haskell-monaden3.html)).
 Praktische Einsatzmöglichkeiten von Monaden werden außerdem in einem
 [Artikel](http://funktionale-programmierung.de/2013/05/29/gui-monade.html) über eine Monade zur GUI-Programmierung
-vorgestellt. Unser Gastautor [Torsten Grust] zeigt außerdem, wie man mit Hilfe von Monaden
+vorgestellt. Unser Gastautor [Torsten Grust](http://db.inf.uni-tuebingen.de/team/grust/) zeigt außerdem, wie man mit Hilfe von Monaden
 [Datenbankabfragen repräsentieren](http://funktionale-programmierung.de/2014/02/19/comprehending-queries.html) kann.
 
 ## Klassiker der funktionalen Programmierung ##
@@ -172,18 +178,20 @@ den [Zurich FP Afternoon / Haskell-Hackathon](http://funktionale-programmierung.
 welcher im September 2013 in Zürich stattfand. Zum "Commercial Users of Functional Programming" Workshop
 gibt es einen [Vorbericht](http://funktionale-programmierung.de/2013/08/07/cufp-2013.html)
 sowie eine [Nachbetrachtung](http://funktionale-programmierung.de/2013/12/12/cufp-2013-report.html).
+Die in der Nachbetrachtungen verlinkten [Videos](http://www.youtube.com/channel/UCfSUv7I_aHgzcnXMcd8obsw)
+demonstrieren sehr gut die Vorteile und die breiten Einsatzmöglichkeiten funktionaler Programmierung.
     
 ## Ein paar Zahlen zum Blog ##
 
-Elf Autoren, darunter fünf Gastautoren, haben im zurückliegenden Jahr insgesamt 43 Artikel verfasst.
-Jeder Artikel hatte dabei mehr als 70 Leser, wobei die Hälfte der Artikel sogar mehr als 235 Leser
-hatte. Die Top-3 Artikel hatten sogar mehr als 1.000 Leser. 
+Elf Autoren, darunter fünf Gastautoren, haben im zurückliegenden Jahr insgesamt 43 Artikel für diesen Blog verfasst.
+Jeder Artikel hatte dabei mehr als 70 Leser, die Hälfte der Artikel sogar mehr als 235 Leser.
+Die Top-3 Artikel hatten sogar mehr als 1.000 Leser. 
 
-Insgesamt haben mehr als 8.000 Menschen das Blog "Funktionale Programmierer" im letzten Jahr gelesen,
+Insgesamt haben über 8.000 Menschen das Blog "Funktionale Programmierer" im letzten Jahr gelesen,
 insgesamt kamen dabei mehr als 23.000 Seitenaufrufe zusammen.
 Wir haben dabei 30-40 Besucher pro Tag, an Tagen an den Artikel veröffentlich werden sind es
 mindestens 60 Besucher, oft aber auch 80-120 Besucher. (Die Besucherzahlen bezeichnen dabei immer
-*eindeutige* Besucher, mehrfache Aufrufe derselben Personen werden also nur einmal gezählt.)
+*eindeutige* Besucher, mehrfache Aufrufe derselben Person werden also nur einmal gezählt.)
 
 Wir möchten Ihnen, unseren Lesern, an dieser Stelle sehr herzlich für Ihre Treue danken. Wir hoffen, dass Sie auch in Zukunft
 unseren Blog lesen und die Inhalte interessant finden. Damit wir unsere Artikel noch besser auf Ihre Interessen abstimmen können,
