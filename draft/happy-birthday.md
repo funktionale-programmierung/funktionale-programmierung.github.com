@@ -17,13 +17,14 @@ noch den einen oder anderen für Sie interessanten Artikel, der Ihnen im Lauf de
 gegangen ist.
 
 Am Schluss des Artikels finden Sie auch einige interessante Zahlen zum Blog und seinen Besuchern.
-Wir möchten Sie an dieser Stelle schon jetzt um Ihr Feedback bitten. 
+Wir möchten uns an dieser Stelle schon einmal ganz herzlich bei Ihnen, unseren vielen Lesern bedanken
+und Sie um Ihr Feedback bitten. 
 
 * Was gefällt Ihnen an diesem Blog?
 * Was kann noch verbessert werden? 
 * Worüber würden Sie gerne mehr erfahren? 
 
-Schreiben Sie Antworten auf diese Fragen doch einfach in einen kurzem Kommentar am Ende des Artikels. Danke!
+Schreiben Sie Antworten auf diese Fragen doch einfach in einen kurzen Kommentar am Ende des Artikels. Danke!
 Jetzt aber viel Spaß beim Lesen dieses Überblicks.
 
 <!-- more start -->
@@ -45,7 +46,7 @@ und [3.](http://funktionale-programmierung.de/2013/04/25/rein-funktional-3.html)
 ## Java und Sprachen auf der JVM ##
 
 Viele industrielle Softwareentwickler sind mit objektorientierter Programmierung in Java und der JVM als Ausführungsplatform
-vertraut. Auch auf dieser Platform kann man funktional programmieren!
+vertraut. Auch auf dieser Plattform kann man funktional programmieren!
 In einem [Artikel](http://funktionale-programmierung.de/2013/02/26/scala-java-ant.html) sehen
 Sie anhand eines konkreten Beispiels aus dem Quellcode des Buildsystem [Apache Ant](http://ant.apache.org/),
 wie Java-Code wesentlich lesbarer in der funktionalen JVM-Sprache [Scala](http://www.scala-lang.org/)
@@ -59,9 +60,9 @@ zum Erzeugen von Berichten, erstellt werden kann.
  
 Neben Scala gibt es noch eine Reihe anderer
 funktionaler Sprachen für die JVM. Ein [Artikel](http://funktionale-programmierung.de/2013/06/27/dsl-clojure.html) stellt die Sprache
-[clojure](http://clojure.org/) vor und zeigt, wie man dort einfach kleine Spezialsprachen entwicklen kann.
+[Clojure](http://clojure.org/) vor und zeigt, wie man dort einfach kleine Spezialsprachen entwicklen kann.
 Unser Gastautor [Ingo Wechsung](http://www.contexo.de/) stellt die Sprache [Frege](http://funktionale-programmierung.de/2013/10/10/frege.html)
-vor, eine [Haskell](http://haskell.org)-Dialekt für die JVM.
+vor, ein [Haskell](http://haskell.org)-Dialekt für die JVM.
 
 ## Funktionales in imperativen Sprachen ##
 
@@ -117,7 +118,7 @@ vor und vertieft diese in einem
 Zum anderen diskutiert ein andere Artikel
 [erste Schritte in ClojureScript](http://funktionale-programmierung.de/2014/02/14/clojurescript-react.html)
 und beschäftigt sich dabei hauptsächlich mit Web-Programmierung.
-Dass man auch in Javascript, der Lingua franca des Webs, funktional programmieren kann (wenn auch mit gewissen
+Dass man auch in JavaScript, der Lingua franca des Webs, funktional programmieren kann (wenn auch mit gewissen
 Einschränkungen), zeigt das [Curry-Buch](http://www.currybuch.de/), welches wir in einer
 [Buchbesprechung](http://funktionale-programmierung.de/2013/07/25/curry-buch.html) vorstellen.
 
@@ -146,7 +147,7 @@ wird ebenfalls aus praktischer Sicht beleuchtet.
 
 Kein Blog über funktionale Programmiersprachen ohne Monaden! Unser Gastautor [Uwe Schmidt](http://www.fh-wedel.de/~si/)
 bringt den Lesern in einer dreiteiligen, didaktisch hervorragend aufbereiteten Artikelserie die Funktionsweise
-und Vorzüge von Moden bei ([Teil 1](http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html), 
+und Vorzüge von Moden näher ([Teil 1](http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html), 
 [Teil 2](http://funktionale-programmierung.de/2013/05/22/haskell-monaden2.html), 
 [Teil 3](http://funktionale-programmierung.de/2013/07/03/haskell-monaden3.html)).
 Praktische Einsatzmöglichkeiten von Monaden werden außerdem in einem
@@ -185,7 +186,10 @@ demonstrieren sehr gut die Vorteile und die breiten Einsatzmöglichkeiten funkti
 
 Elf Autoren, darunter fünf Gastautoren, haben im zurückliegenden Jahr insgesamt 43 Artikel für diesen Blog verfasst.
 Jeder Artikel hatte dabei mehr als 70 Leser, die Hälfte der Artikel sogar mehr als 235 Leser.
-Die Top-3 Artikel hatten sogar mehr als 1.000 Leser. 
+Die Top-3-Artikel hatten sogar jeweils mehr als 1.000 Leser. Dabei sind die Top-3-Artikel (in dieser Reihenfolge):
+[Monaden: Das programmierbare Semikolon](/2013/04/18/haskell-monaden.html),
+[Haskell schlägt node.js](/2013/05/08/haskell-nodejs.html) sowie
+[Funktional Programmieren am konkreten Beispiel](/2013/02/26/scala-java-ant.html).
 
 Insgesamt haben über 8.000 Menschen das Blog "Funktionale Programmierer" im letzten Jahr gelesen,
 insgesamt kamen dabei mehr als 23.000 Seitenaufrufe zusammen.
