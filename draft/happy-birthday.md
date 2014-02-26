@@ -205,7 +205,7 @@ möchten wir Sie an dieser Stelle um Ihr Feedback bitten.
 * Was kann noch verbessert werden? 
 * Worüber würden Sie gerne mehr erfahren? 
 
-Schreiben Sie Antworten auf diese Fragen doch einfach in einen kurzem Kommentar. Danke!
+Schreiben Sie Antworten auf diese Fragen doch einfach in einen kurzen Kommentar. Danke!
 
 <!-- more end -->
 
