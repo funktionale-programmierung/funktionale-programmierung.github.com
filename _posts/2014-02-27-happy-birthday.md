@@ -17,7 +17,7 @@ noch den einen oder anderen für Sie interessanten Artikel, der Ihnen im Lauf de
 gegangen ist.
 
 Am Schluss des Artikels finden Sie auch einige interessante Zahlen zum Blog und seinen Besuchern.
-Wir möchten uns an dieser Stelle schon einmal ganz herzlich bei Ihnen, unseren vielen Lesern bedanken
+Wir möchten uns an dieser Stelle schon einmal ganz herzlich bei Ihnen, unseren vielen Lesern bedanken,
 und Sie um Ihr Feedback bitten. 
 
 * Was gefällt Ihnen an diesem Blog?
@@ -192,7 +192,7 @@ Die Top-3-Artikel hatten sogar jeweils mehr als 1.000 Leser. Dabei sind die Top-
 [Funktional Programmieren am konkreten Beispiel](/2013/02/26/scala-java-ant.html).
 
 Insgesamt haben über 8.000 Menschen das Blog "Funktionale Programmierer" im letzten Jahr gelesen,
-insgesamt kamen dabei mehr als 23.000 Seitenaufrufe zusammen.
+mit mehr als 23.000 Seitenaufrufen.
 Wir haben dabei 30-40 Besucher pro Tag, an Tagen an den Artikel veröffentlich werden sind es
 mindestens 60 Besucher, oft aber auch 80-120 Besucher. (Die Besucherzahlen bezeichnen dabei immer
 *eindeutige* Besucher, mehrfache Aufrufe derselben Person werden also nur einmal gezählt.)
