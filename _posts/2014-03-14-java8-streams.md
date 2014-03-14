@@ -49,7 +49,7 @@ public class Game {
         this.guestTeam = guestTeam;
         this.guestGoals = guestGoals;
     }
-	...
+    ...
 }
 {% endhighlight %}
 
@@ -61,9 +61,9 @@ repräsentieren:
 
 {% highlight java %}
 Game[] season_2009_2010a = {
-		new Game(1, "Wolfsburg", 2, "Stuttgart", 0),
-		new Game(1, "Mainz", 2, "Bayer 04" 2),
-		...
+        new Game(1, "Wolfsburg", 2, "Stuttgart", 0),
+        new Game(1, "Mainz", 2, "Bayer 04" 2),
+        ...
 };
 List<Game> season_2009_2010 = Arrays.asList(season_2009_2010a);
 {% endhighlight %}
@@ -107,7 +107,7 @@ Sachen zu machen:
         else // if (g1 == g2)
             return 1;
     }
-	
+    
     // Spielt ein bestimmtes Team in diesem Spiel?
     public boolean playsGame(String t) {
         return this.homeTeam.equals(t) || this.guestTeam.equals(t);
@@ -167,16 +167,16 @@ insbesondere eine zum Aufsammeln in eine Liste:
 {% highlight java %}
 List<Game> l1 = season_2009_2010.stream()
                   .filter(g -> g.playsGame("Nürnberg"))
-				  .collect(Collectors.toList())
+                  .collect(Collectors.toList())
 {% endhighlight %}
 
 Auch [`map`](http://en.wikipedia.org/wiki/Map_%28higher-order_function%29) [gibt es](http://download.java.net/jdk8/docs/api/java/util/stream/Stream.html#map-java.util.function.Function-):
 
 {% highlight java %}
 List<Integer> hgs = season_2009_2010.stream()
-		.filter(g -> g.playsGame("Hamburg"))
-		.map(g -> g.teamPoints("Hamburg"))
-		.collect(Collectors.toList());
+        .filter(g -> g.playsGame("Hamburg"))
+        .map(g -> g.teamPoints("Hamburg"))
+        .collect(Collectors.toList());
 {% endhighlight %}
 
 Wenn wir jetzt auch noch die Punkte aufsummieren wollen, dann können
@@ -186,9 +186,9 @@ bemühen, die ein "Map" mit einer Summenbildung kombiniert:
 
 {% highlight java %}
 int hg = season_2009_2010.stream()
-		.filter(g -> g.playsGame("Hamburg"))
-		.map(g -> g.teamPoints("Hamburg"))
-		.collect(Collectors.summingInt(i -> i));
+        .filter(g -> g.playsGame("Hamburg"))
+        .map(g -> g.teamPoints("Hamburg"))
+        .collect(Collectors.summingInt(i -> i));
 {% endhighlight %}
 
 Aus irgendeinem Grund gibt es keinen Collector, der direkt die Summe
@@ -197,8 +197,8 @@ zu:
 
 {% highlight java %}
 int hg = season_2009_2010.stream()
-		.filter(g -> g.playsGame("Hamburg"))
-		.collect(Collectors.summingInt(g -> g.teamPoints("Hamburg")));
+        .filter(g -> g.playsGame("Hamburg"))
+        .collect(Collectors.summingInt(g -> g.teamPoints("Hamburg")));
 {% endhighlight %}
 
 Das tolle an Operationen wie `map` und `filter` ist, dass sie die
@@ -209,8 +209,8 @@ verarbeiten.  Dazu ist nur eine klitzekleine Änderung nötig, nämlich
 
 {% highlight java %}
 int hg = season_2009_2010.parallelStream()
-		.filter(g -> g.playsGame("Hamburg"))
-		.collect(Collectors.summingInt(g -> g.teamPoints("Hamburg")));
+        .filter(g -> g.playsGame("Hamburg"))
+        .collect(Collectors.summingInt(g -> g.teamPoints("Hamburg")));
 {% endhighlight %}
 
 Die `filter`-Methode bemüht sich dann, das Filtern parallel
@@ -241,27 +241,27 @@ hier geht also nicht:
 {% highlight java %}
 Stream<Game> season_2009_2010_stream = season_2009_2010.stream();
 List<Game> l3 = season_2009_2010_stream
-		.filter(g -> g.playsGame("Nürnberg"))
-		.collect(Collectors.toList());
+        .filter(g -> g.playsGame("Nürnberg"))
+        .collect(Collectors.toList());
 List<Game> l4 = season_2009_2010_stream
-		.filter(g -> g.playsGame("Nürnberg"))
-		.collect(Collectors.toList());
+        .filter(g -> g.playsGame("Nürnberg"))
+        .collect(Collectors.toList());
 {% endhighlight %}
 
 Das compiliert zwar noch, liefert aber folgenden Fehler:
 
-	Exception in thread "main" java.lang.IllegalStateException: stream has already been operated upon or closed
-		at java.util.stream.AbstractPipeline.<init>(AbstractPipeline.java:203)
-		at java.util.stream.ReferencePipeline.<init>(ReferencePipeline.java:94)
-		at java.util.stream.ReferencePipeline$StatelessOp.<init>(ReferencePipeline.java:618)
-		at java.util.stream.ReferencePipeline$2.<init>(ReferencePipeline.java:163)
-		at java.util.stream.ReferencePipeline.filter(ReferencePipeline.java:162)
-		at Game.main(Game.java:202)
-		at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-		at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-		at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-		at java.lang.reflect.Method.invoke(Method.java:483)
-		at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
+    Exception in thread "main" java.lang.IllegalStateException: stream has already been operated upon or closed
+        at java.util.stream.AbstractPipeline.<init>(AbstractPipeline.java:203)
+        at java.util.stream.ReferencePipeline.<init>(ReferencePipeline.java:94)
+        at java.util.stream.ReferencePipeline$StatelessOp.<init>(ReferencePipeline.java:618)
+        at java.util.stream.ReferencePipeline$2.<init>(ReferencePipeline.java:163)
+        at java.util.stream.ReferencePipeline.filter(ReferencePipeline.java:162)
+        at Game.main(Game.java:202)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.lang.reflect.Method.invoke(Method.java:483)
+        at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
 
 Außerdem gibt es separate Stream-Klassen für einige primitiven Typen:
 [`IntStream`](http://download.java.net/jdk8/docs/api/java/util/stream/IntStream.html),
