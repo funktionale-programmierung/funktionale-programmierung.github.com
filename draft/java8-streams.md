@@ -10,8 +10,8 @@ In einem <a href="{% post_url 2013-09-19-java8 %}">früheren Posting</a>
 hatten wir bereits die wichtigste Neuerung in Java 8,
 nämlich die Lambda-Ausdrücke vorgestellt.  Inzwischen steht das
 offizielle Release von Java 8 [unmittelbar
-bevor](https://blogs.oracle.com/theaquarium/entry/java_8_launch);
-inzwischen gibt es einen [Release
+bevor](https://blogs.oracle.com/theaquarium/entry/java_8_launch)
+und es gibt einen [Release
 Candidate](https://jdk8.java.net/download.html).  Heute beleuchten wir
 die Hauptmotivation für die Einführung von Lambda-Ausdrücken, die
 neuen *Streams* in Java 8.  Die lassen tatsächlich etwas funktionales
@@ -23,10 +23,10 @@ Feinheiten beachten.
 Eine der besonderen Stärken der funktionalen Programmierung ist der
 Umgang mit "Collections", weil viele Operationen auf Listen, Mengen
 oder Maps als Higher-Order-Funktion ausgedrückt werden können.  Im
-"alten Java" dafür Schleifen nötig.  Das ist nicht nur umständlich,
+"alten Java" waren dafür Schleifen nötig.  Das ist nicht nur umständlich,
 sondern sequenzialisiert den Programmablauf unnötig, was bei modernen
 Multicore-Rechnern häufig Potenzial zum
-[Datenparallelism](http://en.wikipedia.org/wiki/Data_parallelism)
+[Datenparallelismus](http://en.wikipedia.org/wiki/Data_parallelism)
 verschwendet.
 
 Das alles lässt sich am einfachsten an einem konkreten Beispiel
@@ -124,9 +124,12 @@ Sachen zu machen:
     }
 {% endhighlight %}
 
-(Es ist eine lohnende Fingerübung zu versuchen, die frustrierenden
+(Ich weiß, seit [gotofail](https://gotofail.com/) macht man `{...}`
+nach den `if`s.  Tschuldigung.)
+
+Es ist eine lohnende Fingerübung zu versuchen, die frustrierenden
 Gemeinsamkeiten von `homePoints` und `guestPoints` durch Abstraktion
-zusammenzufassen, vielleicht sogar unter Verwendung von Lambda-Ausdrücken.)
+zusammenzufassen, vielleicht sogar unter Verwendung von Lambda-Ausdrücken.
 
 Die Funktion `playsGame` können wir zum Beispiel benutzen, um alle
 Spiele von Nürnberg aus der Saison herauszufiltern.  Jede funktionale
@@ -231,7 +234,7 @@ praktische Anwendungen!) Mehr Informationen gibt es in der
 
 Insgesamt also eine tolle Sache, diese Streams.
 
-Einige Aspekte der Streams trotzdem zu beachten, vor allem für
+Einige Aspekte der Streams sind trotzdem zu beachten, vor allem für
 funktionale Programmierer.  So sind Streams *nicht* persistent.  Das
 hier geht also nicht:
 
@@ -241,7 +244,7 @@ List<Game> l3 = season_2009_2010_stream
 		.filter(g -> g.playsGame("Nürnberg"))
 		.collect(Collectors.toList());
 List<Game> l4 = season_2009_2010_stream
-		.filter(makePlaysGame("Nürnberg"))
+		.filter(g -> g.playsGame("Nürnberg"))
 		.collect(Collectors.toList());
 {% endhighlight %}
 
