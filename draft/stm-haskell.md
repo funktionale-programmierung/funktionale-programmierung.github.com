@@ -159,7 +159,7 @@ Um diese Frage und um weiterführende STM-Operationen zum Blockieren und
 zur Kombination von Transaktionen möchten wir uns im nächsten Artikel
 kümmern.
 
-Zusammenfassend lässt sich sage: STM ist eine Alternative zu Locks. Mit STM werden
+Zusammenfassend lässt sich sagen: STM ist eine Alternative zu Locks. Mit STM werden
 Codeblöcke als *atomar* gekennzeichnet und das Laufzeitsystem
 kümmert sich darum, dass so gekennzeichnete Blöcke auch wirklich atomar
 ausgeführt werden. Damit lassen sich Race Conditions und Deadlocks viel
