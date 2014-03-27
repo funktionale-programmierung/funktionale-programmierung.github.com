@@ -104,7 +104,7 @@ JavaScript-Code geladen, zusammen mit den benötigten Libraries.
 Da die direkte Manipulation des DOM von JavaScript aus wenig Spaß
 macht, empfiehlt sich auch in ClojureScript die Verwendung eines
 GUI-Frameworks.  Besonders gut passt zum Beispiel das kürzlich von
-Facebook und LinkedIn veröffentliche
+Facebook und Instagram veröffentliche
 [React](http://facebook.github.io/react/), das insbesondere den
 Konzepten aus der funktionalen Programmierung sehr nah ist:
 
