@@ -1,7 +1,7 @@
 ---
 layout: post
-description: Nebenläufigkeit mit Software Transaction Memory
-title: "Nebenläufigkeit mit Software Transaction Memory"
+description: Nebenläufigkeit mit Software Transactional Memory
+title: "Nebenläufigkeit mit Software Transactional Memory"
 author: stefan-wehr
 tags: ["Nebenläufigkeit", "Haskell", "STM"]
 ---
