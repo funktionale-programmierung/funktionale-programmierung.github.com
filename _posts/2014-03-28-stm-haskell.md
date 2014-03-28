@@ -19,7 +19,7 @@ meine ich, dass die Nebenläufigkeit nicht Mittel zum Zweck ist, sondern
 im zu lösenden Problem schon drinsteckt. Ein gutes Beispiel ist z.B.
 ein Webserver, der quasi gleichzeitig Anfragen von verschiedenen Clients
 beantwortet. Um einen solchen Webserver zu programmieren, ist
-Nebenläufigkeit ein gutes Modell: jeder Client wird als seperater Thread
+Nebenläufigkeit ein gutes Modell: jeder Client wird als separater Thread
 programmiert und kann damit isoliert betrachtet werden.
 
 Jeder der schon einmal ein nebenläufiges Programm geschrieben hat, weiß
@@ -31,7 +31,7 @@ Technik zur Kommunikation zwischen Threads. Wir setzen in der Serverkomponente
 unseres Produkts [CheckpadMED](/2013/07/17/medizin-funktional.html)
 ausschließlich auf STM zur Kommunikation zwischen Threads und sind damit
 sehr zufrieden. STM ist sprachunabhängig und steht für eine Vielzahl
-von funktionalen Sprachen (z.B. [clojure](http://clojure.org/refs),
+von funktionalen Sprachen (z.B. [Clojure](http://clojure.org/refs),
 [Haskell](http://hackage.haskell.org/package/stm),
 [OCaml](http://cothreads.sourceforge.net/),
 [Scala](http://github.com/djspiewak/scala-stm/tree/master))
@@ -179,7 +179,7 @@ zweier Komponenten das Locking-Protokoll aufbohren und neu durchdenken, um
 die Komponenten zusammenbringen zu können. Eine genauere Erklärung hierzu
 findet sich, wie auch das vorhergehende Beispiel, in Simon Peyton-Jones
 wunderschönem Artikel
-[Beautiful concurrency](http://research.microsoft.com/en-us/um/people/simonpj/papers/stm/beautiful.pdf)
+[Beautiful Concurrency](http://research.microsoft.com/en-us/um/people/simonpj/papers/stm/beautiful.pdf)
 aus dem Buch *Beautiful Code* (O'Reilly, 2007).
 
 Ich freue mich über Rückmeldungen!
