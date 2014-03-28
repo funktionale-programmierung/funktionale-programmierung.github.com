@@ -1,7 +1,7 @@
 ---
 layout: post
-description: Nebenläufigkeit mit Software Transaction Memory
-title: "Nebenläufigkeit mit Software Transaction Memory"
+description: Nebenläufigkeit mit Software Transactional Memory
+title: "Nebenläufigkeit mit Software Transactional Memory"
 author: stefan-wehr
 tags: ["Nebenläufigkeit", "Haskell", "STM"]
 ---
@@ -60,30 +60,8 @@ Programm hängt. Jeder, der schon mal mit Locks gearbeitet hat, weiß wie
 schwierig es ist, Deadlocks und Race Conditions zu vermeiden bzw. zu
 debuggen.
 
-STM ist eine Alternative zu Locks. Mit STM werden
-Codeblöcke als *atomar* gekennzeichnet und das Laufzeitsystem
-kümmert sich darum, dass so gekennzeichnete Blöcke auch wirklich atomar
-ausgeführt werden. Damit lassen sich Race Conditions und Deadlocks viel
-einfacher verhindern als dies beim Einsatz von Locks der Fall ist.
-
-Ein weiterer Vorteil von STM gegenüber von Locks: mit STM geschrieben
-Komponenten lassen sich sehr gut kombinieren, da sich atomare Blöcke aus
-verschiedenen Komponenten einfach zu größeren Blöcken zusammensetzen lassen.
-Wenn man also einmal darüber nachgedacht hat, wie die atomaren Blöcke
-innerhalb der Komponenten sein sollen, muss man mit STM nur noch darüber
-nachdenken, ob und wie es atomare Operationen über Komponentengrenzen
-hinaus geben muss.
-
-Mit Locks ist das nicht so einfach. Hier muss man oft bei der Kombination
-zweier Komponenten das Locking-Protokoll aufbohren und neu durchdenken, um
-die Komponenten zusammenbringen zu können. Eine genauere Erklärung hierzu
-findet sich, wie auch das nachfolgende Beispiel, in Simon Peyton-Jones
-wunderschönem Artikel
-[Beautiful concurrency](http://research.microsoft.com/en-us/um/people/simonpj/papers/stm/beautiful.pdf)
-aus dem Buch "Beautiful Code" (O'Reilly, 2007).
-
-So, jetzt aber genug der Theorie, wir starten mit einem praktischem
-Beispiel. Wir wählen das Standardbeispiel, nämlich die Modellierung von
+Starten wir mit einem praktischen Beispiel.
+Wir wählen das Standardbeispiel, nämlich die Modellierung von
 Überweisungen zwischen Bankkonten. Dabei soll die wichtige
 Eigenschaft gelten, dass kein Geld verloren gehen kann: wenn wir einen
 Betrag `N` von Konto `k1` auf Konto `k2` übertragen, soll entweder der
@@ -138,7 +116,7 @@ readTVar  :: TVar a -> STM a        -- Inhalt lesen
 writeTVar :: TVar a -> a -> STM ()  -- Inhalt schreiben
 {% endhighlight %}
 
-Sie sehen, alle drei Operationen laufen in der
+Alle drei Operationen laufen also in der
 `STM`-[Monade](/2013/04/18/haskell-monaden.html) und diese drei
 Operationen sind (im wesentlichen) auch die einzigen Operationen, die in
 der `STM`-Monade zur Verfügung stehen. Damit wird bereits im Typsystem
@@ -154,8 +132,8 @@ Daraus sehen wir, dass Operationen auf Transkationsvariablen
 immer innerhalb eines `atomically`-Blocks ausgeführt werden müssen, das
 stellt das Typsystem sicher. Den einzigen Fehler, den ein Programmierer hier noch machen
 kann, ist eine falsche Einteilung des Programms in atomare Blöcke. Dies
-aber ist ein logischer Fehler, der nur schwer durch einen Compiler oder
-ein Laufzeitsystem zu finden ist.
+aber ist ein logischer Fehler, und solche Fehler kann ein Compiler
+oder ein Laufzeitsystem nur schwerlich verhindern.
 
 So, mit diesem Wissen ausgestattet können wir nun die Operationen
 `withdraw` und `deposit` implementieren.
@@ -181,11 +159,27 @@ Um diese Frage und um weiterführende STM-Operationen zum Blockieren und
 zur Kombination von Transaktionen möchten wir uns im nächsten Artikel
 kümmern.
 
-Heute haben wir die Grundlagen von STM kennengelernt und gesehen, dass STM
-eine bessere Alternative zu Locks bei der Synchronisation von Threads ist.
-Bei uns in der Firma ist STM täglich im Einsatz, denn alle nebenläufigen
-Threads in unserem
-[CheckpadMED](/2013/07/17/medizin-funktional.html)-Projekt kommunizieren
-über STM.
+Zusammenfassend lässt sich sagen: STM ist eine Alternative zu Locks. Mit STM werden
+Codeblöcke als *atomar* gekennzeichnet und das Laufzeitsystem
+kümmert sich darum, dass so gekennzeichnete Blöcke auch wirklich atomar
+ausgeführt werden. Damit lassen sich Race Conditions und Deadlocks viel
+einfacher verhindern als dies beim Einsatz von Locks der Fall ist.
+
+Ein weiterer Vorteil von STM gegenüber von Locks, der bisher unerwähnt
+geblieben ist: mit STM geschriebene
+Komponenten lassen sich sehr gut kombinieren, da sich atomare Blöcke aus
+verschiedenen Komponenten einfach zu größeren Blöcken zusammensetzen lassen.
+Wenn man also einmal darüber nachgedacht hat, wie die atomaren Blöcke
+innerhalb der Komponenten sein sollen, muss man mit STM nur noch darüber
+nachdenken, ob und wie es atomare Operationen über Komponentengrenzen
+hinaus geben muss.
+
+Mit Locks ist das nicht so einfach. Hier muss man oft bei der Kombination
+zweier Komponenten das Locking-Protokoll aufbohren und neu durchdenken, um
+die Komponenten zusammenbringen zu können. Eine genauere Erklärung hierzu
+findet sich, wie auch das vorhergehende Beispiel, in Simon Peyton-Jones
+wunderschönem Artikel
+[Beautiful concurrency](http://research.microsoft.com/en-us/um/people/simonpj/papers/stm/beautiful.pdf)
+aus dem Buch *Beautiful Code* (O'Reilly, 2007).
 
 Ich freue mich über Rückmeldungen!
