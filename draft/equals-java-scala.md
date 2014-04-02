@@ -1,12 +1,10 @@
 ---
 layout: post
-description: Java to Scala
-title: "Wie migriert man Java nach Scala"
+description: Java und Scala in einem Projekt
+title: "Gemeinsame Verwendung von Scala und Java in einem Projekt"
 author: helmut-dobretzberger
-tags: ["Scala", "Java", "Equals"]
-meta_description: >
-  Scala in einem Java-Programm verwenden
-page_title: "Java to Scala"
+tags: ["Scala", "Java", "SBT", "EQUALS"]
+page_title: "Java und Scala in einem Projekt"
 ---
 
 Die ActiveGroup entwickelt die Software [EQUALS](http://www.equals.ch) für das gleichnamige Gescheinschaftsprojekt von [INTEGRAS](http://www.integras.ch)
@@ -16,6 +14,7 @@ der psychischen Gesundheit von jungen Menschen, sowie zur pädagogischen Dokumen
 
 In diesem Projekt haben wir 2012 begonnen, die Java-Codebasis Schritt für Schritt nach Scala zu migrieren.
 Dieser Blogpost zeigt dazu die prinzipellen Schritte die notwendig sind, um Scala und Java zusammen in einer Software zu verwenden.
+
 <!-- more start --> 
 
 Bevor wir uns aber damit beschäftigen, zunächst ein Überblick über die Funktionen der Software:
@@ -26,7 +25,7 @@ Bevor wir uns aber damit beschäftigen, zunächst ein Überblick über die Funkt
 - Datenauswerung inklusive Diagramm-Erstellung, PDF und CSV-Export, Vergleich von Antworten uvm.
 - Erfassung einer umfassenden Anamnese der Jugendlichen
 - Ex- und Import der Programmdaten zu anderen EQUALS-Installationen
-- Versionen für Windows und MacOS, inkl. Server für die Datebank oder lokaler Installation
+- Versionen für Windows und MacOS, inkl. Server für die Datenbank oder lokaler Installation
 
 EQUALS wurde ab Ende 2010 von einem Subunternehmen der Active Group
 entwickelt, die einen relativ üblichen Design-Ansatz aus der Java-Welt
@@ -68,25 +67,31 @@ gleich in Scala entwickelt. Das bedeutet, dass an einigen Stellen sehr
 häufig zwischen Java und Scala-Code interagiert wird. Dies läuft
 ziemlich problemlos.
 
-Eine Übersetzung des Java-Codes nach Scala wäre zwar auch relativ
+Eine Übersetzung des vorhandenen Java-Codes nach Scala wäre zwar auch relativ
 direkt und mit automatischen Tools möglich, aber wir wollen natürlich
-den stark imperativen, objekt-orientierten Code in funktionalen
-Scala-Code übertragen. Hier fangen die eigentlichen Kopfschmerzen an,
-und machen die Umstellung von größeren Java-Codeblöcken, die von
-Methodenüberschreibungen und Mutation von Objekten und Collections
-oder gar statischen Variablen durchsetzt sind, enorm aufwändig. Hier
-hilft einem oft auch das statische Typsystem nicht, und da auch die
-Testabdeckung nahe bei 0 ist, bleibt einem in der Regel nur manuelles
-"Ausprobieren".
+den stark imperativen, objekt-orientierten Code in _funktionalen_
+Scala-Code übertragen. Dort wo dabei Methodenüberschreibungen,
+Mutation von Objekten und Collections oder gar statischen Variablen
+und komplexe Klassenhierarchien vorhanden sind (und das ist leider
+fast immer der Fall), wird dies schnell enorm aufwändig. Umfangreiche
+und häufig manuelle Vorher-/Nachher-Tests sind hier erforderlich. Nach
+und nach haben wir es aber bisher immer geschafft beim Übersetzen nach
+Scala mehr Struktur in den Code zu bekommen, Intentionen von
+Implementationsdetails zu trennen, und die Software robuster für
+zukünftige Änderungen zu machen.
 
-Dies ist in der Regel ein "Kleinkrieg" in den Innereien des Codes,
-aber falls sich mal etwas Allgemeingültiges ergibt, werden wir in einem
-zukünftigen Artikel nochmal darauf eingehen.
+Unter Umständen können wir in einem zukünftigen Artikel noch einmal
+konkreter darauf eingehen, wie man bestimmte typische
+Java-Entwurfsmuster und Bibliotheken (wie z.B. Hibernate) los werden
+kann.
 
-# Ausblick
+## Ausblick
 
-TODO
+Neben der fortlaufenden Umstellung von Java auf Scala ist heuer auch eine Webversion von EQUALS in Planung,
+bei der wir dann Clientseitig höchstwahrscheinlich auf ClojureScript und React setzen; eine kleine
+Einführung hierzu gibt es bereits hier im Blog: [Erste Schritte mit ClojureScript](/2014/02/14/clojurescript-react.html)
 
-# Zusammenfassung
+## Zusammenfassung
 
-TODO
+Wir hatten bei der Umstellung der Entwicklung von Java auf Scala mit keinen größeren Problemen zu kämpfen, im Gegenteil: Scala und Java können mithilfe von SBT bequem gemeinsam verwendet werden und es
+ist möglich, eine Änderung der Codebasis Schritt für Schritt durchzuführen. Da kein bestehender Code zeitaufwendig migriert werden muss, können wir Scala auch für bereits existierende, umfangreiche Java-Projekte empfehlen. 
