@@ -1,4 +1,4 @@
----
+--
 layout: post
 description: "Funktional Programmieren mit Wahrscheinlichkeiten"
 title: "Die Wahrscheinlichkeitsverteilungsmonade"
@@ -156,7 +156,7 @@ Mit deren Hilfe können wir `grass-is-wet` umschreiben:
 (define (grass-is-wet? rain sprinkler)
   (dis (con (flip 0.9) rain)
        (dis (con (flip 0.8) sprinkler)
-	    (flip 0.1))))
+            (flip 0.1))))
 {% endhighlight %}
 
 Aber wie könnten wir `con` und `dis` definieren?  Wir müssten alle
@@ -349,7 +349,7 @@ aus:
                     (e1)
                     (e2)))))
 {% endhighlight %}
-		    
+                    
 Die Prozedur benutzt also `pv-bind`, um den booleschen Wert des Tests
 zu extrahieren und wendet dann darauf das "normale" `if` an.  Die
 beiden Zweige `e1` und `e2` werden als nullstellige Prozeduren
