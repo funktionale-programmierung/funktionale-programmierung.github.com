@@ -1,12 +1,10 @@
 ---
 layout: post
-description: Java to Scala
-title: "Wie migriert man Java nach Scala"
+description: Java und Scala in einem Projekt
+title: "Gemeinsame Verwendung von Scala und Java in einem Projekt"
 author: helmut-dobretzberger
-tags: ["Scala", "Java", "Equals"]
-meta_description: >
-  Scala in einem Java-Programm verwenden
-page_title: "Java to Scala"
+tags: ["Scala", "Java", "SBT", "EQUALS"]
+page_title: "Java und Scala in einem Projekt"
 ---
 
 Die ActiveGroup entwickelt die Software [EQUALS](http://www.equals.ch) für das gleichnamige Gescheinschaftsprojekt von [INTEGRAS](http://www.integras.ch)
@@ -16,6 +14,7 @@ der psychischen Gesundheit von jungen Menschen, sowie zur pädagogischen Dokumen
 
 In diesem Projekt haben wir 2012 begonnen, die Java-Codebasis Schritt für Schritt nach Scala zu migrieren.
 Dieser Blogpost zeigt dazu die prinzipellen Schritte die notwendig sind, um Scala und Java zusammen in einer Software zu verwenden.
+
 <!-- more start --> 
 
 Bevor wir uns aber damit beschäftigen, zunächst ein Überblick über die Funktionen der Software:
@@ -83,10 +82,13 @@ Dies ist in der Regel ein "Kleinkrieg" in den Innereien des Codes,
 aber falls sich mal etwas Allgemeingültiges ergibt, werden wir in einem
 zukünftigen Artikel nochmal darauf eingehen.
 
-# Ausblick
+## Ausblick
 
-TODO
+Nebend der fortlaufenden Umstellung von Java auf Scala ist auch eine Webversion von EQUALS in Planung,
+bei der wir dann Clientseitig höchstwahrscheilnich auf ClojureScript und React setzen; eine kleine
+Einführung hierzu gibt es bereits hier im Blog: [Erste Schritte mit ClojureScript](/2014/02/14/clojurescript-react.html)
 
-# Zusammenfassung
+## Zusammenfassung
 
-TODO
+Wir hatten bei der Umstellung der Entwicklung von Java auf Scala mit keinen größeren Problemen zu kämpfen, im Gegenteil: Scala und Java können mithilfe von SBT bequem gemeinsam verwendet werden und es
+ist möglich, eine Änderung der Codebasis Schritt für Schritt durchzuführen. Da kein bestehender Code zeitaufwendig migriert werden muss, können wir Scala auch für bereits existierende, umfangreiche Java-Projekte empfehlen. 

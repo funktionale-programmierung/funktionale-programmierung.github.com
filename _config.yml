@@ -77,3 +77,7 @@ authors:
     image: /author/torsten-grust.png
     href: "http://db.inf.uni-tuebingen.de/team/grust/"
     about: '<a href="http://db.inf.uni-tuebingen.de/team/grust/">Torsten Grust</a> ist Professor für Datenbanksysteme an der Universität Tübingen. Torsten ist am glücklichsten, wenn er in seiner Forschung Ideen aus der Welt der Datenbanksysteme und der funktionalen Programmierung mischen kann.'
+  helmut-dobretzberger:
+    name: Helmut Dobretzberger
+    href: "http://www.active-group.de/unternehmen/dobretzberger.html"
+    about: 'todo'
