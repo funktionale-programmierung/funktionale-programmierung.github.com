@@ -38,8 +38,8 @@ Im Zuge der Übernahme der Weiterentwicklung von EQUALS durch
 Entwickler der Active Group, wurde Ende 2012 daher auch entschieden, EQUALS
 mit Scala weiterzuentwickeln, um diesen Problemen mittelfristig Herr
 zu werden, und um zukünftige Anforderungen mithilfe von funktionaler Programmierung schneller und robuster umsetzen zu können.
-Dabei war klar, dass wir nicht auf einen Schlag eine komplette Übersetzung des Java-Codes machen können oder wollen - das Projekt bestand
-aus über 100.000 Zeilen Java-Code - sondern über längere Zeit sowohl Java als auch Scala verwenden müssen.
+Dabei war klar, dass wir nicht auf einen Schlag eine komplette Übersetzung des Java-Codes machen können oder wollen - das Projekt besteht
+aus über 100.000 Zeilen Code - sondern über längere Zeit sowohl Java als auch Scala verwenden müssen.
 
 ## Buildtool für gemischte Projekte
 
@@ -83,10 +83,10 @@ Scala mehr Struktur in den Code zu bekommen, Intentionen von
 Implementationsdetails zu trennen, und die Software robuster für
 zukünftige Änderungen zu machen.
 
-Wir werden in einem zukünftigen Artikel noch einmal
-konkreter darauf eingehen, wie man bestimmte typische
-Java-Entwurfsmuster und Bibliotheken (wie z.B. [Hibernate](http://hibernate.org/)) los werden
-kann.
+Hier im Blog ist bereits beschrieben, wie wir neue Anforderungen an die Benutzeroberfläche mithilfe einer [GUI-Monade](/2013/05/29/gui-monade.html) umgesetzt haben,
+und wie wir mithilfe einer eigens entwickelten, [funktionalen API für JasperReports](2013/06/13/funktionale-api-jasper.html) die Reporting-Funktionalität der Software programmieren.
+Es wird in Zukunft weitere Artikel zu dem Thema geben, z.B. werden wir noch einmal konkreter darauf eingehen, wie man bestimmte typische
+Java-Entwurfsmuster und Bibliotheken (wie z.B. [Hibernate](http://hibernate.org/)) los werden kann.
 
 ## Ausblick
 
