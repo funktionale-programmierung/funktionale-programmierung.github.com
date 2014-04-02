@@ -84,7 +84,7 @@ Implementationsdetails zu trennen, und die Software robuster für
 zukünftige Änderungen zu machen.
 
 Hier im Blog ist bereits beschrieben, wie wir neue Anforderungen an die Benutzeroberfläche mithilfe einer [GUI-Monade](/2013/05/29/gui-monade.html) umgesetzt haben,
-und wie wir mithilfe einer eigens entwickelten, [funktionalen API für JasperReports](2013/06/13/funktionale-api-jasper.html) die Reporting-Funktionalität der Software programmieren.
+und wie wir mithilfe einer eigens entwickelten, [funktionalen API für JasperReports](/2013/06/13/funktionale-api-jasper.html) die Reporting-Funktionalität der Software programmieren.
 Es wird in Zukunft weitere Artikel zu dem Thema geben, z.B. werden wir noch einmal konkreter darauf eingehen, wie man bestimmte typische
 Java-Entwurfsmuster und Bibliotheken (wie z.B. [Hibernate](http://hibernate.org/)) los werden kann.
 
