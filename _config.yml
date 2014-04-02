@@ -38,7 +38,7 @@ authors:
     name: David Frese
     image: /author/david-frese.jpg
     href: "http://www.active-group.de/unternehmen/frese.html"
-    about: '<a href="http://www.active-group.de/unternehmen/frese.html">David Frese</a> ist Softwarearchitekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a>, Diplom Informatiker, und verfügt über langjährige Erfahrung in funktionaler aber auch klassischer Programmierung in großen Projekten der Industrie.'
+    about: '<a href="http://www.active-group.de/unternehmen/frese.html">David Frese</a> ist Softwarearchitekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a>, Diplom-Informatiker, und verfügt über langjährige Erfahrung in funktionaler aber auch klassischer Programmierung in großen Projekten der Industrie.'
   andreas-bernauer:
     name: Andreas Bernauer
     image: /author/andreas-bernauer.jpg
@@ -77,3 +77,8 @@ authors:
     image: /author/torsten-grust.png
     href: "http://db.inf.uni-tuebingen.de/team/grust/"
     about: '<a href="http://db.inf.uni-tuebingen.de/team/grust/">Torsten Grust</a> ist Professor für Datenbanksysteme an der Universität Tübingen. Torsten ist am glücklichsten, wenn er in seiner Forschung Ideen aus der Welt der Datenbanksysteme und der funktionalen Programmierung mischen kann.'
+  helmut-dobretzberger:
+    name: Helmut Dobretzberger
+    image: /author/helmut-dobretzberger.png
+    href: "http://www.active-group.de/unternehmen/dobretzberger.html"
+    about: '<a href="http://www.active-group.de/unternehmen/dobretzberger.html">Helmut Dobretzberger</a> ist seit 2003 Softwareentwickler, und bringt Projekte bei der <a href="http://www.active-group.de">Active Group</a> mit Hilfe funktionaler Programmierung voran.'
