@@ -34,7 +34,7 @@ werden können.
 
 Wir orientieren uns an der Sprache
 [HANSEI](http://okmij.org/ftp/kakuritu/index.html), die ursprünglich
-in OCaml eingebettet ist.  Das beschreibt folgendes Szenario:
+in OCaml eingebettet ist.  Das dazugehörige Paper beschreibt folgendes Szenario:
 
 > Ein Rasen kann nass werden, und zwar durch Regen, Sprinklereinsatz
 > oder aus einem anderen Grund.  Die Wahrscheinlichkeitsverteilung ist
