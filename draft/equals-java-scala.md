@@ -7,7 +7,7 @@ tags: ["Scala", "Java", "SBT", "EQUALS"]
 page_title: "Java und Scala in einem Projekt"
 ---
 
-Die Active Group entwickelt die Software [EQUALS](http://www.equals.ch) für das gleichnamige Gescheinschaftsprojekt von [INTEGRAS](http://www.integras.ch)
+Die Active Group entwickelt die Software [EQUALS](http://www.equals.ch) für das gleichnamige Gemeinschaftsprojekt von [INTEGRAS](http://www.integras.ch)
 und der [KJPK Basel](http://www.upkbs.ch/patienten/ambulantes-angebot/kinder-und-jugend/Seiten/default.aspx). 
 EQUALS (eine Kurzform für "Ergebnisorientierte Qualitätssicherung in sozialpädagogischen Einrichtungen") hilft zur Abklärung
 der psychischen Gesundheit von jungen Menschen, sowie zur pädagogischen Dokumentation der (Heim)-Erziehungshilfen.
@@ -29,7 +29,7 @@ Bevor wir uns aber damit beschäftigen, zunächst ein Überblick über die Funkt
 
 EQUALS wurde ab Ende 2010 von einem Subunternehmen der Active Group
 entwickelt, das einen relativ üblichen Design-Ansatz aus der Java-Welt
-wählten. Hibernate und Spring wurden als Basis verwendet, und mit jedem
+wählte. Hibernate und Spring wurden als Basis verwendet, und mit jedem
 Änderungswunsch des Kunden enstanden immer komplexere
 Klassenhierarchien, eine Vermischung von Datenbank- und Datenmodell,
 und immer mehr Duplikation von Code, um nur einige Punkte zu nennen.
@@ -37,9 +37,9 @@ und immer mehr Duplikation von Code, um nur einige Punkte zu nennen.
 Im Zuge der Übernahme der Weiterentwicklung von EQUALS durch
 Entwickler der Active Group, wurde Ende 2012 daher auch entschieden, EQUALS
 mit Scala weiterzuentwickeln, um diesen Problemen mittelfristig Herr
-zu werden. Dabei war klar, dass wir nicht auf einen Schlag eine
-komplette Übersetzung des Java-Codes machen können oder wollen,
-sondern über längere Zeit sowohl Java als auch Scala verwenden müssen.
+zu werden, und um zukünftige Anforderungen mithilfe von funktionaler Programmierung schneller und robuster umsetzen zu können.
+Dabei war klar, dass wir nicht auf einen Schlag eine komplette Übersetzung des Java-Codes machen können oder wollen - das Projekt bestand
+aus über 100.000 Zeilen Java-Code - sondern über längere Zeit sowohl Java als auch Scala verwenden müssen.
 
 ## Buildtool für gemischte Projekte
 
@@ -52,12 +52,15 @@ Es sind tatsächlich nur wenige Schritte notwendig, um die Umstellung durchzufü
    - Analog dazu wird der Scala-Code in `src/main/scala` sowie in `src/test/scala` erwartet.
 3. SBT konfigurieren: SBT verfügt über eine Konfigurationsdatei `build.sbt`, die es erlaubt, die gewünschte Scala-Version, Java-Compile-Flags, 
    Abhängigkeiten der Software zu anderen Bibliotheken und ähnliches anzugeben: [http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html](http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html).
+   Man darf hier aber natürlich nicht verschweigen, dass das SBT auch Schwierigkeiten mit sich bringt und ein bisschen Einarbeitungszeit erfordert. Das gilt aber
+auch für andere Build-Tools des Java Ökosystems.
 4. Um nun aus dem Java/Scala-Programm ein lauffähiges \*.jar zu erzeugen, muss SBT verwendet werden. Mit dem Befehl `sbt assembly` wird die Software compilert und
    das jar-File erzeugt.
-
+   
 Man sieht bereits, dass man vorhandenen Java-Code nicht anfassen muss, um die Möglichkeit zu schaffen, mit Scala weiterzuentwickeln. Bereits vorhandener Code ist also
 nicht wertlos, sondern kann sukzessive an den Stellen, bei denen die Software verbessert oder mit neuen Funktionen versehen wird, durch Scala-Code ausgetauscht 
 oder ergänzt werden. Auch für doch recht umfangreiche Frameworks wie Hibernate stellt es kein Problem dar, dass man dieses über Scala anspricht. 
+
 
 ## Übersetzung
 
@@ -80,9 +83,9 @@ Scala mehr Struktur in den Code zu bekommen, Intentionen von
 Implementationsdetails zu trennen, und die Software robuster für
 zukünftige Änderungen zu machen.
 
-Unter Umständen können wir in einem zukünftigen Artikel noch einmal
+Wir werden in einem zukünftigen Artikel noch einmal
 konkreter darauf eingehen, wie man bestimmte typische
-Java-Entwurfsmuster und Bibliotheken (wie z.B. Hibernate) los werden
+Java-Entwurfsmuster und Bibliotheken (wie z.B. [Hibernate](http://hibernate.org/)) los werden
 kann.
 
 ## Ausblick
