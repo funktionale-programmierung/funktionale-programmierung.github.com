@@ -453,4 +453,4 @@ Makros noch eine weitere Abstraktionsform, die *Kontrollabstraktion*.
 Das ist so cool, dass wir uns das Thema für einen separaten Beitrag aufheben.
 
 
-<!-- More end -->
+<!-- more end -->
