@@ -6,7 +6,7 @@ author: michael-sperber
 tags: ["Racket", "Monaden"]
 ---
 
-Uns erreicht neulich die Frage "Wozu sind
+Uns erreichte neulich die Frage "Wozu sind
 Monaden eigentlich in dynamisch getypten Sprachen" gut?  In Haskell
 zum Beispiel sind ja [Monaden fast allgegenwärtig]({% post_url 2013-04-18-haskell-monaden %}) 
 und haben dort insbesondere die Aufgabe, anhand der Typen deutlich zu
@@ -34,7 +34,7 @@ werden können.
 
 Wir orientieren uns an der Sprache
 [HANSEI](http://okmij.org/ftp/kakuritu/index.html), die ursprünglich
-in OCaml eingebettet ist.  Das dazugehörige Paper beschreibt folgendes Szenario:
+in OCaml eingebettet war.  Das dazugehörige Paper beschreibt folgendes Szenario:
 
 > Ein Rasen kann nass werden, und zwar durch Regen, Sprinklereinsatz
 > oder aus einem anderen Grund.  Die Wahrscheinlichkeitsverteilung ist
@@ -84,7 +84,7 @@ es regnet etc.
 
 Die Prozedur `grass-model` sagt dann, ob es regnet - und zwar nur
 dann, wenn der Rasen nass ist, entsprechend der Aufgabenstellung,
-Pr(rain | grass_is_wet) auszurechnen.  Die Funktionen sehen aus, wie
+Pr(rain | grass_is_wet) auszurechnen.  Die Funktionen sehen aus wie
 ganz normale Scheme-Funktionen.  Idealerweise würden sie eine präzise
 Wahrscheinlichkeitsverteilung liefern.  Das allerdings scheint erstmal
 schwierig: Da der Rückgabewert von `flip` als Argument für `and`
@@ -94,9 +94,9 @@ Pseudozufallszahlengenerator erzeugt werden und bei `(flip 0.9)` mit
 90% Wahrscheinlichkeit `#t` und mit 10% Wahrscheinlichkeit `#f`
 liefern.  Damit eignet sich das Programm scheinbar nur fürs
 *Sampling*: Wir lassen sie einfach 1000mal laufen und zählen nach, wie
-oft `#t` und wie oft `#f` herausbekommen ist.  Das ist hier aber
+oft `#t` und wie oft `#f` herausgekommen ist.  Das ist hier aber
 suboptimal, da es möglich ist, die Wahrscheinlichkeit genau
-auszurechnen, ohne Sampling ist.  Damit das geht, müssen wir zunächst
+auszurechnen, ohne Sampling zu machen.  Damit das geht, müssen wir zunächst
 (aber nur vorläufig) einen Umweg über - na klar - *Monaden* gehen.
 
 Wir bauen also eine Monade für Wahrscheinlichkeitsverteilungen, die
@@ -160,11 +160,11 @@ Mit deren Hilfe können wir `grass-is-wet` umschreiben:
 {% endhighlight %}
 
 Aber wie könnten wir `con` und `dis` definieren?  Wir müssten alle
-Kombinationen möglicher Werte ihrer Argumente durchspielen.  Ähnliches
+Kombinationen möglicher Werte ihrer Argumente durchspielen!  Ähnliches
 für jede Andere Prozedur, die auf Wahrscheinlichkeitsverteilungen
 arbeiten soll.  Das jedesmal von vorn zu programmieren, ist mühsam.
 Es geht aber auch einfacher: Eine Wahrscheinlichkeitsverteilung
-beschreibt eine stochastische Berchnung, und
+beschreibt eine stochastische Berechnung, und
 Wahrscheinlichkeitsverteilungen können miteinander kombiniert werden.
 Erfahrene funktionale Programmierer denken bei diesem Satz *Mal
 schauen, ob das nicht eine Monade ist.*  Dafür bräuchten wir eine
@@ -237,7 +237,7 @@ Das funktioniert allerdings nicht, weil Racket eine
 *Call-by-Value*-Sprache ist: Wenn `defer` aufgerufen wird, wird vorher
 ihr Argument berechnet.  Das wollen wir gerade verzögern.  (Hier sind
 Haskell-Programmierer natürlich fein raus, weil da *alles* verzögert
-wird.)  Deshalb müssen einen *Makro* bemühen, der mit `define-syntax`
+wird.)  Deshalb müssen wir einen *Makro* bemühen, der mit `define-syntax`
 definiert wird.  Die obige Definition besagt einfach, dass ein
 Makro-"Aufruf" der Form `(defer ?x)` durch `(deferred (delay ?x))`
 ersetzt wird.  (Das `?` in `?x` ist reine Konvention.)
@@ -288,9 +288,9 @@ rauskommt, wenn wir es auf die Verteilungen für Regen und Sprinkler loslassen:
 '((0.9 . #<deferred>) (0.09999999999999998 . #<deferred>))
 {% endhighlight %}
 
-Jetzt rächst sich, dass wir das Problem mit dem "Ausmultiplizieren"
+Jetzt rächt sich, dass wir das Problem mit dem "Ausmultiplizieren"
 vor uns hergeschoben haben: Wir müssen noch eine Prozedur schreiben,
-die das erledigt.  Dadurch, dass die `deferred`-Verteilungen belieb
+die das erledigt.  Dadurch, dass die `deferred`-Verteilungen beliebig
 geschachtelt werden, entsteht eine Art Suchbaum mit versteckten
 Zweigen, den die Prozedur `explore` bis zu einer vorgegebenen Tiefe
 `maxdepth` ausfaltet.  Das Argument `maxdepth` kann auch `#f` sein,
