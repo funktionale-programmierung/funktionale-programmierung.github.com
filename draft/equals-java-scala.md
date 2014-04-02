@@ -15,26 +15,35 @@ EQUALS (eine Kurzform für Ergebnisorientierte Qualitätssicherung in sozialpäd
 der psychischen Gesundheit von jungen Menschen, sowie zur pädagogischen Dokumentation der (Heim)-Erziehungshilfen.
 
 In diesem Projekt haben wir 2012 begonnen, die Java-Codebasis Schritt für Schritt nach Scala zu migrieren.
-Dieser Blogpost zeigt dazu die prinzipellen Schritte die notwendig sind, um Scala-Code in einer Java-Software zu verwenden
+Dieser Blogpost zeigt dazu die prinzipellen Schritte die notwendig sind, um Scala und Java zusammen in einer Software zu verwenden.
 <!-- more start --> 
 
-Bevor wir uns aber damit beschäftigen, aber ein Überblick über die Funktionen der Software:
+Bevor wir uns aber damit beschäftigen, zunächst ein Überblick über die Funktionen der Software:
 
-- Fremdsprachigkeit (deutsch, schweizerdeutsch, italienisch, französisch)
+- Mehrsprachigkeit (deutsch, schweizerdeutsch, italienisch, französisch)
 - Userverwaltung
-- viele unterschiedliche Fragenbögen, die von Jugendlichen, Betreuern, Lehrern oder Eltern ausgefüllt werden
-- Datenauswerung inklusive Diagramm-Erstellung, PDF und SPSS-Export, Vergleich von Antworten uvm.
-- Erfassung der Anamnese von Jugendlichen
+- viele unterschiedliche Fragebögen, die von Jugendlichen, Betreuern, Lehrern oder Eltern ausgefüllt werden
+- Datenauswerung inklusive Diagramm-Erstellung, PDF und CSV-Export, Vergleich von Antworten uvm.
+- Erfassung einer umfassenden Anamnese der Jugendlichen
 - Ex- und Import der Programmdaten zu anderen EQUALS-Installationen
 - Versionen für Windows und MacOS, inkl. Server für die Datebank oder lokaler Installation
 
-EQUALS wurde Ende 2010 entwickelt, damals noch von ukrainischen Entwicklern, die das Programm in Java entwickelten und dabei einen
- idiomatischen Java-Stil verwendeten: Hibernate, Spring und häufiges Überschreiben von Methoden sind nur einige Beispiele hierfür.
+EQUALS wurde ab Ende 2010 von einem Subunternehmen der Active Group
+entwickelt, die einen relativ üblichen Design-Ansatz aus der Java-Welt
+wählten. Hibernate und Spring wurden als Basis verwendet, und mit jedem
+Änderungswunsch des Kunden enstanden immer komplexere
+Klassenhierarchien, eine Vermischung von Datenbank- und Datenmodell,
+und immer mehr Duplikation von Code, um nur einige Punkte zu nennen.
  
-Die Übernahme der Weiterentwicklung von EQUALS durch Entwickler der ActiveGroup führte dazu, dass Ende 2012 entschieden wurde, 
-EQUALS mit von Scala weiterzuentwickeln. 
+Im Zuge der Übernahme der Weiterentwicklung von EQUALS durch
+Entwickler der ActiveGroup, wurde Ende 2012 daher auch entschieden, EQUALS
+mit Scala weiterzuentwickeln, um diesen Problemen mittelfristig Herr
+zu werden. Dabei war klar, dass wir nicht auf einen Schlag eine
+komplette Übersetzung des Java-Codes machen können oder wollen,
+sondern über längere Zeit sowohl Java als auch Scala verwenden müssen.
 
-## Umstellung von Java auf Scala 
+## Buildtool für gemischte Projekte
+
 Die gemeinsame Verwendung von Java und Scala in einem Projekt wird durch [SBT (Scala Build Tool)](http://www.scala-sbt.org) ermöglicht.
 Es sind tatsächlich nur wenige Schritte notwendig, um die Umstellung durchzuführen:
 
@@ -51,6 +60,33 @@ Man sieht bereits, dass man vorhandenen Java-Code nicht anfassen muss, um die M�
 nicht wertlos, sondern kann sukzessive an den Stellen, bei denen die Software verbessert oder mit neuen Funktionen versehen wird, durch Scala-Code ausgetauscht 
 oder ergänzt werden. Auch für doch recht umfangreiche Frameworks wie Hibernate stellt es kein Problem dar, dass man dieses über Scala anspricht. 
 
-Bei uns besteht EQUALS mitterweile etwa nur noch zu 50% aus Java, der Rest wurde durch Scala sukzessive abgelöst. Das bedeutet, dass an einigen Stellen sehr häufig zwischen
-Java und Scala-Code interagiert wird. Dies läuft recht problemlos, welche Dinge aber bei der Entwicklung einer Software, die Java und Scala verwendet 
-noch vernünftigerweise zu beachten sind, werden wir in einem späteren Blogposting behandeln.
+## Übersetzung
+
+Bei uns besteht EQUALS mitterweile etwa nur noch zu ca. 70% aus Java,
+der Rest wurde durch Scala sukzessive abgelöst, bzw. neue Features
+gleich in Scala entwickelt. Das bedeutet, dass an einigen Stellen sehr
+häufig zwischen Java und Scala-Code interagiert wird. Dies läuft
+ziemlich problemlos.
+
+Eine Übersetzung des Java-Codes nach Scala wäre zwar auch relativ
+direkt und mit automatischen Tools möglich, aber wir wollen natürlich
+den stark imperativen, objekt-orientierten Code in funktionalen
+Scala-Code übertragen. Hier fangen die eigentlichen Kopfschmerzen an,
+und machen die Umstellung von größeren Java-Codeblöcken, die von
+Methodenüberschreibungen und Mutation von Objekten und Collections
+oder gar statischen Variablen durchsetzt sind, enorm aufwändig. Hier
+hilft einem oft auch das statische Typsystem nicht, und da auch die
+Testabdeckung nahe bei 0 ist, bleibt einem in der Regel nur manuelles
+"Ausprobieren".
+
+Dies ist in der Regel ein "Kleinkrieg" in den Innereien des Codes,
+aber falls sich mal etwas Allgemeingültiges ergibt, werden wir in einem
+zukünftigen Artikel nochmal darauf eingehen.
+
+# Ausblick
+
+TODO
+
+# Zusammenfassung
+
+TODO
