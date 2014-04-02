@@ -1,4 +1,4 @@
---
+---
 layout: post
 description: "Funktional Programmieren mit Wahrscheinlichkeiten"
 title: "Die Wahrscheinlichkeitsverteilungsmonade"
