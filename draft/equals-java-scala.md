@@ -70,22 +70,25 @@ ziemlich problemlos.
 Eine Übersetzung des Java-Codes nach Scala wäre zwar auch relativ
 direkt und mit automatischen Tools möglich, aber wir wollen natürlich
 den stark imperativen, objekt-orientierten Code in funktionalen
-Scala-Code übertragen. Hier fangen die eigentlichen Kopfschmerzen an,
-und machen die Umstellung von größeren Java-Codeblöcken, die von
-Methodenüberschreibungen und Mutation von Objekten und Collections
-oder gar statischen Variablen durchsetzt sind, enorm aufwändig. Hier
-hilft einem oft auch das statische Typsystem nicht, und da auch die
-Testabdeckung nahe bei 0 ist, bleibt einem in der Regel nur manuelles
-"Ausprobieren".
+Scala-Code übertragen. Dort wo dabei Methodenüberschreibungen,
+Mutation von Objekten und Collections oder gar statischen Variablen
+und komplexe Klassenhierarchien vorhanden sind (und das ist leider
+fast immer der Fall), wird dies schnell enorm aufwändig. Umfangreiche
+und häufig manuelle Vorher-/Nachher-Tests sind hier erforderlich. Nach
+und nach haben wir es aber bisher immer geschafft beim Übersetzen nach
+Scala mehr Struktur in den Code zu bekommen, Intentionen von
+Implementationsdetails zu trennen, und die Software robuster für
+zukünftige Änderungen zu machen.
 
-Dies ist in der Regel ein "Kleinkrieg" in den Innereien des Codes,
-aber falls sich mal etwas Allgemeingültiges ergibt, werden wir in einem
-zukünftigen Artikel nochmal darauf eingehen.
+Unter Umständen können wir in einem zukünftigen Artikel noch einmal
+konkreter darauf eingehen, wie man bestimmte typische
+Java-Entwurfsmuster und Bibliotheken (wie z.B. Hybernate) los werden
+kann.
 
 ## Ausblick
 
 Nebend der fortlaufenden Umstellung von Java auf Scala ist auch eine Webversion von EQUALS in Planung,
-bei der wir dann Clientseitig höchstwahrscheilnich auf ClojureScript und React setzen; eine kleine
+bei der wir dann Clientseitig höchstwahrscheinlich auf ClojureScript und React setzen; eine kleine
 Einführung hierzu gibt es bereits hier im Blog: [Erste Schritte mit ClojureScript](/2014/02/14/clojurescript-react.html)
 
 ## Zusammenfassung
