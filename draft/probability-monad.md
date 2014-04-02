@@ -439,7 +439,7 @@ durch Makros einsparen:
 Damit sieht `grass-model` so aus:
 
 {% highlight scheme %}
-(define (grass-model-1)
+(define (grass-model)
   (let- rain (flip 0.3) 
     (let- sprinkler (flip 0.5) 
       (if- (grass-is-wet? rain sprinkler)
