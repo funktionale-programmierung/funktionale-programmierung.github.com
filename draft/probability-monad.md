@@ -69,7 +69,7 @@ Hier ist ein Vorschlag:
         (sprinkler (flip 0.5)))
     (if (grass-is-wet? rain sprinkler)
         rain
-        fail)))
+        (fail))))
 {% endhighlight %}
 
 (Eine Einführung in Racket befindet sich in einem [früheren
@@ -138,7 +138,7 @@ Entsprechend zu `flip` definieren wir noch `fail` als leere
 Verteilung:
 
 {% highlight scheme %}
-(define fail (dist '()))
+(define (fail) (dist '()))
 {% endhighlight %}
 
 Natürlich funktionieren die eingebauten Operatoren `and` und `or`
@@ -384,7 +384,7 @@ schreiben, dass es funktioniert:
         (lambda (sprinkler)
           (if_ (grass-is-wet? rain sprinkler)
                (lambda () rain)
-               (lambda () fail)))))))
+               (lambda () (fail))))))))
 {% endhighlight %}
 
 Diese Prozedur können wir jetzt aufrufen:
@@ -444,7 +444,7 @@ Damit sieht `grass-model` so aus:
     (let- sprinkler (flip 0.5) 
       (if- (grass-is-wet? rain sprinkler)
            rain
-           fail))))
+           (fail)))))
 {% endhighlight %}
 
 Das ist schon nah dran, wo wir hinwollen, aber eben noch nicht ganz
