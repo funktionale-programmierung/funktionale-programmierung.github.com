@@ -7,9 +7,9 @@ tags: ["Scala", "Java", "SBT", "EQUALS"]
 page_title: "Java und Scala in einem Projekt"
 ---
 
-Die ActiveGroup entwickelt die Software [EQUALS](http://www.equals.ch) für das gleichnamige Gescheinschaftsprojekt von [INTEGRAS](http://www.integras.ch)
+Die Active Group entwickelt die Software [EQUALS](http://www.equals.ch) für das gleichnamige Gescheinschaftsprojekt von [INTEGRAS](http://www.integras.ch)
 und der [KJPK Basel](http://www.upkbs.ch/patienten/ambulantes-angebot/kinder-und-jugend/Seiten/default.aspx). 
-EQUALS (eine Kurzform für Ergebnisorientierte Qualitätssicherung in sozialpädagogischen Einrichtungen) hilft zur Abklärung
+EQUALS (eine Kurzform für "Ergebnisorientierte Qualitätssicherung in sozialpädagogischen Einrichtungen") hilft zur Abklärung
 der psychischen Gesundheit von jungen Menschen, sowie zur pädagogischen Dokumentation der (Heim)-Erziehungshilfen.
 
 In diesem Projekt haben wir 2012 begonnen, die Java-Codebasis Schritt für Schritt nach Scala zu migrieren.
@@ -22,20 +22,20 @@ Bevor wir uns aber damit beschäftigen, zunächst ein Überblick über die Funkt
 - Mehrsprachigkeit (deutsch, schweizerdeutsch, italienisch, französisch)
 - Userverwaltung
 - viele unterschiedliche Fragebögen, die von Jugendlichen, Betreuern, Lehrern oder Eltern ausgefüllt werden
-- Datenauswerung inklusive Diagramm-Erstellung, PDF und CSV-Export, Vergleich von Antworten uvm.
+- Datenauswertung inklusive Diagramm-Erstellung, PDF und CSV-Export, Vergleich von Antworten uvm.
 - Erfassung einer umfassenden Anamnese der Jugendlichen
 - Ex- und Import der Programmdaten zu anderen EQUALS-Installationen
 - Versionen für Windows und MacOS, inkl. Server für die Datenbank oder lokaler Installation
 
 EQUALS wurde ab Ende 2010 von einem Subunternehmen der Active Group
-entwickelt, die einen relativ üblichen Design-Ansatz aus der Java-Welt
+entwickelt, das einen relativ üblichen Design-Ansatz aus der Java-Welt
 wählten. Hibernate und Spring wurden als Basis verwendet, und mit jedem
 Änderungswunsch des Kunden enstanden immer komplexere
 Klassenhierarchien, eine Vermischung von Datenbank- und Datenmodell,
 und immer mehr Duplikation von Code, um nur einige Punkte zu nennen.
  
 Im Zuge der Übernahme der Weiterentwicklung von EQUALS durch
-Entwickler der ActiveGroup, wurde Ende 2012 daher auch entschieden, EQUALS
+Entwickler der Active Group, wurde Ende 2012 daher auch entschieden, EQUALS
 mit Scala weiterzuentwickeln, um diesen Problemen mittelfristig Herr
 zu werden. Dabei war klar, dass wir nicht auf einen Schlag eine
 komplette Übersetzung des Java-Codes machen können oder wollen,
@@ -88,7 +88,7 @@ kann.
 ## Ausblick
 
 Neben der fortlaufenden Umstellung von Java auf Scala ist heuer auch eine Webversion von EQUALS in Planung,
-bei der wir dann Clientseitig höchstwahrscheinlich auf ClojureScript und React setzen; eine kleine
+bei der wir dann clientseitig wahrscheinlich auf ClojureScript und React setzen; eine kleine
 Einführung hierzu gibt es bereits hier im Blog: [Erste Schritte mit ClojureScript](/2014/02/14/clojurescript-react.html)
 
 ## Zusammenfassung
