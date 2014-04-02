@@ -25,7 +25,7 @@ Bevor wir uns aber damit beschäftigen, zunächst ein Überblick über die Funkt
 - Datenauswerung inklusive Diagramm-Erstellung, PDF und CSV-Export, Vergleich von Antworten uvm.
 - Erfassung einer umfassenden Anamnese der Jugendlichen
 - Ex- und Import der Programmdaten zu anderen EQUALS-Installationen
-- Versionen für Windows und MacOS, inkl. Server für die Datebank oder lokaler Installation
+- Versionen für Windows und MacOS, inkl. Server für die Datenbank oder lokaler Installation
 
 EQUALS wurde ab Ende 2010 von einem Subunternehmen der Active Group
 entwickelt, die einen relativ üblichen Design-Ansatz aus der Java-Welt
@@ -67,9 +67,9 @@ gleich in Scala entwickelt. Das bedeutet, dass an einigen Stellen sehr
 häufig zwischen Java und Scala-Code interagiert wird. Dies läuft
 ziemlich problemlos.
 
-Eine Übersetzung des Java-Codes nach Scala wäre zwar auch relativ
+Eine Übersetzung des vorhandenen Java-Codes nach Scala wäre zwar auch relativ
 direkt und mit automatischen Tools möglich, aber wir wollen natürlich
-den stark imperativen, objekt-orientierten Code in funktionalen
+den stark imperativen, objekt-orientierten Code in _funktionalen_
 Scala-Code übertragen. Dort wo dabei Methodenüberschreibungen,
 Mutation von Objekten und Collections oder gar statischen Variablen
 und komplexe Klassenhierarchien vorhanden sind (und das ist leider
@@ -82,12 +82,12 @@ zukünftige Änderungen zu machen.
 
 Unter Umständen können wir in einem zukünftigen Artikel noch einmal
 konkreter darauf eingehen, wie man bestimmte typische
-Java-Entwurfsmuster und Bibliotheken (wie z.B. Hybernate) los werden
+Java-Entwurfsmuster und Bibliotheken (wie z.B. Hibernate) los werden
 kann.
 
 ## Ausblick
 
-Nebend der fortlaufenden Umstellung von Java auf Scala ist auch eine Webversion von EQUALS in Planung,
+Neben der fortlaufenden Umstellung von Java auf Scala ist heuer auch eine Webversion von EQUALS in Planung,
 bei der wir dann Clientseitig höchstwahrscheinlich auf ClojureScript und React setzen; eine kleine
 Einführung hierzu gibt es bereits hier im Blog: [Erste Schritte mit ClojureScript](/2014/02/14/clojurescript-react.html)
 
