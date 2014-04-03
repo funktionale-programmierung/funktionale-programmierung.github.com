@@ -20,7 +20,7 @@ Dieser Blogpost zeigt dazu die prinzipellen Schritte, die notwendig sind, um Sca
 Bevor wir uns aber damit beschäftigen, zunächst ein Überblick über die Funktionen der Software:
 
 - Mehrsprachigkeit (deutsch, schweizerdeutsch, italienisch, französisch)
-- Userverwaltung
+- Probandenverwaltung und Mandantenfähigkeit
 - viele unterschiedliche Fragebögen, die von Jugendlichen, Betreuern, Lehrern oder Eltern ausgefüllt werden
 - Datenauswertung inklusive Diagramm-Erstellung, PDF und CSV-Export, Vergleich von Antworten uvm.
 - Erfassung einer umfassenden Anamnese der Jugendlichen
@@ -51,12 +51,10 @@ Es sind tatsächlich nur wenige Schritte notwendig, um die Umstellung durchzufü
 2. Die eigene Software an die geforderte Ordner-Struktur von SBT anpassen: 
    - SBT setzt standardmäßig voraus, dass der Java-Programm-Code im Ordner `src/main/java`, sowie der Code der Unit-Tests in `src/test/java` liegt.
    - Analog dazu wird der Scala-Code in `src/main/scala` sowie in `src/test/scala` erwartet.
-3. SBT konfigurieren: SBT verfügt über eine Konfigurationsdatei `build.sbt`, die es erlaubt, die gewünschte Scala-Version, Java-Compile-Flags, 
-   Abhängigkeiten der Software zu anderen Bibliotheken und ähnliches
-   anzugeben:
-   [http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html](http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html). Weiters
-   ist es auch kein Problem, Maven-Repositories, die in der Java-Welt
-   gern genutzt werden, in SBT zu verwenden.
+3. SBT konfigurieren: SBT verfügt über eine Konfigurationsdatei `build.sbt`, die es erlaubt, die gewünschte [Scala-Version](http://www.scala-sbt.org/release/docs/Howto/scala.html), [Java-Compile-Flags]((http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html), 
+   [Abhängigkeiten der Software zu anderen Bibliotheken](http://www.scala-sbt.org/release/docs/Getting-Started/Library-Dependencies) und ähnliches
+   anzugeben. Weiters ist es auch kein Problem, Maven-Repositories, die in der Java-Welt
+   gern genutzt werden, auch in SBT zu verwenden.
    Man darf hier aber natürlich nicht verschweigen, dass das SBT auch Schwierigkeiten mit sich bringt und ein bisschen Einarbeitungszeit erfordert. Das gilt aber
 auch für andere Build-Tools des Java Ökosystems.
 4. Um nun aus dem Java/Scala-Programm ein lauffähiges \*.jar zu erzeugen, muss SBT verwendet werden. Mit dem Befehl `sbt assembly` wird die Software compilert und
@@ -67,7 +65,8 @@ nicht wertlos, sondern kann sukzessive an den Stellen, bei denen die Software ve
 oder ergänzt werden. Auch für doch recht umfangreiche Frameworks wie
 Hibernate stellt es kein Problem dar, dass man dieses über Scala
 anspricht. Auch die bevorzugte IDE kann man normalerweise weiterverwenden,
-so bieten z.B. [IntelliJ](http://www.jetbrains.com/idea/) eine standardmäßige Integration für SBT, für
+so bieten z.B. [IntelliJ](http://www.jetbrains.com/idea/)
+standardmäßige eine Integration für SBT, für
 [Eclipse](http://www.eclipse.org) oder [NetBeans](http://netbeans.org) kann diese über Plugins nachinstalliert werden.
 
 ## Übersetzung
