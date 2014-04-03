@@ -35,9 +35,10 @@ Klassenhierarchien, eine Vermischung von Datenbank- und Datenmodell,
 und immer mehr Duplikation von Code, um nur einige Punkte zu nennen.
  
 Im Zuge der Übernahme der Weiterentwicklung von EQUALS durch
-Entwickler der Active Group, wurde Ende 2012 daher auch entschieden, EQUALS
-mit Scala weiterzuentwickeln, um diesen Problemen mittelfristig Herr
-zu werden, und um zukünftige Anforderungen mithilfe von funktionaler Programmierung schneller und robuster umsetzen zu können.
+Entwickler der Active Group, wurde Ende 2012 daher auch entschieden,
+bei der Weiterentwicklung der Software auf Scala zu setzen. Dadurch
+können wir mithilfe funktionaler Programmierung, die ja von Scala umfangreich
+unterstützt wird, der Probleme herr werden, und zukünftige Anforderungen schneller und robuster umsetzen.
 Dabei war klar, dass wir nicht auf einen Schlag eine komplette Übersetzung des Java-Codes machen können oder wollen - das Projekt besteht
 aus über 100.000 Zeilen Code - sondern über längere Zeit sowohl Java als auch Scala verwenden müssen.
 
