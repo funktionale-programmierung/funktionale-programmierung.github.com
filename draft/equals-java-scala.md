@@ -87,8 +87,7 @@ und komplexe Klassenhierarchien vorhanden sind (und das ist leider
 fast immer der Fall), wird dies schnell enorm aufwändig. Umfangreiche
 und häufig manuelle Vorher-/Nachher-Tests sind hier erforderlich. Nach
 und nach haben wir es aber bisher immer geschafft beim Übersetzen nach
-Scala mehr Struktur in den Code zu bekommen, Intentionen von
-Implementationsdetails zu trennen, und die Software robuster für
+Scala mehr Struktur in den Code zu bekommen und die Software robuster für
 zukünftige Änderungen zu machen.
 
 Hier im Blog ist bereits beschrieben, wie wir neue Anforderungen an die Benutzeroberfläche mithilfe einer [GUI-Monade](/2013/05/29/gui-monade.html) umgesetzt haben,
