@@ -13,7 +13,7 @@ EQUALS (eine Kurzform für "Ergebnisorientierte Qualitätssicherung in sozialpä
 der psychischen Gesundheit von jungen Menschen, sowie zur pädagogischen Dokumentation der (Heim)-Erziehungshilfen.
 
 In diesem Projekt haben wir 2012 begonnen, die Java-Codebasis Schritt für Schritt nach Scala zu migrieren.
-Dieser Blogpost zeigt dazu die prinzipellen Schritte die notwendig sind, um Scala und Java zusammen in einer Software zu verwenden.
+Dieser Blogpost zeigt dazu die prinzipellen Schritte, die notwendig sind, um Scala und Java zusammen in einer Software zu verwenden.
 
 <!-- more start --> 
 
@@ -51,7 +51,11 @@ Es sind tatsächlich nur wenige Schritte notwendig, um die Umstellung durchzufü
    - SBT setzt standardmäßig voraus, dass der Java-Programm-Code im Ordner `src/main/java`, sowie der Code der Unit-Tests in `src/test/java` liegt.
    - Analog dazu wird der Scala-Code in `src/main/scala` sowie in `src/test/scala` erwartet.
 3. SBT konfigurieren: SBT verfügt über eine Konfigurationsdatei `build.sbt`, die es erlaubt, die gewünschte Scala-Version, Java-Compile-Flags, 
-   Abhängigkeiten der Software zu anderen Bibliotheken und ähnliches anzugeben: [http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html](http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html).
+   Abhängigkeiten der Software zu anderen Bibliotheken und ähnliches
+   anzugeben:
+   [http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html](http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html). Weiters
+   ist es auch kein Problem, Maven-Repositories, die in der Java-Welt
+   gern genutzt werden, in SBT zu verwenden.
    Man darf hier aber natürlich nicht verschweigen, dass das SBT auch Schwierigkeiten mit sich bringt und ein bisschen Einarbeitungszeit erfordert. Das gilt aber
 auch für andere Build-Tools des Java Ökosystems.
 4. Um nun aus dem Java/Scala-Programm ein lauffähiges \*.jar zu erzeugen, muss SBT verwendet werden. Mit dem Befehl `sbt assembly` wird die Software compilert und
@@ -59,16 +63,20 @@ auch für andere Build-Tools des Java Ökosystems.
    
 Man sieht bereits, dass man vorhandenen Java-Code nicht anfassen muss, um die Möglichkeit zu schaffen, mit Scala weiterzuentwickeln. Bereits vorhandener Code ist also
 nicht wertlos, sondern kann sukzessive an den Stellen, bei denen die Software verbessert oder mit neuen Funktionen versehen wird, durch Scala-Code ausgetauscht 
-oder ergänzt werden. Auch für doch recht umfangreiche Frameworks wie Hibernate stellt es kein Problem dar, dass man dieses über Scala anspricht. 
-
+oder ergänzt werden. Auch für doch recht umfangreiche Frameworks wie
+Hibernate stellt es kein Problem dar, dass man dieses über Scala
+anspricht. Auch die bevorzugte IDE kann man normalerweise weiterverwenden,
+so bieten z.B. [IntelliJ](http://www.jetbrains.com/idea/) eine standardmäßige Integration für SBT, für
+[Eclipse](http://www.eclipse.org) oder [NetBeans](http://netbeans.org) kann diese über Plugins nachinstalliert werden.
 
 ## Übersetzung
 
 Bei uns besteht EQUALS mitterweile etwa nur noch zu ca. 70% aus Java,
 der Rest wurde durch Scala sukzessive abgelöst, bzw. neue Features
 gleich in Scala entwickelt. Das bedeutet, dass an einigen Stellen sehr
-häufig zwischen Java und Scala-Code interagiert wird. Dies läuft
-ziemlich problemlos.
+häufig zwischen Java und Scala-Code interagiert wird. Dies ist aber
+unproblematisch, da man aus Scala direkt Java-Code aufrufen kann
+(und umgekehrt).
 
 Eine Übersetzung des vorhandenen Java-Codes nach Scala wäre zwar auch relativ
 direkt und mit automatischen Tools möglich, aber wir wollen natürlich
