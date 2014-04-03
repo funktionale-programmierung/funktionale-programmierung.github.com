@@ -12,7 +12,7 @@ zum Beispiel sind ja [Monaden fast allgegenwärtig]({% post_url 2013-04-18-haske
 und haben dort insbesondere die Aufgabe, anhand der Typen deutlich zu
 machen, welche Effekte ein Entwickler bei der Auswertung eines
 Ausdrucks befürchten muss.  Da Typen in dynamisch getypten Sprachen
-fehlen, ist die Frage legitim, da viele Monaden nur jeweils einen
+im Programmtext nicht direkt sichtbar sind, ist die Frage legitim, da viele Monaden nur jeweils einen
 Wert als Resultat einer Berechnung mit Seiteneffekten produzieren.  Es
 gibt allerdings auch Monaden, die mehr leisten wie zum Beispiel die
 Monade der Wahrscheinlichkeitsverteilungen.  Um die geht es in diesem
@@ -99,8 +99,8 @@ suboptimal, da es möglich ist, die Wahrscheinlichkeit genau
 auszurechnen, ohne Sampling zu machen.  Damit das geht, müssen wir zunächst
 (aber nur vorläufig) einen Umweg über - na klar - *Monaden* gehen.
 
-Wir bauen also eine Monade für Wahrscheinlichkeitsverteilungen, die
-also zum Beispiel explizit sagen kann, "dieser Wert ist mit 90%
+Wir bauen eine Monade für Wahrscheinlichkeitsverteilungen, die
+zum Beispiel explizit sagen kann, "dieser Wert ist mit 90%
 Wahrscheinlichkeit `#t` und mit 10% `#f`", oder "diesert Wert ist mit
 40% Wahrscheinlichkeit 1, mit 30% Wahrscheinlichkeit 2, mit 20% 3 und
 mit 10% 4" usw.  Zu diesem Zweck benutzen wir eine Liste aus Paaren.
@@ -113,7 +113,9 @@ also folgendermaßen:
 ((0.4 . 1) (0.3 . 2) (0.2 . 3) (0.1 . 4))
 {% endhighlight %}
 
-Jetzt definieren wir die Prozedur `flip`, die wir oben benutzt haben:
+Jetzt definieren wir die Prozedur `flip`, die wir oben benutzt haben,
+und zwar so, dass sie eine Wahrscheinlichkeitsverteilung liefert,
+anstatt einen Würfel zu werfen:
 
 {% highlight scheme %}
 (define (flip p)
@@ -150,7 +152,7 @@ zunächst eigene Prozeduren definieren:
 (define (dis e1 e2) ...)
 {% endhighlight %}
 
-Mit deren Hilfe können wir `grass-is-wet` umschreiben:
+Mit deren Hilfe können wir `grass-is-wet?` umschreiben:
 
 {% highlight scheme %}
 (define (grass-is-wet? rain sprinkler)
