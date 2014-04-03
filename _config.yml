@@ -1,3 +1,4 @@
+markdown: kramdown
 encoding: UTF-8
 permalink: date
 paginate: 3
