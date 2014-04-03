@@ -14,7 +14,7 @@ machen, welche Effekte ein Entwickler bei der Auswertung eines
 Ausdrucks befürchten muss.  Da Typen in dynamisch getypten Sprachen
 im Programmtext nicht direkt sichtbar sind, ist die Frage legitim, da viele Monaden nur jeweils einen
 Wert als Resultat einer Berechnung mit Seiteneffekten produzieren.  Es
-gibt allerdings auch Monaden, die mehr leisten wie zum Beispiel die
+gibt allerdings auch Monaden, die mehr leisten - wie zum Beispiel die
 Monade der Wahrscheinlichkeitsverteilungen.  Um die geht es in diesem
 Beitrag - und zwar in einer dynamisch getypten Sprache, nämlich in
 [Racket](http://racket-lang.org/).  Racket bietet für diese Anwendung
@@ -46,7 +46,7 @@ in OCaml eingebettet war.  Das dazugehörige Paper beschreibt folgendes Szenario
 
 Das bedeutet soviel wie: Zu einem beliebigen Zeitpunkt regnet es mit
 30% Wahrscheinlichkeit und der Sprinkler ist mit 50%
-wahrscheinlichkeit eingeschaltet.   Außerdem:
+Wahrscheinlichkeit eingeschaltet.   Außerdem:
 
 > Wenn es regnet, ist der Rasen mit 90% Wahrscheinlichkeit nass.  Wenn
 > der Sprinkler an ist, ist der Rasen mit 80% Wahrscheinlichkeit
@@ -84,8 +84,8 @@ es regnet etc.
 
 Die Prozedur `grass-model` sagt dann, ob es regnet - und zwar nur
 dann, wenn der Rasen nass ist, entsprechend der Aufgabenstellung,
-Pr(rain | grass_is_wet) auszurechnen.  Die Funktionen sehen aus wie
-ganz normale Scheme-Funktionen.  Idealerweise würden sie eine präzise
+Pr(rain | grass_is_wet) auszurechnen.  Die Prozeduren sehen aus wie
+ganz normale Racket-Prozeduren.  Idealerweise würden sie eine präzise
 Wahrscheinlichkeitsverteilung liefern.  Das allerdings scheint erstmal
 schwierig: Da der Rückgabewert von `flip` als Argument für `and`
 verwendet wird, müsste `flip` einen einzelnen booleschen Wert liefern.
@@ -93,7 +93,7 @@ Dieser boolesche Wert könnte zum Beispiel durch einen
 Pseudozufallszahlengenerator erzeugt werden und bei `(flip 0.9)` mit
 90% Wahrscheinlichkeit `#t` und mit 10% Wahrscheinlichkeit `#f`
 liefern.  Damit eignet sich das Programm scheinbar nur fürs
-*Sampling*: Wir lassen sie einfach 1000mal laufen und zählen nach, wie
+*Sampling*: Wir lassen sie einfach 1000-mal laufen und zählen nach, wie
 oft `#t` und wie oft `#f` herausgekommen ist.  Das ist hier aber
 suboptimal, da es möglich ist, die Wahrscheinlichkeit genau
 auszurechnen, ohne Sampling zu machen.  Damit das geht, müssen wir zunächst
@@ -125,15 +125,15 @@ anstatt einen Würfel zu werfen:
 
 Diese macht eine Liste, in der mögliche Werte ihren
 Wahrscheinlichkeiten zugeordnet sind, und ruft dann eine weitere
-Funktion `dist` auf, die daraus ein
-Wahrscheinlichkeitsverteilung-Objekt macht.  Diese Funktion hat eine
+Prozedur `dist` auf, die daraus ein
+Wahrscheinlichkeitsverteilung-Objekt macht.  Diese Prozedur hat eine
 ziemlich triviale Definition, da diese Liste bereits das richtige Format:
 
 {% highlight scheme %}
 (define (dist ch) ch)
 {% endhighlight %}
 
-(Warum dann überhaupt die Funktion einführen, wenn sie trivial ist?
+(Warum dann überhaupt die Prozedur einführen, wenn sie trivial ist?
 Weil wir sie später ändern wollen!)
 
 Entsprechend zu `flip` definieren wir noch `fail` als leere
@@ -163,7 +163,7 @@ Mit deren Hilfe können wir `grass-is-wet?` umschreiben:
 
 Aber wie könnten wir `con` und `dis` definieren?  Wir müssten alle
 Kombinationen möglicher Werte ihrer Argumente durchspielen!  Ähnliches
-für jede Andere Prozedur, die auf Wahrscheinlichkeitsverteilungen
+für jede andere Prozedur, die auf Wahrscheinlichkeitsverteilungen
 arbeiten soll.  Das jedesmal von vorn zu programmieren, ist mühsam.
 Es geht aber auch einfacher: Eine Wahrscheinlichkeitsverteilung
 beschreibt eine stochastische Berechnung, und
@@ -181,10 +181,10 @@ herauskommt:
 {% endhighlight %}
 
 Bei "bind" ist es etwas schwieriger: Es akzeptiert eine
-Wahrscheinlichkeitsverteilung und eine Funktion, die einen Wert aus
+Wahrscheinlichkeitsverteilung und eine Prozedur, die einen Wert aus
 der Wahrscheinlichkeitsverteilung akzeptiert.  Da eine
 Wahrscheinlichkeitsverteilung mehrere Werte enthalten kann, müssen wir
-auch die Funktion auf jeden einzelnen möglichen Wert loslassen:
+auch die Prozedur auf jeden einzelnen möglichen Wert loslassen:
 
 {% highlight scheme %}
 (define (pv-bind m f)
@@ -226,7 +226,7 @@ packen:
   (force (deferred-promise d)))
 {% endhighlight %}
 
-Die Funktion `undefer` packt die Promise aus dem `deferred`-Struct
+Die Prozedur `undefer` packt die Promise aus dem `deferred`-Struct
 aus, und fordert dann ihren Wert mit `force` an.  Fürs Einpacken wäre
 eine naive Lösung folgende Definition:
 
@@ -364,7 +364,7 @@ in `grass-model` die Variable `rain` zweimal auftaucht, und das
 eingebaute `let` einfach die Verteilung kopieren würde.  Tatsächlich
 müssen sich beide Vorkommen von `rain` aber auf den gleichen Punkt der
 Verteilung beziehen.  Hinzu kommt, dass der `let`-Ersatz eine Variable
-binden muss.  Wir benutzen die gängige Technik, eine Funktion zu
+binden muss.  Wir benutzen die gängige Technik, eine Prozedur zu
 übergeben, welche die Variable bindet und in der der Rumpf des `let`
 steht:
 
