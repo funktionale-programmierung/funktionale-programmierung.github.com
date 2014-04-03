@@ -51,7 +51,7 @@ Es sind tatsächlich nur wenige Schritte notwendig, um die Umstellung durchzufü
 2. Die eigene Software an die geforderte Ordner-Struktur von SBT anpassen: 
    - SBT setzt standardmäßig voraus, dass der Java-Programm-Code im Ordner `src/main/java`, sowie der Code der Unit-Tests in `src/test/java` liegt.
    - Analog dazu wird der Scala-Code in `src/main/scala` sowie in `src/test/scala` erwartet.
-3. SBT konfigurieren: SBT verfügt über eine Konfigurationsdatei `build.sbt`, die es erlaubt, die gewünschte [Scala-Version](http://www.scala-sbt.org/release/docs/Howto/scala.html), [Java-Compile-Flags]((http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html), 
+3. SBT konfigurieren: SBT verfügt über eine Konfigurationsdatei `build.sbt`, die es erlaubt, die gewünschte [Scala-Version](http://www.scala-sbt.org/release/docs/Howto/scala.html), [Java-Compile-Flags](http://www.scala-sbt.org/release/docs/Detailed-Topics/Java-Sources.html), 
    [Abhängigkeiten der Software zu anderen Bibliotheken](http://www.scala-sbt.org/release/docs/Getting-Started/Library-Dependencies) und ähnliches
    anzugeben. Weiters ist es auch kein Problem, Maven-Repositories, die in der Java-Welt
    gern genutzt werden, auch in SBT zu verwenden.
