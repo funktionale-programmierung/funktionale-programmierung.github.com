@@ -1,7 +1,7 @@
 ---
 layout: post
 description: "Funktional Programmieren mit Wahrscheinlichkeiten"
-title: "Die Wahrscheinlichkeitsverteilungsmonade"
+title: "Eine Monade für Wahrscheinlichkeitsverteilungen"
 author: michael-sperber
 tags: ["Racket", "Monaden"]
 ---
@@ -10,8 +10,8 @@ Uns erreichte neulich die Frage "Wozu sind
 Monaden eigentlich in dynamisch getypten Sprachen" gut?  In Haskell
 zum Beispiel sind ja [Monaden fast allgegenwärtig]({% post_url 2013-04-18-haskell-monaden %}) 
 und haben dort insbesondere die Aufgabe, anhand der Typen deutlich zu
-machen, welche Effekte ein Entwickler bei der Auswertung eines
-Ausdrucks befürchten muss.  Da Typen in dynamisch getypten Sprachen
+machen, mit welchen Effekte ein Entwickler bei der Auswertung eines
+Ausdrucks rechnen muss.  Da Typen in dynamisch getypten Sprachen
 im Programmtext nicht direkt sichtbar sind, ist die Frage legitim, da viele Monaden nur jeweils einen
 Wert als Resultat einer Berechnung mit Seiteneffekten produzieren.  Es
 gibt allerdings auch Monaden, die mehr leisten - wie zum Beispiel die
@@ -19,7 +19,10 @@ Monade der Wahrscheinlichkeitsverteilungen.  Um die geht es in diesem
 Beitrag - und zwar in einer dynamisch getypten Sprache, nämlich in
 [Racket](http://racket-lang.org/).  Racket bietet für diese Anwendung
 relevante Abstraktionsmöglichkeiten, die noch über die Fähigkeiten von
-Haskell hinausgehen.
+Haskell hinausgehen.  Es wird nur rudimentäres Racket vorausgesetzt,
+wie zum Beispiel in unserem [früheren
+Posting]({% post_url 2013-03-12-rein-funktional %}) erläutert.
+
 
 <!-- more start -->
 
@@ -71,9 +74,6 @@ Hier ist ein Vorschlag:
         rain
         (fail))))
 {% endhighlight %}
-
-(Eine Einführung in Racket befindet sich in einem [früheren
-Posting]({% post_url 2013-03-12-rein-funktional %}).)
 
 Die erste Prozedur hält die Bedingung dafür fest, dass der Rasen nass
 ist.  Dabei bedient sie sich einer Prozedur `flip`, die "eine Münze
@@ -189,13 +189,14 @@ auch die Prozedur auf jeden einzelnen möglichen Wert loslassen:
 {% highlight scheme %}
 (define (pv-bind m f)
   (map (lambda (p)
-         (let ((prob (car p))
-               (branch (cdr p)))
-           (cons prob ... (f branch) ...)))
+         (let ((prob (car p)) ; Wahrscheinlichkeit ist car vom Paar
+               (val (cdr p))) ; Wert ist cdr vom Paar
+           ; neues Paar zusammensetzen
+           (cons prob ... (f val) ...)))
        m))
 {% endhighlight %}
 
-Das blöde ist nur, dass `(f branch)` selbst wieder eine
+Das blöde ist nur, dass `(f val)` selbst wieder eine
 Wahrscheinlichkeitsverteilung liefert, die wir irgendwie
 "ausmultiplizieren" müssten.  Wir lösen dieses Problem erstmal
 dadurch, dass wir uns darum drücken.  (Der tiefere Sinn davon wird
@@ -252,8 +253,8 @@ um ein `deferred` oder einen regulären Wert handelt:
 {% highlight scheme %}
 (define (pv-bind m f)
   (map (lambda (p)
-         (let ((prob (car p))
-               (branch (cdr p)))
+         (let ((prob (car p))    ; Wahrscheinlichkeit
+               (branch (cdr p))) ; Wert oder "deferred"-Verteilung
            (if (deferred? branch)
                (cons prob (defer (pv-bind (undefer branch) f)))
                (cons prob (defer (f branch))))))
@@ -398,7 +399,9 @@ Diese Prozedur können wir jetzt aufrufen:
 
 Da `grass-model` gelegentlich `fail` aufruft, ist diese Verteilung
 nicht *normalisiert* - die Summe der Wahrscheinlichkeiten ergibt nicht
-100%.  Das können wir mit mit zwei `fold`s und einer kleinen
+100%.  (Dies ist übrigens äuivalent dazu, die Bayes-Regel für bedingte
+Wahrscheinlichkeiten direkt anzuwenden.) 
+Das können wir mit mit zwei `fold`s und einer kleinen
 Hilfsprozedur nachholen:
 
 {% highlight scheme %}
