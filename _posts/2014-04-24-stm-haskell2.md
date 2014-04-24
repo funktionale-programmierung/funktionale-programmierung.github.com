@@ -37,6 +37,8 @@ problemlos,
 ohne dass man sich über Implementierungsdetails der Komponenten Gedanken
 machen muss.
 
+<!-- more start -->
+
 Wenn sich zwei
 Komponente problemlos zu einer größeren Komponente zusammenbauen lassen,
 spricht man häufig auch von guter *Komponierbarkeit* der Komponenten. Mit
