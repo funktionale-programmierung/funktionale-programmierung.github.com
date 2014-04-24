@@ -11,7 +11,11 @@ Vor kurzem war
 das Thema hier im Blog. Da Nebenläufigkeit auch in modernen Softwaresystemen
 immer noch häufig ein schwieriges Problem und eine Quelle vieler Fehler
 ist, schauen wir uns heute Software Transactional Memory (kurz: STM)
-nochmal genauer an.
+nochmal genauer an. Funktionale Sprache wie
+z.B. [Haskell](http://haskell.org), [Scala](http://www.scala-lang.org/)
+oder [clojure](http://clojure.org/) bieten gute Unterstützung für STM,
+denn der deklarative Programmierstil und der weitgehende Verzicht auf
+Seiteneffekte passen gut zum STM-Paradigma.
 
 Wir haben in dem ersten Artikel gesehen, dass STM eine Alternative zu
 Locks darstellt, die einfacher zu benutzen ist und bei der Probleme wie
@@ -36,7 +40,7 @@ machen muss.
 Wenn sich zwei
 Komponente problemlos zu einer größeren Komponente zusammenbauen lassen,
 spricht man häufig auch von guter *Komponierbarkeit* der Komponenten. Mit
-STM entwickelte Komponenten sind also gut komponierbar, während des für
+STM entwickelte Komponenten sind also gut komponierbar, während das für
 Komponenten, die Nebenläufigkeit mit Locks kontrollieren, nur bedingt
 gilt.
 
@@ -78,7 +82,9 @@ transfer k1 k2 amount =
 
 Durch das `atomically` wird der übergebene Codeblock als atomar
 gekennzeichnet und das STM-Laufzeitsystem sorgt dafür, dass der Block
-entweder ganz oder gar nicht ausgeführt wird.
+entweder ganz oder gar nicht ausgeführt wird. Außerdem sind Änderungen
+an Transaktionsvariablen erst nach Abschluss des `atomically`-Blocks
+für andere Threads sichtbar.
 
 Wir möchten jetzt die beiden "Komponenten" `deposit` und `withdraw`
 benutzen, um eine neue Funktionalität umzusetzen: der Betrag `2 * N`
