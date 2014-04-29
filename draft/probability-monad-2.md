@@ -6,7 +6,7 @@ author: michael-sperber
 tags: ["Racket", "Monaden", "Continuations"]
 ---
 
-In einem [vorherigen Posting](FIXME) haben wir uns mit einer Monade
+In einem [vorherigen Posting]({% post_url 2014-04-10-probability-monad %}) haben wir uns mit einer Monade
 für Wahrscheinlichkeitsverteilungen beschäftigt.  Diese erlaubt uns,
 ein probabilistisches Szenarium als Programm aufzuschreiben, deren
 Ausführungen die Wahrscheinlichkeitsverteilung möglicher Resultate des
@@ -18,23 +18,34 @@ schreiben.  Stattdessen mussten wir bisher monadische Versionen `con`,
 `if_` und `let_` benutzen.  In diesem Post zeigen wir, wie wir genau
 das erreichen, und zwar unter Verwendung einer geradezu
 bewusstseinserweiternden Technik namens *Kontrollabstraktion*, die es
-in der Mächtigkeit nur in funktionalen Sprachen gibt.
+in der Mächtigkeit nur in funktionalen Sprachen gibt.  Dieses Posting
+ist technisch etwas anspruchsvoll.
 
 <!-- more start -->
 
 Um zum Punkt zu kommen, müssen wir allerdings einige Stellen des Codes
-aus dem [vorherigen Posting](FIXME) nochmal Revue passieren lassen:
+aus dem [vorherigen Posting]({% post_url 2014-04-10-probability-monad %}) nochmal Revue passieren lassen:
 
 Schauen wir uns die Prozedur `grass-is-wet?` an, welche die
 Wahrscheinlichkeitsverteilung von "der Rasen ist nass" vs. "der Rasen
-ist nicht nass" anzeigt:
+ist nicht nass" anzeigt.  Zur Erinnerung - die
+Wahrscheinlichkeitsverteilung ist folgendermaßen definiert:
+
+> Wenn es regnet, ist der Rasen mit 90% Wahrscheinlichkeit nass.  Wenn
+> der Sprinkler an ist, ist der Rasen mit 80% Wahrscheinlichkeit
+> nass.  Außerdem besteht eine 10%ige Wahrscheinlichkeit, dass der
+> Rasen aus einem anderen Grund nass ist.
+
+In der Prozedur `grass-is-wet?` werden `con` und `dis` für Konjunktion
+bzw. "and" respektive für Disjunktion bzw. "or" verwendet:
 
 {% highlight scheme %}
 (define (grass-is-wet? rain sprinkler)
   (dis (con (flip 0.9) rain)
        (dis (con (flip 0.8) sprinkler)
-                (flip 0.1))))
+                 (flip 0.1))))
 {% endhighlight %}
+
 
 Der verschachtelte Aufruf im Rumpf erzeugt eine Menge
 Zwischenergebnisse, die ihrerseits wieder
@@ -66,7 +77,10 @@ Ausmultiplizieren statt:
 {% endhighlight %}
 
 Die `pv-bind`-Prozedur wendet `f` innen auf jeden Zweig der
-Wahrscheinlichkeitsverteilung `m` an.  Man könnte auch sagen, es
+Wahrscheinlichkeitsverteilung `m` an.  (Das `defer` aus dem
+[vorherigen Posting]({% post_url 2014-04-10-probability-monad %})
+verschiebt die
+Auswertung des jeweiligen Zweiges auf später.)  Man könnte auch sagen, es
 schiebt das `f` nach *innen*, und zwar einmal für jeden Zweig.  Wir 
 können das `f` aber als *Kontext* betrachten (siehe dazu auch [dieses
 frühere Posting]({% post_url 2013-11-08-tail-calls %})): Das `f`
@@ -83,9 +97,11 @@ Form benutzen zu müssen?
 
 Der Kontext wird normalerweise von der Ausführungsmaschinerie der
 Programmiersprache hinter den Kulissen verwaltet.  (Das dort
-verwaltete Objekt heißt dann meist *Continuation*.)  In den
+verwaltete Objekt heißt dann meist *Continuation*.  Siehe dazu auch
+unter Posting [Continuations in der Praxis]({% post_url 2014-04-10-probability-monad %}).)  
+In den
 Programmiersprachen Scheme und auch in Racket ist es allerdings
-möglich, in die diese Ausführungsmaschinerie hereinzugreifen und
+möglich, in diese Ausführungsmaschinerie hereinzugreifen und
 die Continuation als Objekt herauszuziehen - sie zu *reifizieren*.
 Für diese Reifikation gibt es unterschiedliche APIs.  Wir verwenden
 die `shift`/`reset`-API, die ihren Ursprung in [diesem
@@ -146,7 +162,8 @@ ergibt 84.
 
 Zurück zu unserer probabilistischen Monade: Die Verteilung des
 Kontexts auf die Zweige einer Wahrscheinlichkeitsverteilung backen wir
-direkt in die `dist`-Prozedur ein:
+direkt in die `dist`-Prozedur ein, die aus einer Liste von
+Wahrschleichkeits/Wert-Paaren `ch` eine Wahrscheinlichkeitsverteilung macht:
 
 {% highlight scheme %}
 (define (dist ch)
@@ -161,7 +178,18 @@ Diese Prozedur schnappt sich also ihren eigenen Kontext und wendet
 ihn auf jeden Zweig der gewünschten Wahrscheinlichkeitsverteilung an.
 Wenn es mehrere Aufrufe von `dist` gibt, wie ins unserem Beispiel, so
 wird diese Kontextanwendung geschachtelt, was gerade das
-"Ausmultiplizieren" besorgt.
+"Ausmultiplizieren" besorgt.  Damit passiert das, was vorher `pv-bind`
+explizit erledigt hat, hinter den Kulissen.  Hier zum Beispiel die
+Definition von `con` mit `pv-bind`:
+
+{% highlight scheme %}
+(define (con e1 e2)
+  (pv-bind e1
+           (lambda (v1)
+             (if v1
+                 e2
+                 (pv-unit #f)))))
+{% endhighlight %}
 
 Jetzt können wir die monadischen Operatoren allesamt neu definieren
 mit frappierend einfachen Definitionen:
@@ -182,9 +210,34 @@ mit frappierend einfachen Definitionen:
   (f e))
 {% endhighlight %}
 
-Allerdings müssen wir nun noch das Ergebnis seinerseits wieder zu
-einem Suchbaum machen, den wir mit `explore` verarbeiten können.
-Insbesondere müssen wie da auch das `reset` unterbringen:
+Um das etwas besser zu verstehen, betrachten wir mal isoliert
+Betrachten wir mal isoliert `(neg (flip 0.1))`, äquivalent zu:
+
+{% highlight scheme %}
+(not (dist (list (cons 0.1 #t) (cons 0.9 #f))))
+{% endhighlight %}
+
+In diesem Fall ist der Kontext vom Aufruf von `dist` gerade `(not [])`.
+(Da, wo `dist` aufgerufen wird, kommt das Loch hin.)  Dieses wird in
+jeden Zweig nach innen geschoben:
+
+{% highlight scheme %}
+   (dist (list (cons 0.1 #t) (cons 0.9 #f)))
+=> (shift k
+          (list
+            (cons 0.1 (k #t))
+	  	    (cons 0.9 (k #f))))
+=> (list
+     (cons 0.1 (not #t))
+     (cons 0.9 (not #f)))
+=> (list
+     (cons 0.1 #f)
+     (cons 0.9 #f))
+{% endhighlight %}
+
+Damit das `shift` funktioniert, müssen wir allerdings noch ein `reset`
+an die richtige Stelle setzen und das Ergebnis seinerseits wieder zu
+einem Suchbaum machen.  Das passiert mit der Prozedur `reify0`:
 
 {% highlight scheme %}
 (define (reify0 m)
