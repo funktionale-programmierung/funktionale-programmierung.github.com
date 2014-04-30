@@ -176,7 +176,7 @@ Wahrscheinlichkeits/Wert-Paaren `ch` eine Wahrscheinlichkeitsverteilung macht:
 
 Diese Prozedur schnappt sich also ihren eigenen Kontext und wendet
 ihn auf jeden Zweig der gewünschten Wahrscheinlichkeitsverteilung an.
-Wenn es mehrere Aufrufe von `dist` gibt, wie ins unserem Beispiel, so
+Wenn es mehrere Aufrufe von `dist` gibt, wie in unserem Beispiel, so
 wird diese Kontextanwendung geschachtelt, was gerade das
 "Ausmultiplizieren" besorgt.  Damit passiert das, was vorher `pv-bind`
 explizit erledigt hat, hinter den Kulissen.  Hier zum Beispiel die
@@ -210,8 +210,8 @@ mit frappierend einfachen Definitionen:
   (f e))
 {% endhighlight %}
 
-Um das etwas besser zu verstehen, betrachten wir mal isoliert
-Betrachten wir mal isoliert `(neg (flip 0.1))`, äquivalent zu:
+Um das etwas besser zu verstehen, betrachten wir mal
+isoliert `(neg (flip 0.1))`, äquivalent zu:
 
 {% highlight scheme %}
 (not (dist (list (cons 0.1 #t) (cons 0.9 #f))))
