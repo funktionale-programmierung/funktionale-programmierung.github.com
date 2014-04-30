@@ -163,7 +163,7 @@ ergibt 84.
 Zurück zu unserer probabilistischen Monade: Die Verteilung des
 Kontexts auf die Zweige einer Wahrscheinlichkeitsverteilung backen wir
 direkt in die `dist`-Prozedur ein, die aus einer Liste von
-Wahrschleichkeits/Wert-Paaren `ch` eine Wahrscheinlichkeitsverteilung macht:
+Wahrscheinlichkeits/Wert-Paaren `ch` eine Wahrscheinlichkeitsverteilung macht:
 
 {% highlight scheme %}
 (define (dist ch)
