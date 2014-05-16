@@ -63,7 +63,7 @@ zwei Konten `acc1` und `acc2` zwei Threads eine Überweisung von jeweils 50
 EUR von `acc1` auf `acc2` durchführen.
 
 Was passiert jetzt zur Laufzeit? Die Hauptidee ist, dass STM-Transkationen
-optimistisch, gut Glück ausgeführt werden. Das
+optimistisch, also auf gut Glück ausgeführt werden. Das
 STM-Laufzeitsystem führt also ohne jedes Locking die beiden STM-Transaktionen
 
     atomically (transfer acc1 acc2 50) -- Thread A
