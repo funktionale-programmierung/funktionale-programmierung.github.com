@@ -83,3 +83,8 @@ authors:
     image: /author/helmut-dobretzberger.jpg
     href: "http://www.active-group.de/unternehmen/dobretzberger.html"
     about: '<a href="http://www.active-group.de/unternehmen/dobretzberger.html">Helmut Dobretzberger</a> ist seit 2003 Softwareentwickler, und bringt Projekte bei der <a href="http://www.active-group.de">Active Group</a> mit Hilfe funktionaler Programmierung voran.'
+  andres-loeh:
+    name: Andres Löh
+    image: /author/andres-loeh.jpg
+    href: "http://www.andres-loeh.de"
+    about: '<a href="http://www.andres-loeh.de/">Andres Löh</a> ist Partner bei <a href="http://www.well-typed.com/">Well-Typed LLP</a>, einer auf Haskell spezialisierten Software-Beratungsfirma. Andres verwendet Haskell seit 1997.'
