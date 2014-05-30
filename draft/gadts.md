@@ -76,12 +76,12 @@ Wie schon in der Einleitung skizziert, wollen wir mehrere Sorten von Fragen
 zulassen. Um unsere Beispiele klein genug zu halten, beschränken wir uns hier
 auf zwei Sorten Fragen, etwa
 
-> Wer wird Fussball-Weltmeister? <br/>
+> Wer wird Fußball-Weltmeister? <br/>
 > Wie endet das Spiel Deutschland -- Portugal?
 
 Der erste Fragentyp fragt nach einem Land, hier spezifisch nach einem
-Teilnehmerland der Fussball-Weltmeisterschaft. Der zweite Typ fragt nach
-dem Ergebnis eines Fussballspiels.
+Teilnehmerland der Fußball-Weltmeisterschaft. Der zweite Typ fragt nach
+dem Ergebnis eines Fußballspiels.
 
 Zur Unterscheidung dieser beiden Sorten von Fragen definieren wir den
 Datentyp `Question` wie folgt:
@@ -113,7 +113,7 @@ darstellen:
 {% highlight haskell %}
 exampleQuestions :: Questions
 exampleQuestions = [
-    CountryQuestion "Wer wird Fussball-Weltmeister?"
+    CountryQuestion "Wer wird Fußball-Weltmeister?"
   , ResultQuestion  "Wie endet das Spiel Deutschland -- Portugal?"
   ]
 {% endhighlight %}
@@ -247,7 +247,7 @@ Wir können das im Interpreter testen:
 
 ~~~
 GHCi> displayQAs exampleQuestions exampleAnswers
-Wer wird Fussball-Weltmeister? Germany
+Wer wird Fußball-Weltmeister? Germany
 Wie endet das Spiel Deutschland -- Portugal? 3 : 1
 ~~~
 
@@ -381,15 +381,15 @@ Wenn wir im Interpreter nachfragen, können wir jetzt am Typ ablesen, welchen
 Konstruktor wir verwendet haben. Bislang hatten wir:
 
 ~~~
-GHCi> :t CountryQuestion "Wer wird Fussball-Weltmeister?"
-CountryQuestion "Wer wird Fussball-Weltmeister?" :: Question
+GHCi> :t CountryQuestion "Wer wird Fußball-Weltmeister?"
+CountryQuestion "Wer wird Fußball-Weltmeister?" :: Question
 ~~~
 
 Jetzt bekommen wir:
 
 ~~~
-GHCi> :t CountryQuestion "Wer wird Fussball-Weltmeister?"
-CountryQuestion "Wer wird Fussball-Weltmeister?" :: Question 'CountryType
+GHCi> :t CountryQuestion "Wer wird Fußball-Weltmeister?"
+CountryQuestion "Wer wird Fußball-Weltmeister?" :: Question 'CountryType
 ~~~
 
 (Einen Apostroph wie in der Ausgabe von GHCi vor `CountryType` werden wir im weiteren
@@ -416,7 +416,7 @@ Unseren Beispielfragebogen können wir nun wie folgt definieren:
 
 {% highlight haskell %}
 exampleQuestions = 
-  QCons (CountryQuestion "Wer wird Fussball-Weltmeister?") (
+  QCons (CountryQuestion "Wer wird Fußball-Weltmeister?") (
   QCons (ResultQuestion  "Wie endet das Spiel Deutschland -- Portugal?") (
   QNil))
 {% endhighlight %}

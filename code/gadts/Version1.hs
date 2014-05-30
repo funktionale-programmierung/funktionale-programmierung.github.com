@@ -9,7 +9,7 @@ data Question =
 
 exampleQuestions :: Questions
 exampleQuestions = [
-    CountryQuestion "Wer wird Fussball-Weltmeister?"
+    CountryQuestion "Wer wird Fußball-Weltmeister?"
   , ResultQuestion  "Wie endet das Spiel Deutschland -- Portugal?"
   ]
 

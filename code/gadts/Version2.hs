@@ -14,7 +14,7 @@ data Questions :: [QuestionType] -> * where
   QCons :: Question t -> Questions ts -> Questions (t ': ts)
 
 exampleQuestions = 
-  QCons (CountryQuestion "Wer wird Fussball-Weltmeister?") (
+  QCons (CountryQuestion "Wer wird Fußball-Weltmeister?") (
   QCons (ResultQuestion  "Wie endet das Spiel Deutschland -- Portugal?") (
   QNil))
 
