@@ -47,6 +47,14 @@ sind.
 
 <!-- more start -->
 
+## Haskell-Code
+
+Der Code, der in diesem Artikel behandelt wird, ist in zwei separaten Dateien
+verfügbar.  Die [erste Version](/code/gadts/Version1.hs) verwendet normale
+Haskell-Sprachmittel, also keine GADTs. Die [zweite
+Version](/code/gadts/Version2.hs) enthält dann mehr oder weniger denselben Code
+noch einmal, aber unter Verwendung von GADTs.
+
 ## Fragen über Fragen
 
 Stellen wir uns also vor, wir wollen ein System zur Erstellung, Verwaltung und
@@ -315,7 +323,7 @@ Listen übergeben, was uns beim Programmieren wiederum erlauben würde, bei der
 Implementierung dieser Funktionen *vorauszusetzen*, dass die Eingaben den
 Anforderungen genügen.
 
-## GADTs zur Rettung
+## Alles noch einmal, aber mit GADTs
 
 Die gerade beschriebene zusätzliche Präzision in den Typen ist genau das, was GADTs,
 also generalisierte algebraische Datentypen, uns ermöglichen.
