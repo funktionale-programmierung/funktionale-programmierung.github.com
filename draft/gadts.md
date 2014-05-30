@@ -207,7 +207,7 @@ Der genaue Code ist nicht besonders wichtig. Natürlich kann man das wesentlich
 robuster und besser gestalten. In der Praxis würde man die Antworten z.B.
 eventuell über ein Web-Formular oder eine REST-Anfrage erhalten. Darum soll es
 hier und heute aber nicht gehen. Interessant allerdings ist die Struktur der
-Funktion. Mittels `mapM` durchlaufen wir die Liste der Fragen und führen auf
+Funktion. Wir durchlaufen durchlaufen die Liste der Fragen und führen auf
 jeder Frage die Hilfsfunktion `getAnswer` aus. Die Funktion `getAnswer` erzeugt
 letzlich genau eine Antwort pro Frage aus der Eingabe des Benutzers, und zwar
 so, dass der Antworttyp zum Fragetyp passt.
@@ -263,7 +263,7 @@ GHCi> displayQAs exampleQuestions []
 ~~~
 
 Eine ähnliche Situation ergibt sich, wenn wir Antworten und zugehörige "korrekte"
-Antworten haben, und daraus eine Gesamtpunktzahl berechnen wollen:
+Antworten haben, und daraus die Anzahl der korrekten Antworten berechnen wollen:
 
 {% highlight haskell %}
 computeTotalScore :: Answers -> CorrectAnswers -> Int
@@ -329,7 +329,7 @@ Die gerade beschriebene zusätzliche Präzision in den Typen ist genau das, was 
 also generalisierte algebraische Datentypen, uns ermöglichen.
 
 Dazu werden wir im folgenden die Datentypen, die wir für die obige Entwicklung verwendet
-haben, leicht abändern und verfeinern, so dass zum Beispiel eine leere liste von Fragen
+haben, leicht abändern und verfeinern, so dass zum Beispiel eine leere Liste von Fragen
 nicht mehr denselben Typ hat wie unser Beispielfragebogen `exampleQuestions`, sondern
 dass wir am Typ ablesen können
 
