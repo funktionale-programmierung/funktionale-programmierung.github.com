@@ -6,8 +6,8 @@ author: andres-loeh
 tags: ["haskell", "datatypes", "GADTs"]
 ---
 
-Statische Typsysteme können viele Vorteile haben. Ein sehr zentraler Vorteil
-sollte es sein, dass mögliche Laufzeitfehler verhindert werden.
+Statische Typsysteme haben zahlreiche Vorteile. Der naheliegendste Vorteil ist
+vermutlich, dass mögliche Laufzeitfehler verhindert werden.
 
 Stellen wir uns zum Beispiel vor, wir wollten SQL-Anfragen modellieren. Wählen
 wir einen `String` als Repräsentation, so können wir ohne weiteres syntaktisch
@@ -16,7 +16,7 @@ wir statt dessen einen spezifischen Datentyp `SQL`, der einen abstrakten
 Syntaxbaum modelliert, so können wir uns auf syntaktische Korrektheit verlassen,
 aber wir können noch immer andere Fehler machen. Was, wenn wir sicherstellen
 wollten, dass die verwendeten Namen von Tabellen und Feldern tatsächlich in
-unserer Datenbank erhalten sind? Was, wenn wir garantieren wollen, dass wir
+unserer Datenbank enthalten sind? Was, wenn wir garantieren wollen, dass wir
 SQL-Operatoren in typkorrekter Art und Weise verwenden wollen? Es ist einfach,
 sich vorzustellen, dass wir dies durch Tests zur Laufzeit sicherstellen können.
 Aber ist es auch möglich, dies bereits durch statische Typen zu garantieren?
@@ -25,12 +25,12 @@ Ein einfacheres Beispiel: Wir haben eine Applikation, die Fragebögen und
 zugehörige Antworten verwaltet. Es gibt verschiedene Sorten von Fragen. Manche
 Fragen sollten mit "Ja" oder "Nein" beantwortet werden, andere mit einer
 Antwort aus einer vorgegebenen Auswahl, wieder andere mit einer quantitativen
-Angabe. Sicher können wir Datentypen definieren, der die verschiedenen Sorten
-von Fragen und die verschiedenen Sorten von Antworten modelliert. Aber wenn wir
-nun Fragen und zugehörige Antworten haben, wie wissen wir dann, dass diese
-zueinander passen? Wiederum ist es einfach, dies zur dynamisch zu testen. Es
-ist nicht ganz so einfach -- aber durchaus möglich -- dies auch statisch im
-Typsystem sicherzustellen.
+Angabe. Sicher können wir Datentypen definieren, die die verschiedenen Sorten
+von Fragen und die verschiedenen Sorten von Antworten modellieren. Aber wenn wir
+nun Fragen und zugehörige Antworten haben, wie wissen wir dann, dass die Sorten
+der Fragen und die Sorten der Antworten zueinander passen? Wiederum ist es
+einfach, dies zur dynamisch zu testen. Es ist nicht ganz so einfach -- aber
+durchaus möglich -- dies auch statisch im Typsystem sicherzustellen.
 
 Das Sprachmittel, welches wir dazu verwenden werden, heißt "GADT". Die
 Abkürzung steht für "Generalized Algebraic Data Type", zu Deutsch
@@ -110,10 +110,9 @@ exampleQuestions = [
   ]
 {% endhighlight %}
 
-Man kann Konstruktoren aber auch als Muster ("patterns")verwenden, um Unterscheidungen
+Man kann Konstruktoren aber auch als Muster ("patterns") verwenden, um Unterscheidungen
 durchzuführen. Zum Beispiel können wir eine Funktion definieren, die den Fragetext
-extrahiert und zusätzlich eine Information für den Benutzer, welcher Antworttyp erwartet
-wird:
+extrahiert und um eine vom Fragetyp abhängige Nachricht erweitert:
 
 {% highlight haskell %}
 displayQuestion :: Question -> String
@@ -149,7 +148,7 @@ exampleAnswers = [
 Früher oder später wollen wir die gegebenen Antworten vielleicht an der Wirklichkeit
 messen. Wir nehmen dazu an, dass unser System zu einem Fragebogen auch Musterlösungen
 repräsentieren kann. Da in unserem Szenario während der Weltmeisterschaft erst nach
-und nach die richtigen Antworten vorliegen werden, ermöglichen wir es, dass die liste
+und nach die richtigen Antworten vorliegen werden, ermöglichen wir es, dass die Liste
 der Musterlösungen Lücken enthält:
 
 {% highlight haskell %}
@@ -176,8 +175,8 @@ bettet einen Wert vom Typ `Answer` in den Typ `Maybe Answer` ein.
 
 ## Berechnungen auf Fragebögen
 
-Nachdem wir die Datentypen definiert haben, können wir jetzt ein paar
-Funktionen implementieren, wir wir sie auch in einem größeren System in
+Nachdem wir die Datentypen definiert haben, können wir jetzt einige
+Funktionen implementieren, wie wir sie auch in einem größeren System in
 ähnlicher Form gebrauchen könnten.
 Zum Beispiel können wir die zu einem Fragebogen gehörenden Antworten 
 (interaktiv) einlesen:
@@ -219,7 +218,7 @@ displayQAs (q : qs) (a : as) = do
   displayQA q a
   displayQAs qs as
 displayQAs []       []       = return ()
-displayQAs _        _        = fail "incompatible questions and answers"
+displayQAs _        _        = error "incompatible questions and answers"
 
 displayQA :: Question -> Answer -> IO ()
 displayQA (CountryQuestion txt) (CountryAnswer a) = do
@@ -230,28 +229,30 @@ displayQA (ResultQuestion txt) (ResultAnswer m n) = do
   putStr txt
   putStr " "
   putStrLn (show m ++ " : " ++ show n)
-displayQA _ _ = fail "incompatible questions and answers"
+displayQA _ _ = error "incompatible questions and answers"
 {% endhighlight %}
 
 Wir durchlaufen beide Listen synchron. Für jede Frage und zugehörige Antwort
 rufen wir `displayQA` auf.
 
 Wir können das im Interpreter testen:
-{% highlight haskell %}
+
+~~~
 GHCi> displayQAs exampleQuestions exampleAnswers
 Wer wird Fussball-Weltmeister? Germany
 Wie endet das Spiel Deutschland -- Portugal? 3 : 1
-{% endhighlight %}
+~~~
 
 In der Funktion `displayQAs` erwarten wir, dass Frage- und Antwort-Liste dieselbe
 Länge haben. In `displayQA` erwarten wir, dass Frage- und Antwort-Typ zueinander
 passen. Falls nicht, so bleibt uns nichts, als die Ausführung mit `error` abzubrechen.
 Wir können auch das leicht nachvollziehen, indem wir `displayQAs` mit inkompatiblen
 Listen aufrufen:
-{% highlight haskell %}
+
+~~~
 GHCi> displayQAs exampleQuestions []
 *** Exception: user error (incompatible questions and answers)
-{% endhighlight %}
+~~~
 
 Eine ähnliche Situation ergibt sich, wenn wir Antworten und zugehörige "korrekte"
 Antworten haben, und daraus eine Gesamtpunktzahl berechnen wollen:
@@ -270,8 +271,8 @@ computeScore _                  _                           =
   error "incompatible questions and answers"
 {% endhighlight %}
 
-Das Muster ist wiederum sehr ähnlich, und abermals müssen wir zur Laufzeit damit
-Rechnung tragen, dass die übergebenen Listen evtl. unterschiedlicher Länge sein
+Das Muster ist wiederum sehr ähnlich, und abermals müssen wir zur Laufzeit
+berücksichtigen, dass die übergebenen Listen evtl. unterschiedlicher Länge sein
 könnten, oder die Antworttypen nicht zueinander passen.
 
 ## Dynamisches Testen ist suboptimal
@@ -281,21 +282,21 @@ eingelesene Antworten garantiert kompatibel zu dem verwendeten Fragebogen sind.
 Aber diese Kompatibilität kommt im Typsystem nicht zum Ausdruck.
 
 In einem größeren Programm hätten wir eventuell mehrere Quellen, aus denen wir
-externe Daten wie etwa Antworten bekommen, die wir zunächst auf ihre Qualität
+externe Daten wie etwa Antworten bekommen, die wir zunächst auf ihre Gültigkeit
 hin überprüfen sollten, bevor wir sie im Kern unseres Programms
 weiterverwenden. Wir würden dann vermutlich Funktionen schreiben wie etwa
 
 {% highlight haskell %}
-verifyAnswers        :: Questions -> Answers -> Bool
-verifyCorrectAnswers :: Questions -> CorrectAnswers -> Bool
+validateAnswers        :: Questions -> Answers -> Bool
+validateCorrectAnswers :: Questions -> CorrectAnswers -> Bool
 {% endhighlight %}
 
-die zu einem gegebenen Fragebogen ermitteln, ob die Antworten oder Beispielantworten
-kompatibel sind.
+die zu einem gegebenen Fragebogen ermitteln, ob die Typen der Antworten oder
+Beispielantworten kompatibel sind.
 
 Aber solche dynamischen Tests von Eigenschaften sind suboptimal, weil wir als
 Programmierer die Verantwortung tragen, sie an den richtigen Stellen auszuführen.
-Vergessen wir den Test, schreiben wir in in fehlerhafter Weise, oder ändern wir
+Vergessen wir den Test, schreiben wir ihn in fehlerhafter Weise, oder ändern wir
 später das Programm und die Bedingungen, so treten Laufzeitfehler auf, ohne dass
 der Compiler uns gewarnt hätte.
 
@@ -305,7 +306,7 @@ würden, dass zu diesem Zeitpunkt die Kompatibilität der Daten bereits sicherge
 ist.
 
 Dies alles ist nicht wirklich zufriedenstellend. Es wäre viel schöner, wenn
-beim Testen mit `verifyAnswers` bzw. beim Einlesen mit `getAnswers` nicht nur
+beim Testen mit `validateAnswers` bzw. beim Einlesen mit `getAnswers` nicht nur
 wir *wüssten*, dass bei erfolgreichem Abschluss die Kompatibilität der
 Antworten mit den Fragen sichergestellt ist, sondern *auch der Haskell-Compiler
 bzw. das Typsystem*. Konsequenterweise würde das Typsystem beim Aufruf von
@@ -345,7 +346,7 @@ Form unseres Beispielfragebogens `exampleQuestions` ist etwa
 [CountryType, ResultType]
 {% endhighlight %}
 
-da die erste Frage einen Teilnehmer sicht, und die zweite ein Spielergebnis. Dem leeren
+da die erste Frage einen Teilnehmer sucht, und die zweite ein Spielergebnis. Dem leeren
 Fragebogen wäre entsprechend die leere Liste `[]` zugeordnet.
 
 Diese "Zuordnung" ist das, wozu wir GADTs benötigen. Wir beginnen mit einzelnen Fragen
@@ -364,24 +365,24 @@ auf. Der Typ `Question` ist jetzt parametrisiert über einen Wert vom Typ `Quest
 und je nach Konstruktor nimmt dieser Parameter einen anderen spezifischen Wert an.
 Diese Parametrisierung und Einschränkung des Parameters für verschiedene Konstruktoren
 ist es, was GADTs ausmacht.
-Die Teil `QuestionType -> *` der ersten Zeile ist eine Art "Typsignatur" für den Datentyp,
+Der Teil `QuestionType -> *` der ersten Zeile ist eine Art "Typsignatur" für den Datentyp,
 die explizit macht, dass der Datentyp einen Parameter vom Typ `QuestionType` nimmt und
 darau einen ganz normalen Datentyp formt -- diese werden durch `*` repräsentiert.
 
 Wenn wir im Interpreter nachfragen, können wir jetzt am Typ ablesen, welchen
 Konstruktor wir verwendet haben. Bislang hatten wir:
 
-{% highlight haskell %}
+~~~
 GHCi> :t CountryQuestion "Wer wird Fussball-Weltmeister?"
 CountryQuestion "Wer wird Fussball-Weltmeister?" :: Question
-{% endhighlight %}
+~~~
 
 Jetzt bekommen wir:
 
-{% highlight haskell %}
+~~~
 GHCi> :t CountryQuestion "Wer wird Fussball-Weltmeister?"
 CountryQuestion "Wer wird Fussball-Weltmeister?" :: Question 'CountryType
-{% endhighlight %}
+~~~
 
 (Einen Apostroph wie in der Ausgabe von GHCi vor `CountryType` werden wir im weiteren
 Verlauf noch häufiger sehen. Diese sind im Prinzip optional, deuten aber explizit an,
@@ -420,10 +421,10 @@ die leere Liste `QNil` erzeugen. Ich habe die Typsignatur für `exampleQuestions
 weggelassen. Den Typ soll der Typinferenz-Algorithmus von Haskell für uns ermitteln.
 Im Interpreter erfragen wir diesen wie folgt:
 
-{% highlight haskell %}
+~~~
 GHCi> :t exampleQuestions
 exampleQuestions :: Questions '['CountryType, 'ResultType]
-{% endhighlight %}
+~~~
 
 Dies zeigt, dass der Typparameter von `Questions` uns nun wie gewünscht anzeigt, wie viele
 und welche Art von Fragen der Fragebogen enthält.
@@ -452,12 +453,12 @@ exampleAnswers =
   ANil))
 {% endhighlight %}
 
-nun *dieselbe* Form erhalten wir für die Beispielfragen:
+nun *dieselbe* Form erhalten wie für die Beispielfragen:
 
-{% highlight haskell %}
+~~~
 GHCi> :t exampleAnswers
 exampleAnswers :: Answers '[CountryType, ResultType]
-{% endhighlight %}
+~~~
 
 Jetzt haben wir endlich die Möglichkeit, klar und deutlich auszudrücken, was es
 heisst, dass wir *kompatible* Fragen und Antworten erwarten: sowohl Fragen als auch
@@ -485,9 +486,11 @@ displayQA (ResultQuestion txt) (ResultAnswer m n) = do
 
 Die Typen von `displaQAs` sowie `displayQA` drücken jetzt aus, dass wir kompatible
 Fragen und Antworten erwarten. Das Typsystem prüft dies. Ein Aufruf wie etwa
-{% highlight haskell %}
+
+~~~
 GHCi> displayQAs exampleQuestions ANil
-{% endhighlight %}
+~~~
+
 erzeugt jetzt einen Typfehler zum Zeitpunkt des Übersetzens:
 
     Couldn't match type ‘'[]’ with ‘'['CountryType, 'ResultType]’
