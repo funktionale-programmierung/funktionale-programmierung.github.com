@@ -7,9 +7,9 @@ tags: ["funktional", "Job", "Stellenanzeige"]
 ---
 
 Aufmerksame Leser dieses Blogs wissen, dass wir nicht nur
-mit viel Spaß funktional programmieren, sondern auch um damit unser Geld
+mit viel Spaß funktional programmieren, sondern auch, um damit unser Geld
 zu verdienen. So entwickelt z.B. die factis research GmbH in der
-funktionale Sprache [Haskell](http://haskell.org) das Produkt [Checkpad
+funktionalen Sprache [Haskell](http://haskell.org) das Produkt [Checkpad
 MED](http://checkpad.de),
 eine elektronische Patientenakte für iPad, iPhone und Co. Wir haben
 die technischen Zusammenhänge von Checkpad bereits in einem [früheren
@@ -21,12 +21,12 @@ vielen Pilot-Projekten und noch mehr Kundenanfragen so erfolgreich, dass wir dri
 Kernentwickler, Schnittstellenentwickler, QA-Entwickler, DevOps-Entwickler
 und mehr. Alle Stellen haben etwas mit funktionaler Programmierung zu tun,
 manche mehr, manche weniger. Es ist also sowohl für Experten und
-Expertinnen der funktionalen Programmierung also auch für Leute, die das
+Expertinnen der funktionalen Programmierung, als auch für Leute, die das
 noch werden wollen, etwas dabei.
 
-Wenn Sie Lust haben, gemeinsam mit uns in einem tollen Team etwas zu bewegen,
+Wenn Sie Lust haben, gemeinsam mit uns in einem tollen Team etwas voranzubringen,
 dann schauen Sie doch einfach mal auf unser
-[Webseite](http://checkpad.de/jobs) vorbei, dort finden Sie viele weitere
+[Webseite](http://checkpad.de/jobs) vorbei, dort finden Sie alle weiteren
 Informationen. Wir sind gespannt!
 
 <!-- more end -->
