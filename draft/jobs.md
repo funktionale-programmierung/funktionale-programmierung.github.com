@@ -1,7 +1,7 @@
 ---
 layout: post
 description: Beschreibung
-title: "Funktionale Programmier(innen) gesucht!"
+title: "Funktionale Programmierer(innen) gesucht!"
 author: stefan-wehr
 tags: ["funktional", "Job", "Stellenanzeige"]
 ---
@@ -17,10 +17,10 @@ Artikel](/2013/07/17/medizin-funktional.html) vorgestellt.
 
 Inzwischen ist Checkpad mit mehrere Produktiv-Installationen,
 vielen Pilot-Projekten und noch mehr Kundenanfragen so erfolgreich, dass wir dringend
-[http://checkpad.de/jobs](Verstärkung) brauchen! Und zwar in allen technischen Bereichen, z.B. als
+[Verstärkung](http://checkpad.de/jobs) brauchen! Und zwar in allen technischen Bereichen, z.B. als
 Kernentwickler, Schnittstellenentwickler, QA-Entwickler, DevOps-Entwickler
 und mehr. Alle Stellen haben etwas mit funktionaler Programmierung zu tun,
-manche mehr, manche weniger.
+manche mehr, manche weniger. Es ist al
 
 Wenn Sie Lust haben, gemeinsam mit uns in einem tollen Team etwas zu bewegen,
 dann schauen Sie doch einfach mal auf unser
@@ -28,4 +28,3 @@ dann schauen Sie doch einfach mal auf unser
 Informationen. Wir sind gespannt!
 
 <!-- more end -->
-
