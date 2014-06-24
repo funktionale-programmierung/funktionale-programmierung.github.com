@@ -26,7 +26,7 @@ noch werden wollen, etwas dabei.
 
 Wenn Sie Lust haben, gemeinsam mit uns in einem tollen Team etwas zu bewegen,
 dann schauen Sie doch einfach mal auf unser
-[http://checkpad.de/jobs](Webseite) vorbei, dort finden Sie viele weitere
+[Webseite](http://checkpad.de/jobs) vorbei, dort finden Sie viele weitere
 Informationen. Wir sind gespannt!
 
 <!-- more end -->
