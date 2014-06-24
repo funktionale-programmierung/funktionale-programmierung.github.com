@@ -20,7 +20,9 @@ vielen Pilot-Projekten und noch mehr Kundenanfragen so erfolgreich, dass wir dri
 [Verstärkung](http://checkpad.de/jobs) brauchen! Und zwar in allen technischen Bereichen, z.B. als
 Kernentwickler, Schnittstellenentwickler, QA-Entwickler, DevOps-Entwickler
 und mehr. Alle Stellen haben etwas mit funktionaler Programmierung zu tun,
-manche mehr, manche weniger. Es ist al
+manche mehr, manche weniger. Es ist also sowohl für Experten und
+Expertinnen der funktionalen Programmierung also auch für Leute, die das
+noch werden wollen, etwas dabei.
 
 Wenn Sie Lust haben, gemeinsam mit uns in einem tollen Team etwas zu bewegen,
 dann schauen Sie doch einfach mal auf unser
