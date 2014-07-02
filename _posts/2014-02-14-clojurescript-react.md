@@ -275,7 +275,7 @@ holt sich den Anfangszustand aus den Properties (die wir noch
 entsprechend übergeben müssen):
 
 {% highlight clojure %}
-((def CommentBox
+(def CommentBox
   (js/React.createClass
    #js {:getInitialState 
         (fn []
