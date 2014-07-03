@@ -132,8 +132,8 @@ Namespace `reacl.lens` ist eine kleine Library für *Linsen*, welche es
 erleichtern, den Applikationszustand zu manipulieren.  Eine Linse ist
 eine Art Zeiger auf einen Teil einer größeren Struktur, der es
 erlaubt, auf diesen Teil zuzugreifen und diesen auszutauschen.
-(Linsen sind in Haskell [ein echter Hit
-sind](http://www.haskellforall.com/2013/05/program-imperatively-using-haskell.html).
+(Linsen sind in Haskell [ein echter
+Hit](http://www.haskellforall.com/2013/05/program-imperatively-using-haskell.html).
 Darüber werden wir auch noch ein Posting schreiben.)  Sie ersparen
 uns, mit "Ids" o.ä. hantieren zu müssen, um bestimmte Teile des
 Applikationszustands zu identifizieren.
@@ -229,7 +229,7 @@ mit `reacl/send-message!` verschickt wurde:
 
 In diesem Fall führt das Abhaken der Checkbox dazu, dass der
 Applikationszustand durch einen neuen ersetzt werden muss: Der Wert
-des `done?`-Felds des aktullen Todos soll ersetzt werden.  Dies macht
+des `done?`-Felds des aktuellen Todos soll ersetzt werden.  Dies macht
 der `lens/shove`-Ausdruck oben, der eine neue Liste von Todos
 liefert.  (Mehr zu Linsen - wie gesagt - in einem späteren Posting.)
 Der Aufruf von `(reacl/return :app-state ...)` signalisiert Reacl,
