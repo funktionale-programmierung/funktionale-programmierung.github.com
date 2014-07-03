@@ -21,7 +21,7 @@ vielen Frameworks, die das eigentlich vereinfachen sollen) oft nicht
 so richtig Freude.  Geändert hat sich das für uns mit dem
 Open-Source-Release von Facebooks Framework
 [React](http://facebook.github.io/react/), bei dem Ideen aus der
-funktionalen Programmierung deutlich zu erkennen ist.  Um die
+funktionalen Programmierung deutlich zu erkennen sind.  Um die
 Entwicklung noch weiter zu vereinfachen, setzen wir für die
 React-Programmierung
 [ClojureScript](https://github.com/clojure/clojurescript) ein, und
@@ -76,7 +76,7 @@ abgeschlossen sind.  So können keine Zykeln entstehen.
 Eine ausführlichere Beschreibung dieses Modells und der Vorteile in
 der Entwicklung gibt es auch [auf
 Video](http://www.youtube.com/watch?v=nYkdrAPrdcw&list=PLb0IAmt7-GS188xDYE-u1ShQmFFGbrk0v).
-(Am besten gleich über das Marketing-Geseiere am Anfang auf Minute 7 vorspulen.)
+(Am besten gleich über das Marketing-Sprech am Anfang auf Minute 7 vorspulen.)
 
 # Noch funktionaler mit ClojureScript und Reacl #
 
@@ -119,6 +119,13 @@ typisch ist:
             [reacl.lens :as lens]))
 {% endhighlight %}
 
+Das Beispiel landet mit dieser Deklaration in einem Namespace namens
+`examples.todo.core`.  Außerdem importiert es Funktionen und Makros
+aus dem Namespace `reacl.core` mit Präfix `reacl/`
+(ClojureScript-Makros werden in Clojure gesondert programmiert, darum
+muss man sie mit `:include-macros` auch extra einbinden), aus
+`reacl.dom` mit Präfix `dom/` und `reacl.lens` mit Präfix `lens/`.
+
 Der Namespace `reacl.core` definiert die zentralen, oben beschriebenen
 Konzepte und `reacl.dom` Funktionen für die DOM-Manipulation.  Der
 Namespace `reacl.lens` ist eine kleine Library für *Linsen*, welche es
@@ -127,7 +134,9 @@ eine Art Zeiger auf einen Teil einer größeren Struktur, der es
 erlaubt, auf diesen Teil zuzugreifen und diesen auszutauschen.
 (Linsen sind in Haskell [ein echter Hit
 sind](http://www.haskellforall.com/2013/05/program-imperatively-using-haskell.html).
-Darüber werden wir auch noch ein Posting schreiben.)
+Darüber werden wir auch noch ein Posting schreiben.)  Sie ersparen
+uns, mit "Ids" o.ä. hantieren zu müssen, um bestimmte Teile des
+Applikationszustands zu identifizieren.
 
 ## Einzelne Todos ##
 
@@ -182,15 +191,19 @@ Dazu benutzt er `lens/yank`, um aus der Todo-Liste "dieses" Todo
 herauszuholen.  Der `dom/div`-Ausdruck macht ein DOM-Objekt (ein
 `div`-Element) aus einer Checkbox (zum Abhaken des Todos) und dem Text
 des Todos.  Die Checkbox wird mit dem `dom/input`-Ausdruck erzeugt,
-der ein entsprechendes `input`-Element liefert.  `:type`, `:value` und
-`:onChange` stehen für die HTML-Attribute `type`, `value` und
-`onChange`.
+der ein entsprechendes `input`-Element liefert.
+Die Map mit den Schlüsseln `:type`, `:value` und
+`:onChange` steht für die HTML-Attribute `type`, `value` und
+`onChange`.  (Die Doppelpunkte kennzeichnen sogenannte *Keywords* in
+ClojureScript, als effiziente Schlüssel in die Map fungieren.)
 
 Wichtig am `input`-Element ist die Callback-Funktion am
 `onChange`-Attribut: Diese schickt eine Nachricht an die Komponente
 (also an `this`): `true`, wenn der Haken gesetzt ist, sonst `false`.
 Dieser boolesche Wert muss aus dem "echten" DOM extrahiert werden, den
 `dom/dom-node` liefert - dort ist er der Wert des `checked`-Felds.
+(Der Punkt in `.-checked` steht für den Zugriff auf ein Feld, das `-`
+besagt, dass ein Feld ausgelesen wird und nicht eine Methode aufgerufen.)
 Damit `dom/dom-node` weiß, für *welchen* virtuellen DOM-Knoten sie den
 echten DOM-Knoten liefern soll (nämlich das `input`-Element), muss das
 `input`-DOM einen Namen bekommen - das passiert mit `dom/letdom`, das
@@ -242,9 +255,10 @@ Aktionen zu repräsentieren, benutzen wir zwei Record-Definitionen:
 Der bisher eingetippte Text ist "irgendwie Zustand", aber kein
 Applikationszustand: Er geht erst in den Applikationszustand ein, wenn
 `Add`/Return gedruckt wird.  Davor ist er reiner lokaler
-"GUI-Zustand", der lokale zur Komponente gehört.  Diese Sorte Zustand
+"GUI-Zustand", der lokal zur Komponente gehört.  
+Diese Sorte Zustand
 unterscheidet Reacl vom Applikationszustand, und er kann bei der
-Klassendeklaration angemeldet als zusätzlicher Parameter angemeldet
+Klassendeklaration als zusätzlicher Parameter angemeldet
 werden:
 
 {% highlight clojure %}
@@ -253,6 +267,11 @@ werden:
   initial-state ""
   ...)
 {% endhighlight %}
+
+Es reicht übrigens nicht, den Text erst bei Bedarf aus dem DOM-Knoten
+auszulesen, da der Message-Handler keinen Zugriff auf das DOM hat.
+Dies entkoppelt außerdem den GUI-View von der Reaktion auf
+Benutzereingaben, was die Softwarearchitektur verbessert.
 
 Die `initial-state`-Klausel legt den Anfangszustand bei der Erzeugung
 der Komponente fest - noch kein Text da.  Der `render`-Ausdruck kann
