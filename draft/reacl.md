@@ -105,9 +105,10 @@ mit der Entwicklung erst vor kurzem angefangen, es sind also noch
 
 Dieser Abschnitt führt in Reacl anhand einer winzigen Todo-Applikation
 ein: Neue Todos können in eine Liste eingetragen und dann abhakt
-werden.   Das sieht so aus:
+werden.  Live zu sehen ist die Anwendung hier:
 
-<img src="/files/reacl/todo.png"/>
+<div id="todos"></div>
+<script src="/files/reacl/todo.js" type="text/javascript"></script>
 
 Hier ist die Namespace-Deklaration, die für eine Reacl-Anwendung
 typisch ist:
