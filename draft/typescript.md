@@ -12,12 +12,12 @@ eine Richtung gedreht, in der immer größere Teile komplexer
 Softwaresysteme im Browser leben.  Damit haben sich auch die Ansprüche
 an den Browser als Softwareplattform geändert, und die Kapselungs- und
 Abstraktionsmöglichkeiten der ehemals als HTML-Erweiterung angelegten
-Sprache
-[JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript),
-die Browser üblicherweise interpretieren können, genügen nicht mehr.
+Browser-Programmiersprache
+[JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+genügen nicht mehr.
 
-Inzwischen gibt es eine Reihe von Programmiersprachen, die sich mit
-verschiedenen Ansätzen an JavaScript andocken lassen.  In einem
+Inzwischen gibt es eine Reihe von Programmiersprachen, die mit
+unterschiedlichen Ansätzen an JavaScript andocken können.  In einem
 Artikel über [ClojureScript]({% post_url 2014-02-14-clojurescript-react %})
 wurde in diesem Blog bereits eine
 Sprache aus der LISP-Familie vorgestellt.  Im vorliegenden Artikel
@@ -26,26 +26,28 @@ Alternative, die sich durch ein statisches, von C# inspiriertes
 Typsystem und niedrige Einsatzhürden auszeichnet.
 
 TypeScript ist eine Obermenge von JavaScript, d.h. jedes
-JavaScript-Programm ist ein TypeScript-Programm.  So kann es mit wenigen
+JavaScript-Programm ist ein TypeScript-Programm.  So kann der Compiler mit wenigen
 Stunden Aufwand <!-- more start -->
-in ein großes Softwareprojekt eingeführt werden, um erst
-nach und nach die Vorteile der statischen Typisierung intensiver zu
-nutzen.  Die Neuerungen an TypeScript sind konservativ und
-orientieren sich an bestehenden Sprachen wie C# (das Projekt stammt
-aus dem Hause Microsoft) und Java.
+selbst in ein großes Softwareprojekt eingeführt werden, (fast) ohne
+den Code zu ändern.  Die Vorteile der statischen Typisierung kann man
+dann nach und nach intensiver nutzen.  Die Neuerungen an TypeScript
+sind konservativ und orientieren sich an bestehenden Sprachen wie C#
+(das Projekt stammt aus dem Hause Microsoft) und Java.
 
-TypeScript läuft in [Node.js](http://nodejs.org) und lässt sich
-genauso gut in CLI-basierte Entwicklungsumgebungen integrieren wie in
+Der Compiler ist in TypeScript geschrieben, läuft in
+[Node.js](http://nodejs.org), und lässt sich
+genauso gut in CLI-basierte Entwicklungsumgebungen oder emacs
+integrieren wie in
 Eclipse oder VisualStudio.  Es unterstützt die gängigen
 JavaScript-Modulsysteme und skaliert gut in großen Softwareprojekten.
-Ich will mich im Folgenden zunächst die Sprache vorstellen und ein
-Gefühl dafür geben, was es heißt, in TypeScript zu denken.  Ein
+Ich will im Folgenden zunächst die Sprache vorstellen und versuchen, ein
+Gefühl zu dafür geben, was es heißt, in TypeScript zu denken.  Ein
 Abschnitt über Entwicklungswerkzeuge und das Arbeiten mit
 TypeScript-Code folgt danach.
 
 Dem eiligen Leser, der sowohl in JavaScript als auch in C#, Java
 o.ä. Routine hat, mag es genügen, die Code-Schnipsel zu lesen und den
-Erklärenden Text auszulassen.
+erklärenden Text auszulassen.
 
 
 ## Fehler finden in JavaScript ##
@@ -54,7 +56,17 @@ TypeScript bietet einen
 [Spielplatz](https://www.typescriptlang.org/Playground) ([hier ohne
 SSL](http://www.typescriptlang.org/Playground)) im Netz an, auf dem
 Code-Schnipsel nach JavaScript übersetzt und ausgeführt werden können.
-Hier mit einem einfachen "Hello-World"-Programm:
+Zum besseren Verständnis können Sie die folgenden Beispiele wärend des
+Lesens hier eingeben und mit den Übersetzungen zu vergleichen.  Hier
+als erstes Beispiel ein einfaches "Hello-World"-Programm:
+
+
+{% highlight javascript %}
+var msg = "Die Sonne scheint";
+window.alert(msg)
+{% endhighlight %}
+
+So sollte das im Playground aussehen:
 
 ![(Screenshot)](fig1.png)
 
@@ -62,13 +74,7 @@ Zunächst fällt auf, wie durchlässig die Abstraktionsschicht zwischen
 Quell- und der Zielsprache ist.  _Jedes JavaScript-Programm ist ein
 TypeScript-Programm_; Wenn man also einfachen JavaScript-Code in das
 TypeScript-Feld auf der linken Bildhälfte eingibt, tut der Compiler
-(fast) gar nichts:
-
-{% highlight javascript %}
-var msg = "Die Sonne scheint";
-window.alert(msg)
-{% endhighlight %}
-
+(fast) gar nichts.
 Auf der rechten Bildhälfte im generierten JavaScript-Code sieht man,
 dass in der zweiten Zeile ein Semikolon angehängt wurde; ansonsten
 bleibt der Code unverändert.
@@ -80,7 +86,7 @@ festgestellt.  Außerdem wurden die Typen in den Playground gereicht,
 wo man sie sich anzeigen lassen kann, in dem man mit der Maus auf
 einen Ausdruck zeigt (`msg` hat etwa den Typ `string`).
 
-Auch beim Debugging kann der Compiler bereits gute Dienste, ohne auf
+Auch beim Debugging leistet der Compiler bereits gute Dienste, ohne auf
 Sprach-Erweiterungen zuzugreifen.  Wenn man den folgenden Code in den
 Playground eingibt:
 
@@ -124,15 +130,20 @@ var msg : string = "Die Sonne scheint";
 window.alert(msg);
 {% endhighlight %}
 
-Anders als in Python, wo Typen zur Laufzeit abgefragt werden können,
-existieren Typen in TypeScript nur in der Übersetzungsphase, wo sie
-der Korrektheitsanalyse dienen.  Der JavaScript-Code enthält keine
-Spur mehr von `: string`:
+Anders als die JavaScript-Typen, die zur Laufzeit mit `typeof`
+abgefragt werden können, existieren die Typ-Annotationen von
+TypeScript nur in der Übersetzungsphase, wo sie der
+Korrektheitsanalyse dienen.  Der JavaScript-Code enthält keine Spur
+mehr von `: string`:
 
 {% highlight javascript %}
 var msg = "Die Sonne scheint";
 window.alert(msg);
 {% endhighlight %}
+
+(Wenn ich im zweiten Teil dieses Artikels auf Interfaces und Klassen
+eingegangen bin, wird klar werden, warum man TypeScript-Typen zur
+Laufzeit behalten möchte.)
 
 Neben den einfachen Basistypen `string`, `number`, und `boolean`, gibt
 es Typen für Funktionen und (natürlich) Objekte und Arrays:
@@ -157,22 +168,25 @@ var msg : {
 
 Der aufmerksame Leser hat vielleicht bemerkt, dass die Implementierung
 von `f` in ein eigenes Statement gerutscht ist.  Das liegt daran, dass
-der Typ `((number, string) => string)` sich anders verhält als der Typ
-`string`.  Das ist nicht besonders intuitiv, aber glücklicherweise
-gibt es in TypeScript eine spezielle Schreibweise für Funktionen, die
-ohnehin besser zu lesen ist, nämlich:
+der Typ `((number, string) => string)` im Gegensatz zu `string` nicht
+in Typ-Annotationen direkt verwendt werden kann.  Das ist eine
+seltsame Ausnahme und ein Bruch mit der Idee der funktionalen
+Programmierung, aber glücklicherweise gibt es eine spezielle
+Schreibweise, die ohnehin besser zu lesen ist:
 
 {% highlight javascript %}
-var f = (msgNumber : number, msgHeader : string) : string =>
-    msgNumber.toString() + ": " + msgHeader;
+var f = (msgNumber : number, msgHeader : string) : string => {
+    return msgNumber.toString() + ": " + msgHeader;
+}
 {% endhighlight %}
 
 Im zweiten Teil dieses Artikels werden wir mehr über Funktionen,
-Typen, Klassen und Module lernen.  An dieser Stelle sei nur noch
-angemerkt, dass auch die etwas klobige Typ-Annotation von `msg` im
-letzten Beispiel eleganter ausgedrückt werden kann.  Objekt-Typen kann
-man nämlich wie JavaScript-Ausdrücke mit einem Namen versehen, unter
-dem man sie dann überall verwenden kann:
+Typen, Klassen und Module lernen.
+
+An dieser Stelle sei nur noch angemerkt, dass auch die etwas klobige
+Typ-Annotation von `msg` im letzten Beispiel eleganter ausgedrückt
+werden kann.  Objekt-Typen kann man nämlich wie JavaScript-Ausdrücke
+einem Namen zuweisen:
 
 {% highlight javascript %}
 interface IMsg {
@@ -196,9 +210,9 @@ JavaScript reden kann.
 
 Wie wir bisher gesehen haben, kann der TypeScript-Compiler dies
 weitgehend tun, ohne uns damit zu behelligen (es sei denn natürlich,
-es gibt Typfehler zu berichten).  Richtig interessant wird es aber
-erst, wenn wir die Typ-Sprache in Form von Annotationen verwenden
-können, um dem Compiler zu unseren Code genauer zu erklären.  Dadurch
+es gibt Typfehler zu berichten).  Richtig interessant wird es aber,
+wenn wir die Typ-Sprache in Form von Annotationen verwenden
+können, um dem Compiler unseren Code genauer zu erklären.  Dadurch
 schlägt man zwei Fliegen mit einer Klappe:
 
 - __Maschinenlesbarkeit__: Der Compiler kann an Stellen, an denen er
@@ -207,17 +221,20 @@ schlägt man zwei Fliegen mit einer Klappe:
   blieb, jetzt eine Fehlermeldung anzeigen.
 
 - __Lesbarkeit für die Mitmenschen__: Typ-Annotationen sind
-  Kommentare!  Der nächste (oder der selbe) Programmierer, der sich
+  Kommentare.  Der nächste (oder der selbe) Programmierer, der sich
   den Code einige Wochen später anschauen muss, erhält durch die Typen
   kompakte Zusatzinformationen darüber, was mit einem Stück Code
-  "gemeint" ist.
+  "gemeint" ist.  Bonus: diese Kommentare werden immer korrekt sein,
+  weil sich der Code sonst nicht mehr übersetzen lässt.
 
 
 ## Installation und Benutzung ##
 
 Um den TypeScript-Compiler auf einem Debian-Rechner zu installieren,
 benötigt man [node](http://nodejs.org) und [npm](http://npmjs.org).
-In der aktuellen Version ist npm in node enthalten:
+Da in der aktuell in Debian enthaltenen node-Release kein npm
+enthalten ist, sollte man am besten die Version von der Website
+installieren:
 
 {% highlight sh %}
 $ curl -O http://nodejs.org/dist/v0.10.29/node-v0.10.29.tar.gz
@@ -226,12 +243,18 @@ $ cd node-v0.10.29
 $ ./configure --prefix=$HOME/opt  # (oder ein Pfad Ihrer Wahl)
 $ make
 $ make install
+$ node --version
+{% endhighlight %}
+
+Danach ist die Installation von TypeScript ein Kinderspiel:
+
+{% highlight sh %}
 $ npm install -g typescript
 $ tsc --version
 {% endhighlight %}
 
-TypeScript wird inzwischen in vielen IDEs unterstützt (insbesondere
-Eclipse und VisualStudio).  Wer emacs, vi, gmake etc. als IDE
+TypeScript wird in vielen IDEs unterstützt (insbesondere
+Eclipse und VisualStudio).  Aber auch wer emacs, vi, gmake etc. als IDE
 verwendet, findet sich schnell zurecht:
 
 {% highlight sh %}
@@ -244,8 +267,8 @@ $ node code.js
 Immer noch gutes Wetter.
 {% endhighlight %}
 
-Der entstehende JavaScript-Code kann nun genau wie von Hand
-geschriebener in den Browser eingebunden werden.
+Der entstehende JavaScript-Code kann nun genau wie der von Hand
+geschriebene in den Browser eingebunden werden.
 
 `tsc` hat ein eigenes Format für Zeilen- und Spaltennummern in
 Fehlermeldungen.  Wer die einzeiligen Fehlmeldungsbandwürmer nicht mag
