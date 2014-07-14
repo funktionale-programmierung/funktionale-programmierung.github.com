@@ -25,9 +25,11 @@ geht es um [TypeScript](http://www.typescriptlang.org/), eine
 Alternative, die sich durch ein statisches, von C# inspiriertes
 Typsystem und niedrige Einsatzhürden auszeichnet.
 
+ <!-- more start -->
+
 TypeScript ist eine Obermenge von JavaScript, d.h. jedes
 JavaScript-Programm ist ein TypeScript-Programm.  So kann der Compiler mit wenigen
-Stunden Aufwand <!-- more start -->
+Stunden Aufwand
 selbst in ein großes Softwareprojekt eingeführt werden, (fast) ohne
 den Code zu ändern.  Die Vorteile der statischen Typisierung kann man
 dann nach und nach intensiver nutzen.  Die Neuerungen an TypeScript
@@ -313,11 +315,12 @@ verlinken:
   mit denen der Browser den TypeScript-Quellcode im debugger
   anzeigen kann, während er im Hintergrund durch die
   korrespondierenden Zeilen im generierten JavaScript-Code läuft;
-- Integration mit den üblichen Modulsystemen [requirejs/amd](http://requirejs.org) und
-[commonjs](http://commonjs.org);
+- [Integration](http://www.codebelt.com/typescript/typescript-amd-with-requirejs-tutorial/)
+  mit den üblichen Modulsystemen [requirejs/amd](http://requirejs.org) und
+  [commonjs](http://commonjs.org);
 - eine [Bibliothek von Interfaces](http://definitelytyped.org) mit einer langen
-Liste von JavaScript-Bibliotheken und Frameworks, mit denen Typfehler
-in Aufrufen in diese Bibliotheken beim Übersetzen abgefangen werden können;
+  Liste von JavaScript-Bibliotheken und Frameworks, mit denen Typfehler
+  in Aufrufen in diese Bibliotheken beim Übersetzen abgefangen werden können;
 - [tslint](https://github.com/palantir/tslint) für weitergehende Coding-Policy-Checks.
 
 Der zweite Teil dieses Artikels erscheint in den nächsten Wochen.

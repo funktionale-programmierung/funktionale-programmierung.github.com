@@ -88,3 +88,7 @@ authors:
     image: /author/andres-loeh.jpg
     href: "http://www.andres-loeh.de"
     about: '<a href="http://www.andres-loeh.de/">Dr. Andres Löh</a> ist Partner bei <a href="http://www.well-typed.com/">Well-Typed LLP</a>, einer auf Haskell spezialisierten Software-Beratungsfirma. Andres verwendet Haskell seit 1997.'
+  matthias-fischmann:
+    name: Matthias Fischmann
+    image: /author/matthias-fischmann.jpg
+    about: 'Dr. Matthias Fischmann ist Geschäftsführer und Senior Consultant bei <a href="http://zerobuzz.net/">zerobuzz.net</a>, einem Beratungsunternehmen mit den Standbeinen SAP und Haskell.  Er arbeitet seit 1999 mit Haskell und anderen funktionalen Sprachen.'
