@@ -128,8 +128,31 @@ werden.  (Dazu später mehr.)
 
 ## Typen zur Dokumentation von JavaScript-Code ##
 
-Mit _Typ-Annotationen_ bietet TypeScript eine echte Spracherweiterung
-gegenüber JavaScript an.  Annotationen können an jeder Stelle stehen,
+Ein Typsystem ist eine Meta-Sprache, in der Aussagen über die Struktur
+einer darunterliegenden Programmiersprache gemacht werden können.  Das
+Typsystem von TypeScript ist also eine Sprache, in der man über
+JavaScript reden kann.
+
+Wie wir bisher gesehen haben, kann der TypeScript-Compiler dies
+bis zu einem gewissen grad tun, ohne uns damit zu behelligen (es sei denn natürlich,
+es gibt Typfehler zu berichten).  In der Praxis interessant wird es aber erst,
+wenn wir die Typ-Sprache in Form von Annotationen verwenden
+können, um dem Compiler unseren Code genauer zu erklären.  Dadurch
+schlägt man zwei Fliegen mit einer Klappe:
+
+- __Maschinenlesbarkeit__: Der Compiler kann an Stellen, an denen er
+  vorher einen zwar in sich stimmigen, aber nicht vom Programmierer
+  beabsichtigten Typ hergeleitet hat und ein Fehler deshalb unbemerkt
+  blieb, jetzt eine Fehlermeldung anzeigen.
+
+- __Lesbarkeit für die Mitmenschen__: Typ-Annotationen sind
+  Kommentare.  Der nächste (oder der selbe) Programmierer, der sich
+  den Code einige Wochen später anschauen muss, erhält durch die Typen
+  kompakte Zusatzinformationen darüber, was mit einem Stück Code
+  "gemeint" ist.  Bonus: diese Kommentare werden immer korrekt sein,
+  weil sich der Code sonst nicht mehr übersetzen lässt.
+
+_Typ-Annotationen_ in TypeScript können an jeder Stelle stehen,
 an der ein Name definiert wird, und werden mit `:` eingeleitet:
 
 {% highlight javascript %}
@@ -209,30 +232,6 @@ var msg : IMsg = {
     ]
 };
 {% endhighlight %}
-
-Ein Typsystem ist eine Meta-Sprache, in der Aussagen über die Struktur
-einer darunterliegenden Programmiersprache gemacht werden können.  Das
-Typsystem von TypeScript ist also eine Sprache, in der man über
-JavaScript reden kann.
-
-Wie wir bisher gesehen haben, kann der TypeScript-Compiler dies
-bis zu einem gewissen grad tun, ohne uns damit zu behelligen (es sei denn natürlich,
-es gibt Typfehler zu berichten).  In der Praxis interessant wird es aber erst,
-wenn wir die Typ-Sprache in Form von Annotationen verwenden
-können, um dem Compiler unseren Code genauer zu erklären.  Dadurch
-schlägt man zwei Fliegen mit einer Klappe:
-
-- __Maschinenlesbarkeit__: Der Compiler kann an Stellen, an denen er
-  vorher einen zwar in sich stimmigen, aber nicht vom Programmierer
-  beabsichtigten Typ hergeleitet hat und ein Fehler deshalb unbemerkt
-  blieb, jetzt eine Fehlermeldung anzeigen.
-
-- __Lesbarkeit für die Mitmenschen__: Typ-Annotationen sind
-  Kommentare.  Der nächste (oder der selbe) Programmierer, der sich
-  den Code einige Wochen später anschauen muss, erhält durch die Typen
-  kompakte Zusatzinformationen darüber, was mit einem Stück Code
-  "gemeint" ist.  Bonus: diese Kommentare werden immer korrekt sein,
-  weil sich der Code sonst nicht mehr übersetzen lässt.
 
 
 ## Installation und Benutzung ##
