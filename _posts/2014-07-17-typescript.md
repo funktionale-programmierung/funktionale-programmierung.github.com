@@ -190,7 +190,7 @@ var msg : {
 Der aufmerksame Leser hat vielleicht bemerkt, dass die Implementierung
 von `f` in ein eigenes Statement gerutscht ist.  Das liegt daran, dass
 der Typ `((number, string) => string)` im Gegensatz zu `string` nicht
-in Typ-Annotationen direkt verwendt werden kann.  Das ist eine
+in Typ-Annotationen direkt verwendet werden kann.  Das ist eine
 seltsame Ausnahme und ein Bruch mit der Idee der funktionalen
 Programmierung, aber glücklicherweise gibt es eine spezielle
 Schreibweise, die ohnehin besser zu lesen ist:
