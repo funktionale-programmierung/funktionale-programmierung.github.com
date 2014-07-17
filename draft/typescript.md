@@ -206,13 +206,13 @@ var msg : IMsg = {
 {% endhighlight %}
 
 Ein Typsystem ist eine Meta-Sprache, in der Aussagen über die Struktur
-einer darunterliegnden Programmiersprache gemacht werden können.  Das
+einer darunterliegenden Programmiersprache gemacht werden können.  Das
 Typsystem von TypeScript ist also eine Sprache, in der man über
 JavaScript reden kann.
 
 Wie wir bisher gesehen haben, kann der TypeScript-Compiler dies
-weitgehend tun, ohne uns damit zu behelligen (es sei denn natürlich,
-es gibt Typfehler zu berichten).  Richtig interessant wird es aber,
+bis zu einem gewissen grad tun, ohne uns damit zu behelligen (es sei denn natürlich,
+es gibt Typfehler zu berichten).  In der Praxis interessant wird es aber erst,
 wenn wir die Typ-Sprache in Form von Annotationen verwenden
 können, um dem Compiler unseren Code genauer zu erklären.  Dadurch
 schlägt man zwei Fliegen mit einer Klappe:
@@ -232,10 +232,10 @@ schlägt man zwei Fliegen mit einer Klappe:
 
 ## Installation und Benutzung ##
 
-Um den TypeScript-Compiler auf einem Debian-Rechner zu installieren,
-benötigt man [node](http://nodejs.org) und [npm](http://npmjs.org).
-Da in der aktuell in Debian enthaltenen node-Release kein npm
-enthalten ist, sollte man am besten die Version von der Website
+Um den TypeScript-Compiler unter Linux zu installieren, benötigt man
+[node](http://nodejs.org) und [npm](http://npmjs.org).  Beides ist in
+allen verbreiteten Distributionen enthalten.  Wer sicher gehen will,
+dass er die aktuellste Version hat, kann direkt von der Website
 installieren:
 
 {% highlight sh %}
