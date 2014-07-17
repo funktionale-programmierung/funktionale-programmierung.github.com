@@ -75,7 +75,7 @@ window.alert(msg)
 
 So sollte das im Playground aussehen:
 
-![(Screenshot)](fig1.png)
+![(Screenshot)](/files/typescript/fig1.png)
 
 Zunächst fällt auf, wie durchlässig die Abstraktionsschicht zwischen
 Quell- und der Zielsprache ist.  _Jedes JavaScript-Programm ist ein
