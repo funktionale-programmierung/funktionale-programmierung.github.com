@@ -91,4 +91,5 @@ authors:
   matthias-fischmann:
     name: Matthias Fischmann
     image: /author/matthias-fischmann.jpg
+    href: "http://zerobuzz.net/"
     about: 'Dr. Matthias Fischmann ist Geschäftsführer und Senior Consultant bei <a href="http://zerobuzz.net/">zerobuzz.net</a>, einem Beratungsunternehmen mit den Standbeinen SAP und Haskell.  Er arbeitet seit 1999 mit Haskell und anderen funktionalen Sprachen.'
