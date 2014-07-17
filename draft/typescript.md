@@ -36,6 +36,11 @@ dann nach und nach intensiver nutzen.  Die Neuerungen an TypeScript
 sind konservativ und orientieren sich an bestehenden Sprachen wie C#
 (das Projekt stammt aus dem Hause Microsoft) und Java.
 
+Wie JavaScript kann hat TypeScript Funktionen erster Klasse
+(Funktionen sind Daten) und höherer Ordnung (Funkionen können andere
+Funkionen als Parameter nehmen), und kann damit der Familie der
+Funktionalen Programmiersprachen zugeordnet werden.
+
 Der Compiler ist in TypeScript geschrieben, läuft in
 [Node.js](http://nodejs.org), und lässt sich
 genauso gut in CLI-basierte Entwicklungsumgebungen oder emacs
