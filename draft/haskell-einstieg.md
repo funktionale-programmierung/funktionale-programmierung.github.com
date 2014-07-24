@@ -60,15 +60,16 @@ So, jetzt schauen wir uns aber den Code unserer tail-Implementierung
 an. Sie finden den Code in `src/Tail.hs`. Wir starten zunächst mit den
 Imports für eine Datenstruktur für Sequenzen. Das Besondere an dieser
 Datenstrukturen ist, dass man ein neues Element links oder rechts an eine
-Sequenz in Zeit O(1) anhängen kann. (In funktionalen Sprachen benutzen wir
-oft einfach verkettete Listen; dabei hat das Anhängen an das rechte
+Sequenz in Zeit O(1) anhängen kann. (Wir könnten auch normale Listen
+verwenden. Allerdings hat hier das Anhängen an das rechte
 Ende einer Liste lineare Laufzeit.)
 
-{% highlight haskell %}
-import Data.Sequence ( (|>), ViewL( (:<) ) ) -- http://hackage.haskell.org/package/containers-0.2.0.1/docs/Data-Sequence.html
-import qualified Data.Sequence as Seq
-import qualified Data.Foldable as F -- nötig für toList auf Sequenzen, https://hackage.haskell.org/package/base-4.7.0.0/docs/Data-Foldable.html
-{% endhighlight %}
+<div class="highlight"><pre><code class="haskell"><span
+class="kr">import</span> <span class="k">qualified</span> <span
+class="nn"><a href="http://hackage.haskell.org/package/containers-0.2.0.1/docs/Data-Sequence.html">Data.Sequence</a></span> <span class="k">as</span> <span class="n">Seq</span> <span class="c1"></span>
+<span class="kr">import</span> <span class="k">qualified</span> <span
+class="nn"><a hef="https://hackage.haskell.org/package/base-4.7.0.0/docs/Data-Foldable.html">Data.Foldable</a></span> <span class="k">as</span> <span class="n">F</span> <span class="c1">-- nötig für toList auf Sequenzen</span>
+</code></pre></div>
 
 Das Modul `Safe` benötigen wir, um beim Parsen der Kommandozeilenargument
 das Argument der Option `-n` in eine Zahl zu konvertieren. Haskell hat zwar
@@ -77,22 +78,42 @@ das Fehlschlagen der Konvertierung direkt zu einem Programmabsturz. Das
 `Safe`-Modul stellt eine bessere Variante der `read`-Funktion zur
 Verfügung.
 
-{% highlight haskell %}
-import Safe -- https://hackage.haskell.org/package/safe-0.3.7/docs/Safe.html
-{% endhighlight %}
+<div class="highlight"><pre><code class="haskell"><span
+class="kr">import</span> <span class="nn"><a href="https://hackage.haskell.org/package/safe-0.3.7/docs/Safe.html">Safe</a></span> <span class="c1"></span>
+</code></pre></div>
 
 Als nächstes folgen Module, die uns Zugriff auf die
 Kommandozeilenargumente, auf Funktionen zum Beenden des Programms sowie
 auf Funktionalität zur Ein-/Ausgabe bieten.
 
-{% highlight haskell %}
-import System.Environment -- https://hackage.haskell.org/package/base-4.2.0.0/docs/System-Environment.html
-import System.Exit        -- https://hackage.haskell.org/package/base-4.2.0.0/docs/System-Exit.html
-import System.IO          -- https://hackage.haskell.org/package/base-4.3.1.0/docs/System-IO.html
-{% endhighlight %}
+<div class="highlight"><pre><code class="haskell"><span
+class="kr">import</span> <span class="nn"><a href="https://hackage.haskell.org/package/base-4.2.0.0/docs/System-Environment.html">System.Environment</a></span> <span class="c1"></span>
+<span class="kr">import</span> <span class="nn"><a href="https://hackage.haskell.org/package/base-4.2.0.0/docs/System-Exit.html">System.Exit</a></span>        <span class="c1"></span>
+<span class="kr">import</span> <span class="nn"><a href="https://hackage.haskell.org/package/base-4.3.1.0/docs/System-IO.html">System.IO</a></span>          <span class="c1"></span>
+</code></pre></div>
+
+Das `ByteString`-Modul schließlich stellt Operation für den Umgang mit
+Byte-Arrays zur Verfügung.
+
+<div class="highlight"><pre><code class="haskell"><span
+class="kr">import</span> <span class="k">qualified</span> <span
+class="nn"><a href="https://hackage.haskell.org/package/bytestring-0.10.4.0">Data.ByteString</a></span> <span class="k">as</span> <span class="n">BS</span>
+</code></pre></div>
+
+Wenn Sie selbst ein Haskell Programm schreiben, aber nicht wissen welche
+Funktionen in welchen Modulen zu finden sind, gibt es mindestens drei
+Möglichkeiten, dies herauszufinden:
+
+* Sie benutzen [hoogle](http://www.haskell.org/hoogle/) oder
+  [hayoo](http://holumbus.fh-wedel.de/hayoo/hayoo.html),
+  zwei Suchmaschine für Haskell-API-Dokumentation.
+* Sie studieren die
+  [Übersicht](http://www.haskell.org/ghc/docs/latest/html/libraries/) der
+  gängigen Haskell Module.
+* Sie schauen sich auf [hackage](http://hackage.haskell.org/) um.
 
 Jetzt können wir mit der eigentlichen Implementierung loslegen. Wir
-starten mit der Funktion `printTail lines file`, welche die letzten `lines` Zeile
+starten mit der Funktion `printTail`, welche die letzten `lines` Zeile
 einer Datei `file` ausgibt.
 
 {% highlight haskell %}
@@ -105,12 +126,15 @@ printTail lines file =
       doWork :: Handle -> IO ()
       doWork h =
           do list <- collectLines lines h
-             mapM_ (\bs -> BS.hPut stdout bs >> BS.hPut stdout newline) list
+             mapM_ printLine list
+      printLine bs =
+          do BS.hPut stdout bs
+             BS.hPut stdout newline
       newline = BS.pack [10]
 {% endhighlight %}
 
-Die `printTail`-Funktion interpretiert den Dateinamen `-` als
-Standard-Input (wie üblich). Für echte Dateien benutzt sie die Funktion
+Die `printTail`-Funktion öffnet erst die zu lesende Datei, dabei wird `-` als
+Standard-Input interpretiert (wie üblich). Für echte Dateien benutzten wir die Funktion
 `withFile`. Diese Funktion öffnet eine Datei, führt mit der geöffneten
 Datei die übergebenen Aktion aus (hier: `doWork`) und stellt dann sicher,
 dass die Datei nach Abschluss der Aktion oder im Fehlerfall geschlossen
@@ -119,7 +143,9 @@ wird.
 Die Funktion `doWork` nimmt dann eine `Handle`, welches in Haskell eine
 geöffnete Datei repräsentiert. Mittels der noch zu implementierenden
 Funktion `collectLines` werden die letzten `lines` Zeilen aus der Datei
-extrahiert und anschließend ausgegeben.
+extrahiert und anschließend mit der Hilfsfunktion `printLine`
+ausgegeben. Der Aufruf `mapM_ printLine list` ruft dabei die
+`printLine`-Funktion für jedes Element der Liste `list` auf.
 
 Noch ein Wort zum Typ von `printTail`: in der Typsignatur zu Beginn der
 Funktion legen wir diesen auf `Int -> FilePath -> IO ()` zurück, die
@@ -131,11 +157,11 @@ Seiteneffekte hat (der `IO` Teil des Typs) und kein Ergebnis liefert (der
 In der `collectLines`-Funktion sammeln wir nun die richtigen Zeilen aus
 der Datei auf. Dazu benutzen wir die Datenstruktur aus `Data.Sequence`. Zu
 Anfang ist die Sequenz leer (`Seq.empty`). Dann hängen wir jede Zeile der
-Datei rechts an die Sequenz mittels `|>` an, und sorgen anschließend
+Datei rechts an die Sequenz mittels `Seq.|>` an, und sorgen anschließend
 dafür, dass überschüssige Zeilen am linken Ende entfernt werden. Dazu
 benutzen wir `Seq.viewl`, um einen "View" auf das linke Ende zu
 bekommen. Wenn das linke Ende leer ist (`Seq.EmptyL`) ist das ein Bug,
-anderenfalls matchen wir mittels `_ :< rest` auf das erste Element `_`
+anderenfalls matchen wir mittels `_ Seq.:< rest` auf das erste Element `_`
 und den `rest`.
 
 {% highlight haskell %}
@@ -147,14 +173,18 @@ collectLines lines handle = loop Seq.empty
              if isEof
              then return (F.toList acc)
              else do l <- BS.hGetLine handle
-                     loop (trim (acc |> l))
+                     loop (trim (acc Seq.|> l))
       trim seq =
           if Seq.length seq <= lines
           then seq
           else case Seq.viewl seq of
                  Seq.EmptyL -> error ("Bug in tail: argument to -n should not be negative")
-                 _ :< rest -> rest
+                 _ Seq.:< rest -> rest
 {% endhighlight %}
+
+Da wir keine Annahme über das Encoding der zu lesenden Daten machen
+wollen, lesen wir rohe Byte-Arrays (Type `BS.ByteString`) aus der Datei und
+verzichten auf eine Konvertierung nach `String`.
 
 Die hier vorgestellte Implementierung von `collectLines` ist sicher nicht
 die effizienteste, da wir immer die komplette Datei lesen. Die
@@ -162,10 +192,10 @@ C-Implementierung von `tail` unter BSD ist hier z.B. wesentlich schlauer,
 denn hier wird mit
 [Memory-Mapped IO](http://en.wikipedia.org/wiki/Memory-mapped_file) vom
 Ende der Datei her immer mehr Zeilen in den Speicher geladen, bis die
-gewünschte Anzahl Zeilen erreich ist. So etwas ist natürlich auch mit
+gewünschte Anzahl Zeilen erreicht ist. So etwas ist natürlich auch mit
 Haskell möglich, es gibt z.B. auf
 [Hackage](https://hackage.haskell.org/package/mmap) einen Wrapper für den
-`mmap` Systemcall. Falls ein Leser es wünscht, liefere ich gerne eine
+`mmap`-Systemcall. Falls ein Leser es wünscht, liefere ich gerne eine
 effizientere Implementierung von `collectLines` mittels `mmap` nach, in
 diesem Falle bitte einen entsprechenden Kommentar schreiben.
 
