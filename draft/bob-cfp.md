@@ -12,12 +12,13 @@ Die [BOB](http://bobkonf.de/) ist eine neue Konferenz für
 Software-Entwickler, Architekten und Macher.  Sie findet zum ersten
 Mal am [23. Januar 2015](http://bobkonf.de/2015/) in Berlin statt.  Die BOB
 wird von von den Betreibern des [Blogs "Funktionale
-Programmierung](http://funktionale-programmierung.de/) organisiert -
-entsprechend ist eines der Schwerpunkte die funktionale
+Programmierung"](http://funktionale-programmierung.de/) organisiert -
+entsprechend ist einer der Schwerpunkte die funktionale
 Programmierung.
 
 Gerade ist der [Call for
-Contributions](http://bobkonf.de/2015/cfp.html) gestartet - Deadline
+Contributions](http://bobkonf.de/2015/cfp.html) gestartet, in dem wir
+nach interessanten Vorträgen fahnden - Deadline
 ist der 30. September 2014.
 
 <!-- more start -->
@@ -26,14 +27,14 @@ Die BOB füllt eine Lücke in der deutschen Konferenzlandschaft für
 Software-Entwickler:
 
 Bei der BOB geht um Techniken und Technologien, die jeweils *das
-beste* im jeweiligen Bereich repräsentieren, das es für Entwickler
+Beste* im jeweiligen Bereich repräsentieren, das es für Entwickler
 gibt.  Dies entspricht unserer Erfahrung, dass jenseits des
 Mainstreams oft mächtige Werkzeuge schlummern, welche Produktivität
 und Freude an der Softwareentwicklung steigern können, von denen aber
 viele Entwickler noch zuwenig wissen.
 
-Natürlich ist die funktionale Programmierung ein Themenschwerpunkt und
-wir sehen weitere Schwerpunkte bei reaktiver Programmierung,
+Natürlich ist die funktionale Programmierung ein Themenschwerpunkt.
+Wir sehen weitere Schwerpunkte bei reaktiver Programmierung,
 Mikroservice-Architekturen sowie persistenten Datenstrukturen und
 Datenbanken.  Wir hoffen aber, dass uns Einreicher und Teilnehmer noch
 für weitere Themen begeistern können, von denen wir im Moment noch gar
@@ -42,7 +43,8 @@ nichts wissen.
 Der erste Schritt dafür ist der druckfrische [Call for
 Contributions](http://bobkonf.de/2015/cfp.html), bei dem *Sie* die
 Konferenz mitgestalten könnnen, indem Sie einen Vorschlag für einen
-Vortrag einreichen.  Begutachtet werden die Vorschläge von
+Vortrag einreichen.  **Deadline
+ist der 30. September 2014.**  Begutachtet werden die Vorschläge von
 einem hochkarätig besetzten
 [Programmkomitee](http://bobkonf.de//2015/programmkomitee.html).
 
