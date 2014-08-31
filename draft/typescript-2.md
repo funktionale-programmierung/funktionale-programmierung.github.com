@@ -16,6 +16,39 @@ ausloten.
 
 
 
+## Der `any`-Typ ##
+
+Um mit existierendem JavaScript-Code arbeiten zu können, ist das
+Typsystem nicht immer mächtig genug, und würde zu einer Vielzahl von
+Typfehlern führen.  Um das kontrolliert zu vermeiden, gibt es den Typ
+`any`.
+
+Namen, die den Typ `any` haben, können in jedem Kontext ohne Typfehler
+verwendet werden, d.h. sie haben insbesondere jedes Attribut, das
+gewünscht wird, und alle Attribute haben immer jeden gewünschten Typ.
+
+Um einen Typfehler auszuschalten, genügt es gewöhnlich, an die
+richtige Stelle im Code einen Typ-Cast zu schreiben:
+
+{% highlight javascript %}
+var x = (<any>r).someMethod();
+{% endhighlight %}
+
+Typ-Casts erzwingen vom Programmierer gewünschte Typen.  Mit `<T>`
+wird der Compiler gezwungen, für den folgenden Ausdruck den Typ `T`
+anzunehmen.
+
+`any` lässt sich auf unterschiedliche Weise einsetzen: Einerseits kann
+mit einigen Typ-Casts, alle Typfehler ausschalten (das mag akzeptabel
+sein für Prototypen, oder wenn eine stärkere Typisierung für später
+geplant ist).  Andererseits lässt sich mit `--noImplicitAny` und über
+Konventionen die Verwendung von `any` weitgehend verhindern.  Dadurch
+erhält man sehr viel besser dokumentierten und gecheckten Code, muss
+aber auch an vielen Stellen dem Compiler mit Typ-Annotationen und
+Casts auf die Sprünge helfen.
+
+
+
 ## `class` ##
 
 JavaScript ist ein seltenes Exemplar der Familie der im engeren
@@ -28,7 +61,10 @@ mehr ins Zentrum.
 
 TypeScript-Klassen bestehen aus Methoden, Attributen, und einem
 Konstruktor, für die es jeweils eine eigene Syntax und eigene
-semantische Feinheiten zu lernen gibt:
+semantische Feinheiten zu lernen gibt.  Hier als Beispiel eine Klasse,
+die REST-Objekte modelliert, bestehend aus einem etwas unkonkreten
+`data`-Attribut, einem URL-Pfad `path`, und einem Attribut `metaData`
+mit getter-Methode:
 
 {% highlight javascript %}
 class Resource {
@@ -75,8 +111,7 @@ legt ein leeres Objekt an, legt die Konstruktorfunktion unter
 `.prototype` auf diesem Objekt ab, und ruft diese dann auf, wobei
 `this` auf das angelegte Objekt zeigt.  Bei diesem Konstruktor-Aufruf
 werden die Attribute initialisiert; die Methoden werden als Attribute
-im Konstruktor registriert, und damit unter `prototype` im Objekt
-abgelegt.
+im Konstruktor, und damit auch unter `prototype` im Objekt, abgelegt.
 
 Attribute werden mit einem der beiden Schlüsselworte `public` oder
 `private` gekennzeichnet.  TypeScript erlaubt die Deklaration von
@@ -109,8 +144,7 @@ provoziert zwar einen Fehler, der sich aber mit
 console.log((<any>r).metaData);
 {% endhighlight %}
 
-leicht umgehen lässt (siehe weiter unten).  Zu den Ecken und Kanten
-des Typsystems, und wie man damit umgehen kann, kommen wir gleich.
+leicht umgehen lässt.
 
 
 
@@ -134,11 +168,11 @@ class PngResource extends Resource {
 {% endhighlight %}
 
 Der Konstruktor kann den Konstruktor der Superklasse über `super`
-erreichen (es ist sogar ein Compiler-Fehler, wenn er das nicht tut).
+erreichen (es ist sogar ein Compilerfehler, wenn er das nicht tut).
 
 Wir haben bereits
-[kurz gezeigt]({% post_url 2014-07-17-typescript %}), wie man mit
-Interfaces Typen von Objekten mit einem eigenen Namen versehen kann.
+[ein Beispiel gezeigt]({% post_url 2014-07-17-typescript %}), in dem mit
+Interfaces Typen von Objekten mit einem eigenen Namen versehen wurden.
 Interfaces sind auch bei der Entwicklung von Klassen eine wertvolle
 Abstraktionshilfe.  Damit kann man z.B. einfach formulieren, dass
 `PngResource` ein Attribut `.data.imageData` hat:
@@ -153,15 +187,6 @@ interface HasImageData {
 class PngResource extends Resource implements HasImageData {
 ...
 {% endhighlight %}
-
-Eine Klasse kann nur von einer anderen Erben (_keine_ Multiple
-Vererbung), aber beliebig viele Interfaces implementieren.
-
-Man könne dieses Beispiel auch mit einer reinen Klassenhierarchie
-`Resource` - `ResourceWithImageData` - `PngResource` implementieren.
-Der generierte Code ist dann aber umfangreicher: Interfaces sind wie
-Typen in TypeScript und im Gegensatz zu Klassen reine
-Compiler-Artefakte.  Sie verschwinden zur Laufzeit spurlos.
 
 Durch Interfaces lassen sich viele Dinge sehr kompakt ausdrücken, für
 die man mit Unit-Tests deutlich mehr schreiben muss:
@@ -189,7 +214,18 @@ class Directive implements IHasTemplateURL {
             });
 {% endhighlight %}
 
-Interfaces können übrigens wie Klassen voneinander abgeleitet werden:
+Man könne statt Interfaces oft auch mit weiteren Klassen hantieren.
+Um im Beispiel zu bleiben: `Resource` - `ResourceWithImageData` -
+`PngResource`.  Interfaces haben aber eine Reihe von Vorteilen:
+
+1. Eine Klasse kann nur von einer anderen Erben (_keine_ Multiple
+Vererbung), aber beliebig viele Interfaces implementieren.
+
+2. Klassen erzeugen generierten Code.  Interfaces sind (wie Typen) in
+TypeScript reine Compiler-Artefakte.  Sie verschwinden zur Laufzeit
+spurlos.
+
+Interfaces können außerdem wie Klassen voneinander abgeleitet werden:
 
 {% highlight javascript %}
 interface IMsg {
@@ -269,7 +305,7 @@ var storeCB = (
 $.get("api/48791", storeCB);
 {% endhighlight %}
 
-TypeScript stellt nun sichr, dass der Typ von `storeCB` den
+TypeScript stellt nun sicher, dass der Typ von `storeCB` den
 Erwartungen von `$.get` entspricht.
 
 Neben der Typisierung von aufrufendem Code eigenen sich
@@ -284,29 +320,6 @@ verbreitete JavaScript-Bibliotheken (eine Art "npm für Typen").  (Ich
 habe in der Praxis gute Erfahrungen damit gemacht, die Datenbank
 direkt aus github zu installieren und zu verwenden, allerdings steigt
 das Volumen stetig an und wird wohl langsam etwas unhandlich.)
-
-
-
-## Der `any`-Typ ##
-
-Um mit existierendem JavaScript-Code arbeiten zu können, ist das
-Typsystem nicht immer mächtig genug, und würde zu einer Vielzahl von
-Typfehlern führen.  Um das kontrolliert zu vermeiden, gibt es den Typ
-`any`.
-
-Namen, die den Typ `any` haben, können in jedem Kontext ohne Typfehler
-verwendet werden, d.h. sie haben insbesondere jedes Attribut, das
-gewünscht wird, und alle Attribute haben immer jeden gewünschten Typ.
-
-Dieses Feature lässt sich für verschiedene Geschmäcker unterschiedlich
-einsetzen: Einerseits kann man mit dem einfachen Trick,
-`(<any>someThing)` zu schreiben statt `someThing`, jeden Typfehler
-ausschalten (nicht sehr sicher, aber mag z.B. beim Schreiben von
-Unit-Tests, die ohnehin nicht produktiv eingesetzt werden, akzeptabel
-sein).  Andererseits lässt sich über ein Compiler-Flag die
-automatische Inferenz von `any` ausschalten.  Dann bekommt man so
-lange Typfehler, bis man an alle Stellen, an denen die Typinferenz
-fehlgeschlaten ist, einen Typ geschrieben hat.
 
 
 
@@ -337,7 +350,7 @@ Bei der täglichen Arbeit mit TypeScript stößt man doch noch öfters auf
 Typfehler, die erst zur Laufzeit erkannt werden.  Das liegt in der
 Natur der Sache, besonders wenn man beim Übersetzen auf
 `--noImplicitAny` verzichtet.  Oft kann man aber mit etwas geschicktem
-Refactoring doch noch einen Compiler-Fehler aus `tsc` herauskitzeln.
+Refactoring doch noch einen Compilerfehler aus `tsc` herauskitzeln.
 
 Das folgende Stück Code ist etwas überraschend _kein_ Fehler:
 
@@ -349,10 +362,13 @@ var x = f(2, 2);
 Das liegt daran, dass der minimale Typ von `arg` das leere Objekt ist
 (`field` ist optional).  Jeder Typ ist aber eine Spezialisierung des
 leeren Objekts, also gilt auch `2 : {}`, und damit `2 : { field ?:
-boolean }`.  Die Funktion `f` wird nun sehen, dass `arg.field` nicht
-definiert ist und hoffentlich nicht überrascht sein.
+boolean }` ("überstehende" Felder in Objekten werden ignoriert).  Die
+Funktion `f` wird nun sehen, dass `arg.field` nicht definiert ist (und
+darf das auch nicht überraschend finden, weil das Feld ja optional
+ist).
 
-Um dieses Problem zu vermeiden, muss mindestens ein nicht-optionales
+Um für diesen Aufruf von `f` einen Compilerfehler zu provozieren,
+muss mindestens ein nicht-optionales
 Attribut in `arg` vorkommen, das nicht im Typ `number` enthalten ist.
 Bei Funkionen mit optionalen Keyword-Argumenten z.B. kann man einfach
 ein Objekt nehmen, das nicht nur die optionalen, sondern alle
@@ -374,11 +390,62 @@ var x : { count : number };
 var y : number = x.count;
 {% endhighlight %}
 
-Diese Klasse von Fehlern wäre in stärker getypten Sprachen wie
-[Haskell]({% post_url 2014-07-25-haskell-einstieg %}) durch das
-Typsystem ausgeschlossen; das Typsystem von TypScript ist aber nicht
-rigoros genug, und daher hilft hier weiterhin nur
-Programmierdisziplin.
+`null` entspricht also nicht dem
+[Haskell]({% post_url 2014-07-25-haskell-einstieg %})-Wert
+`Nothing`, `False` o.ä., wie man
+vielleicht erwarten würde, sondern dem Wert `error "something went
+wrong"`, der beim Auswerten einen Fehler wirft.
+
+Fehler der Form _`undefined` hat diese oder jene Methode nicht_ sind
+in Haskell ausgeschlossen.  In TypeScript lässt sich das bis zu einem
+gewissen Grad nachprogrammieren:
+
+{% highlight javascript %}
+class Maybe<T> {
+    constructor(private value ?: T) {
+    }
+
+    public isJust() {
+        return typeof this.value !== 'undefined';
+    }
+
+    public isNothing() {
+        return typeof this.value === 'undefined';
+    }
+
+    public set(value ?: T) : void {
+        this.value = value;
+    }
+
+    public update(whenJust : T => T, whenNothing : () => T) : void {
+        if (this.isJust()) {
+            this.value = whenJust(this.value);
+        } else {
+            this.value = whenNothing();
+        }
+    }
+
+    public get(defaultValue : () => T) : T {
+        if (this.isJust()) {
+            return this.value;
+        } else {
+            return defaultValue();
+        }
+    }
+}
+{% endhighlight %}
+
+Ein Objekt der Klasse `Maybe` kann sagen, ob es einen Wert enthält
+oder `undefined` ist.  Mit `update` und `get` bietet es eine einfache
+Form von Pattern Matching, um die beiden Fälle zu unterscheiden.  Und
+da die Ersatzwerte in Funktionen eingepackt sind, kann man, statt
+einen Default-Wert zu verwenden, auch immer eine Exception werfen.
+
+Dieser Ansatz erzeugt Laufzeit-Daten und hat damit ein potentielles
+Performance-Problem.  Außerdem müssen für existierende Bibliotheken
+zusätzliche Wrapper-Module geschrieben werden.  Als Alternative bleibt
+immer noch wie bei JavaScript Programmierdisziplin und rigoroses
+Testen.
 
 Als drittes und letztes Beispiel möchte ich auf das oben skizzierte
 jquery-Ajax-Beispiel zurückkommen:
@@ -407,11 +474,9 @@ ist `storeCB` eine dynamisch getypte Funktion ohne jegliche checks.
 
 Dies ist eine grundsätzliche Beschränkung von statisch getypten
 Sprachen: An der Schnittstelle zu anderen Softwaresystemen müssen die
-Daten validiert und Fehler dynamisch abgefangen werden.  TypeScript
-kann aber dabei helfen, diese Fehler an einer Stelle zu lokalisieren,
-wo sie sofort nach Eintreffen der fehlerhaften Daten abgefangen
-werden.  Nämlich im Konstruktor einer Klasse, die den Typ der
-erwarteten Daten repräsentiert:
+Daten validiert und Fehler dynamisch abgefangen werden.  In TypeScript
+bietet es sich an, diese Validierung im Konstruktor einer Klasse
+durchzuführen, die den Typ der erwarteten Daten repräsentiert:
 
 {% highlight javascript %}
 class IMsgGeo {
@@ -443,54 +508,45 @@ Wenn `storeCB` nun mit einem `data`-Objekt aufgerufen wird, das nicht
 den Typ `IMsgGeo` hat, dann wird der Konstruktor eine Exception
 werfen.
 
-Dieser Ansatz hat auch Nachteile: Es ist schon bei diesem einfachen
-Typ recht lang und mühevoll zu schreiben; und um wirklich alle
-dynamischen Typfehler abzufangen, wären die Implementierung weiterer
-Tests notwenig (ist `data.header` wirklich ein String, und nicht
-wieder ein Objekt?  Sind alle Elemente von `data.details` Strings?).
-Außerdem werden "überstehende" Attribute, die vom Server geliefert,
-aber von `IMsgGeo` nicht gefordert werden, stillschweigend gelöscht,
-statt Laufzeit-Typfehler zu provozieren.
-
-Das Problem der Laufzeit-Kosten von umfassenden Typchecks kann
-entschärft werden, indem die Checks nur im Development-Modus
-ausgeführt und im produktiven Code ausgeschaltet werden.
+Dieser Ansatz erfordert einige Handarbeit, die wieder Laufzeit-Effekte
+hat.  Das Beispiel ist schon recht lang, testet aber beispielsweise
+noch nicht, ob `data.header` wirklich `string` ist, sondern nur, ob es
+existiert.  Allerdings sollten die Laufzeitkosten nicht überbewertet
+werden, da die Netzwerklatenz in jedem Fall um einige Größenordnungen
+höhere Kosten verursacht.
 
 Um den entstehenden Aufwand für das Schreiben von Boilerplate-Code zu
 minimieren, lohnt sich vielleicht schon in einem größeren
-Web-Anwendungsprojekt das Schreiben eines Tools.
+Web-Anwendungsprojekt das Schreiben eines Tools, das die dynamischen
+Typchecks in den Ressourcenkonstruktoren automatisch generiert.
 
 
 ## Schluss ##
 
-TypeScript ist ein großartiges Refactoring-Tool: Mit etwas Übung kann
-man sich einen Stil aneignen, in dem fast alle Fehler, die durch
-Änderung oder Entfernung von Namen auftreten, direkt beim Speichern im
-Editor durch den Compiler finden.
-
-Die Dokumentation und Struktur einer großen JavaScript-Codebasis
-erfordert sehr viel Disziplin.  Mit TypeScript entsteht viel Struktur
-von alleine und wird bei jedem build auf Konsistenz überprüft.
-
 Leider wurde bei TypeScript der gleiche Fehler gemacht wie bei
-[mypy](http://mypy-lang.org/): `null` und `undefined` haben jeden Typ.
-Der Grund liegt vermutlich in einem weiterne Manko, nämlich dem Fehlen
-von Disjunktiven Typen, mit denen man immer aussagekräftige Typen für
-Funktionen schreiben könnte, bei denen man das nicht sicherstellen
-kann (für Leser mit Haskell-Kenntnissen: `Maybe`).
+[mypy](http://mypy-lang.org/): `null` und `undefined` haben keinen
+eigenen Typ.  Der Typchecker kann nichts dagegen tun, wenn überall
+statt des erwarteten Wertes `null` steht.
+
+Außerdem fehlen wegen der starken Orientierung an C# viele Features,
+die in Hindley-Milner-getypten Sprachen wie Haskell oder OCaml
+selbstverständlich sind, z.B. disjunktive Typen, mit denen man Enums
+besser modellieren könnte oder das `null`-Problem über Pattern
+Matching (Haskell: `Maybe`; OCaml: `option`) lösen könnte.
 
 Ansätze wie [fay](https://github.com/faylang/fay/wiki),
 [elm](https://en.wikipedia.org/wiki/Elm_%28programming_language%29),
 [shade](https://github.com/takeoutweight/shade),
 [ghcjs](https://github.com/ghcjs/ghcjs/) oder [haste](haste-lang.org)
-sind TypeScript konzeptuell weit überlegen, aber (noch) nicht
+sind TypeScript konzeptuell überlegen, aber (noch) nicht
 ausgereift genug, um für einen Einsatz in der Praxis in Frage zu
 kommen.  Außerdem ist die Einstiegshürde für das landläufige
 Web-Entwicklungs-Team sehr viel höher als bei TypeScript.
 
-Mein Fazit ist also fast durchweg positiv: Die Robustheit, Wartbarkeit
-und Lesbarkeit des Codes verbessert sich enorm gegenüber JavaScript,
+Mein Fazit ist also trotz der genannten Schwächen fast durchweg
+positiv: Die Robustheit, Erweiterbarkeit
+und Lesbarkeit des Codes verbessert sich enorm gegenüber JavaScript;
 Werkzeuge, Bibliotheken und Frameworks aus JavaScript lassen sich
-mühelos weiterverwenden, und selbst überzeugte Anwender un- oder
+mühelos weiterverwenden; und selbst überzeugte Anwender un- oder
 dynamisch getypter Programmiersprachen haben nicht allzuviele
 Probleme, sich an die neuen Konzepte zu gewöhnen.
