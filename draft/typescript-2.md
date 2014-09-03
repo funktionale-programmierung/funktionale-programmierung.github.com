@@ -38,8 +38,8 @@ Typ-Casts erzwingen vom Programmierer gewünschte Typen.  Mit `<T>`
 wird der Compiler gezwungen, für den folgenden Ausdruck den Typ `T`
 anzunehmen.
 
-`any` lässt sich auf unterschiedliche Weise einsetzen: Einerseits kann
-mit einigen Typ-Casts, alle Typfehler ausschalten (das mag akzeptabel
+`any` lässt sich auf unterschiedliche Weise einsetzen: Einerseits kann man
+mit einigen Typ-Casts alle Typfehler ausschalten (das mag akzeptabel
 sein für Prototypen, oder wenn eine stärkere Typisierung für später
 geplant ist).  Andererseits lässt sich mit `--noImplicitAny` und über
 Konventionen die Verwendung von `any` weitgehend verhindern.  Dadurch
@@ -127,7 +127,7 @@ dürfen auch sonst nirgends gesetzt oder gelesen werden.  Die folgende
 {% endhighlight %}
 
 Darüberhinaus hat eine TypeScript-Attributdeklaration keine Wirkung.
-`path` wird nirgends initialisiert, daher verschwindet er vollständig
+`path` wird nirgends initialisiert, daher verschwindet es vollständig
 aus dem generierten Code.
 
 `public`, `private` werden ebenfalls nur für die Typchecks (und im
@@ -188,37 +188,11 @@ class PngResource extends Resource implements HasImageData {
 ...
 {% endhighlight %}
 
-Durch Interfaces lassen sich viele Dinge sehr kompakt ausdrücken, für
-die man mit Unit-Tests deutlich mehr schreiben muss:
-
-{% highlight javascript %}
-interface IHasTemplateURL {
-    templateUrl : string;
-}
-
-class Directive implements IHasTemplateURL {
-    // ...
-}
-{% endhighlight %}
-
-Statt:
-
-{% highlight javascript %}
-class Directive implements IHasTemplateURL {
-    // ...
-}
-
-        // ...  (an einer ganz anderen Stelle in der Jasmine Testsuite)
-            it("has property 'templateUrl'", () => {
-                expect((new UI.Directive(0)).templateUrl).toBeDefined();
-            });
-{% endhighlight %}
-
 Man könne statt Interfaces oft auch mit weiteren Klassen hantieren.
 Um im Beispiel zu bleiben: `Resource` - `ResourceWithImageData` -
 `PngResource`.  Interfaces haben aber eine Reihe von Vorteilen:
 
-1. Eine Klasse kann nur von einer anderen Erben (_keine_ Multiple
+1. Eine Klasse kann nur von einer anderen erben (_keine_ Multiple
 Vererbung), aber beliebig viele Interfaces implementieren.
 
 2. Klassen erzeugen generierten Code.  Interfaces sind (wie Typen) in
@@ -242,6 +216,32 @@ var msg : IMsgGeo = {
     details: [],
     location: "Wien"
 };
+{% endhighlight %}
+
+Schließlich lassen sich durch Interfaces viele Dinge sehr kompakt
+ausdrücken, für die man mit Unit-Tests deutlich mehr schreiben muss:
+
+{% highlight javascript %}
+interface IHasTemplateURL {
+    templateUrl : string;
+}
+
+class Directive implements IHasTemplateURL {
+    // ...
+}
+{% endhighlight %}
+
+Statt:
+
+{% highlight javascript %}
+class Directive implements IHasTemplateURL {
+    // ...
+}
+
+        // ...  (an einer ganz anderen Stelle in der Jasmine Testsuite)
+            it("has property 'templateUrl'", () => {
+                expect((new UI.Directive(0)).templateUrl).toBeDefined();
+            });
 {% endhighlight %}
 
 
@@ -370,7 +370,7 @@ ist).
 Um für diesen Aufruf von `f` einen Compilerfehler zu provozieren,
 muss mindestens ein nicht-optionales
 Attribut in `arg` vorkommen, das nicht im Typ `number` enthalten ist.
-Bei Funkionen mit optionalen Keyword-Argumenten z.B. kann man einfach
+Bei Funktionen mit optionalen Keyword-Argumenten z.B. kann man einfach
 ein Objekt nehmen, das nicht nur die optionalen, sondern alle
 Argumente der Funktion als Attribute enthält:
 
