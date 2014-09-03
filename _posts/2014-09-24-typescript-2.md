@@ -6,7 +6,6 @@ author: matthias-fischmann
 tags: ["JavaScript", "TypeScript", "Datentypen"]
 ---
 
-
 Im [ersten Teil]({% post_url 2014-07-17-typescript %}) dieses Artikels
 über [TypeScript](http://www.typescriptlang.org/) ging es um die
 grundlegende Idee der Sprache und den Umgang mit dem Compiler.  Im nun
@@ -14,7 +13,7 @@ vorliegenden zweiten und vorläufig letzten Teil werden wir das Typ-
 und Modulsystem weiter durchleuchten und die Grenzen des Typsystems
 ausloten.
 
-
+<!-- more start -->
 
 ## Der `any`-Typ ##
 
@@ -550,3 +549,5 @@ Werkzeuge, Bibliotheken und Frameworks aus JavaScript lassen sich
 mühelos weiterverwenden; und selbst überzeugte Anwender un- oder
 dynamisch getypter Programmiersprachen haben nicht allzuviele
 Probleme, sich an die neuen Konzepte zu gewöhnen.
+
+<!-- more end -->
