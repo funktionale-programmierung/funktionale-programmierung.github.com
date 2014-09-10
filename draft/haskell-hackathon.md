@@ -27,7 +27,16 @@ in Berlin wird dieses mal von uns (also von
 [Lohmann&Birkner](http://lohmann-birkner.de)) organisiert.
 Von Freitag, 26.9.2014 bis Sonntag 28.9.2014 treffen sich
 Haskell-Programmierer(innen) in Berlin, um zusammen Haskell zu
-programmieren und darüber zu diskutieren. Aus meiner Erfahrung von
+programmieren und darüber zu diskutieren. Am Freitag geht's los mit
+einer Vorstellung von geplanten Projekten, abends gibt's dann ein gemeinsames
+Grill-Event. Am Samstag gibt es zwei Vorträge von
+[Andres Löh](http://www.andres-loeh.de/) und
+[José Pedro Magalhães](http://dreixel.net/), zwei
+absoluten Haskell-Experten. Zum Abschluss am Sonntag werden wir noch eine
+Session mit Demos und Kurzvorträgen einwerfen. Die restliche Zeit steht
+zum Programmieren und Diskutieren zur Verfügung.
+
+Aus meiner Erfahrung von
 inzwischen vier Haskell-Hackathons und nach einem Blick auf die
 [Teilneherliste](http://www.haskell.org/haskellwiki/HacBerlin2014/Participants)
 nehme ich stark an, dass sich auch
