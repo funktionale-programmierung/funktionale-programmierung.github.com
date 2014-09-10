@@ -9,8 +9,9 @@ tags: ["Haskell", "Hackathon"]
 In gut zwei Wochen findet vom 26. bis zum 28. September in Berlin der
 [Haskell-Hackathon](http://www.haskell.org/haskellwiki/HacBerlin2014)
 statt. Wir möchten die Gelegenheit nutzen, alle interessierten
-Haskell-Programmierer(innen) einzuladen: kommt nach Berlin, lernt
-andere Haskell-Programmier(innen) kennen, diskutiert und arbeitet
+Haskell-Programmierer jeden Geschlechts, Alters, Zugehörigkeit und
+Nationalität einzuladen: kommt nach Berlin, lernt
+andere Haskell-Programmier kennen, diskutiert und arbeitet
 zusammen an einer Haskell-Bibliothek, der Infrastruktur oder an einem
 eigenen Projekt. Auch unerfahrene Haskell-Programmierer sind herzlich
 willkommen, typischerweise findet sich auf einem solchen Hackathon
@@ -26,9 +27,9 @@ in Berlin wird dieses mal von uns (also von
 [factis research](http://factisresearch.com) mit Unterstützung von
 [Lohmann&Birkner](http://lohmann-birkner.de)) organisiert.
 Von Freitag, 26.9.2014 bis Sonntag 28.9.2014 treffen sich
-Haskell-Programmierer(innen) in Berlin, um zusammen Haskell zu
+Haskell-Programmierer in Berlin, um zusammen Haskell zu
 programmieren und darüber zu diskutieren. Am Freitag geht's los mit
-einer Vorstellung der geplanten Projekten, abends gibt's dann ein gemeinsames
+einer Vorstellung der geplanten Projekte, abends gibt's dann ein gemeinsames
 Grill-Event. Am Samstag gibt es zwei Vorträge von
 [Andres Löh](http://www.andres-loeh.de/) und
 [José Pedro Magalhães](http://dreixel.net/), zwei
@@ -38,7 +39,7 @@ zum Programmieren und Diskutieren zur Verfügung.
 
 Aus meiner Erfahrung von
 inzwischen vier Haskell-Hackathons und nach einem Blick auf die
-[Teilneherliste](http://www.haskell.org/haskellwiki/HacBerlin2014/Participants)
+[Teilnehmerliste](http://www.haskell.org/haskellwiki/HacBerlin2014/Participants)
 nehme ich stark an, dass sich auch
 dieses Mal wieder ein bunte Mischung aus Haskell Programmierern
 zusammenfinden wird. Man trifft auf einem
