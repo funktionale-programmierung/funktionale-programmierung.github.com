@@ -28,7 +28,7 @@ in Berlin wird dieses mal von uns (also von
 Von Freitag, 26.9.2014 bis Sonntag 28.9.2014 treffen sich
 Haskell-Programmierer(innen) in Berlin, um zusammen Haskell zu
 programmieren und darüber zu diskutieren. Am Freitag geht's los mit
-einer Vorstellung von geplanten Projekten, abends gibt's dann ein gemeinsames
+einer Vorstellung der geplanten Projekten, abends gibt's dann ein gemeinsames
 Grill-Event. Am Samstag gibt es zwei Vorträge von
 [Andres Löh](http://www.andres-loeh.de/) und
 [José Pedro Magalhães](http://dreixel.net/), zwei
