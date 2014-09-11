@@ -4,6 +4,7 @@ description: Ein Streifzug durch die Features von TypeScript
 title: "Ein Streifzug durch die Features von TypeScript (Teil 2)"
 author: matthias-fischmann
 tags: ["JavaScript", "TypeScript", "Datentypen"]
+permalink: /2014/09/24/typescript-2.html
 ---
 
 Im [ersten Teil]({% post_url 2014-07-17-typescript %}) dieses Artikels
