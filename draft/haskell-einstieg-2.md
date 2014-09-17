@@ -255,7 +255,7 @@ später mehrere Dateien verarbeiten und ein Fehler bei einer Datei führt
 nicht sofort zum Abbruch des gesamten Programms.
 
 Jetzt bleibt uns nur noch das Parsen der Kommandozeilenargumente und die
-eigentliche `main`-Funktion. Dies ist heute einfach, die `view-ascii`
+eigentliche `main`-Funktion. Dies ist heute einfach, da `view-ascii`
 lediglich die zu verarbeitenden Dateien übergeben bekommt.
 
 {% highlight haskell %}
