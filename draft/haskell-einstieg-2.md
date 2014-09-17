@@ -24,14 +24,15 @@ lediglich eine Installation der
 Version 2014.2.0.0 als auch die vorige Version 2013.2.0.0
 wird unterstützt. Außerdem brauchen Sie ein Checkout
 des
-[git Repositories](https://github.com/funktionale-programmierung/haskell-for-beginners.git)
+[git-Repositories](https://github.com/funktionale-programmierung/haskell-for-beginners.git)
 zu dieser Artikelserie.
 
-Ich werde mir Mühe geben, viele Dinge detailliert zu erklären. Allerdings
+In diesem Posting versuche ich, die Funktionsweise des Codes möglichst
+verständlich zu erläutern. Allerdings
 würde es den Rahmen dieses Blogs sprengen, auf jedes Detail
 einzugehen. Hierzu sei das Studium des einen oder
-anderen Haskell [Tutorials](http://learnyouahaskell.com/chapters) oder
-[Buchs](http://www.realworldhaskell.org/) empfohlen. Natürlich können Sie
+anderen [Haskell-Tutorials](http://learnyouahaskell.com/chapters) oder
+[-Buchs](http://www.realworldhaskell.org/) empfohlen. Natürlich können Sie
 Rückfragen auch als Kommentar zu diesem Artikel stellen.
 
 Im heutigen Artikel implementieren wir ein Tool names `view-ascii`. Dieses
@@ -41,7 +42,7 @@ Encodingproblem hat mir dieses Tool schon öfters geholfen.
 
 Um zu schauen, ob Ihre Haskell-Installation funktioniert, sollten Sie
 spätestens jetzt ein Checkout des
-[git Repositories](https://github.com/funktionale-programmierung/haskell-for-beginners.git)
+[git-Repositories](https://github.com/funktionale-programmierung/haskell-for-beginners.git)
 machen. Dann führen Sie im Verzeichnis `haskell-for-beginners` folgende
 Befehle aus:
 
@@ -70,31 +71,51 @@ auch in Gro<iso-8859-1: sharp s>buchstaben: <iso-8859-1: O with diaresis>
 ~~~
 
 So, jetzt aber zur Implementierung. Wir importieren zuerst das Modul
-`Data.ByteString` zum Arbeiten mit rohen Bytes.
-Die beiden Module `Data.Text` und `Data.Text.Encoding` brauchen wir,
+[`Data.ByteString`](https://hackage.haskell.org/package/bytestring-0.10.0.1/docs/Data-ByteString.html)
+zum Arbeiten mit rohen Bytes.
+Die beiden Module
+[`Data.Text`](https://hackage.haskell.org/package/text-1.1.1.3/docs/Data-Text.html)
+und
+[`Data.Text.Encoding`](https://hackage.haskell.org/package/text-1.1.1.3/docs/Data-Text-Encoding.html)
+brauchen wir,
 um Strings in Bytes zu kodieren.
 
-{% highlight haskell %}
-import qualified Data.ByteString as BS
-import qualified Data.Text as T
-import qualified Data.Text.Encoding as T
-{% endhighlight %}
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">import</span> <span class="k">qualified</span> <span class="nn"><a href="https://hackage.haskell.org/package/bytestring-0.10.0.1/docs/Data-ByteString.html">Data.ByteString</a></span> <span class="k">as</span> <span class="n">BS</span>
+<span class="kr">import</span> <span class="k">qualified</span> <span class="nn"><a href="https://hackage.haskell.org/package/text-1.1.1.3/docs/Data-Text.html">Data.Text</a></span> <span class="k">as</span> <span class="n">T</span>
+<span class="kr">import</span> <span class="k">qualified</span> <span class="nn"><a href="https://hackage.haskell.org/package/text-1.1.1.3/docs/Data-Text-Encoding.html">Data.Text.Encoding</a></span> <span class="k">as</span> <span class="n">T</span></code></pre></div>
+
+Alle drei Imports sind qualifiziert (Schlüsselwort `qualified`), d.h. Funktionen und Typen aus diesen Modulen
+können nur durch Voranstellen des Modulnamens gefolgt von einem Punkt verwendet werden. Da die Modulnamen
+relativ lang sind, geben wir mittels dem `as` Teil noch ein Kürzel für den Modulnamen an. So definiert
+`Data.ByteString` z.B. eine Funktion `singleton`. Um diese in unserem Programm verwenden zu können, müssen
+wir jetzt `BS.singleton` schreiben.
 
 Wir benötigen noch weitere Standardmodule zum Lesen von Dateien, zum
 Umgang mit Ausnahmen dabei, sowie zum Zugriff auf Kommandozeilenargument
 und zum vorzeitigen Beenden des Programms.
 
-{% highlight haskell %}
-import System.IO
-import Control.Exception
-import System.Environment
-import System.Exit
-{% endhighlight %}
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">import</span> <span class="nn"><a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/System-IO.html">System.IO</a></span>
+<span class="kr">import</span> <span class="nn"><a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Exception.html">Control.Exception</a></span>
+<span class="kr">import</span> <span class="nn"><a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/System-Environment.html">System.Environment</a></span>
+<span class="kr">import</span> <span class="nn"><a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/System-Exit.html">System.Exit</a></span></code></pre></div>
+
+Wenn Sie selbst ein Haskell Programm schreiben, aber nicht wissen welche
+Funktionen in welchen Modulen zu finden sind, gibt es mindestens drei
+Möglichkeiten, dies herauszufinden:
+
+* Sie benutzen [hoogle](http://www.haskell.org/hoogle/) oder
+  [hayoo](http://holumbus.fh-wedel.de/hayoo/hayoo.html),
+  zwei Suchmaschine für Haskell-API-Dokumentation.
+* Sie studieren die
+  [Übersicht](http://www.haskell.org/ghc/docs/latest/html/libraries/) der
+  gängigen Haskell Module.
+* Sie schauen sich auf [hackage](http://hackage.haskell.org/) um.
 
 Jetzt geht's richtig los. Wir definieren uns zuerst eine Tabelle, in
 der wir angeben, welche Bytesequenzen wir in der Ausgabe speziell
 darstellen möchten. Im deutschsprachen Raum sind dies die Umlaute und
-das Scharf-s in UTF-8 und ISO-8859-1 Encoding. Sie
+das Scharf-s in [UTF-8-](http://de.wikipedia.org/wiki/UTF-8) und
+[ISO-8859-1-Encoding](http://de.wikipedia.org/wiki/ISO_8859-1). Sie
 können die Tabelle aber auch gerne noch um weitere Zeichen und/oder
 Encodings erweitern. Die Tabelle ist als Liste von Paaren repräsentiert
 und hat den Typ `[(BS.ByteString, String)]`. Die erste
@@ -188,7 +209,8 @@ transform chunk acc =
 Der zweite Parameter `acc` von `transform` ist ein sogenannter
 *Akkumulator*, welcher zum Aufsammeln des Ergebnisses dient. In der
 funktionalen Programmierung benutzt man einen Akkumulator oft, um eine
-Funktion *endrekursiv* schreiben zu können. Endrekursiv bedeutet, dass der
+Funktion *endrekursiv* schreiben zu können. [Endrekursiv](http://funktionale-programmierung.de/2013/11/08/tail-calls.html)
+bedeutet, dass der
 rekursive Aufruf die letzte "Aktion" der Funktion ist. Bei unserer
 `transform`-Funktion sind beide rekursiven Aufrufe auch endrekursiv, wie
 durch die Kommentare angedeutet. Der Vorteil von endrekursiven Funktionen
