@@ -153,10 +153,11 @@ Dazu sind Linsen folgender Art hilfreich:
 {% endhighlight %}
 
 Die Funktion `contains` nimmt einen Wert und gibt eine Linse zurück,
-die über der boolschen Eigenschaft *fokussiert*.  Die `yank`-Funktion
-dieser Liste prüft, ob dieser Wert in einem Set enthalten ist oder
-nicht; die `shove`-Funktion ergänzt oder löscht einen Wert, abhängig
-vom zweiten Argument.
+die über der boolschen Eigenschaft *fokussiert*, ob dieser Wert in
+einem Set enthalten ist oder nicht. Die `yank`-Funktion dieser Linse
+prüft dazu, ob dieser Wert in einem Set enthalten ist; die
+`shove`-Funktion ergänzt oder löscht einen Wert, abhängig vom zweiten
+Argument.
 
 Für unsere Telefonbuch-Einträge könnten wir also zunächst definieren:
 
@@ -259,7 +260,7 @@ erst sinnvoll:
 
     `(shove l (shove l d v) v)` == `(shove l d v)`
 
-Die Linsen aus diesem Eintrag erfüllen alle Gesetze.
+Die Linsen aus diesem Beitrag erfüllen alle Gesetze.
 
 ## Zusammenfassung
 
