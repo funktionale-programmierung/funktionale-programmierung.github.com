@@ -7,7 +7,7 @@ tags: ["Clojure", "ClojureScript", "Linsen"]
 ---
 
 Linsen sind eine funktionale Abstraktion, die sich für uns schon in
-mehreren Projekten als sehr nützlich erwiesen hat. Mit ihnen kann man
+mehreren Projekten als sehr nützlich erwiesen haben. Mit ihnen kann man
 sehr gut komplexe Eigenschaften größerer Datenstrukturen definieren,
 solche Eigenschaften abfragen und insbesondere ändern. Dieser Artikel
 soll zeigen was Linsen sind, und wie man sie dafür verwenden kann. Die
@@ -31,10 +31,10 @@ Das Telefonbuch ist also eine Map mit Namen als Schlüssel, und einem
 Set von Einträgen als Wert. Jeder Eintrag besteht aus einem Tupel aus
 der Art des Eintrags und einem String mit der Telefonnummer selbst.
 
-Als Aufgabe stellen wir uns zwei Funktionen, die einmal angeben ob zu
-einem Namen ein bestimmter Eintrag vorhanden ist, und zum anderen
-einen Eintrag hinzufügen. Dabei sollte es keine Rolle spielen ob ein
-Name überhaupt schon im Telefonbuch vorhanden ist oder nicht:
+Als Aufgabe stellen wir uns zwei Funktionen: Eine schaut nach, ob zu
+einem Namen ein bestimmter Eintrag vorhanden ist, die Andere fügt
+einen Eintrag hinzu. Dabei sollte es keine Rolle spielen ob ein Name
+überhaupt schon im Telefonbuch vorhanden ist oder nicht:
 
 {% highlight clojure %}
 (defn has-entry? [book name kind number] ...)
@@ -107,8 +107,14 @@ Map gehalten, den zugehörigen Wert *fokussiert*:
            (assoc %1 key %2))))
 {% endhighlight %}
 
-Damit können wir gleich die erste interessante Eigenschaft eines
-Telefonbuchs als Linse definieren, nämlich die Menge der Einträge zu
+Die Funktion `yank` der `member`-Linse gibt den zum Schlüssel
+passenden Wert zurück (oder den Default-Wert, falls der Schlüssel
+nicht in der Map ist); die Funktion `shove` ändert den Wert zu einem
+Schlüssel oder entfernt Schlüssel und Wert aus der Map, wenn wir den
+Default-Wert übergeben.
+
+Damit können wir die erste interessante Eigenschaft eines
+Telefonbuchs als Linse definieren, nämlich das Set der Einträge zu
 einem Namen:
 
 {% highlight clojure %}
@@ -130,10 +136,9 @@ setzen. Ein Beispiel:
 ;; => {"Mike" #{[:work "071170709468"] [:home "07071xxx"]}}
 {% endhighlight %}
 
-Dadurch dass `member` einen Map-Eintrag komplett entfernt, der dem
-Default-Wert entspricht, enthält das neue Telefonbuch, das hier mit
-dem letzten Ausdruck erzeugt wurde, übrigens keinen Schlüssel `"David"`
-mehr.
+Dadurch, dass `member` einen Map-Eintrag komplett entfernt, der dem
+Default-Wert entspricht, enthält das neue Telefonbuch, das der letzte 
+Ausdruck erzeugt, keinen Schlüssel `"David"` mehr.
 
 Wir müssen jetzt ausserdem noch in das Set der Einträge *einsteigen*.
 Dazu sind Linsen folgender Art hilfreich:
@@ -148,8 +153,10 @@ Dazu sind Linsen folgender Art hilfreich:
 {% endhighlight %}
 
 Die Funktion `contains` nimmt einen Wert und gibt eine Linse zurück,
-die über der boolschen Eigenschaft *fokussiert*, ob dieser Wert in
-einem Set enthalten ist oder nicht.
+die über der boolschen Eigenschaft *fokussiert*.  Die `yank`-Funktion
+dieser Liste prüft, ob dieser Wert in einem Set enthalten ist oder
+nicht; die `shove`-Funktion ergänzt oder löscht einen Wert, abhängig
+vom zweiten Argument.
 
 Für unsere Telefonbuch-Einträge könnten wir also zunächst definieren:
 
@@ -171,13 +178,13 @@ Und so können wir das direkt auf den Sets verwenden:
 ;; => #{[:home "07121xxx"] [:work "071170709475"]}
 {% endhighlight %}
 
-Was wir jetzt aber noch machen wollen, ist die Linsen für die
-Map-Einträge und die für die Sets irgendwie zu kombinieren. In diesem
+Jetzt wollen wir noch die Linsen für die
+Map-Einträge und die für die Sets kombinieren. In diesem
 Fall wollen wir sie *aneinander hängen*, oder *übereinander legen*, um
 im Bild zu bleiben. Die kombinierte Linse sollte beim Lesen erst die
-`yank` Funktion der Linse für einen Map-Eintrag anwenden, und dann auf
-dem resultieren Set die `yank` Funktion einer Linse für den
-Set-Eintrag. Beim Schreiben, der `shove` Funktion sollte es
+`yank`-Funktion der Linse für einen Map-Eintrag anwenden, und dann auf
+dem resultieren Set die `yank`-Funktion einer Linse für den
+Set-Eintrag anwenden. Beim Schreiben, der `shove`-Funktion sollte es
 entsprechend andersherum passieren. Wenn wir einmal Wunschdenken
 anwenden brauchen wir einen Kombinator, nennen wir ihn `>>`, der
 folgendes kann:
@@ -194,7 +201,7 @@ folgendes kann:
 ;;     "David" #{[:home "07121xxx"] [:work "071170709475"]}
 {% endhighlight %}
 
-Und tatsächlich ist es auch gar nicht so schwer diesen überaus
+Und tatsächlich ist es auch gar nicht so schwer, diesen überaus
 nützlichen Kombinator zu definieren:
 
 {% highlight clojure %}
@@ -209,7 +216,7 @@ nützlichen Kombinator zu definieren:
 ## Lösung
 
 Kommen wir zum Schluss nun zu den beiden Funktionen auf
-Telefonbüchern, die wir uns oben als Aufgabe gestellt haben:
+Telefonbüchern, die wir uns zu Beginn als Aufgabe gestellt haben:
 
 {% highlight clojure %}
 (defn has-entry? [book name kind number] ...)
@@ -236,7 +243,7 @@ Wie man jetzt noch ein `remove-entry` definieren könnte ist sicherlich nahelieg
 
 ## Regeln
 
-Nicht alles was das dem obigen `Lens` Protokoll entspricht sollte man
+Nicht alles, was das dem obigen `Lens`-Protokoll entspricht, sollte man
 als Linse betrachten. Folgende Regeln, oder *Gesetze*, machen Linsen
 erst sinnvoll:
 
@@ -244,13 +251,15 @@ erst sinnvoll:
 
     `(yank l (shove l d v))` == `v`
 
-2. Reinstecken was man raus gezogen hat ändert nichts:
+2. Reinstecken, was man raus gezogen hat, ändert nichts:
 
     `(shove l d (yank l d))` == `d`
 
 3. Zweimal reinstecken ist das gleiche wie einmal:
 
     `(shove l (shove l d v) v)` == `(shove l d v)`
+
+Die Linsen aus diesem Eintrag erfüllen alle Gesetze.
 
 ## Zusammenfassung
 
