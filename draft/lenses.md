@@ -7,12 +7,17 @@ tags: ["Clojure", "ClojureScript", "Linsen"]
 ---
 
 Linsen sind eine funktionale Abstraktion, die sich für uns schon in
-mehreren Projekten als sehr nützlich erwiesen haben. Mit ihnen kann man
-sehr gut komplexe Eigenschaften größerer Datenstrukturen definieren,
-solche Eigenschaften abfragen und insbesondere ändern. Dieser Artikel
-soll zeigen was Linsen sind, und wie man sie dafür verwenden kann. Die
-verwendete Programmiersprache ist [Clojure](http://clojure.org/), in
-der wir zur Zeit sehr viel und gerne programmieren.
+mehreren Projekten als sehr nützlich erwiesen haben. Mit ihnen kann
+man sehr gut komplexe Eigenschaften größerer Datenstrukturen
+definieren, abfragen und insbesondere ändern. Linsen machen aus
+Eigenschaften *first class citizens* über die man abstrahieren und
+die man miteinander kombinieren kann.
+
+Dieser Artikel soll zeigen was Linsen sind, und wie man sie dafür
+verwenden kann. Die verwendete Programmiersprache ist
+[Clojure](http://clojure.org/), in der wir zur Zeit sehr viel und
+gerne programmieren. Einige Tutorials zur Sprache finden sich zum
+Beispiel [hier](http://learn-clojure.com/).
 
 <!-- more start -->
 
@@ -41,10 +46,10 @@ einen Eintrag hinzu. Dabei sollte es keine Rolle spielen ob ein Name
 (defn add-entry [book name kind number] ...)
 {% endhighlight %}
 
-## Was sind Linsen
+## Was sind Linsen?
 
 Zunächst einmal kommt das Wort vom englischen *Lens*, es sind also
-nicht die Linsen zum Essen gemeint, sondern die zum Durchgucken. Und
+nicht die Linsen zum Essen gemeint, sondern die zum Durchsehen. Und
 diese Analogie ist recht treffend: man hält eine Linse vor etwas
 Großes, und sieht einen kleineren Teil davon. Vom Programmieren her
 geht es also erst einmal darum, dass man mithilfe einer Linse einen
@@ -58,7 +63,9 @@ man das so definieren:
 
 Dies definiert Linsen als ein Protokoll, das von verschiedenen Typen
 implementiert werden kann, indem man eine Funktion `yank` mit einem
-weiteren Parameter `data` über Werte diesen Typs definiert.
+weiteren Parameter `data` über Werte diesen Typs definiert. Der erste
+Parameter von Protokollfunktionen ist in Clojure immer der konkrete
+Wert des jeweiligen Typs, und `this` ein passender Name dafür.
 
 Das allein wäre aber natürlich noch nicht der Rede wert. Entscheind
 ist, dass eine Linse ausserdem die Möglichkeit bietet, den Wert, den
@@ -89,14 +96,19 @@ Funktionen `yank` und `shove` explizit zu definieren:
   (ExplicitLens. yanker shover))
 {% endhighlight %}
 
+Der Recordtyp `ExplicitLens` hat also die beiden Felder `yanker` und
+`shover` und implementiert das Protokoll `Lens` direkt mit diesen
+beiden Funktionen. Die Funktion `lens` konstruiert einen Wert vom Typ
+`ExplicitLens`.
+
 ## Anwendung
 
 Die richtigen Eigenschaften als Linsen zu definieren, ist manchmal gar
-nicht so einfach. Die erste die wir hier brauchen werden, ist der Wert
-der in einer Map zu einem bestimmten Schlüssel hinterlegt ist. Dazu
-schreiben wir eine Funktion `member`, die einen Schlüssel und einen
-Default-Wert nimmt, und eine Linse erzeugt, die, über eine konkrete
-Map gehalten, den zugehörigen Wert *fokussiert*:
+nicht so einfach. Die erste die wir für unser Beispiel brauchen
+werden, ist der Wert der in einer Map zu einem bestimmten Schlüssel
+hinterlegt ist. Dazu schreiben wir eine Funktion `member`, die einen
+Schlüssel und einen Default-Wert nimmt, und eine Linse erzeugt, die,
+über eine konkrete Map gehalten, den zugehörigen Wert *fokussiert*:
 
 {% highlight clojure %}
 (defn member
@@ -107,6 +119,12 @@ Map gehalten, den zugehörigen Wert *fokussiert*:
            (assoc %1 key %2))))
 {% endhighlight %}
 
+`Member` nimmt also einen Parameter `key` und einen optionalen
+Parameter `default`, und ruft `lens` mit entsprechenden `yanker` und
+`shover` Funktionen auf (`#` zusammen mit `%` bzw. `%1` und `%2` ist
+Clojure's Kurzschreibweise für "Lambda-Ausdrücke" mit einem bzw.
+meheren Parametern.)
+
 Die Funktion `yank` der `member`-Linse gibt den zum Schlüssel
 passenden Wert zurück (oder den Default-Wert, falls der Schlüssel
 nicht in der Map ist); die Funktion `shove` ändert den Wert zu einem
@@ -115,7 +133,7 @@ Default-Wert übergeben.
 
 Damit können wir die erste interessante Eigenschaft eines
 Telefonbuchs als Linse definieren, nämlich das Set der Einträge zu
-einem Namen:
+einem Namen, mit einem leeren Set als Default-Wert:
 
 {% highlight clojure %}
 (defn book-entries
@@ -123,7 +141,7 @@ einem Namen:
   (member name #{}))
 {% endhighlight %}
 
-Wie gesagt, können wir mit einer Linse diese Eigenschaft lesen und
+Wie gesagt können wir mit einer Linse diese Eigenschaft lesen und
 setzen. Ein Beispiel:
 
 {% highlight clojure %}
@@ -136,7 +154,13 @@ setzen. Ein Beispiel:
 ;; => {"Mike" #{[:work "071170709468"] [:home "07071xxx"]}}
 {% endhighlight %}
 
-Dadurch, dass `member` einen Map-Eintrag komplett entfernt, der dem
+Hier sieht man aber auch, dass solche Eigenschaften jetzt
+*first-class* sind: `(book-entries "David")` erzeugt eine Linse für
+meine Einträge in einem Telefonbuch! Diesen Wert kann man an einen
+Namen binden wie hier, oder an andere Funktionen übergeben und weiter
+verarbeiten - dazu kommen wir noch weiter unten.
+
+Übrigens: Dadurch, dass `member` einen Map-Eintrag komplett entfernt, der dem
 Default-Wert entspricht, enthält das neue Telefonbuch, das der letzte 
 Ausdruck erzeugt, keinen Schlüssel `"David"` mehr.
 
@@ -212,9 +236,14 @@ nützlichen Kombinator zu definieren:
         (fn [data v] (shove l1 data (shove l2 (yank l1 data) v)))))
 {% endhighlight %}
 
-(Die Erweiterung auf mehr als zwei Linsen ist auch nicht schwer.)
+Der `yanker` liest zuerst den Wert den die Linse `l1` in `data`
+fokussiert, und liest darin dann das was die Linse `l2` definiert hat
+aus. Der `shover` liest auch zunächst auch aus was `l1` in den
+bisherigen Daten zeigt, lässt `l2` darin seine Änderungen
+machen, und setzt das Ergebnis schließlich an die entsprechende
+"Stelle" zurück, so wie von `l1` definiert.
 
-## Lösung
+(Die Erweiterung auf mehr als zwei Linsen ist auch nicht schwer.)
 
 Kommen wir zum Schluss nun zu den beiden Funktionen auf
 Telefonbüchern, die wir uns zu Beginn als Aufgabe gestellt haben:
