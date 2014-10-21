@@ -302,3 +302,8 @@ wie bereits in einem [früheren Artikel]({% post_url 2014-07-07-reacl %})
 erwähnt. Aber wir haben Linsen auch erfolgreich in
 [Xtend](http://www.eclipse.org/xtend/) auf einer mutierbaren
 Java-Datenstruktur eingesetzt.
+
+Nachtrag: Linsen für Clojure und ClojureScript sind, in leicht anderer
+Form, Teil unserer
+[active-clojure](https://github.com/active-group/active-clojure)
+Bibliothek.
