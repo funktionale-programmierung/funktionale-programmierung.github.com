@@ -113,7 +113,7 @@ Spracherweiterung `OverloadedStrings` sorgt nun dafür, dass wir normale
 Stringliterale auch an Stellen verwenden können, in denen ein solcher alternativer
 String-Typ erwartet wird.
 
-Als nächstes folgen eine Reihen von Imports:
+Als Nächstes folgen eine Reihen von Imports:
 
 {% highlight haskell %}
 -- Bibliothek für JSON
@@ -167,7 +167,7 @@ Möglichkeiten, dies herauszufinden:
 Jetzt geht's richtig los. Wir widmen uns zunächst dem Filtern von
 JSON-Daten. Wir haben oben gesehen, dass wir Pfadausdrücke der Form
 `name.first` angeben können, um bestimmte Teile der JSON-Daten zu
-selektieren. Ein Pfadausdruck ist also eine Liste von Propertyname:
+selektieren. Ein Pfadausdruck ist also eine Liste von Propertynamen:
 
 {% highlight haskell %}
 type JsonPath = [T.Text]
@@ -175,10 +175,10 @@ type JsonPath = [T.Text]
 
 Die eigentliche Funktion `filterJson` zum Filtern nimmt einen solchen Pfadausdruck
 und eine Repräsentation der JSON-Daten.
-Um JSON-Daten zu Repräsentieren,
-zu Parsen und zu Serialisieren, benutzen wir die Bibliothek
+Um JSON-Daten zu repräsentieren,
+zu parsen und zu serialisieren, benutzen wir die Bibliothek
 [aeson](http://hackage.haskell.org/package/aeson-0.7.0.6). Dort ist der
-zentral Datentyp
+zentrale Datentyp
 [Value](http://hackage.haskell.org/package/aeson-0.7.0.6/docs/Data-Aeson.html#t:Value)
 definiert. Wir sehen den `Value`-Typ sowohl im Argument- als auch im
 Ergebnistyp von `filterJson`. Im Ergebnis ist `Value` noch in ein
@@ -191,23 +191,6 @@ Der `Value`-Datentyp erlaubt eine Fallunterscheidung über die
 Art der JSON-Daten. Die Funktion `filterJson` macht von dieser
 Fallunterscheidung gebrauch, nämlich dann wenn der vorliegende
 Pfadausdruck mit einem Propertynamen `p` beginnt.
-
-* Liegt ein JSON-Objekt vor (also etwas von der Form `{"key1": value1, "key2": value2}`), dann landen
-wir im Fall `J.Object m`, wobei `m` eine Hash-Map mit den Properties
-ist. In diesem Fall schlagen wir `p` in der Hash-Map nach. Falls `p` drin
-ist, machen wir mit dem restlichen Pfadausdruck und dem unter `p`
-gespeicherten Wert weiter. Anderenfalls liefern wir `Nothing` als Ergebnis zurück.
-
-* Liegt eine JSON-Array vor (also sowas wie
-`[1, "foobar", {"name": "Stefan"}]`), dann filtern wir mittels des kompletten
-Pfadausdrucks die Elemente des Arrays. Das [`mapMaybe`](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Maybe.html#v:mapMaybe) sorgt hier dafür,
-dass nur erfolgreich gefilterte JSON-Werte im Ergebnis landen.
-
-* In allen anderen Fällen liefert `filterJson` für einen nicht-leeren
-Pfadausdruck `Nothing` zurück, als kein Ergebnis.
-
-* Für einen leeren Pfadausdruck ist das Ergebnis die unveränderte Eingabe
-(eingepackt in ein `Just`).
 
 {% highlight haskell %}
 filterJson :: JsonPath -> J.Value -> Maybe J.Value
@@ -225,6 +208,34 @@ filterJson path json =
                 in Just (J.Array newArr)
             _ -> Nothing
 {% endhighlight %}
+
+* Liegt ein JSON-Objekt vor (also etwas von der Form `{"key1": value1, "key2": value2}`), dann landen
+wir im Fall `J.Object m`, wobei `m` eine Hash-Map mit den Properties
+ist. In diesem Fall schlagen wir `p` in der Hash-Map nach. Falls `p` drin
+ist, machen wir mit dem restlichen Pfadausdruck und dem unter `p`
+gespeicherten Wert weiter. Anderenfalls liefern wir `Nothing` als Ergebnis zurück.
+
+* Liegt eine JSON-Array vor (also sowas wie
+`[1, "foobar", {"name": "Stefan"}]`), dann filtern wir mittels des kompletten
+Pfadausdrucks die Elemente des Arrays. Das [`mapMaybe`](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Maybe.html#v:mapMaybe) sorgt hier dafür,
+dass nur erfolgreich gefilterte JSON-Werte im Ergebnis landen. Interessant
+ist auch, wie hier `mapMaybe` verwendet wird. Der Typ von `mapMaybe` ist
+`(a -> Maybe b) -> [a] -> [b]`. Wir müssen also eine Funktion mit Typ
+`a -> Maybe b` und eine Liste von `a`s übergeben, um eine Liste von `b`s
+zu erhalten. Das erste Argument von `mapMaybe` ist `filterJson path`. Das
+mag zuerst mal ungewohnt erscheinen, denn `filterJson` nimmt ja eigentlich
+zwei Argumente. Allerdings unterstützt Haskell
+[Currying](http://de.wikipedia.org/wiki/Currying), was bedeutet dass wir
+`filterJson` auch partiell anwenden können. Wenn wir nun ein statt zwei
+Argumente an `filterJson` übergeben, erhalten wir eine Funktion mit Typ
+`J.Value -> Maybe J.Value` zurück. Diese Funktion übergeben wir dann als
+erstes Argument an `mapMaybe`.
+
+* In allen anderen Fällen liefert `filterJson` für einen nicht-leeren
+Pfadausdruck `Nothing` zurück, als kein Ergebnis.
+
+* Für einen leeren Pfadausdruck ist das Ergebnis die unveränderte Eingabe
+(eingepackt in ein `Just`).
 
 So, jetzt können wir direkt mit dem Pretty-Printing weitermachen. Auch
 hier verwenden wir eine Fallunterscheidung über die Form der JSON-Daten,
