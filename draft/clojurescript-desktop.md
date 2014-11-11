@@ -3,7 +3,7 @@ layout: post
 description: ClojureScript in Desktopanwendungen verwenden.
 title: "ClojureScript in Desktopanwendungen"
 author: helmut-dobretzberger
-tags: ["Scala", "Reacl", "ClojureScript", "JavaFX", "Equals"] 
+tags: ["Scala", "Reacl", "ClojureScript", "JavaFX", "EQUALS"] 
 page_title: "ClojureScript in Desktopanwendungen"
 ---
 
@@ -14,13 +14,22 @@ beschrieben, verwenden wir bei der
 Web-Frontends [ClojureScript](http://clojure.org/clojurescript) mit
 unserem Framework [Reacl](https://github.com/active-group/reacl).
 Im Projekt [EQUALS](/2014/04/03/equals-java-scala.html)
-entwickeln wir derzeit für EQUALS-Desktopanwendung Teile der grafischen
-Benutzeroberfläche neu. Dieser Artikel zeigt, wie man in einer Scala-
-und Java-Desktopanwendung ClojureScript-Programme verwenden kann.
-<!-- more start -->
+entwickeln wir derzeit für die EQUALS Anwendung Teile der grafischen
+Benutzeroberfläche neu. <!-- more start -->
 
+Unser Ziel dabei ist, es die neue entwickelten Teile der Benutzeroberfläche nicht nur in der
+Desktopanwendung, sondern später auch in der Webversion von EQUALS
+verwenden zu können. Die Lösung war für uns, dass wir die Benutzeroberfläche
+als Webanwendung umsetzen. Neben der Wiederverwendbarkeit (das
+Design ist für die Desktop- und Webanwendung weitgehend identisch und basiert auf
+HTML5 & CSS), können wir dabei insbesondere unser Framework reacl
+verwenden und die Benutzeroberfläche mithilfe von funktionaler
+Programmierung umsetzen.
+
+
+## Technische Voraussetzungen
 Seit Version 7u6 integriert die Java-Runtime (JRE) das Framework
-[ JavaFX](http://docs.oracle.com/javase/8/javase-clienttechnologies.htm),
+[JavaFX](http://docs.oracle.com/javase/8/javase-clienttechnologies.htm),
 welches unter anderem einen eingebetteten Browser (als `WebView`
 bezeichnet) enthält. Dieser kann in eine Java/Scala-Benutzeroberfläche
 integriert werden, und erlaubt somit die Einbindung beliebiger
@@ -28,30 +37,17 @@ Webseiten in eine Desktopanwendung. Es wird dabei, wie auch in Apples
 Safari, die Rendering-Engine [WebKit](https://www.webkit.org/)
 verwendet. Seit der Version 8 der Java-Runtime ist die Darstellung von
 Webseiten , die sich ja häufig von Browser zu Browser unterscheidet,
-in JavaFX sehr ähnlich zu Apples Browser Safari und auch Google Chrome.
+in JavaFX sehr ähnlich zu Apples Browser Safari und auch Google
+Chrome.
 
-## Motivation
-
-Für uns bietet die Möglichkeit, die Benutzeroberfläche mit Webtechnologien zwei entscheidende Vorteile:
-
-- Es sind nahezu beliebige JavaScript oder CSS-Bibliotheken für die Oberflächengestaltung verwendbar. Wir verwenden unser Framework Reacl in Kombination mit Twitters [Bootstrap-Framework](http://getbootstrap.com/)
-
-- Das grafische Design ist auch unabhängig von der Desktopanwendung
-  einsetzbar. Für uns ist das vor allem im Hinblick auf eine
-  Webversion, die ähnliche Funktionalität wie die Desktopanwendung
-  bieten soll, relevant. Hier ist dann keine Neugestaltung mehr
-  notwendig sondern die grafische Benutzeroberfläche, die ja bereits
-  eine Webanwendung ist, kann wiederverwendet werden.
-
-JavaFX bietet noch [mehr](http://docs.oracle.com/javase/8/javafx/get-started-tutorial/jfx-overview.htm#A1131418) als einen eingebetteten Browser, wir betrachten hier aber nur die Einbindung von Webanwendungen.
+Das Framework bietet noch [mehr](http://docs.oracle.com/javase/8/javafx/get-started-tutorial/jfx-overview.htm#A1131418) als einen eingebetteten Browser, wir betrachten hier aber nur die Einbindung von Webanwendungen.
 Wer nicht unbedingt JavaFX verwenden muss/möchte, kann auch gern auf Alternativen zurückgreifen, so bietet z.B. das [.NET-Framework](http://msdn.microsoft.com/de-de/library/w0x726c2)  mit der [WebBrowser-Klasse](http://msdn.microsoft.com/de-de/library/system.windows.controls.webbrowser) ähnliche Funktionalität.
 
 ## Integration einer Webanwendung in eine Scala-Desktopanwendung
-
-Es ist sehr einfach möglich, in einer mit Swing gestalteten
+Es ist einfach möglich, in einer mit Swing gestalteten
 Benutzeroberfläche JavaFX zur Gestaltung der Benutzeroberfläche zu verwenden: Das `JFXPanel` ist eine `JComponent` und kann daher überall eingesetzt werden, wo man auch andere Swing-Komponenten wie `JTextField` oÄ. verwenden kann.
 
-Ein typisches Aussehen in einer Scala-Anwendung, die eine Webanwendung integriert, sieht wie folgt aus:
+Das typisches Aussehen einer Scala-Anwendung, die eine Webanwendung integriert, sieht wie folgt aus:
 
 {% highlight scala %}
 object Main {
@@ -62,7 +58,7 @@ object Main {
   }
 
  def initPanel() = {
-  val frame = new scala.swing.Frame()
+ val frame = new scala.swing.Frame()
   val panel = new JFXPanel()
   frame.peer.add(panel)
   frame.visible = true
@@ -73,15 +69,14 @@ object Main {
 
  def initView(p: JFXPanel) = {
    javafx.application.Platform.runLater(new Runnable {
-    override def run() {
+     override def run() {
         val webView = new javafx.scene.web.WebView()
         val webEngine = webView.getEngine
         webEngine.load("http://www.funktionale-programmierung.de")
-    }
-  })
-
-  p.setScene(new Scene(webView))
- }
+        p.setScene(new Scene(webView))
+     }
+   })
+  } 
 }
 {% endhighlight %}
 
@@ -91,7 +86,10 @@ die Möglichkeit, beliebige JFX-Funktionalitäten einzubinden. Wir
 wollen eine Webanwendung anzeigen, was beispielhaft in `initView` geschieht: Es wird ein neuer `WebView` erzeugt, und dann die Seite `www.funktionale-programmierung.de` geladen. Damit die Seite im `JFXPanel` angezeigt wird, muss diese noch mit einer `Scene` dem Panel hinzugefügt werden. (Eine Scene ist vom Grundsatz her nichts anderes als ein JPanel. Es heißt in JavaFX nur anders und kann mehr.)
 
 Somit hat man eine einfaches Programm, welches Webanwendung wie ein Browser lädt und anzeigt.
-Jetzt fehlt noch die Möglichkeit, mit dieser Webanwendung zu interagieren:
+Jetzt fehlt noch die Möglichkeit, mit dieser Webanwendung zu
+interagieren. Normalerweise geschieht dies über einen Server, der
+Anfragen entgegennimmt und dann passende Antworten zurückliefert. So
+einen Server gibt es hier nicht, es stellen sich also folgende Fragen:
 
 -  Woher weiß Scala, wann in der Webanwendung ein Knopf gedrückt wurde, oder welche Eingaben ein Benutzer in ein Textfeld gemacht hat?
 -  Woher weiß die Webanwendung, wenn der Benutzer im restlichen Teil
@@ -99,16 +97,15 @@ Jetzt fehlt noch die Möglichkeit, mit dieser Webanwendung zu interagieren:
    eine Aktion getätigt hat, die sich auf die Webanwendung auswirken
    soll?
 
-Zur Lösung und Erklärung dieser Fragen verwenden wir im Folgenden eine
+Zur Lösung und Erklärung dieser Fragestellungen verwenden wir im Folgenden eine
 mit reacl entwickelte Mini-Webanwendung, die nur einen Button enthält. 
 
 ## Kommunikation von der Desktopanwendung zur Webanwendung
 
 Die folgende Reacl-Anwendung wird im Namespace `javafx.simple`
-erstellt und enthält nur eine Reacl-Klasse, die einen Button erzeugt,
-sowie eine Funktion `simple-app`, die diese Reacl-Klasse aufruft.
+erstellt und enthält nur eine Reacl-Klasse `javafx-simple-app`, die
+mit `dom/button` einen Button erzeugt, sowie eine Funktion `simple-app`, die diese Reacl-Klasse aufruft.
 Erstmal macht dieser Button noch nichts, wir füllen Ihn später mit Funktionalität.
-
 
 {% highlight clojure %}
 (ns javafx.simple
@@ -119,7 +116,8 @@ Erstmal macht dieser Button noch nichts, wir füllen Ihn später mit Funktionali
   this []
   render
   (dom/div
-    (dom/button "Beenden - Aber ich funktioniere noch nicht!")))
+    (dom/button "Beenden - Aber wenn man auf mich klickt passiert noch
+  nichts!")))
 
 (defn simple-app []
   (reacl/render-component
@@ -285,6 +283,6 @@ JavaFX bietet eine komfortable Möglichkeit, Webanwendungen in eine
 Desktopanwendung zu integrieren. Die Vorteile davon sind vor allem in
 den größeren Freiheiten bei der grafischen Gestaltung der Anwendung,
 sowie in der Wiederverwendbarkeit einer so entwickelten Anwendung für
-"echte" Webanwendungen. Gerade in Kombination mit ClojureScript/Reacl
+*echte* Webanwendungen. Gerade in Kombination mit ClojureScript/Reacl
 können wir hier funktionale Programmierung sowohl für die
-Benutzeroberfläche, als auch den zugrundeliegenden Scala-Code einsetzen.
+Benutzeroberfläche, als auch für den zugrundeliegenden Scala-Code einsetzen.
