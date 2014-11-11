@@ -15,7 +15,9 @@ Web-Frontends [ClojureScript](http://clojure.org/clojurescript) mit
 unserem Framework [Reacl](https://github.com/active-group/reacl).
 Im Projekt [EQUALS](/2014/04/03/equals-java-scala.html)
 entwickeln wir derzeit für die EQUALS-Anwendung Teile der grafischen
-Benutzeroberfläche neu. <!-- more start -->
+Benutzeroberfläche neu.
+
+<!-- more start -->
 
 Unser Ziel dabei ist, die neue entwickelten Teile der Benutzeroberfläche nicht nur in der
 Desktopanwendung, sondern später auch in der Webversion von EQUALS zu
