@@ -14,12 +14,13 @@ beschrieben, verwenden wir bei der
 Web-Frontends [ClojureScript](http://clojure.org/clojurescript) mit
 unserem Framework [Reacl](https://github.com/active-group/reacl).
 Im Projekt [EQUALS](/2014/04/03/equals-java-scala.html)
-entwickeln wir derzeit für die EQUALS Anwendung Teile der grafischen
+entwickeln wir derzeit für die EQUALS-Anwendung Teile der grafischen
 Benutzeroberfläche neu. <!-- more start -->
 
-Unser Ziel dabei ist, es die neue entwickelten Teile der Benutzeroberfläche nicht nur in der
-Desktopanwendung, sondern später auch in der Webversion von EQUALS
-verwenden zu können. Die Lösung war für uns, dass wir die Benutzeroberfläche
+Unser Ziel dabei ist, die neue entwickelten Teile der Benutzeroberfläche nicht nur in der
+Desktopanwendung, sondern später auch in der Webversion von EQUALS zu
+verwenden.
+Die Lösung liegt für uns darin, dass wir die Benutzeroberfläche
 als Webanwendung umsetzen. Neben der Wiederverwendbarkeit (das
 Design ist für die Desktop- und Webanwendung weitgehend identisch und basiert auf
 HTML5 & CSS), können wir dabei insbesondere unser Framework reacl
