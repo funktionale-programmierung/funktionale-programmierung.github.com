@@ -1,10 +1,10 @@
 ---
 layout: post
-description: ClojureScript in Desktopanwendungen verwenden.
-title: "ClojureScript in Desktopanwendungen"
+description: "Funktionale Frontend-Entwicklung: ClojureScript in Desktopanwendungen einsetzen."
+title: "Funktionale Frontend-Entwicklung: ClojureScript in Desktopanwendungen"
 author: helmut-dobretzberger
 tags: ["Scala", "Reacl", "ClojureScript", "JavaFX", "EQUALS"] 
-page_title: "ClojureScript in Desktopanwendungen"
+page_title: "Funktionale Frontend-Entwicklung: ClojureScript in Desktopanwendungen"
 ---
 
 Wie bereits im Artikel
@@ -195,7 +195,7 @@ mit `getLoadWorker.stateProperty.addListener`) ruft Scala mit
 Anwendung in ClojureScript `simple-app`heißt? Der Grund liegt darin,
 dass in ClojureScript Namen erlaubt sind, die in JavaScript nicht
 möglich sind. Dadurch finden beim Compilieren Umbenennungen statt:
-`-`zu `_`oder ein `!`zu `_BANG_`
+`-`wird zu `_`oder ein `!`zu `_BANG_`
 Es gibt hierfür noch viele weitere Regeln, die
 z.B. [hier](https://groups.google.com/d/msg/clojure/jeg3LdDQnaU/UrOv75FfYh0J)
 gut zusammengefasst sind.
@@ -284,6 +284,6 @@ JavaFX bietet eine komfortable Möglichkeit, Webanwendungen in eine
 Desktopanwendung zu integrieren. Die Vorteile davon sind vor allem in
 den größeren Freiheiten bei der grafischen Gestaltung der Anwendung,
 sowie in der Wiederverwendbarkeit einer so entwickelten Anwendung für
-*echte* Webanwendungen. Gerade in Kombination mit ClojureScript/Reacl
+"echte" Webanwendungen. Gerade in Kombination mit ClojureScript/Reacl
 können wir hier funktionale Programmierung sowohl für die
 Benutzeroberfläche, als auch für den zugrundeliegenden Scala-Code einsetzen.
