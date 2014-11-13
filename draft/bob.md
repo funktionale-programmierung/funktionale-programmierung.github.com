@@ -47,6 +47,10 @@ auch anwendungsbezogene Themen wie zum Beispiel zu
 [AUTOSAR](http://bobkonf.de/2015/nordlander.html) und
 [Package-Management](http://bobkonf.de/2015/garbas.html).
 
+Die [Keynote von Anil
+Madhavapeddy](http://bobkonf.de/2015/keynote.html) garantiert
+spannendes Material zu Unikernels und funktionaler Programmierung.
+
 Ergänzt wird das Vortragsprogramm durch zwei Tutorial-Tracks:
 
 Ein Track bietet lose aufeinander aufbauende Tutorials rund um Erlang,
