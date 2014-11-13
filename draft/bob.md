@@ -1,0 +1,82 @@
+---
+layout: post
+description: "Die BOB-Konferenz steht!"
+title: "Die BOB-Konferenz steht!"
+author: michael-sperber
+tags: ["BOB", "Konferenz"]
+---
+
+![BOB 2015](http://bobkonf.de/images/bob_head_small.png)
+
+<!-- more start -->
+
+Die [BOB](http://bobkonf.de/) ist eine neue Konferenz für
+Software-Entwickler, Architekten und Macher.  Sie findet zum ersten
+Mal am [23. Januar 2015](http://bobkonf.de/2015/) in Berlin statt.  Die BOB
+wird von von den Betreibern des [Blogs "Funktionale
+Programmierung"](http://funktionale-programmierung.de/) organisiert -
+entsprechend ist einer der Schwerpunkte die funktionale
+Programmierung.
+
+Das [Programm](http://bobkonf.de/2015/programm.html) der BOB steht und
+die [Anmeldung](http://bobkonf.de/2015/registration.html) ist
+eröffnet!
+
+<!-- more end -->
+
+## 14 Vorträge und 8 Tutorials
+
+Wir haben uns sehr über die vielen Einreichungen gefreut, die aus sehr
+unterschiedlichen Themengebieten kamen, aber in jedem Fall Impulse für
+die Entwicklungspraxis liefern.
+
+Insgesamt finden nun 14 Vorträge und 8 Tutorials in vier parallelen
+Tracks statt, die das
+[Programmkomitee](http://bobkonf.de/2015/programmkomitee.html) aus den
+Einreichungen ausgewählt hat.
+
+Bei den Vorträgen ist natürlich die funktionale Programmierung
+vertreten (mit u.a. Vorträgen zu
+[Swift](http://bobkonf.de/2015/swierstra-talk.html),
+[Haskell](http://bobkonf.de/2015/magalhaes.html) und
+[Clojure](http://bobkonf.de/2015/stepien.html)),
+Mikroservice-Architekturen ([hier](http://bobkonf.de/2015/zuther.html)
+und [hier](http://bobkonf.de/2015/kischkel.html) zum Beispiel) aber
+auch anwendungsbezogene Themen wie zum Beispiel zu
+[Datenbanken](http://bobkonf.de/2015/knauel.html),
+[AUTOSAR](http://bobkonf.de/2015/nordlander.html) und
+[Package-Management](http://bobkonf.de/2015/garbas.html).
+
+Ergänzt wird das Vortragsprogramm durch zwei Tutorial-Tracks:
+
+Ein Track bietet lose aufeinander aufbauende Tutorials rund um Erlang,
+mit einer [Einführung](http://bobkonf.de/2015/rehfeld.html) und
+Tutorials zu [Webmachine](http://bobkonf.de/2015/meiklejohn.html),
+[Riak](http://bobkonf.de/2015/meiklejohn-riak.html) und
+[CRDTs](http://bobkonf.de/2015/bieniusa.html).
+
+Der zweite Track bietet Einführungen in
+[Haskell](http://bobkonf.de/2015/fischmann.html),
+[ClojureScript](http://bobkonf.de/2015/gilliar.html) und
+[Swift](http://bobkonf.de/2015/swierstra-tutorial.html) und
+[Web-Entwicklung mit Haskell](http://bobkonf.de/2015/thiemann.html).
+
+Alle Tutorials werden von ausgewiesenen Experten ihres jeweiligen
+Bereichs gehalten.
+
+Wir freuen uns riesig auf das Programm und würden uns freuen, auch Sie
+auf der BOB begrüßen zu können!
+
+## Anmeldung
+
+Die BOB findet auf dem [Gelände der Firma Lohmann & Birkner
+GmbH](http://bobkonf.de/2015/local.html) statt, die uns ihre
+Räumlichkeiten freundlicherweise zur Verfügung stellen.
+
+Die Anmeldung ist ab sofort [online
+möglich](http://bobkonf.de/2015/registration.html).
+
+**Achtung**: Die vergünstigten Early-Bird-Tarife laufen am 19.12.2014
+aus!
+
+
