@@ -84,3 +84,8 @@ möglich](http://bobkonf.de/2015/registration.html).
 aus!
 
 
+### :clojured
+
+Die BOB wird in Kooperation mit der [:clojured](http://clojured.de)
+direkt am Folgetag in Berlin organisiert - wer beide Konferenzen
+besucht, profitiert von Anmelderabatt!
