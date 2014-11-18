@@ -24,14 +24,14 @@ eröffnet!
 
 <!-- more end -->
 
-## 14 Vorträge und 8 Tutorials
+## 14 Vorträge und viele Tutorials
 
 Wir haben uns sehr über die vielen Einreichungen gefreut, die aus sehr
 unterschiedlichen Themengebieten kamen, aber in jedem Fall Impulse für
 die Entwicklungspraxis liefern.
 
-Insgesamt finden nun 14 Vorträge und 8 Tutorials in vier parallelen
-Tracks statt, die das
+Insgesamt finden nun voraussichtlich vier parallele Tracks statt,
+deren Vorträge und Tutorials das
 [Programmkomitee](http://bobkonf.de/2015/programmkomitee.html) aus den
 Einreichungen ausgewählt hat.
 
