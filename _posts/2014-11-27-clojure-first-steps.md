@@ -36,7 +36,7 @@ stattfindet.  Sie lässt sich zum Doppelpack mit der [BOB
 Es ist zwar möglich, Clojure "ohne alles" zu verwenden, es ist aber -
 wie bei allen JVM-Sprachen - sinnvoll, ein Werkzeug zu benutzen, um
 den Build-Prozess, den Classpath etc. zu verwalten.  Manuell macht das
-nur wenig Spaß.  Die meisten Wege zu Clojure führen außerdem über
+nur wenig Spaß.  Die meisten Wege zu Clojure führen daher über
 [Leiningen](http://leiningen.org/), das viele Aufgaben im Zusammenhang
 mit der Clojure-Entwicklung automatisiert.  Es gibt außerdem
 zahlreiche IDE- und Editor-Plugins (für
