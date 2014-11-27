@@ -84,7 +84,7 @@ runden auch eckige und geschweifte Klammern kennt) und durch
 Whitespace getrennt.  Diese Formen sind in Präfix-Notation; die erste
 Teilform nach der offenen Klammer sagt also, um was es sich handelt.
 
-Eine `defn`-Form definiert eine Funktion (hier namens `main-` - der
+Eine `defn`-Form definiert eine Funktion (hier namens `-main` - der
 Bindestrich sorgt dafür, dass Clojure die
 Java-Standard-`main`-Methode generiert) ohne
 Parameter (dafür steht das `[]`), die, wenn sie aufgerufen wird,
