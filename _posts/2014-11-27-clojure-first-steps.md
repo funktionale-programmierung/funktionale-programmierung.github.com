@@ -81,7 +81,7 @@ Ignorieren wir für die Zwecke dieser Einführung erstmal den
 verrät sich sofort als Lisp-Dialekt: Zusammengesetzte Formen sind
 immer von Klammern umschlossen (wobei Clojure neben den Lisp-üblichen
 runden auch eckige und geschweifte Klammern kennt) und durch
-Whitespace getrennt.  Diese Formen sind in Präfix-Notation, die erste
+Whitespace getrennt.  Diese Formen sind in Präfix-Notation; die erste
 Teilform nach der offenen Klammer sagt also, um was es sich handelt.
 
 Eine `defn`-Form definiert eine Funktion (hier namens `main-` - der
