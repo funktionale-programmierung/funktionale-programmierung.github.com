@@ -10,7 +10,7 @@ Dieses Posting beginnt eine kurze Reihe mit einer Einführung in die
 funktionale Sprache [Clojure](http://clojure.org/).  Clojure ist eine
 funktionale Sprache für die Java-Plattform, die schon des öfteren
 durch unser Blog gegeistert ist (zum Beispiel [hier]({% post_url 2013-06-27-dsl-clojure %})).
-Clojure ist in aktiver Entwicklung, hat
+Clojure ist in aktiver Entwicklung und hat
 schon vor Jahren die für industrielle Projekte nötige Reife erreicht.
 Ihre Schwestersprache
 [ClojureScript](http://clojure.org/clojurescript), die nach JavaScript
