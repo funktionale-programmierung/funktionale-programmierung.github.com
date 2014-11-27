@@ -90,7 +90,7 @@ Java-Standard-`main`-Methode generiert) ohne
 Parameter (dafür steht das `[]`), die, wenn sie aufgerufen wird,
 ihrerseits die eingebaute Funktion `println` aufruft.
 
-Keine große Sache also, wenn man sich an die vielen Klammern gewohnt
+Keine große Sache also, wenn man sich an die vielen Klammern gewöhnt
 hat.  A propos Klammern: Wer noch nie in einem Lisp-Dialekt
 programmiert ist, mag vielleicht denken, es sei umständlich, die immer
 zu zählen.  Das ist allerdings nicht nötig - wenn der Cursor auf einer
