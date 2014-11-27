@@ -180,7 +180,7 @@ dieses hier fortsetzen wird.
 
 Wer nach einem Buch über Clojure sucht, sollte berücksichtigen, dass
 die Sprache sich gerade in den letzten Jahren stark weiterentwickelt
-hat.  Darum fehlen behandeln viele Büchern
+hat.  Darum behandeln viele Bücher
 [hier](http://clojure.org/books) entscheidende Sprachelemente noch
 nicht.  Am ehestens scheint uns das [Clojure
 Programming](http://www.clojurebook.com/) empfehlenswert.
