@@ -1,7 +1,7 @@
 ---
 layout: post
-description: "Einführung in Clojure, Teil 1"
-title: "Einführung in Clojure, Teil 1"
+description: "Einführung in Clojure, erste Gehversuche"
+title: "Einführung in Clojure, erste Gehversuche"
 author: michael-sperber
 tags: ["Clojure"]
 ---
@@ -22,20 +22,30 @@ In diesem Posting zeigen wir, was Sie für für einen einfachen
 Clojure-Einstieg an Software installieren müssen und wie Sie die
 ersten Gehversuche machen können.
 
+# Übrigens ...
+
+Clojure ist auch Thema der Konferenz
+[:clojured](http://www.clojured.de/), die am 24. Januar in Berlin
+stattfindet.  Sie lässt sich zum Doppelpack mit der [BOB
+2015](http://bobkonf.de) am Tag davor kombinieren!
+
 <!-- more start -->
 
 # Handwerkszeug
 
-Clojure "ohne alles" ist kaum für die Entwicklung zu gebrauchen.  Es
-gibt zahlreiche IDE- und Editor-Plugins (für
+Es ist zwar möglich, Clojure "ohne alles" zu verwenden, es ist aber -
+wie bei allen JVM-Sprachen - sinnvoll, ein Werkzeug zu benutzen, um
+den Build-Prozess, den Classpath etc. zu verwalten.  Manuell macht das
+nur wenig Spaß.  Die meisten Wege zu Clojure führen außerdem über
+[Leiningen](http://leiningen.org/), das viele Aufgaben im Zusammenhang
+mit der Clojure-Entwicklung automatisiert.  Es gibt außerdem
+zahlreiche IDE- und Editor-Plugins (für
 [Eclipse](https://code.google.com/p/counterclockwise/),
 [IntelliJ](https://cursiveclojure.com/),
 [Emacs](https://github.com/clojure-emacs/clojure-mode),
-[Vim](https://github.com/guns/vim-clojure-static)).  Die meisten Wege
-zu Clojure führen außerdem über [Leiningen](http://leiningen.org/),
-das viele Aufgaben im Zusammenhang mit der Clojure-Entwicklung
-automatisiert.  Alle o.g. Plugins kommen auch mit
-Leiningen-Unterstützung.
+[Vim](https://github.com/guns/vim-clojure-static)).  Alle o.g. Plugins
+kommen auch mit Leiningen-Unterstützung und bieten andere
+Erleichterungen wie Syntax-Highlighting, Completion usw.
 
 Am einfachsten ist der Einstieg mit der kleinen IDE
 [Nightcode](https://nightcode.info/).  (Da ist Leinigen gleich schon
@@ -63,7 +73,8 @@ folgendes kleine Programm:
 
 Was das Programm tut, liegt nahe - über dem unteren Fenster gibt es
 einen `Run`-Knopf: Draufdrücken, und schon erscheint der erwartete
-Output.
+Output.  (Das dauert ziemlich lange, weil Nightcode erst einmal eine
+JVM hochfahren muss.  Mit Clojure selbst hat das wenig zu tun.)
 
 Ignorieren wir für die Zwecke dieser Einführung erstmal den
 `ns`-Header und schauen uns die Definition von `-main` an.  Clojure
@@ -73,7 +84,9 @@ runden auch eckige und geschweifte Klammern kennt) und durch
 Whitespace getrennt.  Diese Formen sind in Präfix-Notation, die erste
 Teilform nach der offenen Klammer sagt also, um was es sich handelt.
 
-Eine `defn`-Form definiert eine Funktion (hier namens `main-`) ohne
+Eine `defn`-Form definiert eine Funktion (hier namens `main-` - der
+Bindestrich sorgt dafür, dass Clojure die
+Java-Standard-`main`-Methode generiert) ohne
 Parameter (dafür steht das `[]`), die, wenn sie aufgerufen wird,
 ihrerseits die eingebaute Funktion `println` aufruft.
 
@@ -171,13 +184,6 @@ hat.  Darum fehlen behandeln viele Büchern
 [hier](http://clojure.org/books) entscheidende Sprachelemente noch
 nicht.  Am ehestens scheint uns das [Clojure
 Programming](http://www.clojurebook.com/) empfehlenswert.
-
-# Übrigens ...
-
-Clojure ist auch Thema der Konferenz
-[:clojured](http://www.clojured.de/), die am 24. Januar in Berlin
-stattfindet.  Sie lässt sich zum Doppelpack mit der [BOB
-2015](http://bobkonf.de) am Tag davor kombinieren!
 
 <!-- more end -->
 
