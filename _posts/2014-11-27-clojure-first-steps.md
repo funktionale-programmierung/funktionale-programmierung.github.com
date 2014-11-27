@@ -18,7 +18,7 @@ kompiliert wird und so im Browser läuft, hatten wir schon
 [hier]({% post_url 2014-02-14-clojurescript-react %}) und 
 [hier]({% post_url 2014-11-11-funktional-frontend-clojurescript %}) behandelt.
 
-In diesem Posting zeigen wir, was Sie für für einen einfachen
+In diesem Posting zeigen wir, was Sie für einen einfachen
 Clojure-Einstieg an Software installieren müssen und wie Sie die
 ersten Gehversuche machen können.
 
