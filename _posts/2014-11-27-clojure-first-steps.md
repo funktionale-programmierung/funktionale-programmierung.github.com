@@ -133,7 +133,7 @@ false
 Sie sehen - alles in Präfix-Notation und vollständig geklammert,
 ungewohnt aber leicht zu merken.
 
-Als nächstes legen wir eine eine *Definition* an, die einen Wert an
+Als nächstes legen wir eine *Definition* an, die einen Wert an
 einen Namen bindet.  Dazu schreiben wir ins obere Editor-Fenster
 folgendes:
 
