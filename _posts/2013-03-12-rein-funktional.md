@@ -34,7 +34,7 @@ Schnecken, die wir in einem späteren Posting dann in der Schneckenwelt
 anordnen.  In einem dritten Posting werden wir das Programm so
 erweitern, daß die Schnecken *Schleimspuren* hinterlassen und den
 Schleimspuren anderer Schnecken ("die stinken") ausweichen.  Das ganze
-visualisieren wir dann dergestallt, daß es so aussieht:
+visualisieren wir dann dergestalt, daß es so aussieht:
 
 <div id="center">
 <img src="/files/rein-funktional/snailworld.gif">
