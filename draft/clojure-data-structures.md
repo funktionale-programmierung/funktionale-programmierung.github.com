@@ -7,7 +7,7 @@ tags: ["Clojure"]
 ---
 
 Dieses Posting setzt unsere Clojure-Einführung
-(hier [Teil 1]({% post_url 2014-11-27-clojure-first-steps %}) fort.  Clojure war ein
+(hier [Teil 1]({% post_url 2014-11-27-clojure-first-steps %})) fort.  Clojure war ein
 Pionier bei der Bereitstellung von effizienten rein funktionalen
 Datenstrukturen (siehe 
 [hier]({% post_url 2013-03-12-rein-funktional %}) für eine
@@ -116,6 +116,7 @@ fp1.core=> :ok
 fp1.core=> :fail
 :fail
 fp1.core=> :delayed
+:delayed
 {% endhighlight %}
 
 # Folgen
@@ -138,7 +139,7 @@ Die drei Folgentypen unterscheiden sich - grob - folgendermaßen:
   repräsentiert.)
 
 * *Seqs* sind nicht-strikte ("lazy") Datenstrukturen, die erst
-  wirklich konstruiert wird, wenn Elemente aus der Folge abgerufen
+  wirklich konstruiert werden, wenn Elemente aus der Folge abgerufen
   werden.
 
 Die folgenden Abschnitte gehen etwas mehr ins Detail:
@@ -190,7 +191,7 @@ Vektoren unterstützen außerdem noch sehr schnelles Umdrehen mit
 Extraktion von Teilfolgen mit
 [`subvec`](http://conj.io/1.6.0/clojure.core/subvec/).
 
-Wegen der praktischen ' []`-Notation und der effizienten
+Wegen der praktischen `[]`-Notation und der effizienten
 Repräsentation sind Vektoren in Clojure eher der Typ der Wahl für
 Folgen, nicht Listen wie in anderen Lisps.
 
