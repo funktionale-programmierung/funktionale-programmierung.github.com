@@ -24,7 +24,7 @@ Auf unserer Konferenz [BOB 2015](http://bobkonf.de/) gibt es ein
 
 # Beispiele nachvollziehen
 
-Um die Beispiele in diesem Posting reicht eine einfache Clojure-REPL.
+Um die Beispiele in diesem Posting nachzuvollziehen, reicht eine einfache Clojure-REPL.
 Entweder können Sie - wie in Teil 1 beschrieben -
 [Nightcode hochfahren]({% post_url 2014-11-27-clojure-first-steps %}) und die dortige REPL
 benutzen, oder Sie begeben sich in einem Kommandozeilen-Fenster in das
@@ -36,7 +36,7 @@ Projektverzeichnis vom letzten Mal und tippen ein
 dem Sie Clojure-Ausdrücke eintippen können und sichten, was dabei
 herauskommt.
 
-Einen guten Überblick über die eingbauten Clojure-Funktionen - nach
+Einen guten Referenz für die eingebauten Clojure-Funktionen - nach
 Datentyp sortiert - gibt es zu Beispiel [bei
 Grimoire](http://conj.io/).
 
@@ -107,7 +107,7 @@ Diese sparen wir uns deshalb für ein zukünftiges Posting auf.
 
 Für den täglichen Einsatz hat Clojure stattdessen *Keywords*, die wir
 benutzen können, um Aufzählungen zum Beispiel für Status-Werte und
-ähnliches zu repräsentieren.  Keyword-Literale sind am Doppelpunkt am
+ähnliches zu repräsentieren.  Keyword-Literale sind durch den Doppelpunkt am
 Anfang zu erkennen:
 
 {% highlight clojure %}
@@ -238,9 +238,15 @@ nil nil nil)
 {% endhighlight %}
 
 Hier wird das `println` erst dann angewendet, wenn der Inhalt von `x`
-ausgedruckt wird, nicht schon bei der Definition von `x`.  Seqs merken
-sich die produzierten Elemente, so dass eine wiederholte Auswertung
-von `x` nicht dazu führt, dass alle Elemente erneute berechnet werden.
+ausgedruckt wird, nicht schon bei der Definition von `x`.    (Clojure
+druckt erst die öffnende Klammer, holt dann die drei Elemente heraus -
+aus Effizienzgründen sind es meist mehrere auf einmal - diese werden
+dabei ausgedruckt, und das Ergebnis ist dann die Liste aus den drei
+`nil`s, die `println` zurückgegeben hat.)
+
+Seqs merken sich die produzierten Elemente, so dass eine wiederholte
+Auswertung von `x` nicht dazu führt, dass alle Elemente erneut
+berechnet werden.
 
 Wer strikte Ausführung benötigt, ist oft mit spezialisierten
 Operationen wie [`mapv`](http://conj.io/1.6.0/clojure.core/mapv/)
