@@ -26,33 +26,32 @@ ein
 
 <!-- more start -->
 
-String-Verarbeitung in Haskell ist eigentlich elegant und einfach, den der
+String-Verarbeitung in Haskell ist eigentlich elegant und einfach, denn der
 Datentyp `String` in Haskell ist lediglich eine Abkürzung für den
-Typ `[Char]`. D.h. ein String ist eine Liste von Unicodezeichen, und damit
+Typ `[Char]`. D.h. ein String ist eine Liste von [Unicode-Code-Points](http://www.unicode.org/glossary/#code_point), und damit
 stehen uns alle
 [Listenfunktionen](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-List.html)
 aus Haskells Standardbibliothek zur Verfügung um Strings zu bearbeiten.
 
 Ich habe oben "eigentlich" geschrieben, denn in der Praxis wird der
 `String` Typ immer seltener verwendet. Die Benutzung von Listen als
-Strings ist zwar elegant, aber auch ziemlich inneffizient. Schließlich ist
+Strings ist zwar elegant, aber auch ziemlich ineffizient. Schließlich ist
 eine Liste in Haskell als eine einfach verkettete Liste implementiert,
 was zur Folge hat, dass ein String der Länge `N` ungefähr `5 * N` Wörter
 im Speicher benötigt. Daher gibt es eine Reihe von Alternativen im
 Haskell-Ökosystem, die beiden wichtigsten sind dabei:
 
 * [Data.Text](https://hackage.haskell.org/package/text-1.2.0.3) eine
-  effiziente Kodierung von Strings, basierend auf einer internen UTF-16
-  Kodierung.
+  effiziente Kodierung von Strings, basierend auf einer internen UTF-16-Kodierung.
 * [Data.ByteString](https://hackage.haskell.org/package/bytestring-0.10.4.1). Streng
   genommen ist das keine wirkliche Alternative zu Strings, denn
   mit `Data.ByteString` werden rohe Bytearrays repräsentiert, also ohne
-  Encoding. In manchen Situation ist dies aber besser als die Bytes zu
+  Encoding. In manchen Situation ist dies aber besser, als die Bytes zu
   dekodieren.
 
-Damit Sie ein bißchen mit Strings vertraut werden, möchte ich als
+Damit Sie mit Strings vertraut werden, möchte ich als
 Beispiel eine Funktion zum Parsen eines sehr einfachen
-Konfigurationsformat verwenden.
+Konfigurationsformats verwenden.
 Um loszulegen benötigen Sie
 lediglich eine Installation der
 [Haskell Platform](https://www.haskell.org/platform), sowohl die neue
@@ -73,7 +72,7 @@ Rückfragen auch als Kommentar zu diesem Artikel stellen.
 Jetzt aber zum Parser für das einfache Konfigurationsformat. Wir möchten
 eine Konfigurationsdatei parsen, in der Schlüssel-Wert-Paare stehen. In
 jeder Zeile steht ein solches Paar, der Wert ist vom Schlüssel durch `:`
-separiert. Zeilen, die mit `#` sind Kommentarzeilen. Hier ein Beispiel:
+separiert. Zeilen, die mit `#` beginnen, sind Kommentarzeilen. Hier ein Beispiel:
 
 ~~~
 # Dies ist ein Kommentare
@@ -90,13 +89,13 @@ Das Ergebnis des Parsen dieser Konfigurationsdatei soll dann die Liste
 # String
 
 Wir starten erstmal mit einer Version für `String`. Zunächst ein paar
-Imports aus der Standardlibrary:
+Imports aus der [Standardbibliothek](http://hackage.haskell.org/package/base-4.7.0.1):
 
 <div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">import</span> <span class="nn"><a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Char.html">Data.Char</a></span>
 <span class="kr">import</span> <span class="nn"><a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Maybe.html">Data.Maybe</a></span>
 <span class="kr">import</span> <span class="k">qualified</span> <span class="nn"><a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-List.html">Data.List</a></span> <span class="k">as</span> <span class="n">List</span></code></pre></div>
 
-Wenn Sie selbst ein Haskell Programm schreiben, aber nicht wissen welche
+Wenn Sie selbst ein Haskell-Programm schreiben, aber nicht wissen, welche
 Funktionen in welchen Modulen zu finden sind, gibt es mindestens drei
 Möglichkeiten, dies herauszufinden:
 
@@ -105,7 +104,7 @@ Möglichkeiten, dies herauszufinden:
   zwei Suchmaschine für Haskell-API-Dokumentation.
 * Sie studieren die
   [Übersicht](http://www.haskell.org/ghc/docs/latest/html/libraries/) der
-  gängigen Haskell Module.
+  gängigen Haskell-Module.
 * Sie schauen sich auf [hackage](http://hackage.haskell.org/) um.
 
 Jetzt machen wir gleich mit der eigentlichen Parse-Funktion weiter.
@@ -157,7 +156,7 @@ Der Teil zwischen `{-#` und `#-}` ist ein
 [Language-Pragma](https://downloads.haskell.org/~ghc/7.2.1/docs/html/users_guide/pragmas.html). Damit
 weisen wir den [GHC-Compiler](http://haskell.org/ghc) an, Stringliteralen
 wie `"Hallo"` nicht den fixen Typ `String` zu geben, sondern den Typen
-abhängig vom Kontext zu machen. `"Hallo"` kann als auch den Typ `Text` aus
+abhängig vom Kontext zu machen. `"Hallo"` kann also auch den Typ `Text` aus
 `Data.Text` haben (wenn es der Kontext verlangt).
 
 Jetzt geht's weiter mit Imports:
@@ -169,7 +168,7 @@ Jetzt geht's weiter mit Imports:
 Da `Data.Text` die Namen vieler Funktion aus Haskells
 [`Prelude`](https://hackage.haskell.org/package/base-4.3.0.0/docs/Prelude.html)
 verwendet, importiert man `Data.Text`
-typischwerweise qualifizert, als Alias hat sich der Buchstabe `T`
+typischerweise qualifiziert, als Alias hat sich der Buchstabe `T`
 eingebürgert.
 
 Die `parseKeyValues`-Funktion für `Data.Text` sieht sehr ähnlich aus wie bei
@@ -194,7 +193,7 @@ parseKeyValues txt =
 Im wesentlichen präfixen wir alle Listenfunktionen mit `T.`. Das
 funktioniert, weil diese Funktionen in `Data.Text` mit demselben Namen
 implementiert sind. Da der Typ `T.Text` nun aber keine Liste mehr ist,
-sondern den String intern als ein Array von UTF-16 kodierten Characters
+sondern den String intern als ein Array von UTF-16 kodierten Unicode-Scalar-Values
 repräsentiert, können wir, anders als bei der String-Variante, kein
 Pattern-Matching auf solchen Werte machen. Stattdessen benutzen wir
 [`T.isPrefixOf`](https://hackage.haskell.org/package/text-1.2.0.3/docs/Data-Text.html#v:isPrefixOf) um zu prüfen, ob eine Zeile ein Kommentar ist, und
