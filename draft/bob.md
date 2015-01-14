@@ -1,0 +1,92 @@
+---
+layout: post
+description: Beschreibung
+title: "BOB Konferenz am 23.1.2015 in Berlin"
+author: stefan-wehr
+tags: ["BOB", "Konferenz"]
+---
+
+![BOB 2015](http://bobkonf.de/images/bob_head_small.png)
+
+Die [BOB Konferenz](http://bobkonf.de/2015) steht vor der Tür! Am
+Freitag, 23.1.2015 findet
+die erste Auflage der BOB Konferenz statt. Wir laden alle Interessierten
+nach Berlin ein, in spannenden Vorträgen und Tutorien
+viel über moderne Softwareentwicklung zu lernen und dabei auch etwas für
+die tägliche Arbeit mit nach Hause zu nehmen. Das
+[Programm](http://bobkonf.de/2015/programm.html)
+ist vollgepackt mit zwei parallelen Vortrag-Tracks sowie drei Tracks mit
+Tutorien. Die
+[Online-Registrierung](http://bobkonf.de/2015/registration.html) läuft
+noch bis Mittwoch, 21. Januar 2015, danach ist noch eine
+Registrierung vor Ort für Kurzentschlossene möglich.
+
+
+<!-- more start -->
+
+Eröffnet wird die [BOB Konferenz](http://bobkonf.de/2015) mit der
+[Keynote](http://bobkonf.de/2015/keynote.html)
+von [Anil Madhavapeddy](http://anil.recoil.org/), in der es um
+Unikernels und funktionale Programmierung gehen wird. Anschließend
+finden in fünf parallelen Tracks Vorträge und Tutorien statt. Das
+komplette Programm können Sie
+[online](http://bobkonf.de/2015/programm.html) einsehen, wir geben hier
+nur einen kleinen Überblick.
+
+## Vorträge
+
+Bei den Vorträgen ist natürlich die funktionale Programmierung
+vertreten (mit u.a. Vorträgen zu
+[Swift](http://bobkonf.de/2015/swierstra-talk.html),
+[Haskell](http://bobkonf.de/2015/magalhaes.html) und
+[Clojure](http://bobkonf.de/2015/stepien.html)),
+Mikroservice-Architekturen ([hier](http://bobkonf.de/2015/zuther.html)
+und [hier](http://bobkonf.de/2015/kischkel.html) zum Beispiel) aber
+auch anwendungsbezogene Themen wie zu
+[Datenbanken](http://bobkonf.de/2015/knauel.html),
+[AUTOSAR](http://bobkonf.de/2015/nordlander.html) und
+[Package-Management](http://bobkonf.de/2015/garbas.html).
+
+## Tutorials
+
+Ergänzt wird das Vortragsprogramm durch drei Tutorial-Tracks:
+
+Ein Track bietet lose aufeinander aufbauende Tutorials rund um Erlang,
+mit einer [Einführung](http://bobkonf.de/2015/rehfeld.html) und
+Tutorials zu [Webmachine](http://bobkonf.de/2015/meiklejohn.html),
+[Riak](http://bobkonf.de/2015/meiklejohn-riak.html) und
+[CRDTs](http://bobkonf.de/2015/bieniusa.html).
+
+Der zweite Track bietet Einführungen in
+[Haskell](http://bobkonf.de/2015/fischmann.html),
+[Web-Entwicklung mit Haskell](http://bobkonf.de/2015/thiemann.html),
+[ClojureScript](http://bobkonf.de/2015/gilliar.html) und
+[Swift](http://bobkonf.de/2015/swierstra-tutorial.html) an.
+
+Im dritten Track gibt es eine
+[Streifzug durch Clojure](http://bobkonf.de/2015/sperber.html)
+sowie eine Einführung in
+[Cloud-Management mit Erlang](http://bobkonf.de/2015/gies.html).
+
+Alle Tutorials werden von ausgewiesenen Experten ihres jeweiligen
+Bereichs gehalten.
+
+Wir freuen uns riesig auf das Programm und würden uns freuen, auch Sie
+auf der BOB begrüßen zu können!
+
+## Anmeldung
+
+Die BOB findet auf dem [Gelände der Firma Lohmann & Birkner
+GmbH](http://bobkonf.de/2015/local.html) statt, die uns ihre
+Räumlichkeiten freundlicherweise zur Verfügung stellen.
+Die Anmeldung ist [online](http://bobkonf.de/2015/registration.html)
+bis Mittwoch 21.1.2015 möglich, außerdem kann man sich am Tag der
+Konferenz vor Ort registrieren (das ist dann aber etwas teurer).
+
+### :clojured
+
+Die BOB wird in Kooperation mit der [:clojured](http://clojured.de)
+direkt am Folgetag in Berlin organisiert - wer beide Konferenzen
+besucht, profitiert von Anmelderabatt!
+
+<!-- more end -->
