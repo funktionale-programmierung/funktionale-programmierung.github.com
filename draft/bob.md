@@ -41,11 +41,12 @@ vertreten (mit u.a. Vorträgen zu
 [Haskell](http://bobkonf.de/2015/magalhaes.html) und
 [Clojure](http://bobkonf.de/2015/stepien.html)),
 Mikroservice-Architekturen ([hier](http://bobkonf.de/2015/zuther.html)
-und [hier](http://bobkonf.de/2015/kischkel.html) zum Beispiel) aber
+und [hier](http://bobkonf.de/2015/kischkel.html) zum Beispiel), aber
 auch anwendungsbezogene Themen wie zu
 [Datenbanken](http://bobkonf.de/2015/knauel.html),
 [AUTOSAR](http://bobkonf.de/2015/nordlander.html) und
-[Package-Management](http://bobkonf.de/2015/garbas.html).
+[Package-Management](http://bobkonf.de/2015/garbas.html) sind im
+Programm zu finden.
 
 ## Tutorials
 
