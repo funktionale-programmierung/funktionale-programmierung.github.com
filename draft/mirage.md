@@ -8,7 +8,7 @@ tags: ["OCaml", "BOB"]
 
 Die [BOB 2015](http://bobkonf.de/2015/") ist passiert!  Wir hatten
 einen tollen Konferenztag mit [vielen Vorträgen und
-Tutorials](http://bobkonf.de/2015/programm.html) mit vielen Vorträgen
+Tutorials](http://bobkonf.de/2015/programm.html)
 zum Besten in der Software-Entwicklung.
 
 Besonders beeindruckt hat uns der Vortrag von unserem Eröffnungsredner
@@ -25,12 +25,12 @@ Posting fasst die wichtigsten Aspekte von Mirage zusammen.
 
 # Hintergrund
 
-Wer heutzutage einen Dienst im Internet anbieten muss greift oft auf
+Wer heutzutage einen Dienst im Internet anbieten muss, greift oft auf
 eine Kombination von Betriebssystem und Webserver wie den
 [LAMP-Stack](http://de.wikipedia.org/wiki/LAMP_%28Softwarepaket%29)
 zu.
 
-Mit LAMP ist allerdings ein komplettes Linux mit
+Mit LAMP kommt allerdings ein komplettes Linux mit
 Multi-User-Verwaltung, Prozessverwaltung, jeder Menge
 Betriebssystemtreiber und haufenweise weiterer Funktionalität, die der
 LAMP-Stack gar nicht benötigt.  Dies wäre nicht so schlimm, wenn nicht
@@ -46,7 +46,7 @@ Natürlich nicht.
 
 # Mirage
 
-Mirage ist ein Framework, umsogenannte *Unikernels* zu bauen, also
+Mirage ist ein Framework, um sogenannte *Unikernels* zu bauen, also
 Betriebssystem-Images, die jeweils auf eine bestimmte Aufgabe
 spezialisiert sind.  Dazu wird der Code, der den Dienst implementiert,
 in [https://ocaml.org/](OCaml) geschrieben.  Mirage macht daraus ein
@@ -59,10 +59,10 @@ um mehrere Größenordnungen weniger komplex als z.B. Linux und isoliert
 virtuelle Maschinen deutlich besser als Linux Prozesse voneinander
 trennt.  Diese virtuellen Maschinen können so schnell gestartet
 werden, dass es sogar möglich ist, Internet-Services so zu bauen, dass
-die VM pro Anfrage neu gestartet wird.
+die VM pro Anfrage neu gestartet wird. (FIXME: Wie lang ca? Millisekunden!)
 
-Zu Mirage gehört ein kompletter TCP/IP-Stack inzwischen eine ganze
-Reihe von Internet-Protokollen, insbesondere eine [Implementierung
+Zu Mirage gehört ein kompletter TCP/IP-Stack und inzwischen eine ganze
+Reihe von Internet-Protokollen, insbesondere eine [Implementierung von
 TLS](https://github.com/mirleft/ocaml-tls).  Damit können eine Reihe
 von Internet-Services auf Basis solcher Unikernels aufgesetzt werden,
 angefangen mit dem [Mirage-Web-Server](http://www.openmirage.org/).
