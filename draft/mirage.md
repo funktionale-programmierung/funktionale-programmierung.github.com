@@ -30,17 +30,19 @@ eine Kombination von Betriebssystem und Webserver wie den
 [LAMP-Stack](http://de.wikipedia.org/wiki/LAMP_%28Softwarepaket%29)
 zu.
 
-Mit LAMP kommt allerdings ein komplettes Linux mit
+Zu LAMP gehört allerdings ein komplettes Linux mit
 Multi-User-Verwaltung, Prozessverwaltung, jeder Menge
-Betriebssystemtreiber und haufenweise weiterer Funktionalität, die der
-LAMP-Stack gar nicht benötigt.  Dies wäre nicht so schlimm, wenn nicht
-der größte Teil dieser Funktionalität in C geschrieben und damit
-anfällig für Sicherheitsprobleme wie
-[Heartbleed](http://heartbleed.com/) oder
+Betriebssystemtreiber und haufenweise weiterer Funktionalität, die
+Angriffe wie
 [Shellshock](http://de.wikipedia.org/wiki/Shellshock_%28Sicherheitsl%C3%BCcke%29)
-ist.  Je mehr Code im System vorhanden ist, desto anfälliger ist das
-System.  Muss das sein, wenn ein Dienst im Internet doch all diese
+ermöglicht.  Je mehr Code im System vorhanden ist, desto anfälliger
+ist das System.  Außerdem ist der größte Teil dieser Funktionalität in
+C geschrieben und damit anfällig für Sicherheitsprobleme wie
+[Heartbleed](http://heartbleed.com/).
+
+Muss das sein, wenn ein Dienst im Internet doch all diese
 Funktionalität des drumherumliegenden Systems gar nicht benötigt?
+LAMP-Stack gar nicht benötigt.  
 
 Natürlich nicht.
 
@@ -49,7 +51,7 @@ Natürlich nicht.
 Mirage ist ein Framework, um sogenannte *Unikernels* zu bauen, also
 Betriebssystem-Images, die jeweils auf eine bestimmte Aufgabe
 spezialisiert sind.  Dazu wird der Code, der den Dienst implementiert,
-in [https://ocaml.org/](OCaml) geschrieben.  Mirage macht daraus ein
+in [OCaml](https://ocaml.org/) geschrieben.  Mirage macht daraus ein
 Image, das direkt unter [Xen](http://xenproject.org/) laufen kann -
 ohne dass ein Linux oder anderes Betriebssystem drumherum benötigt
 wird.  Diese Images nehmen typischerweise nur wenige Megabytes ein
@@ -62,7 +64,7 @@ werden, dass es sogar möglich ist, Internet-Services so zu bauen, dass
 die VM pro Anfrage neu gestartet wird.  (Ein Mirage-Image kann
 innerhalb weniger Millisekunden hochfahren.)
 
-Zu Mirage gehört ein kompletter TCP/IP-Stack und inzwischen eine ganze
+Zu Mirage gehören ein kompletter TCP/IP-Stack und eine ganze
 Reihe von Internet-Protokollen, insbesondere eine [Implementierung von
 TLS](https://github.com/mirleft/ocaml-tls).  Damit können eine Reihe
 von Internet-Services auf Basis solcher Unikernels aufgesetzt werden,
