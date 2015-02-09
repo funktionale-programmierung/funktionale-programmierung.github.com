@@ -14,7 +14,7 @@ zum Besten in der Software-Entwicklung.
 Besonders beeindruckt hat uns der Vortrag von unserem Eröffnungsredner
 [Anil Madhavapeddy](http://anil.recoil.org/) von der Universität
 Cambridge, der über das Projekt [Mirage](http://www.openmirage.org/)
-berichtet ein - ein Framework, komplette Betriebssystem-Images aus
+berichtete - ein Framework, um komplette Betriebssystem-Images aus
 OCaml-Code zusammenzustellen.  Mirage ist damit eine spektakuläre
 Anwendung funktionaler Programmierung in der Praxis.  Ein
 Vortragsvideo sowie die Folien zu Dr. Madhavapeddys Vortrag stehen
@@ -38,7 +38,7 @@ der größte Teil dieser Funktionalität in C geschrieben und damit
 anfällig für Sicherheitsprobleme wie
 [Heartbleed](http://heartbleed.com/) oder
 [Shellshock](http://de.wikipedia.org/wiki/Shellshock_%28Sicherheitsl%C3%BCcke%29)
-sind.  Je mehr Code im System vorhanden ist, desto anfälliger ist das
+ist.  Je mehr Code im System vorhanden ist, desto anfälliger ist das
 System.  Muss das sein, wenn ein Dienst im Internet doch all diese
 Funktionalität des drumherumliegenden Systems gar nicht benötigt?
 
@@ -68,7 +68,7 @@ TLS](https://github.com/mirleft/ocaml-tls).  Damit können eine Reihe
 von Internet-Services auf Basis solcher Unikernels aufgesetzt werden,
 angefangen mit dem [Mirage-Web-Server](http://www.openmirage.org/).
 
-Die TLS-Implementierung ist exemplarisch für die weiteren
+Die TLS-Implementierung ist exemplarisch für die weiteren,
 entscheidenden Vorteile, die in OCaml geschriebene Software mit sich
 bringt:
 
