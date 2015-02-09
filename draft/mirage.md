@@ -59,7 +59,8 @@ um mehrere Größenordnungen weniger komplex als z.B. Linux und isoliert
 virtuelle Maschinen deutlich besser als Linux Prozesse voneinander
 trennt.  Diese virtuellen Maschinen können so schnell gestartet
 werden, dass es sogar möglich ist, Internet-Services so zu bauen, dass
-die VM pro Anfrage neu gestartet wird. (FIXME: Wie lang ca? Millisekunden!)
+die VM pro Anfrage neu gestartet wird.  (Ein Mirage-Image kann
+innerhalb weniger Millisekunden hochfahren.)
 
 Zu Mirage gehört ein kompletter TCP/IP-Stack und inzwischen eine ganze
 Reihe von Internet-Protokollen, insbesondere eine [Implementierung von
