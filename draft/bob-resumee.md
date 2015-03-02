@@ -5,7 +5,7 @@ author: stefan-wehr
 tags: ["BOB", "Konferenz"]
 ---
 
-Die 1. Ausgabe der [http://bobkonf.de/](BOB-Konferenz 2015) ist Geschichte! Mehr als 120
+Die 1. Ausgabe der [BOB-Konferenz 2015](http://bobkonf.de/) ist Geschichte! Mehr als 120
 Softwarentwickler, Macher und Entscheider kamen am 23.1.2015 in Berlin zusammen, um
 sich über die neuesten Trends in der Softwareentwicklung zu informieren
 und auszutauschen. Uns als Veranstalter hat die Konferenz viel Spaß
