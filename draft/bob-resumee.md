@@ -17,12 +17,12 @@ zu sehen und hören gab. Falls jemand dadurch Lust bekommt, den einen oder
 anderen Vortrag anzuschauen: kein Problem, die Slides und Videos zu (fast)
 allen Vorträgen sind online verfügbar, entweder verlinkt in der
 [Programmübersicht](http://bobkonf.de/2015/programm.html)
-oder auf unserem [youtube-Channel](https://www.youtube.com/channel/UC2svxmX1Bfyaln2bs9ZsyGA).
+oder auf unserem [YouTube-Channel](https://www.youtube.com/channel/UC2svxmX1Bfyaln2bs9ZsyGA).
 
 <img src="/files/bob-2015-resumee/bob-keynote.jpg">
 
 Weitere Impressionen zur Konferenz finden Sie auf der
-[Google+ Seite der Konferenz](https://plus.google.com/u/0/b/114182696261405219198/114182696261405219198/posts/c6z1rm1xuSb?pid=6121552383913282738&oid=114182696261405219198).
+[Google+-Seite der Konferenz](https://plus.google.com/u/0/b/114182696261405219198/114182696261405219198/posts/c6z1rm1xuSb?pid=6121552383913282738&oid=114182696261405219198).
 Folgen Sie uns auch auf [Twitter](https://twitter.com/bobkonf),
 [Google+](https://plus.google.com/+BobkonfDe/posts) und
 [Lanyrd](http://lanyrd.com/2015/bob2015/), um über Neuigkeiten informiert
@@ -63,12 +63,18 @@ Danach gab es in zwei parallelen Tracks jede Menge interessante Vorträge:
   über
   [Continuous Delivery](http://en.wikipedia.org/wiki/Continuous_delivery)
   mit [clojure](http://clojure.org).
-* [Microservices und die Jagd nach mehr Konversion](http://bobkonf.de/2015/zuther.html)
+* [Microservices und die Jagd nach mehr
+  Konversion](http://bobkonf.de/2015/zuther.html): Wie können
+  Mikroservices helfen, aus Seitenbetrachtern Kunden zu machen?
 * [Mikroservices mit Erlang/OTP](http://bobkonf.de/2015/iserlohn.html)
 * [Eins nach dem anderen: Konfiguration mit modellbasierten Abhängigkeiten](http://bobkonf.de/2015/greif.html)
 * [A Database Application Without NoSQL And SQL - An Experience Report](http://bobkonf.de/2015/knauel.html)
 * [Praktische Erfahrungen mit GPU-Programmierung in Haskell](http://bobkonf.de/2015/thielemann.html)
-* [Clutching a grip on AUTOSAR using Haskell](http://bobkonf.de/2015/nordlander.html)
+* [Clutching a grip on AUTOSAR using
+  Haskell](http://bobkonf.de/2015/nordlander.html): Wie lässt sich die
+  außerordendliche Komplexität des
+  [AUTOSAR-Standards](http://en.wikipedia.org/wiki/AUTOSAR) für
+  eingebettete Software in Autos in den Griff bekommen?
 * [Break the Monolith - Service Extraction at SoundCloud](http://bobkonf.de/2015/kischkel.html)
 
 Zusätzlichen zu den Vorträgen gab es eine Reihe von Tutorials.
