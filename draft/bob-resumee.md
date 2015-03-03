@@ -68,8 +68,8 @@ Danach gab es in zwei parallelen Tracks jede Menge interessante Vorträge:
   Mikroservices helfen, aus Seitenbetrachtern Kunden zu machen?
 * [Mikroservices mit Erlang/OTP](http://bobkonf.de/2015/iserlohn.html)
 * [Eins nach dem anderen: Konfiguration mit modellbasierten Abhängigkeiten](http://bobkonf.de/2015/greif.html)
-* [A Database Application Without NoSQL And SQL - An Experience Report](http://bobkonf.de/2015/knauel.html)
-* [Praktische Erfahrungen mit GPU-Programmierung in Haskell](http://bobkonf.de/2015/thielemann.html)
+* [A Database Application Without NoSQL And SQL - An Experience Report](http://bobkonf.de/2015/knauel.html): ein Erfahrungsbericht über die Konzeption einer kompositionalen Abfragesprache.
+* [Praktische Erfahrungen mit GPU-Programmierung in Haskell](http://bobkonf.de/2015/thielemann.html): hier ging es um die GPU-Programmierung mit Hilfe von [CUDA](http://www.nvidia.de/object/cuda-parallel-computing-de.html) und dem [accelerate](http://hackage.haskell.org/package/accelerate)-Package für Haskell.
 * [Clutching a grip on AUTOSAR using
   Haskell](http://bobkonf.de/2015/nordlander.html): Wie lässt sich die
   außerordendliche Komplexität des
