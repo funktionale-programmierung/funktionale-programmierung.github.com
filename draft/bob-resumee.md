@@ -58,7 +58,7 @@ Danach gab es in zwei parallelen Tracks jede Menge interessante Vorträge:
 * [Clojures Implementation von STM](http://bobkonf.de/2015/kamphausen.html): eine Einführung
   in
   [Software Transactional Memory](http://en.wikipedia.org/wiki/Software_transactional_memory)
-  (STM) mit [clojure](http://clojure.org/).
+  (STM) mit [Clojure](http://clojure.org/).
 * [Clojure Redeployed](http://bobkonf.de/2015/stepien.html): ein Vortrag
   über
   [Continuous Delivery](http://en.wikipedia.org/wiki/Continuous_delivery)
