@@ -173,7 +173,7 @@ fp1.core=> (circumference 5)
 Diese ersten Gehversuche geben hoffentlich schon einen ersten
 Vorgeschmack auf Clojure und erlauben Ihnen, zumindest einfache
 mathematische Funktionen selbst zu programmieren.  Etwas mehr in die
-Tiefe steigen wir dann mit einem zukünftigen Blog-Posting ein, das
+Tiefe steigen wir dann mit einem [zukünftigen Blog-Posting]({% post_url 2014-12-08-clojure-datenstrukturen %}) ein, das
 dieses hier fortsetzen wird.
 
 # Material
