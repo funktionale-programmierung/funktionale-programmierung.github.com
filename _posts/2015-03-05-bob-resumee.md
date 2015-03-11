@@ -64,18 +64,24 @@ Danach gab es in zwei parallelen Tracks jede Menge interessante Vorträge:
   [Continuous Delivery](http://en.wikipedia.org/wiki/Continuous_delivery)
   mit [clojure](http://clojure.org).
 * [Microservices und die Jagd nach mehr
-  Konversion](http://bobkonf.de/2015/zuther.html): Wie können
+  Konversion](http://bobkonf.de/2015/zuther.html): wie können
   Mikroservices helfen, aus Seitenbetrachtern Kunden zu machen?
-* [Mikroservices mit Erlang/OTP](http://bobkonf.de/2015/iserlohn.html)
-* [Eins nach dem anderen: Konfiguration mit modellbasierten Abhängigkeiten](http://bobkonf.de/2015/greif.html)
+* [Mikroservices mit Erlang/OTP](http://bobkonf.de/2015/iserlohn.html):
+  eine Vorstellung von [Erlang](http://erlang.org) als etablierte Platform für verteilte,
+  service-orientierte Anwendungen.
+* [Eins nach dem anderen: Konfiguration mit modellbasierten Abhängigkeiten](http://bobkonf.de/2015/greif.html):
+  hier ging es um Umkonfiguration von Hardware
+  mit Hilfe eines speziellen diff-Algorithmus und einer Haskell-DSL.
 * [A Database Application Without NoSQL And SQL - An Experience Report](http://bobkonf.de/2015/knauel.html): ein Erfahrungsbericht über die Konzeption einer kompositionalen Abfragesprache.
 * [Praktische Erfahrungen mit GPU-Programmierung in Haskell](http://bobkonf.de/2015/thielemann.html): hier ging es um die GPU-Programmierung mit Hilfe von [CUDA](http://www.nvidia.de/object/cuda-parallel-computing-de.html) und dem [accelerate](http://hackage.haskell.org/package/accelerate)-Package für Haskell.
 * [Clutching a grip on AUTOSAR using
-  Haskell](http://bobkonf.de/2015/nordlander.html): Wie lässt sich die
-  außerordendliche Komplexität des
+  Haskell](http://bobkonf.de/2015/nordlander.html): wie lässt sich die
+  außerordentliche Komplexität des
   [AUTOSAR-Standards](http://en.wikipedia.org/wiki/AUTOSAR) für
   eingebettete Software in Autos in den Griff bekommen?
-* [Break the Monolith - Service Extraction at SoundCloud](http://bobkonf.de/2015/kischkel.html)
+* [Break the Monolith - Service Extraction at SoundCloud](http://bobkonf.de/2015/kischkel.html):
+  Thema dieses Vortrags war die schrittweise Migration einer monolithischen Rails Anwendung in
+  kleinteilige Scala Services.
 
 Zusätzlichen zu den Vorträgen gab es eine Reihe von Tutorials.
 Zum Thema [Erlang](http://www.erlang.org/) gab es eine [Einführung](http://bobkonf.de/2015/rehfeld.html) sowie
@@ -96,7 +102,7 @@ haben wir die Tutorials nicht auf Video aufgezeichnet.
 Natürlich kam auch der soziale Aspekte nicht zu kurz. In den Pausen
 zwischen den Vorträgen blieb genug Zeit, um Erfahrung auszutauschen und
 die Themen der Vorträge aufzugreifen und zu vertiefen. Den Abschluss der
-Konferenz bildete ein Abendessen im
+Konferenz bildete ein gemeinsames Abendessen im
 [Schillerpalais](http://www.schillerpalais.de/), bei dem diese
 Diskussionen fortgeführt wurden.
 
