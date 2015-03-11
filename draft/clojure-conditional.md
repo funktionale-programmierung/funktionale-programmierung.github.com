@@ -186,7 +186,7 @@ Zweig.
 Auch dieses Beispiel können wir noch kürzer schreiben, weil
 [`or`](http://conj.io/store/v0/org.clojure/clojure/1.6.0/clj/clojure.core/or)
 nicht einfach `true` liefert, wenn ein Operand "wahr" ergibt, sondern
-stattdessen den *Wert des ersten Operanden, der "wahr" ergibt*:
+stattdessen den *Wert* des ersten Operanden, der "wahr" ergibt:
 
 {% highlight clojure %}
 (defn adresse
