@@ -8,10 +8,12 @@ tags: ["Clojure"]
 
 Dieses Posting setzt unsere Clojure-Einführung (hier [Teil 1]({% post_url 2014-11-27-clojure-first-steps %}),
 [Teil 2]({% post_url 2014-12-08-clojure-datenstrukturen %})) fort.  Dieses Mal geht es um
-Fallunterscheidungen.  (Zur Erinnerung: In [Teil 1]({% post_url 2014-11-27-clojure-first-steps %}) steht, wie Sie eine
-einfache IDE installieren und betreiben können.)
+Fallunterscheidungen.
 
 <!-- more start -->
+
+Zur Erinnerung: In [Teil 1]({% post_url 2014-11-27-clojure-first-steps %}) steht, wie Sie eine
+einfache IDE installieren und betreiben können.
 
 Nehmen wir, an, wir wollten für Verkehrssünder aus dem
 Flensburg-Punktestand berechnen, welche
