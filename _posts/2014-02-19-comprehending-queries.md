@@ -281,7 +281,13 @@ in Form einer Haskell-Bibliothek.  Wir bauen derzeit weiter aktiv daran.
 
 
 [^tshirt]: Da sag' noch einmal jemand, Informatikern wäre es egal, welche 
-Klamotten sie tragen. Don Stewart meinte dazu auf Twitter: <blockquote class="twitter-tweet" align="center" lang="en"><p>TIL that the &quot;bring back monad comprehensions&quot; tshirt project from mid 00s <a href="http://t.co/0jFbPnqQaJ">http://t.co/0jFbPnqQaJ</a> inspired <a href="http://t.co/ZIAGqW3ycH">http://t.co/ZIAGqW3ycH</a></p>&mdash; Don Stewart (@donsbot) <a href="https://twitter.com/donsbot/statuses/377546421312188416">September 10, 2013</a></blockquote><blockquote class="twitter-tweet" align="center" lang="en"><p>/2 first case of tshirt driven development ??</p>&mdash; Don Stewart (@donsbot) <a href="https://twitter.com/donsbot/statuses/377546537385332736">September 10, 2013</a></blockquote>
+Klamotten sie tragen. Don Stewart meinte dazu auf Twitter:
+
+<blockquote class="twitter-tweet" align="center" lang="en"><p>TIL that the &quot;bring back monad comprehensions&quot; tshirt project from mid 00s <a href="http://t.co/0jFbPnqQaJ">http://t.co/0jFbPnqQaJ</a> inspired <a href="http://t.co/ZIAGqW3ycH">http://t.co/ZIAGqW3ycH</a></p>&mdash; Don Stewart (@donsbot) <a href="https://twitter.com/donsbot/statuses/377546421312188416">September 10, 2013</a>
+</blockquote>
+
+<blockquote class="twitter-tweet" align="center" lang="en"><p>/2 first case of tshirt driven development ??</p>&mdash; Don Stewart (@donsbot) <a href="https://twitter.com/donsbot/statuses/377546537385332736">September 10, 2013</a>
+</blockquote>
 
 [^monad-algebra]: Ganz genau: `reduce` definiert eine Monad-Algebra in Kleisli-Darstellung.  Details dazu finden
 sich zum Beispiel auf dem [Blog von Jeremy Gibbons](http://patternsinfp.wordpress.com/2012/01/19/comprehensions/).
