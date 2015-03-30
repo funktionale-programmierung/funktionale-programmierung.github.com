@@ -666,5 +666,5 @@ Viel Spaß beim Ausprobieren der [Beispiele].
 [ControlMonad]: <http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html> "Control.Monad"
 
 [fp1]: <http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html>
-[fp2]: <http://funktionale-programmierung.de/2013/05/22/haskell-monaden2.html
+[fp2]: <http://funktionale-programmierung.de/2013/05/22/haskell-monaden2.html>
 [rf]:  <http://funktionale-programmierung.de/2013/03/12/rein-funktional.html>
