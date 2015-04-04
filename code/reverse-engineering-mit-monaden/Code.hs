@@ -67,7 +67,7 @@ getWord16P = do
     b2 <- getWord8P
     return (fromIntegral b1 + 265 * fromIntegral b2)
 
-parser4 :: ByteString ->  (Word8, Word16, Word16)
+parser4 :: ByteString -> (Word8, Word16, Word16)
 parser4 = evalParser $ do
     byte0 <- getWord8P
     word1 <- getWord16P

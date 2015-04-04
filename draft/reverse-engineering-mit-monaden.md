@@ -8,7 +8,7 @@ tags: ["Haskell", "Monaden", "Praxis"]
 
 Der Spieleverlag Ravensburger hat in seinem Programm den „Tiptoi-Stift“, der mit einer Kamera in der Spitze und einem Lautsprecher ausgestattet Kinderbücher zum Sprechen bringt. Die Logik für den eingebauten Prozessor steckt dabei in einer Datei im GME-Format, die man sich auf der Webseite von Ravensburger herunterlädt und auf den Stift kopiert.
 
-Ein paar interessierte Bastler haben sich dieses proprietäre, binäre Dateiformat vorgenommen und weitgehend entschlüsselt, so dass man jetzt seine eigenen Bücher und Spiele für den Tiptoi-Stift erstellen kann. Das dabei entstandene Programm [tttool](http://tttool.entropia.de/) zum analysieren und erzeugen von GME-Dateien ist in Haskell implementiert, und mal wieder waren Monaden dabei eine große Hilfe.
+Ein paar interessierte Bastler haben sich dieses proprietäre, binäre Dateiformat vorgenommen und weitgehend entschlüsselt, so dass man jetzt seine eigenen Bücher und Spiele für den Tiptoi-Stift erstellen kann. Das dabei entstandene Programm [tttool](http://tttool.entropia.de/) zum Analysieren und Erzeugen von GME-Dateien ist in Haskell implementiert, und mal wieder waren Monaden dabei eine große Hilfe.
 
 Dieser Artikel geht auf zwei Anwendungen von Monaden in diesem Projekt ein:
 
@@ -127,7 +127,7 @@ evalParser p bs = fst $ runParser p bs 0
 
 ## Die erste Monade ##
 
-Nun machen wir einen kleinen Sprung und definieren nun in welchem Sinne unser `Parser`-Typ eine Monade ist – schließlich wurden Monaden bereits in der Artikelreihe (Teil 1, Teil 2, Teil 3) von Uwe Schmidt hier ausführlich motiviert. Wir werden direkt danach sehen, was uns das gebracht hat:
+Nun machen wir einen kleinen Sprung und definieren, in welchem Sinne unser `Parser`-Typ eine Monade ist – wem das jetzt zu schnell geht, dem sei die Artikelreihe zu Monaden (Teil 1, Teil 2, Teil 3) von Uwe Schmidt ans Herz gelegt. Wir werden direkt danach sehen, was uns das gebracht hat:
 
 {% highlight haskell %}
 instance Monad Parser where
@@ -138,7 +138,7 @@ instance Monad Parser where
         in (y, i2))
 {% endhighlight %}
 
-Diese Instanz definiert zwei Sachen:
+Diese Instanz Legt zweierlei fest:
 
  * Wie ein Parser aussieht, der nichts macht, genannt `return`. Ein solcher
    ignoriert die Datei (`bs`) und gibt die aktuelle Position zurück (`i`).
@@ -155,7 +155,7 @@ getWord16P = do
     b2 <- getWord8P
     return (fromIntegral b1 + 265 * fromIntegral b2)
 
-parser4 :: ByteString ->  (Word8, Word16, Word16)
+parser4 :: ByteString -> (Word8, Word16, Word16)
 parser4 = evalParser $ do
     byte0 <- getWord8P
     word1 <- getWord16P
@@ -163,13 +163,13 @@ parser4 = evalParser $ do
     return (byte0, word1, word2)
 {% endhighlight %}
 
-Man muss sich nun weder mit den Indizes herumschlagen, noch muss man den `ByteString` immer herumreichen: Um all das kümmert sich `(>>=)` unter der Haube der Do-Notation.
+Man muss sich nun weder mit den Indizes herumschlagen, noch muss man den `ByteString` immer herumreichen: Um all das kümmert sich `(>>=)` unter der Haube der `do`-Notation.
 
 ## Library-Code ##
 
-Die Verwendung der `Monad`-Typklasse hat noch mehr Vorteile. So gibt es eine Reihe von Library-Funktionen, die mit jeder Monade funktionieren, also auch mit unseren. Als Beispielt dient die Funktion `replicateM :: Monad m => Int -> m a -> m [a]`, mit der die monadische Aktion mehrfach ausgeführt wird.
+Die Verwendung der `Monad`-Typklasse bringt noch mehr Vorteile. So gibt es eine Reihe von Library-Funktionen, die mit jeder Monade funktionieren, also auch mit unseren. Als Beispiel dient hier die Funktion `replicateM :: Monad m => Int -> m a -> m [a]`, mit der die monadische Aktion mehrfach ausgeführt wird.
 
-So können wir Beispielsweise elegant eine Liste von 16-Bit-Zahlen parsen, die der ihre Länge (als 8-Bit-Zahl) vorangestellt wird:
+So können wir beispielsweise elegant eine Liste von 16-Bit-Zahlen parsen, der ihre Länge (als 8-Bit-Zahl) vorangestellt wird:
 
 {% highlight haskell %}
 import Control.Monad
@@ -183,9 +183,9 @@ getWord16ListP = do
 
 ## Verweise ##
 
-Das GME-Dateiformat hat nicht nur Bytes und solche Arrays, sondern auch Verweise: Da ist z.b. das erste Wort eine Position in der Datei, an der dann das eigentliche Objekt, z.B. eine Liste von Zahlen, steht.
+Das GME-Dateiformat hat nicht nur Bytes und solche Arrays, sondern auch Verweise: Da ist z.B. das erste Wort eine Position in der Datei, an der dann das eigentliche Objekt, z.B. eine Liste von Zahlen, steht.
 
-Mit dem „externen“ Interface unseres `Parser`-Typs können wir das nicht parsen. Man könnte zwar mit vielen Aufrufen von `getWord8P` vorspulen, kommt dann aber nicht mehr zurück. Das heißt wir müssen auf die Implementierung von `Parser` zugreifen, und bauen uns folgenden Kombinator:
+Mit dem „externen“ Interface unseres `Parser`-Typs können wir das nicht parsen. Man könnte zwar mit vielen Aufrufen von `getWord8P` vorspulen, kommt dann aber nicht mehr zurück. Das heißt wir müssen auf die Implementierung von `Parser` zugreifen, und bauen uns folgende Kombinatoren:
 
 {% highlight haskell %}
 lookAt :: Int -> Parser a -> Parser a
@@ -199,6 +199,8 @@ getInd p = do
     lookAt (fromIntegral offset) p
 {% endhighlight %}
 
+Wichtig bei `lookAt` ist, dass die aktuelle Position des Parsers gespeichert und nachher zurückgesetzt wird.
+
 Damit können wir schön das folgende, recht komplizierte Format parsen: Die Datei beginnt mit zwei 16-Bit-Zahlen, die jeweils die Offsets von Listen von 16-Bit-Zahlen (mit vorangestellter Länge als 8-Bit-Zahl) enthalten:
 
 {% highlight haskell %}
@@ -211,16 +213,16 @@ parser5 = evalParser $ do
 
 ## Segmente ##
 
-Soweit so gut, damit könnten wir das GME-Dateiformat parsen. Das Problem ist allerdings, dass das Format nicht dokumentiert ist und durch „intensives draufschauen“ entschlüsselt wird. Daher wäre es gut zu wissen, welche Teile der Datei man jetzt eignetlich verstanden hat, welche Bytes eigentlich wo gelandet sind, wo noch Lücken sind und wo etwas eventuell zweimal gelesen wurde (was auf einen Fehler im Formatverständnis hinweisen würde).
+Soweit so gut: Damit könnten wir das GME-Dateiformat parsen. Das Problem ist allerdings, dass das Format nicht dokumentiert ist und durch „intensives draufschauen“ entschlüsselt wird. Daher wäre es gut zu wissen, welche Teile der Datei man jetzt eigentlich verstanden hat, welche Bytes welche Bedeutung haben, wo noch Lücken sind und wo etwas eventuell zweimal gelesen wurde (was auf einen Fehler im Formatverständnis hinweisen würde).
 
-Wir wollen also dass der Parser nebenher noch eine Liste von _Segmenten_ sammelt, die einen Namen und ein Byte-Bereich enthalten. Damit ändert sich die Definition von `Parser`:
+Wir wollen also, dass der Parser nebenher noch eine Liste von _Segmenten_ sammelt, die einen Namen und ein Byte-Bereich enthalten. Damit ändert sich die Definition von `Parser`:
 
 {% highlight haskell %}
 type Seg = (String, Index, Index)
 newtype Parser a = Parser (ByteString -> Index -> (a, [Seg], Index))
 {% endhighlight %}
 
-Die Funktionen, die nur das „externe“ Interface von `Parser` verwenden, müssen nicht angepasst werden; lediglich jene die in den `Parser`-Typ reinschauen müssen geändert werden. Diese schreiben sich – gesteuert durch die Typen – praktisch von selber:
+Die Funktionen, die nur das „externe“ Interface von `Parser` verwenden, müssen nicht angepasst werden; lediglich jene, die in den `Parser`-Typ reinschauen. Diese schreiben sich – gesteuert durch die Typen – praktisch von selber:
 
 {% highlight haskell %}
 runParser :: Parser a -> ByteString -> Index -> (a, [Seg], Index)
@@ -247,7 +249,7 @@ lookAt offset p = Parser $ \bs i ->
     in  (x,s,i)
 {% endhighlight %}
 
-Noch haben wir keine Segmente benannt und reichen nur die leere Liste umher. Also brauchen wir einen Kombinator, der das, was ein Parser eingelesen hat, benennt. Gleichzeitig werden alle Segmente, die der übergebene Parser benennt, noch qualifiziert: So bekommen wir einen schönen Parse-Baum, der die Datei erklärt.
+Noch haben wir keine Segmente benannt und reichen nur die leere Liste umher. Also brauchen wir einen Kombinator, der das, was ein Parser eingelesen hat, benennt. Gleichzeitig werden alle Segmente, die der übergebene Parser identifiziert, noch qualifiziert: Wie wir gleich sehen werden bekommen wir so eine schöne hierarchische Übersicht, die die Datei erklärt.
 
 {% highlight haskell %}
 named :: String -> Parser a -> Parser a
@@ -266,24 +268,187 @@ parser6 = evalParser $ named "Header" $ do
 	return (list1, list2)
 {% endhighlight %}
 
-Nun wird es Zeit, mal den Code in Aktion zu sehen:
+Lässt man diese Funktion auf eine kleine Testeingabe los, so sieht man nicht nur das korrekte Ergebnis, sondern auch der Aufbau der Funktion wird gezeigt.
 
 {% highlight haskell %}
 > parser6 (BS.pack [4,0,7,0,1,23,0,1,42,0])
 (([23],[42]),[("Header",0,4),("Header/Liste1",4,7),("Header/Liste2",7,10)])
 {% endhighlight %}
 
-Nun kann man sich noch schöne Funktionen basteln, die aus einer Liste von Segmenten und der Originaldatei einen übersichtlichen annotierten Hex-Dump erstellt und dabei bei Überlappungen warnt, und das Reverse Engineering kann weitergehen...
+Nun kann man sich noch schöne Funktionen basteln, die aus einer Liste von Segmenten und der Originaldatei einen übersichtlichen annotierten Hex-Dump erstellt. Bei einer echten GME-Datei kann das dann z.B. so aussehen:
+
+
+    At 0x00000200 Size    20960: Header/Scripts
+       0x00000200: B5 33 00 00 40 1F 00 00 A0 F5 05 00 C2 F6 05 00
+       (skipping 1308 lines)
+       0x000053D0: AC F0 05 00 E9 F1 05 00 26 F3 05 00 63 F4 05 00
+    
+    At 0x000053E0 Size       66: Header/Scripts/12150
+       0x000053E0: 10 00 22 54 00 00 42 54 00 00 62 54 00 00 82 54
+       0x000053F0: 00 00 90 54 00 00 B0 54 00 00 BE 54 00 00 CC 54
+       0x00005400: 00 00 DA 54 00 00 E8 54 00 00 F6 54 00 00 04 55
+       0x00005410: 00 00 12 55 00 00 20 55 00 00 2E 55 00 00 3C 55
+       0x00005420: 00 00
+    
+    At 0x00005422 Size       32: Header/Scripts/12150/Line 0
+       0x00005420:       01 00 00 00 00 F9 FF 01 01 00 02 00 00 00
+       0x00005430: E8 FF 01 00 00 00 00 E8 FF 01 01 00 02 00 00 00
+       0x00005440: 01 00
+    
+    At 0x00005442 Size       32: Header/Scripts/12150/Line 1
+       0x00005440:       01 00 00 00 00 F9 FF 01 02 00 02 00 00 00
+       0x00005450: E8 FF 01 00 00 00 00 E8 FF 01 01 00 02 00 00 00
+       0x00005460: 01 00
+    
+    At 0x00005462 Size       32: Header/Scripts/12150/Line 2
+       0x00005460:       01 00 00 00 00 F9 FF 01 03 00 02 00 00 00
+       0x00005470: E8 FF 01 00 00 00 00 E8 FF 01 01 00 02 00 00 00
+       0x00005480: 01 00
+
+
+Zusätzlich kann das Programm nun unverstandene Bereiche der Datei aufzeigen und vor Überlappungen warnen, so dass das Reverse Engineering ungebremst weitergehen kann...
 
 
 # Eine Monade mit Blick in die Zukunft #
 
+Nun soll das `tttool` diese GME-Dateien nicht nur einlesen, sondern auch wieder ausgeben. Auch hier bieten sich Monaden als komfortable Abstraktionsschicht an, schließlich hat die “Gib dies aus, dann jenes und dann folgendes“ einen stark sequentiellen Touch. Und die `do`-Notation is attraktriv.
+
+## Noch eine Monade ##
+
+Die Monade dazu ist recht einfach: Neben einem Rückgabewert (der meist nicht interessiert) wird eben auch eine Liste von Bytes zurückgegeben. In produktiv eingesetztem Code sollte man hier einen besseren Datentypen nehmen, aber für das Beispiel genügen Listen:
+
+{% highlight haskell %}
+newtype Write a = Write ([Word8], a)
+
+runWrite :: Write a -> ([Word8], a)
+runWrite (Write result) = result
+
+execWrite :: Write a -> [Word8]
+execWrite (Write result) = fst result
+
+instance Monad Write where
+    return x = Write ([], x)
+    w1 >>= w2 = let (bytes1, x1) = runWrite w1
+                    (bytes2, x2) = runWrite (w2 x1)
+                in  Write (bytes1 ++ bytes2, x2)
+{% endhighlight %}
+
+Analog zum Parser wird das Schreiben eines Bytes noch mit dem Blick „unter die Haube“ des `Write`-Konstruktors implementiert, währen uns danach die Abstraktionsschicht Monade genügt:
+
+{% highlight haskell %}
+writeWord8 :: Word8 -> Write ()
+writeWord8 b = Write ([b], ())
+
+writeWord16 :: Word16 -> Write ()
+writeWord16 w = do
+    writeWord8 (fromIntegral w1)
+    writeWord8 (fromIntegral w2)
+  where (w2, w1) = w `divMod` 265
+
+writeWord16List :: [Word16] -> Write ()
+writeWord16List ws = do
+    writeWord8 (fromIntegral (length ws))
+    mapM_ writeWord16 ws
+{% endhighlight %}
+
+## Positionsinformation ##
+
+Wie würden wir jetzt das Dateiformat von oben (Zwei 16-Bit-Zahlen mit den Offsets von zwei Listen) erzeugen? Man kann natürlich die Positionen „von Hand“ vorhersehen und dann rausschreiben:
+
+{% highlight haskell %}
+writeAll1 :: ([Word16], [Word16]) -> Write ()
+writeAll1 (ws1, ws2) = do
+    writeWord16 4
+    writeWord16 (4 + 1 + 2 * fromIntegral (length ws1))
+    writeWord16List ws1
+    writeWord16List ws2
+{% endhighlight %}
+
+Aber es ist klar dass das nicht zielführend ist. Die `Write`-Monade sollte uns diese Arbeit abnehmen können!
+
+Lösen wir erstmal ein einfacherers Problem und ändern das Format: Es sollen erst die Listen, und dann deren Position geschrieben werden. Unser Wunsch wäre, folgendes schreiben zu können:
+
+{% highlight haskell %}
+writeAll2 :: ([Word16], [Word16]) -> Write ()
+writeAll2 (ws1, ws2) = do
+    pos1 <- getPosition
+    writeWord16List ws1
+    pos2 <- getPosition
+    writeWord16List ws2
+    writeWord16 pos1
+    writeWord16 pos2
+{% endhighlight %}
+
+Wie können wir ein solches `getPosition` implementieren? Dazu müssen wir den Typ unserer Monade anpassen, denn er muss nun seine Position wissen, und die muss ihm irgendwer mitteilen. Das sieht also so aus:
+
+{% highlight haskell %}
+newtype Write a = Write (Word16 -> ([Word8], a))
+
+runWrite :: Write a -> Word16 -> ([Word8], a)
+runWrite (Write result) = result
+
+execWrite :: Write a -> [Word8]
+execWrite (Write result) = fst $ result 0
+
+instance Monad Write where
+    return x = Write $ \_ -> ([], x)
+    w1 >>= w2 = Write $ \pos1 ->
+                let (bytes1, x1) = runWrite w1 pos1
+                    pos2 = pos1 + fromIntegral (length bytes1)
+                    (bytes2, x2) = runWrite (w2 x1) pos2
+                in  (bytes1 ++ bytes2, x2)
+
+writeWord8 :: Word8 -> Write ()
+writeWord8 b = Write $ \_ -> ([b], ())
+{% endhighlight %}
+
+Der restliche Code muss wieder nicht verändert werden. Die Funktion `getPosition` gibt einfach den Parameter zurück, natürlich ohne neue Bytes zu produzieren:
+
+{% highlight haskell %}
+getPosition :: Write Word16
+getPosition = Write $ \pos -> ([], pos)
+{% endhighlight %}
+
+## Der Blick in die Zukunft ##
+
+Nun ist das Format nunmal leider so, dass wir die Positionen der Listen brauchen, _bevor_ wir die Listen rausschreiben. Heißt dass dass wir auf den Komfort und die schöne Syntax einer Monade verzichen müssen? Nein! Wir machen es einfach so, wie es schön wäre:
+
+{% highlight haskell %}
+writeAll2 :: ([Word16], [Word16]) -> Write ()
+writeAll2 (ws1, ws2) = mdo
+    writeWord16 pos1
+    writeWord16 pos2
+    pos1 <- getPosition
+    writeWord16List ws1
+    pos2 <- getPosition
+    writeWord16List ws2
+{% endhighlight %}
+
+Nun greifen wir auf `pos1` und `pos2` zu, „bevor“ sie definiert werden. Damit das klappt, muss da stat `do` ein `mdo` stehen (wobei das `m` für µ steht, der Fixpunkt-Operator aus der Mathematik) und wir müssen `{# LANGUAGE RecursiveDo #-}` an den Anfang der Datei schreiben.
+
+Zusätzlich müssen wir dem Compiler sagen, wie so eine rekursive Berechnung in unserer Monade erfolgen soll. Dazu instantiieren wir die Typklasse `MonadFix` mit der Methode `mfix :: (a -> Write a) -> Write a`:
+
+{% highlight haskell %}
+instance MonadFix Write where
+    mfix f = Write $ \pos -> let (bytes,x) = runWrite (f x) pos in (bytes, x)
+{% endhighlight %}
+
+Der Parameter (`f`) ist dabei einer, der einen Wert (`x`) produziert, dafür aber genau diesen Wert als Argument braucht – ein Hirnverdreher erster Güte.
+
+Wer nicht glaub dass das funktionieren kann sehe selbst:
+
+    execWrite $ writeAll3 ([1,2],[3,4])
+    [4,0,9,0,2,1,0,2,0,2,3,0,4,0]
+
+Tatsächlich stehen nun noch vor der ersten Liste die Position der zweiten Liste, die ja von der Länge der ersten Liste abhängt. Wie kann das funktionieren?
+
+Das Zauberwort hier ist _Lazyness_ (Bedarfsauswertung): Um die Position zu berechnen interessiert uns ja nur die _Anzahl_ der erzeugten Bytes, nicht ihr inhalt. Der Code legt also erstmal die Listen an, aber ohne sie mit den Zahlen zu füllen. Erst wenn so die Struktur der Datei festgelegt ist und somit die Längen bekannt sind, findet die Berechnung der Positionen statt und sie werden in die Liste geschrieben.
+
+# Fazit #
+
+Ein Parser, der einem nebenher die Dateistruktur erklärt; eine Serialisierungshilfe, die einen jetzt schon verrät, wo was später liegt – mit handgestrickten Monaden kann man sich seinen Code schön-abstrahieren.
 
 
-Links mit [Text](http://URL).
-
-Hervorhebungen *mit Stern* oder _Unterstrich_.  **Doppelt** für mehr
-__Druck__.  Geht auch mitt*endr*in in einem Wort.
 
 <!-- more end -->
 
