@@ -21,7 +21,7 @@ Im folgenden gehen wir nicht direkt auf „echte“ [GME-Format](https://github.
 
 # Ein protokollierender Parser #
 
-Um den Appetit auf die Monaden zu erhöhen, gönnen wir uns Apperitiv erst einmal einen Parser, der von Hand geschrieben ist:
+Um den Appetit auf die Monaden zu erhöhen, gönnen wir uns Aperitif erst einmal einen Parser, der von Hand geschrieben ist:
 
 ## Die ersten Bytes  ##
 
@@ -109,7 +109,7 @@ newtype Parser a = Parser (ByteString -> Index -> (a, Index))
 
 Diese Zeile kann man wie folgt verstehen: „Ein Parser-Baustein, der etwas von Typ `a` parsen soll, ist eine Funktion, die den Inhalt der zu parsenden Datei und den Index, wo das Etwas zu finden ist, erwartet und neben dem Etwas auch noch verrät, wo es danach weitergeht.“
 
-Die Definition des Parser, der eine 8-Bit-Zahl einliest, hat sich dadurch kaum verädert:
+Die Definition des Parser, der eine 8-Bit-Zahl einliest, hat sich dadurch kaum verändert:
 {% highlight haskell %}
 getWord8P :: Parser Word8
 getWord8P = Parser (\bs i -> (BS.index bs i, i+1))
@@ -311,7 +311,7 @@ Zusätzlich kann das Programm nun unverstandene Bereiche der Datei aufzeigen und
 
 # Eine Monade mit Blick in die Zukunft #
 
-Nun soll das `tttool` diese GME-Dateien nicht nur einlesen, sondern auch wieder ausgeben. Auch hier bieten sich Monaden als komfortable Abstraktionsschicht an, schließlich hat die “Gib dies aus, dann jenes und dann folgendes“ einen stark sequentiellen Touch. Und die `do`-Notation is attraktriv.
+Nun soll das `tttool` diese GME-Dateien nicht nur einlesen, sondern auch wieder ausgeben. Auch hier bieten sich Monaden als komfortable Abstraktionsschicht an, schließlich hat die “Gib dies aus, dann jenes und dann folgendes“ einen stark sequentiellen Touch. Und die `do`-Notation ist attraktiv.
 
 ## Noch eine Monade ##
 
@@ -366,7 +366,7 @@ writeAll1 (ws1, ws2) = do
 
 Aber es ist klar dass das nicht zielführend ist. Die `Write`-Monade sollte uns diese Arbeit abnehmen können!
 
-Lösen wir erstmal ein einfacherers Problem und ändern das Format: Es sollen erst die Listen, und dann deren Position geschrieben werden. Unser Wunsch wäre, folgendes schreiben zu können:
+Lösen wir erst mal ein einfacherers Problem und ändern das Format: Es sollen erst die Listen, und dann deren Position geschrieben werden. Unser Wunsch wäre, folgendes schreiben zu können:
 
 {% highlight haskell %}
 writeAll2 :: ([Word16], [Word16]) -> Write ()
@@ -411,7 +411,7 @@ getPosition = Write $ \pos -> ([], pos)
 
 ## Der Blick in die Zukunft ##
 
-Nun ist das Format nunmal leider so, dass wir die Positionen der Listen brauchen, _bevor_ wir die Listen rausschreiben. Heißt dass dass wir auf den Komfort und die schöne Syntax einer Monade verzichen müssen? Nein! Wir machen es einfach so, wie es schön wäre:
+Nun ist das Format nun mal leider so, dass wir die Positionen der Listen brauchen, _bevor_ wir die Listen rausschreiben. Heißt dass dass wir auf den Komfort und die schöne Syntax einer Monade verzichten müssen? Nein! Wir machen es einfach so, wie es schön wäre:
 
 {% highlight haskell %}
 writeAll2 :: ([Word16], [Word16]) -> Write ()
@@ -424,7 +424,7 @@ writeAll2 (ws1, ws2) = mdo
     writeWord16List ws2
 {% endhighlight %}
 
-Nun greifen wir auf `pos1` und `pos2` zu, „bevor“ sie definiert werden. Damit das klappt, muss da stat `do` ein `mdo` stehen (wobei das `m` für µ steht, der Fixpunkt-Operator aus der Mathematik) und wir müssen `{# LANGUAGE RecursiveDo #-}` an den Anfang der Datei schreiben.
+Nun greifen wir auf `pos1` und `pos2` zu, „bevor“ sie definiert werden. Damit das klappt, muss da statt `do` ein `mdo` stehen (wobei das `m` für µ steht, der Fixpunkt-Operator aus der Mathematik) und wir müssen `{# LANGUAGE RecursiveDo #-}` an den Anfang der Datei schreiben.
 
 Zusätzlich müssen wir dem Compiler sagen, wie so eine rekursive Berechnung in unserer Monade erfolgen soll. Dazu instantiieren wir die Typklasse `MonadFix` mit der Methode `mfix :: (a -> Write a) -> Write a`:
 
@@ -442,7 +442,7 @@ Wer nicht glaub dass das funktionieren kann sehe selbst:
 
 Tatsächlich stehen nun noch vor der ersten Liste die Position der zweiten Liste, die ja von der Länge der ersten Liste abhängt. Wie kann das funktionieren?
 
-Das Zauberwort hier ist _Lazyness_ (Bedarfsauswertung): Um die Position zu berechnen interessiert uns ja nur die _Anzahl_ der erzeugten Bytes, nicht ihr inhalt. Der Code legt also erstmal die Listen an, aber ohne sie mit den Zahlen zu füllen. Erst wenn so die Struktur der Datei festgelegt ist und somit die Längen bekannt sind, findet die Berechnung der Positionen statt und sie werden in die Liste geschrieben.
+Das Zauberwort hier ist _Lazyness_ (Bedarfsauswertung): Um die Position zu berechnen interessiert uns ja nur die _Anzahl_ der erzeugten Bytes, nicht ihr Inhalt. Der Code legt also erst mal die Listen an, aber ohne sie mit den Zahlen zu füllen. Erst wenn so die Struktur der Datei festgelegt ist und somit die Längen bekannt sind, findet die Berechnung der Positionen statt und sie werden in die Liste geschrieben.
 
 # Fazit #
 
