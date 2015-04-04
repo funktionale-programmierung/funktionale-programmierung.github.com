@@ -63,7 +63,7 @@ authors:
     name: Joachim Breitner
     image: /author/joachim-breitner.png
     href: "http://www.joachim-breitner.de/blog/"
-    about: '<a href="http://www.joachim-breitner.de/">Joachim Breitner</a> ist Doktorand am Karlsruher Institut für Technologie und forscht zur Semantik von Bedarfsauswertung. Seit 6 Jahren programmiert er Haskell und engagiert sich in der Community, etwa als Mitglied des Haskell Core Library Committees.'
+    about: '<a href="http://www.joachim-breitner.de/">Joachim Breitner</a> ist Doktorand am Karlsruher Institut für Technologie und forscht zur Semantik von Bedarfsauswertung. Seit 8 Jahren programmiert er Haskell und engagiert sich in der Community, etwa als GHC-Entwickler und als Mitglied des Haskell Core Library Committees.'
   johannes-weiss:
     name: Johannes Weiß
     image: /author/johannes-weiss.png
