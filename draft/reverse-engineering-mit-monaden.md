@@ -188,7 +188,7 @@ Das GME-Dateiformat hat nicht nur Bytes und solche Arrays, sondern auch Verweise
 Mit dem „externen“ Interface unseres `Parser`-Typs können wir das nicht parsen. Man könnte zwar mit vielen Aufrufen von `getWord8P` vorspulen, kommt dann aber nicht mehr zurück. Das heißt wir müssen auf die Implementierung von `Parser` zugreifen, und bauen uns folgende Kombinatoren:
 
 {% highlight haskell %}
-lookAt :: Int -> Parser a -> Parser a
+lookAt :: Index -> Parser a -> Parser a
 lookAt offset p = Parser $ \bs i ->
     let (x,_) = runParser p bs offset
     in  (x,i)
@@ -255,7 +255,7 @@ Noch haben wir keine Segmente benannt und reichen nur die leere Liste umher. Als
 named :: String -> Parser a -> Parser a
 named n p = Parser $ \bs i0 ->
     let (x, segments, i1) = runParser p bs i0
-    in  (x, (n,i0,i1):[(n ++ n', i0', i1') | (n',i0',i1') <- segments], i1)
+    in  (x, (n,i0,i1):[(n ++ "/" ++ n', i0', i1') | (n',i0',i1') <- segments], i1)
 {% endhighlight %}
 
 Diese Funktion verwenden wir jetzt großzügig in unserer Hauptfunktion, um die Teile zu benennen:
@@ -333,7 +333,7 @@ instance Monad Write where
                 in  Write (bytes1 ++ bytes2, x2)
 {% endhighlight %}
 
-Analog zum Parser wird das Schreiben eines Bytes noch mit dem Blick „unter die Haube“ des `Write`-Konstruktors implementiert, währen uns danach die Abstraktionsschicht Monade genügt:
+Analog zum Parser wird das Schreiben eines Bytes noch mit dem Blick „unter die Haube“ des `Write`-Konstruktors implementiert, während uns danach die Abstraktionsschicht Monade genügt:
 
 {% highlight haskell %}
 writeWord8 :: Word8 -> Write ()
