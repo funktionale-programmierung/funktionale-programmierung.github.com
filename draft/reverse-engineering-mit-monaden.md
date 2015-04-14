@@ -124,7 +124,7 @@ evalParser :: Parser a -> ByteString -> a
 evalParser p bs = fst $ runParser p bs 0
 {% endhighlight %}
 
-Zur Erinnerung: Der Operator `$` dient nur darzu, Klammern zu sparen; `f $ g $ h x` ist das selbe wie `f (g (h x))`.
+Zur Erinnerung: Der Operator `$` dient nur darzu, Klammern zu sparen; `f $ g $ h x` ist das Gleiche wie `f (g (h x))`.
 
 
 ## Die erste Monade ##
