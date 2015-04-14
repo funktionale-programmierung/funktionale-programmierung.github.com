@@ -21,7 +21,7 @@ Im folgenden gehen wir nicht direkt auf „echte“ [GME-Format](https://github.
 
 # Ein protokollierender Parser #
 
-Um den Appetit auf die Monaden zu erhöhen, gönnen wir uns Aperitif erst einmal einen Parser, der von Hand geschrieben ist:
+Um den Appetit auf die Monaden zu erhöhen, gönnen wir uns als Aperitif erst einmal einen Parser, der von Hand geschrieben ist:
 
 ## Die ersten Bytes  ##
 
@@ -33,7 +33,7 @@ import qualified Data.ByteString as BS
 import Data.Word
 {% endhighlight %}
 
-Im ersten Schritt gehen wir einfach mal davon aus, dass die Datei immer vier Bytes groß ist: Erst kommt eine 8-Bit-Zahl und dann zwei 16-Bit-Zahlen. Es ist nicht schwer, eine Funktion zu schreiben, die dieses einfache Dateiformat zerlegt:
+Im ersten Schritt gehen wir einfach mal davon aus, dass die Datei immer fünf Bytes groß ist: Erst kommt eine 8-Bit-Zahl und dann zwei 16-Bit-Zahlen. Es ist nicht schwer, eine Funktion zu schreiben, die dieses einfache Dateiformat zerlegt:
 
 {% highlight haskell %}
 parser1 :: ByteString -> (Word8, Word16, Word16)
@@ -73,7 +73,7 @@ Damit haben wir den ersten Schritt in Richtung eines Kombinator-Parsers gemacht:
 
 ## Index-Berechnungen vermeiden ##
 
-Das nächste Problem mit dieser Definition ist dass die Funktion `parser2` die Startpositionen der Bausteine – im Beispiel die `0`, `1` und `3` – wissen muss. Das geht vielleicht noch in diesem einfachen Beispiel gut, aber spätestens wenn die Teile des Datei verschiedene Längen haben, werden wir ein Problem haben.
+Das nächste Problem mit dieser Definition ist, dass die Funktion `parser2` die Startpositionen der Bausteine – im Beispiel die `0`, `1` und `3` – wissen muss. Das geht vielleicht noch in diesem einfachen Beispiel gut, aber spätestens wenn die Teile des Datei verschiedene Längen haben, werden wir ein Problem haben.
 
 Es wäre also sinnvoll, wenn jeder Baustein nicht nur das Ergebnis des zurückliefert, sondern seinem Aufrufer auch verrät, an welcher Stelle es weitergeht. So sieht zum Beispiel der Baustein für 8-Bit-Zahlen jetzt so aus:
 
@@ -141,7 +141,8 @@ instance Monad Parser where
 Diese Instanz Legt zweierlei fest:
 
  * Wie ein Parser aussieht, der nichts macht, genannt `return`. Ein solcher
-   ignoriert die Datei (`bs`) und gibt die aktuelle Position zurück (`i`).
+   ignoriert den Inhalt der Datei (`bs`), belässt die aktuelle Position `i`,
+   wie sie ist, und gibt als Ergebnis jenes `x` zurück, das es bekommen hat.
  * Ein Operator `(>>=)`, genannt *bind*, der zwei Parser aneinanderhängt, um einen neuen zu
    bauen. Dabei darf der zweite Parser (`p2`) das Ergebnis des ersten Parsers
    (`x`) verwenden, also geben wir ihm das mit.
@@ -167,7 +168,7 @@ Man muss sich nun weder mit den Indizes herumschlagen, noch muss man den `ByteSt
 
 ## Library-Code ##
 
-Die Verwendung der `Monad`-Typklasse bringt noch mehr Vorteile. So gibt es eine Reihe von Library-Funktionen, die mit jeder Monade funktionieren, also auch mit unseren. Als Beispiel dient hier die Funktion `replicateM :: Monad m => Int -> m a -> m [a]`, mit der die monadische Aktion mehrfach ausgeführt wird.
+Die Verwendung der `Monad`-Typklasse bringt noch mehr Vorteile. So gibt es eine Reihe von Library-Funktionen, die mit jeder Monade funktionieren, also auch mit unserer. Als Beispiel dient hier die Funktion `replicateM :: Monad m => Int -> m a -> m [a]`, mit der die monadische Aktion mehrfach ausgeführt wird.
 
 So können wir beispielsweise elegant eine Liste von 16-Bit-Zahlen parsen, der ihre Länge (als 8-Bit-Zahl) vorangestellt wird:
 
@@ -193,8 +194,8 @@ lookAt offset p = Parser $ \bs i ->
     let (x,_) = runParser p bs offset
     in  (x,i)
 
-getInd :: Parser a -> Parser a
-getInd p = do
+indirection :: Parser a -> Parser a
+indirection p = do
     offset <- getWord16P
     lookAt (fromIntegral offset) p
 {% endhighlight %}
@@ -206,8 +207,8 @@ Damit können wir schön das folgende, recht komplizierte Format parsen: Die Dat
 {% highlight haskell %}
 parser5 :: ByteString -> ([Word16], [Word16])
 parser5 = evalParser $ do
-	list1 <- getInd getWord16ListP
-	list2 <- getInd getWord16ListP
+	list1 <- indirection getWord16ListP
+	list2 <- indirection getWord16ListP
 	return (list1, list2)
 {% endhighlight %}
 
@@ -255,7 +256,9 @@ Noch haben wir keine Segmente benannt und reichen nur die leere Liste umher. Als
 named :: String -> Parser a -> Parser a
 named n p = Parser $ \bs i0 ->
     let (x, segments, i1) = runParser p bs i0
-    in  (x, (n,i0,i1):[(n ++ "/" ++ n', i0', i1') | (n',i0',i1') <- segments], i1)
+        segments' = (n,i0,i1) : map qualify segments
+    in  (x, segments', i1)
+ where qualify (n', i0, i1) = (n ++ "/" ++ n', i0, i1)
 {% endhighlight %}
 
 Diese Funktion verwenden wir jetzt großzügig in unserer Hauptfunktion, um die Teile zu benennen:
@@ -263,8 +266,8 @@ Diese Funktion verwenden wir jetzt großzügig in unserer Hauptfunktion, um die 
 {% highlight haskell %}
 parser6 :: ByteString -> (([Word16], [Word16]), [Seg])
 parser6 = evalParser $ named "Header" $ do
-	list1 <- getInd $ named "Liste1" getWord16ListP
-	list2 <- getInd $ named "Liste2" getWord16ListP
+	list1 <- indirection $ named "Liste1" getWord16ListP
+	list2 <- indirection $ named "Liste2" getWord16ListP
 	return (list1, list2)
 {% endhighlight %}
 
@@ -442,7 +445,7 @@ Wer nicht glaub dass das funktionieren kann sehe selbst:
 
 Tatsächlich stehen nun noch vor der ersten Liste die Position der zweiten Liste, die ja von der Länge der ersten Liste abhängt. Wie kann das funktionieren?
 
-Das Zauberwort hier ist _Lazyness_ (Bedarfsauswertung): Um die Position zu berechnen interessiert uns ja nur die _Anzahl_ der erzeugten Bytes, nicht ihr Inhalt. Der Code legt also erst mal die Listen an, aber ohne sie mit den Zahlen zu füllen. Erst wenn so die Struktur der Datei festgelegt ist und somit die Längen bekannt sind, findet die Berechnung der Positionen statt und sie werden in die Liste geschrieben.
+Das Zauberwort hier ist _Laziness_ (Bedarfsauswertung): Um die Position zu berechnen interessiert uns ja nur die _Anzahl_ der erzeugten Bytes, nicht ihr Inhalt. Der Code legt also erst mal die Listen an, aber ohne sie mit den Zahlen zu füllen. Erst wenn so die Struktur der Datei festgelegt ist und somit die Längen bekannt sind, findet die Berechnung der Positionen statt und sie werden in die Liste geschrieben.
 
 # Fazit #
 
