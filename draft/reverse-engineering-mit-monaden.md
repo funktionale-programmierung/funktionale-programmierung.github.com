@@ -12,12 +12,12 @@ Ein paar interessierte Bastler haben sich dieses proprietäre, binäre Dateiform
 
 Dieser Artikel geht auf zwei Anwendungen von Monaden in diesem Projekt ein:
 
- * Dass sich Parser gut als mit Monaden spezifizieren lassen, ist nichts neues. Hier wurde der Parser zusätzlich so instrumentiert, dass er sich merkt, welche Dateibereiche welche Bedeutung hatten, was beim Verstehen eines unbekannten Dateiformates eine große Hilfe ist. Dank der Abstraktion durch Monaden musste der Parser selbst kaum angepasst werden.
+ * Dass sich Parser gut mit Monaden spezifizieren lassen, ist nichts neues. Hier wurde der Parser zusätzlich so instrumentiert, dass er sich merkt, welche Dateibereiche welche Bedeutung hatten, was beim Verstehen eines unbekannten Dateiformates eine große Hilfe ist. Dank der Abstraktion durch Monaden musste der Parser selbst kaum angepasst werden.
  * Diese GME-Dateien lassen sich nicht ohne weiteres in einem Rutsch rausschreiben, da man dazu vorher wissen müsste, an welchen Stellen in der Datei später was landet. Da wäre es geschickt, wenn man beim Programmieren „in die Zukunft blicken könnte“. Das geht tatsächlich: Mit Monaden und der rekursiven Do-Notation.
 
 <!-- more start -->
 
-Im folgenden gehen wir nicht direkt auf „echte“ [GME-Format](https://github.com/entropia/tip-toi-reveng/blob/master/GME-Format.md) ein, sondern überlegen uns einfache Beispielformate.
+Im folgenden gehen wir nicht direkt auf das „echte“ [GME-Format](https://github.com/entropia/tip-toi-reveng/blob/master/GME-Format.md) ein, sondern überlegen uns einfache Beispielformate.
 
 # Ein protokollierender Parser #
 
@@ -40,8 +40,8 @@ parser1 :: ByteString -> (Word8, Word16, Word16)
 parser1 bs = (byte0, word1, word2)
   where
     byte0 = BS.index bs 0
-    word1 = fromIntegral (BS.index bs 1) + 265 * fromIntegral (BS.index bs 2)
-    word2 = fromIntegral (BS.index bs 3) + 265 * fromIntegral (BS.index bs 4)
+    word1 = fromIntegral (BS.index bs 1) + 2^8 * fromIntegral (BS.index bs 2)
+    word2 = fromIntegral (BS.index bs 3) + 2^8 * fromIntegral (BS.index bs 4)
 {% endhighlight %}
 
 Die Funktion `fromIntegral` konvertiert hierbei vom Typ `Word8`, den ein Element eines ByteStrings hat, zu dem Typ `Int`, den wir hinterher haben wollen.
@@ -57,7 +57,7 @@ getWord8At :: ByteString -> Index -> Word8
 getWord8At bs i = BS.index bs i
 
 getWord16At :: ByteString -> Index -> Word16
-getWord16At bs i = fromIntegral b1 + 265 * fromIntegral b2
+getWord16At bs i = fromIntegral b1 + 2^8 * fromIntegral b2
   where b1 = getWord8At bs i
         b2 = getWord8At bs (i+1)
 
@@ -85,7 +85,7 @@ getWord8AtI bs i = (BS.index bs i, i+1)
 Wenn wir diesen Baustein nun verwenden wollen, müssen wir den neuen Index entsprechend weiterreichen:
 {% highlight haskell %}
 getWord16AtI :: ByteString -> Index -> (Word16, Index)
-getWord16AtI bs i0 = (fromIntegral b1 + 265 * fromIntegral b2, i2)
+getWord16AtI bs i0 = (fromIntegral b1 + 2^8 * fromIntegral b2, i2)
   where (b1, i1) = getWord8AtI bs i0
         (b2, i2) = getWord8AtI bs i1
 
@@ -124,10 +124,16 @@ evalParser :: Parser a -> ByteString -> a
 evalParser p bs = fst $ runParser p bs 0
 {% endhighlight %}
 
+Zur Erinnerung: Der Operator `$` dient nur darzu, Klammern zu sparen; `f $ g $ h x` ist das selbe wie `f (g (h x))`.
+
 
 ## Die erste Monade ##
 
-Nun machen wir einen kleinen Sprung und definieren, in welchem Sinne unser `Parser`-Typ eine Monade ist – wem das jetzt zu schnell geht, dem sei die Artikelreihe zu Monaden (Teil 1, Teil 2, Teil 3) von Uwe Schmidt ans Herz gelegt. Wir werden direkt danach sehen, was uns das gebracht hat:
+Nun machen wir einen kleinen Sprung und definieren, in welchem Sinne unser `Parser`-Typ eine Monade ist – wem das jetzt zu schnell geht, dem sei die Artikelreihe zu Monaden ([Teil 1], [Teil 2], [Teil 3]) von Uwe Schmidt ans Herz gelegt. Wir werden direkt danach sehen, was uns das gebracht hat:
+
+[Teil1]: http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html
+[Teil2]: http://funktionale-programmierung.de/2013/05/22/haskell-monaden2.html
+[Teil3]: http://funktionale-programmierung.de/2013/07/03/haskell-monaden3.html
 
 {% highlight haskell %}
 instance Monad Parser where
@@ -138,7 +144,7 @@ instance Monad Parser where
         in (y, i2))
 {% endhighlight %}
 
-Diese Instanz Legt zweierlei fest:
+Diese Instanz legt zweierlei fest:
 
  * Wie ein Parser aussieht, der nichts macht, genannt `return`. Ein solcher
    ignoriert den Inhalt der Datei (`bs`), belässt die aktuelle Position `i`,
@@ -154,7 +160,7 @@ getWord16P :: Parser Word16
 getWord16P = do
     b1 <- getWord8P
     b2 <- getWord8P
-    return (fromIntegral b1 + 265 * fromIntegral b2)
+    return (fromIntegral b1 + 2^8 * fromIntegral b2)
 
 parser4 :: ByteString -> (Word8, Word16, Word16)
 parser4 = evalParser $ do
@@ -216,7 +222,7 @@ parser5 = evalParser $ do
 
 Soweit so gut: Damit könnten wir das GME-Dateiformat parsen. Das Problem ist allerdings, dass das Format nicht dokumentiert ist und durch „intensives draufschauen“ entschlüsselt wird. Daher wäre es gut zu wissen, welche Teile der Datei man jetzt eigentlich verstanden hat, welche Bytes welche Bedeutung haben, wo noch Lücken sind und wo etwas eventuell zweimal gelesen wurde (was auf einen Fehler im Formatverständnis hinweisen würde).
 
-Wir wollen also, dass der Parser nebenher noch eine Liste von _Segmenten_ sammelt, die einen Namen und ein Byte-Bereich enthalten. Damit ändert sich die Definition von `Parser`:
+Wir wollen also, dass der Parser nebenher noch eine Liste von _Segmenten_ sammelt, die einen Namen und einen Byte-Bereich enthalten. Damit ändert sich die Definition von `Parser`:
 
 {% highlight haskell %}
 type Seg = (String, Index, Index)
@@ -346,7 +352,7 @@ writeWord16 :: Word16 -> Write ()
 writeWord16 w = do
     writeWord8 (fromIntegral w1)
     writeWord8 (fromIntegral w2)
-  where (w2, w1) = w `divMod` 265
+  where (w2, w1) = w `divMod` (2^8)
 
 writeWord16List :: [Word16] -> Write ()
 writeWord16List ws = do
@@ -427,7 +433,7 @@ writeAll2 (ws1, ws2) = mdo
     writeWord16List ws2
 {% endhighlight %}
 
-Nun greifen wir auf `pos1` und `pos2` zu, „bevor“ sie definiert werden. Damit das klappt, muss da statt `do` ein `mdo` stehen (wobei das `m` für µ steht, der Fixpunkt-Operator aus der Mathematik) und wir müssen `{# LANGUAGE RecursiveDo #-}` an den Anfang der Datei schreiben.
+Nun greifen wir auf `pos1` und `pos2` zu, „bevor“ sie definiert werden. Damit das klappt, muss da statt `do` ein `mdo` stehen (wobei das `m` für µ steht, der Fixpunkt-Operator aus der Mathematik). Zusätzlich müssen wir `{# LANGUAGE RecursiveDo #-}` an den Anfang der Datei schreiben, denn dieses Feature ist eine Erweiterung der Programmiersprache.
 
 Zusätzlich müssen wir dem Compiler sagen, wie so eine rekursive Berechnung in unserer Monade erfolgen soll. Dazu instantiieren wir die Typklasse `MonadFix` mit der Methode `mfix :: (a -> Write a) -> Write a`:
 
@@ -449,7 +455,7 @@ Das Zauberwort hier ist _Laziness_ (Bedarfsauswertung): Um die Position zu berec
 
 # Fazit #
 
-Ein Parser, der einem nebenher die Dateistruktur erklärt; eine Serialisierungshilfe, die einen jetzt schon verrät, wo was später liegt – mit handgestrickten Monaden kann man sich seinen Code schön-abstrahieren.
+Ein Parser, der einem nebenher die Dateistruktur erklärt; eine Serialisierungshilfe, die einem jetzt schon verrät, wo was später liegt – mit handgestrickten Monaden kann man sich seinen Code schön-abstrahieren.
 
 
 
