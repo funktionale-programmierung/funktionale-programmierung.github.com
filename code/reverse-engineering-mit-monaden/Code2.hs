@@ -30,7 +30,7 @@ getWord16P :: Parser Word16
 getWord16P = do
     b1 <- getWord8P
     b2 <- getWord8P
-    return (fromIntegral b1 + 265 * fromIntegral b2)
+    return (2^8 * fromIntegral b1 + fromIntegral b2)
 
 getWord16ListP :: Parser [Word16]
 getWord16ListP = do

@@ -29,7 +29,7 @@ writeWord16 :: Word16 -> Write ()
 writeWord16 w = do
     writeWord8 (fromIntegral w1)
     writeWord8 (fromIntegral w2)
-  where (w2, w1) = w `divMod` 265
+  where (w1, w2) = w `divMod` 265
 
 writeWord16List :: [Word16] -> Write ()
 writeWord16List ws = do

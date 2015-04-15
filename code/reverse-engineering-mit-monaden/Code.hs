@@ -7,8 +7,8 @@ parser1 :: ByteString -> (Word8, Word16, Word16)
 parser1 bs = (byte0, word1, word2)
   where
     byte0 = BS.index bs 0
-    word1 = fromIntegral (BS.index bs 1) + 265 * fromIntegral (BS.index bs 2)
-    word2 = fromIntegral (BS.index bs 3) + 265 * fromIntegral (BS.index bs 4)
+    word1 = 2^8 * fromIntegral (BS.index bs 1) + fromIntegral (BS.index bs 2)
+    word2 = 2^8 * fromIntegral (BS.index bs 3) + fromIntegral (BS.index bs 4)
 
 type Index = Int
 
@@ -16,7 +16,7 @@ getWord8At :: ByteString -> Index -> Word8
 getWord8At bs i = BS.index bs i
 
 getWord16At :: ByteString -> Index -> Word16
-getWord16At bs i = fromIntegral b1 + 265 * fromIntegral b2
+getWord16At bs i = 2^8 * fromIntegral b1 + fromIntegral b2
   where b1 = getWord8At bs i
         b2 = getWord8At bs (i+1)
 
@@ -31,7 +31,7 @@ getWord8AtI :: ByteString -> Index -> (Word8, Index)
 getWord8AtI bs i = (BS.index bs i, i+1)
 
 getWord16AtI :: ByteString -> Index -> (Word16, Index)
-getWord16AtI bs i0 = (fromIntegral b1 + 265 * fromIntegral b2, i2)
+getWord16AtI bs i0 = (2^8 * fromIntegral b1 + fromIntegral b2, i2)
   where (b1, i1) = getWord8AtI bs i0
         (b2, i2) = getWord8AtI bs i1
 
@@ -45,7 +45,7 @@ parser3 bs = (byte0, word1, word2)
 
 newtype Parser a = Parser (ByteString -> Index -> (a, Index))
 
-runParser :: Parser a -> ByteString -> Index -> (a,Index)
+runParser :: Parser a -> ByteString -> Index -> (a, Index)
 runParser (Parser p) = p
 
 evalParser :: Parser a -> ByteString -> a
@@ -65,7 +65,7 @@ getWord16P :: Parser Word16
 getWord16P = do
     b1 <- getWord8P
     b2 <- getWord8P
-    return (fromIntegral b1 + 265 * fromIntegral b2)
+    return (2^8 * fromIntegral b1 + fromIntegral b2)
 
 parser4 :: ByteString -> (Word8, Word16, Word16)
 parser4 = evalParser $ do
@@ -80,18 +80,18 @@ getWord16ListP = do
     entries <- replicateM (fromIntegral n) getWord16P
     return entries
 
-lookAt :: Int -> Parser a -> Parser a
+lookAt :: Index -> Parser a -> Parser a
 lookAt offset p = Parser $ \bs i ->
     let (x,_) = runParser p bs offset
     in  (x,i)
 
-getInd :: Parser a -> Parser a
-getInd p = do
+indirection :: Parser a -> Parser a
+indirection p = do
     offset <- getWord16P
     lookAt (fromIntegral offset) p
 
 parser5 :: ByteString -> ([Word16], [Word16])
 parser5 = evalParser $ do
-	list1 <- getInd getWord16ListP
-	list2 <- getInd getWord16ListP
+	list1 <- indirection getWord16ListP
+	list2 <- indirection getWord16ListP
 	return (list1, list2)

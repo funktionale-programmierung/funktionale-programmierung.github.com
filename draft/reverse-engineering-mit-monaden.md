@@ -40,8 +40,8 @@ parser1 :: ByteString -> (Word8, Word16, Word16)
 parser1 bs = (byte0, word1, word2)
   where
     byte0 = BS.index bs 0
-    word1 = fromIntegral (BS.index bs 1) + 2^8 * fromIntegral (BS.index bs 2)
-    word2 = fromIntegral (BS.index bs 3) + 2^8 * fromIntegral (BS.index bs 4)
+    word1 = 2^8 * fromIntegral (BS.index bs 1) + fromIntegral (BS.index bs 2)
+    word2 = 2^8 * fromIntegral (BS.index bs 3) + fromIntegral (BS.index bs 4)
 {% endhighlight %}
 
 Die Funktion `fromIntegral` konvertiert hierbei vom Typ `Word8`, den ein Element eines ByteStrings hat, zu dem Typ `Int`, den wir hinterher haben wollen.
@@ -57,7 +57,7 @@ getWord8At :: ByteString -> Index -> Word8
 getWord8At bs i = BS.index bs i
 
 getWord16At :: ByteString -> Index -> Word16
-getWord16At bs i = fromIntegral b1 + 2^8 * fromIntegral b2
+getWord16At bs i = 2^8 * fromIntegral b1 + fromIntegral b2
   where b1 = getWord8At bs i
         b2 = getWord8At bs (i+1)
 
@@ -85,7 +85,7 @@ getWord8AtI bs i = (BS.index bs i, i+1)
 Wenn wir diesen Baustein nun verwenden wollen, müssen wir den neuen Index entsprechend weiterreichen:
 {% highlight haskell %}
 getWord16AtI :: ByteString -> Index -> (Word16, Index)
-getWord16AtI bs i0 = (fromIntegral b1 + 2^8 * fromIntegral b2, i2)
+getWord16AtI bs i0 = (2^8 * fromIntegral b1 + fromIntegral b2, i2)
   where (b1, i1) = getWord8AtI bs i0
         (b2, i2) = getWord8AtI bs i1
 
@@ -160,7 +160,7 @@ getWord16P :: Parser Word16
 getWord16P = do
     b1 <- getWord8P
     b2 <- getWord8P
-    return (fromIntegral b1 + 2^8 * fromIntegral b2)
+    return (2^8 * fromIntegral b1 + fromIntegral b2)
 
 parser4 :: ByteString -> (Word8, Word16, Word16)
 parser4 = evalParser $ do
@@ -280,7 +280,7 @@ parser6 = evalParser $ named "Header" $ do
 Lässt man diese Funktion auf eine kleine Testeingabe los, so sieht man nicht nur das korrekte Ergebnis, sondern auch der Aufbau der Funktion wird gezeigt.
 
 {% highlight haskell %}
-> parser6 (BS.pack [4,0,7,0,1,23,0,1,42,0])
+> parser6 (BS.pack [0,4,0,7,1,0,23,1,0,42])
 (([23],[42]),[("Header",0,4),("Header/Liste1",4,7),("Header/Liste2",7,10)])
 {% endhighlight %}
 
@@ -352,7 +352,7 @@ writeWord16 :: Word16 -> Write ()
 writeWord16 w = do
     writeWord8 (fromIntegral w1)
     writeWord8 (fromIntegral w2)
-  where (w2, w1) = w `divMod` (2^8)
+  where (w1, w2) = w `divMod` (2^8)
 
 writeWord16List :: [Word16] -> Write ()
 writeWord16List ws = do
@@ -447,7 +447,7 @@ Der Parameter (`f`) ist dabei einer, der einen Wert (`x`) produziert, dafür abe
 Wer nicht glaub dass das funktionieren kann sehe selbst:
 
     execWrite $ writeAll3 ([1,2],[3,4])
-    [4,0,9,0,2,1,0,2,0,2,3,0,4,0]
+    [0,4,0,9,2,0,1,0,2,2,0,3,0,4]
 
 Tatsächlich stehen nun noch vor der ersten Liste die Position der zweiten Liste, die ja von der Länge der ersten Liste abhängt. Wie kann das funktionieren?
 
