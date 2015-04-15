@@ -277,3 +277,20 @@ hr.post-divider {
   float: right;
   height: auto;
 }
+
+
+/* Remove some elements on printouts */
+@media print {
+  #sidebar, .navbar-row, .post-sharing, .pager, #disqus_thread {
+    display:none;
+  }
+  .post-tags a[href]:after {
+        content: "" !important;
+  }
+  #main {
+    width:100%;
+    margin-left: 1em;
+    margin-right: 1em;
+    float: none;
+  }
+}
