@@ -17,7 +17,7 @@ Dieser Artikel geht auf zwei Anwendungen von Monaden in diesem Projekt ein:
 
 <!-- more start -->
 
-Im folgenden gehen wir nicht direkt auf das „echte“ [GME-Format](https://github.com/entropia/tip-toi-reveng/blob/master/GME-Format.md) ein, sondern überlegen uns einfache Beispielformate.
+Im Folgenden gehen wir nicht direkt auf das „echte“ [GME-Format](https://github.com/entropia/tip-toi-reveng/blob/master/GME-Format.md) ein, sondern überlegen uns einfache Beispielformate.
 
 # Ein protokollierender Parser #
 
@@ -44,7 +44,7 @@ parser1 bs = (byte0, word1, word2)
     word2 = 2^8 * fromIntegral (BS.index bs 3) + fromIntegral (BS.index bs 4)
 {% endhighlight %}
 
-Die Funktion `fromIntegral` konvertiert hierbei vom Typ `Word8`, den ein Element eines ByteStrings hat, zu dem Typ `Int`, den wir hinterher haben wollen.
+Die Funktion `fromIntegral` konvertiert hierbei vom Typ `Word8`, den ein Element eines ByteStrings hat, zu dem Typ `Word16`, den wir hinterher haben wollen.
 
 ## Hilfsfunktionen ##
 
@@ -100,7 +100,7 @@ parser3 bs = (byte0, word1, word2)
 
 ## Der Parser-Typ ##
 
-Logisch gesehen ist das schon ziemlich schön so: Wir können diese Parser beliebig aneinanderhängen und die ganze Index-Rumrechnerei wird uns abgenommen. Aber schön zu schreiben ist das nicht, mit diesen vielen Index-Variablen, die da rumfahren. Auch diese können wir doch sicherlich weg-abstrahieren!
+Logisch gesehen ist das schon ganz gut so: Wir können diese Parser beliebig aneinanderhängen und die ganze Index-Rumrechnerei wird uns abgenommen. Aber schön zu schreiben ist das nicht, mit diesen vielen Index-Variablen, die da rumfahren. Auch diese können wir doch sicherlich weg-abstrahieren!
 
 Zuerst stellen wir fest, dass die Typen von `getWord8AtI` und `getWord16AtI` recht groß geworden sind und dabei die spannende Information vor lauter Indizes verschwindet. Verstecken wir diese also in einem neuen Typ:
 {% highlight haskell %}
@@ -124,16 +124,16 @@ evalParser :: Parser a -> ByteString -> a
 evalParser p bs = fst $ runParser p bs 0
 {% endhighlight %}
 
-Zur Erinnerung: Der Operator `$` dient nur darzu, Klammern zu sparen; `f $ g $ h x` ist das Gleiche wie `f (g (h x))`.
+Zur Erinnerung: Der Operator `$` dient nur dazu, Klammern zu sparen; `f $ g $ h x` ist das Gleiche wie `f (g (h x))`.
 
 
 ## Die erste Monade ##
 
 Nun machen wir einen kleinen Sprung und definieren, in welchem Sinne unser `Parser`-Typ eine Monade ist – wem das jetzt zu schnell geht, dem sei die Artikelreihe zu Monaden ([Teil 1], [Teil 2], [Teil 3]) von Uwe Schmidt ans Herz gelegt. Wir werden direkt danach sehen, was uns das gebracht hat:
 
-[Teil1]: http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html
-[Teil2]: http://funktionale-programmierung.de/2013/05/22/haskell-monaden2.html
-[Teil3]: http://funktionale-programmierung.de/2013/07/03/haskell-monaden3.html
+[Teil 1]: http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html
+[Teil 2]: http://funktionale-programmierung.de/2013/05/22/haskell-monaden2.html
+[Teil 3]: http://funktionale-programmierung.de/2013/07/03/haskell-monaden3.html
 
 {% highlight haskell %}
 instance Monad Parser where
@@ -174,7 +174,7 @@ Man muss sich nun weder mit den Indizes herumschlagen, noch muss man den `ByteSt
 
 ## Library-Code ##
 
-Die Verwendung der `Monad`-Typklasse bringt noch mehr Vorteile. So gibt es eine Reihe von Library-Funktionen, die mit jeder Monade funktionieren, also auch mit unserer. Als Beispiel dient hier die Funktion `replicateM :: Monad m => Int -> m a -> m [a]`, mit der die monadische Aktion mehrfach ausgeführt wird.
+Die Verwendung der `Monad`-Typklasse bringt noch mehr Vorteile. So gibt es eine Reihe von Library-Funktionen, die mit jeder Monade funktionieren, also auch mit unserer. Als Beispiel dient hier die Funktion `replicateM :: Monad m => Int -> m a -> m [a]`, mit der eine monadische Aktion mehrfach ausgeführt wird.
 
 So können wir beispielsweise elegant eine Liste von 16-Bit-Zahlen parsen, der ihre Länge (als 8-Bit-Zahl) vorangestellt wird:
 
@@ -320,7 +320,7 @@ Zusätzlich kann das Programm nun unverstandene Bereiche der Datei aufzeigen und
 
 # Eine Monade mit Blick in die Zukunft #
 
-Nun soll das `tttool` diese GME-Dateien nicht nur einlesen, sondern auch wieder ausgeben. Auch hier bieten sich Monaden als komfortable Abstraktionsschicht an, schließlich hat die “Gib dies aus, dann jenes und dann folgendes“ einen stark sequentiellen Touch. Und die `do`-Notation ist attraktiv.
+Nun soll das `tttool` diese GME-Dateien nicht nur einlesen, sondern auch wieder ausgeben. Auch hier bieten sich Monaden als komfortable Abstraktionsschicht an, schließlich hat “Gib dies aus, dann jenes und dann folgendes“ einen stark sequentiellen Touch. Und die `do`-Notation ist attraktiv.
 
 ## Noch eine Monade ##
 
@@ -388,7 +388,7 @@ writeAll2 (ws1, ws2) = do
     writeWord16 pos2
 {% endhighlight %}
 
-Wie können wir ein solches `getPosition` implementieren? Dazu müssen wir den Typ unserer Monade anpassen, denn er muss nun seine Position wissen, und die muss ihm irgendwer mitteilen. Das sieht also so aus:
+Wie können wir ein solches `getPosition` implementieren? Dazu müssen wir den Typ unserer Monade anpassen, denn er muss nun seine Position wissen, und die muss ihm irgendwer mitteilen:
 
 {% highlight haskell %}
 newtype Write a = Write (Word16 -> ([Word8], a))
@@ -433,7 +433,7 @@ writeAll2 (ws1, ws2) = mdo
     writeWord16List ws2
 {% endhighlight %}
 
-Nun greifen wir auf `pos1` und `pos2` zu, „bevor“ sie definiert werden. Damit das klappt, muss da statt `do` ein `mdo` stehen (wobei das `m` für µ steht, der Fixpunkt-Operator aus der Mathematik). Zusätzlich müssen wir `{# LANGUAGE RecursiveDo #-}` an den Anfang der Datei schreiben, denn dieses Feature ist eine Erweiterung der Programmiersprache.
+Nun greifen wir auf `pos1` und `pos2` zu, „bevor“ sie definiert werden. Damit das klappt, muss da statt `do` ein `mdo` stehen (wobei das `m` für µ steht, dem Fixpunkt-Operator aus der Mathematik). Zusätzlich müssen wir `{# LANGUAGE RecursiveDo #-}` an den Anfang der Datei schreiben, denn dieses Feature ist eine Erweiterung der Programmiersprache.
 
 Zusätzlich müssen wir dem Compiler sagen, wie so eine rekursive Berechnung in unserer Monade erfolgen soll. Dazu instantiieren wir die Typklasse `MonadFix` mit der Methode `mfix :: (a -> Write a) -> Write a`:
 
@@ -444,7 +444,7 @@ instance MonadFix Write where
 
 Der Parameter (`f`) ist dabei einer, der einen Wert (`x`) produziert, dafür aber genau diesen Wert als Argument braucht – ein Hirnverdreher erster Güte.
 
-Wer nicht glaub dass das funktionieren kann sehe selbst:
+Wer nicht glaubt dass das funktionieren kann sehe selbst:
 
     execWrite $ writeAll3 ([1,2],[3,4])
     [0,4,0,9,2,0,1,0,2,2,0,3,0,4]
