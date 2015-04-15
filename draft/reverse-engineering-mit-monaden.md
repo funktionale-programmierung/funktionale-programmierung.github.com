@@ -457,7 +457,8 @@ Das Zauberwort hier ist _Laziness_ (Bedarfsauswertung): Um die Position zu berec
 
 Ein Parser, der einem nebenher die Dateistruktur erklärt; eine Serialisierungshilfe, die einem jetzt schon verrät, wo was später liegt – mit handgestrickten Monaden kann man sich seinen Code schön-abstrahieren.
 
-
-
 <!-- more end -->
+
+*Zu diesem Artikel wurde auch ein [Vortrag für die Karlsruhe Functional Programmers Meetup Group](http://www.meetup.com/The-Karlsruhe-Functional-Programmers-Meetup-Group/events/221493241/) gehalten.*
+
 
