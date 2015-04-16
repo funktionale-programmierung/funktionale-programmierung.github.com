@@ -1,7 +1,7 @@
 ---
 layout: post
-description: Monaden fürs Reverse Engineering
-title: "Monaden fürs Reverse Engineering"
+description: Monaden für's Reverse Engineering
+title: "Monaden für's Reverse Engineering"
 author: joachim-breitner
 tags: ["Haskell", "Monaden", "Praxis"]
 ---
