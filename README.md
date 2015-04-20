@@ -1,6 +1,14 @@
 Schreiben von Artikeln
 ==
 
+Entwürfe
+===
+
+Der Entwurf eines neuen Artikels landet erstmal im Unterverzeichnis
+`draft`. Dort gibt es auch einen Template für einen neuen Artikel. Bitte
+das Template kopieren und eine sinnvollen Dateinamen für den neuen Artikel
+vergeben.
+
 Header
 === 
 
@@ -70,3 +78,10 @@ Artikel dazu:
 
 http://blog.shareaholic.com/2012/01/how-to-optimize-your-blog-posts-for-seo/
 http://www.seomoz.org/blog/perfecting-keyword-targeting-on-page-optimization
+
+Veröffentlichen
+==
+
+Zum Veröffentlichen wird der Artikel auf dem `draft` Verzeichnis in das
+`_posts` Verzeichnis bewegt. Dabei wird das Veröffentlichungsdatum dem
+Dateinamen vorangestellt.
