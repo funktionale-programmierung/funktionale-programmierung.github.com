@@ -21,8 +21,8 @@ zusammengesetzter Datentypen.
 Als Beispiel gehen wir in einen Computerladen und stellen uns einen
 Individualrecher aus Einzelteilen zusammen.  Um diese Zusammenstellung
 zu beschreiben (zum Beispiel für einen Online-Shop), entwerfen wir
-eine Repräsentation als Daten.  Dieser Prozeß fängt an mit einer
-Datendefinition:
+eine Repräsentation als Daten.  Dieser Prozess fängt mit einer
+Datendefinition an:
 
 {% highlight clojure %}
 ; Ein Computer besteht aus:
@@ -63,7 +63,7 @@ Wir können `new Computer` abkürzen mit `Computer.` (beachten Sie den Punkt):
 (def workstation (Computer. "Xeon" 2 500))
 {% endhighlight %}
 
-Allerdings ist zu beachten, dass `Computer.` keine Funktion, sondern
+Allerdings ist zu berücksichtigen, dass `Computer.` keine Funktion, sondern
 ein Makro ist.  Wenn wir versuchen, sie als eigenständiges Objekt zu
 verwenden, passiert folgendes:
 
