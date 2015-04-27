@@ -200,4 +200,6 @@ stattdessen den *Wert* des ersten Operanden, der "wahr" ergibt:
 
 Soweit so gut für heute!
 
+Weiter geht's mit zusammengesetzten Daten in [Teil 4]({% post_url 2015-04-27-clojure-records %}).
+
 <!-- more end -->
