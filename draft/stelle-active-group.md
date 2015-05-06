@@ -1,9 +1,9 @@
 ---
 layout: post
-description: "Active Group sucht Softwareentwickler(in)"
-title: "Active Group sucht Softwareentwickler(in)"
-author: michael-sperber
-tags: ["Job, "Stellenanzeige"]
+description: Beschreibung
+title: "Titel"
+author: vorname-nachmane
+tags: ["tag1", "tag2", "tag3"]
 ---
 
 Die Active Group suchen eine Softwareentwicklerin oder einen
