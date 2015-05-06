@@ -2,8 +2,7 @@
 layout: post
 description: "Active Group sucht Softwareentwickler(in)"
 title: "Active Group sucht Softwareentwickler(in)"
-title: "Titel"
-author: vorname-nachmane
+author: michael-sperber
 tags: ["tag1", "tag2", "tag3"]
 ---
 
