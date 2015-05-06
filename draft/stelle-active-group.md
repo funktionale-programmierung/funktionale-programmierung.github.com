@@ -1,6 +1,7 @@
 ---
 layout: post
-description: Beschreibung
+description: "Active Group sucht Softwareentwickler(in)"
+title: "Active Group sucht Softwareentwickler(in)"
 title: "Titel"
 author: vorname-nachmane
 tags: ["tag1", "tag2", "tag3"]
