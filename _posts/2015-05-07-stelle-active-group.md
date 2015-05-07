@@ -39,7 +39,9 @@ oder Erfahrung in der Softwareentwicklung  sollten Sie haben.
 
 Wir sind bestrebt, die Vielfalt unseres Teams zu verbessern.
 
-Wenn Sie Interesse oder Fragen haben, melden Sie sich bitte [bei
-uns](mailto:michael.sperber@active-group.de).
+Wenn Sie Interesse oder Fragen haben, melden Sie sich bitte [per
+E-Mail](mailto:michael.sperber@active-group.de) oder rufen Sie unter (0711)
+707094-60 an und fragen nach unserem technischen Geschäftsführer
+Dr. Michael Sperber.
 
 <!-- more end -->
