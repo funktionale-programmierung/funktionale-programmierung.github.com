@@ -6,14 +6,15 @@ author: michael-sperber
 tags: ["Job", "Stellenanzeige"]
 ---
 
-Die Active Group suchen eine Softwareentwicklerin oder einen
+Die Active Group sucht eine Softwareentwicklerin oder einen
 Softwareentwickler mit Schwerpunkt in funktionaler Programmierung zur
-Verstärkung unseres Teams!
+Verstärkung unseres Teams in Filderstadt!
 
 <!-- more start -->
 
 Die Active Group entwickelt Individualsoftware in einer großen
-Bandbreite von Branchen.  Worum es auch geht, wir eignen uns zunächst
+Bandbreite von Branchen - von Sozialpädagogik bis
+Halbleiterfabrikation.  Worum es auch geht, wir eignen uns zunächst
 umfangreiches Fachwissen aus der jeweiligen Branche an.  Dann wenden
 wir die besten sinnvollen Techniken und Technologien an, die wir
 finden können.  In diesem Sinne kommt in jedem unserer Projekte
@@ -27,17 +28,18 @@ Wir suchen jemanden mit folgenden Eigenschaften:
 
 - der Wunsch, jeden Tag etwas Neues zu lernen
 
-- Freude daran, stets das beste zu geben und sich kontinuierlich zu verbessern
+- Freude daran, stets das Beste zu geben und sich kontinuierlich zu verbessern
 
 - die Bereitschaft, im Team gemeinsam zu entscheiden, was das Beste
   für ein Projekt ist und dies auch umzusetzen.
 
 Ein abgeschlossenes Hochschulstudium, eine andere Form der Ausbildung
-oder Erfahrung in der Softwareentwicklung sind wünschenswert.
+oder Erfahrung in der Softwareentwicklung  sollten Sie haben.
+
 
 Wir sind bestrebt, die Vielfalt unseres Teams zu verbessern.
 
 Wenn Sie Interesse oder Fragen haben, melden Sie sich bitte [bei
-uns](mailto:info@active-group.de).
+uns](mailto:michael.sperber@active-group.de).
 
 <!-- more end -->
