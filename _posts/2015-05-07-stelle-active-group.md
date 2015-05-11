@@ -36,8 +36,10 @@ Wir suchen jemanden mit folgenden Eigenschaften:
 Ein abgeschlossenes Hochschulstudium, eine andere Form der Ausbildung
 oder Erfahrung in der Softwareentwicklung  sollten Sie haben.
 
-
-Wir sind bestrebt, die Vielfalt unseres Teams zu verbessern.
+Wir sind stolz auf unser freundschaftliches und familienfreundliches
+Betriebsklima.  Teilzeitarbeit und flexible Arbeitszeiten können wir
+uns gut vorstellen.  Wir sind außerdem bestrebt, die Vielfalt unseres
+Teams zu verbessern.
 
 Wenn Sie Interesse oder Fragen haben, melden Sie sich bitte [per
 E-Mail](mailto:michael.sperber@active-group.de) oder rufen Sie unter (0711)
