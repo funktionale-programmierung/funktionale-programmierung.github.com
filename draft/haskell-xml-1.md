@@ -2,7 +2,7 @@
 layout: post
 description: "XML in Haskell - Datentypen und Serialisierung"
 title: "XML in Haskell - Datentypen und Serialisierung"
-author: stefan-wehr
+author: david-leuschner
 tags: ["Haskell"]
 ---
 
@@ -305,3 +305,6 @@ Da wir die Textknoten zwischen dem End-Tag von `patient` und dem
 Start-Tag von `name` in Haskell nicht eingefügt haben sieht die Ausgabe
 nicht exakt so aus wie das oben stehende Beispiel, sondern alles steht in
 einer Zeile.
+
+So, das war's für heute. Das nächste Mal schauen wir uns an, wie man
+XML-Dateien einlesen und verarbeiten kann. Ich freue mich über Feedback!

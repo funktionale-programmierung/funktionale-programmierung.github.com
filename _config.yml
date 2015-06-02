@@ -93,3 +93,7 @@ authors:
     image: /author/matthias-fischmann.jpg
     href: "http://zerobuzz.net/"
     about: 'Dr. Matthias Fischmann ist Geschäftsführer und Senior Consultant bei <a href="http://zerobuzz.net/">zerobuzz.net</a>, einem Beratungsunternehmen mit den Standbeinen SAP und Haskell.  Er arbeitet seit 1999 mit Haskell und anderen funktionalen Sprachen.'
+  david-leuschner:
+    name: David Leuschner
+    image: /author/david-leuschner.jpg
+    about: 'David Leuschner ist Geschäftsführer und Entwicklungsleiter der <a href="http://factisresearch.com">factis research GmbH</a>. Er setzt sich seit mehr als 10 Jahren für den Einsatz funktionaler Sprachen in der Industrie ein.'
