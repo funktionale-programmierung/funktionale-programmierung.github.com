@@ -21,7 +21,7 @@ auftauchen. -->
 Nehmen wir an, wir benötigen eine Funktion die alle Elemente einer List aufsummiert. 
 Eine Möglichkeit `sum` zu implementieren ist folgende:
  
-{% highlight Haskell %}
+{% highlight haskell %}
 sum :: Num a -> [a] -> a
 sum [] = 0
 sum (x:xs) = x + sum xs 
@@ -35,7 +35,7 @@ wieder die korrekte Summe aus. Jedoch terminiert es bei noch größeren Listen w
 stack overflow. Das Problem ist dabei, dass die Rekursionstiefe für den vorhandenen Stack zu hoch ist. Veranschaulichen wir uns die 
 Auswertung eines Aufrufes von `sum` in folgendem Beispiel:
 
-{% highlight Haskell %}
+{% highlight haskell %}
 sum [1,2,3]
 = 
 1 + sum [2,3]
@@ -56,7 +56,7 @@ Bevor wir also mit dem Aufsummieren anfangen können, müssen wir die Liste komp
 Dadurch korreliert die Rekursionstiefe mit der Länge der Liste. Der geübte funktionale Programmierer 
 wird sofort vorschlagen die Funktion in eine _Endrekursive_ zu transformieren. Diese ist nun in 
 der Funktion `go` realisiert.
-{% highlight Haskell %}
+{% highlight haskell %}
 sum' :: Num a -> [a] -> a
 sum' = go 0
   where
@@ -72,7 +72,7 @@ Um also den gewünschten Effekt zu erzielen müssen wir die Auswertung der Addit
 ## Berechnungen erzwingen ##
 
 Mit der Funktion `seq :: a -> b -> b` wird die Auswertung von `a` erzwungen und `b` zurückgegeben. 
-{% highlight Haskell %}
+{% highlight haskell %}
 sum'' :: Num a -> [a] -> a
 sum'' = go 0
   where
@@ -85,7 +85,7 @@ Die angepasste Funktion `sum''` läuft nun wie erwartet als endrekursive Funktio
 Stackverbrauch. Eine syntaktisch weniger aufwendige Methode biete die GHC Erweiterung 
 `BangPatterns`. Durch diese ist es möglich die strikt zu evaluirenden Werte mit einem `!` zu 
 markieren wie in `sum'''` zu sehen ist.
-{% highlight Haskell %}
+{% highlight haskell %}
 sum''' :: Num a -> [a] -> a
 sum''' = go 0
   where
@@ -104,7 +104,7 @@ der CPU-Architektur gemappt.
 
 Bei einem Aufruf der Funktion `sum` wie in folgendem Kontext ohne 
 Typannotationen 
-{% highlight Haskell %}
+{% highlight haskell %}
 main :: IO ()
 main = print $ sum''' [1,2,3]
 {% endhighlight %}

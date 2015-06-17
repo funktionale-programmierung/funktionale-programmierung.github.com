@@ -102,3 +102,8 @@ authors:
     image: /author/emin-karayel.png
     href: "https://de.linkedin.com/pub/emin-karayel/28/774/524"
     about: '<a href="https://de.linkedin.com/pub/emin-karayel/28/774/524">Emin Karayel</a> hat Mathematik am KIT studiert, hat mehr als 10 Jahre Erfahrung in der Software-Technik und entwickelt bei der <a href="http://www.factisresearch.com">factis research GmbH</a> verteilte Anwendungen und Machine-Learning Algorithmen unter anderem mit Haskell.'
+  alex-gremm:
+    name: Alexandros Gremm
+    image: /author/alex-gremm.png
+    href: "http://www.active-group.de/unternehmen/gremm.html"
+    about: '<a href="http://www.active-group.de/unternehmen/gremm.html">Alexandros Gremm</a> hat einen Master-Abschluss in Informatik von der Universität Tübingen. Sein besonderes Interesse gilt dem High-Performance-Computing in der Funktionalen Programmierung, insbesondere in Haskell.'
