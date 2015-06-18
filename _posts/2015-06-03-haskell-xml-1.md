@@ -6,27 +6,27 @@ author: david-leuschner
 tags: ["Haskell"]
 ---
 
-Die Frage "Wie parse oder erzeuge ich ein XML Dokument mit Haskell?"  ist
+Die Frage "Wie parse oder erzeuge ich ein XML-Dokument mit Haskell?"  ist
 mir schon oft gestellt worden und ich stelle sie mir auch selbst immer
-wieder.  Es gibt viele XML Libraries für Haskell, so dass man oft gar
+wieder.  Es gibt viele XML-Libraries für Haskell, so dass man oft gar
 nicht weiss wo man als erstes schauen sollte.  In dieser Serie von
-Blogartikeln möchten wir zeigen, wie man XML Dokumente erzeugt, wie man
+Blogartikeln möchten wir zeigen, wie man XML-Dokumente erzeugt, wie man
 vorhandene Dokumente in eigene Datenstrukturen einliest und wie man in
 Dokumenten suchen und diese transformieren kann.
 
 In der Welt des World Wide Web werden Daten fast nur noch im
 [JSON-Format](http://www.json.org) ausgetauscht.  In der Industrie spielt
 XML jedoch weiterhin eine sehr wichtige Rolle, so dass sich wahrscheinlich
-jeder irgendwann mit dem Erzeugen oder Verarbeiten von XML Dokumenten
+jeder irgendwann mit dem Erzeugen oder Verarbeiten von XML-Dokumenten
 beschäftigen wird.  Da wir nicht davon ausgehen, dass jeder bereits
-Erfahrung mit XML hat, stellen wir in jedem Artikel auch XML Technologien
+Erfahrung mit XML hat, stellen wir in jedem Artikel auch XML-Technologien
 unabhängig von Haskell vor.
 
 Dieser erste Artikel der Serie erklärt die Grundbegriffe von XML, zeigt
 auf wie die zugehörigen Haskell Datentypen aus dem Paket
 [xml-conduit](https://hackage.haskell.org/package/xml-conduit) aussehen
 und veranschaulicht die Nutzung durch Erzeugung und Serialisierung eines
-XML Dokument mit Hilfe dieser Datentypen.
+XML-Dokument mit Hilfe dieser Datentypen.
 
 
 # Was ist XML und warum sollte ich XML überhaupt verwenden?
@@ -38,13 +38,13 @@ Datenaustauschformate zu beschreiben.  XML kann also genutzt werden um zum
 Beispiel Blogartikel, Rechnungen oder Arztbriefe maschinenlesbar zu
 beschreiben.  Wenn man Daten speichern oder austauschen möchte ist es
 vorteilhaft XML zu verwenden, weil es für jede Programmiersprache gute
-Bibliotheken zum Einlesen und Ausgeben von XML Dokumenten gibt.  Was der
-Inhalt eines XML Dokuments bedeutet und wie die Daten strukturiert sind,
-wird durch die [XML Spezifikation](http://www.w3.org/TR/REC-xml/) nicht
+Bibliotheken zum Einlesen und Ausgeben von XML-Dokumenten gibt.  Was der
+Inhalt eines XML-Dokuments bedeutet und wie die Daten strukturiert sind,
+wird durch die [XML-Spezifikation](http://www.w3.org/TR/REC-xml/) nicht
 festgelegt.  Jede Anwendung, die XML benutzen möchte, muss also selbst
-festlegen wie ein XML Dokument strukturiert sein darf.  XML gibt vor wie
-die Kodierung der Struktur erfolgen muss.  Hier ein Beispiel für ein XML
-Dokument aus unserer digitalen Krankenakte
+festlegen wie ein XML-Dokument strukturiert sein darf.  XML gibt vor wie
+die Kodierung der Struktur erfolgen muss.  Hier ein Beispiel für ein
+XML-Dokument aus unserer digitalen Krankenakte
 [Checkpad MED](http://www.cpmed.de):
 
 # Ein Beispieldokument
@@ -67,12 +67,12 @@ Dokument aus unserer digitalen Krankenakte
 Dieses Dokument enthält Daten zu unserer Demo-Patientin Jana Braun.  Zu
 diesen Daten gehören der Name, Identifikationsnummern für die Patientin
 und den Krankenhausaufenthalt, Geburtsdatum, Geschlecht und Aufnahmedatum.
-Aus Sicht des XML Parsers sind die eigentlichen Daten irrelevant - es
+Aus Sicht des XML-Parsers sind die eigentlichen Daten irrelevant - es
 zählt nur, dass das Dokument syntaktisch korrekt ist.  Man sagt auch: Das
-XML Dokument ist *well-formed*.  Ein Dokument darf (aber muss nicht) mit
+XML-Dokument ist *well-formed*.  Ein Dokument darf (aber muss nicht) mit
 einem Prolog `<?xml version="1.0" encoding="UTF-8"?>` beginnen, der
-festlegt welcher XML Spezifikation das Dokument entspricht und in welcher
-Zeichenkodierung (hier UTF-8) es abgelegt ist.  Was jedes XML Dokument
+festlegt welcher XML-Spezifikation das Dokument entspricht und in welcher
+Zeichenkodierung (hier UTF-8) es abgelegt ist.  Was jedes XML-Dokument
 aber braucht ist ein Wurzelelement, das hier `patient` heisst.
 
 # Elemente und Attribute
@@ -104,7 +104,7 @@ data Document
   , documentEpilogue :: [Miscellaneous]
   }
 
--- Der Prolog eins XML Dokuments besteht aus einer Liste von Kommentaren
+-- Der Prolog eins XML-Dokuments besteht aus einer Liste von Kommentaren
 -- und Verarbeitungsanweisungen (Miscellaneous), einer optionalen Referenz
 -- auf eine Document Type Definition und weiteren Kommentaren und
 -- Verarbeitungsanweisungen.
@@ -146,14 +146,14 @@ der schließenden, spitzen Klammer des Start-Tag `<name>` und der
 öffnenden, spitzen Klammer des Start-Tag `<given-name>` ist auch noch ein
 Textknoten (`NodeContent`), der einen Zeilenumbruch und einige Leerzeichen
 enthält.  Für unsere Anwendung Checkpad MED sind diese Textknoten
-irrelevant und könnten ignoriert werden. Da der XML Parser aber die Daten
+irrelevant und könnten ignoriert werden. Da der XML-Parser aber die Daten
 nicht versteht wird er diese Textknoten nicht ignorieren. Es könnte beim
 Inhalt ja auch um den Programmcode einer Programmiersprache handeln, wo
 solches Whitespace zur Einrückung wichtig ist.
 
 Was ist aber mit dem Zeilenumbruch innerhalb des End-Tag des Elements
 `admission'?  Hier ist sogar ein Zeilenumbruch enthalten.  Whitespace
-innerhalb von Tags wird vom XML Parser ignoriert und nicht an die XML
+innerhalb von Tags wird vom XML-Parser ignoriert und nicht an die XML
 verarbeitende Anwendung zurückgeliefert.  Welche Informationen genau von
 einem Parser an die Anwendung zur Weiterverarbeitung geliefert werden
 müssen und was ignoriert werden darf, ist in der Spezifkation des
@@ -162,7 +162,7 @@ müssen und was ignoriert werden darf, ist in der Spezifkation des
 # Namen
 
 Jedes Element und jedes Attribut hat einen
-[XML Namen](http://www.w3.org/TR/REC-xml-names/), der aus drei
+[XML-Namen](http://www.w3.org/TR/REC-xml-names/), der aus drei
 Bestandteilen besteht:
 
 * dem `local name` (hier z.B. `patient`)
@@ -221,7 +221,7 @@ import Text.XML
 import qualified Data.Text as T
 import qualified Data.Map as Map
 
--- Erzeugt einen XML Namen mit dem angegebenen lokalen Namen, ohne Präfix
+-- Erzeugt einen XML-Namen mit dem angegebenen lokalen Namen, ohne Präfix
 -- im Checkpad Namespace.
 mkName :: T.Text -> Name
 mkName localName =
