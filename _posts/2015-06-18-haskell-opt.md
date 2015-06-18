@@ -22,7 +22,7 @@ Nehmen wir an, wir benötigen eine Funktion die alle Elemente einer List aufsumm
 Eine Möglichkeit `sum` zu implementieren ist folgende:
  
 {% highlight haskell %}
-sum :: Num a -> [a] -> a
+sum :: Num a => [a] -> a
 sum [] = 0
 sum (x:xs) = x + sum xs 
 {% endhighlight %}
@@ -57,7 +57,7 @@ Dadurch korreliert die Rekursionstiefe mit der Länge der Liste. Der geübte fun
 wird sofort vorschlagen die Funktion in eine _endrekursive_ zu transformieren. Diese ist nun in 
 der Funktion `go` realisiert.
 {% highlight haskell %}
-sum' :: Num a -> [a] -> a
+sum' :: Num a => [a] -> a
 sum' = go 0
   where
     go acc [] = acc
@@ -73,7 +73,7 @@ Um also den gewünschten Effekt zu erzielen müssen wir die Auswertung der Addit
 
 Mit der Funktion `seq :: a -> b -> b` wird die Auswertung von `a` erzwungen und `b` zurückgegeben. 
 {% highlight haskell %}
-sum'' :: Num a -> [a] -> a
+sum'' :: Num a => [a] -> a
 sum'' = go 0
   where
     go acc [] = acc
@@ -86,7 +86,7 @@ Stackverbrauch. Eine syntaktisch weniger aufwendige Methode biete die GHC Erweit
 `BangPatterns`. Durch diese ist es möglich die strikt zu evaluierenden Werte mit einem `!` zu 
 markieren wie in `sum'''` zu sehen ist.
 {% highlight haskell %}
-sum''' :: Num a -> [a] -> a
+sum''' :: Num a => [a] -> a
 sum''' = go 0
   where
     go acc [] = acc
@@ -102,7 +102,7 @@ die `Num` instantieren. Diese sind unter anderen `Integer` und `Int`,
 große Ganzzahlen darstellen und `Int` wird direkt auf die Wortgröße
 der CPU-Architektur gemappt.
 
-Bei einem Aufruf der Funktion `sum` wie in folgendem Kontext ohne 
+Bei einem Aufruf der Funktion `sum'''` wie in folgendem Kontext ohne 
 Typannotationen 
 {% highlight haskell %}
 main :: IO ()
@@ -111,7 +111,7 @@ main = print $ sum''' [1,2,3]
 wird die Liste `[1,2,3]` als Liste aus `Integer`-Werten interpretiert. Da alle in der Liste enthaltenen Werte jedoch problemlos in ein 
 Maschinenwort passen, kann (und sollte man!) einen der Werte als `Int` annotieren. Dadurch wird `sum` zur Kompilierzeit auf den Typen `Int` spezialisiert wodurch die effiziente Addition auf 
 Maschinenworten benutzt wird anstatt der langsameren Addition auf 
-beliebig großen Ganzzahlen. Die Ausführung von `sum [0..1000000000]` benötigt 21 Sekunden wohingegen `sum [0..1000000000 :: Int]` in schon 9 Sekunden
+beliebig großen Ganzzahlen. Die Ausführung von `sum''' [0..1000000000]` benötigt 21 Sekunden wohingegen `sum''' [0..1000000000 :: Int]` in schon 9 Sekunden
 das korrekte Ergebnis liefert.
 
 Woher wir das wissen und noch viel mehr bald in Teil 2!
