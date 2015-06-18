@@ -6,7 +6,7 @@ author: alex-gremm
 tags: ["Haskell", "Optimierung", "Performance"]
 ---
 
-Geht es um funktionalle Programmierung denkt der eine sofort an Kombinatoren wie _map_, _fold_ und 
+Geht es um funktionale Programmierung denkt der eine sofort an Kombinatoren wie _map_, _fold_ und 
 _zipWith_, der andere an Rekursion und Seiteneffekte, und wieder ein anderer an Monaden und 
 Typsysteme. Selten, wenn überhaupt, bringt man funktionale Programmierung mit dem Höchstleistungsrechnen
 in Verbindung. In diesem Blogeintrag werden wir an einem kleinen Beispiel zeigen, worauf man achten muss, 
