@@ -14,6 +14,8 @@ Blogartikeln möchten wir zeigen, wie man XML-Dokumente erzeugt, wie man
 vorhandene Dokumente in eigene Datenstrukturen einliest und wie man in
 Dokumenten suchen und diese transformieren kann.
 
+<!-- more start -->
+
 In der Welt des World Wide Web werden Daten fast nur noch im
 [JSON-Format](http://www.json.org) ausgetauscht.  In der Industrie spielt
 XML jedoch weiterhin eine sehr wichtige Rolle, so dass sich wahrscheinlich
