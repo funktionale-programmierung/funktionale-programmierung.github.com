@@ -7,7 +7,10 @@ Entwürfe
 Der Entwurf eines neuen Artikels landet erstmal im Unterverzeichnis
 `draft`. Dort gibt es auch einen Template für einen neuen Artikel. Bitte
 das Template kopieren und eine sinnvollen Dateinamen für den neuen Artikel
-vergeben.
+vergeben. Der Dateiname für den Artikel muss mit `.md` enden. Für einen
+Artikel in `draft/foobar.md` ist nach einem entsprechenden `git commit` und
+`git push` der Artikel unter http://funktionale-programmierung.de/draft/foobar.html
+einsehbar.
 
 Header
 === 
@@ -84,4 +87,5 @@ Veröffentlichen
 
 Zum Veröffentlichen wird der Artikel auf dem `draft` Verzeichnis in das
 `_posts` Verzeichnis bewegt. Dabei wird das Veröffentlichungsdatum dem
-Dateinamen vorangestellt.
+Dateinamen vorangestellt. Vor dem Veröffentlichen bitte unbedingt mit 
+den Verantwortlichen des Blogs Kontakt aufnehmen.
