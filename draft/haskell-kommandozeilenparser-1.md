@@ -29,7 +29,7 @@ type ErrorMessages = [String]
 type ErrorM r = Either ErrorMessages r
 {% endhighlight %}
 
-Mit der Bibliothek `Control.Monad.Except` ist dieser bereits eine Instanz von der Klasse `MonadError`, die unter anderem die polymorphe Funktion `throwError` zur Verfügung stellt. (siehe auch [Monaden das programmierbare Semikolon](http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html))
+Mit der Bibliothek `Control.Monad.Except` ist dieser bereits eine Instanz von der Klasse `MonadError`, die unter anderem die polymorphe Funktion `throwError` zur Verfügung stellt. (Siehe auch [Monaden das programmierbare Semikolon](http://funktionale-programmierung.de/2013/04/18/haskell-monaden.html).)
 
 Unsere exemplarische Anwendung ist ein Kompressions-Tool, das drei verschiedene Kompressionsstufen unterstützt, die wir mit dem Datentyp `CompressionLevel` beschreiben.
 {% highlight haskell %}
