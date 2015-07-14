@@ -47,7 +47,7 @@ Usage: compress [option...]
   -l LEVEL  --level=LEVEL      Level of compression (LEVEL can be one of low, high or ultra_high)
   -i FILE   --inputfile=FILE   Path to the input file
   -o FILE   --outputfile=FILE  Path to the output file
-  -f        --force            Overwrite exiting files
+  -f        --force            Overwrite existing files
 {% endhighlight %}
 
 ## Beschreibung der Kommandozeilenoptionen
@@ -139,7 +139,7 @@ optionDescriptions =
         "Level of compression (LEVEL must be either 'low','high' or 'ultra_high' (default))"
     , Option ['i'] ["inputfile"] inputFileArgDescr "Path to the input file (required)"
     , Option ['o'] ["outputfile"] outputFileArgDescr "Path to the output file (required)"
-    , Option ['f'] ["force"] forceArgDescr "Overwrite exiting files"
+    , Option ['f'] ["force"] forceArgDescr "Overwrite existing files"
     ]
 {% endhighlight %}
 
@@ -175,7 +175,7 @@ fromOptionListToArgs result =
            }
 {% endhighlight %}
 
-Die Aktionen in dem obigen `do` Block laufen in der `Either String` Monade. Die Funktionen `getInputFile` und `getOutputFile` gehen die Liste der geparsten Optionen durch, um den Wert der entsprechenden Option zu bestimmen oder liefern eine Fehlermeldung zurück, falls die Option nicht gesetzt wurde.
+Die Aktionen in dem obigen `do` Block laufen in der `ErrorM` Monade. Die Funktionen `getInputFile` und `getOutputFile` gehen die Liste der geparsten Optionen durch, um den Wert der entsprechenden Option zu bestimmen oder liefern eine Fehlermeldung zurück, falls die Option nicht gesetzt wurde.
 
 {% highlight haskell %}
 getInputFile :: [CompressProgramOption] -> ErrorM FilePath
