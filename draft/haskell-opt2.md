@@ -138,6 +138,7 @@ sum [] = 0
 sum (x:xs) = x + sum xs
 
 -- Vereinfachter Core von sum
+-- Generiert durch `ghc -ddump-simpl Main.hs`
 sum =
   \ ($num_a :: Num a)
     (list :: [a]) ->
