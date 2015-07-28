@@ -14,13 +14,14 @@ sind, in den [Räumlichkeiten von Canoo](http://www.canoo.com/blog/2015/06/30/fr
 
 ## Ein Haskell für die Java Plattform ##
  
-Es gibt viele Möglichkeiten auf der JVM einen *funktionalen Stil* zu pflegen. *Rein funktionale
-Programmierung* war aber bisher nicht auf der Sprachebene unterstützt. Das [Frege](http://www.frege-lang.org)-Projekt
-möchte diese Lücke schliessen, indem es Haskell (mit ganz leichten Anpassungen) nach Java compiliert und spezielle Deklarationen für die sichere und effiziente Interaktion mit Java bereitstellt. 
+Das [Frege](http://www.frege-lang.org)-Projekt
+compiliert Haskell (mit ganz leichten Anpassungen) nach Java und stellt spezielle Deklarationen für die sichere und effiziente Interaktion mit Java bereit. 
 Als Haskell arbeitet Frege mit Bedarfsauswertung (lazy, non-strict) und ist explizit bezüglich
 Status, Statusänderungen und allen Arten von Effekten.
 
-In zukünftigen Beiträgen werden wir zeigen, wie diese Besonderheiten von Frege zu verstehen sind, wie Frege sich
+Im Blog haben wir bereits [hier]({% post_url 2013-10-10-frege %})
+in Frege eingeführt.
+In weiteren zukünftigen Beiträgen werden wir zeigen, wie diese Besonderheiten von Frege zu verstehen sind, wie Frege sich
 von anderen Sprachen und Ansätzen unterscheidet und welchen Nutzen das für uns Programmierer hat. 
 
 Die Freunde dieses Ansatzes treffen sich am 11. September 2015 in Basel bei der Firma Canoo 
