@@ -23,6 +23,10 @@ Status, Statusänderungen und allen Arten von Effekten.
 In zukünftigen Beiträgen werden wir zeigen, wie diese Besonderheiten von Frege zu verstehen sind, wie Frege sich
 von anderen Sprachen und Ansätzen unterscheidet und welchen Nutzen das für uns Programmierer hat. 
 
+In zukünftigen Beiträgen werden wir zeigen, wie diese Besonderheit von Frege zu verstehen ist, wie sie sich
+von anderen Sprachen und Ansätzen unterscheidet, mit welchen
+Mitteln sie erreicht wird und welchen Nutzen sie für uns Programmierer hat. 
+
 Die Freunde dieses Ansatzes treffen sich am 11. September 2015 in Basel bei der Firma Canoo 
 (siehe [Ankündigung](http://www.canoo.com/blog/2015/06/30/frege-day-2015/?lang=de)). Ingo Wechsung, der
 Initiator von Frege, wird dabei sein und Rede und Antwort zu stehen. Simon Peyton Jones hat zugesagt,
