@@ -15,8 +15,12 @@ sind, in den [Räumlichkeiten von Canoo](http://www.canoo.com/blog/2015/06/30/fr
 ## Rein funktional auf der Java Plattform ##
  
 Es gibt viele Möglichkeiten auf der JVM einen *funktionalen Stil* zu pflegen. *Rein funktionale
-Programmierung* war aber bisher nicht unterstützt. Das [Frege](http://www.frege-lang.org)
+Programmierung* war aber bisher nicht auf der Sprachebene unterstützt. Das [Frege](http://www.frege-lang.org)
 Projekt möchte diese Lücke schliessen, indem es Haskell (mit ganz leichten Anpassungen) nach Java compiliert und spezielle Deklarationen für die sichere und effiziente Interaktion mit Java bereitstellt. 
+
+In zukünftigen Beiträgen werden wir zeigen, wie diese Besonderheit von Frege zu verstehen ist, wie sie sich
+von anderen Sprachen und Ansätzen unterscheidet, mit welchen
+Mitteln sie erreicht wird und welchen Nutzen sie für uns Programmierer hat. 
 
 Die Freunde dieses Ansatzes treffen sich am 11. September 2015 in Basel bei der Firma Canoo 
 (siehe [Ankündigung](http://www.canoo.com/blog/2015/06/30/frege-day-2015/?lang=de)). Ingo Wechsung, der
@@ -34,5 +38,6 @@ Dafür sind die Fragen, Kommentare und Einschätzungen aller Teilnehmer hilfreic
 Wer also in diesem frühen Stadium des Projekts gerne zum Gelingen beitragen möchte, 
 der hat beim "Frege Tag" die beste Gelegenheit dazu.
 
+_Gastbeitrag von Dierk König, @mittie_
 <!-- more end -->
 
