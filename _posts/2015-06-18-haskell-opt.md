@@ -1,7 +1,7 @@
 ---
 layout: post
 description: Haskell optimieren
-title: "Optimierung von Haskellprogrammen"
+title: "Optimierung von Haskellprogrammen - Teil 1"
 author: alex-gremm
 tags: ["Haskell", "Optimierung", "Performance"]
 ---
@@ -114,7 +114,7 @@ Maschinenworten benutzt wird anstatt der langsameren Addition auf
 beliebig großen Ganzzahlen. Die Ausführung von `sum''' [0..1000000000]` benötigt 21 Sekunden wohingegen `sum''' [0..1000000000 :: Int]` in schon 9 Sekunden
 das korrekte Ergebnis liefert.
 
-Woher wir das wissen und noch viel mehr bald in Teil 2!
+Woher wir das wissen und noch viel mehr bald in [Teil 2](http://funktionale-programmierung.de/2015/08/03/haskell-opt-2.html)!
 
 <!-- more end -->
 
