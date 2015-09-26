@@ -12,6 +12,8 @@ Für die Umwandlung haben wir die Funktionen `fromOptionListToArgs`, `getInputFi
 
 In Haskell gibt es unter [anderem](https://wiki.haskell.org/Generics) die Spracherweiterungen [Generics](https://wiki.haskell.org/GHC.Generics) und [Literale auf der Typebene](https://downloads.haskell.org/~ghc/7.8.4/docs/html/users_guide/type-level-literals.html), mit denen man über die Struktur von Datentypen abstrahieren kann. Die beiden Spracherweiterungen ermöglichen, im Gegensatz zur Reflexion und Annotation, eine typsichere Abstraktion über die Datenstrukur - insbesondere werden hierdurch Fehler bereits bei der Kompilierung des Programms erkannt, statt zur Laufzeit.
 
+Wir wollen in diesem zweiten Teil des Artikels mit Hilfe der obigen Spracherweiterung einen generischen Kommandozeilenparser entwickeln, mit dem das Parsen von Kommandozeilenoptionen in einen Record-Typ ohne die obigen Zwischenschritte möglich ist.
+
 <!-- more start -->
 
 # Type-Level Literals
@@ -84,7 +86,7 @@ showGeneric :: (GenericRepresetable a) => a -> String
 showGeneric = show . to
 {% endhighlight %}
 
-Wenn wir die Klasse definieren wollen, stellen wir allerdings fest, dass die Repräsentationsformen zwar eine einfache Struktur, aber es sind immer noch unterschiedliche Typen. D.h. der Typ von `to` oder `from` sind je nach Instanz unterschiedlich.  Mit Typfamillien kann man unter anderem einer Klasse auch eine Typoperator mit dem Schlüsselwort `type` einführen:
+Wenn wir die Klasse definieren wollen, stellen wir allerdings fest, dass die Repräsentationsformen zwar eine einfachere Struktur haben, aber es sind immer noch unterschiedliche Typen. D.h. der Typ von `to` oder `from` sind je nach Instanz unterschiedlich.  Mit Typfamillien kann man unter anderem einer Klasse auch eine Typoperator mit dem Schlüsselwort `type` einführen:
 
 {% highlight haskell %}
 class GenericRepresetable a where
