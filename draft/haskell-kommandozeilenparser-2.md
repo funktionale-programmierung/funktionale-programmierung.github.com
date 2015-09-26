@@ -6,16 +6,16 @@ author: emin-karayel
 tags: ["haskell"]
 ---
 
-Im ersten Teil des Artikels haben wir Kommandozeilenoptionen mit der Bibliothek [System.Console.GetOpt](https://hackage.haskell.org/package/base-4.7.0.1/docs/System-Console-GetOpt.html) verarbeitet.  Weil es für die Weiterverarbeitung der Kommandozeilenoptionen in der Anwendung von Vorteil war die Optionen als Record-Typ darzustellen, war es erforderlich die Daten in zwei Schritten zu verarbeiten, da die Bibliothek als Ausgabeformat eine Liste von geparsten Optionen zurückliefert.
+Im ersten Teil des Artikels haben wir Kommandozeilenoptionen mit der Bibliothek [System.Console.GetOpt](https://hackage.haskell.org/package/base-4.7.0.1/docs/System-Console-GetOpt.html) verarbeitet.  Für die Weiterverarbeitung der Kommandozeilenoptionen in der Anwendung war es von Vorteil, die Optionen als Record-Typ darzustellen. Daher war es erforderlich die Daten in zwei Schritten zu verarbeiten, da die Bibliothek als Ausgabeformat eine Liste von geparsten Optionen zurückliefert.
 
 Für die Umwandlung haben wir die Funktionen `fromOptionListToArgs`, `getInputFile`, `getOutputFile`, `getForce` sowie `getLevel` geschrieben, die alle eine gleichförmige Struktur haben. Gerade bei der Entwicklung von komplexen Anwendungen entsteht oft, an den Schnittstellen, eine hohe Menge an [Boilerplate Code](https://en.wikipedia.org/wiki/Boilerplate_code), das bei Anpassungen und bei der Entwicklung zu einer Fehlerquelle und zu höherem Wartungsaufwand führt. (vgl. auch [DRY Prinzip](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)). In objektorientierte Programmiersprachen setzt man zur Vermeidung hiervon oft Reflexion und Annotation ein (ein bekanntes Beispiel ist die Java Bibliothek [Jackson](https://github.com/FasterXML/jackson-docs)) mit der Parser und Serialisierer für anwendungseigene Datentypen erzeugt werden können. Die Annotationen werden dabei eingesetzt, um Besonderheiten der Konvertierung direkt bei der Deklaration anzugeben.
 
-In Haskell gibt es unter [anderem](https://wiki.haskell.org/Generics) die Spracherweiterungen [Generics](https://wiki.haskell.org/GHC.Generics) und [Literale auf der Typebene](https://downloads.haskell.org/~ghc/7.8.4/docs/html/users_guide/type-level-literals.html) mit denen man über die Struktur von Datentypen abstrahieren kann. Die beiden Spracherweiterungen ermöglichen im Gegensatz zur Reflexion und Annotation eine typsichere Abstraktion über die Datenstrukur - insbesondere werden hierdurch Fehler bereits bei der Kompilierung des Programs erkannt - statt zur Laufzeit.
+In Haskell gibt es unter [anderem](https://wiki.haskell.org/Generics) die Spracherweiterungen [Generics](https://wiki.haskell.org/GHC.Generics) und [Literale auf der Typebene](https://downloads.haskell.org/~ghc/7.8.4/docs/html/users_guide/type-level-literals.html), mit denen man über die Struktur von Datentypen abstrahieren kann. Die beiden Spracherweiterungen ermöglichen, im Gegensatz zur Reflexion und Annotation, eine typsichere Abstraktion über die Datenstrukur - insbesondere werden hierdurch Fehler bereits bei der Kompilierung des Programms erkannt, statt zur Laufzeit.
 
 <!-- more start -->
 
 # Type-Level Literals
-Mit Type-Level Literals kann man Zeichenketten und Zahlen auch bei der Definition von Datentypen verwenden.  Wir werden hiervon Gebrauch machen um die zugehörige Kommandozeilenoption direkt an die Datentypdefinition zu annotieren:
+Mit Type-Level Literals kann man Zeichenketten und Zahlen auch bei der Definition von Datentypen verwenden.  Wir werden hiervon Gebrauch machen, um die zugehörige Kommandozeilenoption direkt an die Datentypdefinition zu annotieren:
 
 {% highlight haskell %}
 data ProgramArgs
@@ -26,7 +26,7 @@ data ProgramArgs
       deriving (Show, Generic)
 {% endhighlight %}
 
-Auf die Zeichenkette kann man über die polymorphe Funktion `symbolVal`, die in der Typklasse `KnownSymbol` definiert ist zugreifen, z.B. gilt:
+Auf die Zeichenkette kann man über die polymorphe Funktion `symbolVal`, die in der Typklasse `KnownSymbol` definiert ist, zugreifen, z.B. gilt:
 
 {% highlight haskell %}
 symbolVal (Proxy :: Proxy "foo") == "foo"
@@ -39,7 +39,7 @@ Mit Generics kann man über die Struktur von algebraischen Typen abstrahieren. W
 data Person = Person { firstName :: String, lastName :: String, age :: Int }
 {% endhighlight %}
 
-und stellen fest, dass man diesen bijektive in das Produkt der Typen `String`, `String` und `Int` abbilden kann, d.h. es gibt Funktionen von `Person` nach `((String, String), Int)` und zurück, mit der Definition
+und stellen fest, dass man diesen bijektiv in das Produkt der Typen `String`, `String` und `Int` abbilden kann, d.h. es gibt Funktionen von `Person` nach `((String, String), Int)` und zurück, mit der Definition
 
 {% highlight haskell %}
 toPersonRep :: Person -> ((String, String), Int)
@@ -111,7 +111,7 @@ kann man eine solche isomorphe Darstellung `Rep a` für beliebige algebraische D
 
 Die beiden Typkonstruktoren `:*:`, `:+:` haben die selbe Funktion wie Paare und die `Either` Konstruktion von oben. Die Infixschreibweise erleichtert die Lesbarkeit, vorallem wenn es mehrere Alternativen gibt.  (Statt `Either (Either a b) c` - schreibt man `a :+: b :+: c`.)  Hierfür benötigt man die Spracherweiterung [Type Operators](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/data-type-extensions.html#type-operators).
 
-Der Konstruktor `V1` wird nur für leere Datentypen verwendet (keine Werte), `U1` für Konstruktoren ohne Werte, bspw. Enumerationen, der Konstruktor `M1` wird - vor jedem Feld, vor jedem Konstruktor, und vor dem ganzen Typen gesetzt und enthählt Metadaten zu dem Typ (z.B. Feldnamen, Konstruktornamen und den Namen des Datentyps.)
+Der Konstruktor `V1` wird nur für leere Datentypen verwendet (keine Werte), `U1` für Konstruktoren ohne Werte, bspw. Enumerationen. Der Konstruktor `M1` wird - vor jedem Feld, vor jedem Konstruktor, und vor dem ganzen Typen gesetzt und enthählt Metadaten zu dem Typ (z.B. Feldnamen, Konstruktornamen und den Namen des Datentyps.)
 
 Die Definition ist ein Kapsellungs-Datentyp (`newtype`), der zwei Phantomparameter enthält, (d.h. Typparameter die nicht in der Definition des Datentyps verwendet werden.)
 {% highlight haskell %}
@@ -123,7 +123,7 @@ Vor allen Feldern wird noch der Konstruktor `K1` eingesetzt, der ähnlich wie de
 Bem.: Der Typparameter `f` wird bei `deriving Generic` nicht verwendet - er ist deshalb da, damit es möglich ist, dass einige der Konstruktoren auch bei `deriving Generic1` für Kind `* -> *` Typen wieder verwendet werden können.
 
 # Beispielprogramm mit einem generischen Kommandozeilenparser
-Das [Beispielprogramm](http://funktionale-programmierung.de/2015/07/16/haskell-kommandozeilenparser-1.html) aus unserem letzten Artikel mit wird mit dem generischen Kommandozeilenparser viel kürzer:
+Das [Beispielprogramm](http://funktionale-programmierung.de/2015/07/16/haskell-kommandozeilenparser-1.html) aus unserem letzten Artikel wird mit dem generischen Kommandozeilenparser viel kürzer:
 
 {% highlight haskell %}
 {-# LANGUAGE DataKinds #-}
@@ -134,7 +134,7 @@ import System.Environment
 import FP.GenericsExample
 {% endhighlight %}
 
-In der letzten Zeile importieren wir das Modul `FP.GenericsExample`, dass wir im Abschnitt "Generischer Kommondazeilenparser" weiter unten vorstellen werden.
+In der letzten Zeile importieren wir das Modul `FP.GenericsExample`, das wir im Abschnitt "Generischer Kommondazeilenparser" weiter unten vorstellen werden.
 
 {% highlight haskell %}
 data CompressionLevel
@@ -165,7 +165,7 @@ data CompressProgramArgs
       deriving (Show, Generic)
 {% endhighlight %}
 
-Der Typkonstruktor `Option` kommt aus dem Modul `FP.GenericsExample`, es hat drei Typparameter:  Der erste Parameter ist der Datentyp, in dem die Werte des Feldes abgelegt werden sollen. Der Datentyp muss eine Instanz der Klasse `OptionType` sein. Diese Klasse legt für den Typ fest, ob die Option notwendig oder optional ist, ob die Option weitere Argumente hat, ob diese wiederum optional oder notwendig sind und wie diese aus den Kommandozeilenargumenten ermittelt werden.
+Der Typkonstruktor `Option` kommt aus dem Modul `FP.GenericsExample`. Es hat drei Typparameter:  Der erste Parameter ist der Datentyp, in dem die Werte des Feldes abgelegt werden sollen. Der Datentyp muss eine Instanz der Klasse `OptionType` sein. Diese Klasse legt für den Typ fest, ob die Option notwendig ist, ob die Option weitere Argumente hat, ob diese wiederum optional oder notwendig sind und wie diese aus den Kommandozeilenargumenten ermittelt werden.
 
 Die nächsten beiden Parameter des Typkonstruktors `Option` geben den Optionspräfix und den Hilfetext an. Den Parser kann man nun mit
 
@@ -177,7 +177,7 @@ main =
        putStrLn $ show $ helloWorldArgs
 {% endhighlight %}
 
-aufrufen. Die Funktion `getOptGeneric` liefert ein Tripel mit den verarbeiteten Kommandozeilenoptionen vom Typ `CompressProgramArgs`, sowie unverarbeiten Kommandozeilenargumenten und Fehlermeldungen. Das Tripel hat bis auf die erste Komponente, dieselbe Struktur wie sie auch [getOpt](https://hackage.haskell.org/package/base-4.7.0.1/docs/System-Console-GetOpt.html#g:1) zurückliefert. Bei der ersten Komponente gehen wir in diesem Artikel einen Schritt weiter und erlauben mit unserem generischen Kommandozeilenparser beliebige Record-Typen, deren Felder mit den Typkonstruktur `Option` definiert sind.
+aufrufen. Die Funktion `getOptGeneric` liefert ein Tripel mit den verarbeiteten Kommandozeilenoptionen vom Typ `CompressProgramArgs` sowie unverarbeiten Kommandozeilenargumenten und Fehlermeldungen. Das Tripel hat bis auf die erste Komponente dieselbe Struktur wie sie auch [getOpt](https://hackage.haskell.org/package/base-4.7.0.1/docs/System-Console-GetOpt.html#g:1) zurückliefert. Bei der ersten Komponente gehen wir in diesem Artikel einen Schritt weiter und erlauben mit unserem generischen Kommandozeilenparser beliebige Record-Typen, deren Felder mit dem Typkonstruktur `Option` definiert sind.
 
 # Das Modul FP.GenericsExample
 
@@ -238,7 +238,7 @@ Die beiden Typen `ShortOpts` und `Description` haben keine Werte - sie werden nu
 
 ## Erzeugung der Optionsbeschreibungen
 
-Die Klasse `OptDescriptions` verwenden wir intern um über die Struktur der Datentypen abstrahieren zu können. Mit der Typfamillie `OptListType a` entwickeln wir einen Summentyp für die einzelnen Optionen (da die Funktion `getOpt` so aufgebaut ist, dass sie eine Liste der geparsten Optionen zurückliefert) und die Funktion `fromOptionListToArgs` die aus einer Liste vom Typ `OptListType a` in einen Wert vom Typ `a` - dem Darstellungstypen des Record-Typs umrechnet, bzw. eine Fehlermeldung zurückliefert, falls eine notwenidge Option in der Liste gefehlt hat.  Die Funktion `optDescriptions` liefert eine Liste von Optionsbeschreibungen für jede Kommandozeilenoption zurück.
+Die Klasse `OptDescriptions` verwenden wir intern, um über die Struktur der Datentypen abstrahieren zu können. Mit der Typfamillie `OptListType a` entwickeln wir einen Summentyp für die einzelnen Optionen (da die Funktion `getOpt` so aufgebaut ist, dass sie eine Liste der geparsten Optionen zurückliefert). Die Funktion `fromOptionListToArgs` liefert aus einer Liste vom Typ `OptListType a` einen Wert vom Typ `a`, dem Darstellungstypen des Record-Typs, bzw. eine Fehlermeldung zurück, falls eine notwenidge Option in der Liste gefehlt hat.  Die Funktion `optDescriptions` liefert eine Liste von Optionsbeschreibungen für die Kommandozeilenoptionen zurück.
 
 {% highlight haskell %}
 
