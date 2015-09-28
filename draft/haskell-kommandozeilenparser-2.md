@@ -6,9 +6,9 @@ author: emin-karayel
 tags: ["haskell"]
 ---
 
-Im ersten Teil des Artikels haben wir Kommandozeilenoptionen mit der Bibliothek [System.Console.GetOpt](https://hackage.haskell.org/package/base-4.7.0.1/docs/System-Console-GetOpt.html) verarbeitet.  Für die Weiterverarbeitung der Kommandozeilenoptionen in der Anwendung war es von Vorteil, die Optionen als Record-Typ darzustellen. Daher war es erforderlich die Daten in zwei Schritten zu verarbeiten, da die Bibliothek als Ausgabeformat eine Liste von geparsten Optionen zurückliefert.
+Im [ersten Teil des Artikels](/2015/07/16/haskell-kommandozeilenparser-1.html) haben wir Kommandozeilenoptionen mit der Bibliothek [System.Console.GetOpt](https://hackage.haskell.org/package/base-4.7.0.1/docs/System-Console-GetOpt.html) verarbeitet.  Für die Weiterverarbeitung der Kommandozeilenoptionen in der Anwendung war es von Vorteil, die Optionen als Record-Typ darzustellen. Daher war es erforderlich die Daten in zwei Schritten zu verarbeiten, da die Bibliothek als Ausgabeformat eine Liste von geparsten Optionen zurückliefert.
 
-Für die Umwandlung haben wir die Funktionen `fromOptionListToArgs`, `getInputFile`, `getOutputFile`, `getForce` sowie `getLevel` geschrieben, die alle eine gleichförmige Struktur haben. Gerade bei der Entwicklung von komplexen Anwendungen entsteht oft, an den Schnittstellen, eine hohe Menge an [Boilerplate Code](https://en.wikipedia.org/wiki/Boilerplate_code), das bei Anpassungen und bei der Entwicklung zu einer Fehlerquelle und zu höherem Wartungsaufwand führt. (vgl. auch [DRY Prinzip](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)). In objektorientierte Programmiersprachen setzt man zur Vermeidung hiervon oft Reflexion und Annotation ein (ein bekanntes Beispiel ist die Java Bibliothek [Jackson](https://github.com/FasterXML/jackson-docs)) mit der Parser und Serialisierer für anwendungseigene Datentypen erzeugt werden können. Die Annotationen werden dabei eingesetzt, um Besonderheiten der Konvertierung direkt bei der Deklaration anzugeben.
+Für die Umwandlung haben wir die Funktionen `fromOptionListToArgs`, `getInputFile`, `getOutputFile`, `getForce` sowie `getLevel` geschrieben, die alle eine gleichförmige Struktur haben. Gerade bei der Entwicklung von komplexen Anwendungen entsteht oft, an den Schnittstellen, eine hohe Menge an [Boilerplate Code](https://en.wikipedia.org/wiki/Boilerplate_code), das bei Anpassungen und bei der Entwicklung zu einer Fehlerquelle und zu höherem Wartungsaufwand führt (vgl. auch [DRY Prinzip](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)). In objektorientierte Programmiersprachen setzt man zur Vermeidung hiervon oft Reflexion und Annotation ein (ein bekanntes Beispiel ist die Java Bibliothek [Jackson](https://github.com/FasterXML/jackson-docs), mit der Parser und Serialisierer für anwendungseigene Datentypen erzeugt werden können). Die Annotationen werden dabei eingesetzt, um Besonderheiten der Konvertierung direkt bei der Deklaration anzugeben.
 
 In Haskell gibt es unter [anderem](https://wiki.haskell.org/Generics) die Spracherweiterungen [Generics](https://wiki.haskell.org/GHC.Generics) und [Literale auf der Typebene](https://downloads.haskell.org/~ghc/7.8.4/docs/html/users_guide/type-level-literals.html), mit denen man über die Struktur von Datentypen abstrahieren kann. Die beiden Spracherweiterungen ermöglichen, im Gegensatz zur Reflexion und Annotation, eine typsichere Abstraktion über die Datenstrukur - insbesondere werden hierdurch Fehler bereits bei der Kompilierung des Programms erkannt, statt zur Laufzeit.
 
@@ -28,7 +28,7 @@ data ProgramArgs
       deriving (Show, Generic)
 {% endhighlight %}
 
-Auf die Zeichenkette kann man über die polymorphe Funktion `symbolVal`, die in der Typklasse `KnownSymbol` definiert ist, zugreifen, z.B. gilt:
+Auf die Zeichenkette kann man über die polymorphe Funktion [`symbolVal`](https://hackage.haskell.org/package/base-4.8.1.0/docs/GHC-TypeLits.html#v:symbolVal), die in der Typklasse [`KnownSymbol`](https://hackage.haskell.org/package/base-4.8.1.0/docs/GHC-TypeLits.html#t:KnownSymbol) definiert ist, zugreifen, z.B. gilt:
 
 {% highlight haskell %}
 symbolVal (Proxy :: Proxy "foo") == "foo"
@@ -110,10 +110,13 @@ Durch die Anweisung
     deriving Generic
 {% endhighlight %}
 kann man eine solche isomorphe Darstellung `Rep a` für beliebige algebraische Datentypen `a` automatisch erzeugen lassen, dabei werden auch die Funktionen `fromRep :: Rep a f -> a` und `toRep :: a -> Rep a f` erzeugt. Dieser ist mit den Typ-Konstruktoren `:*:`, `:+:`, `K1`, `M1`, `U1`, `V1` konstruiert (statt wie in unserem vereinfachten Beispiel mit `Either` und Paaren.)
+Die Typklassen `Rep` und `Generic` sowie die angegebenen Typ-Konstruktoren
+sind dabei im Module
+[`GHC.Generics`](https://hackage.haskell.org/package/base-4.8.1.0/docs/GHC-Generics.html) definiert.
 
 Die beiden Typkonstruktoren `:*:`, `:+:` haben die selbe Funktion wie Paare und die `Either` Konstruktion von oben. Die Infixschreibweise erleichtert die Lesbarkeit, vorallem wenn es mehrere Alternativen gibt.  (Statt `Either (Either a b) c` - schreibt man `a :+: b :+: c`.)  Hierfür benötigt man die Spracherweiterung [Type Operators](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/data-type-extensions.html#type-operators).
 
-Der Konstruktor `V1` wird nur für leere Datentypen verwendet (keine Werte), `U1` für Konstruktoren ohne Werte, bspw. Enumerationen. Der Konstruktor `M1` wird - vor jedem Feld, vor jedem Konstruktor, und vor dem ganzen Typen gesetzt und enthählt Metadaten zu dem Typ (z.B. Feldnamen, Konstruktornamen und den Namen des Datentyps.)
+Der Konstruktor `V1` wird nur für leere Datentypen verwendet (keine Werte), `U1` für Konstruktoren ohne Werte, bspw. Enumerationen. Der Konstruktor `M1` wird - vor jedem Feld, vor jedem Konstruktor, und vor dem ganzen Typen gesetzt und enthält Metadaten zu dem Typ (z.B. Feldnamen, Konstruktornamen und den Namen des Datentyps.)
 
 Die Definition ist ein Kapsellungs-Datentyp (`newtype`), der zwei Phantomparameter enthält, (d.h. Typparameter die nicht in der Definition des Datentyps verwendet werden.)
 {% highlight haskell %}
@@ -210,7 +213,7 @@ import GHC.TypeLits
 import qualified System.Console.GetOpt as G
 {% endhighlight %}
 
-Die Klasse `ParameterType` gibt an, ob der Kommandozeilenparameter notwendig oder optional ist, falls er optional ist, wird ein Standardwert mit der Funktion `defaultValue` zürckgeliefert, sowie möglicherweise selbst Argumente hat und wie diese ausgelesen werden. Wir verwenden den Typ, der auch in `System.Console.GetOpt` verwendet wird: (`ArgDescr a`)
+Die Klasse `ParameterType` gibt an, ob der Kommandozeilenparameter notwendig oder optional ist, falls er optional ist, wird ein Standardwert mit der Funktion `defaultValue` zurückgeliefert, sowie möglicherweise selbst Argumente hat und wie diese ausgelesen werden. Wir verwenden den Typ, der auch in `System.Console.GetOpt` verwendet wird: (`ArgDescr a`)
 
 {% highlight haskell %}
 class ParameterType a where
@@ -218,7 +221,7 @@ class ParameterType a where
     argDescr :: G.ArgDescr a
 {% endhighlight %}
 
-Für eine optionale Kommandozeilenoption vom Typ `Bool` ohne Argumente deren Wert `True` wird falls die Option angeben wurde, können wir die Instanz Beispielsweise wie folgt definieren:
+Für eine optionale Kommandozeilenoption vom Typ `Bool` ohne Argumente, deren Wert `True` wird falls die Option angeben wurde, können wir die Instanz Beispielsweise wie folgt definieren:
 
 {% highlight haskell %}
 instance ParameterType Bool where
@@ -226,7 +229,7 @@ instance ParameterType Bool where
     argDescr = G.NoArg True
 {% endhighlight %}
 
-Hier definieren wir, den schon oben beschriebenen Typkonstruktor `Option`:
+Hier definieren wir den schon oben beschriebenen Typkonstruktor `Option`:
 
 {% highlight haskell %}
 data Option a b c = Option a
@@ -319,7 +322,7 @@ Mit Alternativen wäre es möglich, auch komplexere Kommandozeilenparameterabhä
 data CmdLineArgs
     = Help (CmdLineAlternative (ShortOpts "-h") (Description "Print usage information") ())
     | Compress (CmdLineAlternative (ShortOpts "-c") (Description "Compress") CompressArgs)
-    | Decompress (CmdLineAlternative (ShortOpts "-c") (Description "Compress") DecompressArgs)
+    | Decompress (CmdLineAlternative (ShortOpts "-d") (Description "Compress") DecompressArgs)
 
 data CompressArgs
     = CompressArgs
