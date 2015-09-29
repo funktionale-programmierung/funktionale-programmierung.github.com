@@ -16,6 +16,68 @@ Wir wollen in diesem zweiten Teil des Artikels mit Hilfe der obigen Spracherweit
 
 <!-- more start -->
 
+# Beispielprogramm mit einem generischen Kommandozeilenparser
+Das [Beispielprogramm](http://funktionale-programmierung.de/2015/07/16/haskell-kommandozeilenparser-1.html) aus unserem letzten Artikel wird mit dem generischen Kommandozeilenparser, den wir in den nächsten Abschnitten entwickeln werden, viel kürzer:
+
+{% highlight haskell %}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DeriveGeneric #-}
+
+import GHC.Generics
+import System.Environment
+import FP.GenericsExample
+{% endhighlight %}
+
+In der letzten Zeile importieren wir das Modul `FP.GenericsExample`, das wir im Abschnitt "Generischer Kommondazeilenparser" weiter unten vorstellen werden.
+
+{% highlight haskell %}
+data CompressionLevel
+    = Low
+    | High
+    deriving (Read, Show, Enum, Bounded)
+
+newtype File = File FilePath
+    deriving Show
+
+instance ParameterType CompressionLevel where
+    argDescr = ReqArg read (show [(minBound::CompressionLevel)..maxBound])
+
+instance ParameterType File where
+    argDescr = ReqArg File "FILE"
+
+data CompressProgramArgs
+    = CompressProgramArgs
+      { cp_compressionLevel
+          :: Option CompressionLevel (ShortOpts "l") (Description "compression level")
+      , cp_inputFile
+          :: Option File (ShortOpts "i") (Description "input file")
+      , cp_outFile
+          :: Option File (ShortOpts "o") (Description "output file")
+      , cp_force
+          :: Option Bool (ShortOpts "f") (Description "force")
+      }
+      deriving (Show, Generic)
+{% endhighlight %}
+
+Der Typkonstruktor `Option` kommt aus dem Modul `FP.GenericsExample`. Es hat drei Typparameter:  Der erste Parameter ist der Datentyp, in dem die Werte des Feldes abgelegt werden sollen. Der Datentyp muss eine Instanz der Klasse `ParameterType` sein. Diese Klasse legt für den Typ fest, ob die Option notwendig ist, ob die Option weitere Argumente hat, ob diese wiederum optional oder notwendig sind und wie diese aus den Kommandozeilenargumenten ermittelt werden.
+
+Die nächsten beiden Parameter des Typkonstruktors `Option` geben den Optionspräfix und den Hilfetext an. Den Parser kann man nun mit
+
+{% highlight haskell %}
+main :: IO ()
+main =
+    do args <- getArgs
+       compressProgramArgs <-
+           case getOptGeneric args of
+             Right r -> return r
+             Left err -> fail err
+       putStrLn $ show (compressProgramArgs :: CompressProgramArgs)
+{% endhighlight %}
+
+aufrufen. Die Funktion `getOptGeneric` liefert entweder eine Fehlermeldung zurück, falls das Parsen der Kommandozeilenargumente fehlgeschlagen ist, oder einen Wert vom dem oben definierten Typ `CompressProgramArgs` züruck.  Wobei wir hier, da die Funktion generisch ist auch einen beliebigen anderen Record-Typ mit Feldern die mit dem Konstruktor `Option` definiert sind, verwenden können.
+
+In den folgenden Abschnitten wollen wir die Spracherweiterungen, die wir für die Implementation der obigen Funktion `getOptGeneric` benötigen werden, kennenlernen.
+
 # Type-Level Literals
 Mit Type-Level Literals kann man Zeichenketten und Zahlen auch bei der Definition von Datentypen verwenden.  Wir werden hiervon Gebrauch machen, um die zugehörige Kommandozeilenoption direkt an die Datentypdefinition zu annotieren:
 
@@ -75,18 +137,10 @@ fromLegalPersonRep (Right x) = Company { legalName = x }
 Ein wichtiger Aspekt ist, dass wir für die isomorphe Darstellung nur zwei Typkonstruktoren (mit zwei Typparametern) gebraucht haben: `(a,b)` und `Either a b`, durch Iteration kann man beliebig viele Konstruktoren oder Felder auf diese beiden abbilden.
 
 ## Type families
-Wenn wir eine Klasse für die beiden Typkonstruktoren und die Basistypen definiert haben, können wir diese auch durch unsere Bijektion für die Typen `LegalPerson` und `Person` einsetzen.
 
-Beispielsweise ist `Show` für `String`, `Int`, `(,)` und `Either` definiert, um den Inhalt von `LegalPerson` auszugeben können wir allerdings nur `show . toLegalPersonRep` hinschreiben, bzw. `show . toPersonRep` die Übersetzung muss noch explizit hingeschrieben werden.
+Polymorphe Funktionen werden in Haskell durch Typklassen definiert, so dass die Implementation sich für jede Instanz, die die Typklasse implementiert unterscheiden kann. Typfamillien erweitern, unter anderem, diese Funktionalität und bieten die Möglichkeit auch für jede Instanz individuelle Typzuordnungen zu definieren. Am obigen Beispiel können wir hierdurch bei der Definition einer Klasse für die beiden Typen `LegalPerson` und `Person` unterschiedliche Repräsentationstypen angeben.
 
-Wir wollen hierfür stattdessen polymorphe Funktionen einer Klasse einsetzen:
-
-{% highlight haskell %}
-showGeneric :: (GenericRepresetable a) => a -> String
-showGeneric = show . to
-{% endhighlight %}
-
-Wenn wir die Klasse definieren wollen, stellen wir allerdings fest, dass die Repräsentationsformen zwar eine einfachere Struktur haben, aber es sind immer noch unterschiedliche Typen. D.h. der Typ von `to` oder `from` sind je nach Instanz unterschiedlich.  Mit Typfamillien kann man unter anderem einer Klasse auch eine Typoperator mit dem Schlüsselwort `type` einführen:
+Beispielsweise ist `Show` für `String`, `Int`, `(,)` und `Either` definiert, um den Inhalt von `LegalPerson` auszugeben können wir bis jetzt ohne eine Typklasse nur `show . toLegalPersonRep` hinschreiben, bzw. `show . toPersonRep` die Übersetzung müssen wir noch explizit hinschreiben.  Mit der folgenden Klasse `GenericRepresetable`, in der wir die Typfamillie `Rep` einführen:
 
 {% highlight haskell %}
 class GenericRepresetable a where
@@ -95,7 +149,7 @@ class GenericRepresetable a where
     from :: Rep a -> a
 {% endhighlight %}
 
-dann kann man bei jeder Instanz den entsprechenden Typ hinschreiben, z.B. bei `Person`:
+können wir in der Instanz den entsprechenden Repräsentationstyp hinschreiben, z.B. bei `Person`:
 
 {% highlight haskell %}
 instance GenericRepresetable Person where
@@ -104,6 +158,15 @@ instance GenericRepresetable Person where
     from = fromPersonRep
 {% endhighlight %}
 
+und eine `showGeneric` Funktion schreiben, in der wir Ausnutzen, dass `Show` für den Repräsentationstypen definiert ist:
+
+{% highlight haskell %}
+showGeneric :: (GenericRepresetable a, Show (Rep a)) => a -> String
+showGeneric = show . to
+{% endhighlight %}
+
+Wir werden bei der Entwicklung des generischen Kommandozeilenparsers weiter unten Typfamillien an einer zweiten Stelle einsetzen, um dem Record-Typen in den wir die Kommandozeilenargumente übersetzen wollen, den Summentyp in dem die Kommandozeilenoptionen von der Funktion `getOpt` zurückgeliefert werden, mit der Typfamillie `OptListType` zuzuordnen.
+
 ## Automatische Erzeugung von Generic-Instanzen
 Durch die Anweisung
 {% highlight haskell %}
@@ -111,7 +174,7 @@ Durch die Anweisung
 {% endhighlight %}
 kann man eine solche isomorphe Darstellung `Rep a` für beliebige algebraische Datentypen `a` automatisch erzeugen lassen, dabei werden auch die Funktionen `fromRep :: Rep a f -> a` und `toRep :: a -> Rep a f` erzeugt. Dieser ist mit den Typ-Konstruktoren `:*:`, `:+:`, `K1`, `M1`, `U1`, `V1` konstruiert (statt wie in unserem vereinfachten Beispiel mit `Either` und Paaren.)
 Die Typklassen `Rep` und `Generic` sowie die angegebenen Typ-Konstruktoren
-sind dabei im Module
+sind dabei im Modul
 [`GHC.Generics`](https://hackage.haskell.org/package/base-4.8.1.0/docs/GHC-Generics.html) definiert.
 
 Die beiden Typkonstruktoren `:*:`, `:+:` haben die selbe Funktion wie Paare und die `Either` Konstruktion von oben. Die Infixschreibweise erleichtert die Lesbarkeit, vorallem wenn es mehrere Alternativen gibt.  (Statt `Either (Either a b) c` - schreibt man `a :+: b :+: c`.)  Hierfür benötigt man die Spracherweiterung [Type Operators](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/data-type-extensions.html#type-operators).
@@ -127,62 +190,6 @@ Vor allen Feldern wird noch der Konstruktor `K1` eingesetzt, der ähnlich wie de
 
 Bem.: Der Typparameter `f` wird bei `deriving Generic` nicht verwendet - er ist deshalb da, damit es möglich ist, dass einige der Konstruktoren auch bei `deriving Generic1` für Kind `* -> *` Typen wieder verwendet werden können.
 
-# Beispielprogramm mit einem generischen Kommandozeilenparser
-Das [Beispielprogramm](http://funktionale-programmierung.de/2015/07/16/haskell-kommandozeilenparser-1.html) aus unserem letzten Artikel wird mit dem generischen Kommandozeilenparser viel kürzer:
-
-{% highlight haskell %}
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
-
-import GHC.Generics
-import System.Environment
-import FP.GenericsExample
-{% endhighlight %}
-
-In der letzten Zeile importieren wir das Modul `FP.GenericsExample`, das wir im Abschnitt "Generischer Kommondazeilenparser" weiter unten vorstellen werden.
-
-{% highlight haskell %}
-data CompressionLevel
-    = Low
-    | High
-    deriving (Read, Show, Enum, Bounded)
-
-newtype File = File FilePath
-    deriving Show
-
-instance ParameterType CompressionLevel where
-    argDescr = ReqArg read (show [(minBound::CompressionLevel)..maxBound])
-
-instance ParameterType File where
-    argDescr = ReqArg File "FILE"
-
-data CompressProgramArgs
-    = CompressProgramArgs
-      { cp_compressionLevel
-          :: Option CompressionLevel (ShortOpts "l") (Description "compression level")
-      , cp_inputFile
-          :: Option File (ShortOpts "i") (Description "input file")
-      , cp_outFile
-          :: Option File (ShortOpts "o") (Description "output file")
-      , cp_force
-          :: Option Bool (ShortOpts "f") (Description "force")
-      }
-      deriving (Show, Generic)
-{% endhighlight %}
-
-Der Typkonstruktor `Option` kommt aus dem Modul `FP.GenericsExample`. Es hat drei Typparameter:  Der erste Parameter ist der Datentyp, in dem die Werte des Feldes abgelegt werden sollen. Der Datentyp muss eine Instanz der Klasse `OptionType` sein. Diese Klasse legt für den Typ fest, ob die Option notwendig ist, ob die Option weitere Argumente hat, ob diese wiederum optional oder notwendig sind und wie diese aus den Kommandozeilenargumenten ermittelt werden.
-
-Die nächsten beiden Parameter des Typkonstruktors `Option` geben den Optionspräfix und den Hilfetext an. Den Parser kann man nun mit
-
-{% highlight haskell %}
-main =
-    do args <- getArgs
-       let helloWorldArgs :: HelloWorldArgs
-           (helloWorldArgs, _unparsedArgs, _error_) = getOptGeneric args
-       putStrLn $ show $ helloWorldArgs
-{% endhighlight %}
-
-aufrufen. Die Funktion `getOptGeneric` liefert ein Tripel mit den verarbeiteten Kommandozeilenoptionen vom Typ `CompressProgramArgs` sowie unverarbeiten Kommandozeilenargumenten und Fehlermeldungen. Das Tripel hat bis auf die erste Komponente dieselbe Struktur wie sie auch [getOpt](https://hackage.haskell.org/package/base-4.7.0.1/docs/System-Console-GetOpt.html#g:1) zurückliefert. Bei der ersten Komponente gehen wir in diesem Artikel einen Schritt weiter und erlauben mit unserem generischen Kommandozeilenparser beliebige Record-Typen, deren Felder mit dem Typkonstruktur `Option` definiert sind.
 
 # Das Modul FP.GenericsExample
 
@@ -312,7 +319,20 @@ getOptGeneric args =
 
 # Mögliche Verbesserungen
 
-Aktuell bieten wir keine Möglichkeit, auch Kommandozeilenargumente zu verarbeiten, die mit langen `--foobar` Präfixen versehen sind. Hierfür wäre es noch notwendig, Listen auf der Typebene zu verweden `HList` (siehe auch [Promoted lists and tuple types](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/promotion.html) und [HList](https://hackage.haskell.org/package/HList)), falls man so wie bei dem Modul System.Console.GetOpt mehrere Alternativen erlauben will.
+Aktuell bieten wir keine Möglichkeit, auch Kommandozeilenargumente zu verarbeiten, die mit langen `--foobar` Präfixen versehen sind. Hierfür wäre es noch notwendig, Listen auf der Typebene zu verweden (siehe auch [Datatype promotion](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/promotion.html)), um so wie bei dem Modul System.Console.GetOpt mehrere Alternativen für eine Option angeben zukönnen.
+
+Noch ist es nicht möglich den gleichen Parametertyp als notwendige und optionale Kommandozeilenoption an unterschiedlichen Stellen zu verwenden. Mit zwei verschiedenen Typkonstruktoren `RequiredOption` und `OptionalOption`
+
+{% highlight haskell %}
+data OptionalOption a b c = OptionalOption (Maybe a)
+data RequiredOption a b c = RequiredOption a
+{% endhighlight %}
+
+wäre es möglich diese Eigenschaft direkt in die Beschreibung des Record-Typen aufzunehmen. Eine weitere Erweiterung wäre der Typkonstruktor `RepeatableOption` für wiederholbare Kommandozeilenoptionen.
+
+{% highlight haskell %}
+data RepeatableOption a b c = RepeatableOption [a]
+{% endhighlight %}
 
 Zeichenketten auf Typebene können auch auf Gleichheit innerhalb des Typsystems überprüft werden. Hierdurch wäre es möglich, bereits zum Kompilierungszeitpunkt eine Fehlermeldung zu liefern, falls ein Optionspräfix mehrfach verwendet wurde.
 
@@ -326,17 +346,17 @@ data CmdLineArgs
 
 data CompressArgs
     = CompressArgs
-      { c_inFile :: Option File (ShortOpts "-i") (Description "Input file")
-        c_outFile :: Option File (ShortOpts "-o") (Description "Output file")
-        c_compressionLevel :: Option CompressionLevel (ShortOpts "-l") (Description "Level")
+      { c_inFile :: RequiredOption File (ShortOpts "-i") (Description "Input file")
+      , c_outFile :: RequiredOption File (ShortOpts "-o") (Description "Output file")
+      , c_compressionLevel :: OptionalOption CompressionLevel (ShortOpts "-l")
+          (Description "Compression level")
       }
 
 data DecompressArgs
-      { d_inFile :: Option File (ShortOpts "-i") (Description "Input file")
-        d_outFile :: Option File (ShortOpts "-o") (Description "Output file")
+    = DecompressArgs
+      { d_inFile :: RequiredOption File (ShortOpts "-i") (Description "Input file")
+      , d_outFile :: RequiredOption File (ShortOpts "-o") (Description "Output file")
       }
 {% endhighlight %}
-
-
 
 <!-- more end -->
