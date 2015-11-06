@@ -122,8 +122,6 @@ innerhalb der Definition eines Enums das Enum selbst verwenden. Dazu
 brauchen wir das Schlüsselwort `indirect`.
 
 {% highlight swift %}
-// Das Schlüsselwort "indirect" wird benötigt, da der enum-Typ
-// rekursiv ist.
 indirect enum Diagram {
     case Primitive(CGSize, Shape)
     case Beside(Diagram, Diagram)
@@ -133,7 +131,7 @@ indirect enum Diagram {
 
 {% endhighlight %}
 
-Ein Diagramm ist als entweder eine primitive Form mit einer Größe (die
+Ein Diagramm ist also entweder eine primitive Form mit einer Größe (die
 Größe ist nicht in Pixel angegeben, sondern relativ zu den anderen
 Diagrammelementen gedacht), oder zwei Diagramme neben- bzw. untereinander,
 oder ein annotiertes Diagramm. Für solche annotierten Diagramme benutzen
@@ -162,8 +160,9 @@ Diagramm, dem wir dann mit `Diagram.Annotated` eine Farbe verpassen.
 Das obige Diagram `blueSquare` ist sehr einfach und besteht nur aus einem blauen
 Quadrat. Trotzdem ist der Code zum Erzeugen etwas länglich. Wir können ihn
 vereinfachen, indem wir Hilfsfunktionen bereitstellen. In OO-Sprachen sagt
-man zu solchen Funtionen oft "Smarte Konstruktoren", in funktionalen
-Sprache werden sie auch "Kombinatoren" genannt.
+man zu solchen Funtionen oft "smarte Konstruktoren", in funktionalen
+Sprache werden sie auch "Kombinatoren" genannt. Wir starten mit smarten
+Konstruktoren für einfache Formen.
 
 {% highlight swift %}
 func square(side: CGFloat) -> Diagram {
@@ -218,7 +217,7 @@ Wir konstruieren zuerst ein Quadrat, um dann auf dem resultierenden
 Diagramm `fill` aufzurufen. Wenn wir `fill` als globale Funktion
 geschrieben hätten, müssten wir stattdessen so etwas schreiben:
 `fill(NSColor.redColor(), square(2))`. Welche der beiden Schreibweisen wir
-wählen ist Geschmacksache, ich habe mir für die Dot-Notation entschieden,
+wählen ist Geschmacksache, ich habe mich für die Dot-Notation entschieden,
 weil sie meiner Ansicht nach zu leichter lesbarem Code führt.
 
 Es fehlen noch smarte Konstruktoren zur Platzierung von Diagrammen
@@ -256,13 +255,20 @@ let sampleDiagram2 =
     rectangle(10, height:0.2).fill(.magentaColor()).alignTop()
 {% endhighlight %}
 
-Das letzte Diagram `sampleDiagram2` soll übrigens wie folgt aussehen, die
-Diagramm `sampleDiagram1a` und `sampleDiagram1b` haben wir bereits weiter
+
+Die Diagramm `sampleDiagram1a` und `sampleDiagram1b` haben wir bereits weiter
 oben als Bilder gesehen.
+Das letzte Diagram `sampleDiagram2` sollte wie folgt aussehen:
 
 <div id="center">
 <img src="/files/swift/diag3.png" />
 </div>
+
+Bis jetzt haben wir gesehen, wie man mittels Enums Diagramm einfach und
+kompakt repräsentieren kann. Wie man diese Diagramme dann auf den
+Bildschirm zeichnet, das werden wir in einem Folgeartikel diskutieren. Bis
+dahin freue ich mich über Rückfragen und anderes Feedback. Viel Erfolg
+beim funktionalen Programmieren in Swift!
 
 
 <!-- more end -->
