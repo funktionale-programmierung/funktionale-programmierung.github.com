@@ -34,7 +34,7 @@ genauer an. Wir möchten eine kleine Bibliothek zum
 Zeichnen von Diagrammen designen und implementieren. Damit können wir dann
 z.B. solche Diagramme zeichnen:
 
-<div id="center">
+<div class="center">
 <img src="/files/swift/diag1.png" />
 </div>
 
@@ -56,7 +56,7 @@ zeichnen. Wir sagen dem System also genau, *wie* gezeichnet werden soll.
 Was passiert nun aber, wenn wir das Diagramm leicht ändern möchten und
 z.B. eine grünen Kreis zwischen die beiden Rechtecke einfügen wollen?
 
-<div id="center">
+<div class="center">
 <img src="/files/swift/diag2.png" />
 </div>
 
@@ -260,7 +260,7 @@ Die Diagramm `sampleDiagram1a` und `sampleDiagram1b` haben wir bereits weiter
 oben als Bilder gesehen.
 Das letzte Diagram `sampleDiagram2` sollte wie folgt aussehen:
 
-<div id="center">
+<div class="center">
 <img src="/files/swift/diag3.png" />
 </div>
 
