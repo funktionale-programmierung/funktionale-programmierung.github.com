@@ -8,15 +8,15 @@ tags: ["Swift", "Apple", "Mac", "iOS"]
 Letztes Jahr hat Apple mit [Swift](https://developer.apple.com/swift/)
 eine neue Programmiersprache vorgestellt. Über kurz oder lang wird Swift
 die Standardsprache werden, um Apps für iPhone, iPad, Mac und Co zu
-entwicklen. Und Swift enthält viele Elemente der funktionalen
-Programmierung, Zeit genug also, dass wir in diesem Blob mal einen
+entwickeln. Und Swift enthält viele Elemente der funktionalen
+Programmierung, Zeit genug also, dass wir in diesem Blog mal einen
 genaueren Blick auf die Sprache werfen.
 
-Interessant ist auch, dass Apple in Swift nicht nur einfach ein paar
-liebgewonnene Features aus funktionalen Sprachen einbaut. Nein, es
+Interessant ist, dass Apple in Swift nicht nur einfach ein paar
+liebgewonnene Features aus funktionalen Sprachen eingebaut hat. Nein, es
 scheint vielmehr, dass grundlegende funktionale Designparadigmen wie
 "Werte statt veränderbare Objekte" und "Seiteneffekte ja, aber mit
-Disziplin" auch in Apple Vorstellung von guter Softwarearchitektur eine
+Disziplin" auch in Apples Vorstellung von guter Softwarearchitektur eine
 große Rolle spielen. Exemplarisch seien hier zwei Vorträge der
 [Apple Worldwide Developers Conference](https://developer.apple.com/wwdc/) genannt.
 Im Vortrag
@@ -29,8 +29,8 @@ geht es ebenfalls um Werttypen und *Unveränderbarkeit* (*immutability*).
 
 <!-- more start -->
 
-Im heutigen Blogartikel schauen wir uns anhand eines Beispiels einige der
-Sprachfeatures von Swift an. Wir möchten eine kleine Bibliothek zum
+Im heutigen Blogartikel schauen wir uns anhand eines Beispiels Swift etwas
+genauer an. Wir möchten eine kleine Bibliothek zum
 Zeichnen von Diagrammen designen und implementieren. Damit können wir dann
 z.B. solche Diagramme zeichnen:
 
@@ -38,8 +38,8 @@ z.B. solche Diagramme zeichnen:
 <img src="/files/swift/diag1.png" />
 </div>
 
-Solche Diagramme können wir natürlich auch mit herkömmlichen, imperativen
-Mitteln zeichnen. Etwa so:
+Das geht natürlich auch mit herkömmlichen, imperativen
+Mitteln. Etwa so:
 
 {% highlight swift %}
 NSColor.blueColor().setFill()
@@ -49,12 +49,12 @@ CGContextFillRect(ctx, CGRectMake(75.0, 0.0, 150.0, 150.0))
 {% endhighlight %}
 
 Dieser Code benutzt die Mac API zum Zeichnen, aber das Grundprinzip ist in
-fast alle UI Toolkits gleich: wir benutzen einen Grafikkontext `ctx`, um
+fast alle UI-Toolkits gleich: wir benutzen einen Grafikkontext `ctx`, um
 primitive Formen wie Rechtecke und Kreise auf den Bildschirm zu
-zeichnen. Wir sagen dem System also genau *wie* gezeichnet werden soll.
+zeichnen. Wir sagen dem System also genau, *wie* gezeichnet werden soll.
 
 Was passiert nun aber, wenn wir das Diagramm leicht ändern möchten und
-z.B. eine grünen Kreis zwischen die beiden Rechtecke einfügen sollen.
+z.B. eine grünen Kreis zwischen die beiden Rechtecke einfügen wollen?
 
 <div id="center">
 <img src="/files/swift/diag2.png" />
@@ -75,28 +75,53 @@ NSColor.redColor().setFill()
 CGContextFillRect(ctx, CGRectMake(150.0, 0.0, 150.0, 150.0))
 {% endhighlight %}
 
-Mit einem funktionalen Desig werden solche Probleme vermieden. Denn
+Mit einem funktionalen Design werden solche Probleme vermieden. Denn
 funktional gedacht spezifizieren wir lediglich *was* gezeichnet werden
 soll und überlassen das *wie* einer Bibliothek.
 
-In folgenden schauen wir uns an, wie wir in Swift Diagramm
+Im Folgenden schauen wir uns an, wie wir in Swift Diagramme
 deklarativ spezifizieren können und wie wir eine Bibliothek zum Umsetzen
 der Spezifikation in echte Bilder realisieren können. Die Idee zu diesem
 Beispiel stammt aus dem schönen Buch
 [Functional Programming in Swift](https://www.objc.io/books/) von
-Chris Eidhof, Florian Kugler und Wouter Swierstra.
+Chris Eidhof, Florian Kugler und Wouter Swierstra, die Ideen sind aber
+auch z.B. schon in der Haskell Bibliothek
+[diagrams](http://projects.haskell.org/diagrams/) zu finden.
 
 ## Spezifikation von Diagramm
 
-Um zu Spezifizieren, was in einem Diagram enthalten sein soll, benutzen
-wir das `enum`-Feature von Swift.
+Um zu spezifizieren, was in einem Diagram enthalten sein soll, benutzen
+wir das `enum`-Feature von Swift. Wir beginnen mit einfachen geometrischen Formen:
 
 {% highlight swift %}
 enum Shape {
     case Ellipse
     case Rectangle
 }
+{% endhighlight %}
 
+Die Enums können aber mehr als einfach nur verschiedene Fälle in einem
+Typen zusammenzufassen. Wir können z.B. auch Werte mit einzelnen Fällen
+assoziieren. Exemplarisch hierfür definieren wir das Enum `Attribut`, welches wir
+später verwenden, um Diagramme einzufärben und um die Anordnung zu spezifizieren.
+
+{% highlight swift %}
+enum Attribute {
+    case FillColor(NSColor)
+    case Alignment(Align)
+}
+// Alignment auf der x- und y-Achse sind Werte zwischen 0 und 1, wobei
+// 0 ganz links bzw. oben und 1 ganz rechts und unten bedeutet. Der Wert
+// CGPointMake(x: 0.5, y: 1.0) spezifiziert als ein horizontal zentriertes
+// und vertikal am unteren Rand fixiertes Alignment.
+typealias Align = CGPoint
+{% endhighlight %}
+
+Es geht aber noch mehr! Enums können auch rekursiv sein, d.h. wir können
+innerhalb der Definition eines Enums das Enum selbst verwenden. Dazu
+brauchen wir das Schlüsselwort `indirect`.
+
+{% highlight swift %}
 // Das Schlüsselwort "indirect" wird benötigt, da der enum-Typ
 // rekursiv ist.
 indirect enum Diagram {
@@ -106,29 +131,18 @@ indirect enum Diagram {
     case Annotated(Attribute, Diagram)
 }
 
-enum Attribute {
-    case FillColor(NSColor)
-    case Alignment(Align)
-}
-
-// Alignment auf der x- und y-Achse sind Werte zwischen 0 und 1, wobei
-// 0 ganz links bzw. oben und 1 ganz rechts und unten bedeutet. Der Wert
-// CGPointMake(x: 0.5, y: 1.0) spezifiziert als ein horizontal zentriertes
-// und vertikal am unteren Rand fixiertes Alignment.
-typealias Align = CGPoint
 {% endhighlight %}
 
 Ein Diagramm ist als entweder eine primitive Form mit einer Größe (die
 Größe ist nicht in Pixel angegeben, sondern relativ zu den anderen
 Diagrammelementen gedacht), oder zwei Diagramme neben- bzw. untereinander,
-oder ein annotiertes Diagramm. Mit solche annotierten Diagrammen
-modellieren wir Farben (`FillColor`) und Anordnung (`Alignment`).
+oder ein annotiertes Diagramm. Für solche annotierten Diagramme benutzen
+wir das bereits definierte Enum `Attribute`.
 
-Am obigen Beispiel sehen Sie, dass Enums in Swift viel mächtiger sind
-als reine Aufzählungstypen wie beispielsweise in Java oder C#. Enums
-können nämlich auch rekursiv sein (Schlüsselwert `indirect`) und die
-einzelnen Alternativen eines Enums können mit Argumenten versehen sein. In
-funktionalen Sprache sind solche Datentypen Standard; sie heißen dort
+Enums in Swift sind also viel mächtiger
+als reine Aufzählungstypen wie beispielsweise in Java oder C#. Das, was
+Enums in Swift sind, ist in funktionalen Sprache Standard;
+sie heißen dort
 *algebraischen Datentypen* oder auch *Summentypen*.
 
 ## Beispiel-Diagramme
