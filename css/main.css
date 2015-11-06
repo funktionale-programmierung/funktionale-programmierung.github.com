@@ -67,7 +67,7 @@ h6 { font-size:0.7em; color:#000000; font-weight:normal; }
 
 .center { 
   text-align:center;
-  margin: 5 5 5 5;
+  margin-bottom: 10px;
 }
 
 .navbar-fp .nav > li > a:hover {
