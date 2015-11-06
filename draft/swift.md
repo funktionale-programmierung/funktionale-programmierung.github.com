@@ -41,7 +41,7 @@ z.B. solche Diagramme zeichnen:
 Solche Diagramme können wir natürlich auch mit herkömmlichen, imperativen
 Mitteln zeichnen. Etwa so:
 
-{% hightlight swift %}
+{% highlight swift %}
 NSColor.blueColor().setFill()
 CGContextFillRect(ctx, CGRectMake(0.0, 37.5, 75.0, 75.0)
 NSColor.redColor().setFill()
@@ -142,7 +142,8 @@ let blueSquare = Diagram.Annotated(Attribute.FillColor(.blueColor()),
 {% endhighlight %}
 
 Mit `let` führen wir eine neue Variable `blueSquare` ein, deren Wert nicht
-verändert werden kann.
+verändert werden kann. `Diagram.Primitive` erzeugt ein neues primitives
+Diagramm, dem wir dann mit `Diagram.Annotated` eine Farbe verpassen.
 
 Das obige Diagram `blueSquare` ist sehr einfach und besteht nur aus einem blauen
 Quadrat. Trotzdem ist der Code zum Erzeugen etwas länglich. Wir können ihn
@@ -164,7 +165,8 @@ func rectangle(width: CGFloat, height: CGFloat) -> Diagram {
 }
 {% endhighlight %}
 
-//: Farben und Alignment
+Nachfolgend definieren wir auch smarte Konstruktoren für Farbe und
+Alignment. 
 
 {% highlight swift %}
 extension Diagram {
@@ -184,8 +186,33 @@ extension Diagram {
         return align(0.5, y:0)
     }
 }
+{% endhighlight %}
 
-//: Operatoren zur Platzierung nebeneinander- bzw. untereinander
+Wir haben diese Funktionen als Erweiterung (`extension`)
+von `Diagram` geschrieben, damit wir die "Dot-Notation" verwenden können,
+um die Funktionen wie Methoden auf einem Diagram aufzurufen. Innerhalb einer solchen
+`extension` verwenden wir wie immer `self`, um auf das Diagram zuzugreifen, auf dem
+die Methode aufgerufen wurde.
+
+Wir sehen die Dot-Notation gut an folgendem Beispiel:
+
+{% highlight swift %}
+let redSquare = square(2).fill(NSColor.redColor())
+{% endhighlight %}
+
+Wir konstruieren zuerst ein Quadrat, um dann auf dem resultierenden
+Diagramm `fill` aufzurufen. Wenn wir `fill` als globale Funktion
+geschrieben hätten, müssten wir stattdessen so etwas schreiben:
+`fill(NSColor.redColor(), square(2))`. Welche der beiden Schreibweisen wir
+wählen ist Geschmacksache, ich habe mir für die Dot-Notation entschieden,
+weil sie meiner Ansicht nach zu leichter lesbarem Code führt.
+
+Es fehlen noch smarte Konstruktoren zur Platzierung von Diagrammen
+nebeneinander- bzw. untereinander. Diese realisieren wir als
+Operatoren. (Auch diese Entscheidung ist Geschmacksache, wir hätten
+genauso gut normale Funktionen verwenden können.) Die Operatoren sind
+dabei `|||` für nebeneinander und `---` für untereinander.
+
 
 {% highlight swift %}
 infix operator ||| { associativity left }
@@ -198,25 +225,30 @@ func --- (top: Diagram, bottom: Diagram) -> Diagram {
     return Diagram.Below(top, bottom)
 }
 {% endhighlight %}
-<!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
-auftauchen. -->
 
-## Überschriften ##
- 
-Code: `f(a,b)`. Als Block:
+Durch die `associativity` Notation lassen wir den Swift-Compiler wissen,
+dass er einen Ausdruck ohne Klammern wie z.B.
+`blueSquare ||| redSquare ||| diag1` als
+`(blueSquare ||| redSquare) ||| diag1` verstehen soll.
 
-    <-- vier Leerzeichen eingerückt
+Jetzt können wir noch ein paar mehr Diagramme definieren:
 
-Codebeispiele einer Programmiersprache:
-
-{% highlight scheme %}
-(repl)
+{% highlight swift %}
+let greenCircle = circle(0.5).fill(.greenColor())
+let sampleDiagram1a = blueSquare ||| redSquare
+let sampleDiagram1b = blueSquare ||| greenCircle ||| redSquare
+let sampleDiagram2 =
+    sampleDiagram1b.alignBottom() ---
+    rectangle(10, height:0.2).fill(.magentaColor()).alignTop()
 {% endhighlight %}
 
-Links mit [Text](http://URL).
+Das letzte Diagram `sampleDiagram2` soll übrigens wie folgt aussehen, die
+Diagramm `sampleDiagram1a` und `sampleDiagram1b` haben wir bereits weiter
+oben als Bilder gesehen.
 
-Hervorhebungen *mit Stern* oder _Unterstrich_.  **Doppelt** für mehr
-__Druck__.  Geht auch mitt*endr*in in einem Wort.
+<div id="center">
+<img src="/files/swift/diag3.png" />
+</div>
+
 
 <!-- more end -->
-
