@@ -273,5 +273,11 @@ Bildschirm zeichnet, das werden wir in einem Folgeartikel diskutieren. Bis
 dahin freue ich mich über Rückfragen und anderes Feedback. Viel Erfolg
 beim funktionalen Programmieren in Swift!
 
+Übrigens: wir arbeiten gerade daran, den Objective-C Code für unser
+Produkt
+[Checkpad MED](http://funktionale-programmierung.de/2013/07/17/medizin-funktional.html)
+zumindest teilweise auf Swift zu aktualisieren. Falls Sie Lust und
+Interesse haben, daran mitzuhelfen, dann freuen wir uns auf
+[Ihre Bewerbung](http://cpmed.de/jobs/).
 
 <!-- more end -->
