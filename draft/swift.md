@@ -43,13 +43,13 @@ Mitteln. Etwa so:
 
 {% highlight swift %}
 NSColor.blueColor().setFill()
-CGContextFillRect(ctx, CGRectMake(0.0, 37.5, 75.0, 75.0)
+CGContextFillRect(ctx, CGRectMake(0.0, 37.5, 75.0, 75.0))
 NSColor.redColor().setFill()
 CGContextFillRect(ctx, CGRectMake(75.0, 0.0, 150.0, 150.0))
 {% endhighlight %}
 
 Dieser Code benutzt die Mac API zum Zeichnen, aber das Grundprinzip ist in
-fast alle UI-Toolkits gleich: wir benutzen einen Grafikkontext `ctx`, um
+fast allen UI-Toolkits gleich: wir benutzen einen Grafikkontext `ctx`, um
 primitive Formen wie Rechtecke und Kreise auf den Bildschirm zu
 zeichnen. Wir sagen dem System also genau, *wie* gezeichnet werden soll.
 
@@ -100,7 +100,7 @@ enum Shape {
 }
 {% endhighlight %}
 
-Die Enums können aber mehr als einfach nur verschiedene Fälle in einem
+Die Enums können aber mehr als einfach nur verschiedene Fälle zu einem
 Typen zusammenzufassen. Wir können z.B. auch Werte mit einzelnen Fällen
 assoziieren. Exemplarisch hierfür definieren wir das Enum `Attribut`, welches wir
 später verwenden, um Diagramme einzufärben und um die Anordnung zu spezifizieren.
@@ -258,7 +258,10 @@ let sampleDiagram2 =
 
 Die Diagramm `sampleDiagram1a` und `sampleDiagram1b` haben wir bereits weiter
 oben als Bilder gesehen.
-Das letzte Diagram `sampleDiagram2` sollte wie folgt aussehen:
+Das letzte Diagram `sampleDiagram2` demonstriert die Verwendung von
+`---`. Wir benötigen `alignBottom` und `alignTop`, damit der obere Teile
+des Bilds `sampleDiagram1b` und das langgezogene, magentafarbene Rechteck
+direkt übereinander liegen. So sieht `sampleDiagram2` dann aus:
 
 <div class="center">
 <img src="/files/swift/diag3.png" />
