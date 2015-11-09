@@ -6,6 +6,10 @@ highlighter: pygments
 safe: true
 lsi: false
 
+# This is a german blog...
+kramdown:
+  smart_quotes:   sbquo,lsquo,bdquo,ldquo
+
 sharing :
   twitter :
     size :
