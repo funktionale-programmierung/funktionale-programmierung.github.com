@@ -15,9 +15,9 @@ funktionale Programmierung.
 Produkt [Checkpad MED](http://cpmed.de/), eine elektronische
 Patientenakte für iPad, iPhone und Co. Bei Checkpad kommt an vielen
 Stellen funktionale Programmierung zum Einsatz. So ist z.B. das Backend
-fast komplett in Haskell geschrieben, aber auch im iOS-Client setzen
+fast komplett in Haskell geschrieben, aber auch im iOS-Client möchten
 wir vermehrt auf die funktionalen Features der Sprache
-[Swift](/2015/11/09/swift.html).
+[Swift](/2015/11/09/swift.html) setzen.
 
 Wir brauchen Unterstützung bei der Entwicklung von Checkpad!
 
