@@ -1,14 +1,15 @@
 ---
 layout: post
 description: Beschreibung
-title: "Funktionale Programmierer(innen) gesucht"
+title: "Funktionale Programmiererinnen und Programmierer gesucht"
 author: stefan-wehr
 tags: ["funktional", "Job", "Stellenanzeige", "Haskell", "Freiburg"]
 ---
 
 Wir von factis research suchen
 [Softwareentwicklerinnen und
-Softwareentwickler](http://cpmed.de/jobs/) mit Schwerpunkt funktionale Programmierung.
+Softwareentwickler](http://cpmed.de/jobs/) mit Schwerpunkt
+funktionale Programmierung.
 
 [Factis research](http://factisresearch.com) entwickelt das
 Produkt [Checkpad MED](http://cpmed.de/), eine elektronische
@@ -17,6 +18,8 @@ Stellen funktionale Programmierung zum Einsatz. So ist z.B. das Backend
 fast komplett in Haskell geschrieben, aber auch im iOS-Client setzen
 wir vermehrt auf die funktionalen Features der Sprache
 [Swift](/2015/11/09/swift.html).
+
+Wir brauchen Unterstützung bei der Entwicklung von Checkpad!
 
 <!-- more start -->
 
@@ -46,7 +49,7 @@ gestalten.
 - *Atmosphäre:* Kickertisch, Snacks und gemeinsame Hackathons - Du triffst auf
 ein sympathisches Arbeitsumfeld.
 
-Du hast Lust, mit uns gemeinsam Software zu gestalten? Dann schreibe eine
+Du hast Lust, mit uns gemeinsam Software zu gestalten? Dann schreib' eine
 Email an [jobs@cpmed.de](jobs@cpmed.de) oder informiere dich
 auf unserer [Jobs-Seite](http://cpmed.de/jobs/) über mehr
 Details und offene Stellen.
