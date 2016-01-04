@@ -1,10 +1,12 @@
 markdown: kramdown
 encoding: UTF-8
 permalink: date
+gems: [jekyll-paginate]
 paginate: 3
 highlighter: pygments
 safe: true
 lsi: false
+
 
 # This is a german blog...
 kramdown:
