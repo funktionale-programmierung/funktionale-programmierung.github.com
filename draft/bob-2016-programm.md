@@ -9,9 +9,9 @@ tags: ["BOB", "Konferenz"]
 ![BOB 2016](http://bobkonf.de/images/bob_head_small_2016.png)
 
 Die Konferenz [BOB 2016](http://bobkonf.de/2016/) ist in den
-Startlöchern: Am Freitag, 19.2.20156 die zweite Auflage in Berlin
+Startlöchern: Am Freitag, 19.2.20156 findet die zweite Auflage in Berlin
 statt.  Wir laden alle Interessierten ein, sich bei Vorträgen und
-Tutorien über das beste zu informieren, was die Softwareentwicklung zu
+Tutorien über das Beste zu informieren, was die Softwareentwicklung zu
 bieten hat.  Das [Programm](http://bobkonf.de/2016/program.html)
 besteht aus zwei parallelen Tracks mit insgesamt 14 Vorträgen sowie
 zwei Tracks mit acht Tutorials.  Die
@@ -24,8 +24,8 @@ läuft; bis zum 17.1. gibt es noch Frühbucherrabatt.
 
 Eröffnet wird die Konferenz mit der
 [Keynote](http://bobkonf.de/2016/keynote.html) von
-[Elise Huard](http://jabberwocky.eu/), die sie über
-Programmiersprachen reflektiert wird und die Dimensionen, in denen sie
+[Elise Huard](http://jabberwocky.eu/), die über
+Programmiersprachen reflektieren wird und die Dimensionen, in denen sie
 sich unterscheiden.
 
 ## Vorträge
