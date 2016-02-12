@@ -4,7 +4,6 @@ permalink: date
 gems: [jekyll-paginate]
 paginate: 3
 highlighter: rouge
-safe: true
 lsi: false
 
 
