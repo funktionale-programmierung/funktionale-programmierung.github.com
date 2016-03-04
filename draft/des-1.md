@@ -504,7 +504,7 @@ setValue name value =
   do ms <- State.get
      State.put (Map.insert name value ms)
 
-incrementValue :: Num a => String -> v -> StateChange v
+incrementValue :: Num v => String -> v -> StateChange v
 incrementValue name inc =
   do ms <- State.get
      let (Just v) = Map.lookup name ms
