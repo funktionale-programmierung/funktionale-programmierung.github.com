@@ -237,7 +237,6 @@ public class ConstantDelay implements Delay {
     public Long getDelay() {
         return this.value;
     }
-
 }
 {% endhighlight %}
 
