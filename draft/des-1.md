@@ -240,8 +240,8 @@ public class ConstantDelay implements Delay {
 }
 {% endhighlight %}
 
-Es riecht schon ein bißchen nach funktionaler Programmierung!
-Allerdings gibt es auch eine Klasse für zufällige, exponenziell
+Es riecht schon ein bisschen nach funktionaler Programmierung!
+Allerdings gibt es auch eine Klasse für zufällige, exponentiell
 verteilte Verzögerungen:
 
 {% highlight java %}
