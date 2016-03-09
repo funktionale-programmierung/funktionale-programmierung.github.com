@@ -107,11 +107,11 @@ Update-Funktionen für diese Felder:
         this.priority = priority;
     }
 
-    public List<Transition> getTransistions() {
+    public List<Transition> getTransitions() {
         return transitions;
     }
 
-    public void addTransistion(Transition transition) {
+    public void addTransition(Transition transition) {
         this.transitions.add(transition);
     }
 
@@ -353,6 +353,19 @@ data Model v = Model {
   }
 {% endhighlight %}
 
+Der Typparameter `v` ist neu und steht für den Typ der Werte der
+Zustandsvariablen, der in `StateChange` vorkommt.  Im Java-Code steht
+dort `Object`.
+
+Als ich den Code anfing zu schreiben, hatte ich den Typparameter
+noch nicht auf dem Zettel.  Erst bei `StateChange` sah ich, dass er
+benötigt wird.  Der Haskell-Compiler erinnerte mich dann daran, wo ich
+überall den Typparameter ebenfalls noch hinzufügen musste:
+`StateChange` kommt in `Event` vor, also musste ich ihn auch bei
+`Event` hinzufügen, und von dort kam er dann auch bei `Model` dazu und
+bei allen anderen Typen, die sich auf den konkreten Modellzstand
+beziehen.
+
 Als nächstes ist `Event` dran, das ebenfalls durch eine
 Record-Definition übersetzt werden kann:
 
@@ -370,7 +383,8 @@ Felder außer `name`.  In Haskell können wir das aber auch einfach
 simulieren, indem wir ein "Standard-Event" anlegen:
 
 {% highlight haskell %}
-event = Event { name = "UNKNOWN", priority = 0, transitions = [], stateChanges = [] }
+event =
+  Event { name = "UNKNOWN", priority = 0, transitions = [], stateChanges = [] }
 {% endhighlight %}
 
 Wir können dann z.B. das hier schreiben, um ein Ereignis mit
@@ -409,8 +423,9 @@ import Control.Monad.State.Strict (State)
 Nun soll ja `StateChange` den Modellzustand manipulieren.  Dazu
 brauchen wir erstmal eine Typdefinition für diesen Modellzustand.  In
 Java ist das eine Klasse, die eine Map von `String` nach `Object`
-kapselt.  `Object` geht in Haskell gar nicht - wir verschieben das
-Problem einfach, indem wir statt `Object` einen Typparameter einführen:
+kapselt.  Wie oben schon bemerkt, geht `Object` in Haskell gar nicht -
+wir verschieben das Problem einfach, indem wir statt `Object` einen
+Typparameter einführen:
 
 {% highlight haskell %}
 type ModelState v = Map String v
@@ -494,6 +509,20 @@ largerThanValueCondition name value ms =
   in  value' > value
 {% endhighlight %}
 
+Haskell-Programmierer sehen sofort ein Problem mit dieser Funktion:
+Die Bindung an `Just value'` funktioniert nur, wenn `Map.lookup`
+tatsächlich einen `Just`-Wert liefert.  Wenn `Nothing` zurückkommt
+(also kein Eintrag dieses Namens im Modellzustand steht), bricht das
+Programm ab.  Die Funktion ist also
+[*partiell*](https://wiki.haskell.org/Partial_functions) - nicht so
+gut.  Das Java-Programm hat das gleiche Problem (weil `get` dann
+`null` zurückliefert), da ist es aber nicht
+so offensichtlich.  
+
+Da es uns in diesem Posting darum geht, den Java-Code möglichst
+originalgetreu nachzubilden, heben wir uns dieses Problem für einen
+späteren Teil dieser Reihe auf.
+
 Bleiben noch die zwei Implementierungen von `StateChange`.  Dazu
 definieren wir entsprechende Funktionen, die Berechnungen in der
 `ModelAction`-Monade liefern:
@@ -511,6 +540,8 @@ incrementValue name inc =
      setValue name (v + inc)
 {% endhighlight %}
 
+(Auch `incrementValue` ist partiell.)
+
 So, das wäre erst mal die naive Übersetzung des Java-Codes für
 Simulationsmodelle.  Wir konstatieren:
 
@@ -519,8 +550,8 @@ Simulationsmodelle.  Wir konstatieren:
   manipulieren.
 - Die werden dann in der Regel in Haskell zu monadischen Funktionen.
 
-Die Haskell-Experten werden bemerkt haben, dass da noch was nicht
-stimmt.  Aber dazu mehr im zweiten Teil, demnächst auf diesem Blog.
+Die Haskell-Experten werden bemerkt haben, dass da noch einiges nicht
+stimmt.  Mehr dazu im zweiten Teil, demnächst auf diesem Blog.
 
 <!-- more end -->
 
