@@ -22,7 +22,7 @@ funktionale Programmierung.  Die Software, die dort geschrieben wird,
 ist meist klassischer OO-Java-Code.  Wie, so fragten mich Oliver Rose
 und seine Kollegen, würde denn so ein typisches Java-Projekt aussehen,
 wenn man es stattdessen in Haskell schriebe.  Kurze Zeit später
-lieferte mir der Lehrstuhl ein beispielhaftes und sehr aufgeräumtes
+lieferte mir der Lehrstuhl ein beispielhaftes und aufgeräumtes
 Java-Projekt, das
 [ereignisorientierte Simulation](https://de.wikipedia.org/wiki/Ereignisorientierte_Simulation)
 implementiert.  (Ab jetzt unter der Abkürzung "DES" für
@@ -145,7 +145,7 @@ So eine Transition sagt also aus, dass das Ereignis `targetEvent`
 generiert werden soll, aber nur unter einer bestimmten Bedingung und
 u.U. nach einer Verzögerung.  Die Standardwerte für `condition` und
 `delay` stehen dafür, dass das Ereignis immer und sofort ausgelöst
-wird.  (`Condition` und `Delay` sowie Die konkreten Implementierungen
+wird.  (`Condition` und `Delay` sowie die konkreten Implementierungen
 für `TrueCondition` und `ZeroDelay` werden später erläutert.)
 
 Auch in der `Transition`-Klasse gibt es wieder Getter- und
@@ -186,7 +186,7 @@ public interface StateChange {
 }
 {% endhighlight %}
 
-`ModelState` fehlt auch noch - der Modellzustand als Sammlung von
+`ModelState` fehlt auch noch - der Modellzustand ist als Sammlung von
 Zustandsvariablen modelliert, von denen jede einen Namen hat:
 
 {% highlight java %}
@@ -384,8 +384,8 @@ event { name = ..., transitions = ... }
 (Die Getter sind schon als Teil der `data`-Definition definiert,
 Setter gibt es nicht in Haskell.)
 
-Weiter geht es mit Transition - auch hier verwenden wir ein Record,
-dass der Java-Klasse direkt entspricht:
+Weiter geht es mit Transition - auch hier verwenden wir einen Record-Typ,
+welcher der Java-Klasse direkt entspricht:
 
 {% highlight haskell %}
 data Transition v = Transition { targetEvent :: Event v,
