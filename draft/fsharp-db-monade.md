@@ -83,6 +83,8 @@ let update guid prop value =
 {% endhighlight %}
 
 Die Unterschiede zur naiven Version sind recht klein: `atomically`, um die Datenbank-Operationen in einer Transaktion auszuführen, `db { ... }`, welches die Datenbank-Operationen kapselt und `let!` sowie `do!`, um Ergebnisse von Datenbank-Operationen zu binden bzw. nur auszuführen.
+Hier ist `db` keine Referenz auf eine Datenbank, sondern ein Konstrukt, das die Datenbank-API einleitet.
+Wir kommen gleich darauf zurück.
 
 Eine Anwendung von `update` könnte wie folgt aussehen:
 
