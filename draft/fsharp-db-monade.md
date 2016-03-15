@@ -10,7 +10,7 @@ Für den Programmierer bietet der Einsatz einer Datenbank viele Fallstricke: Una
 
 Wie lassen sich solche Fallstricke vermeiden oder wenigstens
 entschärfen?
-In unserem Key-Value-Store [Active.Net.AddOnlyDb](https://github.com/active-group/Active.Net.AddOnlyDb), der eine schnelle und leichte Synchronisation zwischen mobilen Geräten erlaubt, haben wir eine zusammensetzbare Datenbank-API implementiert, welches sich genau dieses zum Ziel gesetzt hat.
+In unserem in F# geschriebenen Key-Value-Store [Active.Net.AddOnlyDb](https://github.com/active-group/Active.Net.AddOnlyDb), der eine schnelle und leichte Synchronisation zwischen mobilen Geräten erlaubt, haben wir eine zusammensetzbare Datenbank-API implementiert, welches sich zum Ziel gesetzt hat, genau diese Fallstricke zu vermeiden.
 Anhand einer kleinen Beispiel-Funktion `update` zeige ich in diesem Artikel, wie die AddOnlyDb-API dem Programmierer hilft, die Fallstricke zu vermeiden.
 
 <!-- more start -->
@@ -25,7 +25,7 @@ AddOnlyDb repräsentiert Objekte durch eine globale eindeutige Zahl (eine GUID),
 
 AddOnlyDb bietet unter anderem die Funktionen `get`, um Werte auszulesen, `put`, um Werte zu schreiben und `search`, um Werte zu suchen.
 
-Eine einfache, naive `update`-Funktion könnte also wie folgt aussehen:
+Eine einfache, naive `update`-Funktion in F# könnte also wie folgt aussehen:
 
 {% highlight fsharp %}
 let update guid prop value =
