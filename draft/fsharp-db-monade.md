@@ -34,7 +34,7 @@ let update guid prop value =
 {% endhighlight %}
 
 Die `update`-Funktion nimmt als Parameter die `guid` des betreffenden Objekts, die zu aktualisierende Eigenschaft `prop` und den neuen Wert `value`.
-Zunächst sucht sie mit `search` alle Fakten, welche sich momentan auf die zu aktualisierende Eingeschaft beziehen. Anschließend setzt sie mit `put` das neue Faktum, wobei es die alten Fakten als ungültig markiert.
+Zunächst sucht sie mit `search` die Id aller Fakten, welche sich momentan auf die zu aktualisierende Eingeschaft beziehen. Anschließend setzt sie mit `put` das neue Faktum, wobei es die alten Fakten als ungültig markiert.
 `Meta.create()` liefert Meta-Information wie die aktuelle Uhrzeit, welche einem Endanwender beim Auflösen von Konflikten helfen sollen.
 
 ## Fallstricke ##
