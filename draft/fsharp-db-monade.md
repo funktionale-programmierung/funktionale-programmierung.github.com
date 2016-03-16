@@ -136,8 +136,8 @@ type 'a Op =
 
 `'a` ist die erwähnte Typ-Variable, `Result` die Operation, welche nicht wirklich etwas tut (sondern nur ein Ergebnis festhält), `Get` liefert Daten aus der Datenbank, `Put` schreibt Daten in die Datenbank (wobei der Typ `FactT` die Objekt-Guid usw. zusammenfasst) und `Atomically` führt eine Operation atomar aus (also in einer Transaktion).
 
-Die Parameter für die Operation bergen wenig Überraschungen: `Get` benötigt die Objekt-Guid und Eigenschaft, die es auslesen soll, `Put` die Objekt-Guid, Eigenschaft und den Wert, den es schreiben soll und `Atomically` die Operation, welche es atomar ausführen soll.
-Interessanter sind die jeweils letzten Parameter `(ValueT [] -> 'a Op)`, `(HashT -> 'a Op)`, sowie `(unit -> 'a Op)`: sie stellen eine Art "callback" dar, eine Funktion, die von `run` aufgerufen wird, wenn das Ergebnis der Datenbank-Operation eingetroffen ist.
+Die Parameter für die Operation bergen bis auf die jeweils letzten wenig Überraschungen: `Get` benötigt die Objekt-Guid und Eigenschaft, die es auslesen soll, `Put` die Objekt-Guid, Eigenschaft und den Wert, den es schreiben soll und `Atomically` die Operation, welche es atomar ausführen soll.
+Die jeweils letzten Parameter `(ValueT [] -> 'a Op)`, `(HashT -> 'a Op)`, sowie `(unit -> 'a Op)` stellen eine Art "callback" dar, eine Funktion, die von `run` aufgerufen wird, wenn das Ergebnis der Datenbank-Operation eingetroffen ist.
 Dazu gleich mehr, sobald wir uns die Unterstützung der `db { ... }`-Syntax angeschaut haben.
 
 ## Computation Expression ##
