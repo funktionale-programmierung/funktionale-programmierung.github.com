@@ -212,7 +212,7 @@ Zur besseren Illustration ist dies im Fall von `Get` ausgeschrieben.
 
 Bis jetzt haben wir nur Datenbank-Operationen gebaut und zusammengesetzt.
 Zur eigentlichen Ausführung kommt es erst durch einen Aufruf von `run`.
-`run` ist in AddOnlyDb mit den verschränkt rekursiven Hilfsfunktionen `runLoop` und `runInTransaction` implementiert.
+`run` ist in AddOnlyDb mit den verschränkt rekursiven Hilfsfunktionen `runLoop` und `runTransaction` implementiert.
 
 {% highlight fsharp %}
 let run db (op0:'a Op) : 'a =
@@ -240,7 +240,7 @@ let rec runLoop<'a> db (inTransaction:bool) (op:'a Op) : 'a =
 Bei `Get` ruft `runLoop` die Datenbank-Funktion `get` auf, um aus der Datenbank zu lesen, erzeugt mit dem Ergebnis und dem Callback die nächste Datenbank-Operation, und berechnet rekursiv dessen Ergebnis.
 Bei `Result` ist das Ergebnis der Wert, der im `Result` abgelegt ist.
 Bei `Put` geht `runLoop` ähnlich vor.
-Bei `Atomically` geht `runLoop` ebenfalls ähnlich vor, wobei das Ergebnis die andere Hilfsfunktion `runInTransaction` berechnet:
+Bei `Atomically` geht `runLoop` ebenfalls ähnlich vor, wobei das Ergebnis die andere Hilfsfunktion `runTransaction` berechnet:
 
 {% highlight fsharp %}
 and runTransaction<'b> db (inTransaction:bool) (op: 'b Op) : 'b =
@@ -258,8 +258,8 @@ and runTransaction<'b> db (inTransaction:bool) (op: 'b Op) : 'b =
       raise e
 {% endhighlight %}
 
-Falls schon eine Transaktion offen ist, muss `runInTransaction` nichts weiter tun als mit `runLoop` das Ergebnis der Datenbank-Operation zu berechnen.
-Andernfalls berechnet `runInTransaction` das Ergebnis in einer Transaktion, die im Erfolgsfall abgeschlossen, im Fehlerfall rückabgewickelt wird.
+Falls schon eine Transaktion offen ist, muss `runTransaction` nichts weiter tun als mit `runLoop` das Ergebnis der Datenbank-Operation zu berechnen.
+Andernfalls berechnet `runTransaction` das Ergebnis in einer Transaktion, die im Erfolgsfall abgeschlossen, im Fehlerfall rückabgewickelt wird.
 
 Möchte der Programmierer nun die Datenbank-Operationen gegen eine andere Datenbank laufen lassen oder nur simulieren, kann er eine andere `run`-Funktion verwenden.
 Diese könnte zum Beispiel das Ergebnis der `Get`-Operation aus einem Array oder einer Datei lesen.
