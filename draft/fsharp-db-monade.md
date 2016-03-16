@@ -152,7 +152,7 @@ type DbBuilder() =
   member this.Bind(op, next) = bind op next    // : 'b Op → ('b → 'a Op) → 'a Op
 {% endhighlight %}
 
-Regelmäßige Leser unseres Blogs und sonstige Enthusiasten der Funktionalen Programmierung kommen `Return` und `Bind` bekannt vor: tatsächlich lassen sich mit Copmutation Expressions [Monaden](http://funktionale-programmierung.de/tags-archive.html#Monaden) implementieren.
+Regelmäßige Leser unseres Blogs und sonstige Enthusiasten der Funktionalen Programmierung kommen `Return` und `Bind` bekannt vor: tatsächlich lassen sich mit Computation Expressions [Monaden](http://funktionale-programmierung.de/tags-archive.html#Monaden) implementieren.
 Mit `Return` lässt sich ein Wert merken, wozu das `Result` des `Op`-Typs geeignet ist.
 Mit `Bind` lassen sich zwei Datenbank-Operationen aneinanderfügen (also hintereinander ausführen), wobei `next` angibt, wie aus dem Wert vom Typ `'b` der ersten Datenbank-Operation eine Datenbank-Operation mit dem Wert vom Typ `'a` entsteht.
 Die Implementierung von `bind` schauen wir uns gleich an.
