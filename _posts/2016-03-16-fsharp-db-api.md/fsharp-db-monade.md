@@ -27,7 +27,7 @@ AddOnlyDb bietet unter anderem die Funktionen `get`, um Werte auszulesen, `put`,
 
 Eine einfache, naive `update`-Funktion in F# könnte also wie folgt aussehen:
 
-```fsharp
+```F#
 let update guid prop value =
   let oldIds = search (Some guid, Some prop, None)
   put guid prop value (Meta.create()) oldIds
