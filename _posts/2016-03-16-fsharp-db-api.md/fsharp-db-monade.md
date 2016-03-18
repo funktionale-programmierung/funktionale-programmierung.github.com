@@ -42,7 +42,7 @@ Zunächst sucht sie mit `search` die Id aller Fakten, welche sich momentan auf d
 Die soeben vorgestellte `update`-Funktion würde so nicht funktionieren, denn ihr fehlt ein Verweis auf die Datenbank.
 Reichen wir ihn also nach:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 let update db guid prop value =
   let oldIds = search db (Some guid, Some prop, None)
   put db guid prop value (Meta.create()) oldIds
@@ -53,7 +53,7 @@ Allerdings wird damit der Typ der Datenbank festgelegt, was sich als hinderlich 
 
 `update` hat ein weiteres Problem: zwischen dem Auslesen der alten Einträge und dem Setzen des neuen Eintrags sollten keine weiteren Einträge hinzukommen. `update` sollte also in einer Transaktion ausgeführt werden:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 let update db guid prop value =
   startTransaction db
   let oldIds = search db (Some guid, Some prop, None)
@@ -73,7 +73,7 @@ In jedem Fall wird `update` (und alle weiteren Funktionen, welche `update` aufru
 In AddOnlyDb haben wir eine zusammensetzbare Datenbank-API entwickelt, welche
 die dargestellten Fallstricke vermeidet und uns dazu noch erlaubt, Code zu schreiben, welcher der eingangs vorgestellten, naiven Version von `update` sehr nahe kommt:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 let update guid prop value =
   atomically
   db {
@@ -88,7 +88,7 @@ Wir kommen gleich darauf zurück.
 
 Eine Anwendung von `update` könnte wie folgt aussehen:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 let op = update guid prop value
 let db = openDatabase ... // nötige Parameter
 run db op
@@ -126,7 +126,7 @@ Außerdem zeigt die Erfahrung, dass für die Zusammensetzbarkeit eine Operation 
 Dass jede Datenbank-Operation Ergebnisse unterschiedlichen Typs liefert, stellen wir durch eine Typvariable dar.
 Der `Op`-Typ sieht demnach in etwa so aus:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 type 'a Op =
   | Result of 'a
   | Get of GuidT * PropertyT * (ValueT [] -> 'a Op)
@@ -146,7 +146,7 @@ In .Net heißen Konstrukte wie `db { ... }` ["Computation Expressions"]( https:/
 Zur Implementierung definiert man einen Typ, der [eine Reihe von bestimmten Methoden]( https://msdn.microsoft.com/de-de/library/dd233182.aspx#Anchor_1 ) implementiert.
 Für die `db { ... }`-Syntax genügt es, `Return` und `Bind` zu implementieren:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 type DbBuilder() =
   member this.Return(v) = Result v             // : 'a → 'a Op
   member this.Bind(op, next) = bind op next    // : 'b Op → ('b → 'a Op) → 'a Op
@@ -159,7 +159,7 @@ Die Implementierung von `bind` schauen wir uns gleich an.
 
 Zur `db { ... }`-Syntax fehlt nur noch eine Instanz von `DbBuilder`:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 let db = DbBuilder()
 {% endhighlight %}
 
@@ -168,7 +168,7 @@ Tatsächlich ist das `db` in der `db { ... }`-Syntax also ein konkretes Objekt (
 Wie kommt es von der `db { ... }`-Syntax zum eigentlichen Code?
 Der F#-Compiler übersetzt den Ausdruck
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 db {
   let! oldIds = search (Some guid, Some prop, None)
   do! put guid prop value (Meta.create()) oldIds
@@ -177,7 +177,7 @@ db {
 
 beim Compilieren zu etwas wie
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 db.Bind(search (Some guid, Some prop, None), (fun oldIds →
   db.Bind(put guid prop value (Meta.create()) oldIds, (fun x → 
     db.Return ()))))
@@ -192,7 +192,7 @@ Nun zur versprochenen Implementierung von `bind` und wie die "Callbacks" von `Op
 Die Typ-Signatur von `bind` ist praktisch durch die [Typ-Signatur von `Bind`](https://msdn.microsoft.com/de-de/library/dd233182.aspx#mt26) `'b Op → ('b → 'a Op) → 'a Op` vorgegeben.
 Die Implementierung orientiert sich an der Struktur von `'b Op`:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 let rec bind (opB: 'b Op) (next: 'b -> 'a Op) : ('a Op) =
   match opB with
   | Result b             -> next b
@@ -214,7 +214,7 @@ Bis jetzt haben wir nur Datenbank-Operationen gebaut und zusammengesetzt.
 Zur eigentlichen Ausführung kommt es erst durch einen Aufruf von `run`.
 `run` ist in AddOnlyDb mit den verschränkt rekursiven Hilfsfunktionen `runLoop` und `runTransaction` implementiert.
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 let run db (op0:'a Op) : 'a =
     runLoop db false op0
 {% endhighlight %}
@@ -223,7 +223,7 @@ let run db (op0:'a Op) : 'a =
 Das Ergebnis ist der Wert, der sich aus der Datenbank-Operation ergibt.
 Die Implementierung von `runLoop` orientiert sich wieder an der Struktur von `Op`:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 let rec runLoop<'a> db (inTransaction:bool) (op:'a Op) : 'a =
   match op with
   | Result v -> v
@@ -242,7 +242,7 @@ Bei `Result` ist das Ergebnis der Wert, der im `Result` abgelegt ist.
 Bei `Put` geht `runLoop` ähnlich vor.
 Bei `Atomically` geht `runLoop` ebenfalls ähnlich vor, wobei das Ergebnis die andere Hilfsfunktion `runTransaction` berechnet:
 
-{% highlight fsharp %}
+{% highlight ocaml %}
 and runTransaction<'b> db (inTransaction:bool) (op: 'b Op) : 'b =
   if inTransaction
   then runLoop db true opB
