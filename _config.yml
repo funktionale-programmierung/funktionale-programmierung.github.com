@@ -116,4 +116,9 @@ authors:
     name: Dierk König
     image: /author/dierk-koenig.jpg
     href: "http://www.canoo.com"
-    about: 'Dierk König ist Fellow bei der Canoo AG, Basel, und trägt zu den Projekten Frege, OpenDolphin, Groovy, Grails, GPars, GroovyFX und Canoo WebTest bei. Er ist Hauptautor des Beststellers <a href="https://github.com/Dierk/GroovyInAction">Groovy in Action</a>. Twitter: @mittie'    
+    about: 'Dierk König ist Fellow bei der Canoo AG, Basel, und trägt zu den Projekten Frege, OpenDolphin, Groovy, Grails, GPars, GroovyFX und Canoo WebTest bei. Er ist Hauptautor des Beststellers <a href="https://github.com/Dierk/GroovyInAction">Groovy in Action</a>. Twitter: @mittie'
+  marcus-crestani:
+    name: Marcus Crestani
+    image: /author/marcus-crestani.png
+    href: "http://www.active-group.de/unternehmen/crestani.html"
+    about: '<a href="http://www.active-group.de/unternehmen/crestani.html">Marcus Crestani</a> ist Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a> und hat langjährige Erfahrung in funktionaler Programmierung, Softwarearchitektur und Programmiersprachen.'
