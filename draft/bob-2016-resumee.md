@@ -14,7 +14,7 @@ Jahr gab es interessante Vorträge und informative Tutorien. An dieser
 Stelle blicken wir auf die tolle Veranstaltung zurück - wer selbst
 einen Blick darauf werfen will: Die Folien und Videos von (fast) allen
 Vorträgen sind online verfügbar. Sie sind verlinkt auf den Seiten der
-Vorträgen, erreichbar über die
+Vorträge, erreichbar über die
 [Programmübersicht](http://bobkonf.de/2016/programm.html) oder auf
 unserem
 [YouTube-Channel](https://www.youtube.com/channel/UC2svxmX1Bfyaln2bs9ZsyGA).
