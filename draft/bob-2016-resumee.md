@@ -35,7 +35,7 @@ Neuerung bei der diesjährigen Konferenz: Dank des Diversity-Sponsors
 [Zuschüsse für Referenten](http://bobkonf.de/2016/de/speaker-grants.html)
 und
 [Zuschüsse für Teilnehmer](http://bobkonf.de/2016/de/registration.html). Eine
-tolle Sache!
+super Sache!
 
 Das Konferenz-Abendessen am Vorabend war der inoffizielle Startschuss
 der diesjährigen Ausgabe. Bei gutem Essen und leckeren Getränken gab
@@ -125,7 +125,7 @@ Vorträge und Tutorien zu vertiefen.
 
 # Ausblick
 
-Die zweite Auflage der BOB-Konferenz war eine tolle Veranstaltung, die
+Die zweite Auflage der BOB-Konferenz war eine klasse Veranstaltung, die
 steigende Teilnehmerzahl und die vielen positiven Rückmeldungen der
 Referenten und Teilnehmer belegen dies. Wir freuen uns schon auf eine
 Neuauflage im nächsten Jahr - mit noch mehr Verbesserungen.
