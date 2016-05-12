@@ -40,7 +40,7 @@ tolle Sache!
 Das Konferenz-Abendessen am Vorabend war der inoffizielle Startschuss
 der diesjährigen Ausgabe. Bei gutem Essen und leckeren Getränken gab
 es Gelegenheit, bei fachlichen und auch mal nicht so fachlichen
-Diskussionen die anderen Konferenzteilnehmer kennenzulernen und erste
+Diskussionen die anderen Konferenzteilnehmer kennenzulernen, erste
 Kontakte zu knüpfen oder Bekanntschaften aus dem Vorjahr wieder
 aufleben zu lassen.
 
@@ -57,7 +57,7 @@ Zeitpunkt für internationale Teilnehmer mindestens einen
 englischsprachigen Vortrag gab:
 
 * [Dynamic programming at ease - with grammars, algebras, products](http://bobkonf.de/2016/schirmer.html):
-  Stefanie stellte eine formale herangehensweise an dynamische
+  Stefanie stellte eine formale Herangehensweise an dynamische
   Programmierung vor.
 
 * [Keeping Front-end Development Simple with React](http://bobkonf.de/2016/tsui.html):
@@ -99,7 +99,7 @@ englischsprachigen Vortrag gab:
 
 * [Funktionales Design mit Swift](http://bobkonf.de/2016/wehr.html):
   Stefan erklärte, wie gut sich Swift für funktionale Programmierung
-  eigenet.
+  eignet.
 
 * [Jackline, a secure instant messaging application, functional from the ground up](http://bobkonf.de/2016/mehnert.html):
   Hannes präsentierte seine funktionale Kommunikationsapplikation
@@ -114,7 +114,7 @@ anderem Einführungen in
 [PureScript](http://bobkonf.de/2016/fischmann-purescript.html). Außerdem
 Tutorials zu
 [Verifikation mit Isabelle](http://bobkonf.de/2016/breitner-isabelle.html),
-[REST-APIs mit Akka HTTP in Scala](http://bobkonf.de/2016/rudolph.html)
+[REST-APIs mit Akka HTTP in Scala](http://bobkonf.de/2016/rudolph.html) 
 und [Software-Spezifikationen](http://bobkonf.de/2016/rauch.html).
 Wir haben die Tutorien nicht auf Video aufgezeichnet, da ein Tutorium
 vor allem von der Interaktion mit den Teilnehmern lebt.
