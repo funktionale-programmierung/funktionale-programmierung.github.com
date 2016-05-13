@@ -9,7 +9,7 @@ Am 19. Februar 2016 fand in Berlin die zweite
 [BOB-Konferenz](http://bobkonf.de/) statt. Mit mehr als 130 Teilnehmern
 stieg die Teilnehmerzahl im Vergleich zur
 [ersten Ausgabe im Vorjahr](http://funktionale-programmierung.de/2015/03/05/bob-resumee.html)
-nochmal an, was uns als natürlich Veranstalter sehr gefreut hat. Auch in diesem
+nochmal an, was uns als Veranstalter natürlich sehr gefreut hat. Auch in diesem
 Jahr gab es interessante Vorträge und informative Tutorien. An dieser
 Stelle blicken wir auf die tolle Veranstaltung zurück - wer selbst
 einen Blick darauf werfen will: Die Folien und Videos von (fast) allen
