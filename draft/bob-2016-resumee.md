@@ -6,16 +6,16 @@ tags: ["BOB", "Konferenz"]
 ---
 
 Am 19. Februar 2016 fand in Berlin die zweite
-[BOB-Konferenz](http://bobkonf.de/) statt. Mit fast 150 Interessierten
+[BOB-Konferenz](http://bobkonf.de/) statt. Mit mehr als 130 Teilnehmern
 stieg die Teilnehmerzahl im Vergleich zur
 [ersten Ausgabe im Vorjahr](http://funktionale-programmierung.de/2015/03/05/bob-resumee.html)
-deutlich an, was uns als Veranstalter sehr gefreut hat. Auch in diesem
+nochmal an, was uns als natürlich Veranstalter sehr gefreut hat. Auch in diesem
 Jahr gab es interessante Vorträge und informative Tutorien. An dieser
 Stelle blicken wir auf die tolle Veranstaltung zurück - wer selbst
 einen Blick darauf werfen will: Die Folien und Videos von (fast) allen
 Vorträgen sind online verfügbar. Sie sind verlinkt auf den Seiten der
 Vorträge, erreichbar über die
-[Programmübersicht](http://bobkonf.de/2016/programm.html) oder auf
+[Programmübersicht](http://bobkonf.de/2016/program.html) oder auf
 unserem
 [YouTube-Channel](https://www.youtube.com/channel/UC2svxmX1Bfyaln2bs9ZsyGA).
 
@@ -79,7 +79,7 @@ englischsprachigen Vortrag gab:
 
 * [Mit Monaden die Zukunft im Blick](http://bobkonf.de/2016/breitner-monaden.html):
   Joachim zeigte uns, wie man mit Monaden, in denen sich Fixpunkte
-  berechnen, ein Binärformat implementiert.
+  berechnen lassen, ein Binärformat implementiert.
 
 * [Functional Programming and the Web: Frontend Development in PureScript](http://bobkonf.de/2016/karg.html):
   Michael und Jürgen zeigten GUI-Programmierung mit PureScript.
@@ -89,7 +89,7 @@ englischsprachigen Vortrag gab:
   unveränderliche Daten Synchronisationsprobleme lösen.
 
 * [Type the web with Servant!](http://bobkonf.de/2016/loeh-servant.html):
-  Andres stellte Servant vor und wie man damit typsichere APIs bekommt.
+  Andres stellte Servant vor und wie man damit typsichere APIs implementiert.
 
 * [Functional Reactive Programming](http://bobkonf.de/2016/apfelmus.html):
   Heinrich gab eine Einführung in FRP.
