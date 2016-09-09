@@ -16,7 +16,7 @@ beschäftigt, das Kernmodells des Simulators so direkt wie möglich nach
 Haskell zu übersetzen. Das hat weitestgehend auch funktioniert.  Zwei
 auffällige Unterschiede hat es aber gegeben:
 
-- Wir haben für die für die Variablen des Modellzustands (wo in Java
+- Wir haben für die Variablen des Modellzustands (wo in Java
   `Object` steht) eine Typvariable eingeführt.
 
 - Für Zustandsänderungen und Verzögerungen (die Zugriff auf einen
@@ -110,7 +110,7 @@ von `eventList`:
 
 Ich war erst etwas verwirrt, weil `addEvent` keine Rücksicht auf die
 gewünschte Reihenfolge der Ereignis-Instanzen nimmt.  Das macht
-erst `removeEvent`, welches die erste stattzufindende Ereignis-Instanz
+erst `removeNextEvent`, welches die erste stattzufindende Ereignis-Instanz
 liefert und entfernt:
 
 {% highlight java %}
@@ -173,18 +173,18 @@ hat, vertagen wir ihre Diskussion erstmal und stürzen uns ins
 Getümmel.  Die Methode `runSimulation` stößt die Simulation an:
 
 {% highlight java %}
-    public void runSimulation(Model model, Long endTime,
-                              ReportGenerator reportGenerator) {
-        this.model = model;
+  public void runSimulation(Model model, Long endTime,
+                            ReportGenerator reportGenerator) {
+      this.model = model;
 
-        initializationRoutine(reportGenerator);
+      initializationRoutine(reportGenerator);
 
-        while (this.clock.getCurrentTime() <= endTime && this.eventList.getSize() > 0) {
-            EventInstance currentEvent = this.timingRoutine();
-            eventRoutine(currentEvent);
+      while (this.clock.getCurrentTime() <= endTime && this.eventList.getSize() > 0) {
+          EventInstance currentEvent = this.timingRoutine();
+          eventRoutine(currentEvent);
 
-        }
-    }
+      }
+  }
 {% endhighlight %}
 
 Es wird also erstmal initialisiert und dann die Simulation solange
@@ -333,7 +333,7 @@ In Haskell geht sowas mit einem
 also einer Abbildung, die aus einer Monade eine andere Monade macht.
 Glücklicherweise gibt es bei Zustandsmonade aus
 [`Control.Monad.Strict`](https://hackage.haskell.org/package/mtl/docs/Control-Monad-State-Strict.html)
-aus nicht nur die "fertige" Monade `State` sondern auch einen
+nicht nur die "fertige" Monade `State` sondern auch einen
 Transformator
 [`StateT`](https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Strict.html#t:StateT).
 Den benutzen wir, um bei `ModelAction` über die "innere Monade" zu
@@ -385,7 +385,7 @@ aus Uhrzeit (`Clock`), Ereignis-Liste (`MinHeap`) und Report-Generator
 Bei der Hauptfunktion kümmern wir uns erstmal um die innere Schleife.
 (Die Initialisierung kommt dann als Teil der
 Simulations-Hauptfunktion, weil diese Reihenfolge leichter zu
-erläutern.)  Sie orientiert sich stark an der Java-Version: Sie
+erläutern ist.)  Sie orientiert sich stark an der Java-Version: Sie
 akzeptiert eine Endzeit und liefert dann eine Berechung in der Simulations-Monade:
 
 {% highlight haskell %}
@@ -509,7 +509,7 @@ runSimulation sim model clock reportGenerator =
   in r
 {% endhighlight %}
 
-Die Initialisierung entspricht im wesentlichen der Haskell-Version:
+Die Initialisierung entspricht im wesentlichen der Java-Version:
 Anfangszeit, erstes Ereignis aus dem Modell sowie Ereignis-Liste mit
 dem Anfangs-Ereignis.  Um die Simulation laufen zu lassen, müssen wir
 die drei geschachtelten Monaden ausführen - zweimal mit
