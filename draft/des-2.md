@@ -373,8 +373,13 @@ Außerdem kommt noch der Report-Generator dazu, für das es einen
 Typparameter `r` gibt.  Fertig sieht das so aus:
 
 {% highlight haskell %}
-type Simulation r v m = State.StateT (Clock, MinHeap (EventInstance v m), r)
-                                     (ModelActionT v m)
+data SimulationState r v m = SimulationState {
+  clock :: Clock,
+  events :: MinHeap (EventInstance v m),
+  reportGenerator :: r
+}
+
+type Simulation r v m = State.StateT (SimulationState r v m) (ModelActionT v m)
 {% endhighlight %}
 
 Dies ist also eine Typdefinition für eine Monade, in der zwei
@@ -392,9 +397,10 @@ akzeptiert eine Endzeit und liefert dann eine Berechung in der Simulations-Monad
 simulation :: ReportGenerator r v => Time -> Simulation r v Random ()
 simulation endTime =
   let loop =
-        do (clock, evs, r) <- State.get
-           if ((getCurrentTime clock) <= endTime) && not (Heap.null evs) then
+        do ss <- State.get
+           if ((getCurrentTime (clock ss)) <= endTime) && not (Heap.null (events ss)) then
              do currentEvent <- timingRoutine
+                -- seq (unsafePerformIO (putStrLn (show currentEvent))) (updateModelState currentEvent)
                 updateModelState currentEvent
                 updateStatisticalCounters currentEvent
                 generateEvents currentEvent
@@ -437,10 +443,10 @@ Ereignis steckt:
 {% highlight haskell %}
 getNextEvent :: Monad m => Simulation r v m (EventInstance v m)
 getNextEvent =
-  do (clock, evs, r) <- State.get
-     case Heap.view evs of
+  do ss <- State.get
+     case Heap.view (events ss) of
        Just (ev, evs') ->
-         do State.put (clock, evs', r)
+         do State.put (ss { events = evs' })
             return ev
        Nothing -> fail "can't happen"
 {% endhighlight %}
@@ -479,15 +485,17 @@ aus der `ModelState`-Monade in die `Simulation`-Monade zu "liften".
 Bei der `Random`-Monade müssen wir sogar zweimal liften!
 
 {% highlight haskell %}
+generateEvents :: EventInstance v Random -> Simulation r v Random ()
 generateEvents (EventInstance _ ev) =
   mapM_ (\ tr ->
           do ms <- State.lift getModelState
              if condition tr ms then
-               do (clock, evs, r) <- State.get
+               do ss <- State.get
                   d <- State.lift (State.lift (delay tr))
-                  let evi = EventInstance ((getCurrentTime clock) + d) (targetEvent tr)
-                  let evs' = Heap.insert evi evs
-                  State.put (clock, evs', r)
+                  let evi = EventInstance ((getCurrentTime (clock ss)) + d)
+                                          (targetEvent tr)
+                  let evs' = Heap.insert evi (events ss)
+                  State.put (ss { events = evs' })
              else
                return ())
          (transitions ev)
@@ -500,13 +508,18 @@ liefern.  Das geht so:
 
 {% highlight haskell %}
 runSimulation :: ReportGenerator r v => Simulation r v Random () -> Model v Random -> Time -> r -> r
-runSimulation sim model clock reportGenerator =
+runSimulation sim model clock rg =
   let clock = Clock 0
       initialEvent = EventInstance (getCurrentTime clock) (startEvent model)
       eventList = Heap.singleton initialEvent
-      ma = State.execStateT sim (clock, eventList, reportGenerator)
-      (cl', evs, r) = Random.evalRand (State.evalStateT ma Map.empty) (mkStdGen 0)
-  in r
+      ma = State.execStateT sim 
+                            (SimulationState {
+                               clock = clock,
+                               events = eventList,
+                               reportGenerator = rg
+                             })
+      ss = Random.evalRand (State.evalStateT ma Map.empty) (mkStdGen 0)
+  in reportGenerator ss
 {% endhighlight %}
 
 Die Initialisierung entspricht im wesentlichen der Java-Version:
