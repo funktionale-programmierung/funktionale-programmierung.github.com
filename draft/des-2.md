@@ -547,7 +547,7 @@ Die Haupterkenntnisse sind:
   Dann kann man sich die Monade mit Monadentransformatoren
   zusammenbauen.
   
-- Die Operationen aus den einfachen, inneren Monade einer größeren,
+- Die Operationen aus der einfachen, inneren Monade einer größeren,
   äußeren Monade müssen zur Benutzung geliftet werden.
   
 Letzteres geht oft auch automatisch, aber in unserem Fall sind zwei
