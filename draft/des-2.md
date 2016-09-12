@@ -455,6 +455,12 @@ Zustand und benutzt dann `Heap.view`, um das erste Ereignis und die
 restliche Ereignis-Liste zu extrahieren.  Die restliche Ereignis-Liste
 wird dann zurück in den Zustand geschrieben.
 
+Hier weist uns Haskell auf einen unbefriedigenden Aspekt des
+originalen Java-Codes hin: Dass noch Elemente in der Ereignis-Liste
+sind, muss vom Aufrufer von `getNextEvent` sichergestellt werden.
+Besser wäre es, das Pattern-Matching in die `simulation`-Funktion zu
+integrieren.
+
 Kommen wir zur Funktion `updateModelState`, die den Modell-Zustand
 aktualisiert.   Sie muss "einfach" nur die Zustands-Änderungen, die im
 Ereignis-Objekt stecken, nacheinander in der Simulations-Monade
