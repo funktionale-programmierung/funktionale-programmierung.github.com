@@ -400,7 +400,6 @@ simulation endTime =
         do ss <- State.get
            if ((getCurrentTime (clock ss)) <= endTime) && not (Heap.null (events ss)) then
              do currentEvent <- timingRoutine
-                -- seq (unsafePerformIO (putStrLn (show currentEvent))) (updateModelState currentEvent)
                 updateModelState currentEvent
                 updateStatisticalCounters currentEvent
                 generateEvents currentEvent
