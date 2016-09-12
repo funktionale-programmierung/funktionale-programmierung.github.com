@@ -331,11 +331,20 @@ kombinieren.
 In Haskell geht sowas mit einem
 [*Monaden-Transformator*](https://en.wikibooks.org/wiki/Haskell/Monad_transformers),
 also einer Abbildung, die aus einer Monade eine andere Monade macht.
+
+(In Java ist das deutlich einfacher, aber dafür können dort alle
+Methoden unkontrolliert Effekte auslösen.   Der "Java-Ansatz" ist auch
+Haskell möglich - alle gängingen monadischen Berechnungen können auch
+in die [`IO`-Monade](https://www.haskell.org/tutorial/io.html)
+geliftet werden, und das Gefrickel mit den Monadentransformatoren ist
+dann unnötig.)
+
 Glücklicherweise gibt es bei Zustandsmonade aus
 [`Control.Monad.Strict`](https://hackage.haskell.org/package/mtl/docs/Control-Monad-State-Strict.html)
 nicht nur die "fertige" Monade `State` sondern auch einen
 Transformator
 [`StateT`](https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Strict.html#t:StateT).
+
 Den benutzen wir, um bei `ModelAction` über die "innere Monade" zu
 abstrahieren - und fangen uns dabei einen weiteren Typparameter ein:
 
@@ -553,13 +562,6 @@ Die Haupterkenntnisse sind:
 Letzteres geht oft auch automatisch, aber in unserem Fall sind zwei
 Zustands-Monaden geschachtelt, was es dem Haskell-Compiler schwer
 macht zu sehen, welche gemeint ist.  
-
-In Java ist das deutlich einfacher, aber dafür können dort alle
-Methoden unkontrolliert Effekte auslösen.   Der "Java-Ansatz" ist auch
-Haskell möglich - alle gängingen monadischen Berechnungen können auch
-in die [`IO`-Monade](https://www.haskell.org/tutorial/io.html)
-geliftet werden, und das Gefrickel mit den Monadentransformatoren ist
-dann unnötig.  
 
 Warum das aber vielleicht keine gute Idee ist, heben wir uns für den
 dritten Teil auf.
