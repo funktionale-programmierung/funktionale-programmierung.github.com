@@ -320,81 +320,33 @@ type Random = Random.Rand Random.StdGen
 
 Das sind also zwei *unterschiedliche* Monaden, die aber innerhalb
 *derselben* Simulation laufen sollen: Doof!  Wir müssen einen Weg
-finden, beide zu kombinieren.
+finden, beide zu kombinieren.  Außerdem müssen wir ja auch noch die
+Uhrzeit, die Ereignis-Liste und den Report-Generator verwalten.
 
-Diese Monade ist bisher nur `exponentialDelay` geschuldet, das eine
-Zufallszahl braucht.  Die `ModelAction`-Monade ist aber wirklich
-intrinisch zur Simulation selbst.  Gut wäre also eine Möglichkeit, die
-`ModelAction`-Monade mit einer *beliebigen* anderen Monade zu
-kombinieren.
-
-In Haskell geht sowas mit einem
-[*Monaden-Transformator*](https://en.wikibooks.org/wiki/Haskell/Monad_transformers),
-also einer Abbildung, die aus einer Monade eine andere Monade macht.
-
-(In Java ist das deutlich einfacher, aber dafür können dort alle
-Methoden unkontrolliert Effekte auslösen.   Der "Java-Ansatz" ist auch
-Haskell möglich - alle gängingen monadischen Berechnungen können auch
-in die [`IO`-Monade](https://www.haskell.org/tutorial/io.html)
-geliftet werden, und das Gefrickel mit den Monadentransformatoren ist
-dann unnötig.)
-
-Glücklicherweise gibt es bei Zustandsmonade aus
-[`Control.Monad.Strict`](https://hackage.haskell.org/package/mtl/docs/Control-Monad-State-Strict.html)
-nicht nur die "fertige" Monade `State` sondern auch einen
-Transformator
-[`StateT`](https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Strict.html#t:StateT).
-
-Den benutzen wir, um bei `ModelAction` über die "innere Monade" zu
-abstrahieren - und fangen uns dabei einen weiteren Typparameter ein:
+Glücklicherweise sind all diese drei Monaden Zustandsmonaden, deren
+Zustände wir in einem einzelnen *Simulationszustand* zusammenfassen
+können.  Den Typ für den Report-Generator lassen wir erstmal offen (im
+Java-Code steht da ein Interface) und schreiben eine Typvariable dazu:
 
 {% highlight haskell %}
-type ModelActionT v m = State.StateT (ModelState v) m
-{% endhighlight %}
-
-Den müssen wir jetzt durch den Haskell-Code durchfädeln - immerhin
-sagt uns der Compiler, wenn er noch wo fehlt.  Folgende Typen bekommen
-also noch ein `m` am Ende:
-
-{% highlight haskell %}
-data Transition v m
-data Model v m
-data Event v m
-type StateChange v m
-data EventInstance v m
-{% endhighlight %}
-
-Den "Kerncode" selbst müssen wir allerdings nicht ändern, das betrifft
-erstmal nur die Typen.  Z.B. sieht `getValue` jetzt so aus:
-
-{% highlight haskell %}
-getValue :: Monad m => String -> ModelActionT v m v
-getValue name =
-  do ms <- State.get
-     let (Just v) = Map.lookup name ms
-     return v
-{% endhighlight %}
-
-Jetzt können wir den Typ für die große Simulationsmonade definieren.
-Dazu müssen wir ja auch noch die aktuelle Uhrzeit sowie die
-Ereignis-Liste verwalten, ebenfalls als Teil einer Zustandsmonade.
-Außerdem kommt noch der Report-Generator dazu, für das es einen
-Typparameter `r` gibt.  Fertig sieht das so aus:
-
-{% highlight haskell %}
-data SimulationState r v m = SimulationState {
+data SimulationState r v = SimulationState {
   clock :: Clock,
-  events :: MinHeap (EventInstance v m),
-  reportGenerator :: r
+  events :: MinHeap (EventInstance v),
+  reportGenerator :: r,
+  modelState :: ModelState v,
+  randomGenerator :: Random.StdGen
 }
-
-type Simulation r v m = State.StateT (SimulationState r v m) (ModelActionT v m)
 {% endhighlight %}
 
-Dies ist also eine Typdefinition für eine Monade, in der zwei
-Zustandsmonaden kombiniert werden - die äußere verwaltet ein Tripel
-aus Uhrzeit (`Clock`), Ereignis-Liste (`MinHeap`) und Report-Generator
-(`r`).  Die innere Monade verwaltet den Modell-Zustand.
+([`Random.StdGen`](http://hackage.haskell.org/package/random-1.0.0.2/docs/System-Random.html#t:StdGen)
+ist der Typ des *Zustands* des Standard-Zufallszahlengenerators.)
+
+Die Simulationsmonade ist also einfach eine Zustandsmonade über dem
+"großen" Zustand:
+
+{% highlight haskell %}
+type Simulation r v = State.State (SimulationState r v)
+{% endhighlight %}
 
 Bei der Hauptfunktion kümmern wir uns erstmal um die innere Schleife.
 (Die Initialisierung kommt dann als Teil der
@@ -403,7 +355,7 @@ erläutern ist.)  Sie orientiert sich stark an der Java-Version: Sie
 akzeptiert eine Endzeit und liefert dann eine Berechung in der Simulations-Monade:
 
 {% highlight haskell %}
-simulation :: ReportGenerator r v => Time -> Simulation r v Random ()
+simulation :: ReportGenerator r v => Time -> Simulation r v ()
 simulation endTime =
   let loop =
         do ss <- State.get
@@ -418,11 +370,8 @@ simulation endTime =
   in loop
 {% endhighlight %}
 
-Da diese Iteration auch Delays ausführen muss, ist jetzt der
-Typparameter `m` mit `Random` instanziert.
-
 Um überhaupt zu überprüfen, ob die Iteration am Ende angelangt ist,
-muss `loop` die entsprechenden Werte aus dem Zustand holen - mit
+muss `loop` die entsprechenden Werte aus dem Simulationszustand holen - mit
 `State.get`.  Sie ruft dann `timingRoutine` auf.  Der Inhalt der
 Java-Methode `eventRoutine` ist dann auf ihre drei Aufgaben verteilt:
 
@@ -435,7 +384,7 @@ Die Funktion `timingRoutine` ist das Pendant zur gleichnamigen
 Java-Funktion:
 
 {% highlight haskell %}
-timingRoutine :: Monad m => Simulation r v m (EventInstance v m)
+timingRoutine :: Simulation r v (EventInstance v)
 timingRoutine =
   do result <- getNextEvent
      let (EventInstance t e) = result
@@ -449,7 +398,7 @@ Diese geht davon aus, dass in der Ereignis-Liste mindestens ein
 Ereignis steckt:
 
 {% highlight haskell %}
-getNextEvent :: Monad m => Simulation r v m (EventInstance v m)
+getNextEvent :: Simulation r v (EventInstance v)
 getNextEvent =
   do ss <- State.get
      case Heap.view (events ss) of
@@ -481,35 +430,43 @@ sequence_ (stateChanges ev)
 {% endhighlight %}
 
 Allerdings laufen die `stateChanges` nicht in der Simulations-Monade
-ab, sondern in der `ModelAction`-Monade, also der *inneren* Monade von
-`Simulation`.  Wir müssen den Ausdruck also noch auf die
-Simulations-Monade ausdehnen.  Dazu gibt es die Funktion `lift`:
+ab, sondern in der `ModelAction`-Monade.  Wir müssen also den
+Modellzustand aus dem Simulationszustand extrahieren, darauf die
+`ModelAction` laufen lassen (das macht die Funktion
+[`State.execState`](http://hackage.haskell.org/package/mtl-1.1.0.2/docs/Control-Monad-State-Strict.html#v:execState)
+und den resultierenden Zustand wieder zurück in den Simulationszustand
+stecken.
 
 {% highlight haskell %}
-updateModelState :: Monad m => EventInstance v m -> Simulation r v m ()
-updateModelState (EventInstance _ ev) = State.lift (sequence_ (stateChanges ev))
+updateModelState :: EventInstance v -> Simulation r v ()
+updateModelState (EventInstance _ ev) =
+  do ss <- State.get
+     let ms = State.execState (sequence_ (stateChanges ev)) (modelState ss)
+     State.put (ss { modelState = ms })
 {% endhighlight %}
 
 Es bleibt `generateEvents`.  Hier müssen wir über die Transitionen
 eines Ereignisses iterieren (dazu gibt es die eingebaute
-Monaden-Funktion `mapM_`), die Bedingung überprüfen, den Delay
+Monaden-Funktion `mapM_`), die Bedingung überprüfen, die Verzögerung
 berechnen und dann die entstehende Ereignis-Instanz in die
-Ereignis-Liste einfügen.  Wieder müssen wir daran denken, Operationen
-aus der `ModelState`-Monade in die `Simulation`-Monade zu "liften".
-Bei der `Random`-Monade müssen wir sogar zweimal liften!
+Ereignis-Liste einfügen.
+
+Diesmal müssen wir daran denken, die Berechnung der Verzögerung in der
+Zufallszahlenmonade laufen zu lassen, angefangen mit dem Zustand, der
+im Simulationszustand im Feld `randomGenerator` steckt.  Das geht mit [`Random.runRand`](http://hackage.haskell.org/package/MonadRandom-0.1.1/docs/Control-Monad-Random.html#v:runRand).
 
 {% highlight haskell %}
-generateEvents :: EventInstance v Random -> Simulation r v Random ()
+generateEvents :: EventInstance v -> Simulation r v ()
 generateEvents (EventInstance _ ev) =
   mapM_ (\ tr ->
-          do ms <- State.lift getModelState
+          do ss <- State.get
+             let ms = modelState ss
              if condition tr ms then
                do ss <- State.get
-                  d <- State.lift (State.lift (delay tr))
-                  let evi = EventInstance ((getCurrentTime (clock ss)) + d)
-                                          (targetEvent tr)
+                  let (d, rg) = Random.runRand (delay tr) (randomGenerator ss)
+                  let evi = EventInstance ((getCurrentTime (clock ss)) + d) (targetEvent tr)
                   let evs' = Heap.insert evi (events ss)
-                  State.put (ss { events = evs' })
+                  State.put (ss { events = evs', randomGenerator = rg })
              else
                return ())
          (transitions ev)
@@ -521,49 +478,47 @@ Berechnung laufenlassen und den resultierenden Report-Generator
 liefern.  Das geht so:
 
 {% highlight haskell %}
-runSimulation :: ReportGenerator r v => Simulation r v Random () -> Model v Random -> Time -> r -> r
+yrunSimulation :: ReportGenerator r v => Simulation r v () -> Model v -> Time -> r -> r
 runSimulation sim model clock rg =
   let clock = Clock 0
       initialEvent = EventInstance (getCurrentTime clock) (startEvent model)
       eventList = Heap.singleton initialEvent
-      ma = State.execStateT sim 
-                            (SimulationState {
-                               clock = clock,
-                               events = eventList,
-                               reportGenerator = rg
-                             })
-      ss = Random.evalRand (State.evalStateT ma Map.empty) (mkStdGen 0)
-  in reportGenerator ss
+      ss = SimulationState {
+             clock = clock,
+             events = eventList,
+             reportGenerator = rg,
+             modelState = Map.empty,
+             randomGenerator = mkStdGen 0
+           }
+      ss' = State.execState sim ss
+  in reportGenerator ss'
 {% endhighlight %}
 
 Die Initialisierung entspricht im wesentlichen der Java-Version:
 Anfangszeit, erstes Ereignis aus dem Modell sowie Ereignis-Liste mit
-dem Anfangs-Ereignis.  Um die Simulation laufen zu lassen, müssen wir
-die drei geschachtelten Monaden ausführen - zweimal mit
-[`State.evalStateT`](https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Strict.html#v:evalStateT)
-für die beiden Zustandsmonaden und einmal
-[`Random.evalRand`](https://hackage.haskell.org/package/MonadRandom-0.1.3/docs/Control-Monad-Random.html#v:evalRand).
+dem Anfangs-Ereignis.  Die Funktion baut einen
+Anfangs-Simulations-Zustand zusammen, lässt darauf die Simulation
+laufen und extrahiert aus dem Endzustand den Report-Generator.
 
 ## So weit, so gut ... ##
 
 Es fehlen noch ein paar Bausteine (insbesondere der Report-Generator),
-aber die wichtigsten Teile sind jetzt nach Haskell übersetzt.
+aber die wichtigsten Teile sind jetzt nach Haskell übersetzt.  Die
+heben wir uns für einen späteren Teil auf.
 
-Die Haupterkenntnisse sind:
+Für heute konstatieren wir erst einmal, dass die Monaden helfen
+einzugrenzen, was einzelne Operationen anstellen können: Während im
+Original-Java-Code alle Funktionen uneingeschränkt Zustandsänderungen
+bewirken können, ist im Haskell-Code klar, dass Verzögerungen nur auf
+den Zufallszahlengenerator zugreifen können und `ModelAction`s nur auf
+den Modellzustand.
 
-- Wenn man zustandsbehaftete Berechnungen in Monaden ausführen möchte,
-  muss man sich vorher gut überlegen, was alles in die Monade gehört.
-  Dann kann man sich die Monade mit Monadentransformatoren
-  zusammenbauen.
-  
-- Die Operationen aus der einfachen, inneren Monade einer größeren,
-  äußeren Monade müssen zur Benutzung geliftet werden.
-  
-Letzteres geht oft auch automatisch, aber in unserem Fall sind zwei
-Zustands-Monaden geschachtelt, was es dem Haskell-Compiler schwer
-macht zu sehen, welche gemeint ist.  
-
-Warum das aber vielleicht keine gute Idee ist, heben wir uns für den
-dritten Teil auf.
+Allerdings ist die Kombination der drei involvierten Monaden auch
+immer Arbeit, die in der Java-Version nicht anfällt.  Hier ging das
+noch glimpflich ab, weil es sich um Zustandsmonaden handelt.  In
+komplizierteren Fällen sind
+[Monaden-Transformatoren](https://wiki.haskell.org/Monad_Transformers)
+nötig.  Auch diese Diskussion heben wir uns für ein zukünftiges
+Posting auf.
 
 <!-- more end -->
