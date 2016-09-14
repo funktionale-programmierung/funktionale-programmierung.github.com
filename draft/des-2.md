@@ -478,7 +478,7 @@ Berechnung laufenlassen und den resultierenden Report-Generator
 liefern.  Das geht so:
 
 {% highlight haskell %}
-yrunSimulation :: ReportGenerator r v => Simulation r v () -> Model v -> Time -> r -> r
+runSimulation :: ReportGenerator r v => Simulation r v () -> Model v -> Time -> r -> r
 runSimulation sim model clock rg =
   let clock = Clock 0
       initialEvent = EventInstance (getCurrentTime clock) (startEvent model)
