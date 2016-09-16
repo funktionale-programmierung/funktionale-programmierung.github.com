@@ -308,7 +308,7 @@ voranzubringen.  In Haskell muss das innerhalb der
 war eine Instanz der Zustandsmonade:
 
 {% highlight haskell %}
-type ModelAction v = State.State (ModelState v)
+type ModelAction v = State (ModelState v)
 {% endhighlight %}
 
 Außerdem müssen wir ja noch die Delays ausführen - die laufen auch in
@@ -345,7 +345,7 @@ Die Simulationsmonade ist also einfach eine Zustandsmonade über dem
 "großen" Zustand:
 
 {% highlight haskell %}
-type Simulation r v = State.State (SimulationState r v)
+type Simulation r v = State (SimulationState r v)
 {% endhighlight %}
 
 Bei der Hauptfunktion kümmern wir uns erstmal um die innere Schleife.
