@@ -11,9 +11,9 @@ Im heutigen Artikel möchten wir die Haskell-Bibliothek
 ermöglicht, von beliebigen Haskell-Datentypen großes Hashes z.B. mittels
 MD5 oder SHA512 zu berechnen. Wir haben diese Bibliothek im Rahmen
 unseres Produkts [Checkpad MED](/2013/07/17/medizin-funktional.html) entwickelt, um effizient feststellen zu können,
-ob sich ein Wert möglicherweise geändert hat. In diesem Artikel
-zeigen wir zum einen, wie man die Bibliothek benutzt, zum anderen
-beleuchten wir exemplarisch einen wichtigen Implementierungsaspekte, nämlich die
+ob sich das Ergebnis einer Berechnung möglicherweise geändert hat. In diesem Artikel
+zeigen wir zum einen wie man die Bibliothek benutzt, zum anderen
+beleuchten wir exemplarisch einen wichtigen Implementierungsaspekt, nämlich die
 Integration von C-Code in Haskell.
 
 <!-- more start -->
@@ -64,7 +64,7 @@ Hash-Tabellen verwendet werden und für solche Datenstrukturen ist es
 absolut normal das ab und an Hash-Konflikte auftreten.
 
 Wir mussten also eine eigene Bibliothek zur Berechnen von großen Hashes
-entwicklen. Die Bibliothek heißt large-hashable ist unter der BSD3 Lizenz auf
+entwicklen. Die Bibliothek heißt large-hashable und ist unter der BSD3 Lizenz auf
 [hackage](https://hackage.haskell.org/package/large-hashable) verfügbar. Der Quellcode
 wird auf [github](https://github.com/factisresearch/large-hashable) verwaltet. Durch die Verwendung von large-hashable konnte
 wir die Performanz von einer unserer Komponenten um bis 50% steigern!
@@ -76,7 +76,7 @@ Herzstück der large-hashable Bibliothek ist die Typklasse
 Jeder Typ, von dem wir einen großen
 Hash berechnen möchten, muss eine Instanz dieser Typklasse sein. Man kann
 solche Instanzen von Hand schreiben oder auch generieren lassen. Schreiben
-wir zunächste für einen beispielhaften Typ `Name` die Instanz erstmal von Hand:
+wir zunächst für einen beispielhaften Typ `Name` die Instanz erstmal von Hand:
 
 {% highlight haskell %}
 import Data.LargeHashable
@@ -111,7 +111,7 @@ Hierbei wird über die Struktur der
 Datenkonstruktoren der Hashwert zur Laufzeit berechnet. Um diese Funktionalität zu nutzen,
 muss man lediglich die Sprachoption `DeriveGeneric` einschalten
 (z.B. durch das Pragma `{-# LANGUAGE DeriveGeneric #-}` ganz am Anfang der
-Datei) und das Modul `GHC.Generics` importieren. Dann können wir unsn
+Datei) und das Modul `GHC.Generics` importieren. Dann können wir uns
 für jede Instanz der Typklasse `Generic` automatisch eine Instanz von
 `LargeHashable` erzeugen lassen. Zum Beispiel so:
 
@@ -132,8 +132,8 @@ Die dritte Möglichkeit ist Metaprogrammierung mit Hilfe von
 Dabei wird beim Kompilieren Code ausgeführt, der für
 einen gegebenen Typen eine Instanz von `LargeHashable` erzeugt. Dazu muss
 man die Sprachoption `TemplateHaskell` aktivieren (am besten wieder durch
-ein Pragma zu Beginn der Datei (`{-# LANGUAGE TemplateHaskell #-}`). Dann
-kann man folgendes Schreiben:
+ein Pragma zu Beginn der Datei: `{-# LANGUAGE TemplateHaskell #-}`). Dann
+kann man folgendes schreiben:
 
 {% highlight haskell %}
 {-# LANGUAGE TemplateHaskell #-}
@@ -148,6 +148,17 @@ $(deriveLargeHashable ''Car)
 Der Code innerhalb von `$(...)` wird während des Kompilierens
 ausgeführt. An dieser Stelle wird dann die `LargeHashable`-Instanz von
 `Car` erzeugt.
+
+Hier nochmal eine GHCi-Sitzung:
+
+{% highlight bash %}
+$ ghci Example.hs
+*Main> let stefan = Name "Stefan" "Wehr"
+*Main> runMD5 (updateHash (Person stefan 37))
+c03533a58e15759f8f3aea6ccaec09d7
+*Main> runMD5 (updateHash (Car "Ford" "Fiesta" 2009))
+432c598b0b6810b4191cda88ed38348c
+{% endhighlight %}
 
 Welche dieser drei Arten soll ein Programmierer nun wählen, um eine
 Instanz von `LargeHashable` zu schreiben? Die erste, manuelle Art gibt dem
@@ -214,10 +225,12 @@ einen Typ zu repräsentieren, nämlich als `Ptr RawCtx`. Der Typ `Ptr Word8`
 ist analog die Haskell-Repräsentation eines Pointers auf ein Word8,
 entspricht als dem Typen `uint8_t *` in C. Wichtig hierbei ist allerdings, dass diese
 Typen reine Konvention sind, d.h. der Compiler kann uns nicht daran hindern einen
-Pointer vom C-Type `uint8_t *` als `Ptr RawCtx` in Haskell zu repräsentieren.
+Pointer mit dem falschen Haskell-Typ zu verwenden,
+z.B. könnten wir fälschlicherweise auch den C-Typ `uint8_t *` als
+`Ptr RawCtx` in Haskell zu repräsentieren.
 
 Um zu demonstrieren wie man mit solchen C-Funktionen arbeiten, zeigen
-wir zum Abschluss die Funktion aus large-hashable, die eine Kontext zur MD5-Berechnung
+wir zum Abschluss die Funktion aus large-hashable, die einen Kontext zur MD5-Berechnung
 alloziert, dann damit eine Berechnung durchführt und am Schluss den Hash
 extrahiert.
 
@@ -246,7 +259,8 @@ finalen Hashwert zu allozieren. Mittels `c_md5_finalize` schreiben wir den Hashw
 wir mittels Pointerarithmetik und der Funktion [`peek`](http://hackage.haskell.org/package/base-4.9.0.0/docs/Foreign-Storable.html#v:peek)
 das erste und das zweite 64-Bit Wort aus dem `resPtr` und geben dieses Paar zurück.
 
-Sie sehen also: C-Funktion in Haskell einzubinden ist gar nicht so schwer. Natürlich kann es aber einer Funktion wie `withCtx`
+Sie sehen also: C-Funktion in Haskell einzubinden ist gar nicht so
+schwer. Natürlich kann es aber in einer Funktion wie `withCtx`
 zu Segmentation Faults und ähnlichen schlimmen Fehlern kommen; Dinge die in einer Sprache wie Haskell normalerweise nicht vorkommen.
 Daher sollte man auch immer zweimal drüber Nachdenken und gute Gründe haben, wenn man C-Funktionen in Haskell benützen will.
 
