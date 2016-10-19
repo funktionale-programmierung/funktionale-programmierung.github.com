@@ -168,7 +168,7 @@ unterscheiden sich unter anderem durch Performanz-Eigenschaften. Die Variante mi
 TemplateHaskell führt zu einer deutlichen längeren Kompilierzeit des
 Programms, allerdings ist die Performanz zur Laufzeit identisch zu einer
 vergleichbaren, von Hand geschriebenen Instanz. Die Variante über das
-generische Programmien bringt wenig Einbußen bei der Kompilierzeit,
+generische Programmieren bringt wenig Einbußen bei der Kompilierzeit,
 allerdings ist die Performanz zur Laufzeit schlechter. Der Hash wird nämlich
 nicht direkt aus dem Datentyp sondern aus dessen generischer
 Repräsentation berechnet.
