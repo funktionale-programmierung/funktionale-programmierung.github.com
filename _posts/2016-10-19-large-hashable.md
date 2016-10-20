@@ -63,11 +63,11 @@ dass die hashable-Bibliothek im Kontext von Datenstrukturen wie
 Hash-Tabellen verwendet werden und für solche Datenstrukturen ist es
 absolut normal, dass ab und an Hash-Kollisionen auftreten.
 
-Wir mussten also eine eigene Bibliothek zur Berechnen von großen Hashes
+Wir mussten also eine eigene Bibliothek zum Berechnen von großen Hashes
 entwicklen. Die Bibliothek heißt large-hashable und ist unter der BSD3 Lizenz auf
 [hackage](https://hackage.haskell.org/package/large-hashable) verfügbar. Der Quellcode
 wird auf [github](https://github.com/factisresearch/large-hashable) verwaltet. Durch die Verwendung von large-hashable konnte
-wir die Performanz von einer unserer Komponenten um bis 50% steigern!
+wir die Performanz von einer unserer Komponenten um bis zu 50% steigern!
 
 ## Benutzung der Bibliothek ##
 
