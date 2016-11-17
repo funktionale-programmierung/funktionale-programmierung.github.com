@@ -56,20 +56,18 @@ Um mit `clojure.spec` loszulegen, müssen Sie die Bibliothek einbinden:
 
 ## Spezifikationen ##
 
-Jede Spezifikation beschreibt die Menge von erlaubten Werten.  Zum
-Beispiel kann jedes in Clojure existierende Prädikat, das einen
-Wahrheitswert zurück gibt, als Spezifikation verwendet werden.  Ob ein
-Wert auf eine Spezifikation passt, sagt `s/valid?`:
+Jede Spezifikation beschreibt die Menge von erlaubten Werten.  Eine
+Spezifikation ist zum Beispiel das Prädikat `odd?`, das bestimmt, ob
+ein Wert ungerade ist.  Ob ein Wert auf eine Spezifikation passt, sagt
+`s/valid?`:
 
 {% highlight clojure %}
 (s/valid? odd? 23)
 ;; => true
 {% endhighlight %}
 
-`s/valid?` akzeptiert eine Spezifikation und einen Wert.  Im Beispiel
-ist die Spezifikation in Form des Prädikats `odd?`, das bestimmt, ob
-ein Wert ungerade ist.  `s/valid?` gibt zurück, ob der Wert mit der
-Spezifikation übereinstimmt.
+`s/valid?` akzeptiert eine Spezifikation und einen Wert.  `s/valid?`
+gibt zurück, ob der Wert mit der Spezifikation übereinstimmt.
 
 {% highlight clojure %}
 (s/valid? odd? 42)
@@ -105,7 +103,7 @@ werden, um sie einfach wiederverwenden zu können und auch um bessere
 Fehlermeldungen zu erhalten.  Um konfliktfreie Spezifikationen über
 mehrere Bibliotheken und Namespaces zu verwenden, sollten die Namen
 der Spezifikation _namespaced keywords_ sein, also qualifizierte
-Schlüsselwörter mit Namespace-Prefix, in Clojure erzeugt man
+Schlüsselwörter mit Namespace-Prefix.  In Clojure erzeugt man
 qualifizierte Schlüsselworter mit zwei Doppelpunkten:
 
 {% highlight clojure %}
@@ -114,7 +112,7 @@ qualifizierte Schlüsselworter mit zwei Doppelpunkten:
 
 Das obige Beispiel bindet die Spezifikation in Form eines
 Mengenprädikats an das qualifizierte Schlüsselwort `::day-of-week`.
-Die benannte Spezifikation kann dann so benutzt werden kann:
+Die benannte Spezifikation kann dann so benutzt werden:
 
 {% highlight clojure %}
 (s/valid? ::day-of-week :tue)
@@ -161,10 +159,13 @@ Map funktionieren (siehe unsere
 [Einführung in Datentypen](http://funktionale-programmierung.de/2014/12/08/clojure-datenstrukturen.html)).
 Die obige Spezifikation für Gürteltiere ist also tatsächlich eine
 Spezifikation für eine Map, in der die Schlüsselwörter `::weight` und
-`::alive?` in unqualifizierter Form enthalten sein müssen.  Das
+`::alive?` als unqualifizierte Schlüssel enthalten sein müssen.  Das
 Argument `:req-un` für `s/keys` legt fest, dass die Spezifikation
 unqualifizerte Schlüssel akzeptieren soll, da Clojure Records mit
-unqualifizierten Schlüsselwörtern implementiert.
+unqualifizierten Schlüsselwörtern implementiert (Gegenstück wäre das
+Argument `:req`, das qualifizerte Schlüssel erwartet, die von
+`clojure.spec` grundsätzlich empfohlen werden, um Namenskonflikte zu
+vermeiden --- die Clojure-Records passen aber nicht dazu).
 
 Damit können wir Gürteltiere validieren:
 
@@ -194,7 +195,7 @@ eigentlich erwartet wird.
 ## Gemischte Daten validieren ##
 
 Wir können auch gemischte Daten spezifizeren, indem wir die
-Spezifikationen anders zusammensetzen.  Um Tiere zu Repräsentieren,
+Spezifikationen anders zusammensetzen.  Um Tiere zu repräsentieren,
 die entweder ein Gürteltier oder ein Papagei sind, liefern wir
 zunächst die Spezifikation für Papageien nach, die ein Gewicht haben
 und einen Satz sagen können:
@@ -268,7 +269,7 @@ Funktion `s/check-asserts` kann Assertions aktivieren.
 ## Noch viel mehr... ##
 
 In diesem Artikel haben wir nur einen kleinen Teil der Fähigkeiten von
-`clojure.spec` abgedeckt.  `clojure.spec` kann noch viel mehr: Mit
+`clojure.spec` abgedeckt.  `clojure.spec` kann noch viel mehr: mit
 Hilfe von Spezifikationen Eingaben parsen und destrukturieren,
 Collections und Funktionen spezifizieren; die Code-Dokumentation
 erleichtern und automatische Tests erzeugen.  Mehr davon in einem
