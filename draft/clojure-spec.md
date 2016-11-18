@@ -16,7 +16,7 @@ erzwingen.  Die
 [`clojure-spec`-Bibliothek](http://clojure.org/about/spec) füllt diese
 Lücke: Damit ist es möglich, die Struktur der Daten als Programmcode
 zu spezifizieren und so die zur Laufzeit vorhandenen Daten zu
-validieren.  Das führt zu weniger Fehlern während der Programmlaufzeit
+validieren.  Das führt zu weniger unerwartetem Verhalten während der Programmlaufzeit
 und im Fehlerfall zu besseren Fehlermeldungen.  Zusätzlich ist sogar
 möglich, Daten aus der Spezifikation zu generieren, zum Beispiel für
 [randomisiertes Testen](http://funktionale-programmierung.de/2013/07/10/randomisierte-tests-mit-quickcheck.html).
@@ -90,11 +90,15 @@ und Mengenprädikate:
 (import java.util.Date)
 (s/valid? inst? (Date.))
 ;; => true
-(s/valid? #{:mon :tue :wed :thu :fri :sat :sun} :tue)
+(s/valid? #{"Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun"} "Tue")
 ;; => true
-(s/valid? #{:mon :tue :wed :thu :fri :sat :sun} 23)
+(s/valid? #{"Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun"} 23)
 ;; => false
 {% endhighlight %}
+
+Der Ausdruck `#(> % 5)` im vorigen Beispiel ist eine kürzere Notation
+für anonyme Funktionen, hier mit einem Parameter, der mit `%`
+referenziert wird.  `#{...}` ist eine Notation für Mengen.
 
 ## Namen geben ##
 
@@ -103,11 +107,11 @@ werden, um sie einfach wiederverwenden zu können und auch um bessere
 Fehlermeldungen zu erhalten.  Um konfliktfreie Spezifikationen über
 mehrere Bibliotheken und Namespaces zu verwenden, sollten die Namen
 der Spezifikation _namespaced keywords_ sein, also qualifizierte
-Schlüsselwörter mit Namespace-Prefix.  In Clojure erzeugt man
+Schlüsselwörter mit Namespace-Präfix.  In Clojure erzeugt man
 qualifizierte Schlüsselworter mit zwei Doppelpunkten:
 
 {% highlight clojure %}
-(s/def ::day-of-week #{:mon :tue :wed :thu :fri :sat :sun})
+(s/def ::day-of-week #{"Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun"})
 {% endhighlight %}
 
 Das obige Beispiel bindet die Spezifikation in Form eines
@@ -115,7 +119,7 @@ Mengenprädikats an das qualifizierte Schlüsselwort `::day-of-week`.
 Die benannte Spezifikation kann dann so benutzt werden:
 
 {% highlight clojure %}
-(s/valid? ::day-of-week :tue)
+(s/valid? ::day-of-week "Tue")
 ;; => true
 {% endhighlight %}
 
