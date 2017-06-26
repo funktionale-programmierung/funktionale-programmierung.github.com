@@ -118,7 +118,7 @@ einer Liste von Social-Media-Posts darstellen, welche dem Zustand einer
                      :body "Go read the post on Funktionale Programmierung"}])
 
 ;; Record to represent the state of the post-component.
-;; It contains a list of posts and an optional post if it's details should be
+;; It contains a list of posts and an optional post if its details should be
 ;; shown.
 (r/define-record-type post-component-state
   (make-post-component-state posts detail) post-component-state?
