@@ -122,3 +122,8 @@ authors:
     image: /author/marcus-crestani.png
     href: "http://www.active-group.de/unternehmen/crestani.html"
     about: '<a href="http://www.active-group.de/unternehmen/crestani.html">Marcus Crestani</a> ist Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a> und hat langjährige Erfahrung in funktionaler Programmierung, Softwarearchitektur und Programmiersprachen.'
+  marco-schneider:
+    name: Marco Schneider
+    image: /author/marco-schneider.jpg
+    href: "https://twitter.com/eskape"
+    about: 'Marco Schneider ist seit Abschluss (M.Sc., in Medieninformatik) seines Studiums an der Universität Tübingen Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a>. Sein besonderes Interesse gilt der funktionalen Programmierung und der künstlichen Intelligenz.'
