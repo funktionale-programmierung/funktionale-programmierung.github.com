@@ -1,25 +1,22 @@
 ---
 layout: post
-description: Reacl 2.0 - Side Effects und Actions
-title: "Reacl 2.0 - rein funktionale Programmierung, Side Effects und Actinos"
+description: Reacl 2 - Side Effects und Actions
+title: "Reacl 2 - rein funktionale Programmierung, Side Effects und Actions"
 author: marco-schneider
 tags: ["reacl", "clojure", "rein funktional"]
 page_title: "reacl2 und actions"
 ---
 
-Vor einigen Tagen schaffte Reacl, eine von uns im Haus entwickelte, rein 
+Vor einigen Tagen schaffte [Reacl](https://github.com/active-group/reacl), eine von uns im Haus entwickelte, rein 
 funktionale Bibliothek um [React.js](https://facebook.github.io/react/), 
 den Sprung auf Version *2.0.0*. In diesem Artikel betrachten wir einen neu
 eingeführten Mechanismus etwas genauer: die Actions.
 
 <!-- more start -->
 
-Vor einigen Tagen schaffte Reacl, eine von uns im Haus entwickelte, rein 
-funktionale Bibliothek um [React.js](https://facebook.github.io/react/), 
-den Sprung auf Version *2.0.0*.
-Schon seit einiger Zeit ist sie bei uns in verschiedensten Projekten in
+Schon seit einiger Zeit ist Reacl bei uns in verschiedensten Projekten in
 Verwendung um zuverlässige, schnelle und wartbare grafische Benutzeroberflächen 
-(kurz *GUI*, vom englischen Graphical User Interface)
+(kurz *GUI*, vom englischen *Graphical User Interface*)
 zu konstruieren.
 Genug Zeit also, um die hierfür getroffenen Enscheidungen in der Realität zu 
 erproben.
@@ -37,14 +34,15 @@ Besonderen eingegangen werden.
 <!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
 auftauchen. -->
 
-## Seiteneffekte und `actions` ##
-Ein neuer Mechanismus, welcher in `reacl` 2.0.0 implementiert wurde ist der der 
-`action`s &mdash eine Abstraktion mit dem Primärziel, Seiteneffekte zu kapseln 
+## Seiteneffekte und Actions ##
+
+Ein neuer Mechanismus, welcher in Reacl 2 implementiert wurde ist der der 
+*Action*s - eine Abstraktion mit dem Primärziel, Seiteneffekte zu kapseln 
 und deren Logik von der Darstellung zu trennen.
 Betrachtet man aktuelle Entwicklungen wie beispielsweise 
-[Facebooks GraphQL Biblothek](http://graphql.org/learn/), aber auch der sonst 
-üblichen Verwendung asynchroner Kommnukation zwischen Server und Client über 
-sogenannte `Ajax`-Anfragen, so wird Eines schnell klar: der Trend geht eindeutig 
+[Facebooks GraphQL -Biblothek](http://graphql.org/learn/), aber auch der sonst 
+üblichen Verwendung asynchroner Kommmunikation zwischen Server und Client über 
+sogenannte *Ajax*-Anfragen, so wird Eines schnell klar: der Trend geht eindeutig 
 weiter in Richtung der Programmlogik auf der Seite des Klienten.
 Jedoch ist unser Ziel weiterhin eine _rein funktionale Abbildung_ von Daten auf
 eine sogenannte View.
@@ -54,7 +52,7 @@ die Grafischen Benutzerschnittstellen eine pure Funktion des
 Applikationszustandes sein soll, wie lassen sich diese zwei Fakten dann in einer 
 Bibliothek miteinander vereinbaren?
 
-Hier kommen die oben genanten `actions` ins Spiel, welche in einem kurzen
+Hier kommen die oben genanten Actions ins Spiel, welche in einem kurzen
 Beispiel erläutert werden. Zu Beginn betrachten wir folgende Funktion, welche 
 zur Darstellung benötigte Daten von eine Server erfragt.
 
@@ -93,8 +91,9 @@ Betrachten wir nun folgenden Code:
 {% endhighlight %}
 
  
-`handle-action` bekommt hier eine beliebige Nachricht, kodiert in den `message`
-record. Wenn die Anfrage nun asynchron verarbeitet wurde sendet diese Funktion
+Die Funktion `handle-action` bekommt hier eine beliebige Nachricht,
+kodiert in den `message`-Record.
+Wenn die Anfrage nun asynchron verarbeitet wurde, sendet diese Funktion
 die Antwort an die anfragestellende Komponente, welche diese als reguläre 
 Nachricht  entgegennehmen und verarbeiten kann. Und genau das ist der 
 Mechanismus der `actions`, welchen wir im nächsten Abschnitt nochmal genauer
@@ -141,7 +140,7 @@ einer Liste von Social-Media-Posts darstellen, welche dem Zustand einer
     (post-detail
      (reacl2/opt :reaction (reacl2/pass-through-reaction this))
      detail)
-    ;; If there is no detail element, show all elemetns
+    ;; If there is no detail element, show all elements
     (dom/ul
      (map-indexed
       (fn [idx post]
@@ -168,12 +167,12 @@ eine solche Liste anzuzeigen ist (nämlich als ungeordnete Liste der Werte des
 der Elemente in der Liste, so sendet sich die Komponente selber die Nachricht
 `show-detail-msg` für diesen Post und übernimmt ihn in ihren eigenen, lokalen
 Zustand. In solch einem Fall wird dann im nächsten Render-Schritt die
-Detailansicht gezeigt. Eine weitere kleine Änderung in Reacl 2: `reaction`s 
+Detailansicht gezeigt. Eine weitere kleine Änderung in Reacl 2: Reactions
 werden nun als Option (via `reacl2/opt`) an die Kind-Komponente übergeben. In
 unserem Fall wollen wir nur die Nachricht der unterliegenden Komponente an die
 Obere weiterleiten und reagieren daher mit einem `pass-through-reaction`.
 
-Werfen wir nun einen Blick auf die Detail Ansicht:
+Werfen wir nun einen Blick auf die Detailansicht:
 
 {% highlight clojure %}
 (r/define-record-type back-msg (make-back-msg) back-msg? [])
@@ -200,7 +199,7 @@ Werfen wir nun einen Blick auf die Detail Ansicht:
                                     (dom/li comment))) comments))))))
   handle-message
   (fn [msg]
-    ;; Singal the parent component we want to navigate back.
+    ;; Signal the parent component we want to navigate back.
     (reacl2/return :app-state msg)))
 {% endhighlight %}
 
@@ -210,17 +209,18 @@ aus dem Post selbst und dessen Kommentaren besteht. Darüber hinaus kann über d
 den `:app-state` der Komponente "nach oben kommuniziert").
 
 Die Frage lautet nun: wie bekommen wir die Kommentare, welche auf einem Server
-liegen und Momentan noch nicht im Zustand der Applikation bekannt sind in die
+liegen und momentan noch nicht im Zustand der Applikation bekannt sind in die
 Detailkomponente integriert?
 
 ## Actions ##
 Genau hier kommen wir wieder auf die Actions zu sprechen. Anstatt wie sonst
 einen Weg zu finden, möglichst reibungslos innerhalb der Reacl-Komponente
-Seiteneffekte auszuführen greifen wir auf die oben definierte `handle-action`
-Funktion zurück. Da wir die Kommentare erst dann brauchen, wenn wir tatsächlich
+Seiteneffekte auszuführen greifen wir auf die oben definierte
+`handle-action`-Funktion zurück. 
+Da wir die Kommentare erst dann brauchen, wenn wir tatsächlich
 einen einzelnen Post rendern, sollten wir diese auch erst beim Start der
-Komponente anfragen. Das geht dank Reacl2 nun sehr einfach; es muss lediglich 
-ein Wert zur `post-detail` Klasse hinzugefügt werden, der beim Start eine
+Komponente anfragen. Das geht dank Reacl 2 nun sehr einfach; es muss lediglich 
+ein Wert zur `post-detail`-Klasse hinzugefügt werden, der beim Start eine
 entsprechende Aktion auslöst:
 
 {% highlight clojure %}
@@ -233,12 +233,12 @@ entsprechende Aktion auslöst:
 {% endhighlight %}
 
 Wir geben als `return` Wert einfach eine Action an. Diese wird von Reacl an unseren
-Action-handler, der den Request verarbeitet (bitte im Kopf behalten, dass
+Action-Handler, der den Request verarbeitet (bitte im Kopf behalten, dass
 das konkrete Absetzen des Requests hier nur als Platzhalter zu verstehen ist) 
 weitergeleitet.
 Schließlich, also nachdem der Request verarbeitet wurde und die Antwort 
 verfügbar ist benachrichtigt `handle-message` unsere Komponente per regulärer
-Reacl Nachricht. Der angepasste action-handler sieht nun so aus
+Reacl Nachricht. Der angepasste Action-Handler sieht nun so aus
 
 {% highlight clojure %}
 (defn handle-action
