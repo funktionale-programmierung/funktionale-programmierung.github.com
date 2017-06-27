@@ -9,24 +9,24 @@ page_title: "reacl2 und actions"
 
 Vor einigen Tagen schaffte [Reacl](https://github.com/active-group/reacl), eine von uns im Haus entwickelte, rein 
 funktionale Bibliothek um [React.js](https://facebook.github.io/react/), 
-den Sprung auf Version *2.0.0*. In diesem Artikel betrachten wir einen neu
-eingeführten Mechanismus etwas genauer: die Actions.
+den Sprung auf [Version *2.0.0* (Link zur Github Seite)](https://github.com/active-group/reacl/releases/tag/2.0.0). 
+In diesem Artikel betrachten wir einen neu eingeführten Mechanismus etwas genauer: die Actions.
 
 <!-- more start -->
 
 Schon seit einiger Zeit ist Reacl bei uns in verschiedensten Projekten in
-Verwendung um zuverlässige, schnelle und wartbare grafische Benutzeroberflächen 
+Verwendung, um zuverlässige, schnelle und wartbare grafische Benutzeroberflächen 
 (kurz *GUI*, vom englischen *Graphical User Interface*)
 zu konstruieren.
-Genug Zeit also, um die hierfür getroffenen Enscheidungen in der Realität zu 
+Genug Zeit, um die hierfür getroffenen Enscheidungen in der Realität zu 
 erproben.
 
 So ergeben sich in der neuesten Version einige Änderungen, welche allesamt aus 
 den Erfahrungen im Produktiveinsatz resultieren. Das zugrunde liegende Konzept 
 bleibt dabei allerdings gleich:
-weiterhin dreht sich alles rund um das Konzept der Reacl-Klassen (eine 
+Weiterhin dreht sich alles rund um das Konzept der Reacl-Klassen (eine 
 ausführlichere Beschreibung finden Sie 
-[in einem früheren Post hier in unserem Blog](http://funktionale-programmierung.de/2014/07/07/reacl.html)).
+[in einem früheren Blogeintrag](http://funktionale-programmierung.de/2014/07/07/reacl.html)).
 
 In diesem Artikel soll nun auf ein Detail der aktualisierten Verion im
 Besonderen eingegangen werden.
@@ -36,25 +36,25 @@ auftauchen. -->
 
 ## Seiteneffekte und Actions ##
 
-Ein neuer Mechanismus, welcher in Reacl 2 implementiert wurde ist der der 
+Ein neuer Mechanismus, welcher in Reacl 2 implementiert wurde, ist der der 
 *Action*s - eine Abstraktion mit dem Primärziel, Seiteneffekte zu kapseln 
 und deren Logik von der Darstellung zu trennen.
 Betrachtet man aktuelle Entwicklungen wie beispielsweise 
 [Facebooks GraphQL -Biblothek](http://graphql.org/learn/), aber auch der sonst 
 üblichen Verwendung (asynchroner) Kommmunikation zwischen Server und Client über 
-sogenannte *Ajax*-Anfragen, so wird Eines schnell klar: der Trend geht eindeutig 
+sogenannte *Ajax*-Anfragen, so wird eines schnell klar: Der Trend geht eindeutig 
 weiter in Richtung der Programmlogik auf der Seite des Klienten.
 Jedoch ist unser Ziel weiterhin eine _rein funktionale Abbildung_ von Daten auf
 eine sogenannte View.
-Hier versteckt sich allerdings ein nicht-triviales Problem: wenn einerseits die 
+Hier versteckt sich allerdings ein nicht-triviales Problem: Wenn einerseits die 
 Kommunikationslogik stärkeren Einzug in die Klientenlogik erhält, andererseits
-die Grafischen Benutzerschnittstellen eine pure Funktion des 
+die grafischen Benutzerschnittstellen eine pure Funktion des 
 Applikationszustandes sein soll, wie lassen sich diese zwei Fakten dann in einer 
 Bibliothek miteinander vereinbaren?
 
 Hier kommen die oben genanten Actions ins Spiel, welche in einem kurzen
 Beispiel erläutert werden. Zu Beginn betrachten wir folgende Funktion, welche 
-zur Darstellung benötigte Daten von eine Server erfragt.
+zur Darstellung benötigte Daten von einem Server erfragt.
 
 {% highlight clojure %}
 (defn fetch-data-from-server!
@@ -63,58 +63,59 @@ zur Darstellung benötigte Daten von eine Server erfragt.
   ...)
 {% endhighlight %}
 
-Was auch ohne konkrete Implementierung schnell klar ist: das hat nichts in der
+Was auch ohne konkrete Implementierung schnell klar ist: Das hat nichts in der
 Logik der Darstellung verloren!
 Greifen wir uns (unter einigen Problemen) nur die *Testbarkeit* einer Komponente 
 heraus, welche auf diese Weise innerhalb der GUI-Logik einen solchen Effekt 
 auslöst. Wie sollte ein Test für diese Komponente aussehen? Diese Frage lässt
-sich nicht ganz einfach beantworten (möglicherweise benötigen wir hierzu ein
-gemockte Serverimplementierung für die Client-seitigen Tests, eine selber nicht
-triviale Angelegenheit). Im Übrigen wollen wir im besten Fall auch das
-*Verhalten* einer Komponente testen und das am besten *unabhängig* von solcher
+sich nicht einfach beantworten (möglicherweise benötigen wir hierzu ein
+simulierte Serverimplementierung für die clientseitigen Tests, selbst ebenfalls
+keine triviale Angelegenheit). Im Übrigen wollen wir im besten Fall auch das
+*Verhalten* einer Komponente testen und Das am besten *unabhängig* von solcher
 Logik.
 Bislang ließ sich die Situation nur unelegant
 auflösen; an einem Punkt im GUI-Code *musste* nun diese Anfrage abgesetzt werden,
-ein Umstand, der die Idee der rein funktionalen Abbildung verlassen musste.
+ein Umstand, welcher der die Idee der rein funktionalen Abbildung zu wider liegt.
 
-Intuitiv wäre folgender Ansatz wohl der Bessere: möchte eine Komponente gewisse
+Intuitiv wäre folgender Ansatz wohl der Bessere: Möchte eine Komponente gewisse
 Daten erhalten, so stellt sie nicht selbst eine Anfrage an den Server. 
-Stattdessen benachrichtigt Sie ein Modul, welches selbst nicht Teil der
+Stattdessen benachrichtigt sie ein Modul, welches selbst nicht Teil der
 GUI-Logik ist und damit unabhängig von der Darstellungslogik agieren kann. 
 Betrachten wir nun folgenden Code:
 
 {% highlight clojure %}
-;; A record for storing requests and the recipient of the response.
+;; Ein Record, um Anfragen (`request`) und den Empfänger der
+;; Antwort (`recipient`) darzustellen.
 (define-record-type message
   (make-message recipient request) message?
-  [recipient message-recipient  ;; The component sending the request.
-   request message-request])    ;; The request message to send to the server.
+  [recipient message-recipient  ;; Referenz zur Empfängerkomponente.
+   request message-request])    ;; Anfrage, die an den Server gestellt werden soll.
 
 (defn handle-action
   [state req]
   (cond
     (message? req)
-    (let [;; Fetch some data from the server
+    (let [;; Suche Daten von einem Server.
           response-data (...)]
       (send-answer-to (message-recipient msg) repsonse-data))))
 {% endhighlight %}
 
  
 Die Funktion `handle-action` bekommt hier eine beliebige Nachricht,
-kodiert in den `message`-Record.
+kodiert im `message`-Record.
 Wenn die Anfrage nun verarbeitet wurde, sendet diese Funktion
 die Antwort an die anfragestellende Komponente, welche diese als reguläre 
-Nachricht  entgegennehmen und verarbeiten kann. Und genau das ist der 
+Nachricht entgegennimmt und verarbeiten kann. Das ist der 
 Mechanismus der `actions`, welchen wir im nächsten Abschnitt nochmal genauer
 unter die Lupe nehmen.
 
 ## Ein konkretes Beispiel ##
 
-Betrachten wir folgendes Szenario: eine GUI-Komponente soll den ein Element
-einer Liste von Social-Media-Posts darstellen, welche dem Zustand einer 
-überliegenden Komponente bereits bekannt sind. Wir beginnen damit, einen Record
-Type für Posts zu schreiben, welche sich aus einer Id und einem Body
-zusammensetzen.
+Betrachten wir folgendes Szenario: Eine GUI-Komponente soll ein Element
+einer Liste von Social-Media-Posts darstellen, welche eine überliegende Komponente 
+schon in ihrem Zustand hat. Wir beginnen damit einen Record
+Type für Posts zu schreiben. Dieser setzt sich auf einer Id und
+einem Body zusammen.
 
 {% highlight clojure %}
 (ns funktionale-programmierung.core
@@ -123,31 +124,32 @@ zusammensetzen.
             [reacl2.core :as reacl2 :include-macros true]
             [reacl2.dom :as dom]))
 
-;; Record type for posts. See below for details on steps 1-3.
+;; Record Typ für Posts. Details finden sich unter 1-3 unterhalb des Codeblocks.
 (r/define-record-type post
-  ;; 1. Constructor
+  ;; 1. Konstruktor
   (make-post id body)
-  ;; 2. Predicate
+  ;; 2. Prädikat
   post?
-  ;; 3. Selectors
+  ;; 3. Selektoren
   [id post-id
    body post-body])
 
 (def post-1 (make-post 0 "Reacl 2 is out! Time to celebrate!"))
 (def post-2 (make-post 1 "Go read the post on Funktionale Programmierung"))
 
-;; Collection of initial posts.
-(def initial-posts [post-1 post-2)
+;; Ein Vektor von initialen Posts.
+(def initial-posts [post-1 post-2])
 
-;; Example usage of those records.
+;; Beispielverwendung von damit erzeugen Records.
 (post? post-1)      ;; => true
 (post? 42)          ;; => false
 (post-id post-1)    ;; => 0
 (post-body post-1)  ;; => "Reacl 2 is out! Time to celebrate!"
 {% endhighlight %}
 
-Wir definieren hier mit Hilfe der aus der `active-clojure` Bibliothek stammenden
-Record-Types in drei Schritten zuerst einen neuen Typ:
+Wir definieren hier mit Hilfe der aus der `active-clojure` Bibliothek (zu finden
+[auf Github](https://github.com/active-group/active-clojure))
+stammenden `record-types` in drei Schritten zuerst einen neuen Typ:
 
 1. Hier definieren wir einen Datenkonstruktor. Dieser erwartet zwei Argumente:
    eine Id und einen Body. Damit lassen sich neue Instanzen des Typs `post`
@@ -191,43 +193,44 @@ folgt (eine Erklärung findet sich wieder darunter):
 Sehen wir uns diese Komponente im Detail an:
 
 1. In der ersten Zeile definieren wir die Reacl Klasse und geben ihr den Namen
-   `post-detail`. Unter `this` kann diese Komponente sich selbst Referenzieren,
-   Beispielsweise um sich selbst Nachrichten zu senden oder aber eine Referenz
+   `post-detail`. Unter `this` kann diese Komponente sich selbst referenzieren,
+   beispielsweise um sich selbst Nachrichten zu senden oder aber eine Referenz
    zu sich selbst an andere Komponenten weiterzugeben. Den App-State dieser
    Komponente nennen wir `post`, in welchem sich ein einzelner Post befindet und
    innerhalb des Rumpfes der Klasse unter diesem Namen erreichbar ist. Zuletzt
    findet sich dort ein Vektor, über den sich mögliche Argumente für diese 
    Klasse definieren lassen. Wir beschränken uns hier auf eine Referenz an die
-   aufrufende Komponente um ihr im Zweifel mitteilen zu können, dass "zurück"
-   Navigiert werden soll.
+   aufrufende Komponente (`parent`), um ihr im Zweifel mitteilen zu können,
+   dass zurück navigiert werden soll.
 2. In der nächsten Zeile definieren wir einen sogenannten `local-state`. Dieser
    ist ebenfalls innerhalb der ganzen Komponente erreichbar, lässt sich
-   allerdings auchh nur von dieser Lesen und nicht von außen abrufen. Beim
+   allerdings auch nur von dieser lesen und nicht von außen abrufen. Beim
    ersten Instanziieren der Komponente wird dies als *initialer* lokaler Zustand
    verwendet; hier binden wir unter dem Namen `comments` einen leeren Vektor.
-3. Anschließend an das Schlüsselwort `render` bestimmen wir, wie die Komponente
-   nun als HTML dazustellen ist. Reacl bring dafür den `reacl2.dom` Namespace
-   mit, mit Hilfe dessen sich HTML Knoten definieren lassen.
-4. Ein Teil des UIs ist ein "Zurück"-Button. Wird dieser von der Userin/dem User
+3. Anschließend bestimmen wir über das Schlüsselwort `render`, wie die Komponente
+   nun als HTML darzustellen ist. Reacl stellt dafür den `reacl2.dom` Namespace
+   bereit, mit Hilfe dessen sich HTML Knoten definieren lassen.
+4. Ein Teil des User Interfaces ist ein "Zurück"-Button. Wird dieser von der/dem
+   Benutzer*in
    bestätigt (`:onclick`) sendet die Komponente an den übergebenen Parent die
    Nachricht `:back`.
 5. Zum Schluss stellen wir die Kommantare dieses Posts dar. Dies erfolgt über
    eine ungeordnete Liste mit einem Listeneintrag für jeden Kommentar.
 
-Die Frage lautet nun: wie bekommen wir die Kommentare, welche auf einem Server
+Die Frage lautet nun: Wie bekommen wir die Kommentare, welche auf einem Server
 liegen und momentan noch nicht im Zustand der Applikation bekannt sind in die
 Detailkomponente integriert?
 
 ## Actions ##
 Genau hier kommen wir wieder auf die Actions zu sprechen. Anstatt wie sonst
 einen Weg zu finden, möglichst reibungslos innerhalb der Reacl-Komponente
-Seiteneffekte auszuführen greifen wir auf die oben definierte
+Seiteneffekte auszuführen, greifen wir auf die oben definierte
 `handle-action`-Funktion zurück. 
 Da wir die Kommentare erst dann brauchen, wenn wir tatsächlich
 einen einzelnen Post rendern, sollten wir diese auch erst beim Start der
 Komponente anfragen. Das geht dank Reacl 2 nun sehr einfach; es muss lediglich 
-ein Wert zur `post-detail`-Klasse hinzugefügt werden, der beim Start eine
-entsprechende Aktion auslöst:
+ein Wert zur `post-detail`-Klasse hinzugefügt werden. Dies löst
+beim Start eine ensprechende Aktion aus:
 
 {% highlight clojure %}
 (reacl2/defclass ...
@@ -235,15 +238,14 @@ entsprechende Aktion auslöst:
   component-did-mount
   #(reacl2/return
     :action
-    (make-messsage this [:fetch-comments-for-post (post-id post)])))
+    (make-message this [:fetch-comments-for-post (post-id post)])))
 {% endhighlight %}
 
-Wir geben als `return` Wert einfach eine Action an. Diese wird von Reacl an unseren
-Action-Handler, der den Request verarbeitet (bitte im Kopf behalten, dass
-das konkrete Absetzen des Requests hier nur als Platzhalter zu verstehen ist) 
-weitergeleitet.
-Schließlich, also nachdem der Request verarbeitet wurde und die Antwort 
-verfügbar ist benachrichtigt `handle-message` unsere Komponente per regulärer
+Wir geben als `return` Wert einfach eine Aktion an. Diese wird von Reacl an unseren
+Action-Handler, der den Request verarbeitet weitergeleitet (bitte im Kopf behalten, dass
+das konkrete Absetzen des Requests hier nur als Platzhalter zu verstehen ist).
+Am Schluss, also nachdem der Request verarbeitet wurde und die Antwort 
+verfügbar ist, benachrichtigt `handle-message` unsere Komponente mittels regulärer
 Reacl Nachricht.
 
 {% highlight clojure %}
@@ -260,7 +262,7 @@ Reacl Nachricht.
 
 {% endhighlight %}
 
-Im `handle-action` unserer Detailklasse können wir nun diese Antwort als
+In `handle-action` unserer Detailklasse können wir nun diese Antwort als
 reguläre Nachricht empfangen und in den Zustand übernehmen. Das sieht so aus:
 
 {% highlight clojure %}
@@ -273,10 +275,12 @@ reguläre Nachricht empfangen und in den Zustand übernehmen. Das sieht so aus:
 
 Empfängt unsere Detail-Komponente nun in ihrem Messagehandler eine Antwort,
 so übernimmt sie diese als ihren neuen, lokalen Zustand (welcher zu Anfang leer
-war).
+war). Damit werden die Kommentare im nächsten Renderschritt 
+angezeigt, ohne, dass wir uns innerhalb der Definition der
+`render`-Funktion explizit um deren Verfügbarkeit hätten kümmern
+müssen.
 
-Schließlich müssen wir die Antwort in unserem Messagehandler abfragen
-und das Resultat in unseren State übernehmen. Zuletzt müssen wir nur noch beim
+Zuletzt müssen wir nur noch beim
 Einhängen unserer App den `action-handler` registrieren und sind damit bereit,
 die App laufen zu lassen:
 
@@ -287,23 +291,13 @@ die App laufen zu lassen:
  (reacl2/opt :reduce-action handle-action))
 {% endhighlight %}
 
-<!-- ## Und die Testbarkeit? ## -->
-<!-- Eingehend führte ich eine Verbesserung der Testbarkeit als Argument für Reacl 2 -->
-<!-- an. Bezüglich dieser ist hier einiges gewonnen: `:actions` sind wie -->
-<!-- auch lokaler und "App" Zustand einfache Eigenschaften einer Komponentente. -->
-<!-- Was das bedeutet ist recht einfach -- eine Komponente kann bezüglich der von ihr -->
-<!-- ausgelösten Aktionen befragt werden, und zwar genau so, wie nach ihrem Zustand! -->
-
-<!-- Das Testen von Reacl-Komponenten sollte zu einem späteren Zeitpunkt hier im Blog  -->
-<!-- noch  einmal größere Beachtung finden. Zwischenzeitlich folgt hier noch ein -->
-<!-- kleines Beispiel anhand unserer Detailkomponente: -->
-
-
 ## Fazit ##
 Reacl in seiner aktuellsten Version macht (nicht nur!) bezüglich des Ziels, 
 eine rein  funktionale Abbildung des Zustandes zu sein, mithilfe der Actions 
 große Schritte in die richtige Richtung. Das Entkoppeln der Nebeneffekte stellt
 auf diese
 Weise kein Problem mehr dar, da die App vollständig parallel zur (asynchronen)
-Kommunikation mit einem Backend agieren kann; Unterscheidung zwischen side
-effects und Klientapplikationslogik ist damit hinfällig.
+Kommunikation mit einem Backend agieren kann; Unterscheidung zwischen Seiteneffekten
+und der Applikationslogik auf Seite des Clients ist damit hinfällig.
+
+Den hier vorgestellten Code [finden Sie auf Github](https://github.com/neshtea/reacl2post).
