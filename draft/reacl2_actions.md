@@ -9,7 +9,7 @@ page_title: "reacl2 und actions"
 
 Vor einigen Tagen schaffte [Reacl](https://github.com/active-group/reacl), eine von uns im Haus entwickelte, rein 
 funktionale Bibliothek um [React.js](https://facebook.github.io/react/), 
-den Sprung auf [Version *2.0.0* (Link zur Github Seite)](https://github.com/active-group/reacl/releases/tag/2.0.0). 
+den Sprung auf [Version *2.0.0* (Link zur Github-Seite)](https://github.com/active-group/reacl/releases/tag/2.0.0). 
 In diesem Artikel betrachten wir einen neu eingeführten Mechanismus etwas genauer: die Actions.
 
 <!-- more start -->
@@ -28,7 +28,7 @@ Weiterhin dreht sich alles rund um das Konzept der Reacl-Klassen (eine
 ausführlichere Beschreibung finden Sie 
 [in einem früheren Blogeintrag](http://funktionale-programmierung.de/2014/07/07/reacl.html)).
 
-In diesem Artikel soll nun auf ein Detail der aktualisierten Verion im
+In diesem Artikel soll nun auf ein Detail der aktualisierten Version im
 Besonderen eingegangen werden.
 
 <!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
@@ -37,13 +37,14 @@ auftauchen. -->
 ## Seiteneffekte und Actions ##
 
 Ein neuer Mechanismus, welcher in Reacl 2 implementiert wurde, ist der der 
-*Action*s - eine Abstraktion mit dem Primärziel, Seiteneffekte zu kapseln 
+*Actions* - eine Abstraktion mit dem Primärziel, Seiteneffekte zu kapseln 
 und deren Logik von der Darstellung zu trennen.
 Betrachtet man aktuelle Entwicklungen wie beispielsweise 
-[Facebooks GraphQL -Biblothek](http://graphql.org/learn/), aber auch der sonst 
-üblichen Verwendung (asynchroner) Kommmunikation zwischen Server und Client über 
+[Facebooks GraphQL -Biblothek](http://graphql.org/learn/), aber auch die 
+Verwendung (asynchroner) Kommmunikation zwischen Server und Client über 
 sogenannte *Ajax*-Anfragen, so wird eines schnell klar: Der Trend geht eindeutig 
 weiter in Richtung der Programmlogik auf der Seite des Klienten.
+
 Jedoch ist unser Ziel weiterhin eine _rein funktionale Abbildung_ von Daten auf
 eine sogenannte View.
 Hier versteckt sich allerdings ein nicht-triviales Problem: Wenn einerseits die 
@@ -75,7 +76,7 @@ keine triviale Angelegenheit). Im Übrigen wollen wir im besten Fall auch das
 Logik.
 Bislang ließ sich die Situation nur unelegant
 auflösen; an einem Punkt im GUI-Code *musste* nun diese Anfrage abgesetzt werden,
-ein Umstand, welcher der die Idee der rein funktionalen Abbildung zu wider liegt.
+ein Umstand, welcher der die Idee der rein funktionalen Abbildung zuwider liegt.
 
 Intuitiv wäre folgender Ansatz wohl der Bessere: Möchte eine Komponente gewisse
 Daten erhalten, so stellt sie nicht selbst eine Anfrage an den Server. 
@@ -106,15 +107,16 @@ kodiert im `message`-Record.
 Wenn die Anfrage nun verarbeitet wurde, sendet diese Funktion
 die Antwort an die anfragestellende Komponente, welche diese als reguläre 
 Nachricht entgegennimmt und verarbeiten kann. Das ist der 
-Mechanismus der `actions`, welchen wir im nächsten Abschnitt nochmal genauer
+Mechanismus der Actions, welchen wir im nächsten Abschnitt nochmal genauer
 unter die Lupe nehmen.
 
 ## Ein konkretes Beispiel ##
 
 Betrachten wir folgendes Szenario: Eine GUI-Komponente soll ein Element
 einer Liste von Social-Media-Posts darstellen, welche eine überliegende Komponente 
-schon in ihrem Zustand hat. Wir beginnen damit einen Record
-Type für Posts zu schreiben. Dieser setzt sich auf einer Id und
+schon in ihrem Zustand hat. Wir beginnen damit einen Recordtype für
+Posts zu schreiben.
+Dieser setzt sich auf einer Id und
 einem Body zusammen.
 
 {% highlight clojure %}
@@ -147,9 +149,9 @@ einem Body zusammen.
 (post-body post-1)  ;; => "Reacl 2 is out! Time to celebrate!"
 {% endhighlight %}
 
-Wir definieren hier mit Hilfe der aus der `active-clojure` Bibliothek (zu finden
+Wir definieren hier mit Hilfe der aus der Bibliothek *Active Clojure* (zu finden
 [auf Github](https://github.com/active-group/active-clojure))
-stammenden `record-types` in drei Schritten zuerst einen neuen Typ:
+stammenden Records in drei Schritten zuerst einen neuen Typ:
 
 1. Hier definieren wir einen Datenkonstruktor. Dieser erwartet zwei Argumente:
    eine Id und einen Body. Damit lassen sich neue Instanzen des Typs `post`
@@ -159,7 +161,7 @@ stammenden `record-types` in drei Schritten zuerst einen neuen Typ:
    welche jeweils aus dem Namen des Feldes (wie im Konsturktor angegeben) und
    dem gewählten Namen der Selektorfunktion besteht.
 
-Damit instaniziieren wir zwei Postings und binden diese im Anschluss in einem
+Damit erzeugen wir zwei Postings und binden diese im Anschluss in einem
 Vektor an den Namen `initial-posts`. In einer Reacl-Komponente ließen sich diese
 nun beispielsweise als ungeordnete Liste anzeigen. Wir wollen uns allerdings
 hier mit der Detailansicht dieser Posts beschäftigen. Diese definiert sich wie
@@ -192,7 +194,7 @@ folgt (eine Erklärung findet sich wieder darunter):
 
 Sehen wir uns diese Komponente im Detail an:
 
-1. In der ersten Zeile definieren wir die Reacl Klasse und geben ihr den Namen
+1. In der ersten Zeile definieren wir die Reacl-Klasse und geben ihr den Namen
    `post-detail`. Unter `this` kann diese Komponente sich selbst referenzieren,
    beispielsweise um sich selbst Nachrichten zu senden oder aber eine Referenz
    zu sich selbst an andere Komponenten weiterzugeben. Den App-State dieser
@@ -205,7 +207,7 @@ Sehen wir uns diese Komponente im Detail an:
 2. In der nächsten Zeile definieren wir einen sogenannten `local-state`. Dieser
    ist ebenfalls innerhalb der ganzen Komponente erreichbar, lässt sich
    allerdings auch nur von dieser lesen und nicht von außen abrufen. Beim
-   ersten Instanziieren der Komponente wird dies als *initialer* lokaler Zustand
+   ersten Erzeugen der Komponente wird dies als *initialer* lokaler Zustand
    verwendet; hier binden wir unter dem Namen `comments` einen leeren Vektor.
 3. Anschließend bestimmen wir über das Schlüsselwort `render`, wie die Komponente
    nun als HTML darzustellen ist. Reacl stellt dafür den `reacl2.dom` Namespace
@@ -246,7 +248,7 @@ Action-Handler, der den Request verarbeitet weitergeleitet (bitte im Kopf behalt
 das konkrete Absetzen des Requests hier nur als Platzhalter zu verstehen ist).
 Am Schluss, also nachdem der Request verarbeitet wurde und die Antwort 
 verfügbar ist, benachrichtigt `handle-message` unsere Komponente mittels regulärer
-Reacl Nachricht.
+Reacl-Nachricht.
 
 {% highlight clojure %}
 (defn handle-action
