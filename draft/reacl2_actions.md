@@ -76,7 +76,7 @@ keine triviale Angelegenheit). Im Übrigen wollen wir im besten Fall auch das
 Logik.
 Bislang ließ sich die Situation nur unelegant
 auflösen; an einem Punkt im GUI-Code *musste* nun diese Anfrage abgesetzt werden,
-ein Umstand, welcher der die Idee der rein funktionalen Abbildung zuwider liegt.
+ein Umstand, welcher der die Idee der rein funktionalen Abbildung zuwider läuft.
 
 Intuitiv wäre folgender Ansatz wohl der Bessere: Möchte eine Komponente gewisse
 Daten erhalten, so stellt sie nicht selbst eine Anfrage an den Server. 
