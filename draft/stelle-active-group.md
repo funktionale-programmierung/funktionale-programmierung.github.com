@@ -21,7 +21,7 @@ finden können.  In diesem Sinne kommt in jedem unserer Projekte
 funktionale Programmierung zum Einsatz.  Wir arbeiten in kleinen, gut
 eingespielten Teams.
 
-Wir suchen eine jemanden mit folgenden Eigenschaften:
+Wir suchen jemanden mit folgenden Eigenschaften:
 
 - Übung in der Softwareentwicklung mit funktionaler Programmierung,
   gleich in welcher Programmiersprache
