@@ -36,10 +36,13 @@ Wir suchen jemanden mit folgenden Eigenschaften:
 Ein abgeschlossenes Hochschulstudium, eine andere Form der Ausbildung
 oder Erfahrung in der Softwareentwicklung sollten Sie haben.
 
-Wir sind stolz auf flache Hierarchien sowie ein freundschaftliches und
-familienfreundliches Betriebsklima.  Teilzeitarbeit und flexible
-Arbeitszeiten können wir uns gut vorstellen.  Wir sind außerdem
-bestrebt, die Vielfalt unseres Teams zu verbessern.
+Wir bieten:
+
+- flache Hierarchien 
+- ein freundschaftliches und familienfreundliches Betriebsklima
+- flexible Arbeitszeiten
+
+Wir sind bestrebt, die Vielfalt unseres Teams zu verbessern.
 
 Wenn Sie Interesse oder Fragen haben, melden Sie sich bitte bei
 unserem Geschäftsführer Dr. Michael
