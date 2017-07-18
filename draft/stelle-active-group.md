@@ -6,7 +6,7 @@ author: michael-sperber
 tags: ["Job", "Stellenanzeige"]
 ---
 
-Die Active Group sucht eine Softwareentwicklerin oder einen
+Wir suchen eine Softwareentwicklerin oder einen
 Softwareentwickler mit Schwerpunkt in funktionaler Programmierung zur
 Verstärkung unseres Teams in Tübingen!
 
