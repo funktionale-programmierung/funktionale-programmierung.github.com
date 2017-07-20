@@ -51,7 +51,8 @@ mit einem Befehl gemacht:
 namens `cljs-hello`, in dem sich das Projekt befindet.  Dies kann mit
 einem weiteren Leiningen-Befehl in Betrieb genommen werden:
 
-    lein cljsbuild auto
+    cd cljs-hello
+    ./scripts/watch
 	
 Dieser Befehl sorgt dafür, dass der ClojureScript-Code im Projekt nach
 JavaScript compiliert wird und hält danach Ausschau nach Änderungen.
