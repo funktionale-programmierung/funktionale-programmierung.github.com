@@ -48,14 +48,14 @@ mit einem Befehl gemacht:
     lein new mies cljs-hello
 	
 `mies` ist der Name der Schablone - der Befehl macht ein Verzeichnis
-namens `cljs-hello`, in dem sich das Projekt befindet.  Dies kann mit
-einem weiteren Leiningen-Befehl in Betrieb genommen werden:
+namens `cljs-hello`, in dem sich das Projekt befindet.  Dieses kann wie folgt in Betrieb genommen werden:
 
-    lein cljsbuild auto
+    cd cljs-hello
+    ./scripts/watch
 	
-Dieser Befehl sorgt dafür, dass der ClojureScript-Code im Projekt nach
+Das Skript sorgt dafür, dass der ClojureScript-Code im Projekt nach
 JavaScript compiliert wird und hält danach Ausschau nach Änderungen.
-Wenn er welche feststellt, wird recompiliert.
+Wenn es welche feststellt, wird recompiliert.
 
 Wenn `lein cljsbuild` einmal durchgelaufen ist, ist die Datei
 `index.html` (ebenfalls von `lein new` generiert)
