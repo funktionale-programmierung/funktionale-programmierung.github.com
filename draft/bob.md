@@ -6,11 +6,13 @@ tags: ["BOB", "Konferenz"]
 ---
 
 Die [BOB 2017](http://bobkonf.de/2017/) war erstmalig ausverkauft und
-nach den Rückmeldungen der Besucherinnen und Besucher, eine tolle
+bot, so die Rückmeldungen der Besucherinnen und Besucher, eine tolle
 Konferenz mit hochkarätigen Fachvorträgen, Tutorials und interessanten
 Pausengesprächen.
 
-Für 2018 haben wir uns vorgenommen, das Programm noch interessanter zu
+2018 wird die BOB am 23. Februar am gewohnten Ort bei Lohmann &
+Birkner in Berlin stattfinden.
+Wir haben wir uns vorgenommen, das Programm noch interessanter zu
 gestalten.  Den Anfang wird [Alexandra
 Cárdenas](http://cargocollective.com/tiemposdelruido/Alexandra-Cardenas) 
 machen, die neben einer Livecoding-Performance auch ein
@@ -67,7 +69,7 @@ dieser Hinsicht besser zu werden.
 Schicken Sie uns also Ihren Vorschlag für einen Vortrag oder
 ein Tutorial!  Das geht auf
 [deutsch](http://bobkonf.de/2018/de/cfp.html) oder
-[englisch](http://bobkonf.de/2018/en/cfp.html) und wir rechnen wieder
+[englisch](http://bobkonf.de/2018/en/cfp.html).  Wir rechnen wieder
 mit zwei Vortrags-Tracks und zwei Tutorial-Tracks.
 
 Gibt es ein Tutorial oder ein Thema, das Sie gerne auf der Bob
