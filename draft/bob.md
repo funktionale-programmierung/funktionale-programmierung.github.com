@@ -6,7 +6,7 @@ tags: ["BOB", "Konferenz"]
 ---
 
 Die [BOB 2017](http://bobkonf.de/2017/) war erstmalig ausverkauft und
-war, so die Rückmeldungen der Besucherinnen und Besucher, eine tolle
+nach den Rückmeldungen der Besucherinnen und Besucher, eine tolle
 Konferenz mit hochkarätigen Fachvorträgen, Tutorials und interessanten
 Pausengesprächen.
 
@@ -16,13 +16,13 @@ Cárdenas](http://cargocollective.com/tiemposdelruido/Alexandra-Cardenas)
 machen, die neben einer Livecoding-Performance auch ein
 [Tutorial](http://bobkonf.de/2018/cardenas.html) geben wird.
 
-Die [Keynote](http://bobkonf.de/2018/andersen.html) besorgt dieses
-Jahr [Leif Andersen](http://leifandersen.net/) machen.  Sie wird uns
+Die [Keynote](http://bobkonf.de/2018/andersen.html) hält dieses
+Mal [Leif Andersen](http://leifandersen.net/).  Sie wird uns
 zeigen, wie einfach Design und Implementierung von DSLs in
 [Racket](http://racket-lang.org) funktionieren.
 
 Der [Call for Contributions](http://bobkonf.de/2018/cfp.html) ist
-eröffnet.  Schicken Sie uns also (bis zum **39. Oktober**) 
+eröffnet.  Schicken Sie uns also (bis zum **29. Oktober**) 
 Ihren Vorschlag für einen Vortrag oder ein Tutorial - das
 Programmkomittee freut sich darauf!  Es gibt wieder
 [Referentinnen-Zuschüsse](http://bobkonf.de/2018/de/speaker-grants.html)
@@ -70,14 +70,14 @@ ein Tutorial!  Das geht auf
 [englisch](http://bobkonf.de/2018/en/cfp.html) und wir rechnen wieder
 mit zwei Vortrags-Tracks und zwei Tutorial-Tracks.
 
-Gibt es ein Tutorial oder ein Thema, dass Sie gerne auf der Bob
+Gibt es ein Tutorial oder ein Thema, das Sie gerne auf der Bob
 sehen möchten und das bisher gefehlt hat?  Gern nehmen wir Ihre
 Vorschläge und Wünsche auf: Als Kommentare zu diesem Blog-Post, per
 E-Mail an `contact at bobkonf dot de` oder auch als
 Twitter-Posts, die `@BOBkonf` erwähnen.
 
 Auch 2018 arbeiten wir wieder eng mit der
-[:clojureD](http://clojured.de/) zusammen, die am 24.2. (also direkt am Tag danach)
+[:clojureD](http://clojured.de/) zusammen, die direkt am Tag danach am 24.2. 
 ebenfalls in Berlin stattfindet: 
 Es wird wieder Rabatte für die Besucher beider Konferenzen geben.
 
