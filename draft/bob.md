@@ -41,7 +41,7 @@ steigern können, von denen aber viele Entwickler noch zuwenig wissen.
 Die Themenliste haben wir dieses Mal wiederum stark erweitert.  Neben
 den Evergreens funktionale Programmierung, persistente Datenstrukturen
 und Datenbanken, Typen, formale Methoden für korrekte und robuste
-Software, Abstraktionen für Nebenläufigkeit und Parallelismus
+Software, Abstraktionen für Nebenläufigkeit und Parallelismus,
 Metaprogrammierung und probabilistische Programmierung sind diesmal
 neu dabei:
 
