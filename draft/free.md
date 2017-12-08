@@ -29,22 +29,22 @@ wir eine case-Klasse, die eine Adresse repräsentiert und ein Objekt, das Funkti
  
 {% highlight scala %}
 
-  case class Address(id: Long, name : String, street: String, town: String, zip: String, company: String)
+case class Address(id: Long, name : String, street: String, town: String, zip: String, company: String)
 
-  object AddressBookRepo {
-    def put(address : Address) : Future[Either[Throwable, Unit]] = ???
-    def get(id : Long) : Future[Either[Throwable, Option[Address]]] = ???
-    def delete(id : Address) : Future[Either[Throwable, Unit]] = ???
-    def filter(foo : Address => Boolean) : Future[Either[Throwable, List[Address]]] = ???
-      
-    def removeBielefeld : Future[Either[Throwable, List[Address]]] = {
-      val bielefeldFE = filter(_.town == "Bielefeld")
-      bielefeldFE.onSuccess { 
-        case Right(addresses) => addresses.foldMap(delete(_.id)).asRight()
-        case left @ Left(_) => Future.successful(left)
-      }
+object AddressBookRepo {
+  def put(address : Address) : Future[Either[Throwable, Unit]] = ???
+  def get(id : Long) : Future[Either[Throwable, Option[Address]]] = ???
+  def delete(id : Address) : Future[Either[Throwable, Unit]] = ???
+  def filter(foo : Address => Boolean) : Future[Either[Throwable, List[Address]]] = ???
+    
+  def removeBielefeld : Future[Either[Throwable, List[Address]]] = {
+    val bielefeldFE = filter(_.town == "Bielefeld")
+    bielefeldFE.onSuccess { 
+      case Right(addresses) => addresses.foldMap(delete(_.id)).asRight()
+      case left @ Left(_) => Future.successful(left)
     }
   }
+}
 {% endhighlight %}
 
 Die einfach Verwendung des Repos direkt aus der Businesslogik heraus, führt unmittelbar zu mehreren Problemen. Was stimmt damit nicht?
@@ -60,11 +60,11 @@ Um die Operationen als Entitäten zu formulieren, erstellen wir für jede Operat
 
 {% highlight scala %}
 
-  sealed trait AddressBookOp[A]
-  case class Put(address: Address) extends AddressBookOp[Unit]
-  case class Get(id : Long) extends AddressBookOp[Option[Address]]
-  case class Delete(address : Address) extends AddressBookOp[Unit]
-  case class Filter(foo : Address => Boolean) extends AddressBookOp[List[Address]]
+sealed trait AddressBookOp[A]
+case class Put(address: Address) extends AddressBookOp[Unit]
+case class Get(id : Long) extends AddressBookOp[Option[Address]]
+case class Delete(address : Address) extends AddressBookOp[Unit]
+case class Filter(foo : Address => Boolean) extends AddressBookOp[List[Address]]
     
 {% endhighlight %}
 
