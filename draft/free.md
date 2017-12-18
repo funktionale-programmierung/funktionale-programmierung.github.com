@@ -199,7 +199,7 @@ object DatabaseInterpreter {
 
 {% endhighlight %}
 
-Wie zu sehen ist, werden wir erst bei der Intepretation unseres Programmes mit den technischen Aspekten wie Futures und Throwables konfrontiert. Es existiert eine klare Trennung zwischen Beschreibung und Ausführung. Diese geht so weit, dass wir während der Formulierung der Logik nicht wissen müssen, wer unsere Beschreibung in welcher Form ausführt. Bisher haben wir zwar von Datenbanken oder Repos gesprochen. Doch nichts hindert uns daran, einen aktorbasierten Service als Adressbuch zu implementieren. Die entstehenden Beschreibung kann problemlos als Nachrichten zwischen Aktoren ausgetauscht werden. In dieser Unabhängigkeit liegt der Charme freier Monaden.
+Wie zu sehen ist, werden wir erst bei der Intepretation unseres Programmes mit den technischen Aspekten wie Futures und Throwables konfrontiert. Es existiert eine klare Trennung zwischen Beschreibung und Ausführung. Diese geht so weit, dass wir während der Formulierung der Logik nicht wissen müssen, wer unsere Beschreibung in welcher Form ausführt. Bisher haben wir zwar von Datenbanken oder Repos gesprochen. Doch nichts hindert uns daran, einen aktorbasierten Service als Adressbuch zu implementieren. Die entstehenden Beschreibungen können problemlos in Form von Nachrichten zwischen Aktoren ausgetauscht werden. In dieser Unabhängigkeit liegt der Charme freier Monaden.
 
 ## Worte zur Testbarkeit
 
