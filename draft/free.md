@@ -34,14 +34,16 @@ case class Address(id: Long, name : String, street: String, town: String, zip: S
 object AddressBookRepo {
   def put(address : Address) : Future[Either[Throwable, Unit]] = ???
   def get(id : Long) : Future[Either[Throwable, Option[Address]]] = ???
-  def delete(id : Address) : Future[Either[Throwable, Unit]] = ???
+  def delete(address : Address) : Future[Either[Throwable, Unit]] = ???
   def filter(foo : Address => Boolean) : Future[Either[Throwable, List[Address]]] = ???
-    
+
   def removeBielefeld : Future[Either[Throwable, List[Address]]] = {
     val bielefeldFE = filter(_.town == "Bielefeld")
-    bielefeldFE.onSuccess { 
-      case Right(addresses) => addresses.foldMap(delete(_.id)).asRight()
-      case left @ Left(_) => Future.successful(left)
+    for {
+      addressesE <-bielefeldFE
+    } yield {
+      addressesE.map(_.foreach(address => delete(address)))
+      addressesE
     }
   }
 }
