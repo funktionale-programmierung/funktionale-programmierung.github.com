@@ -132,7 +132,7 @@ Unsere neue Version von `removeBielefeld` gibt ein Wert vom Typ `AddressBookOpF[
 def renameBielefeld: AddressBookOpF[Unit] = for {
   for {
     bielefelders <- removeBielefeld
-    _ <- bielefelders.traverse(address => put(address.copy(town="not existent")))
+    _ <- bielefelders.traverse(address => put(address.copy(town="not existant")))
   } yield ()
 }
 
