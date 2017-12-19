@@ -209,7 +209,7 @@ Ein großer Vorteil der Trennung von Beschreibung und Ausführung ist die separa
 
 Denkbar wäre jedoch die Implementierung eines sehr einfachen Testinterpreters, der die ausgeführten Anweisungen beispielsweise lediglich traced. Allerdings muss hierzu in einigen Fällen trotzdem das Verhalten implementiert werden, insbesondere dann, wenn bestimmte Operationen nur bedingt durch gebundene Daten ausgeführt werden. Wollen wir die enstehenden Programme also inhaltlich testen, müssen wir ein Trade-Off zwischen Genauigkeit und Fehleranfälligkeit der Interpretation eingehen.
 
-Wird konsequent zwischen Beschreibung und Ausführung getrennt, können dennoch große Codeteile in Unit-Tests abgedeckt werden, ohne eine integrierte Umgebung bieten zu müssen. Diese Entkopplung macht das Testen unserer Businesslogik oft schon um vieles einfacher. Eine mögliche Synergie, die dies verdeutlicht, ist in Kombination mit dem aktorbasierten [Observer-Pattern](https://alexn.org/blog/2015/12/15/avoid-javaisms-code-smell.html)
+Wird konsequent zwischen Beschreibung und Ausführung getrennt, können dennoch große Codeteile in Unit-Tests abgedeckt werden, ohne eine integrierte Umgebung bieten zu müssen. Diese Entkopplung macht das Testen unserer Businesslogik oft schon um vieles einfacher. Eine mögliche Synergie, die dies verdeutlicht, ist in Kombination mit dem aktorbasierten [Observer-Pattern](https://alexn.org/blog/2015/12/15/avoid-javaisms-code-smell.html). Dabei helfen uns Nachrichten in Form unserer Beschreibungen anhand der freien Monade bei einer sauberer Trennung zwischen Services und trotzdem ist der Austausch flexibler und komplexer Anweisungen möglich. Alle Einheiten sind separat testbar und die Businesslogik kann außerhalb der Integration getestet werden. 
 
 
 ## Resumé 
