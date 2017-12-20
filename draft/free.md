@@ -7,7 +7,7 @@ tags: ["Praxis", "freie", "Monade", "Scala"]
 ---
 
 Eine enge Kopplung der Beschreibung von Programmteilen und deren Ausführung führt unweigerlich
-zu Problemen, spätestens beim Testen der Software. Daher soll in diesem Artikel anhand von 
+zu Problemen, spätestens beim Testen der Software. Daher wird in diesem Artikel anhand von 
 praktischem Code erklärt werden, wie uns das Konzept der freien Monade dabei hilft,
 Beschreibung und Ausführung sauber und elegant voneinander zu trennen.
 
@@ -16,7 +16,7 @@ Beschreibung und Ausführung sauber und elegant voneinander zu trennen.
 
 ## Voraussetzungen
 
-Alle Code-Beispiele in diesem Artikel sind mit [Scala](https://de.wikipedia.org/wiki/Scala_(Programmiersprache)) implementiert. Da dieser Artikel praxisorientiert ist, werden die Beispiele unter Zuhilfenahme der Bibliothek [Cats](https://typelevel.org/cats/) implementiert. Zwar wird die freie Monade nicht theoretisch erklärt, dennoch sollte das 
+Alle Code-Beispiele in diesem Artikel sind mit [Scala](https://www.scala-lang.org) implementiert. Da dieser Artikel praxisorientiert ist, werden die Beispiele unter Zuhilfenahme der Bibliothek [Cats](https://typelevel.org/cats/) implementiert. Zwar wird die freie Monade nicht theoretisch erklärt, dennoch sollte das 
 Konzept der Monaden geläufig sein. Eine tolle und einfache Einführung hierzu bietet [Functors, Applicatives, And Monads in Pictures](http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html). Für den theoretisch interessierten Leser werden an einigen Stellen weiterführende Links bereitgestellt.
 
 Um einen einfachen Einstieg zu ermöglichen, sehen wir uns ein typisches Problem in Verbindung mit Seiteneffekten an.
@@ -70,14 +70,14 @@ case class Filter(foo : Address => Boolean) extends AddressBookOp[List[Address]]
     
 {% endhighlight %}
 
-Der Typ-Parameter `A` des traits `AdressBookOp[A]` bestimmt dabei den Rückgabetyp unserer Operationen. Zwar lassen sich mit diesen Operationen einfache Programme beschreiben, etwa durch Listen von Befehlen, es lassen sich allerdings keine komplexe Zusammenhänge formulieren. Es ist nicht möglich gelesene Daten zu referenzieren, ohne einen Seiteneffekt auszuführen, wie zum Beispiel in der Funktion `removeBielefeld`. Gerne hätten wir hier monadische Syntax, um Rückgabewerte (ohne Ausführung des Effekts) binden zu können.
+Der Typ-Parameter `A` des traits `AdressBookOp[A]` bestimmt dabei den Rückgabetyp unserer Operationen. Zwar lassen sich mit diesen Operationen einfache Programme beschreiben, etwa durch Listen von Befehlen, es lassen sich allerdings keine komplexe Zusammenhänge formulieren. Es ist nicht möglich gelesene Daten zu referenzieren, ohne einen Seiteneffekt auszuführen, wie zum Beispiel in der Funktion `removeBielefeld`. Gerne hätten wir hier eine Möglichkeit, um Rückgabewerte (ohne Ausführung des Effekts) binden zu können.
 
 
 ## Freie Monade, zur Rettung!
 
-Wir verwenden in diesem Artikel die freie Monade aus Cats. Cats ist eine Scala-Bibliothek die mächtige Abstraktionen aus der Funktionalen Programmierung bereitstellt. Wir werden neben der Funktionalität zu freien Monaden weitere Abstraktionen, wie die Natürliche Transformationen aus dieser Bibliothek verwenden. Die freie Monade wird uns helfen, die Einschränkungen unserer kleinen Sprache zu überwinden.
+Wir verwenden in diesem Artikel die freie Monade aus Cats. Cats ist eine Scala-Bibliothek, die mächtige Abstraktionen aus der Funktionalen Programmierung bereitstellt. Wir werden neben der Funktionalität zu freien Monaden weitere Abstraktionen, wie die Natürliche Transformationen aus dieser Bibliothek verwenden. Die freie Monade wird uns helfen, die Einschränkungen unserer kleinen Sprache zu überwinden.
 
-Um unsere Befehle mit der freien Monade aus Cats verwenden zu können, müssen wir diese in die Monade heben. Dazu erstellen wir für jede Funktion einen sogenannten Smart-Konstruktor für jeden Befehl:
+Um unsere Befehle mit der freien Monade aus Cats verwenden zu können, müssen wir diese in die Monade heben. Dazu erstellen wir für jeden Befehl einen sogenannten Smart-Konstruktor:
 
 
 {% highlight scala %}
@@ -102,7 +102,7 @@ object FreeAddressBookOps {
 
 {% endhighlight %}
     
-Die Smart-Konstruktoren nehmen jeweils die Parameter der `AddressBookOps` entgegen, erzeugen die Operation und verwenden `liftF`, um die Operation in die freie Monade zu heben. Zurück kommt ein Wert vom Typ `AddressBookOp[A]` (Alias für `Free[AddressBookOp, A]`), wobei `A` der erwartete Rückgabewert der Operation ist. Die Definition dieser Smart-Konstruktoren macht die Beschreibung der späteren Programme einfacher. Die Funktion `removeBielefeld` ist mithilfe der Definition einfach monadisch beschreibbar, insbesondere lassen sich nun Zwischenergebnisse binden:
+Die Smart-Konstruktoren nehmen jeweils die Parameter der `AddressBookOps` entgegen, erzeugen die Operation und verwenden `liftF`, um die Operation in die freie Monade zu heben. Zurück kommt ein Wert vom Typ `AddressBookOpF[A]` (Alias für `Free[AddressBookOp, A]`), wobei `A` der erwartete Rückgabewert der Operation ist. Die Definition dieser Smart-Konstruktoren macht die Beschreibung der späteren Programme einfacher. Die Funktion `removeBielefeld` ist mithilfe der Definition einfach monadisch beschreibbar. Insbesondere lassen sich Zwischenergebnisse binden:
 
 
 {% highlight scala %}
@@ -122,7 +122,7 @@ object FreeApp {
 
 {% endhighlight %}
 
-Durch die Bindung der Zwischenwerte lassen sich nun komplexe Programme formulieren, ohne über Details der Ausführung sprechen zu müssen: Bei der Formulierung des Programmes wird weder über Throwables noch über Futures nachgedacht. `traverse` ist eine weitere kleine Hilfestellung aus der Cats-Bibliothek, für die wir die zusätzlichen Cats-Imports benötigen. Das Ablaufen der Zwischenergebnisliste liese sich auch durch `fold` Beschreiben.
+Durch die Bindung der Zwischenwerte lassen sich komplexe Programme formulieren, ohne über Details der Ausführung sprechen zu müssen: Bei der Formulierung des Programmes wird weder über Throwables noch über Futures nachgedacht. `traverse` ist eine weitere kleine Hilfestellung aus der Cats-Bibliothek, für die wir die zusätzlichen Cats-Imports benötigen. Das Ablaufen der Zwischenergebnisliste liese sich auch durch `fold` Beschreiben.
 
 Unsere neue Version von `removeBielefeld` gibt ein Wert vom Typ `AddressBookOpF[List[Address]]` zurück. Diese Programmbeschreibung ist kombinier- und damit wiederverwendbar:
 
@@ -140,7 +140,7 @@ def renameBielefeld: AddressBookOpF[Unit] = for {
 
 ## Die Ausführung ##
 
-Wir haben nun also eine mächtige Repräsentation, um Operationen zu repräsentieren, Zwischenergebnisse zu referenzieren und Abstraktionen zu kombinieren. Was fehlt, ist die Ausführung. Dazu benötigen wir einen Interpreter, der `AddressBookOpF[List[Address]]` entgegen nimmt und interpetiert (oder kompiliert). Dazu definieren wie eine [Natürliche Transformation](https://de.wikipedia.org/wiki/Kategorientheorie#Nat.C3.BCrliche_Transformation). Salopp gesagt, überführen wir unsere Programme aus der freien Monade in eine Zielmonade. Im folgenden Beispiel wird die [State-Monade](https://typelevel.org/cats/datatypes/state.html) als einfacher Adressspeicher verwendet:
+Wir haben nun also eine mächtige Repräsentation, um Operationen zu repräsentieren, Zwischenergebnisse zu referenzieren und Abstraktionen zu kombinieren. Was fehlt, ist die Ausführung. Dazu benötigen wir einen Interpreter, der `AddressBookOpF[List[Address]]` entgegen nimmt und interpetiert (oder kompiliert). Dazu definieren wie eine [Natürliche Transformation](https://de.wikipedia.org/wiki/Kategorientheorie#Nat.C3.BCrliche_Transformation). Salopp gesagt überführen wir unsere Programme aus der freien Monade in eine Zielmonade. Im folgenden Beispiel wird die [State-Monade](https://typelevel.org/cats/datatypes/state.html) als einfacher Adressspeicher verwendet:
 
 {% highlight scala %}
 
@@ -164,7 +164,7 @@ object StateInterpreter {
 
 {% endhighlight %}
 
-In Cats wird die Natürliche Transformation von `A` nach `B` durch den Typ `A ~> B` beschrieben (eine Funktor-Transformation vom Typ `FunktionK`). In unserem Fall überführen wir `AddressBookOps` nach `AddressStatate`. Der Interpreter lässt sich nun durch die Verwendung von `foldMap` auf Programm vom Typ `AddressBookOpF` anwenden:
+In Cats wird die Natürliche Transformation von `A` nach `B` durch den Typ `A ~> B` beschrieben (eine Funktor-Transformation vom Typ `FunktionK`). In unserem Fall überführen wir `AddressBookOps` nach `AddressState`. Der Interpreter lässt sich durch die Verwendung von `foldMap` auf ein Programm vom Typ `AddressBookOpF` anwenden:
 
 
 {% highlight scala %}
@@ -201,7 +201,9 @@ object DatabaseInterpreter {
 
 {% endhighlight %}
 
-Wie zu sehen ist, werden wir erst bei der Intepretation unseres Programmes mit den technischen Aspekten wie Futures und Throwables konfrontiert. Es existiert eine klare Trennung zwischen Beschreibung und Ausführung. Diese geht so weit, dass wir während der Formulierung der Logik nicht wissen müssen, wer unsere Beschreibung in welcher Form ausführt. Bisher haben wir zwar von Datenbanken oder Repos gesprochen. Doch nichts hindert uns daran, einen aktorbasierten Service als Adressbuch zu implementieren. Die entstehenden Beschreibungen können problemlos in Form von Nachrichten zwischen Aktoren ausgetauscht werden. In dieser Unabhängigkeit liegt der Charme freier Monaden.
+Wie zu sehen ist, werden wir erst bei der Intepretation unseres Programmes mit den technischen Aspekten wie Futures und Throwables konfrontiert. Es existiert eine klare Trennung zwischen Beschreibung und Ausführung. Diese geht so weit, dass wir während der Formulierung der Logik nicht wissen müssen, wer unsere Beschreibung in welcher Form ausführt. Bisher haben wir zwar von Datenbanken oder Repos gesprochen. Doch nichts hindert uns daran, einen aktorbasierten Service als Adressbuch zu implementieren. Die entstehenden Beschreibungen können problemlos in Form von Nachrichten zwischen Aktoren ausgetauscht werden. 
+
+In dieser Unabhängigkeit liegt der Charme freier Monaden.
 
 ## Worte zur Testbarkeit
 
