@@ -127,3 +127,9 @@ authors:
     image: /author/marco-schneider.jpg
     href: "https://twitter.com/eskape"
     about: 'Marco Schneider ist seit Abschluss (M.Sc., in Medieninformatik) seines Studiums an der Universität Tübingen Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a>. Sein besonderes Interesse gilt der funktionalen Programmierung und der künstlichen Intelligenz.'
+  simon-schulz:
+    name: Simon Schulz
+    image: /author/simon-schulz.jpeg
+    href:
+    about: 'Simon Schulz ist Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a>. Sein besonderes Interesse gilt der funktionalen Programmierung und Softwarearchitektur.'
+
