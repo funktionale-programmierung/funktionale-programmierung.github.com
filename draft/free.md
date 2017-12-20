@@ -2,7 +2,7 @@
 layout: post
 description: "Einführung in freie Monaden"
 title: "Freie Monaden oder: Wie ich lernte, die Unabhängigkeit zu lieben"
-author: Simon-Schulz
+author: simon-schulz
 tags: ["Praxis", "freie", "Monade", "Scala"]
 ---
 
