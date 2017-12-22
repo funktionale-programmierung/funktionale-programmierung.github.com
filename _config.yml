@@ -48,7 +48,6 @@ authors:
   andreas-bernauer:
     name: Andreas Bernauer
     image: /author/andreas-bernauer.jpg
-    href: "http://www.active-group.de/unternehmen/bernauer.html"
     about: '<a href="http://www.active-group.de/unternehmen/bernauer.html">Dr. Andreas Bernauer</a> ist Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a> und beschäftigt sich seit über 10 Jahren mit funktionaler Programmierung.'
   uwe-schmidt:
     name: Uwe Schmidt
@@ -86,8 +85,7 @@ authors:
   helmut-dobretzberger:
     name: Helmut Dobretzberger
     image: /author/helmut-dobretzberger.jpg
-    href: "http://www.active-group.de/unternehmen/dobretzberger.html"
-    about: '<a href="http://www.active-group.de/unternehmen/dobretzberger.html">Helmut Dobretzberger</a> ist seit 2003 Softwareentwickler, und bringt Projekte bei der <a href="http://www.active-group.de">Active Group</a> mit Hilfe funktionaler Programmierung voran.'
+    about: 'Helmut Dobretzberger ist seit 2003 Softwareentwickler, und bringt Projekte bei der <a href="http://www.active-group.de">Active Group</a> mit Hilfe funktionaler Programmierung voran.'
   andres-loeh:
     name: Andres Löh
     image: /author/andres-loeh.jpg
@@ -110,8 +108,7 @@ authors:
   alex-gremm:
     name: Alexandros Gremm
     image: /author/alex-gremm.png
-    href: "http://www.active-group.de/unternehmen/gremm.html"
-    about: '<a href="http://www.active-group.de/unternehmen/gremm.html">Alexandros Gremm</a> hat einen Master-Abschluss in Informatik von der Universität Tübingen. Sein besonderes Interesse gilt dem High-Performance-Computing in der Funktionalen Programmierung, insbesondere in Haskell.'
+    about: 'Alexandros Gremm hat einen Master-Abschluss in Informatik von der Universität Tübingen. Sein besonderes Interesse gilt dem High-Performance-Computing in der Funktionalen Programmierung, insbesondere in Haskell.'
   dierk-koenig:
     name: Dierk König
     image: /author/dierk-koenig.jpg
