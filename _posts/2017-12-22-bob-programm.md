@@ -20,7 +20,8 @@ läuft; bis zum 22.1. gibt es noch Frühbucherrabatt.
 
 <!-- more start -->
 
-Wir haben uns bemüht, die Konferenzbeiträge für möglichst viele Teilnehmer
+Wir haben uns bemüht, die Konferenzbeiträge für möglichst viele
+Teilnehmerinnen und Teilnehmer
 zugänglich zu machen.  So ist es möglich, den ganzen Tag mit
 englischsprachigen Talks und Tutorials zu füllen, es gibt aber auch
 viele deutsche Beiträge.
@@ -40,7 +41,7 @@ Cárdenas](http://cargocollective.com/tiemposdelruido).
 
 Bei den [Vorträgen](http://bobkonf.de/2018/program.html) geht es
 natürlich wieder oft um funktionale Programmierung.  Besonders stark
-ist ein weiteres mal Haskell [hier](http://bobkonf.de/2018/andjelkovic.html),
+ist ein weiteres Mal Haskell [hier](http://bobkonf.de/2018/andjelkovic.html),
 [hier](http://bobkonf.de/2018/volkov.html) und
 [hier](http://bobkonf.de/2018/wickstroem.html), aber auch
 [Racket](http://bobkonf.de/2018/andersen.html) und
@@ -48,7 +49,7 @@ ist ein weiteres mal Haskell [hier](http://bobkonf.de/2018/andjelkovic.html),
 vertreten.
 
 Neben Programmiersprachen sind u.a. formale Spezifikation
-[hier](http://bobkonf.de/2018/kant.html) und
+[hier](http://bobkonf.de/2018/kant.html),
 [hier](http://bobkonf.de/2018/mehnert.html) und
 [Verifikation](http://bobkonf.de/2018/senier.html) vertreten,
 [funktionale Datenstrukturen](http://bobkonf.de/2018/wiedeking.html),
@@ -56,7 +57,6 @@ Neben Programmiersprachen sind u.a. formale Spezifikation
 [maschinelles Lernen](http://bobkonf.de/2018/hung.html) und sogar der
 Zusammenhang zwischen der [Arbeit für Menschenrechte und funktionaler
 Programmierung](http://bobkonf.de/2018/christo.html).
-
 
 ## Tutorials
 
@@ -84,7 +84,8 @@ Die BOB findet ein weiteres mal auf dem
 statt.  Die Anmeldung ist
 [online](http://bobkonf.de/2018/registration.html) möglich.  Bis zum
 22.1. gibt es noch Frühbucher-Rabatt, danach wird es etwas teurer.  Es
-gibt außerdem eine Reihe von Rabatten und kostenlosen Tickets
+gibt außerdem eine Reihe von Rabatten und kostenlosen Tickets für
+unterrepräsentierte Gruppen.
 
 Bereits zugeteilt ist die Unterstützung für Reise- und
 Übernachtungskosten für Teilnehmergruppen, die bei der Konferenz
