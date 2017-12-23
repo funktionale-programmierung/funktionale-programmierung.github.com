@@ -33,7 +33,7 @@ In der [Keynote](http://bobkonf.de/2018/andersen.html) wird
 zeigen, wie einfach Design und Implementierung von DSLs in
 [Racket](http://racket-lang.org) funktionieren.
 
-Zum ersten mal gibt es zur Eröffnung auch eine *Keynote-Performance*]
+Zum ersten mal gibt es zur Eröffnung auch eine *Keynote-Performance*
 von der renommierten Live-Coding-Künstlerin [Alexandra
 Cárdenas](http://cargocollective.com/tiemposdelruido).
 
