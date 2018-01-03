@@ -6,7 +6,7 @@ author: michael-sperber
 tags: ["BOB", "Konferenz"]
 ---
 
-![BOB 2018](http://bobkonf.de/images/bob_head-2018.png)
+![BOB 2018](http://bobkonf.de/images/bob_head-2018-date.png)
 
 Die Vorbereitungen für die [BOB 2018](http://bobkonf.de/2018/) sind
 abgeschlossen: Am Freitag, 23.2.2018 findet die dritte Iteration in
