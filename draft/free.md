@@ -51,13 +51,13 @@ object AddressBookRepo {
 
 Die einfach Verwendung des Repos direkt aus der Businesslogik heraus, führt unmittelbar zu mehreren Problemen. Was stimmt damit nicht?
 
-* *Seiteneffekt werden sofort ausgeführt*: Ein Grundgedanke der funktionalen Programmierung ist die Erstellung von referentiell transparenten Programmen, also ohne Seiteneffekte. Diese Seiteneffekt sollen möglichst erst "am Ende des Universum" ausgeführt werden. Im Beispiel würden Effekte jedoch verstreut an vielen Stellen im Programm ausgeführt werden. Insbesondere würde die Funktion `removeBielefeld` bei Mehrfachausführung unterschiedliche Ergebnisse liefern.
+* *Seiteneffekt werden sofort ausgeführt*: Ein Grundgedanke der funktionalen Programmierung ist die Erstellung von referentiell transparenten Programmen, also ohne Seiteneffekte. Diese Seiteneffekt sollen möglichst erst "am Ende des Universum" ausgeführt werden. Im Beispiel würden Effekte jedoch verstreut an vielen Stellen im Programm ausgeführt werden. Insbesondere würde die Funktion `removeBielefeld` bei Mehrfachausführung unterschiedliche Ergebnisse liefern. Zudem sind Programme, bei denen Seiteneffekte derart verstreut implementiert sind schwer zu testen, da selbst kleine Abschnitte nicht ohne eine integrative Umgebung ausgeführt werden können.
 * *Die Schnittstelle ist zu speziell:* Die Trennung von Beschreibung und Ausführung ist ein wichtiges Konzept, das zu modularem, exzellent wartbarem und testbarem Code führt. Bei der Beschreibung unserer Adressbuch-Operationen sollten wir uns nicht mit Futures, Eithers und Throwables abmühen müssen. Mehr noch, setzen wir damit ein bestimmtes Datenbank voraus (in diesem Fall ein asynchrones, das Exceptions verwendet), das damit zu stark in der Business-Logik unserer Anwendung verzahnt und somit nur schwer austauschbar wäre.
 
 Ein erster Schritt, um derartige Aspekte zu entkoppeln, ist die Formulierung der Operationen als eigene Entitäten. Damit ist es uns möglich, die nötigen Operationen als Daten zu repräsentieren, die dann erst später ausgeführt werden.
 
 ## Unsere kleine Sprache
-
+ut
 Um die Operationen als Entitäten zu formulieren, erstellen wir für jede Operation eine Datenrepräsentation. Diese Repräsentation fassen wir als algebraischen Summentyp zusammen:
 
 {% highlight scala %}
@@ -75,7 +75,7 @@ Der Typ-Parameter `A` des traits `AdressBookOp[A]` bestimmt dabei den Rückgabet
 
 ## Freie Monade, zur Rettung!
 
-Wir verwenden in diesem Artikel die freie Monade aus Cats. Cats ist eine Scala-Bibliothek, die mächtige Abstraktionen aus der Funktionalen Programmierung bereitstellt. Wir werden neben der Funktionalität zu freien Monaden weitere Abstraktionen, wie die Natürliche Transformationen aus dieser Bibliothek verwenden. Die freie Monade wird uns helfen, die Einschränkungen unserer kleinen Sprache zu überwinden.
+Wir verwenden in diesem Artikel die freie Monade aus Cats. Cats ist eine Scala-Bibliothek, die mächtige Abstraktionen aus der Funktionalen Programmierung bereitstellt. Wir werden neben der Funktionalität zu freien Monaden weitere Abstraktionen, wie die Natürliche Transformationen aus dieser Bibliothek verwenden. Die freie Monade wird uns helfen, die Einschränkungen unserer kleinen Sprache zu überwinden. Eine systematische Hinleitung zur internen Funktionalität von freien Monaden kann [in diesem Artikel](https://www.heise.de/developer/artikel/Dependency-Injection-in-der-funktionalen-Programmierung-3115570.html?wt_mc=rss.developer.beitrag.atom) nachgelesen werden.
 
 Um unsere Befehle mit der freien Monade aus Cats verwenden zu können, müssen wir diese in die Monade heben. Dazu erstellen wir für jeden Befehl einen sogenannten Smart-Konstruktor:
 
