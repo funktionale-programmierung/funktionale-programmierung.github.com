@@ -8,7 +8,7 @@ tags: ["Praxis", "freie", "Monade", "Scala"]
 
 Eine enge Kopplung der Beschreibung von Programmteilen und deren Ausführung führt unweigerlich
 zu Problemen, spätestens beim Testen der Software. Daher wird in diesem Artikel anhand von 
-praktischem Code erklärt werden, wie uns das Konzept der freien Monade dabei hilft,
+praktischem Code erklärt, wie uns das Konzept der freien Monade dabei hilft,
 Beschreibung und Ausführung sauber und elegant voneinander zu trennen.
 
 
@@ -16,7 +16,7 @@ Beschreibung und Ausführung sauber und elegant voneinander zu trennen.
 
 ## Voraussetzungen
 
-Alle Code-Beispiele in diesem Artikel sind mit [Scala](https://www.scala-lang.org) implementiert. Da dieser Artikel praxisorientiert ist, werden die Beispiele unter Zuhilfenahme der Bibliothek [Cats](https://typelevel.org/cats/) implementiert. Zwar wird die freie Monade nicht theoretisch erklärt, dennoch sollte das 
+Alle Code-Beispiele in diesem Artikel sind mit [Scala](https://www.scala-lang.org) implementiert. Da dieser Artikel praxisorientiert ist, werden die Beispiele unter Zuhilfenahme der Bibliothek [Cats](https://typelevel.org/cats/) umgesetzt. Zwar wird die freie Monade nicht theoretisch erklärt, dennoch sollte das 
 Konzept der Monaden geläufig sein. Eine tolle und einfache Einführung hierzu bietet [Functors, Applicatives, And Monads in Pictures](http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html). Für den theoretisch interessierten Leser werden an einigen Stellen weiterführende Links bereitgestellt.
 
 Um einen einfachen Einstieg zu ermöglichen, sehen wir uns ein typisches Problem in Verbindung mit Seiteneffekten an.
@@ -58,7 +58,7 @@ Die einfach Verwendung des Repos direkt aus der Businesslogik heraus, führt unm
 Ein erster Schritt, um derartige Aspekte zu entkoppeln, ist die Formulierung der Operationen als eigene Entitäten. Damit ist es uns möglich, die nötigen Operationen als Daten zu repräsentieren, die dann erst später ausgeführt werden.
 
 ## Unsere kleine Sprache
-ut
+
 Um die Operationen als Entitäten zu formulieren, erstellen wir für jede Operation eine Datenrepräsentation. Diese Repräsentation fassen wir als algebraischen Summentyp zusammen:
 
 {% highlight scala %}
@@ -71,12 +71,12 @@ case class Filter(foo : Address => Boolean) extends AddressBookOp[List[Address]]
     
 {% endhighlight %}
 
-Der Typ-Parameter `A` des traits `AdressBookOp[A]` bestimmt dabei den Rückgabetyp unserer Operationen. Zwar lassen sich mit diesen Operationen einfache Programme beschreiben, etwa durch Listen von Befehlen, es lassen sich allerdings keine komplexe Zusammenhänge formulieren. Es ist nicht möglich gelesene Daten zu referenzieren, ohne einen Seiteneffekt auszuführen, wie zum Beispiel in der Funktion `removeBielefeld`. Gerne hätten wir hier eine Möglichkeit, um Rückgabewerte (ohne Ausführung des Effekts) binden zu können.
+Der Typ-Parameter `A` des traits `AdressBookOp[A]` bestimmt dabei den Rückgabetyp unserer Operationen. Zwar lassen sich mit diesen Operationen einfache Programme beschreiben, etwa durch Listen von Befehlen, es lassen sich allerdings keine komplexe Zusammenhänge formulieren. Es ist nicht möglich gelesene Daten zu referenzieren ohne einen Seiteneffekt auszuführen, wie zum Beispiel in der Funktion `removeBielefeld`. Gerne hätten wir hier eine Möglichkeit, um Rückgabewerte (ohne Ausführung des Effekts) binden zu können.
 
 
 ## Freie Monade, zur Rettung!
 
-Wir verwenden in diesem Artikel die freie Monade aus Cats. Cats ist eine Scala-Bibliothek, die mächtige Abstraktionen aus der Funktionalen Programmierung bereitstellt. Wir werden neben der Funktionalität zu freien Monaden weitere Abstraktionen, wie die Natürliche Transformationen aus dieser Bibliothek verwenden. Die freie Monade wird uns helfen, die Einschränkungen unserer kleinen Sprache zu überwinden. Eine systematische Hinleitung zur internen Funktionalität von freien Monaden kann [in diesem Artikel](https://www.heise.de/developer/artikel/Dependency-Injection-in-der-funktionalen-Programmierung-3115570.html?wt_mc=rss.developer.beitrag.atom) nachgelesen werden.
+Wir verwenden in diesem Artikel die freie Monade aus Cats. Cats ist eine Scala-Bibliothek, die mächtige Abstraktionen aus der Funktionalen Programmierung bereitstellt. Wir werden neben der Funktionalität zu freien Monaden weitere Abstraktionen, wie die *Natürliche Transformationen* aus dieser Bibliothek verwenden. Die freie Monade wird uns helfen, die Einschränkungen unserer kleinen Sprache zu überwinden. Eine systematische Hinleitung zur internen Funktionalität von freien Monaden kann [in diesem Artikel](https://www.heise.de/developer/artikel/Dependency-Injection-in-der-funktionalen-Programmierung-3115570.html?wt_mc=rss.developer.beitrag.atom) nachgelesen werden.
 
 Um unsere Befehle mit der freien Monade aus Cats verwenden zu können, müssen wir diese in die Monade heben. Dazu erstellen wir für jeden Befehl einen sogenannten Smart-Konstruktor:
 
@@ -210,7 +210,7 @@ In dieser Unabhängigkeit liegt der Charme freier Monaden.
 
 Ein großer Vorteil der Trennung von Beschreibung und Ausführung ist die separate Testbarkeit der Beschreibungen. So können Beschreibungen auch außerhalb von Integrationstests getestet werden ohne Datenbanken bereitstellen zu müssen. Das hört sich zuerst charmant an, ist allerdings bei freien Monaden schwieriger, als zunächst angenommen. Beschreibungen repräsentieren zwar abstrakte Syntax, diese liegen jedoch in Form einer Funktion vor und lassen sich zunächst nicht einfach inspizieren. Zwar können wir Test-Interpreter, wie den State-Interpreter aus dem obigen Beispiel, implementieren. Allerdings besteht hier die Gefahr, dass sich der Test- und der "echte" Interpreter abweichend verhalten. 
 
-Denkbar wäre jedoch die Implementierung eines sehr einfachen Testinterpreters, der die ausgeführten Anweisungen beispielsweise lediglich traced. Allerdings muss hierzu in einigen Fällen trotzdem das Verhalten implementiert werden, insbesondere dann, wenn bestimmte Operationen nur bedingt durch gebundene Daten ausgeführt werden. Wollen wir die enstehenden Programme also inhaltlich testen, müssen wir ein Trade-Off zwischen Genauigkeit und Fehleranfälligkeit der Interpretation eingehen.
+Denkbar wäre jedoch die Implementierung eines sehr einfachen Testinterpreters, der die ausgeführten Anweisungen beispielsweise lediglich aufzeichnet. Allerdings muss hierzu in einigen Fällen trotzdem das Verhalten implementiert werden, insbesondere dann, wenn bestimmte Operationen nur bedingt durch gebundene Daten ausgeführt werden. Wollen wir die enstehenden Programme also inhaltlich testen, müssen wir ein Trade-Off zwischen Genauigkeit und Fehleranfälligkeit der Interpretation eingehen.
 
 Wird konsequent zwischen Beschreibung und Ausführung getrennt, können dennoch große Codeteile in Unit-Tests abgedeckt werden, ohne eine integrierte Umgebung bieten zu müssen. Diese Entkopplung macht das Testen unserer Businesslogik oft schon um vieles einfacher. Eine mögliche Synergie, die dies verdeutlicht, ist in Kombination mit dem aktorbasierten [Observer-Pattern](https://alexn.org/blog/2015/12/15/avoid-javaisms-code-smell.html). Dabei helfen uns Nachrichten in Form unserer Beschreibungen anhand der freien Monade bei einer sauberer Trennung zwischen Services und trotzdem ist der Austausch flexibler und komplexer Anweisungen möglich. Alle Einheiten sind separat testbar und die Businesslogik kann außerhalb der Integration getestet werden. 
 
