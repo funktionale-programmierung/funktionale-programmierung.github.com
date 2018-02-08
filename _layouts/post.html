@@ -1,79 +1,81 @@
 ---
 layout: default
 ---
-  <div class="post">
-  <article>
-    <h1 class="post-title">{{ page.title }}</h1>
-    <div class="post-date">{{ page.date | date: "%d.%m.%Y" }}</div>
-    {% assign author_ = site.authors[page.author] %}
-    <div class="post-author">Autor: <a href="{{ author_.href }}">{{ author_.name }}</a></div>
-    <div class="post-sharing">
-     {% capture post_url %}http://funktionale-programmierung.de{{ page.url }}{% endcapture %}
-     {% capture post_title %}{{ page.title }}{% endcapture %}
-     {% include sharing %}
-    </div>
-    <div class="post-content">{{ content }}</div>
-    <hr/>
-    <div class="author-info">
-      {% if author_.image %}
-      <div class="author-picture">
-        <img alt="{{ page.author }}" src="{{ author_.image }}">
-      </div>
-      {% endif %}
-      <div markdown="1" class="author-text">
-        <em><p>Zum Autor:</p></em>
-        <p>{{ author_.about }}</p>
-      </div>
-    </div>
-    <hr />
-    <div class="post-tags">
-      <span class="label label-info">Tags</span>
-      {% for tag in page.tags %}
-      <a href="/tags-archive.html#{{ tag }}">{{ tag }}</a>
-      {% endfor %}
-    </div>
-    <hr />
-    <div class="post-sharing">
-     {% include sharing %}
-    </div>
-    <!-- ?? div class="post-permalink">
-    </div-->
-  </article>
-  </div>
-  <hr />
+<div class="post">
+    <article>
+        <h1 class="post-title">{{ page.title }}</h1>
+        <div class="post-date">{{ page.date | date: "%d.%m.%Y" }}</div>
+        {% assign author_ = site.authors[page.author] %}
+        <div class="post-author"> von <a href="{{ author_.href }}">{{ author_.name }}</a></div>
+        <div class="post-sharing">
+            {% capture post_url %}http://funktionale-programmierung.de{{ page.url }}{% endcapture %}
+            {% capture post_title %}{{ page.title }}{% endcapture %}
+            {% include sharing %}
+        </div>
+        <div class="post-content">{{ content }}</div>
+        <hr/>
+        <div class="author-info">
+            {% if author_.image %}
+            <div class="author-picture">
+                <img alt="{{ page.author }}" src="{{ author_.image }}">
+            </div>
+            {% endif %}
+            <div markdown="1" class="author-text">
+                <em><p>Zum Autor:</p></em>
+                <p>{{ author_.about }}</p>
+            </div>
+        </div>
+        <hr />
+        <div class="post-tags">
+            <span class="label label-info">Tags</span>
+            {% for tag in page.tags %}
+            <a href="/tags-archive.html#{{ tag }}">{{ tag }}</a>
+            {% endfor %}
+        </div>
+        <hr />
+        <div class="post-sharing">
+            {% include sharing %}
+        </div>
+        <!-- ?? div class="post-permalink">
+             </div-->
+    </article>
+</div>
+<hr />
 
-  <ul class="pager">
+<ul class="pager">
     {% if page.previous %}
     <li class="previous">
     {% else %}
     <li class="previous disabled">
-    {% endif %}
-    <a href="{{ page.previous.url }}">&larr; Vorheriger Artikel</a>
+        {% endif %}
+        <a href="{{ page.previous.url }}">&larr; Vorheriger Artikel</a>
     </li>
     {% if page.next %}
     <li class="next">
     {% else %}
     <li class="next disabled">
-    {% endif %}
-    <a href="{{ page.next.url }}">Nächster Artikel &rarr;</a>
+        {% endif %}
+        <a href="{{ page.next.url }}">Nächster Artikel &rarr;</a>
     </li>
-  </ul>
-	
-  <hr />
+</ul>
+
+<hr />
 
 
-  <div id="disqus_thread">
-  <script type="text/javascript">
-      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-      var disqus_shortname = 'funktionale-programmierung'; // required: replace example with your forum shortname
+<div class="content-box" >
+    <div id="disqus_thread">
+        <script type="text/javascript">
+         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+         var disqus_shortname = 'funktionale-programmierung'; // required: replace example with your forum shortname
 
-      /* * * DON'T EDIT BELOW THIS LINE * * */
-      (function() {
-	  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-  </div>
+         /* * * DON'T EDIT BELOW THIS LINE * * */
+         (function() {
+	           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	           dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	           (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+         })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+</div>
