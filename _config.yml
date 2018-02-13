@@ -129,4 +129,9 @@ authors:
     image: /author/simon-schulz.jpeg
     href:
     about: 'Simon Schulz ist Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a>. Sein besonderes Interesse gilt der funktionalen Programmierung und Softwarearchitektur.'
+  tim-digel:
+    name: Tim Digel
+    image: /author/tim-digel.jpg
+    href:
+    about: 'Tim Digel hat einen Abschluss als Diplom Mathematiker und ist seither als Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a> tätig. Sein besonderes Interesse gilt der Systemintegration und -administration.'
 
