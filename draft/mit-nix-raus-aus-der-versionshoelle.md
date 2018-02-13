@@ -133,7 +133,7 @@ In unserer `default.nix` können wir jetzt unser _elixirv161_-Paket verwenden (s
 export NIXPKGS_CONFIG=/tmp/my-env/config.nix
 ```
 
-Legt man neben der `default.nix` auch die `config.nix` mit in die Projektversionsverwaltung, so ist zu jedem Zeitpunkt die richtige Version der Entwicklungsgebung definiert. Updatet man irgendwann z. B. auf eine neue Erlang-Hauptversion braucht man sich nicht vor Fehlerbehebungen in alten Versionen drücken. Mit der `default.nix` auf dem alten Stand präsentiert die Nix-Shell ebenfalls wieder die alte Erlang-Version. Ein kurzes verlassen und wiederstarten der Nix-Shell `default.nix` reicht für den Wechsel.
+Legt man neben der `default.nix` auch die `config.nix` mit in die Projektversionsverwaltung, so ist zu jedem Zeitpunkt die richtige Version der Entwicklungsgebung definiert. Updatet man irgendwann z. B. auf eine neue Erlang-Hauptversion braucht man sich nicht vor Fehlerbehebungen in alten Versionen drücken. Mit der `default.nix` auf dem alten Stand präsentiert die Nix-Shell ebenfalls wieder die alte Erlang-Version. Ein kurzes verlassen und wiederstarten der Nix-Shell reicht für den Wechsel.
 
 ## Fazit
 
