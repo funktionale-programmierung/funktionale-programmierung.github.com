@@ -25,7 +25,7 @@ Wir führen einmalig mit unserem normalen Benutzer ein Shell-Skript aus:
 ```
 curl https://nixos.org/nix/install | sh
 ```
-Nix fügt in der Regel automatisch zwei Zeilen unser `.profile`-Datei hinzu, die unsere installierten Nix-Pakete in unserem Pfad verfügbar machen. Bei MacOS sind womöglich andere Schritt notwendig.  
+Nix fügt in der Regel automatisch zwei Zeilen unser `.profile`-Datei hinzu, wodurch die Nix-Tools und alle installierten Nix-Pakete in unserem Pfad verfügbar sind. Bei MacOS sind womöglich andere Schritte notwendig.  
 
 Um immer die neusten Versionen zu erhalten wechseln wir vom Stable-Zweig (entspricht einem Release vom letzten April oder Oktober) auf den Master-Channel:
 ```
@@ -40,14 +40,14 @@ nix-env --install nano
 ```
 In einer neuen Konsole zeigt uns `nano --version` jetzt die Version _2.9.2_ aus den Nix-Paketen.
 
-## Invasive Installationen mit der Nix-Shell
+## Nicht-invasive Installationen mit der Nix-Shell
 
 Hier sehen wir, dass wir mit `nano` nicht mehr so einfach an unser _nano_ vom Betriebssystem ran kommen. Eine Abhilfe schafft hier die Nix-Shell. Deinstallieren wir zuerst die globale _nano_-Installation aus den Nix-Paketen und wechseln anschließend in eine Nix-Shell, in der wir das Paket _nano_ verfügbar haben möchten:
 ```
 nix-env --uninstall nano
 nix-shell -p nano
 ```
-Wir befinden uns jetzt in einer Umgebung, die uns _nano_ zusätzlich bereitstellt. Wir verlassen die Nix-Shell wie üblich mit `exit` oder _STRG_+_D_. 
+Wir befinden uns jetzt in einer Umgebung, die uns _nano_ zusätzlich bereitstellt. Wir verlassen die Nix-Shell wie üblich mit `exit` oder _STRG+D_. 
 
 Wir haben die Möglichkeit auch mehrere Pakete anzugeben und können uns so eine aufwendigere Umgebung bauen. Um nicht jedes mal ein Befehl mit einer Reihe von Paketen als Argumente angeben zu müssen, legen wir in unserem Projekt Verzeichnis eine Datei `default.nix` an. Diese beschreibt unsere Umgebung, insbesondere die Pakete, die wir verfügbar haben möchten.
 
@@ -122,7 +122,7 @@ Möchten wir z. B. Erlang in Version 20.2.2 und Elixir in Version 1.6.1 so komme
    };
 }
 ```
-Im ersten Block definieren wir die Variable `erlangv2022` indem wir die Funktion `pkgs.stdenv.lib.overrideDerivation` auf das Originalpaket _erlangR20_ anwenden und dabei einige Attribute überschreiben. Hier hilft es jetzt in die originale Paketdefinition von Erlang bei [Github](https://github.com/NixOS/nixpkgs) zu schauen. An sich folgt es aber immer dem gleichen Schema: Name, Version und Downloadquelle überschreiben. Erlang und Elixir benutzen `fetchFromGitHub` hier genügt es dann einfach die Version und die dazu passende SHA-256-Kontrollsumme anzupassen. Für normale Downloads kann mit dem Shell-Kommando `nix-prefetch-url` die Kontrollsumme ermittelt werden. Bei `FetchFromGitHub` scheint der einfachste Weg zu sein, die alte Kontrollsumme zu behalten und auf die Fehlermeldung zu warten, wie die Kontrollsumme eigentlich lauten müsste.  
+Im ersten Block definieren wir die Variable `erlangv2022` indem wir die Funktion `pkgs.stdenv.lib.overrideDerivation` auf das Originalpaket _erlangR20_ anwenden und dabei einige Attribute überschreiben. Hier hilft es jetzt in die originale Paketdefinition von Erlang bei [Github](https://github.com/NixOS/nixpkgs) anzuschauen. An sich folgt es aber immer dem gleichen Schema: Name, Version und Downloadquelle überschreiben. Erlang und Elixir benutzen `fetchFromGitHub`, hier genügt es dann einfach die Version und die dazu passende SHA-256-Kontrollsumme anzupassen. Für normale Downloads kann mit dem Shell-Kommando `nix-prefetch-url` die Kontrollsumme ermittelt werden. Bei `fetchFromGitHub` scheint der einfachste Weg zu sein, die alte Kontrollsumme zu behalten und auf die Fehlermeldung zu warten, wie die Kontrollsumme eigentlich lauten müsste.  
 
 Mit unserer eigenen Version von Erlang benutzen wir die eingebaute Funktion `pkgs.beam.packagesWith`, die uns alle Beam-Pakete mit der übergebenen Erlang-Version als Unterbau präsentiert. Dies definieren wir als `erlangR2022` und übergeben der Funktion unser gerade definiertes Paket `erlangv2022`.
 
@@ -133,10 +133,10 @@ In unserer `default.nix` können wir jetzt unser _elixirv161_-Paket verwenden (s
 export NIXPKGS_CONFIG=/tmp/my-env/config.nix
 ```
 
-Legt man neben der `default.nix` auch die `config.nix` mit in die Projektversionsverwaltung, so ist zu jedem Zeitpunkt die richtige Version der Entwicklungsgebung definiert. Updatet man irgendwann z. B. auf eine neue Erlang-Hauptversion braucht man sich nicht vor Fehlerbehebungen in alten Versionen drücken. Mit der `default.nix` auf dem alten Stand präsentiert die Nix-Shell ebenfalls wieder die alte Erlang-Version. Ein kurzes verlassen und wiederstarten der Nix-Shell reicht für den Wechsel.
+Legt man neben der `default.nix` auch die `config.nix` mit in die Projektversionsverwaltung, so ist zu jedem Zeitpunkt die richtige Version der Entwicklungsgebung definiert. Aktualisiert man irgendwann z. B. auf eine neue Erlang-Hauptversion braucht man sich nicht vor Fehlerbehebungen in alten Versionen drücken. Mit der `default.nix` auf dem alten Stand präsentiert die Nix-Shell ebenfalls wieder die alte Erlang-Version. Ein kurzes verlassen und wiederstarten der Nix-Shell reicht für den Wechsel.
 
 ## Fazit
 
-Der Nix-Paketmanager zusammen mit der Nix-Shell bietet uns einen non-invasiven Paketmanager, den man parallel zu Installationen über den systemeigenen Paketverwalter verwenden kann. Durch die Möglichkeit Pakete nur innerhalb einer Shell laufen zu lassen und diese in einer Datei fest zu schreiben, macht die Installation für neue Teammitglieder einfach und vorallem nachvollziehbar.  
+Der Nix-Paketmanager zusammen mit der Nix-Shell bietet uns einen non-invasiven Paketmanager, den man parallel zum systemeigenen Paketverwalter verwenden kann. Durch die Möglichkeit Pakete nur innerhalb einer Shell laufen zu lassen und diese in einer Datei fest zu schreiben, macht die Installation für neue Teammitglieder einfach und vorallem nachvollziehbar.  
 Mit der Option Pakete in der Version zu überschreiben, ersparen wir händische Kompilierungsarbeit und können dadurch auch eine Vielzahl an Versionen gleichzeitig bauen. Ein Wechsel der Versionen folgt dann auf Knopfdruck mit der `nix-shell` oder man benutzt mit zwei Konsolen schlicht weg mehrere Versionen gleichzeitig. 
 <!-- more end -->
