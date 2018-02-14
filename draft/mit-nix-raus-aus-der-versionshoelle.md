@@ -25,7 +25,7 @@ Wir führen einmalig mit unserem normalen Benutzer ein Shell-Skript aus:
 ```
 curl https://nixos.org/nix/install | sh
 ```
-Nix fügt in der Regel automatisch zwei Zeilen unser `.profile`-Datei hinzu, wodurch die Nix-Tools und alle installierten Nix-Pakete in unserem Pfad verfügbar sind. Bei MacOS sind womöglich andere Schritte notwendig.  
+Nix fügt in der Regel automatisch zwei Zeilen unser `.profile`-Datei hinzu, wodurch die Nix-Tools und alle installierten Nix-Pakete in unserem Pfad verfügbar sind.  
 
 Um immer die neusten Versionen zu erhalten wechseln wir vom Stable-Zweig (entspricht einem Release vom letzten April oder Oktober) auf den Master-Channel:
 ```
@@ -38,22 +38,22 @@ Möchten wir ein Paket dauerthaft installieren, so können wir das mit `nix-env 
 nano --version # Zeigt Version 2.5.3 von der Systeminstallation
 nix-env --install nano
 ```
-In einer neuen Konsole zeigt uns `nano --version` jetzt die Version _2.9.2_ aus den Nix-Paketen.
+Nach der Installation ist mit neugeladenem Pfad (neue Konsole) die Nano-Installation aus den Nix-Paketen aktiv: `nano --version` zeigt jetzt die Version _2.9.2_. Die Nix-Pakete stehen in der _PATH_-Umgebungsvariable weiter vorne, wodurch die Systeminstallation überschrieben wird.
 
 ## Nicht-invasive Installationen mit der Nix-Shell
 
-Hier sehen wir, dass wir mit `nano` nicht mehr so einfach an unser _nano_ vom Betriebssystem ran kommen. Eine Abhilfe schafft hier die Nix-Shell. Deinstallieren wir zuerst die globale _nano_-Installation aus den Nix-Paketen und wechseln anschließend in eine Nix-Shell, in der wir das Paket _nano_ verfügbar haben möchten:
+Wir kommen mit dem Kommando `nano` nicht mehr so einfach an unser _nano_ vom Betriebssystem herran. Eine neue Möglichkeit schafft hier die Nix-Shell, die es uns erlaubt, Pakete in einer dedizierten Umgebung verfügbar zu machen. Deinstallieren wir zuerst die globale _nano_-Installation aus den Nix-Paketen und wechseln anschließend in eine Nix-Shell, in der wir das Paket _nano_ verfügbar haben möchten:
 ```
 nix-env --uninstall nano
 nix-shell -p nano
 ```
-Wir befinden uns jetzt in einer Umgebung, die uns _nano_ zusätzlich bereitstellt. Wir verlassen die Nix-Shell wie üblich mit `exit` oder _STRG+D_. 
+Wir befinden uns jetzt in einer Umgebung, die uns _nano_ zusätzlich bereitstellt. Wir verlassen die Nix-Shell wie üblich mit `exit` oder _STRG+D_. Außerhalb der Nix-Shell ist wieder das ursprüngliche _nano_ präsent.  
 
-Wir haben die Möglichkeit auch mehrere Pakete anzugeben und können uns so eine aufwendigere Umgebung bauen. Um nicht jedes mal ein Befehl mit einer Reihe von Paketen als Argumente angeben zu müssen, legen wir in unserem Projekt Verzeichnis eine Datei `default.nix` an. Diese beschreibt unsere Umgebung, insbesondere die Pakete, die wir verfügbar haben möchten.
+Wir haben die Möglichkeit auch mehrere Pakete anzugeben und können so eine aufwendigere Umgebung bauen. Um nicht jedes mal ein Befehl mit einer Reihe von Paketen als Argumente angeben zu müssen, legen wir in unserem Projektverzeichnis eine Datei `default.nix` an. Diese beschreibt unsere Umgebung, insbesondere die Pakete, die wir verfügbar haben möchten.
 
 ## Umgebung für eine Elixir-Anwendung
 
-Elixir ist eine recht neue funktionale Programmiersprache, die auf Erlang aufbaut. Mit Elixir kann man direkt auf Erlang-Bibliotheken zugreifen. Daher ist oft nicht nur die Elixir-Version selbst von Bedeutung, sondern auch die zugrundeliegende Erlang-Version. Die Nix-Pakete bieten uns hierfür schon fertige Pakete an, die verschiedene Elixir-Versionen mit verschiedenen Erlang-Versionen bereitstellen. Eine `default.nix` mit Erlang, Elixir, eine ältere Version von _NodeJS_ und ein paar Pakete um von Hand Quellcode komplilieren zu können (_autoconf_, _automake_, ...) könnte so aussehen:
+Elixir ist eine recht neue funktionale Programmiersprache, die auf Erlang aufbaut. Mit Elixir kann man direkt auf Erlang-Bibliotheken zugreifen. Daher ist oft nicht nur die Elixir-Version selbst von Bedeutung, sondern auch die zugrundeliegende Erlang-Version. Die Nix-Pakete bieten uns hierfür schon fertige Pakete an, die verschiedene Elixir-Versionen mit verschiedenen Erlang-Versionen bereitstellen. Eine `default.nix` mit Erlang, Elixir (aufrufbar unter dem Meta-Paket _beam_, _beam_ bezeichnet die Erlang-Virtualmachine), eine ältere Version von _NodeJS_ und ein paar Pakete um von Hand Quellcode komplilieren zu können (_autoconf_, _automake_, ...) könnte so aussehen:
 ```
 with import <nixpkgs> {}; {
    myEnv = stdenv.mkDerivation {
