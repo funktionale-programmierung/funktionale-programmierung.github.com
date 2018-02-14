@@ -17,7 +17,7 @@ In diesem Artikel sehen wir beispielhaft an einer Entwicklungsumgebung für Elix
 
 Beim Begriff _Paketmanager_ denken viele schon an Chaos und Abneigung, möchte doch jeder gern seinen bisher liebgewonnen Paketmanager behalten. [Nix](https://nixos.org/nix/) ist ein Paketmanager, der sich parallel zum Systempaketmanager auf Benutzerebene installieren lässt. Nix ist ebenso eine funktionalie Programmiersprache. Sämtliche Pakte innerhalb Nix sind als deaklarative _Nix-Expressions_ formuliert. In den allermeisten Fällen gibt die Deklaration an, wie das Paket anhand dem Quellcode gebaut wird. Durch ein ausgeklügeltes Cache-System ist der eigene Rechner aber nicht stundenlang mit Bauen von Paketen beschäftigt, sondern bedient sich aus den fertig gebauten Ergebnissen des Nix-Cache.
 
-Eine weitere Perle von Nix ist die Tatsache, dass jedes Paket sein eigenes Fundament an Abhängigkeiten hat. So können wir z. B. Programme installieren, die vershiedene Versionen von Java oder Python benötigen. Weiter können wir sogar von einem Tool verschiedene Versionen installieren (siehe Abschnitt [Versionen überschreiben](#versionen)).
+Eine weitere Perle von Nix ist die Tatsache, dass jedes Paket sein eigenes Fundament an Abhängigkeiten hat. So können wir z. B. Programme installieren, die verschiedene Versionen von Java oder Python benötigen. Weiter können wir sogar von einem Tool verschiedene Versionen installieren (siehe Abschnitt [Versionen überschreiben](#versionen)).
 
 ## Installation von Nix
 
@@ -90,7 +90,7 @@ IEx 1.6.0 (compiled with OTP 20)
 
 In der Regel halten die Paketmanager der Betriebssysteme keine verschiedenen Versionen von einem Paket bereit und gewiss keine Versionen die sich nur in der dritten Stelle der Version unterscheiden. Will man bestimmte Verisonen von einem Paket haben, bleibt einem nur der Schwenk hin zum selber Kompilieren, was auch alles andere als komfortabel ist.  
 
-Nix bietet meistens auch keine verschiedene Versionen an, mit Ausnahme bei einigen Paketen mit großer Nachfrage (bei Erlang z. B. pro Hauptversion). Wir können aber die vorhandene Version einfach überschreiben und uns so eine Version aussuchen. Dazu legen wir eine Datei `config.nix` an. Diese Datei beinhaltet eine Nix-Expression, welche die Map `pkgs` verändert.  
+Nix bietet meistens auch keine verschiedenen Versionen an, mit Ausnahme einiger Pakete mit großer Nachfrage (bei Erlang z. B. pro Hauptversion). Wir können aber die vorhandene Version einfach überschreiben und uns so eine Version aussuchen. Dazu legen wir eine Datei `config.nix` an. Diese Datei beinhaltet eine Nix-Expression, welche die Map `pkgs` verändert.  
 
 Möchten wir z. B. Erlang in Version 20.2.2 und Elixir in Version 1.6.1 so kommen wir zu dieser `config.nix`:
 ```
