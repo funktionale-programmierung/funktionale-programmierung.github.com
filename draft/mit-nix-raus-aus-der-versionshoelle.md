@@ -10,14 +10,14 @@ Wer kennt es nicht: Man startet ein neues Softwareprojekt oder steigt bei der En
 
 Mit dem Nix-Paketmanager eröffnet sich uns die Möglichkeit deklarativ zu beschreiben, wie unser lokales Setup auszusehen hat. Dabei spielt es (fast) keine Rolle, auf was für einem unixbasiertem Betriebssystem wir unterwegs sind.
 
-In diesem Artikel sehen wir beispielhaft an einer Entwicklungsumgebung für Elixir, wie einfach, schnell, non-invasiv und versionierbar wir eine Entwicklungsumgebung bereitstellen können. Wir lernen weiter eine Möglichkeit kennen, bestimmte Versionen eines Pakets zu installieren.
+In diesem Artikel sehen wir beispielhaft an einer Entwicklungsumgebung für Elixir, wie einfach, schnell, non-invasiv und versionierbar man eine Entwicklungsumgebung bereitstellen kann. Weiter lernen wir eine Möglichkeit kennen, bestimmte Versionen eines Pakets zu installieren.
 <!-- more start -->
 
 ## Der Nix-Paketmanager
 
 Beim Begriff _Paketmanager_ denken viele schon an Chaos und Abneigung, möchte doch jeder gern seinen bisher liebgewonnen Paketmanager behalten. [Nix](https://nixos.org/nix/) ist ein Paketmanager, der sich parallel zum Systempaketmanager auf Benutzerebene installieren lässt. Nix ist ebenso eine funktionalie Programmiersprache. Sämtliche Pakte innerhalb Nix sind als deaklarative _Nix-Expressions_ formuliert. In den allermeisten Fällen gibt die Deklaration an, wie das Paket anhand dem Quellcode gebaut wird. Durch ein ausgeklügeltes Cache-System ist der eigene Rechner aber nicht stundenlang mit Bauen von Paketen beschäftigt, sondern bedient sich aus den fertig gebauten Ergebnissen des Nix-Cache.
 
-Eine weitere Perle von Nix ist die Tatsache, dass jedes Paket sein eigenes Fundament an Abhängigkeiten hat. So können wir z. B. Programme installieren, die verschiedene Versionen von Java oder Python benötigen. Weiter können wir sogar von einem Tool verschiedene Versionen installieren (siehe Abschnitt [Versionen überschreiben](#versionen)).
+Eine weitere Vorteil von Nix ist die Tatsache, dass jedes Paket sein eigenes Fundament an Abhängigkeiten hat. So können wir z. B. Programme installieren, die verschiedene Versionen von Java oder Python benötigen. Weiter können wir sogar von einem Tool verschiedene Versionen installieren (siehe Abschnitt [Versionen überschreiben](#versionen)).
 
 ## Installation von Nix
 
@@ -53,7 +53,7 @@ Wir haben die Möglichkeit auch mehrere Pakete anzugeben und können so eine auf
 
 ## Umgebung für eine Elixir-Anwendung
 
-Elixir ist eine recht neue funktionale Programmiersprache, die auf Erlang aufbaut. Mit Elixir kann man direkt auf Erlang-Bibliotheken zugreifen. Daher ist oft nicht nur die Elixir-Version selbst von Bedeutung, sondern auch die zugrundeliegende Erlang-Version. Die Nix-Pakete bieten uns hierfür schon fertige Pakete an, die verschiedene Elixir-Versionen mit verschiedenen Erlang-Versionen bereitstellen. Eine `default.nix` mit Erlang, Elixir (aufrufbar unter dem Meta-Paket _beam_, _beam_ bezeichnet die Erlang-Virtualmachine), eine ältere Version von _NodeJS_ und ein paar Pakete um von Hand Quellcode komplilieren zu können (_autoconf_, _automake_, ...) könnte so aussehen:
+Elixir ist eine junge funktionale Programmiersprache, die auf Erlang aufbaut. Mit Elixir kann man direkt auf Erlang-Bibliotheken zugreifen. Daher ist oft nicht nur die Elixir-Version selbst von Bedeutung, sondern auch die zugrundeliegende Erlang-Version. Die Nix-Pakete bieten uns hierfür schon fertige Pakete an, die verschiedene Elixir-Versionen mit verschiedenen Erlang-Versionen bereitstellen. Eine `default.nix` mit Erlang, Elixir (aufrufbar unter dem Meta-Paket _beam_, _beam_ bezeichnet die Erlang-Virtualmachine), eine ältere Version von _NodeJS_ und ein paar Pakete um von Hand Quellcode komplilieren zu können (_autoconf_, _automake_, ...) könnte so aussehen:
 ```
 with import <nixpkgs> {}; {
    myEnv = stdenv.mkDerivation {
@@ -72,9 +72,9 @@ with import <nixpkgs> {}; {
    };
 }
 ```
-Die Nix-Shell bietet uns zudem die Möglichkeit, die Konsolen-Benennung zu ändern, indem wir die Variable _PS1_ mit einer Bezeichnung (in unserem Beispiel `[myEnv:]$` belegen. Dies funktioniert meistens nur zuverlässig, wenn man systemweit kein anderes Skript (wie z. B. die Anzeige des aktuellen Git-Zweiges) für die Shell-Bezeichnung aktiv hat.
+Die Nix-Shell bietet uns zudem die Möglichkeit, die Konsolen-Benennung zu ändern, indem wir die Variable _PS1_ mit einer Bezeichnung (in unserem Beispiel `[myEnv:]$`) belegen. Dies funktioniert meistens nur zuverlässig, wenn man systemweit kein anderes Skript (wie z. B. die Anzeige des aktuellen Git-Zweiges) für die Shell-Bezeichnung aktiv hat.
 
-Innerhalb des Verzeichnis mit der `defaul.nix` starten wir unsere Umgebung mit:
+Innerhalb des Verzeichnis, in dem sich die `defaul.nix` befindet, starten wir unsere Umgebung mit:
 ```
 nix-shell
 ```
@@ -88,7 +88,7 @@ IEx 1.6.0 (compiled with OTP 20)
 
 ## Versionen überschrieben <a id="versionen"></a>
 
-In der Regel halten die Paketmanager der Betriebssysteme keine verschiedenen Versionen von einem Paket bereit und gewiss keine Versionen die sich nur in der dritten Stelle der Version unterscheiden. Will man bestimmte Verisonen von einem Paket haben, bleibt einem nur der Schwenk hin zum selber Kompilieren, was auch alles andere als komfortabel ist.  
+In der Regel halten die Paketmanager der Betriebssysteme keine verschiedenen Versionen von einem Paket bereit und gewiss keine Versionen die sich nur in der dritten Stelle der Version unterscheiden. Will man bestimmte Verisonen von einem Paket haben, bleibt einem nur der Ausweg es selber zu Kompilieren, was auch alles andere als komfortabel ist.  
 
 Nix bietet meistens auch keine verschiedenen Versionen an, mit Ausnahme einiger Pakete mit großer Nachfrage (bei Erlang z. B. pro Hauptversion). Wir können aber die vorhandene Version einfach überschreiben und uns so eine Version aussuchen. Dazu legen wir eine Datei `config.nix` an. Diese Datei beinhaltet eine Nix-Expression, welche die Map `pkgs` verändert.  
 
@@ -137,6 +137,6 @@ Legt man neben der `default.nix` auch die `config.nix` mit in die Projektversion
 
 ## Fazit
 
-Der Nix-Paketmanager zusammen mit der Nix-Shell bietet uns einen non-invasiven Paketmanager, den man parallel zum systemeigenen Paketverwalter verwenden kann. Durch die Möglichkeit Pakete nur innerhalb einer Shell laufen zu lassen und diese in einer Datei fest zu schreiben, macht die Installation für neue Teammitglieder einfach und vorallem nachvollziehbar.  
-Mit der Option Pakete in der Version zu überschreiben, ersparen wir händische Kompilierungsarbeit und können dadurch auch eine Vielzahl an Versionen gleichzeitig bauen. Ein Wechsel der Versionen folgt dann auf Knopfdruck mit der `nix-shell` oder man benutzt mit zwei Konsolen schlicht weg mehrere Versionen gleichzeitig. 
+Der Nix-Paketmanager zusammen mit der Nix-Shell bietet uns einen non-invasiven Paketmanager, den man parallel zum systemeigenen Paketverwalter verwenden kann. Durch die Möglichkeit Pakete nur innerhalb einer Shell laufen zu lassen und diese in einer Datei fest zu definieren, macht die Installation für neue Teammitglieder einfach und vorallem nachvollziehbar.  
+Mit der Option die Version von Paketen zu überschreiben, ersparen wir händisches Kompilieren und können eine Vielzahl an Versionen gleichzeitig bereitstellen. Ein Wechsel der Versionen folgt dann auf Knopfdruck mit der `nix-shell` oder man benutzt mit zwei Konsolen schlicht weg mehrere Versionen gleichzeitig. 
 <!-- more end -->
