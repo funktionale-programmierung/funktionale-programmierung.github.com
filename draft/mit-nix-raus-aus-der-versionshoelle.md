@@ -15,7 +15,7 @@ In diesem Artikel sehen wir beispielhaft an einer Entwicklungsumgebung für Elix
 
 ## Der Nix-Paketmanager
 
-Beim Begriff _Paketmanager_ denken viele schon an Chaos und Abneigung, möchte doch jeder gern seinen bisher liebgewonnen Paketmanager behalten. [Nix](https://nixos.org/nix/) ist ein Paketmanager, der sich parallel zum Systempaketmanager auf Benutzerebene installieren lässt. Nix ist ebenso eine funktionalie Programmiersprache. Sämtliche Pakte innerhalb Nix sind als deaklarative _Nix-Expressions_ formuliert. In den allermeisten Fällen gibt die Deklaration an, wie das Paket anhand dem Quellcode gebaut wird. Durch ein ausgeklügeltes Cache-System ist der eigene Rechner aber nicht stundenlang mit Bauen von Paketen beschäftigt, sondern bedient sich aus den fertig gebauten Ergebnissen des Nix-Cache.
+Beim Begriff _Paketmanager_ denken viele schon an Chaos und Abneigung, möchte doch jeder gern seinen bisher liebgewonnen Paketmanager behalten. [Nix](https://nixos.org/nix/) ist ein Paketmanager, der sich parallel zum Systempaketmanager auf Benutzerebene installieren lässt. Nix ist ebenso eine funktionale Programmiersprache. Sämtliche Pakte innerhalb Nix sind als deaklarative _Nix-Expressions_ formuliert. In den allermeisten Fällen gibt die Deklaration an, wie das Paket anhand dem Quellcode gebaut wird. Durch ein ausgeklügeltes Cache-System ist der eigene Rechner aber nicht stundenlang mit Bauen von Paketen beschäftigt, sondern bedient sich aus den fertig gebauten Ergebnissen des Nix-Cache.
 
 Eine weitere Vorteil von Nix ist die Tatsache, dass jedes Paket sein eigenes Fundament an Abhängigkeiten hat. So können wir z. B. Programme installieren, die verschiedene Versionen von Java oder Python benötigen. Weiter können wir sogar von einem Tool verschiedene Versionen installieren (siehe Abschnitt [Versionen überschreiben](#versionen)).
 
@@ -25,7 +25,7 @@ Wir führen einmalig mit unserem normalen Benutzer ein Shell-Skript aus:
 ```
 curl https://nixos.org/nix/install | sh
 ```
-Nix fügt in der Regel automatisch zwei Zeilen unser `.profile`-Datei hinzu, wodurch die Nix-Tools und alle installierten Nix-Pakete in unserem Pfad verfügbar sind.  
+Nix fügt in der Regel automatisch zwei Zeilen unserer `.profile`-Datei hinzu, wodurch die Nix-Tools und alle installierten Nix-Pakete in unserem Pfad verfügbar sind.  
 
 Um immer die neusten Versionen zu erhalten wechseln wir vom Stable-Zweig (entspricht einem Release vom letzten April oder Oktober) auf den Master-Channel:
 ```
@@ -42,7 +42,7 @@ Nach der Installation ist mit neugeladenem Pfad (neue Konsole) die Nano-Installa
 
 ## Nicht-invasive Installationen mit der Nix-Shell
 
-Wir kommen mit dem Kommando `nano` nicht mehr so einfach an unser _nano_ vom Betriebssystem herran. Eine neue Möglichkeit schafft hier die Nix-Shell, die es uns erlaubt, Pakete in einer dedizierten Umgebung verfügbar zu machen. Deinstallieren wir zuerst die globale _nano_-Installation aus den Nix-Paketen und wechseln anschließend in eine Nix-Shell, in der wir das Paket _nano_ verfügbar haben möchten:
+Wir kommen mit dem Kommando `nano` nicht mehr so einfach an unser _nano_ vom Betriebssystem heran. Eine neue Möglichkeit schafft hier die Nix-Shell, die es uns erlaubt, Pakete in einer dedizierten Umgebung verfügbar zu machen. Deinstallieren wir zuerst die globale _nano_-Installation aus den Nix-Paketen und wechseln anschließend in eine Nix-Shell, in der wir das Paket _nano_ verfügbar haben möchten:
 ```
 nix-env --uninstall nano
 nix-shell -p nano
@@ -86,7 +86,7 @@ Erlang/OTP 20 [erts-9.2] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:
 IEx 1.6.0 (compiled with OTP 20)
 ```
 
-## Versionen überschrieben <a id="versionen"></a>
+## Versionen überschreiben <a id="versionen"></a>
 
 In der Regel halten die Paketmanager der Betriebssysteme keine verschiedenen Versionen von einem Paket bereit und gewiss keine Versionen die sich nur in der dritten Stelle der Version unterscheiden. Will man bestimmte Verisonen von einem Paket haben, bleibt einem nur der Ausweg es selber zu Kompilieren, was auch alles andere als komfortabel ist.  
 
