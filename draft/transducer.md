@@ -1,16 +1,15 @@
 ---
 layout: post
 description: Transducer: Komposition, Abstraktion, Performance
-title: "Titel"
+title: "Transducer: Komposition, Abstraktion, Performance"
 author: marco-schneider
 tags: ["Clojure", "Transducer", "Abstraktion", "Performance"]
 ---
 
-
-Funktionen höherer Ordnugn wie `map`, `fold`, `filter` sind aus keinem funktionales Programm wegzudenken.
+Funktionen höherer Ordnung wie `map`, `fold`, `filter` sind aus keinem funktionalen Programm wegzudenken.
 Mit ihrer Flexibilität sind sie das Mittel der Wahl für Operationen auf Kollektionen aller Art.
 Allerdings beschränkt sich ihr Anwendungsbereich nicht nur auf klassische Listen oder Vektoren.
-In diesem Artikel werfen wir einen Blick auf fundamentalere Eigenschaften dieser Operationen und werfen
+In diesem Artikel betrachten wir fundamentalere Eigenschaften dieser Operationen und werfen
 insbesondere einen Blick auf die sogennanten Transducer.
 
 <!-- more start -->
@@ -35,7 +34,8 @@ Um unser Gedächtnis etwas aufzufrischen betrachten wir zuerst eine Variante der
         (cons (f (first xs)) (map f (rest xs)))))
         
     (defn filter
-      "Takes a predicate pred and returns a list with all elements of xs that satisfy pred."
+      "Takes a predicate pred and returns a list with all elements
+       of xs that satisfy pred."
       [pred xs]
       (if (empty? xs)
         xs
@@ -46,13 +46,14 @@ Um unser Gedächtnis etwas aufzufrischen betrachten wir zuerst eine Variante der
 {% endhighlight %}
 
 So oder so ähnlich finden sich viele Defintionen und verschiedenen Standartbibliotheken. 
-Wie versprochen lassen sich beide Funktionen auch über `fold` (bzw. `reduce`) definieren:
+Wie versprochen lassen sich beide Funktionen auch über `reduce` definieren:
 
 {% highlight clojure %}
 
     (defn mapping
       "Takes a function f and returns a function.
-       The returned function takes a collection acc and an element x and conjoins x applied to f to acc."
+       The returned function takes a collection acc 
+       and an element x and conjoins x applied to f to acc."
       [f]
       (fn [acc x] (conj acc (f x))))
       
@@ -63,12 +64,14 @@ Wie versprochen lassen sich beide Funktionen auch über `fold` (bzw. `reduce`) d
     
     (defn filtering
       "Takes a predicate pred and returns a function.
-       The returned function takes a collection acc and an element x and conjoins x if it satisfies pred."
+       The returned function takes a collection acc
+       and an element x and conjoins x if it satisfies pred."
       [pred]
       (fn [acc x] (if (pred x) (conj acc x) acc)))
 
     (defn filter
-      "Takes a predicate pred and returns a list with all elements of xs that satisfy pred."
+      "Takes a predicate pred and returns a list with all 
+       elements of xs that satisfy pred."
       [pred xs]
       (reduce (filtering pred) [] xs))
       
@@ -114,7 +117,7 @@ von dem wir in `map` und `filter` Gebrauch machen, sieht es mit Datenstrukturen 
 Anstatt uns auf die Datenstruktur zu verlassen gehen wir einen anderen Weg:
 
 1. Unsere Transformatoren (`mapping`, `filtering`) sollten von sich aus ein Konzept von "Anfang" und "Ende" haben.
-2. Wir erwarten von unserer `step` Funktion nicht nur, dass sie binär ist, sondern auch, dass sie, aufgerufen mit null oder einem Argument, einen "Null"-Wert produziert.
+2. Wir erwarten von unserer `step` Funktion nicht nur, dass sie binär ist, sondern auch, dass sie, aufgerufen mit keinem oder einem Argument, einen "Null"-Wert produziert.
    Beispiele hierfür wären in Clojure `(conj) => []`, `(conj [1]) => [1]` oder `(+) => 0`, `(+ 1) => 1`, etc.
 
 Wir kümmern uns an dieser Stelle nur um Punkt 1. Ich werde zuerst eine Implementierung von `mapping` und `filtering` vorschlagen
@@ -159,7 +162,7 @@ Im folgenden möchte ich zwei Beispiele dafür geben wie uns das Ganze nun in de
 
 In beiden Beispielen beschäftigen wir uns mit folgendem Problem:
 Das Semester ist zuende und die Professorin möchte wissen, wie gut die Durchschnittliche Leistung ihrer Masterstudent*innen im Übungsbetrieb war.
-Mit Hilfe von Clojure Spec definieren wir einige Beispieldaten:
+Mit Hilfe von Clojure Spec definieren wir einige Beispieldaten (wer mehr zu Spec erfahren möchte kann das [zum Beispiel in einem älteren Artikel in unserem Blog tun](http://funktionale-programmierung.de/2016/11/18/clojure-spec.html)):
 
 {% highlight clojure %}
     (ns my.namespace
@@ -169,7 +172,7 @@ Mit Hilfe von Clojure Spec definieren wir einige Beispieldaten:
     (s/def ::title string?)
     (s/def ::student string?)
     (s/def ::points (set (range 31)))
-    (s/def ::degree #{::msc :bsc})
+    (s/def ::degree #{::msc ::bsc})
     (s/def ::exercises (s/keys :req [::title ::student ::points ::degree]))
     
     (gen/sample ::exercises)
@@ -198,12 +201,14 @@ Mit regulären Listenfunktionen könnten wir die Aufgabe so lösen:
 Angewendet auf eine Liste von Übungen liefert uns das das richtige Ergebnis.
 Es gibt allerdings ein Problem: jeder Aufruf von `filter`, `map` und `reduce` berechnet eine neue Liste!
 Bei großen Mengen kann das, wie wir gleich sehen werden, schon mal zu Problemen führen.
-Das gleiche nun ausgedrück über unsere neu definierten Operatoren:
-
+Unten nun das gleiche, ausgedrück über unsere neu definierten Operatoren.
+Die Funktion `reduce-with` funktioniert ähnlich wie `reduce`, nur, dass sie zusätzlich zur Reduktionsfunktion (hier `step`) einen Paramterer `xf` erwartet,
+welcher eine Komposition unserer Funktionen darstellt.
 
 {% highlight clojure %}
     (defn reduce-with
-      "Takes a function composed of process modifications xf, a step function, 
+      "Takes a function composed of process modifications xf,
+       a step function, 
        an initial value and a sequence of operations.
        Applies xf with a step to every x in xs."
       [xf step init xs]
@@ -236,12 +241,13 @@ Damit sparen wir uns lange Zwischenergebnisse und gewinnen an Durchsatz.
 
 Diese Konzept ist so praktisch, dass es mittlerweile unter dem Namen `Transducer` Teil der Clojure-Standartbibliothek ist.
 Viele Funktionen sind bereits für den Gebrauch als Transducer eingestellt (darunter die altbekannten `map`, `filter`, `mapcat`, ...).
+Unsere Funktion `reduce-with` ist dort als `transduce` bekannt.
 
 
 ## Mehr als Listen ##
 
 Zum Abschluss noch das versprochene zweite Bespiel. 
-Das Problem ist das gleiche, dieses Mal wollen wir allerdings keine Listen verwenden, sondern asynchrone Channels (via `clojure.core.async`).
+Das Problem ist das gleiche, dieses Mal wollen wir allerdings keine Listen verwenden, sondern Channels (via `clojure.core.async`).
 Hierbei schreiben wir alle Werte auf einen Channel `c` und beobachten, wie die selbe `xform` Prozessmodifikation auf ebendiese Channels anwendbar ist.
 Ebenfalls verwenden wir hier nun die eingebaute Funktion `transduce`, die die Arbeit von `sum-of-msc-2` übernimmt.
 
@@ -250,18 +256,29 @@ Ebenfalls verwenden wir hier nun die eingebaute Funktion `transduce`, die die Ar
       (:require [clojure.core.async :as async]))
 
     (let [exercises (sgen/sample (s/gen ::exercises))
+          ;; Create a channel using the xform defined above.
           c (async/chan 1 xform)]
+      ;; Put all our elements onto the channel.
       (async/go (async/onto-chan c exercises))
-      (let [chan-res (loop [n (async/<!! c)
+      (let [chan-res (loop [;; Read one element from the channel.
+                            n (async/<!! c)
                             res 0]
                        (if-not n
                          res
+                                ;; Read the next element from the channel.
                          (recur (async/<!! c)
+                                ;; Accumulate the result.
                                 (+ res n))))
             list-res (transduce xform + 0 exercises)]
         (= chan-res list-res)))
     ;; => true
 {% endhighlight %}
+
+Hier legen wir zuerst alle Elemente in den Channel (`onto-channel`).
+Anschliessen lesen wir Schritt für Schritt so lange von diesem Channel, bis keine Elemente mehr darin vorhanden sind (`<!!`).
+Wie wir am Ergebnis sehen, bewirkt unsere `xform` hier genau das gleiche, wie es schon bei Listen der Fall war.
+Da unserer `xform` egal ist, auf welche Datenstruktur sie arbeitet (solange sie die oben genannte Infrastruktur zur Verfügung stellt)
+lässt sie sich ohne eine Änderung ohne Probleme wiederverwenden!
 
 ## Fazit ##
 
