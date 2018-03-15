@@ -43,7 +43,7 @@ Um unser Gedächtnis etwas aufzufrischen betrachten wir zuerst eine Variante der
       (filter pred (rest xs)))))
 {% endhighlight %}
 
-So oder so ähnlich finden sich viele Defintionen und verschiedenen Standartbibliotheken. 
+So oder so ähnlich finden sich viele Defintionen und verschiedenen Standardbibliotheken. 
 Wie versprochen lassen sich beide Funktionen auch über `reduce` definieren:
 
 {% highlight clojure %}
@@ -73,7 +73,7 @@ Wie versprochen lassen sich beide Funktionen auch über `reduce` definieren:
   (reduce (filtering pred) [] xs))
 {% endhighlight %}
 
-Würden unsere Programme ausschliesslich aus Listenverarbeitung bestehen könnten wir an dieser Stelle zufrieden aufhören.
+Würden unsere Programme ausschließlich aus Listenverarbeitung bestehen könnten wir an dieser Stelle zufrieden aufhören.
 Etwas sticht jedoch ins Auge: sieht man einmal von dem Aufruf an `conj` ab verraten uns die Definitionen von `mapping` und `filtering`
 nichts darüber, dass sie "nur" auf Kollektionen arbeiten!
 
@@ -116,7 +116,7 @@ Anstatt uns auf die Datenstruktur zu verlassen gehen wir einen anderen Weg:
 2. Wir erwarten von unserer `step` Funktion nicht nur, dass sie binär ist, sondern auch, dass sie, aufgerufen mit keinem oder einem Argument, einen "Null"-Wert produziert.
    Beispiele hierfür wären in Clojure `(conj) => []`, `(conj [1]) => [1]` oder `(+) => 0`, `(+ 1) => 1`, etc.
 
-Wir kümmern uns an dieser Stelle nur um Punkt 1. Ich werde zuerst eine Implementierung von `mapping` und `filtering` vorschlagen
+Wir kümmern uns an dieser Stelle nur um Punkt 1. Wir werden zuerst eine Implementierung von `mapping` und `filtering` vorschlagen:
 
 {% highlight clojure %}
 (defn mapping
@@ -154,7 +154,7 @@ Wie sieht das in der Realität aus?
 
 ## Beispiele für Prozessmodifikatoren ##
 
-Im folgenden möchte ich zwei Beispiele dafür geben wie uns das Ganze nun in der echten Welt hilft und wann wir dieses Vorgehen möglicherweise der regulären Verkettung von Listenoperationen vorziehen wollen.
+Im Folgenden geben wir zwei Beispiele dafür, wie uns das Ganze nun in der echten Welt hilft und wann wir dieses Vorgehen möglicherweise der regulären Verkettung von Listenoperationen vorziehen wollen.
 
 In beiden Beispielen beschäftigen wir uns mit folgendem Problem:
 Das Semester ist zuende und die Professorin möchte wissen, wie gut die Durchschnittliche Leistung ihrer Masterstudent*innen im Übungsbetrieb war.
@@ -197,7 +197,7 @@ Mit regulären Listenfunktionen könnten wir die Aufgabe so lösen:
 Angewendet auf eine Liste von Übungen liefert uns das das richtige Ergebnis.
 Es gibt allerdings ein Problem: jeder Aufruf von `filter`, `map` und `reduce` berechnet eine neue Liste!
 Bei großen Mengen kann das, wie wir gleich sehen werden, schon mal zu Problemen führen.
-Unten nun das gleiche, ausgedrück über unsere neu definierten Operatoren.
+Unten nun das gleiche, ausgedrückt über unsere neu definierten Operatoren.
 Die Funktion `reduce-with` funktioniert ähnlich wie `reduce`, nur, dass sie zusätzlich zur Reduktionsfunktion (hier `step`) einen Paramterer `xf` erwartet,
 welcher eine Komposition unserer Funktionen darstellt.
 
@@ -235,7 +235,7 @@ Ebenfalls das richtige Ergebnis liefernd offenbart diese Lösung einen großen V
 Der Grund liegt auf der Hand: Anstatt für jeden Schritt eine neue Liste zu berechnen werden die Prozesse nacheinander für jedes Element ausgeführt.
 Damit sparen wir uns lange Zwischenergebnisse und gewinnen an Durchsatz.
 
-Diese Konzept ist so praktisch, dass es mittlerweile unter dem Namen `Transducer` Teil der Clojure-Standartbibliothek ist.
+Diese Konzept ist so praktisch, dass es mittlerweile unter dem Namen `Transducer` Teil der Clojure-Standardbibliothek ist.
 Viele Funktionen sind bereits für den Gebrauch als Transducer eingestellt (darunter die altbekannten `map`, `filter`, `mapcat`, ...).
 Unsere Funktion `reduce-with` ist dort als `transduce` bekannt.
 
