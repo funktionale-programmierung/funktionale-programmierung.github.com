@@ -17,7 +17,7 @@ insbesondere einen Blick auf die sogennanten Transducer.
 <!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
 auftauchen. -->
 
-## Alles ist ein `fold` ##
+## Alles ist ein fold ##
 
 Wer in der Einführung in die Informatik gut aufgepasst hat (und zugegeben etwas Glück mit der Auswahl der Themen hatte),
 wird von dieser Aussage nicht überrascht sein. 
@@ -25,56 +25,52 @@ Um unser Gedächtnis etwas aufzufrischen betrachten wir zuerst eine Variante der
 (Hinweis: Alle Beispiele sind in Clojure geschrieben, daher nennen wir `fold` ab diesem Punkt bei seinem Clojure-Namen `reduce`):
 
 {% highlight clojure %}
+(defn map
+  "Takes a function f and applies it to every element of xs."
+  [f xs]
+  (if (empty? xs)
+    xs
+    (cons (f (first xs)) (map f (rest xs)))))
 
-    (defn map
-      "Takes a function f and applies it to every element of xs."
-      [f xs]
-      (if (empty? xs)
-        xs
-        (cons (f (first xs)) (map f (rest xs)))))
-        
-    (defn filter
-      "Takes a predicate pred and returns a list with all elements
-       of xs that satisfy pred."
-      [pred xs]
-      (if (empty? xs)
-        xs
-        (if (pred (first xs))
-          (cons (first xs) (filter pred (rest xs)))
-          (filter pred (rest xs)))))
-
+(defn filter
+  "Takes a predicate pred and returns a list with all elements
+  of xs that satisfy pred."
+  [pred xs]
+  (if (empty? xs)
+    xs
+    (if (pred (first xs))
+      (cons (first xs) (filter pred (rest xs)))
+      (filter pred (rest xs)))))
 {% endhighlight %}
 
 So oder so ähnlich finden sich viele Defintionen und verschiedenen Standartbibliotheken. 
 Wie versprochen lassen sich beide Funktionen auch über `reduce` definieren:
 
 {% highlight clojure %}
+(defn mapping
+  "Takes a function f and returns a function.
+    The returned function takes a collection acc 
+    and an element x and conjoins x applied to f to acc."
+  [f]
+  (fn [acc x] (conj acc (f x))))
 
-    (defn mapping
-      "Takes a function f and returns a function.
-       The returned function takes a collection acc 
-       and an element x and conjoins x applied to f to acc."
-      [f]
-      (fn [acc x] (conj acc (f x))))
-      
-    (defn map
-      "Takes a function f and applies it to every element of xs."
-      [f xs]
-      (reduce (mapping f) [] xs))
-    
-    (defn filtering
-      "Takes a predicate pred and returns a function.
-       The returned function takes a collection acc
-       and an element x and conjoins x if it satisfies pred."
-      [pred]
-      (fn [acc x] (if (pred x) (conj acc x) acc)))
+(defn map
+  "Takes a function f and applies it to every element of xs."
+  [f xs]
+  (reduce (mapping f) [] xs))
 
-    (defn filter
-      "Takes a predicate pred and returns a list with all 
-       elements of xs that satisfy pred."
-      [pred xs]
-      (reduce (filtering pred) [] xs))
-      
+(defn filtering
+  "Takes a predicate pred and returns a function.
+    The returned function takes a collection acc
+    and an element x and conjoins x if it satisfies pred."
+  [pred]
+  (fn [acc x] (if (pred x) (conj acc x) acc)))
+
+(defn filter
+  "Takes a predicate pred and returns a list with all 
+    elements of xs that satisfy pred."
+  [pred xs]
+  (reduce (filtering pred) [] xs))
 {% endhighlight %}
 
 Würden unsere Programme ausschliesslich aus Listenverarbeitung bestehen könnten wir an dieser Stelle zufrieden aufhören.
@@ -89,23 +85,23 @@ Für diese Überlegung ist es hilfreich nicht an Listen sondern Sequenzen von Sc
 Definieren wir also eine über diesen "Schritt" parametrisierte Version unserer Funktionen:
 
 {% highlight clojure %}
-    (defn mapping
-      [f]
-      (fn [step]
-        (fn [acc x] (step acc (f x)))))
+(defn mapping
+  [f]
+  (fn [step]
+    (fn [acc x] (step acc (f x)))))
 
-    (defn map
-      [f xs] 
-      (reduce ((mapping f) conj) [] xs))
+(defn map
+  [f xs] 
+  (reduce ((mapping f) conj) [] xs))
 
-    (defn filtering
-      [pred]
-      (fn [step]
-        (fn [acc x] (if (pred x) (step acc x) acc))))
-        
-    (defn filter 
-      [pred xs]
-      (reduce ((filtering pred) conj) [] acc))
+(defn filtering
+  [pred]
+  (fn [step]
+    (fn [acc x] (if (pred x) (step acc x) acc))))
+
+(defn filter 
+  [pred xs]
+  (reduce ((filtering pred) conj) [] acc))
 {% endhighlight %}
 
 Betrachten wir nun die daraus resultierenden Definitionen von `mapping` und `filtering` stellen wir fest, dass die Datenstruktur, auf die diese nun operieren
@@ -123,24 +119,24 @@ Anstatt uns auf die Datenstruktur zu verlassen gehen wir einen anderen Weg:
 Wir kümmern uns an dieser Stelle nur um Punkt 1. Ich werde zuerst eine Implementierung von `mapping` und `filtering` vorschlagen
 
 {% highlight clojure %}
-    (defn mapping
-      [f]
-      (fn [step]
-        (fn
-          ([] (step))  ; 1.
-          ([acc] (step acc))  ; 2.
-          ([acc x] (step acc (f x)))  ; 3.
-        )))
-          
-    (defn filtering
-      [pred]
-      (fn [step]
-        (fn
-          ([] (step))
-          ([acc] (step acc))
-          ([acc x] (if (pred x)
-                     (step acc x)
-                     acc)))))
+(defn mapping
+  [f]
+  (fn [step]
+    (fn
+      ([] (step))  ; 1.
+      ([acc] (step acc))  ; 2.
+      ([acc x] (step acc (f x)))  ; 3.
+    )))
+
+(defn filtering
+  [pred]
+  (fn [step]
+    (fn
+      ([] (step))
+      ([acc] (step acc))
+      ([acc x] (if (pred x)
+                  (step acc x)
+                  acc)))))
 {% endhighlight %}
 
 Auf den ersten Blick sieht das vielleicht etwas unintuitiv aus, ist aber am Beispiel von `mapping` schnell erklärt:
@@ -165,37 +161,37 @@ Das Semester ist zuende und die Professorin möchte wissen, wie gut die Durchsch
 Mit Hilfe von Clojure Spec definieren wir einige Beispieldaten (wer mehr zu Spec erfahren möchte kann das [zum Beispiel in einem älteren Artikel in unserem Blog tun](http://funktionale-programmierung.de/2016/11/18/clojure-spec.html)):
 
 {% highlight clojure %}
-    (ns my.namespace
-      (:require [clojure.spec.alpha :as s]
-                [clojure.spec.gen.alpha :as sgen]))
+(ns my.namespace
+  (:require [clojure.spec.alpha :as s]
+            [clojure.spec.gen.alpha :as sgen]))
 
-    (s/def ::title string?)
-    (s/def ::student string?)
-    (s/def ::points (set (range 31)))
-    (s/def ::degree #{::msc ::bsc})
-    (s/def ::exercises (s/keys :req [::title ::student ::points ::degree]))
-    
-    (gen/sample ::exercises)
-    ;; =>
-    ;; [{::name "Marco"
-    ;;   ::title "Exercise 1"
-    ;;   ::points 29
-    ;;   ::degree ::msc}
-    ;;  {::name "Mathias"
-    ;;   ::title "Exercise 1"
-    ;;   ::points 28
-    ;;   ::degree ::bsc}
-    ;;  ...]
+(s/def ::title string?)
+(s/def ::student string?)
+(s/def ::points (set (range 31)))
+(s/def ::degree #{::msc ::bsc})
+(s/def ::exercises (s/keys :req [::title ::student ::points ::degree]))
+
+(sgen/sample (s/gen ::exercises))
+;; =>
+;; [{::name "Marco"
+;;   ::title "Exercise 1"
+;;   ::points 29
+;;   ::degree ::msc}
+;;  {::name "Mathias"
+;;   ::title "Exercise 1"
+;;   ::points 28
+;;   ::degree ::bsc}
+;;  ...]
 {% endhighlight %}
 
 Mit regulären Listenfunktionen könnten wir die Aufgabe so lösen:
 
 {% highlight clojure %}
-    (defn sum-of-msc
-      [exercises]
-      (reduce + 0 (->> exercises
-                       (filter #(= ::msc (::degree %)))
-                       (map ::handins))))
+(defn sum-of-msc
+  [exercises]
+  (reduce + 0 (->> exercises
+                    (filter #(= ::msc (::degree %)))
+                    (map ::handins))))
 {% endhighlight %}
 
 Angewendet auf eine Liste von Übungen liefert uns das das richtige Ergebnis.
@@ -206,34 +202,34 @@ Die Funktion `reduce-with` funktioniert ähnlich wie `reduce`, nur, dass sie zus
 welcher eine Komposition unserer Funktionen darstellt.
 
 {% highlight clojure %}
-    (defn reduce-with
-      "Takes a function composed of process modifications xf,
-       a step function, 
-       an initial value and a sequence of operations.
-       Applies xf with a step to every x in xs."
-      [xf step init xs]
-      (let [f (xf step)]
-        (f (reduce f init xs))))
+(defn reduce-with
+  "Takes a function composed of process modifications xf,
+    a step function, 
+    an initial value and a sequence of operations.
+    Applies xf with a step to every x in xs."
+  [xf step init xs]
+  (let [f (xf step)]
+    (f (reduce f init xs))))
 
-    ;; Compose two process modificators into one.
-    (def xform (comp
-                 (filtering #(= ::msc (::degree %)))
-                 (mapping ::points))
+;; Compose two process modificators into one.
+(def xform (comp
+              (filtering #(= ::msc (::degree %)))
+              (mapping ::points))
 
-    (defn sum-of-msc-2
-      [exercises]
-      (reduce-with xform + 0 exercises))
+(defn sum-of-msc-2
+  [exercises]
+  (reduce-with xform + 0 exercises))
 {% endhighlight %}
 
 Ebenfalls das richtige Ergebnis liefernd offenbart diese Lösung einen großen Vorteil:
 
 {% highlight clojure %}
-    (let [exercises (sgen/sample (s/gen ::exercises) 1000)]
-      (= (time (sum-of-msc exercises))
-         (time (sum-of-msc-2 exercises))))
-    ;; =>
-    ;; "Elapsed time: 407.378092 msecs"
-    ;; "Elapsed time: 2.144632 msecs"
+(let [exercises (sgen/sample (s/gen ::exercises) 1000)]
+  (= (time (sum-of-msc exercises))
+      (time (sum-of-msc-2 exercises))))
+;; =>
+;; "Elapsed time: 407.378092 msecs"
+;; "Elapsed time: 2.144632 msecs"
 {% endhighlight %}
 
 Der Grund liegt auf der Hand: Anstatt für jeden Schritt eine neue Liste zu berechnen werden die Prozesse nacheinander für jedes Element ausgeführt.
@@ -252,26 +248,28 @@ Hierbei schreiben wir alle Werte auf einen Channel `c` und beobachten, wie die s
 Ebenfalls verwenden wir hier nun die eingebaute Funktion `transduce`, die die Arbeit von `sum-of-msc-2` übernimmt.
 
 {% highlight clojure %}
-    (ns my.namespace
-      (:require [clojure.core.async :as async]))
+(ns my.namespace
+  (:require [clojure.core.async :as async]
+            [clojure.spec.alpha :as s]
+            [clojure.spec.gen.alpha :as sgen]))
 
-    (let [exercises (sgen/sample (s/gen ::exercises))
-          ;; Create a channel using the xform defined above.
-          c (async/chan 1 xform)]
-      ;; Put all our elements onto the channel.
-      (async/go (async/onto-chan c exercises))
-      (let [chan-res (loop [;; Read one element from the channel.
-                            n (async/<!! c)
-                            res 0]
-                       (if-not n
-                         res
-                                ;; Read the next element from the channel.
-                         (recur (async/<!! c)
-                                ;; Accumulate the result.
-                                (+ res n))))
-            list-res (transduce xform + 0 exercises)]
-        (= chan-res list-res)))
-    ;; => true
+(let [exercises (sgen/sample (s/gen ::exercises))
+      ;; Create a channel using the xform defined above.
+      c (async/chan 1 xform)]
+  ;; Put all our elements onto the channel.
+  (async/go (async/onto-chan c exercises))
+  (let [chan-res (loop [;; Read one element from the channel.
+                        n (async/<!! c)
+                        res 0]
+                    (if-not n
+                      res
+                            ;; Read the next element from the channel.
+                      (recur (async/<!! c)
+                            ;; Accumulate the result.
+                            (+ res n))))
+        list-res (transduce xform + 0 exercises)]
+    (= chan-res list-res)))
+;; => true
 {% endhighlight %}
 
 Hier legen wir zuerst alle Elemente in den Channel (`onto-channel`).
