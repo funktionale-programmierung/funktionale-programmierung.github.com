@@ -6,16 +6,17 @@ author: marco-schneider
 tags: ["Clojure", "Transducer", "Abstraktion", "Performance"]
 ---
 
+<h1>Transducer: Komposition, Abstraktion, Performance</h1>
+
 Funktionen höherer Ordnung wie `map`, `fold`, `filter` sind aus keinem funktionalen Programm wegzudenken.
 Mit ihrer Flexibilität sind sie das Mittel der Wahl für Operationen auf Kollektionen aller Art.
 Allerdings beschränkt sich ihr Anwendungsbereich nicht nur auf klassische Listen oder Vektoren.
 In diesem Artikel betrachten wir fundamentalere Eigenschaften dieser Operationen und werfen
 insbesondere einen Blick auf die sogennanten Transducer in der Programmiersprache Clojure.
+<!-- more start -->
 Ausserdem werden wir sehen, wie wir mit Hilfe von sinnvoller Abstraktion nicht
 nur sehr gute Wiederverwendbarkeit sondern auch eine höhere Performance erreichen
 können.
-
-<!-- more start -->
 
 <!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
 auftauchen. -->
