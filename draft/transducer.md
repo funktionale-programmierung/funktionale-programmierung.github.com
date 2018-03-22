@@ -6,8 +6,6 @@ author: marco-schneider
 tags: ["Clojure", "Transducer", "Abstraktion", "Performance"]
 ---
 
-<h1>Transducer: Komposition, Abstraktion, Performance</h1>
-
 Funktionen höherer Ordnung wie `map`, `fold`, `filter` sind aus keinem funktionalen Programm wegzudenken.
 Mit ihrer Flexibilität sind sie das Mittel der Wahl für Operationen auf Kollektionen aller Art.
 Allerdings beschränkt sich ihr Anwendungsbereich nicht nur auf klassische Listen oder Vektoren.
@@ -18,8 +16,7 @@ Ausserdem werden wir sehen, wie wir mit Hilfe von sinnvoller Abstraktion nicht
 nur sehr gute Wiederverwendbarkeit sondern auch eine höhere Performance erreichen
 können.
 
-<!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
-auftauchen. -->
+<!-- more start -->
 
 ## Alles ist ein fold ##
 
@@ -334,3 +331,4 @@ In diesem Artikel haben wir uns mit der konsequenten Abstraktion auseinandergese
 Nicht nur erhalten wir durch Transducer eine mächtige Beschreibung von Datentransformationen, 
 die rein auf Funktionskomposition beruht und vielseitig einsetzbar ist, sondern
 darüber hinaus noch entscheidende Performanceverbesserungen mit sich bringt.
+<!-- more end -->
