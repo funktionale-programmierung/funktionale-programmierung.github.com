@@ -1,9 +1,9 @@
 ---
 layout: post
-description: Transducer: Komposition, Abstraktion, Performance
-title: "Transducer: Komposition, Abstraktion, Performance"
-author: marco-schneider
-tags: ["Clojure", "Transducer", "Abstraktion", "Performance"]
+description: Entwicklungsumgebungen mit der Nix-Shell
+title: "Mit Nix raus aus der Versionshölle"
+author: tim-digel
+tags: ["Nix", "Elixir", "Erlang"]
 ---
 
 Funktionen höherer Ordnung wie `map`, `fold`, `filter` sind aus keinem funktionalen Programm wegzudenken.
