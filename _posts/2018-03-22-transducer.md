@@ -16,8 +16,6 @@ Ausserdem werden wir sehen, wie wir mit Hilfe von sinnvoller Abstraktion nicht
 nur sehr gute Wiederverwendbarkeit sondern auch eine höhere Performance erreichen
 können.
 
-<!-- more start -->
-
 ## Alles ist ein fold ##
 
 Wer sich in der Vergangenheit mit der funktionalen Programmierung auseinandergesetzt hat ist eventuell schon mit dieser Aussage vertraut.
