@@ -372,3 +372,5 @@ Programmierung - natürlich nicht nur wegen des Pattern Matchings. Elixir bietet
 die volle Mächtigkeit von [Erlang und der zugehörigen VM (BEAM) sowie OTP](http://www.erlang.org/), was hochgradig
 nebenläufige Programmierung ermöglicht und unterstützt dabei hervorragend das
 Arbeiten mit funktionaler Programmierung.
+
+Der Code für diesen Artikel kann [hier auf GitHub angesehen werden](https://github.com/neshtea/elixir-json-parser-example).
