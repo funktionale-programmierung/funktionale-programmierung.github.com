@@ -1,7 +1,7 @@
 ---
 layout: post
 description: Ein kurze Einführung in Elixirs Patter Matching
-title: "Pattern Matchin in Elixir"
+title: "Pattern Matching in Elixir"
 author: marco-schneider
 tags: ["elixir", "pattern matching", "json"]
 ---
@@ -372,5 +372,3 @@ Programmierung - natürlich nicht nur wegen des Pattern Matchings. Elixir bietet
 die volle Mächtigkeit von [Erlang und der zugehörigen VM (BEAM) sowie OTP](http://www.erlang.org/), was hochgradig
 nebenläufige Programmierung ermöglicht und unterstützt dabei hervorragend das
 Arbeiten mit funktionaler Programmierung.
-
-```
