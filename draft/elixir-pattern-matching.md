@@ -15,16 +15,14 @@ Seit ihrer Veröffentlichung 2012 erhält Elixir, eine auf Erlang basierende,
 funktionale Programmiersprache, zurecht einiges an Lob.
 Auch bei uns in der Active Group kommt sie mittlerweile gerne zum Einsatz.
 Eine der herausragenden Eigenschaften dieser Sprache ist ihre Unterstützung zum
-Pattern Machting.
-
-In diesem Artikel geben wir eine kurze Einführung am Beispiel eines JSON-Parsers.
+Pattern Machting. Das wollen wir uns in hier genauer anschauen.
 
 <!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
 auftauchen. -->
 
 ## Pattern Matching ##
 
-Unter Pattern Matching versteht man (zu deutsch in etwa "Musterabgleich") versteht
+Unter Pattern Matching (zu deutsch in etwa "Musterabgleich") versteht
 man die Möglichkeit, im Programmcode diskrete Daten(-strukturen) anhand ihres "Musters"
 zu identifizieren und verarbeiten zu können.
 
@@ -41,11 +39,12 @@ factorial n = n * fac (n - 1)   -- 2.
 
 Wird der Funktion der Wert `0` übergeben (Punkt 1), so liefert sie den Wert `1`. 
 Andernfalls greift das Muster `n` (für einen beliebigen Wert, der dieses Muster
-aufweist) und die Funktion gibt den entsprechenden Wert zurück.
-In vielen Fällen ist es sehr hilfreich, die Definition einer Funktion als
-Musterabgleich zu notieren: Es hilft der/dem Leser*in bei Verstehen und hat
+aufweist) und die Funktion gibt den entsprechenden Wert zurück (Punkt 2).
+In vielen Fällen im Alltag ist es sehr hilfreich, die Definition einer Funktion als
+Musterabgleich zu notieren: Es hilft der/dem Leser*in beim Verstehen und hat
 darüber hinaus häufig eine grosse Ähnlichkeit zur mathematischen Notation der
-Fallunterscheidung.
+Fallunterscheidung. Dass dadurch die Definitionen häufig auch kürzer und klarer
+werden ist natürlich auch ein nicht zu verachtender Vorteil.
 
 Leider sind die Möglichkeiten von Haskell hier etwas eingeschränkt. Es ist zwar
 einiges Möglich (Fallunterscheidungen für primitive Werte und Datenstrukturen),
@@ -55,9 +54,9 @@ beispielsweise [hier fündig](https://www.haskell.org/tutorial/patterns.html).
 Elixir geht hier einen Schritt weiter und erhebt das Pattern Matching zum
 primären Bindungsoperator. Wie sieht das ganze dann aus?
 
-## Elixir ##
+## Muterabgleich in Elixir ##
 
-Sehr grob formuliert ist in Elixir *alles* ein Pattern Match. In diesem Sinne
+Sehr grob formuliert ist in Elixir *fast alles* ein Pattern Match. In diesem Sinne
 gibt es keine klassische Wertzuweisung. Möchte man Werte binden, so bedient man
 sich des `=`-Operators (hier nicht Zuweisung sondern **match**). Im folgenden
 sehen wir einige Beispiele.
@@ -69,11 +68,11 @@ n = 42  # => 42
 23 = n  # => ** (MatchError) no match of right hand side value: 42
 
 # 2.
-xs = [1,2,3]   # => [1,2,3]
-[x | ys] = xs  # => [1,2,3]
-x              # => 1
-ys             # => [2,3]
-[1 | zs] = xs  # => [1,2,3]
+xs = [1,2,3]    # => [1,2,3]
+[x | ys] = xs   # => [1,2,3]
+x               # => 1
+ys              # => [2,3]
+[1 | zs] = xs   # => [1,2,3]
 [42 | zs] = xs  # => [1,2,3]
 
 # 3.
@@ -81,6 +80,8 @@ foobar = "foobar"                          # => "foobar"
 "foo" <> rest = foobar                     # => "foobar"
 rest                                       # => "bar"
 <<foo :: binary-size(3)>> <> bar = foobar  # => "foobar"
+foo                                        # => "foo"
+bar                                        # => "bar"
 ```
 
 Der Nummerierung im Code nach:
@@ -93,8 +94,8 @@ Der Nummerierung im Code nach:
    Anschliessend matchen wir das Muster aus erstem Element `x` und einem Rest 
    `ys` mit `xs`. `x` passt nun auf den Wert `1`, `ys` auf den Rest der Liste
    `[2,3]`.
-   Der Match `[1 | zs] = xs` ist demnach wieder erfolgreich, `[42 | zs] = xs`
-   begrüsst uns wieder mit einem `MatchError`.
+   Der Match `[1 | zs] = xs` ist demnach wieder erfolgreich, während `[42 | zs] = xs`
+   uns wieder mit einem `MatchError` begrüsst.
 3. Auch Strings (in Elixir sind Strings binäre Daten) lassen sich matchen.
    Interessant ist hier speziell der letzte Fall: Möchte ich einen Teilstring
    matchen, so muss ich Elixir mitteilen, wie viele Zeichen ich erwarte.
@@ -116,7 +117,7 @@ end
 def factorial(n) do
   n * (factorial (n - 1))
 end
-``**
+```
 
 Das sieht nun wieder ähnlich aus wie unser Haskellcodeschnipsel von vorhin. Um
 damit nun richtig Spass zu haben benutzen wir das schon gelernte um zu zeigen, 
@@ -146,45 +147,53 @@ zutrifft, wenn zusätzlich die Bedingung im Guard-Ausdruck erfüllt ist (nähere
 hierzu [gibt es hier](https://hexdocs.pm/elixir/master/guards.html)).
 
 ```elixir
-@doc "Skip any whitespace characters and return the resulting string."
-def skip_white(<<char>> <> rest, acc) when char in '\s\n\t\r', do: skip_white(rest)
-def skip_white(string), do: string
+# Skip any whitespace characters and return the resulting string.
+defp skip_white(<<char>> <> rest, acc) when char in '\s\n\t\r', do: skip_white(rest)
+defp skip_white(string), do: string
 ```
 
 Beginnen wir nun mit den einfachen Fällen und definieren eine `parse`-Funktion für
 den leeren String, `null`, `true` und `false`. Das Ergebnis soll jeweils ein 
-Tupel aus dem erkannten Wert und dem noch nicht bearbeiteten Rest sein.
+Tupel aus dem erkannten Wert und dem noch nicht bearbeiteten Rest sein. 
+Der `<>`-Operator ist in Elixir die Stringkonkatenation und kann natürlich auch
+in einem Pattern Match verwendet werden.
 
 ```elixir
-def parse("" <> rest),      do: {nil, ""}
-def parse("null" <> rest),  do: {nil, rest}
-def parse("true" <> rest),  do: {true, rest}
-def parse("false" <> rest), do: {false, rest}
+defp parse("" <> rest),      do: {nil, ""}
+defp parse("null" <> rest),  do: {nil, rest}
+defp parse("true" <> rest),  do: {true, rest}
+defp parse("false" <> rest), do: {false, rest}
 ```
 
 Das war einfach! Nun bleiben noch die etwas komplexeren Fälle. 
 
 Als nächstes nehmen wir uns Strings vor. Da Strings immer mit einem `"` anfangen
 haben wir schon eine Ahnung, was jetzt passieren muss.
-Anschliessend übergeben wir an eine Funktion, die den String bis zuende parsed,
-das Ergebnis akkumuliert und am Ende als Binärstring zurück gibt.
 
 ```elixir
-def parse("\"" <> rest), do: parse_string(rest, [])
+defp parse("\"" <> rest), do: parse_string(rest, [])
 
-def parse_string("\"" <> rest, acc) do
+defp parse_string("\"" <> rest, acc) do
   # When we encounter the closing \", we're done.
   {IO.iodata_to_binary(acc), rest}
 end
 
-def parse_string(string, acc) do
+defp parse_string(string, acc) do
   # Count the length of the partial string.
   # See github repo for full code.
   count = string_chunk_size(string, 0)
-  <<chunk :: binary-size(count), res :: binary>> string
-  parse_string(res, [acc, chunk])
+  <<chunk :: binary-size(count), rest :: binary>> = string
+  parse_string(rest, [acc, chunk])
 end
 ```
+
+Um Strings gut matchen zu können müssen wir jeweils wissen, wie lang die Repräsentation
+eines Characters ist (das sagt uns die hier nicht gezeige Funktion `string_chunk_size`).
+Anschliessend gleichen wir `chunk` mit dem ersten Zeichen in `string` ab und `rest`
+mit dem Rest.
+Am Ende, wenn der String bis zuende parsed ist wird das akkumulierte Ergebnis 
+als Binärstring zurück gegeben.
+
 
 Weiter geht es mit Arrays. Für unsere `parse`-Funktion bedeuted das, dass wir
 auf ein `[` matchen wollen.
@@ -338,6 +347,17 @@ def parse!(string) do
   {result, _} = skip_white(string) |> parse()
   result
 end
+
+# Example
+parse!("{\"foo\": 42, 
+         \"bar\": true, 
+         \"fizz\": 3.7e-5, 
+         \"buzz\": [42, true, [\"done\"]]}")
+# =>  %{"bar" => true, 
+        "buzz" => [42, true, ["done"]], 
+        "fizz" => 3.7e-5, 
+        "foo" => 42}
+```
 
 ## Fazit ##
 
