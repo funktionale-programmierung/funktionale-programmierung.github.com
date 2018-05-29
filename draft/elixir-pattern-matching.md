@@ -20,41 +20,16 @@ Pattern Machting. Das wollen wir uns hier genauer anschauen.
 <!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
 auftauchen. -->
 
-## Pattern Matching ##
+## Musterabgleich in Elixir ##
 
 Unter Pattern Matching (zu deutsch in etwa "Musterabgleich") versteht
 man die Möglichkeit, im Programmcode diskrete Daten(-strukturen) anhand ihres "Musters"
 zu identifizieren und verarbeiten zu können.
-
-Mittlerweile unterstützen viele verschiedene Sprachen diese Funktionalität.
-Ein klassisches Beispiel dafür ist Haskell. Hier können Funktionen anhand des 
-Musters der übergebenen Parameter definiert werden. Ein Beispiel für die 
-Fakultätsfunktion könnte so aussehen:
-
-```haskell
-factorial :: Int -> Int
-factorial 0 = 1  -- 1.
-factorial n = n * fac (n - 1)   -- 2.
-```
-
-Wird der Funktion der Wert `0` übergeben (Punkt 1), so liefert sie den Wert `1`. 
-Andernfalls greift das Muster `n` (für einen beliebigen Wert, der dieses Muster
-aufweist) und die Funktion gibt den entsprechenden Wert zurück (Punkt 2).
 In vielen Fällen im Alltag ist es sehr hilfreich, die Definition einer Funktion als
 Musterabgleich zu notieren: Es hilft der/dem Leser*in beim Verstehen und hat
 darüber hinaus häufig eine große Ähnlichkeit zur mathematischen Notation der
 Fallunterscheidung. Dass dadurch die Definitionen häufig auch kürzer und klarer
 werden ist natürlich auch ein nicht zu verachtender Vorteil.
-
-Leider sind die Möglichkeiten von Haskell hier etwas eingeschränkt. Es ist zwar
-einiges möglich (Fallunterscheidungen für primitive Werte und Datenstrukturen),
-jedoch kommt es manchmal doch an seine Grenzen. Wer mehr erfahren möchte wird 
-beispielsweise [hier fündig](https://www.haskell.org/tutorial/patterns.html).
-
-Elixir geht einen Schritt weiter und erhebt das Pattern Matching zum
-primären Bindungsoperator. Wie sieht das ganze dann aus?
-
-## Muterabgleich in Elixir ##
 
 Sehr grob formuliert ist in Elixir *fast alles* ein Pattern Match. In diesem Sinne
 gibt es keine klassische Wertzuweisung. Möchte man Werte binden, so bedient man
