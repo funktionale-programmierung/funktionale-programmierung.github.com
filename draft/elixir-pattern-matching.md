@@ -15,7 +15,7 @@ Seit ihrer Veröffentlichung 2012 erhält Elixir, eine auf Erlang basierende,
 funktionale Programmiersprache, zurecht einiges an Lob.
 Auch bei uns in der Active Group kommt sie mittlerweile gerne zum Einsatz.
 Eine der herausragenden Eigenschaften dieser Sprache ist ihre Unterstützung zum
-Pattern Machting. Das wollen wir uns in hier genauer anschauen.
+Pattern Machting. Das wollen wir uns hier genauer anschauen.
 
 <!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
 auftauchen. -->
@@ -29,7 +29,7 @@ zu identifizieren und verarbeiten zu können.
 Mittlerweile unterstützen viele verschiedene Sprachen diese Funktionalität.
 Ein klassisches Beispiel dafür ist Haskell. Hier können Funktionen anhand des 
 Musters der übergebenen Parameter definiert werden. Ein Beispiel für die 
-Fakultätsfunktion könnte hier so aussehen:
+Fakultätsfunktion könnte so aussehen:
 
 ```haskell
 factorial :: Int -> Int
@@ -42,16 +42,16 @@ Andernfalls greift das Muster `n` (für einen beliebigen Wert, der dieses Muster
 aufweist) und die Funktion gibt den entsprechenden Wert zurück (Punkt 2).
 In vielen Fällen im Alltag ist es sehr hilfreich, die Definition einer Funktion als
 Musterabgleich zu notieren: Es hilft der/dem Leser*in beim Verstehen und hat
-darüber hinaus häufig eine grosse Ähnlichkeit zur mathematischen Notation der
+darüber hinaus häufig eine große Ähnlichkeit zur mathematischen Notation der
 Fallunterscheidung. Dass dadurch die Definitionen häufig auch kürzer und klarer
 werden ist natürlich auch ein nicht zu verachtender Vorteil.
 
 Leider sind die Möglichkeiten von Haskell hier etwas eingeschränkt. Es ist zwar
 einiges möglich (Fallunterscheidungen für primitive Werte und Datenstrukturen),
-jedoch kommt es manchmal doch seine Grenzen. Wer mehr hierzu lesen möchte wird 
+jedoch kommt es manchmal doch an seine Grenzen. Wer mehr erfahren möchte wird 
 beispielsweise [hier fündig](https://www.haskell.org/tutorial/patterns.html).
 
-Elixir geht hier einen Schritt weiter und erhebt das Pattern Matching zum
+Elixir geht einen Schritt weiter und erhebt das Pattern Matching zum
 primären Bindungsoperator. Wie sieht das ganze dann aus?
 
 ## Muterabgleich in Elixir ##
@@ -59,7 +59,7 @@ primären Bindungsoperator. Wie sieht das ganze dann aus?
 Sehr grob formuliert ist in Elixir *fast alles* ein Pattern Match. In diesem Sinne
 gibt es keine klassische Wertzuweisung. Möchte man Werte binden, so bedient man
 sich des `=`-Operators (hier nicht Zuweisung sondern **match**). Im folgenden
-sehen wir einige Beispiele.
+sehen wir einige Beispiele:
 
 ```elixir
 # 1. 
@@ -90,8 +90,8 @@ Der Nummerierung im Code nach:
    das Pattern `n` auf 42 zutrifft. Daher ist der nächste Match `42 = n` auch
    erfolgreich ("Der Wert passt zum Muster"). Für `23` ist das nicht der Fall,
    daher Antwortet Elixir mit einem `MatchError`.
-2. Hier matchen wir zuerst das Muster `xs` an die Liste `[1,2,3]`.
-   Anschließend matchen wir das Muster aus erstem Element `x` und einem Rest 
+2. Hier matchen wir zuerst das Muster `xs` auf die Liste `[1,2,3]`.
+   Anschließend matchen wir das Muster bestehend aus einem erstem Element `x` und einem Rest 
    `ys` mit `xs`. `x` passt nun auf den Wert `1`, `ys` auf den Rest der Liste
    `[2,3]`.
    Der Match `[1 | zs] = xs` ist demnach wieder erfolgreich, während `[42 | zs] = xs`
@@ -120,46 +120,48 @@ end
 ```
 
 Das sieht nun wieder ähnlich aus wie unser Haskellcodeschnipsel von vorhin. Um
-damit nun richtig Spass zu haben benutzen wir das schon gelernte um zu zeigen, 
+damit nun richtig Spaß zu haben benutzen wir das schon Gelernte um zu zeigen, 
 wie einfach es damit ist, eine Parser für JSON zu schreiben!
 
 ## Ein einfacher JSON-Parser ##
 
 **Anmerkung**: Gleich vorneweg möchte ich sagen, dass das hier keine produktionsreife
 Implementierung ist. Der Einfachheit halber sparen wir uns das Abfangen von
-Fehlern etc. und konzentrieren uns nur auf die Idee.
+Fehlern, etc. und konzentrieren uns nur auf die Idee.
 
 JSON unterstützt folgende Daten:
 
 * Null: der primitive Wert `null`
-* Strings: von zwei `"` umschlossene Zeichenketten, z.B. `"foobar"`
+* Strings: von zwei `"` umschlossene Zeichenkette, z. B. `"foobar"`
 * Booleans: die Werte `true` und `false`
 * Zahlen: Fließkomma und Ganzzahlen, z.B. `42`, `-23`, `8.5` oder `3.7e-5`
-* Arrays: Werte beliebiger JSON-Typen, umschlossen von `[]`, z.B. `[1, 2, 3, true, false, "foobar"]`
+* Arrays: Werte beliebiger JSON-Typen, umschlossen von `[]`, z. B. `[1, 2, 3, true, false, "foobar"]`
 * Objekte: Paare von Strings und einem beliebigen JSON-Wert, umschlossen von `{}`,
-  z.B. `{"foo": "asdf", "bar": [1,2,3], "fizz": 42, "buzz": true"}` usw.
+  z. B. `{"foo": "asdf", "bar": [1,2,3], "fizz": 42, "buzz": true"}` usw.
 
-Zuerst definieren wir eine kleine Hilfsfunktion zum Überspringen von Whitespace
+Zuerst definieren wir eine kleine Hilfsfunktion zum Überspringen von Leerzeichen
 in Strings (natürlich mit Hilfe von Pattern Matching!). Um es noch einfacher zu
 machen verwenden wir hier Elixirs **Guard**s. Das sind Prädikate, die wir an den
 Header unserer Funktion anheften können und bewirken, dass das Pattern nur dann
 zutrifft, wenn zusätzlich die Bedingung im Guard-Ausdruck erfüllt ist (näheres 
-hierzu [gibt es hier](https://hexdocs.pm/elixir/master/guards.html)).
+hierzu [gibt es in der offiziellen Dokumentation (Link)](https://hexdocs.pm/elixir/master/guards.html)).
 
 ```elixir
 # Skip any whitespace characters and return the resulting string.
-defp skip_white(<<char>> <> rest, acc) when char in '\s\n\t\r', do: skip_white(rest)
+defp skip_white(<<char>> <> rest) when char in '\s\n\t\r', do: skip_white(rest)
 defp skip_white(string), do: string
 ```
 
 Beginnen wir nun mit den einfachen Fällen und definieren eine `parse`-Funktion für
 den leeren String, `null`, `true` und `false`. Das Ergebnis soll jeweils ein 
 Tupel aus dem erkannten Wert und dem noch nicht bearbeiteten Rest sein. 
-Der `<>`-Operator ist in Elixir die Stringkonkatenation und kann natürlich auch
-in einem Pattern Match verwendet werden.
+Der `<>`-Operator ist in Elixir die Stringverknüpfung und kann natürlich auch
+in einem Pattern Match verwendet werden. Das `_`-Symbol im Pattern steht für einen
+beliebigen Wert; damit signalisieren wir, dass sich dort zwar ein Wert befindet,
+dieser hier für uns aber keine Rolle spielt.
 
 ```elixir
-defp parse("" <> rest),      do: {nil, ""}
+defp parse("" <> _),         do: {nil, ""}
 defp parse("null" <> rest),  do: {nil, rest}
 defp parse("true" <> rest),  do: {true, rest}
 defp parse("false" <> rest), do: {false, rest}
@@ -188,52 +190,52 @@ end
 ```
 
 Um Strings gut matchen zu können müssen wir jeweils wissen, wie lang die Repräsentation
-eines Characters ist (das sagt uns die hier nicht gezeige Funktion `string_chunk_size`).
+eines Zeichens ist (das sagt uns die hier nicht gezeige Funktion `string_chunk_size`).
 Anschließend gleichen wir `chunk` mit dem ersten Zeichen in `string` ab und `rest`
 mit dem Rest.
-Am Ende, wenn der String bis zuende parsed ist wird das akkumulierte Ergebnis 
+Am Ende, wenn der String komplett analysiert ist, wird das akkumulierte Ergebnis 
 als Binärstring zurück gegeben.
 
 
-Weiter geht es mit Arrays. Für unsere `parse`-Funktion bedeuted das, dass wir
+Weiter geht es mit Arrays. Für unsere `parse`-Funktion bedeutet das, dass wir
 auf ein `[` matchen wollen.
 In `parse_array` parsen wir dann Schritt für Schritt alle Werte. Wenn wir am
 Ende angekommen sind geben wir das akkumulierte Ergebnis und den unverarbeiteten
-Rest zurück.
+Rest zurück. Hier sehen wir auch den Pipe-Operator `|>` im Einsatz. Dieser
+erlaubt es, das Ergebnis der "linken" Seite als **erstes** Argument der Funktion
+auf der "rechten" Seite zu verwenden und ist häufig nützlich, um ein Codefragment
+leichter lesbar und kürzer zu machen. Dazu gibt es [hier](https://elixirschool.com/en/lessons/basics/pipe-operator/)
+weitere Beispiele.
 
 ```elixir
-def parse("[" <> rest), do: skip_white(rest) |> parse_array(rest, [])
+defp parse("[" <> rest), do: skip_white(rest) |> parse_array([])
 
 defp parse_array("]" <> rest, _), do: {[], rest}
 
 defp parse_array(string, acc) do
-  {value, rest} = parse(string)
+  {value, rest} = parse(string)
   acc = [value | acc]
   case skip_white(rest) do
     "," <> rest -> skip_white(rest) |> parse_array(acc)
-    "]" <> rest -> {:lists.reverse(acc), rest}
-    _ -> raise "Not a valid array."
+    "]" <> rest -> {Enum.reverse(acc), rest}
   end
 end
 ```
 Bevor wir zu den Zahlen kommen kümmern wir uns noch um JSON-Objekte. Diese sind
-sehr ähnlich zu Arrays; wie suchen nach einem String, der mit `{` beginnt.
+sehr ähnlich zu Arrays; wir suchen nach einem String, der mit `{` beginnt.
 Danach gehen wir durch den String und parsen zuerst Schlüssel, dann Wert.
 Zum Schluss matchen wir auf `","` für weitere Paare oder `"}"` für das Ende
 des Objekts.
 
 ```elixir
-def parse("{" <> rest), do: skip_white(rest) |> parse_object([])
+defp parse("{" <> rest), do: skip_white(rest) |> parse_object([])
 
 defp parse_object("}" <> rest, []), do: {Map.new(), rest}
-defp parse_object("\" <> rest, acc) do
+defp parse_object("\"" <> rest, acc) do
   # First, get the key-value pair
   {name, rest} = parse_string(rest)
-  {value, rest} = case skip_white(rest) do
-                    # A value must be seperated from it's key by ":".
-                    ":" <> rest -> skip_white(rest) |> parse()
-                    _ -> raise "Not a valid object."
-                  end
+  ":" <> rest = skip_white(rest)
+  {value, rest} = skip_white(rest) |> parse()
   acc = [{name, value} | acc]
 
   # Check for more.
@@ -242,7 +244,6 @@ defp parse_object("\" <> rest, acc) do
     "," <> rest -> skip_white(rest) |> parse_object(acc)
     # We're done.
     "}" <> rest -> {Map.new(acc), rest}
-    _ -> raise "Not a valid object."
   end
 end
 ```
@@ -253,7 +254,7 @@ Das Muster, das wir erwarten, ist eine Ziffer oder ein Minus `-`, gefolgt von ei
 beliebigen Wert.
 
 ```elixir
-def parse(<<char, _ :: binary>> = string) when char in '-0123456789' do
+defp parse(<<char, _ :: binary>> = string) when char in '-0123456789' do
   parse_number(string)
 end
 ```
@@ -270,6 +271,7 @@ defp parse_number("-" <> rest) do
   case rest do
     "0" <> rest -> parse_frac(rest, ["-0"])
     rest -> parse_int(rest, [?-])
+  end
 end
 
 # If it starts with a 0, it's always a fraction.
@@ -283,9 +285,9 @@ Eine Ganzzahl parsen wir, indem wir sicherstellen, dass es mit einer Zahl zwisch
 den Zahlenwert aus dem akkumulierten Ergebnis.
 
 ```elixir
-defp parse_int(<<char, _ :: binary>> = string, acc), when char in '123456789' do
+defp parse_int(<<char, _ :: binary>> = string, acc) when char in '123456789' do
   {digits, rest} = parse_digits(string)
-  pare_frac(rest, [acc, digits])
+  parse_frac(rest, [acc, digits])
 end
 
 defp parse_digits(<<char>> <> rest = string) when char in '0123456789' do
@@ -312,7 +314,7 @@ defp parse_frac(string, acc), do: parse_exp(string, false, acc)
 
 defp parse_exp(<<e>> <> rest, frac, acc) when e in 'eE' do
   e = if frac, do: ?e, else: ".0e"
-  case rest of
+  case rest do
     "-" <> rest -> parse_exp_rest(rest, frac, [acc, e, ?-])
     "+" <> rest -> parse_exp_rest(rest, frac, [acc, e])
     rest -> parse_exp_rest(rest, frac, [acc, e])
@@ -323,7 +325,7 @@ defp parse_exp(string, frac, acc), do: {parse_number_complete(acc, frac), string
 
 defp parse_exp_rest(rest, _, acc) do
   {digits, rest} = parse_digits(rest)
-  {parse_number_copmlete([acc, digits], true), rest}
+  {parse_number_complete([acc, digits], true), rest}
 end
 
 defp parse_number_complete(iolist, false), do: IO.iodata_to_binary(iolist) |> String.to_integer
@@ -362,7 +364,7 @@ parse!("{\"foo\": 42,
 ## Fazit ##
 
 In diesem Artikel haben wir uns mit Pattern Matching in Elixir beschäftigt. 
-Anhand eines Parses haben wir es dazu verwendet, kurz und übersichtlich eine
+Anhand eines Parsers haben wir es verwendet, um eine kurze und übersichtliche
 Implementierung zu bauen.
 Weiter haben wir Guards kennen gelernt, die noch mehr Kontrolle über den
 Musterabgleich geben.
