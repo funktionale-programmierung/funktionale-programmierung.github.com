@@ -47,7 +47,7 @@ Fallunterscheidung. Dass dadurch die Definitionen häufig auch kürzer und klare
 werden ist natürlich auch ein nicht zu verachtender Vorteil.
 
 Leider sind die Möglichkeiten von Haskell hier etwas eingeschränkt. Es ist zwar
-einiges Möglich (Fallunterscheidungen für primitive Werte und Datenstrukturen),
+einiges möglich (Fallunterscheidungen für primitive Werte und Datenstrukturen),
 jedoch kommt es manchmal doch seine Grenzen. Wer mehr hierzu lesen möchte wird 
 beispielsweise [hier fündig](https://www.haskell.org/tutorial/patterns.html).
 
@@ -86,16 +86,16 @@ bar                                        # => "bar"
 
 Der Nummerierung im Code nach:
 
-1. Wir matchen die Variable `n` auf den Wert `42`. Anschliessend wissen wir, dass
+1. Wir matchen die Variable `n` auf den Wert `42`. Anschließend wissen wir, dass
    das Pattern `n` auf 42 zutrifft. Daher ist der nächste Match `42 = n` auch
    erfolgreich ("Der Wert passt zum Muster"). Für `23` ist das nicht der Fall,
    daher Antwortet Elixir mit einem `MatchError`.
 2. Hier matchen wir zuerst das Muster `xs` an die Liste `[1,2,3]`.
-   Anschliessend matchen wir das Muster aus erstem Element `x` und einem Rest 
+   Anschließend matchen wir das Muster aus erstem Element `x` und einem Rest 
    `ys` mit `xs`. `x` passt nun auf den Wert `1`, `ys` auf den Rest der Liste
    `[2,3]`.
    Der Match `[1 | zs] = xs` ist demnach wieder erfolgreich, während `[42 | zs] = xs`
-   uns wieder mit einem `MatchError` begrüsst.
+   uns wieder mit einem `MatchError` begrüßt.
 3. Auch Strings (in Elixir sind Strings binäre Daten) lassen sich matchen.
    Interessant ist hier speziell der letzte Fall: Möchte ich einen Teilstring
    matchen, so muss ich Elixir mitteilen, wie viele Zeichen ich erwarte.
@@ -134,7 +134,7 @@ JSON unterstützt folgende Daten:
 * Null: der primitive Wert `null`
 * Strings: von zwei `"` umschlossene Zeichenketten, z.B. `"foobar"`
 * Booleans: die Werte `true` und `false`
-* Zahlen: Fliesskomma und Ganzzahlen, z.B. `42`, `-23`, `8.5` oder `3.7e-5`
+* Zahlen: Fließkomma und Ganzzahlen, z.B. `42`, `-23`, `8.5` oder `3.7e-5`
 * Arrays: Werte beliebiger JSON-Typen, umschlossen von `[]`, z.B. `[1, 2, 3, true, false, "foobar"]`
 * Objekte: Paare von Strings und einem beliebigen JSON-Wert, umschlossen von `{}`,
   z.B. `{"foo": "asdf", "bar": [1,2,3], "fizz": 42, "buzz": true"}` usw.
@@ -189,7 +189,7 @@ end
 
 Um Strings gut matchen zu können müssen wir jeweils wissen, wie lang die Repräsentation
 eines Characters ist (das sagt uns die hier nicht gezeige Funktion `string_chunk_size`).
-Anschliessend gleichen wir `chunk` mit dem ersten Zeichen in `string` ab und `rest`
+Anschließend gleichen wir `chunk` mit dem ersten Zeichen in `string` ab und `rest`
 mit dem Rest.
 Am Ende, wenn der String bis zuende parsed ist wird das akkumulierte Ergebnis 
 als Binärstring zurück gegeben.
@@ -249,7 +249,7 @@ end
 
 Jetzt fehlen nur noch Zahlen. Diese sind im Vergleich mit den anderen Werttypen
 etwas komplexer. Um eine Zahl zu erkennen nutzen wir wieder ein Guard-Statement.
-Das Muster das wir erwarten ist eine Ziffer oder ein Minus `-`, gefolgt von einem
+Das Muster, das wir erwarten, ist eine Ziffer oder ein Minus `-`, gefolgt von einem
 beliebigen Wert.
 
 ```elixir
@@ -336,7 +336,7 @@ hilft uns das Pattern Matching auch hier, die Übersich zu behalten. In allen F�
 von `parse_number_complete` und den eingebauten `String.to_*` in Zahlen überführen.
 
 Um jetzt noch die API aufzuräumen definieren wir eine nicht-private Funktion
-`parse!` (In Elixir ist es üblich, Funktionen, die Fehler werfen und von "aussen"
+`parse!` (In Elixir ist es üblich, Funktionen, die Fehler werfen und von "außen"
 aufgerufen werden können mit einem Ausrufezeichen als solche zu markieren).
 
 ```elixir
