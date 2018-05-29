@@ -210,41 +210,33 @@ weitere Beispiele.
 ```elixir
 defp parse("[" <> rest), do: skip_white(rest) |> parse_array([])
 
-defp parse_array("]" <> rest, _), do: {[], rest}
-
+defp parse_array("]" <> rest, acc), do: {Enum.reverse(acc), rest}
+defp parse_array("," <> rest, acc), do: parse_array(rest, acc)
 defp parse_array(string, acc) do
-  {value, rest} = parse(string)
-  acc = [value | acc]
-  case skip_white(rest) do
-    "," <> rest -> skip_white(rest) |> parse_array(acc)
-    "]" <> rest -> {Enum.reverse(acc), rest}
-  end
+  {value, rest} = skip_white(string) |> parse()
+  skip_white(rest) |> parse_array([value | acc])
 end
 ```
+
 Bevor wir zu den Zahlen kommen kümmern wir uns noch um JSON-Objekte. Diese sind
 sehr ähnlich zu Arrays; wir suchen nach einem String, der mit `{` beginnt.
 Danach gehen wir durch den String und parsen zuerst Schlüssel, dann Wert.
-Zum Schluss matchen wir auf `","` für weitere Paare oder `"}"` für das Ende
-des Objekts.
+Die weiteren Implementierungen prüfen auf `","` für weitere Paare oder `"}"` für
+das Ende des Objekts.
+`Map.new` erstellt aus einer Liste von Tupeln eine neue Elixir-Map,
+wird es ohne Argumente aufgerufen gibt es eine leere Map zurück.
 
 ```elixir
 defp parse("{" <> rest), do: skip_white(rest) |> parse_object([])
 
-defp parse_object("}" <> rest, []), do: {Map.new(), rest}
+defp parse_object("}" <> rest, acc), do: {Map.new(acc), rest}
+defp parse_object("," <> rest, acc), do: skip_white(rest) |> parse_object(acc)
 defp parse_object("\"" <> rest, acc) do
-  # First, get the key-value pair
-  {name, rest} = parse_string(rest)
+  {name, rest} = parse_string(rest)  # Parse the name (key)
   ":" <> rest = skip_white(rest)
-  {value, rest} = skip_white(rest) |> parse()
+  {value, rest} = skip_white(rest) |> parse()  # Parse the value
   acc = [{name, value} | acc]
-
-  # Check for more.
-  case skip_white(rest) do
-    # There is another pair.
-    "," <> rest -> skip_white(rest) |> parse_object(acc)
-    # We're done.
-    "}" <> rest -> {Map.new(acc), rest}
-  end
+  parse_object(rest, acc)
 end
 ```
 
