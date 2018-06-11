@@ -79,23 +79,25 @@ Der Nummerierung im Code nach:
 Soweit, sogut. Elixir erlaubt es uns auch, den Musterabgleich in 
 Funktionsdefinitionen zu verwenden. Hierfür können wir belibig viele 
 Implementierungen einer Funktion angeben und Elixir sucht sich die **erste** aus
-bei dem das Muster und der übergebene Wert übereinstimmen. Mit unserem Beispiel
-von vorhin sieht das dann so aus:
+bei dem das Muster und der übergebene Wert übereinstimmen. Hier ein kleiner
+Klassiker: die Fakultätsfunktion mit Musterabgleich.
 
 ```elixir
+# If we get zero, just return 1.
 def factorial(0) do
   1
 end
 # Oder, in Kurzschreibweise
 # def factorial(0), do: 1
 
+# In any other case, recursively call `factorial`.
 def factorial(n) do
   n * (factorial (n - 1))
 end
 ```
 
-Das sieht nun wieder ähnlich aus wie unser Haskellcodeschnipsel von vorhin. Um
-damit nun richtig Spaß zu haben benutzen wir das schon Gelernte um zu zeigen, 
+Mit ein wenig Fantasie sieht das der mathematischen Notation recht ähnlich.
+Um damit nun richtig Spaß zu haben benutzen wir das schon Gelernte um zu zeigen, 
 wie einfach es damit ist, eine Parser für JSON zu schreiben!
 
 ## Ein einfacher JSON-Parser ##
