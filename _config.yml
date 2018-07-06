@@ -1,7 +1,7 @@
 markdown: kramdown
 encoding: UTF-8
 permalink: date
-gems: [jekyll-paginate]
+plugins: [jekyll-paginate]
 paginate: 3
 highlighter: rouge
 lsi: false
