@@ -78,7 +78,7 @@ Vorschläge und Wünsche auf: Als Kommentare zu diesem Blog-Post, per
 E-Mail an `contact at bobkonf dot de` oder auch als
 Twitter-Posts, die `@BOBkonf` erwähnen.
 
-# Sommer-BOB 2019
+## Sommer-BOB 2019
 
 2019 ist für die BOB ein besonderes Jahr: Es wird *zwei*
 BOB-Konferenzen geben.  Zusätzlich zur "Winter-BOB" im März
