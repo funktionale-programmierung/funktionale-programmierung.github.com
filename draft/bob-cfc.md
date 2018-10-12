@@ -11,7 +11,7 @@ bei Lohmann & Birkner in Berlin stattfinden.
 
 Die BOB ist diesmal ca. einen Monat später als in den Vorjahren: Damit
 gehen wir einem Terminkonflikt mit den [Lambda
-Days](http://www.lambdadays.org/lambdadays2019), worum uns viele
+Days](http://www.lambdadays.org/lambdadays2019) aus dem Weg, worum uns viele
 Teilnehmer gebeten haben.  Leider bedeutet dies auch, dass wir 2019
 nicht im Doppelpack mit der [:clojureD](https://clojured.de/)
 auftreten werden.  Wir hoffen aber, dass dies 2020 wieder klappt.
@@ -21,7 +21,7 @@ Keller](https://www.uu.nl/staff/GKKeller) von der Unversität Utrecht.
 Sie wird uns zeigen, wie man mit Haskell numerischen Code schreibt,
 der in der Performance mit C mithalten kann.
 
-Der [Call for Contributions](http://bobkonf.de/2019/cfp.html) ist
+Der [Call for Contributions](http://bobkonf.de/2019/cfc.html) ist
 eröffnet.  Schicken Sie uns also (bis zum **23. November**) 
 Ihren Vorschlag für einen Vortrag oder ein Tutorial - das
 Programmkomittee freut sich darauf!  Es gibt wieder
@@ -68,8 +68,8 @@ anbieten.
 
 Schicken Sie uns also Ihren Vorschlag für einen Vortrag oder
 ein Tutorial!  Das geht auf
-[deutsch](http://bobkonf.de/2019/de/cfp.html) oder
-[englisch](http://bobkonf.de/2019/en/cfp.html).  Wir rechnen wieder
+[deutsch](http://bobkonf.de/2019/de/cfc.html) oder
+[englisch](http://bobkonf.de/2019/en/cfc.html).  Wir rechnen wieder
 mit zwei Vortrags-Tracks und zwei Tutorial-Tracks.
 
 Gibt es ein Tutorial oder ein Thema, das Sie gerne auf der BOB
