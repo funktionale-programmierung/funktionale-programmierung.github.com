@@ -30,7 +30,7 @@ dieses Feature irgendwann einbauen (oder auch nicht).
 
 Zu Anfang ein populäres Beispiel, das einem eine kleine Syntaxerleichterung bringt.
 
-`when` ist die Abkürzung von `if-then-else` wenn die Alternative, der "else"-Zweig,
+`when` ist die Abkürzung von `if-then-else` wenn die Alternative, der `else`-Zweig,
 `nil` ist.
 
 Man kann mit `when` also
@@ -68,32 +68,37 @@ Schön, `(my-when true "Hallo Du")` liefert tatsächlich `"Hallo Du"` und
 `(my-when false "Hallo Du")` liefert `nil`.
 
 Doch Halt! Was passiert bei der Auswertung von
-`(my-when false (println "Ich sollte nicht geprintet werden")`?
+`(my-when false (println "Ich sollte nicht geprintet werden"))`?
 Richtig, es wird -trotz `false` als Bedingung- der Satz "Ich sollte nicht geprintet werden"
 in die Konsole geschrieben.
 
 Das heißt, unser Ansatz mit einer einfachen Funktion ist hier nicht möglich.
 Wieso nicht? In Clojure werden bei Funktionsaufrufen die Parameter automatisch ausgewertet.
-Damit sind also gerade Konsequenten ("then"-Zweige)  mit Nebeneffekten problematisch
+Damit sind also gerade Konsequenten (`then`-Zweige)  mit Nebeneffekten problematisch
 (Man bedenke nur `(when enemy? (shoot-missiles!))`!).
 
 Makros im Gegensatz zu Funktionen evaluieren ihre Parameter nicht automatisch,
 sondern geben sie unevaluiert an ihren Body weiter.
 
-Hier die funktionierende Version mit `defmacro` statt `defn`
+Hier eine funktionierende Version mit `defmacro` statt `defn`
 {% highlight clojure %}
 (defmacro my-when
   [pred then]
-  (if pred
+  (if (eval pred)
       then
       nil))
 {% endhighlight %}
 
 Nun wird beim Aufruf von
-`(my-when false (println "Ich sollte nicht geprintet werden"))`
+
+{% highlight clojure %}
+(my-when false (println "Ich sollte nicht geprintet werden"))
+{% endhighlight %}
+
 nicht mehr in die Konsole gedruckt.
 (Tatsächlich passiert dies auch nur deshalb nicht, da `if` seinerseits ein Makro ist,
 wäre `if` nur eine Funktion, so wuerde der `println`-Befehl ausgeführt werden.)
+Die Notwendigkeit des zusätlichen `eval`s, wird weiter unten erklärt.
 
 Dieses einführende Beispiel hatte nun weniger mit Makros als mit Ausführungsstrategien
 zu tun. Nachfolgend lüften wir das Geheimnis,
@@ -106,7 +111,9 @@ Die bei vielen Anfängern (und vor allem Programmiersprachenwechslern) oft
 gewöhnungsbedürftige Syntax einer Lisp-Sprache, macht das möglich,
 was "code is data, data is code" aussagt.
 
-Lisp Code wird in Listen ausgedrückt, welche in Lisp wiederum Daten entsprechen.
+Lisp-Code wird in Listen ausgedrückt, welche in Lisp wiederum Daten entsprechen.
+Präziser gesagt ist die *externe Darstellung* des Codes eine Teilmenge der
+externen Darstellung der Data.
 
 Ein Beispiel an dieser Stelle:
 
@@ -121,13 +128,13 @@ Hingegen evaluiert
 '(+ 5 7)
 {% endhighlight %}
 
-zu `(+ 5 7)`, ist also eine Liste, die drei Elemente, `+`, `5`, `7`,  besitzt.
+zu `(+ 5 7)`, es ist also eine Liste, die drei Elemente, `+`, `5`, `7`,  besitzt.
 Das Hochkomma-Zeichen `'` ist syntaktischer Zucker für die Funktion `quote`.
 `quote` (um genau zu sein, ist `quote` eine sogenannte
 [*special form*](https://clojure.org/reference/special_forms))
 gibt ihren übergebenen Parameter unevaluiert zurück.
 
-Mit `quote` können wir also Daten erstellen, die eigentlich Code sind.
+Mit `quote` können wir also Daten erstellen, die Code repräsentieren.
 Doch was tun mit einer "Liste von Code"?
 
 Hier kommt die Funktion `eval` ins Spiel. Sie evaluiert den übergebenen Parameter.
@@ -136,14 +143,11 @@ Hier kommt die Funktion `eval` ins Spiel. Sie evaluiert den übergebenen Paramet
 (eval '(+ 5 7))
 {% endhighlight %}
 
-liefert also `12`.
+liefert demnach `12`.
 
 Warum benötigt man Das Hochkomma `'` überhaupt, und konstruiert nicht einfach eine
 Liste mithilfe des Listenkonstruktors `list`?
-Also
-{% highlight clojure %}
-(list + 5 7)
-{% endhighlight %}
+Also `(list + 5 7)`?
 
 Sie haben es bestimmt schon herausgefunden. Der Listenkonstruktor `list` liefert
 als Rückgabewert zwar eine Liste, *evaluiert* aber die Parameter. Deshalb evaluiert
@@ -176,10 +180,25 @@ Folgendermaßen wäre es also auch möglich, mit dem Listenkonstruktor `list` de
 (list '+ 5 7)
 {% endhighlight %}
 
+Nun wird vielleicht auch klar, wieso wir oben, bei der Definition des `my-when`-Makros,
+die Bedingung (`pred`) mit einem `eval` ausstatten mussten. Nehmen wir an `pred`
+wäre `(= 2 1)`. Mit `eval` wird das zu `false` und `if` wird erwartungsgemäß ausgeführt.
+Ohne `eval` jedoch wird *die Liste* `(= 2 1)` als "truthy"-Wert
+(da alles "truthy" außer `nil` und `false` ist) im `if` interpretiert, und somit
+fälschlicherweise der `then`-Zweig zurückgegeben.
+
+Das ganze `my-when`-Makro können wir mit unserem neuen Wissen nun so schreiben:
+{% highlight clojure %}
+(defmacro my-when
+  [pred then]
+  (list 'if pred then nil))
+{% endhighlight %}
+
+
 ## Das Record-Makro
 
 Clojure bietet einem mit dem Typenkonstruktor `defrecord` die Möglichkeit,
-sogenannte *gemischte Daten* strukturiert zu erstellen.
+sogenannte *zusammengesetzte Daten* strukturiert zu erstellen.
 Nach `(defrecord Computer [cpu ram])` können wir
 (mithilfe des dadurch zur Verfügung gestellten Record-Konstruktors `->Computer`)
 Computer-Records erstellen, die zwei Felder besitzen, `cpu` und `ram`. z.B.
@@ -239,7 +258,8 @@ da es tatsächlich *unausgewerteter* Code ist (also *Data*). Um diese auch benut
 muss der Ausdruck noch evaluiert werden.
 
 Das ist nicht zufriedenstellend, wir müssen `eval` benutzen,
-was man vermeiden sollte, und müssen zusätzlich den Typnamen quoten sowie den Feldnamen
+was man generell vermeiden sollte,
+und müssen zusätzlich den Typnamen quoten sowie den Feldnamen
 als Keyword angeben. (Zudem wird der Record-Konstruktor hier auch erst zur *Laufzeit*
 erstellt und nicht wie bei Makros bereits zur *Kompilierzeit*. Dazu in einem weiteren
 Blogpost mehr.)
@@ -295,9 +315,9 @@ Die Notwendigkeit und Wichtigkeit von Makros wurde in diesem ersten Blogpost anh
 Bedürfnisses (Spracherweiterung durch Record-Typen) dargestellt und
 die Handhabung von Makros über die stückweise Entwicklung des Record-Typen nähergebracht.
 
-In einem weiteren Blogpost werden wir auf das sogenannte *Back- oder Syntax-Quote*,
-und den *Unquote-* bzw *Unquote-Splicing-*Operator eingehen.
+In einem weiteren Blogpost werden wir auf das sogenannte *Back-* oder *Syntax-Quote*, den *Unquote-* und *Unquote-Splicing-*Operator eingehen.
 Zudem wollen wir die eigentliche Funktionsweise von Makros und den Unterschied zwischen
-Kompilier- und Laufzeit näher beleuchten.
+Kompilier- und Laufzeit näher beleuchten
+und nebenher unser Record-Makro (das bisher nur ein Feld erlaubt) erweitern.
 
 <!-- more end -->
