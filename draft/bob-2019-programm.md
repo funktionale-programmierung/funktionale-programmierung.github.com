@@ -1,0 +1,104 @@
+---
+layout: post
+description: "Konferenz BOB 2019"
+title: "BOB Konferenz am 22.3.2019 in Berlin"
+author: michael-sperber
+tags: ["BOB", "Konferenz"]
+---
+
+![BOB 2019](https://bobkonf.de/images/bob_head-2019-date-en.png)
+
+Die Vorbereitungen für die [BOB 2019](http://bobkonf.de/2019/) sind
+abgeschlossen: Am Freitag, 22.3.2019 findet die fünfte BOB in Berlin
+statt.  Unserem Call zum Besten, was die Softwareentwicklung zu bieten
+hat, folgten dieses Mal fast doppelt so viele Einreichungen wie im
+Vorjahr, eine hochkarätiger als die andere.  Wir sind deshalb dieses
+Jahr besonders stolz auf unser
+großartiges [Programm](http://bobkonf.de/2019/program.html).
+
+Das Format hat sich nicht geändert: Es gibt vier Tracks - zwei Tracks
+mit insgesamt 14 Vorträgen und zwei Tracks mit acht Tutorials.  Die
+[Online-Registrierung](http://bobkonf.de/2019/registration.html)
+läuft; bis zum 19.2. gibt es noch Frühbucherrabatt.
+
+<!-- more start -->
+
+Unser Ziel ist stets, die Konferenzbeiträge für möglichst viele
+Teilnehmerinnen und Teilnehmer zugänglich zu machen.  So ist es
+möglich, den ganzen Tag mit englischsprachigen Talks und Tutorials zu
+füllen.  Deutschsprachige Beiträge gibt es auch, waren aber schon bei
+den Einreichungen rarer gesäht als sonst.
+
+## Keynote
+
+In der [Keynote](http://bobkonf.de/2019/keller.html) wird
+[Gabriele Keller](https://www.uu.nl/staff/GKKeller) über
+High-Performance-Numerik in Haskell berichten.
+
+## Vorträge
+
+Bei den [Vorträgen](http://bobkonf.de/2019/program.html) geht es
+natürlich wieder oft um funktionale Programmierung.  Besonders stark
+ist wieder Haskell [hier](https://bobkonf.de/2019/thoma.html),
+[hier](https://bobkonf.de/2019/breitner.html),
+[hier](https://bobkonf.de/2019/kant.html),
+[hier](https://bobkonf.de/2019/torreborre.html) und
+[hier](https://bobkonf.de/2019/andjelkovic.html).
+
+Diesmal sind aber auch ein paar fast vergessene Juwele aus der
+Vergangenheit dabei, die immer noch zum besten gehören:
+[APL](https://bobkonf.de/2019/hsu.html),
+[Prolog](https://bobkonf.de/2019/hupel.html) und
+[SQL](https://bobkonf.de/2019/winand-talk.html).
+
+Neben Programmiersprachen sind u.a.
+[SMT-Solver](https://bobkonf.de/2019/jelvis.html)
+[Musik](https://bobkonf.de/2019/ford.html),
+[EventSourcing](https://bobkonf.de/2019/rauch.html), [Explorative
+UIs](https://bobkonf.de/2019/goebel-sandstede.html) und
+[Gefühle](https://bobkonf.de/2019/mainusch-sperber.html) vertreten.
+
+Außerdem freuen wir uns über den renommierten Forscher [Shriram
+Krishnamurthi](https://cs.brown.edu/~sk/), der über den Einsatz von
+[Logik in
+System-Konfigurationen](https://bobkonf.de/2019/krishnamurthi.html)
+berichten wird.
+
+## Tutorials
+
+Es gibt wieder Einführungen in spezifische Sprachen, dieses Mal
+[Racket](https://bobkonf.de/2019/alama.html),
+[Clojure](https://bobkonf.de/2019/frankel.html) und
+[TypeScript](https://bobkonf.de/2019/opesanya.html) - außerdem [FP mit
+Code-Katas](https://bobkonf.de/2019/zilci.html).
+
+Fortgeschrittene Tutorials gibt es zu [Programmieren auf
+Typebene](https://bobkonf.de/2019/bragilevsky.html) und
+[FPGA-Programmierung](https://bobkonf.de/2019/heinzel.html) in
+Haskell.
+
+Außerdem gibt es ein Tutorial zu
+[SQL-Indizierung](https://bobkonf.de/2019/winand-tutorial.html) und
+[Probabilistischer
+Programmierung](https://bobkonf.de/2019/schmalhofer.html).
+
+## Anmeldung
+
+Die BOB findet ein weiteres mal auf dem
+[Gelände der Firma Lohmann & Birkner GmbH](http://bobkonf.de/local.html)
+statt.  Die Anmeldung ist
+[online](http://bobkonf.de/2019/registration.html) möglich.  Bis zum
+19.2. gibt es noch Frühbucher-Rabatt, danach wird es etwas teurer.  Es
+gibt außerdem eine Reihe von Rabatten und kostenlosen Tickets für
+unterrepräsentierte Gruppen.
+
+### RacketFest
+
+Aus terminlichen Gründen konnten wir dieses Mal nicht gemeinsam mit der
+[:clojured](http://clojured.de/) stattfinden.  (Das wird 2020
+hoffentlich wieder besser.)  Dafür haben wir eine neue tolle
+Partnerkonferenz, das [Racketfest](https://racketfest.com/),
+das direkt am Folgetag in Berlin stattfindet.
+
+
+<!-- more end -->
