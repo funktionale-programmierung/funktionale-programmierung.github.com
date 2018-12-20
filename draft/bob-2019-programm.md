@@ -39,7 +39,7 @@ High-Performance-Numerik in Haskell berichten.
 
 Bei den [Vorträgen](http://bobkonf.de/2019/program.html) geht es
 natürlich wieder oft um funktionale Programmierung.  Besonders stark
-ist wieder Haskell [hier](https://bobkonf.de/2019/thoma.html),
+ist wieder Haskell vertreten: [hier](https://bobkonf.de/2019/thoma.html),
 [hier](https://bobkonf.de/2019/breitner.html),
 [hier](https://bobkonf.de/2019/kant.html),
 [hier](https://bobkonf.de/2019/torreborre.html) und
@@ -52,7 +52,7 @@ Vergangenheit dabei, die immer noch zum besten gehören:
 [SQL](https://bobkonf.de/2019/winand-talk.html).
 
 Neben Programmiersprachen sind u.a.
-[SMT-Solver](https://bobkonf.de/2019/jelvis.html)
+[SMT-Solver](https://bobkonf.de/2019/jelvis.html),
 [Musik](https://bobkonf.de/2019/ford.html),
 [EventSourcing](https://bobkonf.de/2019/rauch.html), [Explorative
 UIs](https://bobkonf.de/2019/goebel-sandstede.html) und
@@ -85,7 +85,7 @@ Programmierung](https://bobkonf.de/2019/schmalhofer.html).
 ## Anmeldung
 
 Die BOB findet ein weiteres mal auf dem
-[Gelände der Firma Lohmann & Birkner GmbH](http://bobkonf.de/local.html)
+[Gelände der Firma Lohmann & Birkner GmbH](http://bobkonf.de/2019/local.html)
 statt.  Die Anmeldung ist
 [online](http://bobkonf.de/2019/registration.html) möglich.  Bis zum
 19.2. gibt es noch Frühbucher-Rabatt, danach wird es etwas teurer.  Es
