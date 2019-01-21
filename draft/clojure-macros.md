@@ -25,7 +25,7 @@ zu finden. Wir empfehlen, ihn während des Lesens Stück für Stück auszuführe
 
 Makros erlauben es, die Programmiersprache auf natürliche Art und Weise zu erweitern.
 So kann man Sprachfeatures, die die Sprache selbst nicht besitzt,
-eigenständig hinzufügen, und muss nicht darauf hoffen, dass die Sprach-Entwickler
+eigenständig hinzufügen, und muss nicht darauf hoffen, dass die Sprachen-Entwickler
 dieses Feature irgendwann einbauen (oder auch nicht).
 
 Zu Anfang ein populäres Beispiel, das einem eine kleine Syntaxerleichterung bringt.
@@ -129,44 +129,10 @@ zu `(+ 5 7)`, es ist also eine Liste, die drei Elemente, `+`, `5`, `7`,  besitzt
 Das Hochkomma-Zeichen `'` ist syntaktischer Zucker für die Funktion `quote`.
 `quote` (um genau zu sein, ist `quote` eine sogenannte
 [*special form*](https://clojure.org/reference/special_forms))
-gibt ihren übergebenen Parameter unevaluiert zurück.
+gibt ihren übergebenen Parameter *unevaluiert* zurück.
 
 Mit `quote` können wir also Daten erstellen, die Code repräsentieren.
-Doch was tun mit einer "Liste von Code"?
-
-Hier kommt die Funktion `eval` ins Spiel. Sie evaluiert den übergebenen Parameter.
-
-{% highlight clojure %}
-(eval '(+ 5 7))
-{% endhighlight %}
-
-liefert demnach `12`.
-
-Warum benötigt man Das Hochkomma `'` überhaupt, und konstruiert nicht einfach eine
-Liste mithilfe des Listenkonstruktors `list`?
-Also `(list + 5 7)`?
-
-Sie haben es bestimmt schon herausgefunden. Der Listenkonstruktor `list` liefert
-als Rückgabewert zwar eine Liste, *evaluiert* aber die Parameter. Deshalb evaluiert
-`(list + 5 7)` auch nicht zu `(+ 5 7)` sondern zu `(#function[clojure.core/+] 5 7)`.
-Da `5` und `7` *Atome* sind, werden sie "zu sich selbst" evaluiert, nur am `+` sieht man
-die Evaluation, das *Symbol* `+` wurde evaluiert zu `clojure.core/+`.
-
-Noch offensichtlicher ist der Unterschied bei den folgenden beiden Codeschnipseln:
-{% highlight clojure %}
-(list (println "println in der Liste") 5 7)
-;; evaluiert zu (nil 5 7) und printet "println in der Liste" in die Konsole
-
-'((println "println in der Liste") 5 7)
-;; evaluiert zu ((println "println in der Liste") 5 7) ohne Konsolenprint.
-{% endhighlight %}
-
-Folgendermaßen wäre es also auch möglich, mit dem Listenkonstruktor `list` den Wert
-`(+ 5 7)` zu erhalten
-
-{% highlight clojure %}
-(list '+ 5 7)
-{% endhighlight %}
+Doch was tun mit einer "Liste von Code"? Das sehen wir folgend.
 
 ## Makros
 
@@ -213,7 +179,8 @@ und wird deshalb gequotet, das Prädikat und die Konsequente müssen natürlich 
 `(if pred then nil)` da!). `nil` soll stehenbleiben, also müsste es normalerweise auch
 gequotet sein, da aber `nil` zu `nil` evaluiert, ist dies nicht nötig.
 
-Bevor wir zu einem praktischen Beispiel kommen, möchten wir zunächst ein Makro schreiben,
+Bevor wir zu einem praktischen Beispiel kommen, möchten wir zunächst zur Übung
+ein Makro schreiben,
 das Berechnungen in Infix-Notation akzeptiert!
 Das heißt `(calc-infix (2 + 3))` soll `5` ergeben!
 Unser Makro `calc-infix` bekommt also eine Form
@@ -227,10 +194,13 @@ wobei das erste und das zweite vertauscht sind.
 {% endhighlight %}
 
 Hier muss kein einziger Ausdruck gequotet sein!
+`calc-infix` zeigt die Mächtigkeit von Makros,
+wir können nun Code schreiben, der eine andere Syntax erlaubt! Dies ist gerade für
+DSLs (domänenspezifische Sprachen) ein großer Vorteil.
 
 ## Das Record-Makro
 
-Clojure bietet einem mit dem Typkonstruktor `defrecord` die Möglichkeit,
+Clojure bietet uns mit dem Typkonstruktor `defrecord` die Möglichkeit,
 sogenannte *zusammengesetzte Daten* strukturiert zu erstellen.
 Nach `(defrecord Computer [cpu ram])` können wir
 (mithilfe des dadurch zur Verfügung gestellten Record-Konstruktors `->Computer`)
@@ -286,7 +256,7 @@ Konstruktorname (`->>Car` bzw. `->>Computer`) sein, der als Parameter übernomme
 (bisher ist der Konstruktorname aber nur bspw. "Car" statt "->>Car").
 Wenn wir einen validen `defn`-Ausdruck erzeugen wollen, benötigt dieser zum Namen noch
 einen Parametervektor und den Rumpf. Der Rumpf besteht aus der Hashmap, die dem in ein
-*Keyword* verwandelte, übergebene *Symbol* `field`, das Argument `arg` zuweist.
+*Keyword* verwandeltes, übergebene *Symbol* `field` das Argument `arg` zuweist.
 Wir wollen, dass `arg` nach der Makro-Expansion `arg` bleibt, deshalb das quote.
 
 Hier das Ergebnis der Makro-Expansion:
@@ -318,11 +288,16 @@ werden kann.
 {% endhighlight %}
 
 Das Makro soll einen Ausdruck liefern, der (wenn wir ihn von Hand für das Computer-Beispiel
-schreiben würden) so aussehen soll `(defn Computer? [el] (= "Computer" (:__type__ el)))`.
+schreiben würden) so aussehen soll
+
+{% highlight clojure %}
+(defn Computer? [el] (= "Computer" (:__type__ el)))
+{% endhighlight %}
+
 Deshalb ist klar,
 dass im Rumpf der Funktion nicht einfach `(= (str type-name) (:__type__ el))` stehen darf
 (das würde sonst schon ausgewertet werden und ergäbe immer `false`,
-da ein String, `(str typ-name)` mit einer Liste `(:__type__ el)` verglichen wird),
+da ein String, `(str typ-name)`, mit einer Liste, `(:__type__ el)`, verglichen wird),
 sondern *die Liste*, die diesen Ausdruck enthält.
 
 Wir benötigen das zusätzliche `do` um die beiden Funktionsdefinitionen herum,
@@ -330,6 +305,18 @@ weil das Makro ansonsten zur Makro-Expansionszeit
 zwar beide Ausdrücke berechnen, aber nur den Letzten zurückgeben würde.
 Die geschachtelten `list`-Ausdrücke machen das Ganze nun etwas unleserlich.
 Dies beheben wir -mithilfe des sogenannten *Syntax-Qotes* im nächsten Beitrag.
+
+Jetzt können wir verschiedene Record-Typen definieren und mit ihnen arbeiten:
+
+{% highlight clojure %}
+(def-my-record Car color)
+(def fire-truck (->>Car "red"))
+(:color fire-truck)        ; --> "red"
+(Car? fire-truck)          ; --> true
+{% endhighlight %}
+
+Durch `(macroexpand-1 '(def-my-record Car color))` können wir uns wieder zeigen lassen,
+ob unser Makro auch die gewünschten Funktionen erstellt!
 
 ## Fazit und Ausblick
 
