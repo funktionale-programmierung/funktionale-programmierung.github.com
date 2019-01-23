@@ -9,8 +9,8 @@ tags: ["Clojure", "Makro", "macro", "defmacro", "quote", "unquote", "backquote",
 *If you give someone Fortran, he has Fortran. If you give someone Lisp, he has any language he pleases.*
 - Guy L. Steele
 
-Mit diesem -zugegebenermaßen provokanten- einführenden Zitat möchten wir dem geneigten
-Leser das heutige Blogpost-Thema, *Clojure Makros*, näherbringen.
+Mit diesem - zugegebenermaßen provokanten - einführenden Zitat möchten wir dem geneigten
+Leser das heutige Blogpost-Thema *Clojure Makros* näherbringen.
 Die in diesem Zusammenhang oft fallende Floskel *"code is data, data is code"*
 wird hierzu eine entscheidende Rolle spielen.
 Wir werden "Programme schreiben, die Programme schreiben"!
@@ -25,14 +25,12 @@ zu finden. Wir empfehlen, ihn während des Lesens Stück für Stück auszuführe
 
 Makros erlauben es, die Programmiersprache auf natürliche Art und Weise zu erweitern.
 So kann man Sprachfeatures, die die Sprache selbst nicht besitzt,
-eigenständig hinzufügen, und muss nicht darauf hoffen, dass die Sprachen-Entwickler
+eigenständig hinzufügen und muss nicht darauf hoffen, dass die Sprachenentwickler
 dieses Feature irgendwann einbauen (oder auch nicht).
-
-Zu Anfang ein populäres Beispiel, das einem eine kleine Syntaxerleichterung bringt.
+Zu Anfang ein populäres Beispiel, das einem eine kleine Syntaxerleichterung bringt:
 
 `when` ist die Abkürzung von `if-then-else` wenn die Alternative, der `else`-Zweig,
 `nil` ist.
-
 Man kann mit `when` also
 
 {% highlight clojure %}
@@ -51,10 +49,9 @@ statt
 schreiben.
 
 Angenommen, die Clojure-Entwickler hätten 'vergessen', `when` zu implementieren,
-wir aber wollen dieses Feature in unserer Sprache benutzen.
-
+wir aber möchten dieses Feature in unserer Sprache benutzen.
 Eine Herangehensweise mittels einfacher Funktionsdeklaration könnte folgendermaßen
-aussehen
+aussehen:
 
 {% highlight clojure %}
 (defn my-when
@@ -66,21 +63,19 @@ aussehen
 
 Schön, `(my-when true "Hallo Du")` liefert tatsächlich `"Hallo Du"` und
 `(my-when false "Hallo Du")` liefert `nil`.
-
 Doch Halt! Was passiert bei der Auswertung von
 `(my-when false (println "Ich sollte nicht geprintet werden"))`?
-Richtig, es wird -trotz `false` als Bedingung- der Satz "Ich sollte nicht geprintet werden"
+Richtig, es wird - trotz `false` als Bedingung - der Satz "Ich sollte nicht geprintet werden"
 in die Konsole geschrieben.
 
 Das heißt, unser Ansatz mit einer einfachen Funktion ist hier nicht möglich.
 Wieso nicht? In Clojure werden bei Funktionsaufrufen die Parameter automatisch ausgewertet.
-Damit sind also gerade Konsequenten (`then`-Zweige)  mit Nebeneffekten problematisch
-(Man bedenke nur `(when enemy? (shoot-missiles!))`!).
-
+Damit sind gerade Konsequenten (`then`-Zweige)  mit Nebeneffekten problematisch
+(Man bedenke nur `(when enemy? (shoot-missiles!))`.)
 Makros im Gegensatz zu Funktionen evaluieren ihre Parameter nicht automatisch,
 sondern geben sie unevaluiert an ihren Rumpf weiter.
 
-Hier eine (zunächst unkommentierte) funktionierende Version mit `defmacro` statt `defn`
+Hier eine (zunächst unkommentierte) funktionierende Version mit `defmacro` statt `defn`:
 {% highlight clojure %}
 (defmacro my-when
   [pred then]
@@ -105,9 +100,8 @@ und damit auch wie und warum unser `my-when`-Makro funktioniert.
 ## Code is Data - Data is Code
 
 Die bei vielen Anfängern (und vor allem Programmiersprachenwechslern) oft
-gewöhnungsbedürftige Syntax einer Lisp-Sprache, macht das möglich,
+gewöhnungsbedürftige Syntax einer Lisp-Sprache macht das möglich,
 was "code is data, data is code" (etwas schwammig) aussagt.
-
 Lisp-Code wird in Listen ausgedrückt, welche in Lisp wiederum Daten entsprechen.
 Präziser gesagt ist die *externe Darstellung* des Codes eine Teilmenge der
 externen Darstellung der Daten.
@@ -119,15 +113,15 @@ Ein Beispiel an dieser Stelle:
 {% endhighlight %}
 
 evaluiert zu `12`.
-
 Hingegen evaluiert
+
 {% highlight clojure %}
 '(+ 5 7)
 {% endhighlight %}
 
 zu `(+ 5 7)`, es ist also eine Liste, die drei Elemente, `+`, `5`, `7`,  besitzt.
 Das Hochkomma-Zeichen `'` ist syntaktischer Zucker für die Funktion `quote`.
-`quote` (um genau zu sein, ist `quote` eine sogenannte
+`quote` (um genau zu sein ist `quote` eine sogenannte
 [*special form*](https://clojure.org/reference/special_forms))
 gibt ihren übergebenen Parameter *unevaluiert* zurück.
 
@@ -139,14 +133,14 @@ Doch was tun mit einer "Liste von Code"? Das sehen wir folgend.
 Um Makros (bzw. ihre Benutzung) besser zu verstehen, ist es sinnvoll,
 sie von Funktionen abzugrenzen.
 Funktionen erhalten einen Wert berechnen damit ggf. etwas und geben dann einen Wert zurück.
-Makros hingegen erhalten *Quellcode* *manipulieren* diesen ggf. und geben *Quellcode* zurück
+Makros hingegen erhalten *Quellcode*, manipulieren diesen ggf. und geben *Quellcode* zurück
 (wir sagen dazu ab jetzt auch *(unausgewertete) Formen*).
 
-Zurück zu unserem `my-when`-Beispiel. Wieso wird beim Aufruf von bspw.
-`(my-when (= 1 1) "Hallo!")` dann kein Quellcode zurückgegeben, sondern "Hallo"?
+Zurück zu unserem `my-when`-Beispiel: Wieso wird beim Aufruf von bspw.
+`(my-when (= 1 1) "Hallo!")` kein Quellcode zurückgegeben, sondern "Hallo"?
 Wichtig zu wissen ist, dass bei der Kompilierung von Clojure-Code Makros *vor* der
 eigentlichen Evaluierung des restlichen Codes ausgeführt werden
-(Makro-Expansionszeit, dazu in einem weiteren Beitrag mehr). Danach wird dann evaluiert
+(Makro-Expansionszeit, dazu in einem späteren Beitrag mehr). Danach wird dann evaluiert
 (*auch* der von den Makros produzierte Code!).
 Das heißt, wir hatten im obigen Beispiel keine Chance,
 das Zwischenergebnis des Makros zu sehen,
@@ -165,8 +159,7 @@ Dies liefert uns
 (if (= 1 1) Hallo! nil)
 {% endhighlight %}
 
-Also genau den Code, den wir abkürzen wollten!
-
+also genau den Code, den wir abkürzen wollten.
 Wenn man also Makros schreiben möchte, ist es sinnvoll, sich im Vorhinein
 immer zu überlegen, welchen *Code* man erzeugen möchte.
 
@@ -181,8 +174,8 @@ gequotet sein, da aber `nil` zu `nil` evaluiert, ist dies nicht nötig.
 
 Bevor wir zu einem praktischen Beispiel kommen, möchten wir zunächst zur Übung
 ein Makro schreiben,
-das Berechnungen in Infix-Notation akzeptiert!
-Das heißt `(calc-infix (2 + 3))` soll `5` ergeben!
+das Berechnungen in Infix-Notation akzeptiert.
+Das heißt `(calc-infix (2 + 3))` soll `5` ergeben.
 Unser Makro `calc-infix` bekommt also eine Form
 (Liste mit drei Elementen) und soll eine Liste zurückgeben, die die Elemente der Form hat,
 wobei das erste und das zweite vertauscht sind.
@@ -193,9 +186,9 @@ wobei das erste und das zweite vertauscht sind.
   (list (second form) (first form) (nth form 2)))
 {% endhighlight %}
 
-Hier muss kein einziger Ausdruck gequotet sein!
-`calc-infix` zeigt die Mächtigkeit von Makros,
-wir können nun Code schreiben, der eine andere Syntax erlaubt! Dies ist gerade für
+Hier muss kein einziger Ausdruck gequotet sein.
+`calc-infix` zeigt die Mächtigkeit von Makros.
+Wir können nun Code schreiben, der eine andere Syntax erlaubt! Dies ist gerade für
 DSLs (domänenspezifische Sprachen) ein großer Vorteil.
 
 ## Das Record-Makro
@@ -204,7 +197,7 @@ Clojure bietet uns mit dem Typkonstruktor `defrecord` die Möglichkeit,
 sogenannte *zusammengesetzte Daten* strukturiert zu erstellen.
 Nach `(defrecord Computer [cpu ram])` können wir
 (mithilfe des dadurch zur Verfügung gestellten Record-Konstruktors `->Computer`)
-Computer-Records erstellen, die zwei Felder besitzen, `cpu` und `ram`. z.B.
+Computer-Records erstellen, die zwei Felder besitzen, `cpu` und `ram`. Z.B.:
 
 {% highlight clojure %}
 (def office-pc (->Computer "AMD Athlon XP 1700 MHz" 2))
@@ -213,17 +206,16 @@ Computer-Records erstellen, die zwei Felder besitzen, `cpu` und `ram`. z.B.
 
 Nun bietet Clojure noch die Möglichkeit, via *Keywords* auf die einzelnen Felder
 zuzugreifen, beispielsweise liefert `(:ram office-pc)` den Wert `2`.
-
 Wir nehmen wieder an, in Clojure existierte `defrecord` nicht, verzagen aber nicht,
 sondern schreiben es einfach selbst!
 
 Als unterliegende Struktur des Records verwenden wir eine Clojure-*Hashmap*.
 Wir brauchen einen Typkonstruktor `def-my-record`, der uns zu einem gegebenen Namen
 eine Funktion (oben war es `->Computer`, wir nehmen `->>Computer`) erstellt,
-mit welcher man die tatsächlichen Records also erzeugen kann.
-(Zunächst wird unser Typkonstruktor nur Rekordtypen mit einem Feld erlauben).
+mit welcher man die tatsächlichen Records erzeugen kann.
+(Zunächst wird unser Typkonstruktor nur Rekordtypen mit einem Feld erlauben.)
 
-Ein nicht-generischer Konstruktor für Computer-Records würde folgendermaßen aussehen:
+Ein nicht-generischer Konstruktor für Computer-Records lautet:
 
 {% highlight clojure %}
 (defn ->>Computer
@@ -231,7 +223,7 @@ Ein nicht-generischer Konstruktor für Computer-Records würde folgendermaßen a
   {:ram ram-value}))
 {% endhighlight %}
 
-Und wir könnten einen Computer mit 4 GB RAM via `(->>Computer 4)` erzeugen.
+und wir könnten einen Computer mit 4 GB RAM via `(->>Computer 4)` erzeugen.
 Für ein Auto entsprechend:
 
 {% highlight clojure %}
@@ -251,12 +243,13 @@ Wir übernehmen den obigen Code, mit ein paar Änderungen, in unseren Makro-Code
   (list 'defn type-name ['arg] {(keyword field) 'arg}))
 {% endhighlight %}
 
-`defn` soll nicht evaluiert werden, `type-name` aber natürlich schon, das soll ja unser
-Konstruktorname (`->>Car` bzw. `->>Computer`) sein, der als Parameter übernommen wird!
-(bisher ist der Konstruktorname aber nur bspw. "Car" statt "->>Car").
+`defn` soll nicht evaluiert werden, `type-name` aber natürlich schon. Das soll ja unser
+Konstruktorname (`->>Car` bzw. `->>Computer`) sein, der als Parameter übernommen wird.
+(Bisher ist der Konstruktorname aber nur bspw. "Car" statt "->>Car".)
 Wenn wir einen validen `defn`-Ausdruck erzeugen wollen, benötigt dieser zum Namen noch
-einen Parametervektor und den Rumpf. Der Rumpf besteht aus der Hashmap, die dem in ein
-*Keyword* verwandeltes, übergebene *Symbol* `field` das Argument `arg` zuweist.
+einen Parametervektor und den Rumpf. Der Rumpf besteht aus der Hashmap,
+die dem übergebenen Feld `field` das Argument `arg` zuweist
+(das Symbol `field` wird zuvor noch in ein Keyword verwandelt).
 Wir wollen, dass `arg` nach der Makro-Expansion `arg` bleibt, deshalb das quote.
 
 Hier das Ergebnis der Makro-Expansion:
@@ -277,6 +270,24 @@ der Typname als String) und erstellen eine neue Funktion,
 das *Typ-Prädikat*, sodass mit `(Computer? my-computer)` diese Überprüfung durchgeführt
 werden kann.
 
+Das Makro soll einen Ausdruck liefern, der (wenn wir ihn von Hand für das Computer-Beispiel
+schreiben würden) so aussehen soll:
+
+{% highlight clojure %}
+(defn Computer? [el] (= "Computer" (:__type__ el)))
+{% endhighlight %}
+
+In unserem Makro-Code nur
+{% highlight clojure %}
+(list 'defn (symbol (str type-name "?")) '[el] (= (str type-name)
+                                                 '(:__type__ el)))
+{% endhighlight %}
+
+zu schreiben, wäre falsch, da `(= (str type-name) (:__type__ el))`
+sonst bereits ausgewertet werden und immer `false` ergeben würde,
+da ein String `(str typ-name)` mit einer Liste `(:__type__ el)` verglichen wird).
+Stattdessen möchten wir *die Liste* zurückgeben, die diesen Ausdruck enthält:
+
 {% highlight clojure %}
 (defmacro def-my-record
   [type-name field]
@@ -287,24 +298,11 @@ werden kann.
                                                              '(:__type__ el)))))
 {% endhighlight %}
 
-Das Makro soll einen Ausdruck liefern, der (wenn wir ihn von Hand für das Computer-Beispiel
-schreiben würden) so aussehen soll
-
-{% highlight clojure %}
-(defn Computer? [el] (= "Computer" (:__type__ el)))
-{% endhighlight %}
-
-Deshalb ist klar,
-dass im Rumpf der Funktion nicht einfach `(= (str type-name) (:__type__ el))` stehen darf
-(das würde sonst schon ausgewertet werden und ergäbe immer `false`,
-da ein String, `(str typ-name)`, mit einer Liste, `(:__type__ el)`, verglichen wird),
-sondern *die Liste*, die diesen Ausdruck enthält.
-
 Wir benötigen das zusätzliche `do` um die beiden Funktionsdefinitionen herum,
 weil das Makro ansonsten zur Makro-Expansionszeit
 zwar beide Ausdrücke berechnen, aber nur den Letzten zurückgeben würde.
 Die geschachtelten `list`-Ausdrücke machen das Ganze nun etwas unleserlich.
-Dies beheben wir -mithilfe des sogenannten *Syntax-Qotes* im nächsten Beitrag.
+Dies beheben wir - mithilfe des sogenannten *Syntax-Quotes* - im nächsten Beitrag.
 
 Jetzt können wir verschiedene Record-Typen definieren und mit ihnen arbeiten:
 
@@ -316,7 +314,7 @@ Jetzt können wir verschiedene Record-Typen definieren und mit ihnen arbeiten:
 {% endhighlight %}
 
 Durch `(macroexpand-1 '(def-my-record Car color))` können wir uns wieder zeigen lassen,
-ob unser Makro auch die gewünschten Funktionen erstellt!
+ob unser Makro auch die gewünschten Funktionen erstellt.
 
 ## Fazit und Ausblick
 
@@ -326,7 +324,7 @@ Die Notwendigkeit und Wichtigkeit von Makros wurde in diesem ersten Blogpost anh
 Bedürfnisses (Spracherweiterung durch Record-Typen) dargestellt und
 die Handhabung von Makros über die stückweise Entwicklung des Record-Typen nähergebracht.
 
-In einem weiteren Blogpost werden wir auf das sogenannte *Back-* oder *Syntax-Quote*, den *Unquote-* und *Unquote-Splicing-*Operator und den Unterschied zwischen
+In einem späteren Blogpost werden wir auf das sogenannte *Back-* oder *Syntax-Quote*, den *Unquote-* und *Unquote-Splicing-*Operator und den Unterschied zwischen
 *Syntax-Quote* und *Quote* eingehen.
 Zudem wollen wir die Funktionsweise von Makros und den Kompilierungsprozess näher beleuchten
 und nebenher unser Record-Makro (das bisher nur ein Feld erlaubt) erweitern.
