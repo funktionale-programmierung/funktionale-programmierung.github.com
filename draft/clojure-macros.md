@@ -117,7 +117,7 @@ einem Apostroph an:
       nil)
 {% endhighlight %}
 
-Mit `'` gibt `(list 'if true "Hallo" nil)` nun tatsächlich die gewünschte Form
+Mit dem Apostroph gibt `(list 'if true "Hallo" nil)` nun tatsächlich die gewünschte Form
 `(if true "Hallo" nil)` zurück! Zum eigentlichen Makro ist es nun nicht mehr weit:
 
 {% highlight clojure %}
@@ -129,7 +129,7 @@ Mit `'` gibt `(list 'if true "Hallo" nil)` nun tatsächlich die gewünschte Form
 {% endhighlight %}
 
 Wenn im Source-Code steht `(my-when (= 1 1) "Hallo!")`, dann ruft der
-Compilter den `my-when`-Makro mit den Argumenten `(= 1 1)`  und
+Compiler den `my-when`-Makro mit den Argumenten `(= 1 1)`  und
 `"Hallo!"` auf: Das erste Argument ist eine Liste mit den Elementen
 `=` (ein Symbol), `1` und `1`, das zweite einfach die Zeichenkette
 `"Hallo!"`.  Das heißt der Compiler übergibt an den Makro Quelltext
@@ -138,7 +138,7 @@ Quelltext zurück.
 
 Wichtig zu wissen ist, dass bei der Kompilierung von Clojure-Code Makros *vor* der
 eigentlichen Evaluierung des restlichen Codes ausgeführt werden
-(Makro-Expansionszeit, dazu in einem späteren Beitrag mehr). 
+(Makro-Expansionszeit, dazu in einem späteren Beitrag mehr).
 Um zu sehen, was ein Makro zur Expansionszeit zurückgibt, kann man die Funktion
 `macroexpand-1` (bzw. `macroexpand`) benutzen:
 
@@ -173,7 +173,7 @@ Unser Makro `calc-infix` bekommt also eine Form
   (list (second form) (first form) (nth form 2)))
 {% endhighlight %}
 
-Hier muss kein einziger Ausdruck mit `'` versehen sein.
+Hier muss kein einziger Ausdruck mit Apostroph versehen sein.
 `calc-infix` zeigt die Mächtigkeit von Makros:
 Wir können nun Code schreiben, der eine andere Syntax erlaubt! Dies ist gerade für
 DSLs (domänenspezifische Sprachen) ein großer Vorteil.
