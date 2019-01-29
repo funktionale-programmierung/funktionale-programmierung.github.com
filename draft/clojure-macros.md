@@ -7,7 +7,7 @@ tags: ["Clojure", "Makro", "macro", "defmacro", "quote", "unquote", "backquote",
 ---
 
 *If you give someone Fortran, he has Fortran. If you give someone Lisp, he has any language he pleases.*
-- Guy L. Steele
+  ---Guy L. Steele
 
 Mit diesem &mdash; zugegebenermaßen provokanten &mdash; einführenden Zitat möchten wir Dir
 das heutige Blogpost-Thema *Clojure Makros* näherbringen.
@@ -66,37 +66,56 @@ Richtig, die Funktion druckt &mdash; trotz `false` als Bedingung &mdash;
 den Satz "Ich sollte nicht geprintet werden" in die Konsole.
 
 Eine einfache Funktion erfüllt scheinbar unsere Anforderungen nicht ganz.
-Wieso nicht? In Clojure werden bei Funktionsaufrufen die Argumente automatisch ausgewertet.
+Wieso nicht? In Clojure werden bei Funktionsaufrufen die Argumente
+ausgewertet, bevor die Funktion aufgerufen wird.
 Damit sind gerade Konsequenten (`then`-Zweige)  mit Nebeneffekten problematisch.
 (Man bedenke nur `(when enemy? (shoot-missiles!))`)
 
 ## Makros
 
-Anders als Funktionen werten Makros ihre Argumente nicht automatisch aus, sondern
-geben sie unausgewertet an ihren Rumpf weiter.
-Ein weiterer Unterschied ist in ihrer Benutzung zu sehen:
-Funktionen erhalten einen Wert berechnen damit ggf. etwas und geben dann einen Wert zurück.
-Makros hingegen erhalten *Quellcode*, manipulieren diesen ggf. und geben *Quellcode* zurück
-(wir sagen dazu ab jetzt auch *(unausgewertete) Formen*).
+Eine Funktion aufzurufen, ist offenbar nicht das richtige, um die
+gewünschte Funktionsweise von `my-when` zu realisieren: Stattdessen
+hätten wir gern, dass der Compiler die `my-when`-Form durch die
+entsprechende `if`-Form *ersetzt*: Das geht mit einem Makro.
 
-Zurück zu `my-when`: Der Ausdruck `(my-when true "Hallo")` soll nun,
-wenn wir `my-when` als Makro schreiben, eine *Liste* mit *vier* Elementen zurückgeben:
-das `if`, das Prädikat `true`, die Konsequente `"Hallo"` und das feste `nil`.
-Listen können wir mit dem Listenkonstruktor `(list ...)` erzeugen.
-Ein erster Versuch wäre also:
+Ein Makro ist eine Funktion, die vom Compiler bei der Verarbeitung des
+Quelltexts aufgerufen wird:
 
 {% highlight clojure %}
-(list if true
+(defmacro my-when
+  [pred then]
+  ...)
+{% endhighlight %}
+
+Der Makro muss Output produzieren, der vom Compiler als Code
+akzeptiert wird.  Das geht mit einem Trick: Es ist möglich,
+Clojure-Werte zu erzeugen, die ausgedruckt genauso aussehen wie
+Clojure-Quelltext.
+
+Wir hätten zum Beispiel gern den Quelltext
+
+{% highlight clojure %}
+(if true "Hallo" nil)
+{% endhighlight %}
+
+Vom `if` einmal abgesehen, könnten wir folgendes versuchen:
+
+{% highlight clojure %}
+(list ??? true
       "Hallo"
       nil)
 {% endhighlight %}
 
-Wenn dieser Code ausgewertet wird, bekommen wir eine Fehlermeldung:
-*"Unable to resolve symbol: if in this context"*.
-Der Clojure-Evaluator versucht die Argumente von `list` *auszuwerten* und stößt auf `if`.
-Wir können den Clojure-Compiler mit `'` anweisen,
-das nachfolgende Symbol *nicht* auszuwerten. Wenn wir bspw. `'if` in die REPL eingeben,
-wird einfach nur `if` zurückgegeben, statt der obigen Fehlermeldung!
+Die Liste sorgt für die nötigen runden Klammern.  Wir benötigen nur
+noch einen Wert, der als `if` ausgedruckt wird.  Dafür gibt es einen
+Extra-Datentyp in Clojure, das *Symbol*.  Symbol-Literale fangen mit
+einem Apostroph an:
+
+{% highlight clojure %}
+(list 'if true
+      "Hallo"
+      nil)
+{% endhighlight %}
 
 Mit `'` gibt `(list 'if true "Hallo" nil)` nun tatsächlich die gewünschte Form
 `(if true "Hallo" nil)` zurück! Zum eigentlichen Makro ist es nun nicht mehr weit:
@@ -109,23 +128,17 @@ Mit `'` gibt `(list 'if true "Hallo" nil)` nun tatsächlich die gewünschte Form
         nil))
 {% endhighlight %}
 
-`pred` und `then` sollen ja ausgewertet werden
-(also wie oben im Beispiel `pred` zu `true` und `then` zu `"Hallo"`), deshalb vor ihnen
-kein `'`.
-`nil` soll eigentlich auch "stehen bleiben", also nicht ausgewertet werden und
-müsste normalerweise mit einem `'` versehen sein, da aber `nil` zu `nil` auswertet,
-ist dies nicht nötig.
+Wenn im Source-Code steht `(my-when (= 1 1) "Hallo!")`, dann ruft der
+Compilter den `my-when`-Makro mit den Argumenten `(= 1 1)`  und
+`"Hallo!"` auf: Das erste Argument ist eine Liste mit den Elementen
+`=` (ein Symbol), `1` und `1`, das zweite einfach die Zeichenkette
+`"Hallo!"`.  Das heißt der Compiler übergibt an den Makro Quelltext
+für die Operanden der Makro-Benutzung und erwartet *expandierten*
+Quelltext zurück.
 
-Oben wurde behauptet, dass Makros Quellcode zurückgeben, jetzt wird beim Aufruf von bspw.
-`(my-when (= 1 1) "Hallo!")` aber nicht der Quellcode `(if (= 1 1) "Hallo! nil)` zurückgegeben,
-sondern `"Hallo"`. Wieso?
 Wichtig zu wissen ist, dass bei der Kompilierung von Clojure-Code Makros *vor* der
 eigentlichen Evaluierung des restlichen Codes ausgeführt werden
-(Makro-Expansionszeit, dazu in einem späteren Beitrag mehr). Danach wird dann ausgewertet
-(*auch* der von den Makros produzierte Code!).
-Das heißt, dass wir im obigen Beispiel keine Chance hatten,
-das Zwischenergebnis des Makros zu sehen,
-da die Evaluation unmittelbar nach der Makro-Expansion geschah.
+(Makro-Expansionszeit, dazu in einem späteren Beitrag mehr). 
 Um zu sehen, was ein Makro zur Expansionszeit zurückgibt, kann man die Funktion
 `macroexpand-1` (bzw. `macroexpand`) benutzen:
 
@@ -133,6 +146,10 @@ Um zu sehen, was ein Makro zur Expansionszeit zurückgibt, kann man die Funktion
 (macroexpand-1 '(my-when (= 1 1)
                          "Hallo!"))
 {% endhighlight %}
+
+Damit `macroexpand-1` funktioniert, müssen wir dem zu expandierenden
+Quelltext ebenfalls ein Apostroph voranstellen.  (Im nächsten Blog-Post
+dieser Reihe werden wir das näher erläutern.)
 
 Dies liefert uns:
 
@@ -144,7 +161,7 @@ also genau den Code, den wir abkürzen wollten.
 Wenn man also Makros schreiben möchte, ist es sinnvoll, sich im Vorhinein
 immer zu überlegen, welchen *Code* man erzeugen möchte.
 
-Als weiteres Beispiel möchten wir nun ein ein Makro schreiben,
+Als weiteres Beispiel möchten wir nun ein Makro schreiben,
 das Berechnungen in Infix-Notation akzeptiert.
 Das heißt `(calc-infix (2 + 3))` soll `5` ergeben.
 Unser Makro `calc-infix` bekommt also eine Form
