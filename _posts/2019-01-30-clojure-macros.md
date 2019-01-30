@@ -1,7 +1,7 @@
 ---
 layout: post
-description: "Clojure Makros"
-title: "Clojure Makros"
+description: "Makros in Clojure"
+title: "Makros in Clojure"
 author: kaan-sahin
 tags: ["Clojure", "Makro", "macro", "defmacro", "quote", "unquote", "backquote", "quasiquote"]
 ---
