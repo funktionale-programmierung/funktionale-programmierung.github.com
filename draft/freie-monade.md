@@ -1,7 +1,7 @@
 ---
 layout: post
 description: "Freie Monaden selbst gemacht"
-title: "Uhrwerk Freie Monade: Hinter den Kullisen" 
+title: "Uhrwerk Freie Monade: Hinter den Kulissen" 
 author: simon-haerer
 tags: ["Praxis", "freie", "Monade", "Scala"]
 ---
@@ -37,11 +37,11 @@ val res : Option[Int] = Some(3).flatMap(a => Some(10).map(b => a + b))
 
 {% endhighlight %}
 
-Um in Scala eine Monade vom Typ `M[A]` zu implementieren, benötigen wir also eine Funktion `flatMap` mit der Signatur `def flatMap[B](f: A => M[B]) : M[B]` und eine Funktion `map` mit der Signatur `def map[B](f: A => B) : M[B]`. Dabei wird davon ausgegangen, dass die Funktionsdefinitionen in der Klasse selbst stattfinden und somit wird die explizite Nennung des Parameters vom Typ `M[A]` bei beiden Funktionen übersprungen. Dieses Wissen über die Grundfunktionen einer Monade in Scala wird im Folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
+Um in Scala eine Monade vom Typ `M[A]` zu implementieren, benötigen wir also eine Funktion `flatMap` mit der Signatur `def flatMap[B](f: A => M[B]) : M[B]` und eine Funktion `map` mit der Signatur `def map[B](f: A => B) : M[B]`. Dabei wird davon ausgegangen, dass die Funktionsdefinitionen in der Klasse selbst befinden und somit wird die explizite Nennung des Parameters vom Typ `M[A]` bei beiden Funktionen übersprungen. Dieses Wissen über die Grundfunktionen einer Monade in Scala wird im Folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
 
 ## Operationen als Daten
 
-Im vorherigen Artikel über freie Monaden haben wir einen Trick kennengelernt: Beim Erstellen der Algebra haben wir Operationen von Funktionen in Daten übersetzt, um diese nicht direkt auszuführen. Dabei ist folgende DSL für ein Adressbuch entstanden, die wir in diesem Artikel weiterhin verwenden:
+Im vorherigen Artikel über freie Monaden haben wir einen Trick kennengelernt: Beim Erstellen der Algebra haben wir Operationen von Funktionen in Daten übersetzt, um diese nicht direkt auszuführen. Dabei ist folgende Domain Specific Language (DSL) für ein Adressbuch entstanden, die wir in diesem Artikel weiterhin verwenden:
 
 {% highlight scala %}
 
@@ -54,7 +54,7 @@ case class Filter(foo : Address => Boolean) extends AddressBookOp[List[Address]]
     
 {% endhighlight %}
 
-Jedoch ist hier nicht Schluss! Dieses Prinzip lässt sich auf einer zusätzlichen Ebene erneut anwenden. Wir wissen, dass die Algebra-Operationen, die mit Hilfe der freien Monade komponiert werden, später ausgeführt und mittels natürlicher Transformation sogar in eine andere Monade überführt werden können. Dazu müssen wir allerdings die strukturelle Information erhalten, wie das monadisches Programm zusammengesetzt ist. Im vorherigen Abschnitt wurde gezeigt, welche Funktionen eine Monade in Scala implementieren muss. Um eine Komposition später nachvollziehen zu können, formulieren wir die Funktionen `flatMap` und `map` zuerst als Daten:
+Jedoch ist hier nicht Schluss! Dieses Prinzip lässt sich auf einer zusätzlichen Ebene erneut anwenden. Wir wissen, dass die Algebra-Operationen, die mit Hilfe der freien Monade komponiert werden, später ausgeführt und mittels natürlicher Transformation sogar in eine andere Monade überführt werden können. Dazu müssen wir allerdings die strukturelle Information über die Zusammensetzung des monadischen Programms erhalten. Im vorherigen Abschnitt wurde gezeigt, welche Funktionen eine Monade in Scala implementieren muss. Um eine Komposition später nachvollziehen zu können, formulieren wir die Funktionen `flatMap` und `map` zuerst als Daten:
 
 {% highlight scala %}
 
@@ -67,7 +67,7 @@ case class FlatMap[F[_], I, A](param: F[I], continuation : I => Free[F, A])
 
 {% endhighlight %}
 
-Dazu wird der algebraische Datentyp `Free` mittels eines _traits_ implementiert. Dieses hat zwei Typparameter, einen Container-Typen `F[_]`, der unsere Algebra repräsentiert und einen Ergebnistypen `A`, dazu später mehr. Die Typen für die Funktionen `map` und `flatMap` lassen sich geradewegs aus den Definitionen der dazugehörigen Funktionen ableiten und erweitern `Free`. Beide Subtypen werden mit einem Parameter und einer dazugehörigen Funktion konstruiert. Somit wird die Ausführung zu einem späteren Zeitpunkt anhand eines Interpreters möglich. Diese Datentypen erlauben es uns bereits, den entfalteten for-Ausdruck aus dem Option-Monaden Beispiel zu beschreiben:
+Dazu wird der algebraische Datentyp `Free` mittels eines _traits_ implementiert. Dieser hat zwei Typparameter, einen Container-Typen `F[_]`, der unsere Algebra repräsentiert und einen Ergebnistypen `A`, dazu später mehr. Die Typen für die Funktionen `map` und `flatMap` lassen sich geradewegs aus den Definitionen der dazugehörigen Funktionen ableiten und erweitern `Free`. Beide Subtypen werden mit einem Parameter und einer dazugehörigen Funktion konstruiert. Somit wird die Ausführung zu einem späteren Zeitpunkt anhand eines Interpreters möglich. Diese Datentypen erlauben es uns bereits, den entfalteten for-Ausdruck aus dem Option-Monaden-Beispiel zu beschreiben:
 
 
 {% highlight scala %}
@@ -80,7 +80,7 @@ Allerdings ist die Beschreibung so sehr mühsam. Es wäre einfacher, diese Besch
 
 ## Meta-Monadisch
 
-Jetzt nicht den Kopf verlieren: Von nun an ist es wichtig, zwischen dem Typ `FlatMap` und der Funktion `flatMap` aufmerksam zu unterscheiden (respektive `Map`). Um `Free` monadisch kombinieren zu können, muss es nämlich die Funktionen `map` und `flatMap` implementieren.
+Jetzt nicht den Kopf verlieren: Von nun an ist es wichtig, zwischen dem Typ `FlatMap` und der Funktion `flatMap` aufmerksam zu unterscheiden (respektive `Map`). Um `Free` monadisch kombinieren zu können, muss es nämlich die Funktionen `map` und `flatMap` implementieren:
 
 {% highlight scala %}
 
@@ -112,7 +112,7 @@ Wird `flatMap` auf einen Wert vom Typ `Map` angewandt, wird zunächst die `conti
 
 Wird `flatMap` auf einen Wert vom Typ `FlatMap` angewandt, wird ein neuer Wert vom Typ `FlatMap` mit unverändertem Parameter konstruiert. Die dazugehörige Funktion ist eine Verkettung aus der `continuation` und einem selbstrekursiven Aufruf der Funktion `flatMap` mit der übergebenen Funktion `f` als Parameter.
 
-Konzeptuell arbeiten wird also mit Komposition von Funktionen, um den Eingabeparameter später in den gewünschten Typen zu übersetzen.
+Konzeptuell arbeiten wird also mit Funktionskompositionen, um den Eingabeparameter später in den gewünschten Typen zu übersetzen.
 
 Betrachten wir nun die Implementierung von `map`:
 
