@@ -216,6 +216,11 @@ img { border: 0 }
     text-decoration: underline;
 }
 
+.post-title a {
+    color: #3e606f;
+    text-decoration: none;
+}
+
 .post-content > figure {
     margin: 4ex 1ex;
 
