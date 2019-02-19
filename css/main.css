@@ -1,10 +1,3 @@
-@font-face {
-  font-family: 'Source Sans Pro';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(http://themes.googleusercontent.com/static/fonts/sourcesanspro/v5/ODelI1aHBYDBqgeIAH2zlNHq-FFgoDNV3GTKpHwuvtI.woff) format('woff');
-}
-
 
 body {
   font-family: 'Source Sans Pro', Helvetica, arial, sans-serif;
@@ -25,15 +18,16 @@ body {
 }
 
 p,h1,h2,h3,h4,h5,h6,ul,ol,li,div,td,th,address,blockquote,nobr,b,i
-     { font-family: 'Source Sans Pro', Helvetica, arial, sans-serif; }
+{ font-family: 'Source Sans Pro', Helvetica, arial, sans-serif;
+  font-weight: 400;
+}
 
 p,ul,ol,li,div,td,th,address,nobr,b,i { font-size:15px; }
 
 p {
     margin-bottom: 1.5ex;
-    line-height: 3.0ex;
-    font-size: 16px;
-    text-align: justify;
+    line-height: 3.3ex;
+    font-size: 1.1em;
 }
 
 p + p {
@@ -42,9 +36,8 @@ p + p {
 }
 
 h1 {
-    font-size:1.2em;
+    font-size: 2.0em;
     color: #3e606f;
-    font-weight:bold;
 }
 
 h1 a {
@@ -52,10 +45,11 @@ h1 a {
 }
 
 h2 {
-    font-size:1.2375em;
+    font-size:1.5em;
     /* ag weinrot color:#640201; hell rot: #994844 */
     color: #3e606f;
-    font-weight:normal;
+    margin-top: 30px;
+    font-weight: 700;
 }
 
 h3 { font-size:1.15em; color:#3e606f; font-weight:normal; }
@@ -174,7 +168,7 @@ img { border: 0 }
     line-height: 160%;
     */
     overflow: hidden;
-    padding: 30px;
+    padding: 40px;
     border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0,0,0,.1);
     box-sizing: border-box;
@@ -208,13 +202,18 @@ img { border: 0 }
 }
 
 .post {
-	padding: 18px 40px 25px 40px;
+	padding: 25px 52px 25px 52px;
 	color: #444;
   background-color: white;
   border-radius: 3px;
   box-shadow: 0 1px 3px rgba(0,0,0,.1);
   box-sizing: border-box;
   margin-bottom: 30px;
+}
+
+.post a {
+    color: black;
+    text-decoration: underline;
 }
 
 .post-content > figure {
@@ -258,7 +257,7 @@ img { border: 0 }
     //border-left: 4px solid #994844;
     //padding-left: 10px;
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 2.5em;
     line-height: 1.2em;
 }
 .label {
