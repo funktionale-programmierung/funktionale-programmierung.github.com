@@ -13,7 +13,7 @@ wie freie Monaden eingesetzt werden können, um die Ausführung eines Programmes
 
 ## Voraussetzungen
 
-Dieser Artikel beschreibt die Implementierung der freien Monade in [Scala](https://www.scala-lang.org). Daher wird eine gewisse Grundkenntnis in Scala vorausgesetzt. Zudem sollte der [vorausgegangene Artikel](https://funktionale-programmierung.de/2018/01/22/freie-monade.html) über freie Monaden gelesen und verstanden worden sein. Zusätzlich ist gute Kenntniss vom Konzept _Monade_ für das Verständnis erforderlich. 
+Dieser Artikel beschreibt die Implementierung der freien Monade in [Scala](https://www.scala-lang.org). Daher wird eine gewisse Grundkenntnis in Scala vorausgesetzt. Zudem sollte der [vorausgegangene Artikel](https://funktionale-programmierung.de/2018/01/22/freie-monade.html) über freie Monaden gelesen und verstanden worden sein. Zusätzlich ist gute Kenntnis vom Konzept _Monade_ für das Verständnis erforderlich. 
 
 
 ## Monaden in Scala
@@ -37,7 +37,7 @@ val res : Option[Int] = Some(3).flatMap(a => Some(10).map(b => a + b))
 
 {% endhighlight %}
 
-Um in Scala eine Monade vom Typ `M[A]` zu implementieren, benötigen wir also eine Funktion `flatMap` mit der Signatur `def flatMap[B](f: A => M[B]) : M[B]` und eine Funktion `map` mit der Signatur `def map[B](f: A => B) : M[B]`. Dabei wird davon ausgegangen, dass die Funktionsdefinitionen in der Klasse selbst stattfinden und somit wird die explizite Nennung des Parameters vom Typ `M[A]` bei beiden Funktionen übersprungen. DIeses Wissen über die Grundfunktionen einer Monade in Scala wird im folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
+Um in Scala eine Monade vom Typ `M[A]` zu implementieren, benötigen wir also eine Funktion `flatMap` mit der Signatur `def flatMap[B](f: A => M[B]) : M[B]` und eine Funktion `map` mit der Signatur `def map[B](f: A => B) : M[B]`. Dabei wird davon ausgegangen, dass die Funktionsdefinitionen in der Klasse selbst stattfinden und somit wird die explizite Nennung des Parameters vom Typ `M[A]` bei beiden Funktionen übersprungen. Dieses Wissen über die Grundfunktionen einer Monade in Scala wird im Folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
 
 ## Operationen als Daten
 
@@ -67,7 +67,7 @@ case class FlatMap[F[_], I, A](param: F[I], continuation : I => Free[F, A])
 
 {% endhighlight %}
 
-Dazu wird der algebraische Datentyp `Free` mittels eines _traits_ implementiert. Dieses hat zwei Typparameter, einen Container-Typen `F[_]`, der unsere Algebra repräsentiert und einen Ergebnistypen `A`, dazu später mehr. Die Typen für die Funktionen `map` und `flatMap` lassen sich geradewegs aus den Definition der dazugehörigen Funktionen ableiten und erweitern `Free`. Beide Subtypen werden mit einem Parameter und einer dazugehörigen Funktion konstruiert. Somit wird die Ausführung zu einem späteren Zeitpunkt anhand eines Interpreters möglich. Diese Datentypen erlauben es uns bereits, den entfalteten for-Ausdruck aus dem Option-Monaden Beispiel zu beschreiben:
+Dazu wird der algebraische Datentyp `Free` mittels eines _traits_ implementiert. Dieses hat zwei Typparameter, einen Container-Typen `F[_]`, der unsere Algebra repräsentiert und einen Ergebnistypen `A`, dazu später mehr. Die Typen für die Funktionen `map` und `flatMap` lassen sich geradewegs aus den Definitionen der dazugehörigen Funktionen ableiten und erweitern `Free`. Beide Subtypen werden mit einem Parameter und einer dazugehörigen Funktion konstruiert. Somit wird die Ausführung zu einem späteren Zeitpunkt anhand eines Interpreters möglich. Diese Datentypen erlauben es uns bereits, den entfalteten for-Ausdruck aus dem Option-Monaden Beispiel zu beschreiben:
 
 
 {% highlight scala %}
@@ -76,7 +76,7 @@ Dazu wird der algebraische Datentyp `Free` mittels eines _traits_ implementiert.
 
 {% endhighlight %}
 
-Allerdings ist die Beschreibung so sehr mühsam. Es wäre einfacher, diese Beschreibung wiederrum mit Hilfe eines for-Ausdrucks formulieren zu können. 
+Allerdings ist die Beschreibung so sehr mühsam. Es wäre einfacher, diese Beschreibung wieder rum mit Hilfe eines for-Ausdrucks formulieren zu können. 
 
 ## Meta-Monadisch
 
@@ -95,7 +95,7 @@ sealed trait Free[F[_], A]{
 
 Auch diese Funktionssignaturen sind aus den bereits oben beschriebenen generischen Signaturen der jeweiligen Funktionen einfach abzuleiten. Lediglich der Typparameter `F` muss zusätzlich unverändert mitgeführt werden; die zugrunde liegende Algebra bleibt stets vom Typ `F[_]`. `A` und `B` beschreiben dabei den gekapselten Typ, der später bei der Interpretation unserer Algebra-Operationen zurückgegeben wird. Beispielsweise gibt `Get` der Adressbuch-Algebra eine `Option[Address]` zurück. Die jeweiligen Funktionen (hier mit `continuation` bezeichnet) überführen diese Rückgabewerte dementsprechend in den Bildraum der übergebenen Funktionen. 
 
-Doch wie sieht die Implementierung dieser Fuktionen aus? Betrachten wir zunächst `flatMap`:
+Doch wie sieht die Implementierung dieser Funktionen aus? Betrachten wir zunächst `flatMap`:
 
 {% highlight scala %}
 
@@ -112,9 +112,9 @@ Wird `flatMap` auf einen Wert vom Typ `Map` angewandt, wird zunächst die `conti
 
 Wird `flatMap` auf einen Wert vom Typ `FlatMap` angewandt, wird ein neuer Wert vom Typ `FlatMap` mit unverändertem Parameter konstruiert. Die dazugehörige Funktion ist eine Verkettung aus der `continuation` und einem selbstrekursiven Aufruf der Funktion `flatMap` mit der übergebenen Funktion `f` als Parameter.
 
-Konzpetuell arbeiten wird also mit Komposition von Funktionen, um den Eingabeparameter später in den gewünschten Typen zu übersetzen.
+Konzeptuell arbeiten wird also mit Komposition von Funktionen, um den Eingabeparameter später in den gewünschten Typen zu übersetzen.
 
-Betrachen wir nun die Implementierung von `map`:
+Betrachten wir nun die Implementierung von `map`:
 
 {% highlight scala %}
 
@@ -139,7 +139,7 @@ Es ist jetzt möglich, Werte vom Typen `Free` mithilfe eines for-Ausdrucks zu ko
 {% endhighlight %}
 
 
-Dabei wird die übergegebene Operation mit Rückgabetyp `A` mithilfe von `FlatMap` und `Map` in einen Wert vom Typ `Free` übersetzt. Der Rückgabewert wird dabei einfach durch die Identitätsfunktion zurückgegeben. Unter Verwendung dieser Funktionen, können die Operationen unserer Algebra in die freie Monade gehoben werden. Dazu definieren wir uns noch einen zusätzlichen Typ, um über den Summentypen `AddressBookOp` im `Free`-Container abstrahieren zu können. Im Anschluss werden die aus dem vorherigen Artikel bekannten smart-constructors definiert:
+Dabei wird die übergebene Operation mit Rückgabetyp `A` mithilfe von `FlatMap` und `Map` in einen Wert vom Typ `Free` übersetzt. Der Rückgabewert wird dabei einfach durch die Identitätsfunktion zurückgegeben. Unter Verwendung dieser Funktionen können die Operationen unserer Algebra in die freie Monade gehoben werden. Dazu definieren wir uns noch einen zusätzlichen Typ, um über den Summentypen `AddressBookOp` im `Free`-Container abstrahieren zu können. Im Anschluss werden die aus dem vorherigen Artikel bekannten smart-constructors definiert:
 
 {% highlight scala %}
 
@@ -171,7 +171,7 @@ Mit Hilfe dieser smart-constructors können in for-Ausdrücken bereits Programme
 
 ## Das Uhrwerk anstoßen
 
-Programme der freien Monade bestehen aus Werten vom Typ `Free`, die jeweils einen Parameter und eine Funktion (`continuation`) beinhalten. Um ein Program abzuspielen, muss nun lediglich der Parameter, also unser Algebra-Kommando, ausgewertet und die `continuation` mit diesem Wert aufgerufen werden. Die Auswertung des Parameters übernimmt ein Interpreter. Dieser bekommt ein Kommando unserer DSL und evaluiert dieses. Die Idee bei freien Monaden ist, diesen Interpreter austauschbar zu implementieren. Daher wird zuerst ein simples _trait_ implementiert und im Anschluss eine explizite Implementierung unserer Addressbuch-Interpreters beschrieben, der dieses _trait_ implementiert. Zu Gunsten des Umfangs definieren wir diesen Interpreter auf Basis einer mutierbaren Map (nicht zuhause nachmachen):
+Programme der freien Monade bestehen aus Werten vom Typ `Free`, die jeweils einen Parameter und eine Funktion (`continuation`) beinhalten. Um ein Programm abzuspielen, muss nun lediglich der Parameter, also unser Algebra-Kommando, ausgewertet und die `continuation` mit diesem Wert aufgerufen werden. Die Auswertung des Parameters übernimmt ein Interpreter. Dieser bekommt ein Kommando unserer DSL und evaluiert dieses. Die Idee bei freien Monaden ist, diesen Interpreter austauschbar zu implementieren. Daher wird zuerst ein simples _trait_ implementiert und im Anschluss eine explizite Implementierung unserer Addressbuch-Interpreters beschrieben, der dieses _trait_ implementiert. Zu Gunsten des Umfangs definieren wir diesen Interpreter auf Basis einer mutierbaren Map (nicht zuhause nachmachen):
 
 
 {% highlight scala %}
@@ -198,7 +198,7 @@ Programme der freien Monade bestehen aus Werten vom Typ `Free`, die jeweils eine
 
 {% endhighlight %}
 
-Die letztendliche Ausführung des Programmes ist unter Zuhilfename eines Interpreters trivial. Ein Kommando wird ausgewertet und die `continuation` damit aufgerufen. `run` wird mit dem Ergebnis so lange rekursiv aufgerufen, bis wir auf einen Wert vom Typ `Map` treffen.
+Die letztendliche Ausführung des Programmes ist unter Zuhilfenahme eines Interpreters trivial. Ein Kommando wird ausgewertet und die `continuation` damit aufgerufen. `run` wird mit dem Ergebnis so lange rekursiv aufgerufen, bis wir auf einen Wert vom Typ `Map` treffen.
 
 {% highlight scala %}
 
@@ -238,6 +238,6 @@ Die letztendliche Ausführung des Programmes ist unter Zuhilfename eines Interpr
 
 ## Resumé
 
-Freie Monaden sind nicht kompliziert. Implementiert man sie indem man über bereits bekannte Konzepte anhand geschickt gewählter Datenstrukturen abstrahiert, stellt man sogar das Gegenteil fest. In diesem Artikel haben wir mit wenigen Zeilen Code die Beispiele aus dem ersten Artikel zu freien Monaden nachimplementiert. Statt einem Interpreter könnten wir ohne Probleme eine natürliche Transformation der Form `F[_] => G[_]` implementieren, um wie im ersten Teil auf die State-Monade abzubilden. Warum also eine Bibliothek verwenden? Insbesondere, wenn man in einem nächsten Schritt beispielsweise mehrere Algebren kombinieren möchte, wird es haarig. Dann sind wir froh, wenn wir eine Bibliothek zur Hand haben, die über fundamentale Konzepte abstrahiert und somit die nötigen Hilfmittel bereits ausliefert&mdash;dazu in einem zukünftigen Artikel mehr.
+Freie Monaden sind nicht kompliziert. Implementiert man sie, indem man über bereits bekannte Konzepte anhand geschickt gewählter Datenstrukturen abstrahiert, stellt man sogar das Gegenteil fest. In diesem Artikel haben wir mit wenigen Zeilen Code die Beispiele aus dem ersten Artikel zu freien Monaden nachimplementiert. Statt einem Interpreter könnten wir ohne Probleme eine natürliche Transformation der Form `F[_] => G[_]` implementieren, um wie im ersten Teil auf die State-Monade abzubilden. Warum also eine Bibliothek verwenden? Insbesondere, wenn man in einem nächsten Schritt beispielsweise mehrere Algebren kombinieren möchte, wird es haarig. Dann sind wir froh, wenn wir eine Bibliothek zur Hand haben, die über fundamentale Konzepte abstrahiert und somit die nötigen Hilfsmittel bereits ausliefert&mdash;dazu in einem zukünftigen Artikel mehr.
 
 Der hier entwickelte Source Code ist auf [GitHub zu finden](https://github.com/smoes/blogpost-free-2).
