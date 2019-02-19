@@ -2,7 +2,7 @@
 layout: post
 description: "Einführung in freie Monaden"
 title: "Freie Monaden oder: Wie ich lernte, die Unabhängigkeit zu lieben"
-author: simon-schulz
+author: simon-haerer
 tags: ["Praxis", "freie", "Monade", "Scala"]
 ---
 
@@ -217,7 +217,7 @@ Wird konsequent zwischen Beschreibung und Ausführung getrennt, können dennoch 
 
 ## Resumé 
 
-In diesem Blog-Artikel haben wir entlang eines einfachen Beispiels eine kleine Sprache mit Hilfe der freien Monade implementiert. Diese Sprache hat es uns ermöglicht, kombinierbarer Beschreibungen ohne Wissen über die spätere Ausführung zu auszudrücken. Erst durch Intepreter (oder Compiler) werden die Beschreibungen ausgeführt und Details über die Ausführung bekannt. 
+In diesem Blog-Artikel haben wir entlang eines einfachen Beispiels eine kleine Sprache mit Hilfe der freien Monade implementiert. Diese Sprache hat es uns ermöglicht, kombinierbare Beschreibungen ohne Wissen über die spätere Ausführung zu auszudrücken. Erst durch Intepreter (oder Compiler) werden die Beschreibungen ausgeführt und Details über die Ausführung bekannt. 
 
 Der in diesem Artikel verwendete Code ist auf [Github](https://github.com/smoes/blogpost-free-1) verfügbar.
 
