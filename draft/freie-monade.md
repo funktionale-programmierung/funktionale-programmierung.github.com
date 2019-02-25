@@ -67,7 +67,7 @@ case class FlatMap[F[_], I, A](param: F[I], continuation : I => Free[F, A])
 
 {% endhighlight %}
 
-Dazu wird der algebraische Datentyp `Free` mittels eines _traits_ implementiert. Dieser hat zwei Typparameter: einen Container-Typen `F[_]`, der unsere Algebra repräsentiert, und einen Ergebnistypen `A`&mdash;dazu später mehr. Die Typen für die Funktionen `map` und `flatMap` lassen sich geradewegs aus den Definitionen der dazugehörigen Funktionen ableiten und erweitern `Free`. Beide Subtypen werden mit einem Parameter und einer dazugehörigen Funktion konstruiert. Somit wird die Ausführung zu einem späteren Zeitpunkt anhand eines Interpreters möglich. Diese Datentypen erlauben es uns bereits, den entfalteten for-Ausdruck aus dem Option-Monaden-Beispiel zu beschreiben:
+Dazu wird der algebraische Datentyp `Free` mittels eines _traits_ implementiert. Dieser hat zwei Typparameter: einen Container-Typen `F[_]`, der unsere Algebra repräsentiert, und einen Ergebnistypen `A`&mdash;dazu später mehr. Die Typen für die Funktionen `map` und `flatMap` lassen sich geradewegs aus den Definitionen der dazugehörigen Funktionen ableiten und erweitern `Free`. Beide Subtypen werden mit einem Parameter und einer dazugehörigen Funktion konstruiert. Der Typ `I` des Parameters wird aus dem übergebenen Wert inferiert. Natürlich muss die übergebene _continuation_ einen Wert dieses Typs als Eingabeparameter entgegennehmen. Konstruieren wir zum Beispiel ein `Map` mit einem `param` vom Typ `Int`, benötigen wir auch eine `continuation`, die Werte vom Typ `Int` auf einen Zielwert abbildet. Anhand dieser aufgeschobenen Auführung, wird die Auswertung zu einem späteren Zeitpunkt anhand eines Interpreters möglich. Diese Datentypen erlauben es uns bereits, den entfalteten for-Ausdruck aus dem Option-Monaden-Beispiel zu beschreiben:
 
 
 {% highlight scala %}
@@ -171,7 +171,7 @@ Mit Hilfe dieser smart-constructors können in for-Ausdrücken bereits Programme
 
 ## Das Uhrwerk anstoßen
 
-Programme der freien Monade bestehen aus Werten vom Typ `Free`, die jeweils einen Parameter und eine Funktion (`continuation`) beinhalten. Um ein Programm abzuspielen, muss nun lediglich der Parameter, also unser Algebra-Kommando, ausgewertet und die `continuation` mit diesem Wert aufgerufen werden. Die Auswertung des Parameters übernimmt ein Interpreter. Dieser bekommt ein Kommando unserer DSL und evaluiert dieses. Die Idee bei freien Monaden ist, diesen Interpreter austauschbar zu implementieren. Daher wird zuerst ein simples _trait_ implementiert und im Anschluss eine explizite Implementierung unseres Addressbuch-Interpreters beschrieben, der dieses _trait_ implementiert. Zu Gunsten des Umfangs definieren wir diesen Interpreter auf Basis einer mutierbaren Map (nicht zuhause nachmachen):
+Programme der freien Monade bestehen aus Werten vom Typ `Free`, die jeweils einen Parameter und eine Funktion (`continuation`) beinhalten. Um ein Programm abzuspielen, muss nun lediglich der Parameter, also unser Algebra-Kommando, ausgewertet und die `continuation` mit diesem Wert aufgerufen werden. Die Auswertung des Parameters übernimmt ein Interpreter. Dieser bekommt ein Kommando unserer DSL und evaluiert dieses. Die Idee bei freien Monaden ist, diesen Interpreter austauschbar zu implementieren. Daher wird zuerst ein simples _trait_ implementiert und im Anschluss eine explizite Implementierung unseres Addressbuch-Interpreters beschrieben, der dieses _trait_ implementiert. Zu Gunsten des Umfangs definieren wir diesen Interpreter auf Basis einer mutierbaren Variable (nicht zuhause nachmachen):
 
 
 {% highlight scala %}
@@ -205,10 +205,11 @@ Die letztendliche Ausführung des Programmes ist unter Zuhilfenahme eines Interp
 
   // generische run-Funktion
 
-  def run[F[_], A](program: Free[F, A])(interpreter: Interpreter[F]): A = 
+  def run[F[_], A](program: Free[F, A], interpreter: Interpreter[F]): A = 
     program match {
       case FlatMap(param, continuation) =>
-          run(continuation(interpreter(param)))(interpreter)
+          val ret = interpreter(param)
+          run(continuation(ret), interpreter)
       case Map(param, continuation) => 
           continuation(param)
     }
@@ -220,10 +221,7 @@ Die letztendliche Ausführung des Programmes ist unter Zuhilfenahme eines Interp
   val newAddress = Address(1, "Santa Clause", "Snow Valley", "Santa's Town", 
                            "0", "Santa Deliveries")
 
-  val updateEntryProgram : Interpreter[AddressBookOp] => Unit =
-     run(updateEntry(newAddress))
-
-  updateEntryProgram(addressBookInterpreter)
+  updateEntryProgram(updateEntry(newAddress), addressBookInterpreter)
 
   /* Deleting address with id: 1
    * Putting address with id: 1
@@ -241,3 +239,18 @@ Die letztendliche Ausführung des Programmes ist unter Zuhilfenahme eines Interp
 Freie Monaden sind nicht kompliziert. Implementiert man sie, indem man über bereits bekannte Konzepte anhand geschickt gewählter Datenstrukturen abstrahiert, stellt man sogar das Gegenteil fest. In diesem Artikel haben wir mit wenigen Zeilen Code die Beispiele aus dem ersten Artikel zu freien Monaden nachimplementiert. Statt einem Interpreter könnten wir ohne Probleme eine natürliche Transformation der Form `F[_] => G[_]` implementieren, um wie im ersten Teil auf die State-Monade abzubilden. Warum also eine Bibliothek verwenden? Insbesondere, wenn man in einem nächsten Schritt beispielsweise mehrere Algebren kombinieren möchte, wird es haarig. Dann sind wir froh, wenn wir eine Bibliothek zur Hand haben, die über fundamentale Konzepte abstrahiert und somit die nötigen Hilfsmittel bereits ausliefert&mdash;dazu in einem zukünftigen Artikel mehr.
 
 Der hier entwickelte Source Code ist auf [GitHub zu finden](https://github.com/smoes/blogpost-free-2).
+
+
+## Nachwort: Terminologie in Haskell
+
+Um den monadischen for-Ausdruck in Scala verwenden zu können, mussten zwei Funktionen implementiert werden, nämlich `flatMap` und `map`. Während `flatMap` das äquivalent zu Haskells `bind` ist, darf das üblicherweise verwendete `return` nicht mit `map` gleichgesetzt werden. `return` nimmt lediglich einen Wert entgegen, während `map` zusätzlich eine Funktion entgegennimmt. `Return` könnte also wie folgt mithilfe der Identitätsfunktion definiert werden:
+
+{% highlight scala %}
+
+object Map {
+  def Return[F[_], I](param: I)  = new Map[F[_], I, I](param, identity[I])
+}
+
+{% endhighlight %}
+
+Spricht man von freien Monaden wird `bind` beziehungsweise `flatMap` oft als `Suspend` bezeichnet.
