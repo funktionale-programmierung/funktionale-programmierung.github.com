@@ -8,19 +8,19 @@ tags: ["Elixir", "Erlang", "Test", "Testing", "ExUnit", "Mix"]
 
 In der Regel schreibt keiner gerne Tests. Es ist einfacher mit etwas Selbstsicherheit zu behaupten, dass man das Programm gleich richtig schreibt und sich Tests sparen kann.  
 
-Weit gefehlt wie wir alle wissen. Tests werden überall benötigt. Wir schauen uns heute die Möglichkeit an mit der jungen Sprache _Elixir_, aufbauend auf der _Erlang Virtual Machine_, Tests zu schreiben. Elixir bietet uns mit _Mix_ und _ExUnit_ ein sehr gutes Tooling, um einfach, übersichtlich und schnell Tests schreiben und ausführen zu können.  
+Weit gefehlt wie wir alle wissen. Tests werden überall benötigt. Wir schauen uns heute die Möglichkeit an mit der jungen Sprache _Elixir_, basierend auf der _Erlang Virtual Machine_, Tests zu schreiben. Elixir bietet uns mit _Mix_ und _ExUnit_ ein sehr gutes Tooling, um einfach, übersichtlich und schnell Tests schreiben und ausführen zu können.  
 
 In diesem Artikel legen wir zuerst ein neues Elixir-Projekt an und schreiben einige Tests um eine Einführung in das Test-Tooling zu bekommen. Weiter lernen wir einfache Möglichkeiten, um im Entwickleralltag schneller und effizienter mit Tests arbeiten zu können.
 <!-- more start -->
 
 ## Bevor es los geht
 
-Wer schon ein bestehendes Projekt hat kann dieses Kapitel überspringen. Für alle anderen erstellen wir uns zuerst eine Spielwiese. Wir verwenden Elixir in Version 1.8 auf Erlang 21, zumal die Versionen keine große Bedeutung für unsere Tests haben werden. Wie man Elixir & Co schnell installieren kann haben wir bereits in [Mit Nix raus aus der Versionshölle](https://funktionale-programmierung.de/2018/02/19/nix.html) gesehen.
-Nun legen wir in einem Verzeichnis mit `mix new fehlerfrei` ein Projekt mit dem Namen _Fehlerfrei_ an. Mix erstellt uns einige hilfreiche Dinge, wie z. B. auch eine Projekt-Liesmich oder die Gitignore-Datei.
+Wer schon ein bestehendes Projekt hat, kann dieses Kapitel überspringen. Wir erstellen uns zuerst eine Spielwiese. Wir verwenden Elixir in Version 1.8 auf Erlang 21, wobei die Versionen keine große Bedeutung für unsere Tests haben werden. Wie man Elixir & Co schnell installieren kann haben wir bereits in [Mit Nix raus aus der Versionshölle](https://funktionale-programmierung.de/2018/02/19/nix.html) gesehen.
+Nun legen wir in einem Verzeichnis mit `mix new fehlerfrei` ein Projekt mit dem Namen _Fehlerfrei_ an. Mix erstellt uns einige hilfreiche Dinge, wie z. B. auch eine Projekt-Readme oder die Gitignore-Datei.
 
 ## Tests ausführen
 
-In einem frischen Projekt gibt es bereits zwei Beispieltests. Führen wir innerhalb unseres Ordner `fehlerfrei` nun `mix test` aus, so erhalten wir:
+In einem frischen Projekt gibt es bereits zwei Beispieltests. Führen wir innerhalb unseres Ordners `fehlerfrei` nun `mix test` aus, so erhalten wir:
 ```console
 user@pc:~/fehlerfrei$ mix test
 ..
@@ -30,9 +30,9 @@ Finished in 0.03 seconds
 
 Randomized with seed 414377
 ```
-Mix zeichnet für jeden erfolgreichen Test einen Punkt, für jeden gescheiterten Test wird eine großzügige Beschreibung über den fehlerhaften Test ausgegeben. Am Ende wird noch die Gesamtanzahl der durchgeführten, fehlgeschlagenen und ggf. übersprungenen Tests ausgegeben. Die letzte Zeile gibt den verwendeten Seed an. Diese Zahl bestimmt die zufällig gewählte Reihenfolge der Tests. Im Folgenden kürzen wir die Ausgabe der Testdurchläufe um irrelevante Teile.  
+Mix zeichnet für jeden erfolgreichen Test einen Punkt, für jeden gescheiterten Test wird eine großzügige Beschreibung über selbigen ausgegeben. Am Ende wird noch die Gesamtanzahl der durchgeführten, fehlgeschlagenen und ggf. übersprungenen Tests ausgegeben. Die letzte Zeile gibt den verwendeten Seed an. Diese Zahl bestimmt die zufällig gewählte Reihenfolge der Tests. Im Folgenden kürzen wir die Ausgabe der Testdurchläufe um irrelevante Teile.  
 
-`mix test` führt alle Tests in allen Dateien innerhalb des Ordners `test/` aus die auf `_test.exs` enden. Die übliche Konvention besagt im Test-Ordner die gleiche Struktur wie für die Moduldefinitionen aufzubauen, jeweils ergänzt um `_test.exs` im Dateinamen, sowie `Test` im Modulnamen innerhalb der Testdatei. Das Modul `Fehlerfrei` hat das zugehörige Test-Modul `FehlerfreiTest`.
+`mix test` führt alle Tests in allen Dateien innerhalb des Ordners `test` aus die auf `_test.exs` enden. Die übliche Konvention besagt, im Test-Ordner die gleiche Struktur wie für die Moduldefinitionen aufzubauen, jeweils ergänzt um `_test.exs` im Dateinamen, sowie `Test` im Modulnamen innerhalb der Testdatei. Das Modul `Fehlerfrei` hat das zugehörige Test-Modul `FehlerfreiTest`.
 
 ## Tests schreiben
 
@@ -44,7 +44,7 @@ Um etwas mehr Material zu haben, definieren wir uns in der Datei `lib/fehlerfrei
   def gausssum(n), do: n + gausssum(n - 1)
 ```
 
-Schreiben wir einige Tests in der dazugehörigen Test-Datei unter `test/fehlerfrei_test.exs`:
+Anschließend schreiben wir unsere ersten Tests in der dazugehörigen Test-Datei unter `test/fehlerfrei_test.exs`:
 ```elixir
   test "that 5 is greater than 4" do
     assert 5 >= 4
@@ -103,7 +103,7 @@ um die Zeichenkette vorher klein zu kriegen. Wir können nun mit `mix test --fai
 
 ## Tests zielgerichtet ausführen
 
-Wenn ein Projekt mit der Zeit größer wird können schnell mehrere Hundert Tests zusammenkommen. Schauen wir uns an wie wir die Zeit verkürzen können, um nicht ewig auf den Bildschirm starren zu müssen.  
+Wenn ein Projekt mit der Zeit größer wird können schnell mehrere Hundert Tests zusammenkommen. Schauen wir uns an, wie wir die Zeit verkürzen können, um nicht ewig auf den Bildschirm starren zu müssen.  
 
 Den Schalter `--failed` haben wir eben schon kennen gelernt, er führt alle zuvor fehlgeschlagenen Tests erneut aus. Diese Option gibt es erst seit Elixir 1.8.  
 
@@ -123,7 +123,7 @@ Finished in 0.1 seconds
 ```
 Zugegeben, man erkennt es nur an den Punkten und an der Gesamtanzahl. Hier schafft uns eine ausführlichere Ausgabe mehr Durchblick. Mit `--trace` können wir sehen, welche Tests ausgeführt werden. Bei _Trace_ werden die erfolgreichen Tests nicht mit einem Punkt, sondern auch mit ihrem Titel aufgelistet.  
 
-Möchten wir nur genau einen Test ausführen können wir zusätzlich noch eine Zeilennummer angeben:
+Möchten wir nur genau einen Test ausführen, können wir zusätzlich noch eine Zeilennummer angeben:
 ```console
 user@pc:~/fehlerfrei$ mix test --trace test/fehlerfrei_test.exs:24 
 Excluding tags: [:test]
@@ -143,13 +143,13 @@ Finished in 0.03 seconds
 
 ## Tests auslassen & Standardeinstellungen
 
-Oft schleppt man unvollendete oder kaputt gegangene Tests mit sich her. Damit diese nicht jedes Mal als fehlgeschlagen angezeigt werden, können wir diese mit `@tag :skip` in der Zeile oberhalb des Tests überspringen. Weiter können wir eigene Tags vergeben, z. B. ist ein Tag `:fixme` sinnvoll. Wir schreiben nun in die Test-Helfer-Datei unter `test/test_helper.exs`, dass Tests mit `@tag :fixme` generell übersprungen werden:
+Oft schleppt man unvollendete oder kaputt gegangene Tests mit sich. Damit diese nicht jedes Mal als fehlgeschlagen angezeigt werden, können wir diese mit `@tag :skip` in der Zeile oberhalb des Tests überspringen. Weiter können wir eigene Tags vergeben, z. B. ist ein Tag `:fixme` sinnvoll. Wir schreiben nun in die Test-Helfer-Datei unter `test/test_helper.exs`, dass Tests mit `@tag :fixme` generell übersprungen werden:
 ```elixir
 ExUnit.start([exclude: :fixme])
 ```
-Hier können wir übrigens alle Optionen verwenden, die `mix test` auch als Kommandozeilenschalter interpretiert. Möchten wir z. B. standardmäßig die ausführliche Ausgabe können wir `trace: true` in die Liste der Optionen hinzufügen. Rufen wir nun `mix test` mit `--include fixme` auf werden auch die Fixme-Tests mit ausgeführt.  
+Hier können wir übrigens alle Optionen verwenden, die `mix test` auch als Kommandozeilenschalter interpretiert. Möchten wir z. B. standardmäßig die ausführliche Ausgabe können wir `trace: true` in die Liste der Optionen hinzufügen. Rufen wir nun `mix test` mit `--include fixme` auf, werden auch die Fixme-Tests mit ausgeführt.  
 
-Die Test-Helfer-Datei wird vor jedem Testdurchlauf ausgeführt. Wir können sie zum Beispiel benutzen um Konfigurationen auszugegeben oder welche Version der Datenbank gerade benutzt wird.  
+Die Test-Helfer-Datei wird vor jedem Testdurchlauf ausgeführt. Wir können sie zum Beispiel benutzen um Konfigurationen auszugegeben oder die Verison der benutzen Datenbank.  
 
 
 ## Fazit
