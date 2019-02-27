@@ -8,14 +8,14 @@ tags: ["Elixir", "Erlang", "Test", "Testing", "ExUnit", "Mix"]
 
 In der Regel schreibt keiner gerne Tests. Es ist einfacher mit etwas Selbstsicherheit zu behaupten, dass man das Programm gleich richtig schreibt und sich Tests sparen kann.  
 
-Weit gefehlt wie wir alle wissen. Tests werden überall benötigt. Wir schauen uns heute die Möglichkeit an mit der jungen Sprache _Elixir_, basierend auf der _Erlang Virtual Machine_, Tests zu schreiben. Elixir bietet uns mit _Mix_ und _ExUnit_ ein sehr gutes Tooling, um einfach, übersichtlich und schnell Tests schreiben und ausführen zu können.  
+Weit gefehlt, wie wir alle wissen. Tests werden überall benötigt. Wir schauen uns heute die Möglichkeit an mit der jungen Sprache _Elixir_, basierend auf der _Erlang Virtual Machine_, Tests zu schreiben. Elixir bietet uns mit _Mix_ und _ExUnit_ ein sehr gutes Tooling, um einfach, übersichtlich und schnell Tests zu formulieren und ausführen zu können.  
 
-In diesem Artikel legen wir zuerst ein neues Elixir-Projekt an und schreiben einige Tests um eine Einführung in das Test-Tooling zu bekommen. Weiter lernen wir einfache Möglichkeiten, um im Entwickleralltag schneller und effizienter mit Tests arbeiten zu können.
+In diesem Artikel legen wir zuerst ein neues Elixir-Projekt an und erstellen einige Tests um eine Einführung in das Test-Tooling zu bekommen. Weiter lernen wir einfache Möglichkeiten, um im Entwickleralltag schneller und effizienter mit Tests arbeiten zu können.
 <!-- more start -->
 
 ## Bevor es losgeht
 
-Wer schon ein bestehendes Projekt hat, kann dieses Kapitel überspringen. Wir erstellen uns zuerst eine Spielwiese. Wir verwenden Elixir in Version 1.8 auf Erlang 21, wobei die Versionen keine große Bedeutung für unsere Tests haben werden. Wie man Elixir & Co schnell installieren kann haben wir bereits in [Mit Nix raus aus der Versionshölle](https://funktionale-programmierung.de/2018/02/19/nix.html) gesehen.
+Wer schon ein bestehendes Projekt hat, kann dieses Kapitel überspringen. Wir erstellen uns zuerst eine Spielwiese. Wir verwenden Elixir in Version 1.8 auf Erlang 21, wobei die Versionen keine große Bedeutung für unsere Tests haben werden. Wie man Elixir & Co schnell installieren, kann haben wir bereits in [Mit Nix raus aus der Versionshölle](https://funktionale-programmierung.de/2018/02/19/nix.html) gesehen.
 Nun legen wir in einem Verzeichnis mit `mix new fehlerfrei` ein Projekt mit dem Namen _Fehlerfrei_ an. Mix erstellt uns einige hilfreiche Dinge, wie z. B. auch eine Projekt-Readme oder die Gitignore-Datei.
 
 ## Tests ausführen
@@ -62,7 +62,7 @@ Anschließend schreiben wir unsere ersten Tests in der dazugehörigen Test-Datei
   end
 ```
 Ein Test hat immer einen Titel und kann dann beliebig viele Behauptungen (`assert`) oder Widerlegungen (`refute`) haben. 
-Testen können wir beliebige Wahrheitswerte oder `nil` und Sachen die nicht `nil` sind. `refute` ist gleichbedeutend mit `assert !` (_behaupte nicht_), liest sich aber viel besser. Im zweiten Test sehen wir, dass wir uns in der Regel nicht um Sachen wie 3.0 ungleich 3 kümmern müssen. Wenn wir `mix test` ausführen, sehen wir, dass alle Tests erfolgreich sind.  
+Testen können wir beliebige Wahrheitswerte oder `nil` und ob etwas nicht `nil` ist. `refute` ist gleichbedeutend mit `assert !` (_behaupte nicht_), liest sich aber viel besser. Im zweiten Test erkennt man, dass wir uns in der Regel nicht um Sachen wie 3.0 (Ergebnis von `6 / 2`) ist das Gleiche wie 3 kümmern müssen. Wenn wir `mix test` ausführen, erhalten wir einen fehlerfreien Testdurchlauf.  
 
 Ein Testfall kann nicht nur `assert`- oder `refute`-Anweisungen beinhalten, sondern auch beliebige Codeanweisungen:
 ```elixir
@@ -72,7 +72,7 @@ Ein Testfall kann nicht nur `assert`- oder `refute`-Anweisungen beinhalten, sond
     assert a == String.reverse(a)
   end
 ```
-Wenn wir die Tests erneut ausführen erhalten wir jetzt unseren ersten Fehlerfall:
+Wenn wir die Tests erneut ausführen, erhalten wir jetzt unseren ersten Fehlerfall:
 ```console
 user@pc:~/fehlerfrei$ mix test
 ..
@@ -99,7 +99,7 @@ Die im Deutschen korrekte Großschreibung macht unser Palindrom kaputt. Wir änd
     assert a == String.reverse(a)
   end
 ```
-um die Zeichenkette vorher klein zu kriegen. Wir können nun mit `mix test --failed` den Durchlauf wiederholen und dabei nur die zuvor fehlgeschlagenen Tests erneut laufen lassen.
+um die Zeichenkette vorher klein zu kriegen. Wir können nun den Durchlauf mit `mix test --failed` wiederholen und dabei nur die zuvor fehlgeschlagenen Tests erneut laufen lassen.
 
 ## Tests zielgerichtet ausführen
 
@@ -107,7 +107,7 @@ Wenn ein Projekt mit der Zeit größer wird können schnell mehrere Hundert Test
 
 Den Schalter `--failed` haben wir eben schon kennen gelernt, er führt alle zuvor fehlgeschlagenen Tests erneut aus. Diese Option gibt es erst seit Elixir 1.8.  
 
-Mit Angabe von Dateien, Ordnern oder Mustern (z. B. `test/*_sql_test.exs`) können wir die Ausführung auf bestimmte Testdateien einschränken. So führt zum Beispiel `mix test test/fehlerfrei_test.exs` nur die Tests in dieser Datei aus. Duplizieren wir unsere Testdatei und führen wir dann zuerst alle Tests und anschließend eingeschränkt auf eine Datei aus, sehen wir den Unterschied:
+Mit Angabe von Dateien, Ordnern oder Mustern (z. B. `test/*_sql_test.exs`) können wir die Ausführung auf bestimmte Testdateien einschränken. So führt zum Beispiel `mix test test/fehlerfrei_test.exs` nur die Tests in dieser Datei aus. Duplizieren wir unsere Testdatei und führen wir dann zuerst alle Tests und anschließend die auf eine Datei eingeschränkte Tests aus, sehen wir den Unterschied:
 ```console
 user@pc:~/fehlerfrei$ cp test/fehlerfrei_test.exs test/duplikate_test.exs # Testdatei duplizieren, dann Modulnamen ändern
 user@pc:~/fehlerfrei$ mix test
@@ -143,11 +143,11 @@ Finished in 0.03 seconds
 
 ## Tests auslassen & Standardeinstellungen
 
-Oft schleppt man unvollendete oder kaputt gegangene Tests mit sich. Damit diese nicht jedes Mal als fehlgeschlagen angezeigt werden, können wir diese mit `@tag :skip` in der Zeile oberhalb des Tests überspringen. Weiter können wir eigene Tags vergeben, z. B. ist ein Tag `:fixme` sinnvoll. Wir schreiben nun in die Test-Helfer-Datei unter `test/test_helper.exs`, dass Tests mit `@tag :fixme` generell übersprungen werden:
+Oft schleppt man unvollendete oder kaputt gegangene Tests mit sich. Damit diese nicht jedes Mal als fehlgeschlagen angezeigt werden, können wir sie mit der Annotation `@tag :skip` in der Zeile oberhalb des Tests überspringen. Weiter können wir eigene Tags vergeben, z. B. ist ein Tag `:fixme` sinnvoll. Wir schreiben nun in die Test-Helfer-Datei unter `test/test_helper.exs`, dass Tests mit `@tag :fixme` generell übersprungen werden:
 ```elixir
 ExUnit.start([exclude: :fixme])
 ```
-Hier können wir übrigens alle Optionen verwenden, die `mix test` auch als Kommandozeilenschalter interpretiert. Möchten wir z. B. standardmäßig die ausführliche Ausgabe können wir `trace: true` in die Liste der Optionen hinzufügen. Rufen wir nun `mix test` mit `--include fixme` auf, werden auch die Fixme-Tests mit ausgeführt.  
+Hier können wir übrigens alle Optionen verwenden, die `mix test` auch als Kommandozeilenschalter interpretiert. Möchten wir zum Beispiel standardmäßig die ausführliche Ausgabe, können wir `trace: true` in die Liste der Optionen hinzufügen. Rufen wir nun `mix test` mit `--include fixme` auf, werden auch die Fixme-Tests mit ausgeführt.  
 
 Die Test-Helfer-Datei wird vor jedem Testdurchlauf ausgeführt. Wir können sie zum Beispiel benutzen um Konfigurationen auszugegeben oder die Verison der benutzen Datenbank.  
 
