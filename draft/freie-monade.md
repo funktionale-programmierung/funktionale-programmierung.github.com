@@ -37,9 +37,7 @@ val res : Option[Int] = Some(3).flatMap(a => Some(10).map(b => a + b))
 
 {% endhighlight %}
 
-Um in Scala eine Monade vom Typ `M[A]` zu implementieren, muss `M[A]`
-eine Methode `flatMap` mit der Signatur `def flatMap[B](f: A =>
-M[B]) : M[B]` und eine Methode `map` mit der Signatur `def map[B](f: A => B) : M[B]` implementieren. Dieses Wissen über die Grundfunktionen einer Monade in Scala wird im Folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
+Um in Scala eine Monade vom Typ `M[A]` zu implementieren, muss `M[A]` eine Methode `flatMap` mit der Signatur `def flatMap[B](f: A => M[B]) : M[B]` und eine Methode `map` mit der Signatur `def map[B](f: A => B) : M[B]` besitzen. Dieses Wissen über die Grundfunktionen einer Monade in Scala wird im Folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
 
 ## Operationen als Daten
 
@@ -58,7 +56,7 @@ case class Filter(foo : Address => Boolean) extends AddressBookOp[List[Address]]
 
 Durch das Heben solcher algebraischer Datentypen in die freie Monade, schafft man die Möglichkeit, die Operationen monadisch zu kombinieren. Dabei ist die Definition der freien Monade unabhängig von einem speziellen Typen, es muss nur ein Container-Typ der Form `F[_]` sein.
 
-Aus dem vorherigen Artikel wissen wir zudem, dass die Algebra-Operationen, die mit Hilfe der freien Monade komponiert werden, später interpretiert und mittels natürlicher Transformation sogar in eine andere Monade überführt werden können. Dazu muss der Interpreter jedoch die Struktur des zu interpretierenden Programmes ablaufen können. Dies wird erreicht, indem die monadische Komposition der freien Monade Datenstrukturen aufbaut, die eben diese Komposition widerspiegeln. Daher repräsentieren wir im folgenden die monadischen Methoden durch Daten. Wie oben gezeigt, implementiert eine Monade in Scala zwei Methoden: `def flatMap[B](f: A => M[B]) : M[B]` und `def map[B](f: A => B) : M[B]`. Ersetzen wir diese durch Daten, könnten wir ein Programm unserer Addressbuchalgebra, dass eine Adresse liest und diese löscht, wie folgt modellieren:
+Aus dem vorherigen Artikel wissen wir zudem, das die Algebra-Operationen, die mit Hilfe der freien Monade komponiert werden, später interpretiert und mittels natürlicher Transformation sogar in eine andere Monade überführt werden können. Dazu muss der Interpreter jedoch die Struktur des zu interpretierenden Programmes ablaufen können. Dies wird erreicht, indem die monadische Komposition der freien Monade Datenstrukturen aufbaut, die eben diese Komposition widerspiegeln. Daher repräsentieren wir im folgenden die monadischen Methoden durch Daten. Wie oben gezeigt, implementiert eine Monade in Scala zwei Methoden: `def flatMap[B](f: A => M[B]) : M[B]` und `def map[B](f: A => B) : M[B]`. Ersetzen wir diese durch Daten, könnten wir ein Programm unserer Addressbuchalgebra, das eine Adresse liest und diese löscht, wie folgt modellieren:
 
 {% highlight scala %}
 
@@ -67,7 +65,7 @@ FlatMap(Get(1), a => Map(Delete(a), () => ())
 {% endhighlight %}
 
 
-Dazu führen wir den algebraischen Datentypen `sealed trait Free[F[_], A]` ein. Dieser nimmt den Algebratypen `F[_]` und dessen Rückgabetyp `A` (beispielsweise gibt `Get` der obigen Algebra `Option[Address]` zurück Das). Nun implementieren wir zwei Klassen, die `Free` erweitern, nämlich wie im Beispiel `FlatMap` und `Map`. Diese repräsentieren die Methoden `flatMap` und `map`.
+Dazu führen wir den algebraischen Datentypen `sealed trait Free[F[_], A]` ein. Dieser nimmt den Algebratypen `F[_]` und dessen Rückgabetyp `A` (beispielsweise gibt `Get` der obigen Algebra `Option[Address]` zurück). Nun implementieren wir zwei Klassen, die `Free` erweitern, nämlich wie im Beispiel `FlatMap` und `Map`. Diese repräsentieren die Methoden `flatMap` und `map`.
 
 Beginnen wir mit `map`. Da es sich um eine Methode handelt, muss ein expliziter Parameter hinzugefügt werden. Dieser repräsentiert den Wert auf den die `map` Methode angewandt wird. In der Regel sind dies Werte vom Typ der Algebra, im Beispiel oben `Delete(1)`. Anhand der Signatur sehen wir, dass `map` eine Funktion entgegen nimmt, welche den im Eingabeparameter gekapselten Typen auf einen Zieltypen abbildet. Dieser entspricht dem neuen Rückgabewert der Algebraoperation. Wir nennen diese Funktion `continuation` und kommen zu folgender Definition:
 
