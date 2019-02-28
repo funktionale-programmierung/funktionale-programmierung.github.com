@@ -37,7 +37,7 @@ val res : Option[Int] = Some(3).flatMap(a => Some(10).map(b => a + b))
 
 {% endhighlight %}
 
-Um in Scala eine Monade vom Typ `M[A]` zu implementieren, muss `M[A]` eine Methode `flatMap` mit der Signatur `def flatMap[B](f: A => M[B]) : M[B]` und eine Methode `map` mit der Signatur `def map[B](f: A => B) : M[B]` besitzen. Dieses Wissen über die Grundfunktionen einer Monade in Scala wird im Folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
+Um eine Monade vom Typ `M[A]` in einem for-Ausdruck komponieren zu können, muss `M[A]` eine Methode `flatMap` mit der Signatur `def flatMap[B](f: A => M[B]) : M[B]` und eine Methode `map` mit der Signatur `def map[B](f: A => B) : M[B]` implementieren. Dieses Wissen wird im Folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
 
 ## Operationen als Daten
 
