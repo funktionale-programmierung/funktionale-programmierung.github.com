@@ -7,13 +7,13 @@ tags: ["Praxis", "freie", "Monade", "Scala"]
 ---
 
 Im Artikel ["Freie Monaden oder: Wie ich lernte, die Unabhängigkeit zu lieben"](https://funktionale-programmierung.de/2018/01/22/freie-monade.html) wurde gezeigt,
-wie freie Monaden eingesetzt werden können, um die Ausführung eines Programmes von dessen Beschreibung zu entkoppeln. In diesem Folgeartikel werden wir in einfachem Scala die freie Monade von Grund auf selbst implementieren, um deren Funktionsweise besser zu verstehen. Dabei wird erneut deutlich, dass die Formulierung von Operationen als Daten dabei hilft, über Probleme strukturiert nachdenken zu können.
+wie freie Monaden eingesetzt werden können, um die Ausführung eines Programmes von dessen Beschreibung zu entkoppeln. In diesem Folgeartikel werden wir in einfachem Scala die freie Monade algebraisch konstruieren. Dabei wird erneut deutlich, dass die Formulierung von Operationen als Daten dabei hilft, über Probleme strukturiert nachdenken zu können. 
 
 <!-- more start -->
 
 ## Voraussetzungen
 
-Dieser Artikel beschreibt die Implementierung der freien Monade in [Scala](https://www.scala-lang.org). Daher wird eine gewisse Grundkenntnis in Scala vorausgesetzt. Zudem sollte der [vorausgegangene Artikel](https://funktionale-programmierung.de/2018/01/22/freie-monade.html) über freie Monaden gelesen und verstanden worden sein. Zusätzlich ist gute Kenntnis von _Monaden_ für das Verständnis erforderlich. 
+Dieser Artikel beschreibt die Implementierung der freien Monade in [Scala](https://www.scala-lang.org). Daher wird eine gute Grundkenntnis in Scala vorausgesetzt. Zudem sollte der [vorausgegangene Artikel](https://funktionale-programmierung.de/2018/01/22/freie-monade.html) über freie Monaden gelesen und verstanden worden sein. Auf die praktischen Aspekte und Anwendungen der freien Monade wird in diesem Artikel nicht eingegangen. Zusätzlich ist gute Kenntnis von _Monaden_ für das Verständnis erforderlich. 
 
 
 ## Monaden in Scala
@@ -37,9 +37,7 @@ val res : Option[Int] = Some(3).flatMap(a => Some(10).map(b => a + b))
 
 {% endhighlight %}
 
-Um in Scala eine Monade vom Typ `M[A]` zu implementieren, muss `M[A]`
-eine Methode `flatMap` mit der Signatur `def flatMap[B](f: A =>
-M[B]) : M[B]` haben und eine Methode `map` mit der Signatur `def map[B](f: A => B) : M[B]`. Dieses Wissen über die Grundfunktionen einer Monade in Scala wird im Folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
+Um eine Monade vom Typ `M[A]` in einem for-Ausdruck komponieren zu können, muss `M[A]` eine Methode `flatMap` mit der Signatur `def flatMap[B](f: A => M[B]) : M[B]` und eine Methode `map` mit der Signatur `def map[B](f: A => B) : M[B]` implementieren. Dieses Wissen wird im Folgenden verwendet, um die freie Monade mit einem einfachen Trick zu implementieren.
 
 ## Operationen als Daten
 
@@ -56,47 +54,38 @@ case class Filter(foo : Address => Boolean) extends AddressBookOp[List[Address]]
     
 {% endhighlight %}
 
-Jedoch ist hier nicht Schluss! Dieses Prinzip lässt sich auf einer
-zusätzlichen Ebene erneut anwenden. 
+Durch das Heben solcher algebraischer Datentypen in die freie Monade, schafft man die Möglichkeit, die Operationen monadisch zu kombinieren. Dabei ist die Definition der freien Monade unabhängig von einem speziellen Typen, es muss nur ein Container-Typ der Form `F[_]` sein.
 
-FIXME. Wir wissen *woher*?
-
-Wir wissen, dass die Algebra-Operationen, die mit Hilfe der freien Monade komponiert werden, später ausgeführt und mittels natürlicher Transformation sogar in eine andere Monade überführt werden können. Dazu müssen wir allerdings die strukturelle Information über die Zusammensetzung des monadischen Programms erhalten. Und dies wird wiederrum durch die Formulierung der monadischen Funktionen als Daten erreicht.
-
-FIXME: Was wollen wir eigentlich machen?
-
-Nun folgt ein kleiner Exkurs in die Kategorientheorie. Eine besondere Form von Monoiden sind [freie Monoiden](https://en.wikipedia.org/wiki/Free_monoid). Im Gegensatz zu Monoiden, lässt sich die Abfolge der monoidischen Operationen jederzeit rekonstruieren. Formal bedeutet dies, das für einen freien Monoid stets einen Isomophismus zu einem beliebigen anderen Monoiden existiert. Konstruiert man nun einen Funktor auf Basis eines freien Monoiden, ist dies ein freier Funktor und letztendlich lässt sich mit diesen Grundlagen die freie Monade definieren. Eine Erklärung anhand von Scala-Code ist [hier](http://blog.higher-order.com/blog/2013/08/20/free-monads-and-free-monoids/) zu finden.
-
-FIXME: Nein, wegen der Assoziativität
-
-Das war nun etwas abstrakt. Wer dies nicht verstanden hat, kann trotzdem weiterlesen, denn es genügt folgende Erkenntnis: Um die monadische Komposition der Algebra später nachvollziehen zu können, müssen wir die Daten und deren Komposition derart konstruieren, dass die Struktur der angewandten monadischen Methoden in `M[A]` wiederhergestellt werden kann. Wir erinnern uns, diese haben die Signaturen
-`def flatMap[B](f: A => M[B]) : M[B]` und `def map[B](f: A => B) : M[B]`. Insbesondere müssen wir die Klasse, die die beiden Funktionen beinhaltet, explizit als Parameter (`param`) festhalten:
+Aus dem vorherigen Artikel wissen wir zudem, das die Algebra-Operationen, die mit Hilfe der freien Monade komponiert werden, später interpretiert und mittels natürlicher Transformation sogar in eine andere Monade überführt werden können. Dazu muss der Interpreter jedoch die Struktur des zu interpretierenden Programmes ablaufen können. Dies wird erreicht, indem die monadische Komposition der freien Monade Datenstrukturen aufbaut, die eben diese Komposition widerspiegeln. Daher repräsentieren wir im folgenden die monadischen Methoden durch Daten. Wie oben gezeigt, implementiert eine Monade in Scala zwei Methoden: `def flatMap[B](f: A => M[B]) : M[B]` und `def map[B](f: A => B) : M[B]`. Ersetzen wir diese durch Daten, könnten wir ein Programm unserer Addressbuchalgebra, das eine Adresse liest und diese löscht, wie folgt modellieren:
 
 {% highlight scala %}
 
-sealed trait Free[F[_], A]
+FlatMap(Get(1), a => Map(Delete(a), () => ()) 
 
-case class Map[F[_], I, A](param : I, continuation: I => A) extends Free[F, A] 
+{% endhighlight %}
 
+
+Dazu führen wir den algebraischen Datentypen `sealed trait Free[F[_], A]` ein. Dieser nimmt den Algebratypen `F[_]` und dessen Rückgabetyp `A` (beispielsweise gibt `Get` der obigen Algebra `Option[Address]` zurück). Nun implementieren wir zwei Klassen, die `Free` erweitern, nämlich wie im Beispiel `FlatMap` und `Map`. Diese repräsentieren die Methoden `flatMap` und `map`.
+
+Beginnen wir mit `map`. Da es sich um eine Methode handelt, muss ein expliziter Parameter hinzugefügt werden. Dieser repräsentiert den Wert auf den die `map` Methode angewandt wird. In der Regel sind dies Werte vom Typ der Algebra, im Beispiel oben `Delete(1)`. Anhand der Signatur sehen wir, dass `map` eine Funktion entgegen nimmt, welche den im Eingabeparameter gekapselten Typen auf einen Zieltypen abbildet. Dieser entspricht dem neuen Rückgabewert der Algebraoperation. Wir nennen diese Funktion `continuation` und kommen zu folgender Definition:
+
+{% highlight scala %}
+case class Map[F[_], I, A](param : F[I], continuation: I => A) extends Free[F, A] 
+{% endhighlight %}
+
+Für `flatMap` verhält es sich ähnlich, nur konstruiert die `continuation` einen neuen Wert vom Typen `Free`:
+
+
+{% highlight scala %}
 case class FlatMap[F[_], I, A](param: F[I], continuation : I => Free[F, A])
                                                             extends Free[F,A]
-
 {% endhighlight %}
 
-Der algebraische Datentyp `Free` hat zwei Typparameter: einen Container-Typen `F[_]` (zum Beispiel `AddressBookOp`), der unsere Algebra repräsentiert, und einen Ergebnistypen `A`&mdash; dazu später mehr. Die Typen für die Funktionen `map` und `flatMap` lassen sich geradewegs aus den Definitionen der dazugehörigen Funktionen ableiten und erweitern `Free`. Beide Typen werden mit einem Parameter `param` und einer Funktion `continuation` konstruiert, wobei `param` jeweils der Eingabeparameter der `continuation` ist. Der Typ `I` des `params` wird aus dem übergebenen Wert inferiert. Natürlich muss die übergebene _continuation_ einen Wert dieses Typs als Eingabeparameter entgegennehmen. Konstruieren wir zum Beispiel ein `Map` mit einem `param` vom Typ `Int`, benötigen wir auch eine `continuation`, die Werte vom Typ `Int` auf einen Zielwert abbildet. Anhand dieser aufgeschobenen Auführung, können wir die Struktur der monadischen Funktionen derart abbilden, dass sie später rekonstruiert werden kann. Wir können bereits den entfalteten for-Ausdruck aus dem Option-Monaden-Beispiel zu beschreiben:
-
-
-{% highlight scala %}
-
-FlatMap(Some(3), a => Map(Some(10), b => a + b))
-
-{% endhighlight %}
-
-Allerdings ist die Beschreibung auf diese Weise sehr mühsam. Es wäre einfacher, diese Beschreibung wieder rum mit Hilfe eines for-Ausdrucks formulieren zu können. 
+Es gibt nun also die Möglichkeit anhand von Algebraoperationen und _continuations_ eine monadische Struktur zu beschreiben, ohne dass die Algebra monadisch ist. Allerdings ist die Beschreibung auf diese Weise sehr mühsam. Es wäre einfacher, diese Beschreibung wieder rum mit Hilfe eines for-Ausdrucks formulieren zu können. 
 
 ## Meta-Monadisch
 
-Jetzt nicht den Kopf verlieren: Von nun an ist es wichtig, zwischen dem Typ `FlatMap` und der Funktion `flatMap` aufmerksam zu unterscheiden (respektive `Map`). Um `Free` monadisch kombinieren zu können, muss es nämlich die Funktionen `map` und `flatMap` implementieren:
+Jetzt nicht den Kopf verlieren: Von nun an ist es wichtig, zwischen dem Typ `FlatMap` und der Funktion `flatMap` aufmerksam zu unterscheiden (respektive `Map`). Um `Free` monadisch kombinieren zu können, muss es nämlich die Funktionen `map` und `flatMap` wie folgt implementieren:
 
 {% highlight scala %}
 
@@ -109,63 +98,52 @@ sealed trait Free[F[_], A]{
 
 {% endhighlight %}
 
-Auch diese Funktionssignaturen sind aus den bereits oben beschriebenen generischen Signaturen der jeweiligen Funktionen einfach abzuleiten. Lediglich der Typparameter `F` muss zusätzlich unverändert mitgeführt werden; die zugrunde liegende Algebra bleibt stets vom Typ `F[_]`. `A` und `B` beschreiben dabei den gekapselten Typ, der später bei der Interpretation unserer Algebra-Operationen zurückgegeben wird. Beispielsweise gibt `Get` der Adressbuch-Algebra eine `Option[Address]` zurück. Die jeweiligen Funktionen (hier mit `continuation` bezeichnet) überführen diese Rückgabewerte dementsprechend in den Bildraum der übergebenen Funktionen. 
-
-Doch wie sieht die Implementierung dieser Funktionen aus? Betrachten wir zunächst `flatMap`:
+Doch wie sieht die Implementierung dieser Funktionen aus? Betrachten wir zunächst `Map`:
 
 {% highlight scala %}
 
+case class Map[F[_], I, A](param : F[I], continuation: I => A) extends Free[F, A] {
 
-case class Map[F[_], I, A](param : I, continuation: I => A) extends Free[F, A] {
-  def flatMap[B](f : A => Free[F, B]) : Free[F,B] =
-        (continuation andThen f)(param)
-  ...
+  def flatMap[B](f : A => Free[F, B]) : Free[F,B] = 
+    FlatMap(param, continuation andThen f)
+
+  def map[B](f: A => B): Free[F,B] = Map(param, continuation andThen f)
 }
 
-case class FlatMap[F[_], I, A](param: F[I], continuation : I => Free[F, A])...{
-  def flatMap[B](f: A => Free[F, B]) = 
-        FlatMap(param, continuation andThen (x => x.flatMap(f)))
-  ...
-}
 {% endhighlight %}
 
-Wird `flatMap` auf einen Wert vom Typ `Map` angewandt, wird zunächst die `continuation` aus `Map` angewandt und dann die Funktion `f`. Hier lassen wir uns durch das Typsystem führen: `continuation` hat die Typsignatur `I => A`, während `f` von `A` nach `Free[F, B]` abbildet. Durch die Komposition beider wird also der in `Map` enthaltene Parameter vom Typ `I` nach `Free[F, B]` überführt.
+Die monadischen Methoden in `Map` implementieren die einfache Hintereinanderausführung von Funktionen. Unterstützt durch die Signaturen der Methoden, kann hier nicht viel falsch gemacht werden. Bei `flatMap` führt eine Verkettung von `f` und `continuation` zu einer Funktion mit der Signatur `I => Free[F, B]`, was der `continuation` eines `FlatMap`s entspricht. Bei `map` führt eine Verkettung der beiden Funktionen zu einer Funktion von `I => A`, was der `continuation` eines `Map`s entspricht.
 
-Wird `flatMap` auf einen Wert vom Typ `FlatMap` angewandt, wird ein neuer Wert vom Typ `FlatMap` mit unverändertem Parameter konstruiert. Die dazugehörige Funktion ist eine Verkettung aus der `continuation` und einem selbstrekursiven Aufruf der Funktion `flatMap` mit der übergebenen Funktion `f` als Parameter.
-
-Konzeptuell arbeiten wir also mit Funktionskompositionen, um den Eingabeparameter später in den gewünschten Typen zu übersetzen.
-
-Betrachten wir nun die Implementierung von `map`:
+Betrachten wir nun `FlatMap`:
 
 {% highlight scala %}
 
- case class Map[F[_], I, A](param : I, continuation: I => A) extends Free[F, A] {
-   ...
-   def map[B](f: A => B): Free[F,B] = Map(param, continuation andThen f)
- }
+case class FlatMap[F[_], I, A](param: F[I], continuation : I => Free[F, A]) ... {
 
- case class FlatMap[F[_], I, A](param: F[I], continuation : I => Free[F, A])...{
-   ...
-   def map[B](f: A => B): Free[F, B] = flatMap(x => Map(x, f))
- }
+  def flatMap[B](f: A => Free[F, B]): Free[F,B] = 
+    FlatMap(param, continuation andThen (x => x.flatMap(f)))
+
+  def map[B](f: A => B): Free[F,B] = 
+    FlatMap(param, continuation andThen (x => x.map(f)))
+}
 
 {% endhighlight %}
 
-Wird `map` auf `Map` angewandt, ist das Vorgehen wieder denkbar einfach. Es wird ein neues `Map` konstruiert und beide Funktionen komponiert. 
+Hierbei fällt auf, dass beide Methoden wiederrum rekursive Aufrufe beinhalten. Das liegt daran, dass die übergebene Funktion `f` zum Ende des Programms propagiert wird. Erst, wenn ein `Map` erreicht wird, wird die Rekursion abgebrochen und `f` in einer neuen `continuation` verkettet. 
 
-Wird `flatMap` auf `Map` angewandt, spiegeln wir genau dies im Quelltext wieder: Es wird `flatMap` aufgerufen mit einer Funktion, die anhand des Eingabeparameters das gewünschte `Map` mit `f` als `continuation` erzeugt. `Map` wird sozusagen im `FlatMap` verpackt.
+Bei beiden Implementierungen wird der Parameter `param` nicht angetastet und lediglich die Transformation, gegen durch `continuation` erweitert.
+
+
 
 ## Die ersten Schritte
 
 Es ist jetzt möglich, Werte vom Typ `Free` mithilfe eines for-Ausdrucks zu kombinieren. Doch wie verbinden wir dies mit unserer Addressbuch-Algebra? Im vorherigen Artikel wurde die Funktion `liftF` der _cats_-Bibliothek verwendet, um die Algebra in die Monade zu heben. Eine Funktion, die Container-Typen in `Free` hebt, sieht wie folgt aus:
 
 {% highlight scala %}
-  def liftF[F[_], A](operation: F[A]): Free[F, A] =
-         FlatMap(operation, (a : A) => Map(a, identity[A]))
+  def liftF[F[_], A](operation: F[A]): Free[F, A] = Map(operation, identity[A])
 {% endhighlight %}
 
-
-Dabei wird die übergebene Operation mit Rückgabetyp `A` mithilfe von `FlatMap` und `Map` in einen Wert vom Typ `Free` übersetzt. Der Rückgabewert wird dabei einfach durch die Identitätsfunktion zurückgegeben. Unter Verwendung dieser Funktionen können die Operationen unserer Algebra in die freie Monade gehoben werden. Dazu definieren wir uns noch einen zusätzlichen Typ, um über den Summentypen `AddressBookOp` im `Free`-Container abstrahieren zu können. Im Anschluss werden die aus dem vorherigen Artikel bekannten _smart-constructors_ definiert:
+Dabei wird aus der übergebenen Operation mithilfe von `Map` ein Wert vom Typ `Free` konstruiert. Als zweiten Parameter übergeben wir dem Konstruktor die Identitätsfunktion. Somit wird der Rückgabewert bei der Auswertung der Operation durch den Interpreter einfach unverändert zurückgegeben. Dieses `liftF` entspricht dem `Return`, dass wir aus Haskell kennen. Im Anschluss werden die aus dem vorherigen Artikel bekannten _smart-constructors_ definiert:
 
 {% highlight scala %}
 
@@ -237,10 +215,9 @@ Die letztendliche Ausführung des Programmes ist unter Zuhilfenahme eines Interp
           val ret = interpreter(param)
           run(continuation(ret), interpreter)
       case Map(param, continuation) => 
-          continuation(param)
+          val ret = interpreter(param)
+          continuation(ret)
     }
-
-
 
   // Beispiel
 
@@ -269,14 +246,4 @@ Der hier entwickelte Source Code ist auf [GitHub zu finden](https://github.com/s
 
 ## Nachwort: Terminologie in Haskell
 
-Um den monadischen for-Ausdruck in Scala verwenden zu können, mussten zwei Funktionen implementiert werden, nämlich `flatMap` und `map`. Während `flatMap` das äquivalent zu Haskells `bind` ist, darf das üblicherweise verwendete `return` nicht mit `map` gleichgesetzt werden. `return` nimmt lediglich einen Wert entgegen, während `map` zusätzlich eine Funktion entgegennimmt. `Return` könnte also wie folgt mithilfe der Identitätsfunktion definiert werden:
-
-{% highlight scala %}
-
-object Map {
-  def Return[F[_], I](param: I)  = new Map[F[_], I, I](param, identity[I])
-}
-
-{% endhighlight %}
-
-Spricht man von freien Monaden wird `bind` beziehungsweise `flatMap` oft als `Suspend` bezeichnet.
+Um den monadischen for-Ausdruck in Scala verwenden zu können, mussten zwei Funktionen implementiert werden, nämlich `flatMap` und `map`. Während `flatMap` das äquivalent zu Haskells `bind` ist, darf das üblicherweise verwendete `return` nicht mit `map` gleichgesetzt werden. `return` nimmt lediglich einen Wert entgegen, während `map` zusätzlich eine Funktion entgegennimmt. `Return` entspricht also `Map` mit der Identitätsfunktion. Diese Funktion haben wir bereits implementiert und sie `liftF` genannt. Spricht man von freien Monaden, wird `bind` beziehungsweise `flatMap` oft als `Suspend` bezeichnet.
