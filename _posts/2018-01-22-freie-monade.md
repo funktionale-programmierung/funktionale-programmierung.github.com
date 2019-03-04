@@ -221,7 +221,7 @@ In diesem Blog-Artikel haben wir entlang eines einfachen Beispiels eine kleine S
 
 Der in diesem Artikel verwendete Code ist auf [Github](https://github.com/smoes/blogpost-free-1) verfügbar.
 
-Im nächsten Post werden wir sehen, wie sich die entworfene Sprache erweitern lässt.
+Im [nächsten Post](https://funktionale-programmierung.de/2019/03/04/freie-monade-2.html) sehen wir, wie man die freie Monade von Grund auf in Scala implementiert.
 
 <!-- more end -->
 
