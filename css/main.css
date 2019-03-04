@@ -202,7 +202,7 @@ img { border: 0 }
 }
 
 .post {
-	padding: 25px 52px 25px 52px;
+	padding: 25px 52px 52px 52px;
 	color: #444;
   background-color: white;
   border-radius: 3px;
