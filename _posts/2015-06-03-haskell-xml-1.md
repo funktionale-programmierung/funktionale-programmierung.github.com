@@ -52,7 +52,7 @@ XML-Dokument aus unserer digitalen Krankenakte
 # Ein Beispieldokument
 {% highlight xml %}
 <?xml version="1.0" encoding="UTF-8"?>
-<patient xmlns="http://www.factisresearch.com/ns/checkpad" id="Patient/432442">
+<patient xmlns="http://www.checkpad.de/ns/checkpad" id="Patient/432442">
   <name>
     <given-name>Jana</given-name>
     <family-name>Braun</family-name>
@@ -168,7 +168,7 @@ Jedes Element und jedes Attribut hat einen
 Bestandteilen besteht:
 
 * dem `local name` (hier z.B. `patient`)
-* einem optionalen `namespace name` (hier `http://www.factisresearch.com/ns/checkpad`) und
+* einem optionalen `namespace name` (hier `http://www.checkpad.de/ns/checkpad`) und
 * einem optionalen `namespace prefix` (im Beispiel gibt es keine)
 
 Ein Präfix wird vor den Namen des Elements geschrieben und durch einen
@@ -188,8 +188,8 @@ Dokument würde daher von unserer Anwendung gleich verarbeitet werden:
 
 {% highlight xml %}
 <?xml version="1.0" encoding="UTF-8"?>
-<cpm:patient cpm:xmlns="http://www.factisresearch.com/ns/checkpad" id="Patient/432442">
-  <name xmlns="http://www.factisresearch.com/ns/checkpad">
+<cpm:patient cpm:xmlns="http://www.checkpad.de/ns/checkpad" id="Patient/432442">
+  <name xmlns="http://www.checkpad.de/ns/checkpad">
     <given-name>Jana</given-name>
     <family-name>Braun</family-name>
     <cpm:display-name>Jana Braun</cpm:display-name>
@@ -197,7 +197,7 @@ Dokument würde daher von unserer Anwendung gleich verarbeitet werden:
   <cpm:case-number>432442</cpm:case-number>
   <cpm:patient-number>55555502</cpm:patient-number>
   <cpm:birth-date>1952-07-18</cpm:birth-date>
-  <test:sex xmlns:test="http://www.factisresearch.com/ns/checkpad">female</test:sex>
+  <test:sex xmlns:test="http://www.checkpad.de/ns/checkpad">female</test:sex>
   <cpm:admission>2011-02-10T08:41:00+01:00</cpm:admission>
 </cpm:patient>
 {% endhighlight %}
@@ -229,7 +229,7 @@ mkName :: T.Text -> Name
 mkName localName =
   Name
   { nameLocalName = localName
-  , nameNamespace = Just "http://www.factisresearch.com/ns/checkpad"
+  , nameNamespace = Just "http://www.checkpad.de/ns/checkpad"
   , namePrefix = Nothing
   }
 

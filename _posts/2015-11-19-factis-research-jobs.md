@@ -11,7 +11,7 @@ Wir von factis research suchen
 Softwareentwickler](http://cpmed.de/jobs/) mit Schwerpunkt
 funktionale Programmierung.
 
-[Factis research](http://factisresearch.com) entwickelt das
+[Factis research](http://checkpad.de) entwickelt das
 Produkt [Checkpad MED](http://cpmed.de/), eine elektronische
 Patientenakte für iPad, iPhone und Co. Bei Checkpad kommt an vielen
 Stellen funktionale Programmierung zum Einsatz. So ist z.B. das Backend

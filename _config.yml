@@ -38,8 +38,8 @@ authors:
   stefan-wehr:
     name: Stefan Wehr
     image: /author/stefan-wehr.jpg
-    href: "http://www.factisresearch.com/company.html#swehr"
-    about: '<a href="http://www.factisresearch.com/company.html#swehr">Dr. Stefan Wehr</a> entwirft und entwickelt bei der <a href="http://www.factisresearch.com">factis research GmbH</a> komplexe Anwendungen sowohl in klassischen als auch in funktionalen Sprachen. Er ist international anerkannter Spezialist für funktionale Programmierung.'
+    href: "http://www.checkpad.de/company.html#swehr"
+    about: '<a href="http://www.checkpad.de/company.html#swehr">Dr. Stefan Wehr</a> entwirft und entwickelt bei der <a href="http://www.checkpad.de">factis research GmbH</a> komplexe Anwendungen sowohl in klassischen als auch in funktionalen Sprachen. Er ist international anerkannter Spezialist für funktionale Programmierung.'
   david-frese:
     name: David Frese
     image: /author/david-frese.jpg
@@ -57,12 +57,12 @@ authors:
   alexander-thiemann:
     name: Alexander Thiemann
     image: /author/alexander-thiemann.jpg
-    href: "http://www.factisresearch.com/company.html#nthiemann"
-    about: '<a href="http://www.factisresearch.com/company.html#athiemann">Alexander Thiemann</a> entwirft und entwickelt bei der <a href="http://www.factisresearch.com">factis research GmbH</a> &uuml;berwiegend Webanwendungen.'
+    href: "http://www.checkpad.de/company.html#nthiemann"
+    about: '<a href="http://www.checkpad.de/company.html#athiemann">Alexander Thiemann</a> entwirft und entwickelt bei der <a href="http://www.checkpad.de">factis research GmbH</a> &uuml;berwiegend Webanwendungen.'
   niklas-baumstark:
     name: Niklas Baumstark
-    href: "http://www.factisresearch.com/company.html#nbaumstark"
-    about: '<a href="http://www.factisresearch.com/company.html#nbaumstark">Niklas Baumstark</a> entwickelt neben seinem Studium Software bei der <a href="http://www.factisresearch.com">factis research GmbH</a> im funktionalen Paradigma. Zu seinen Spezialgebieten zählen systemnahe Programmierung und Algorithmen.'
+    href: "http://www.checkpad.de/company.html#nbaumstark"
+    about: '<a href="http://www.checkpad.de/company.html#nbaumstark">Niklas Baumstark</a> entwickelt neben seinem Studium Software bei der <a href="http://www.checkpad.de">factis research GmbH</a> im funktionalen Paradigma. Zu seinen Spezialgebieten zählen systemnahe Programmierung und Algorithmen.'
   joachim-breitner:
     name: Joachim Breitner
     image: /author/joachim-breitner.png
@@ -99,12 +99,12 @@ authors:
   david-leuschner:
     name: David Leuschner
     image: /author/david-leuschner.jpg
-    about: 'David Leuschner ist Geschäftsführer und Entwicklungsleiter der <a href="http://factisresearch.com">factis research GmbH</a>. Er setzt sich seit mehr als 10 Jahren für den Einsatz funktionaler Sprachen in der Industrie ein.'
+    about: 'David Leuschner ist Geschäftsführer und Entwicklungsleiter der <a href="http://checkpad.de">factis research GmbH</a>. Er setzt sich seit mehr als 10 Jahren für den Einsatz funktionaler Sprachen in der Industrie ein.'
   emin-karayel:
     name: Emin Karayel
     image: /author/emin-karayel.png
     href: "https://de.linkedin.com/pub/emin-karayel/28/774/524"
-    about: '<a href="https://de.linkedin.com/pub/emin-karayel/28/774/524">Emin Karayel</a> hat Mathematik am KIT studiert, verfügt über mehr als 10 Jahre Erfahrung in der Software-Technik und entwickelt bei der <a href="http://www.factisresearch.com">factis research GmbH</a> verteilte Anwendungen und Machine-Learning Algorithmen unter anderem mit Haskell.'
+    about: '<a href="https://de.linkedin.com/pub/emin-karayel/28/774/524">Emin Karayel</a> hat Mathematik am KIT studiert, verfügt über mehr als 10 Jahre Erfahrung in der Software-Technik und entwickelt bei der <a href="http://www.checkpad.de">factis research GmbH</a> verteilte Anwendungen und Machine-Learning Algorithmen unter anderem mit Haskell.'
   alex-gremm:
     name: Alexandros Gremm
     image: /author/alex-gremm.png

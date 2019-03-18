@@ -24,7 +24,7 @@ abzuschauen.
 Der
 [Haskell-Hackathon](http://www.haskell.org/haskellwiki/HacBerlin2014)
 in Berlin wird dieses mal von uns (also von
-[factis research](http://factisresearch.com) mit Unterstützung von
+[factis research](http://checkpad.de) mit Unterstützung von
 [Lohmann&Birkner](http://lohmann-birkner.de)) organisiert.
 Von Freitag, 26.9.2014 bis Sonntag 28.9.2014 treffen sich
 Haskell-Programmierer in Berlin, um zusammen Haskell zu

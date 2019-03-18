@@ -11,7 +11,7 @@ startet mit den ersten Beiträgen!
 Zum Hintergrund:
 
 Wir bei [Active Group](http://www.active-group.de/) und [Factis
-Research](http://www.factisresearch.com/) setzen in unseren
+Research](http://www.checkpad.de/) setzen in unseren
 kommerziellen Produkten und open-source Projekten
 gern und erfolgreich funktionale
 Programmierung ein.  Dies ermöglicht uns, gegenüber traditioneller

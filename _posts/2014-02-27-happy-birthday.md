@@ -8,7 +8,7 @@ tags: ["Rückblick"]
 
 Vor ziemlich genau einem Jahr haben wir das Blog "Funktionale Programmierung" gestartet.
 Zusammen mit einigen Gastautoren berichten in diesem Blog die Firmen
-[Active Group](http://www.active-group.de/) und [Factis Research](http://www.factisresearch.com/)
+[Active Group](http://www.active-group.de/) und [Factis Research](http://www.checkpad.de/)
 über Aspekte der funktionalen Programmierung, die für unser Arbeitsleben von Bedeutung sind. 
 
 In diesem Artikel zum Jahrestag möchten wir ein kurzes Résumé ziehen und einen
@@ -68,11 +68,11 @@ vor, ein [Haskell](http://haskell.org)-Dialekt für die JVM.
 
 Auch wenn Sie selbst in der täglichen Arbeit keine Möglichkeit haben, funktionale Sprachen einzusetzen,
 können Sie in imperativen und objekt-orientierten Sprachen von funktionalen Denk- und Programmiertechniken
-profitieren, wie [Stefan Wehr](http://www.factisresearch.com/company.html#swehr) in seinem Artikel
+profitieren, wie [Stefan Wehr](http://www.checkpad.de/company.html#swehr) in seinem Artikel
 [Warum funktional?](http://funktionale-programmierung.de/2013/03/20/warum-funktional.html)
 zeigt. Auch enthält Java 8 einige längst überfällige
 [funktionale Features](http://funktionale-programmierung.de/2013/09/19/java8.html).
-[Niklas Baumstark](http://www.factisresearch.com/company.html#nbaumstark) demonstriert, dass man selbst in C++ dank
+[Niklas Baumstark](http://www.checkpad.de/company.html#nbaumstark) demonstriert, dass man selbst in C++ dank
 [persistenter Datenstrukturen](http://funktionale-programmierung.de/2013/06/21/persistente-datenstrukturen.html)
 von funktionaler Programmierung profitieren kann.
 
@@ -110,7 +110,7 @@ welches in unserer Arbeit täglich zum Einsatz kommt.
 ## Web-Programmierung ##
 
 Natürlich zollt dieser Blog auch dem Thema Web-Programmierung Tribut. Zum einen stellt
-[Alexander Thiemann](http://www.factisresearch.com/company.html#nthiemann) in
+[Alexander Thiemann](http://www.checkpad.de/company.html#nthiemann) in
 einem Artikel Techniken für
 [moderne Webanwendungen mit Haskell](http://funktionale-programmierung.de/2013/04/04/webanwendung-haskell.html)
 vor und vertieft diese in einem

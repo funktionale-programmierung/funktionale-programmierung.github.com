@@ -22,7 +22,7 @@ eine digitale und mobile Krankenakte für Krankenhausärzte
 Checkpad MED
 wird in Kooperation mit [Lohmann & Birkner](http://www.lohmann-birkner.de/)
 unter technischer Federführung der [factis research
-GmbH](http://www.factisresearch.com/) zu einem großen Teil
+GmbH](http://www.checkpad.de/) zu einem großen Teil
 in funktionalen Programmiersprachen entwickelt, im restlichen
 Teil setzen wir zumindest auf funktionale Paradigmen und Techniken.
 
