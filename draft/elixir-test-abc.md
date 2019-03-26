@@ -8,9 +8,9 @@ tags: ["Elixir", "Erlang", "Test", "Testing", "ExUnit", "Mix"]
 
 In der Regel schreibt keiner gerne Tests. Es ist einfacher mit etwas Selbstsicherheit zu behaupten, dass man das Programm gleich richtig schreibt und sich Tests sparen kann.  
 
-Weit gefehlt, wie wir alle wissen. Tests werden überall benötigt. Wir schauen uns heute die Möglichkeit an mit der jungen Sprache _Elixir_, basierend auf der _Erlang Virtual Machine_, Tests zu schreiben. Elixir bietet uns mit _Mix_ und _ExUnit_ ein sehr gutes Tooling, um einfach, übersichtlich und schnell Tests zu formulieren und ausführen zu können.  
+Weit gefehlt, wie wir alle wissen. Tests werden überall benötigt. Wir schauen uns heute die Möglichkeit an, mit der jungen Sprache _Elixir_, basierend auf der _Erlang Virtual Machine_, Tests zu schreiben. Elixir bietet uns mit _Mix_ und _ExUnit_ ein sehr gutes Tooling, um einfach, übersichtlich und schnell Tests zu formulieren und ausführen zu können.  
 
-In diesem Artikel legen wir zuerst ein neues Elixir-Projekt an und erstellen einige Tests um eine Einführung in das Test-Tooling zu bekommen. Weiter lernen wir einfache Möglichkeiten, um im Entwickleralltag schneller und effizienter mit Tests arbeiten zu können.
+In diesem Artikel legen wir zuerst ein neues Elixir-Projekt an und erstellen einige Tests, um eine Einführung in das Test-Tooling zu bekommen. Weiter lernen wir einfache Möglichkeiten, um im Entwickleralltag schneller und effizienter mit Tests arbeiten zu können.
 <!-- more start -->
 
 ## Bevor es losgeht
