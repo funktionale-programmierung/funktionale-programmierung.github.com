@@ -6,16 +6,16 @@ author: tim-digel
 tags: ["Elixir", "Erlang", "Test", "Testing", "ExUnit", "Mix"]
 ---
 
-In der Regel schreibt keiner gerne Tests. Es ist einfacher mit etwas Selbstsicherheit zu behaupten, dass man das Programm gleich richtig schreibt und sich Tests sparen kann.  
+In der Regel schreibt niemand gerne Tests. Es ist einfacher mit etwas Selbstsicherheit zu behaupten, dass man das Programm gleich richtig schreibt und sich Tests sparen kann.  
 
-Weit gefehlt, wie wir alle wissen. Tests werden überall benötigt. Wir schauen uns heute die Möglichkeit an, mit der jungen Sprache _Elixir_, basierend auf der _Erlang Virtual Machine_, Tests zu schreiben. Elixir bietet uns mit _Mix_ und _ExUnit_ ein sehr gutes Tooling, um einfach, übersichtlich und schnell Tests zu formulieren und ausführen zu können.  
+Weit gefehlt, wie wir alle wissen. Tests werden überall benötigt. Wir schauen uns heute die Möglichkeit an, mit der jungen Sprache _Elixir_ Tests zu schreiben. Elixir basiert auf der _Erlang Virtual Machine_ und bietet uns mit _Mix_ und _ExUnit_ ein sehr gutes Tooling, um einfach, übersichtlich und schnell Tests formulieren und ausführen zu können.  
+<!-- more start -->
 
 In diesem Artikel legen wir zuerst ein neues Elixir-Projekt an und erstellen einige Tests, um eine Einführung in das Test-Tooling zu bekommen. Weiter lernen wir einfache Möglichkeiten, um im Entwickleralltag schneller und effizienter mit Tests arbeiten zu können.
-<!-- more start -->
 
 ## Bevor es losgeht
 
-Wer schon ein bestehendes Projekt hat, kann dieses Kapitel überspringen. Wir erstellen uns zuerst eine Spielwiese. Wir verwenden Elixir in Version 1.8 auf Erlang 21, wobei die Versionen keine große Bedeutung für unsere Tests haben werden. Wie man Elixir & Co schnell installieren, kann haben wir bereits in [Mit Nix raus aus der Versionshölle](https://funktionale-programmierung.de/2018/02/19/nix.html) gesehen.
+Wer schon ein bestehendes Projekt hat, kann dieses Kapitel überspringen. Wir erstellen uns zuerst eine Spielwiese. Dabei verwenden wir Elixir in Version 1.8 auf Erlang 21, wobei die Versionen keine große Bedeutung für unsere Tests haben werden. Wie man Elixir & Co schnell installieren kann, haben wir bereits in [Mit Nix raus aus der Versionshölle](https://funktionale-programmierung.de/2018/02/19/nix.html) gesehen.
 Nun legen wir in einem Verzeichnis mit `mix new fehlerfrei` ein Projekt mit dem Namen _Fehlerfrei_ an. Mix erstellt uns einige hilfreiche Dinge, wie z. B. auch eine Projekt-Readme oder die Gitignore-Datei.
 
 ## Tests ausführen
@@ -30,7 +30,7 @@ Finished in 0.03 seconds
 
 Randomized with seed 414377
 ```
-Mix zeichnet für jeden erfolgreichen Test einen Punkt, für jeden gescheiterten Test wird eine großzügige Beschreibung über selbigen ausgegeben. Am Ende wird noch die Gesamtanzahl der durchgeführten, fehlgeschlagenen und ggf. übersprungenen Tests ausgegeben. Die letzte Zeile gibt den verwendeten Seed an. Diese Zahl bestimmt die zufällig gewählte Reihenfolge der Tests. Im Folgenden kürzen wir die Ausgabe der Testdurchläufe um irrelevante Teile.  
+Mix zeichnet für jeden erfolgreichen Test einen Punkt und würde für jeden gescheiterten Test eine großzügige Beschreibung über selbigen ausgeben (siehe weiter unten). Am Ende wird noch die Gesamtanzahl der durchgeführten, fehlgeschlagenen und ggf. übersprungenen Tests ausgegeben. Die letzte Zeile gibt den verwendeten Seed an. Diese Zahl bestimmt die zufällig gewählte Reihenfolge der Tests. Im Folgenden kürzen wir die Ausgabe der Testdurchläufe um irrelevante Teile.  
 
 `mix test` führt alle Tests in allen Dateien innerhalb des Ordners `test` aus die auf `_test.exs` enden. Die übliche Konvention besagt, im Test-Ordner die gleiche Struktur wie für die Moduldefinitionen aufzubauen, jeweils ergänzt um `_test.exs` im Dateinamen, sowie `Test` im Modulnamen innerhalb der Testdatei. Das Modul `Fehlerfrei` hat das zugehörige Test-Modul `FehlerfreiTest`.
 
@@ -149,12 +149,12 @@ ExUnit.start([exclude: :fixme])
 ```
 Hier können wir übrigens alle Optionen verwenden, die `mix test` auch als Kommandozeilenschalter interpretiert. Möchten wir zum Beispiel standardmäßig die ausführliche Ausgabe, können wir `trace: true` in die Liste der Optionen hinzufügen. Rufen wir nun `mix test` mit `--include fixme` auf, werden auch die Fixme-Tests mit ausgeführt.  
 
-Die Test-Helfer-Datei wird vor jedem Testdurchlauf ausgeführt. Wir können sie zum Beispiel benutzen um Konfigurationen auszugegeben oder die Verison der benutzen Datenbank.  
+Die Test-Helfer-Datei wird vor jedem Testdurchlauf ausgeführt. Wir können sie zum Beispiel benutzen, um Konfigurationen auszugegeben oder die Version der verwendeten Datenbank.  
 
 
 ## Fazit
 
-Da Elixir recht jung ist, wurde das Tooling um die Tests sehr strukturiert und umfassend aufgebaut. Insbesondere die Detailliertheit bei Fehlern oder die Steuerung der Ausgabe mit Einschränkungen, _trace_, etc. machen Tests schreiben etwas angenehmer.  
+Da Elixir recht jung ist, konnte das Tooling um die Tests sehr strukturiert und durchdacht aufgebaut werden. Ältere Sprachen wachsen oder verändern sich mit der Zeit und tun sich hier deutlich schwerer. Elixir profitiert insbesondere von der Detailliertheit bei Fehlern oder der dynamisch gesteuerten Ausgabe mit _trace_, Einschränkungen, etc.. Das macht Tests schreiben deutlich angenehmer.  
 
-Das Test-Tooling von Elixir bietet uns noch einiges mehr: Wir können Fehlermeldungen oder Logging sehr einfach mit testen oder mit Test-Kontexten für jeden Test einen vordefinierten Ausgangszustand bereitstellen. Diese Themen werden wir in einem späteren Artikel betrachten.
+Das Test-Tooling von Elixir bietet uns noch einiges mehr: Wir können Fehlermeldungen oder Logging sehr einfach mit testen oder mit Test-Kontexten für jeden Test einen vordefinierten Ausgangszustand bereitstellen. Diese Themen und auch _Doctest_ werden wir in einem späteren Artikel betrachten.
 <!-- more end -->
