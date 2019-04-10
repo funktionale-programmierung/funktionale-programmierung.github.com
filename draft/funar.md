@@ -59,7 +59,7 @@ gibt es Hands-On-Übungen, in denen (in
 
 Vorkenntnisse in funktionaler Programmierung sind hilfreich aber nicht
 notwendig.  Wer noch nicht in funktionalen Sprachen programmiert hat,
-sollte den **Vorkurs** besuchen.  (Es muss nicht Haskell sein.)  Eine
+sollte den **Vorkurs** besuchen.  Eine
 Einführung in Haskell wird als Teil der Schulung gegeben.
 
 ## Dozenten
