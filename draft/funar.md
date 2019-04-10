@@ -51,8 +51,9 @@ Resultat sind flexible und robuste Architekturen, die gegenüber OO
 weniger komplex sind und weniger versteckte Abhängigkeiten mit sich
 bringen.
 
-In funktionalen Sprachen ist Architektur - aufgrund der erhöhten
-Ausdruckskraft und Abstraktionsmöglichkeit - Code.  In der Schulung
+Aufgrund der erhöhten Ausdruckskraft und Abstraktionsmöglichkeit in
+funktionalen Sprachen ist Architektur Code.
+In der Schulung
 gibt es Hands-On-Übungen, in denen (in
 [Haskell](https://www.haskell.org/)) programmiert wird.
 
