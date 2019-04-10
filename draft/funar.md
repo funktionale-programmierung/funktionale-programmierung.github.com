@@ -32,7 +32,7 @@ Im Juli diesen Jahres bieten wir nun zum ersten Mal offene Schulungen
 an, in denen es um "funktionale Software-Architektur" geht, also die
 besonderen Strukturierungs- und Modellierungstechniken in der
 funktionalen Programmierung.  Wer noch keine Kenntnisse in
-funktionaler Programmierung hat oder diese auffrischen müssen, kann
+funktionaler Programmierung hat oder diese auffrischen möchte, kann
 jeweils einen eintägigen Vorkurs besuchen.
 
 Wer dieses Training als Teil des [Advanced Level des
