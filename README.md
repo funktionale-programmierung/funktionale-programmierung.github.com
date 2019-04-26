@@ -82,6 +82,13 @@ Artikel dazu:
 http://blog.shareaholic.com/2012/01/how-to-optimize-your-blog-posts-for-seo/
 http://www.seomoz.org/blog/perfecting-keyword-targeting-on-page-optimization
 
+Blog lokal anschauen
+==
+
+Um das Blog lokal zu erzeugen benötigst du jekyll in Version 3.8.0 oder neuer.. Installationsanleitung gibt es hier: https://jekyllrb.com/docs/installation/
+
+Sobald jekyll installiert ist, kannst du aus dem Toplevel-Verzeichnis mittels `./run-local-server.sh` das Blog generieren und einen Webserver starten. Das Blog ist dann über http://127.0.0.1:4000 verfügbar.
+
 Veröffentlichen
 ==
 
