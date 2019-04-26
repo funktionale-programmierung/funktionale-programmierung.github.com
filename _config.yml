@@ -38,8 +38,8 @@ authors:
   stefan-wehr:
     name: Stefan Wehr
     image: /author/stefan-wehr.jpg
-    href: "http://www.checkpad.de/company.html#swehr"
-    about: '<a href="http://www.checkpad.de/company.html#swehr">Dr. Stefan Wehr</a> entwirft und entwickelt bei der <a href="http://www.checkpad.de">factis research GmbH</a> komplexe Anwendungen sowohl in klassischen als auch in funktionalen Sprachen. Er ist international anerkannter Spezialist für funktionale Programmierung.'
+    href: "http://www.checkpad.de/"
+    about: '<a href="http://www.checkpad.de/">Dr. Stefan Wehr</a> entwirft und entwickelt für <a href="http://www.checkpad.de">Checkpad</a> komplexe Anwendungen sowohl in klassischen als auch in funktionalen Sprachen. Er ist international anerkannter Spezialist für funktionale Programmierung.'
   david-frese:
     name: David Frese
     image: /author/david-frese.jpg
