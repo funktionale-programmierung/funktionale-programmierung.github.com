@@ -1,13 +1,13 @@
 ---
 layout: post
-description: Keine Fehler wegen null oder undefined mit Typescript
-title: "Keine Fehler wegen null oder undefined mit Typescript"
+description: Keine Fehler wegen Null oder Undefined mit Typescript
+title: "Keine Fehler wegen Null oder Undefined mit Typescript"
 author: stefan-wehr
 tags: ["null", "undefined", "strictNull", "strict", "typescript"]
 ---
 
 Jeder Javascript Programmierer ist bestimmt schon mal über den Laufzeitfehler
-`undefined is not a function` oder auch `Cannot read property 'length' of null` gestolpert.
+_undefined is not a function_ oder auch _Cannot read property 'length' of null_ gestolpert.
 Der Fehler tritt immer dann auf, wenn man mit einem Wert etwas machen möchte (z.B. als Funktion
 aufrufen oder auf die `length` Property zugreifen), der Wert dann aber `undefined` oder
 `null` ist. Auch Java oder C# Programmier kennen dieses Problem unter dem Name
@@ -31,7 +31,7 @@ zu wollen, ob Werte `null` oder `undefined` sein können. So ist in
 [Typescript](https://www.typescriptlang.org/), ein statisch getypter Javascript-Dialekt,
 seit einiger Zeit die `strictNullChecks` Option verfügbar. Wir werden in diesem Artikel sehen,
 wie man mit dieser Option Laufzeitfehler vermeiden kann, welche weiteren sinnvollen Optionen
-es zur Fehlermeidung gibt, wie man die `strictNullChecks` Option für eine große Codebasis
+es zur Fehlervermeidung gibt, wie man die `strictNullChecks` Option für eine große Codebasis
 inkrementell einführen kann und ob man zwischen `null` und `undefined` unterscheiden sollte.
 
 <!-- more start -->
@@ -203,15 +203,15 @@ den `myFormatter` kann, anders als im Interface `Formatter` vorgesehen, mit dem 
      Type '(name: Name) => string' is not assignable to type '(name: Name | undefined) => string | undefined'.
 
 Gemäß den üblichen Subtypregeln für Funktionen ist dieser Fehler auch richtig, denn eine Funktion
-vom Typ `U => V` ist nur genau dann ein Subtyp einer Funktion vom Typ `S => T`
+vom Typ `U => V` ist nur genau dann ein Subtyp einer Funktion vom Typ `S => T`,
 wenn `V` ein Subtyp von `T` ist (covariant im Ergebnis) und `S` ein Subtyp von `U`
-ist (contravariant im Argument). Dies ist hier nicht der Fall den `Name | undefined`
+ist (contravariant im Argument). Dies ist hier nicht der Fall, denn `Name | undefined`
 ist kein Subtyp von `Name`.
 
 Wichtig ist hierbei allerdings, dass dieser Check nur greift wenn `--strict`
-(bzw. `--strictFunctionTypes`) aktiv ist und der Typ der `formatName` Property im `Formatter`
-Interface mit Funktionssyntax aufgeschrieben ist. Schreibt man `Formatter` mit
-der Methodensyntax
+(bzw. `--strictFunctionTypes`) aktiv ist und wir außerdem Funktionssyntax
+für den Typ der `formatName` Property im `Formatter` benutzen. Schreibt man `Formatter` mit
+Methodensyntax
 
 ``` typescript
 interface Formatter {
@@ -236,7 +236,7 @@ zu sehr vielen Kompilierfehlern gekommen wäre, die man unmöglich auf einmal fi
 (es sei denn man möchte für geschätzt zwei Woche die Entwicklung komplett einstellen).
 
 Wir haben daher ein neues Kompiliertarget zur Einführung dieser Checks angelegt. Dieses
-Kompiliertarget hat ein Einstiegsdatei `strictNullChecks.ts`. Diese Datei importiert
+Kompiliertarget hat eine Einstiegsdatei `strictNullChecks.ts`. Diese Datei importiert
 die Module, welche schon mittels `--strictNullChecks` kompiliert werden können. Um
 es möglichst einfach zu machen, inkrementell neue Module zu diesem Target hinzuzufügen
 haben wir initial in `strictNullChecks.ts` alle Module in auskommentierter Form importiert
