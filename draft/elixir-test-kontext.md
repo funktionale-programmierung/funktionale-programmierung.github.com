@@ -6,7 +6,9 @@ author: tim-digel
 tags: ["Elixir", "Erlang", "Test", "Testing", "ExUnit", "Mix", "Setup", "Context", "Describe"]
 ---
 
-Elixir bietet uns eine einfache Möglichkeit, Testdaten übergreifend zu benutzen. Mit sogenannten Kontexten können wir eine Startbasis an Daten und anderen Dingen definieren, die unsere Tests komplett oder in Teilen benutzen können. Wer neu in Elixir ist, kann mit [Test-ABC mit Elixir](https://funktionale-programmierung.de/2019/03/27/elixir-test-abc.html) eine kurze Einführung in die Elixir-Test-Welt bekommen.
+Elixir bietet uns eine einfache Möglichkeit, Testdaten übergreifend zu nutzen. Mit sogenannten Kontexten können wir eine Startbasis an Daten definieren, die unsere Tests komplett oder in Teilen verwenden können. Wir lernen das Konstrukt `setup` kennen. Neben Beispieldaten können wir auch Funktionsaufrufe mit Seiteneffekten im Setup ausführen, z. B. Löschen von vorherigen Testerzeugnissen auf der Festplatte oder Starten von externen Diensten.  
+
+Wer neu in Elixir ist, kann mit [Test-ABC mit Elixir](https://funktionale-programmierung.de/2019/03/27/elixir-test-abc.html) eine kurze Einführung in die Elixir-Test-Welt bekommen.
 <!-- more start -->
 
 ## Bevor es los geht
@@ -16,7 +18,7 @@ Nun legen wir in einem Verzeichnis mit `mix new fehlerfrei` ein Projekt mit dem 
 
 ## Basis für Tests
 
-In einführenden Beispielen lernt man immer nur einfache 3-Zeiler-Tests kennen. In realen Anwendung kommt man schnell zu dem Punkt, wo ein Test die letzten 10% einer Funktion oder eines Programms testen soll. Die ersten 90% über 10 Tests hinweg sind dabei meistens gleich. Möchte man das ewige Beispiel eines Onlineshops bemühen, braucht man zum Testen für Funktionalität wie _Übersicht der Produkte_, _Produkte in den Warenkorb legen_, _Kauf abschließen als registrierter Benutzer_ oder _Benutzerkonto löschen_ einiges an Vorarbeit. Auf jeden Fall sind dies eine Reihe an Produkten und ein Benutzerkonto als Datenobjekt. Dafür definieren wir uns kurz zwei zusammengesetzte Datentypen, _Product_ und _Account_:
+In einführenden Beispielen lernt man immer nur einfache 3-Zeiler-Tests kennen. In realen Anwendung kommt man schnell zu dem Punkt, an dem ein Test die letzten herausfordernden 10% einer Funktion oder eines Programms testen soll. Die ersten 90% über 10 Tests hinweg sind dabei meistens gleich. Möchte man das ewige Beispiel eines Onlineshops bemühen, braucht man zum Testen für Funktionalität wie _Übersicht der Produkte_, _Produkte in den Warenkorb legen_, _Kauf abschließen als registrierter Benutzer_ oder _Benutzerkonto löschen_ einiges an Vorarbeit. Auf jeden Fall schließt dies eine Reihe an Produkten und ein Benutzerkonto als Datenobjekte ein. Dafür definieren wir uns zwei zusammengesetzte Datentypen, _Product_ und _Account_:
 ```elixir
   defmodule Account do
     @enforce_keys [:email]
@@ -48,9 +50,10 @@ In einführenden Beispielen lernt man immer nur einfache 3-Zeiler-Tests kennen. 
     }
   end
 ```
-Diese Definitionen hätten wir normalerweise einzeln in eigenen Dateien gepackt, können wir hier aber auch direkt vor unser Modul `Fehlerfrei` in `lib/fehlerfrei.ex` setzen. 
+Diese Definitionen hätten wir normalerweise einzeln in eigenen Dateien gepackt, wir können diese aber auch direkt vor dem Modul `Fehlerfrei` in `lib/fehlerfrei.ex` definieren. 
 
-Damit erstellen wir uns jetzt Beispieldaten. Da wir bei Tests in einem Modul sind, könnten wir diese einfach außerhalb der Tests definieren und verwenden. Wir verlieren dann schnell die Übersicht. Elixir bietet uns die Möglichkeit einen Test-Kontext aufzubauen. Wir definieren uns am Anfang ein `setup`, z. B. mit Datenobjekten als _Structs_. In unserem Beispiel legen wir Instanzen von Produkten und Benutzerkonten fest:
+Damit erstellen wir uns jetzt Beispieldaten. Da wir bei Tests in einem Modul sind, könnten wir diese Definitionen von Testdaten einfach außerhalb der Tests definieren, analog zu modulweiten Definitionen.
+Wir verlieren dann schnell die Übersicht. Elixir bietet uns daher die Möglichkeit, einen Test-Kontext aufzubauen. Wir definieren uns am Anfang ein `setup`, z. B. mit Datenobjekten als _Structs_. In unserem Beispiel legen wir Instanzen von Produkten und Benutzerkonten fest:
 ```elixir
  setup do
     pRasen = %Product{id: "10000815",
@@ -82,7 +85,7 @@ Damit erstellen wir uns jetzt Beispieldaten. Da wir bei Tests in einem Modul sin
     }
   end
 ```
-Am Ende von `setup` steht der Rückgabewert, das ist ein Tupel mit `:ok` und z. B. einer Keyword-Liste (die eckigen Klammern werden hier oft weg gelassen, zum besseren Verständnis: `{:ok, [a1: objekt1, ...]}`). In unseren Tests können wir jetzt den übergebenen Kontext an eine Variable binden, z. B. `context` im Testfall, der die zuvor definierte Funktion `change_availability` überprüft:
+Am Ende von `setup` steht der Rückgabewert. Das ist ein Tupel mit `:ok` und z. B. einer Keyword-Liste (die eckigen Klammern werden hier oft weg gelassen, zum besseren Verständnis: `{:ok, [a1: objekt1, ...]}`). In unseren Tests können wir jetzt den übergebenen Kontext an eine Variable binden, z. B. an `context` im folgendem Testfall, der die zuvor definierte Funktion `change_availability` überprüft:
 ```elixir
   @doc "Change availability of a products."
   @spec change_availability(%Product{}, integer()) :: %Product{}
@@ -97,7 +100,7 @@ Am Ende von `setup` steht der Rückgabewert, das ist ein Tupel mit `:ok` und z. 
 ```
 In `change_availability` benutzen wir die Pipe-Syntax (`|`) innerhalb eines Structs, mit der man einen vorhandenen Struct in seinen Feldern verändern kann.  
 
-Für einen weiteren Test betrachten wir z. B. nur die beiden Benutzerkonten. Wir müssen nicht zwangsweise den ganzen Kontext in den Test einbinden. Da Elixir Pattern Matching anwendet, können wir einzelne Teile des Kontexts direkt an Variablen binden und andere gar nicht verwenden.
+Für einen weiteren Test betrachten wir nur die beiden Benutzerkonten. Wir müssen nicht zwangsweise den ganzen Kontext in den Test einbinden. Da Elixir Pattern Matching anwendet, können wir einzelne Teile des Kontexts direkt an Variablen binden und andere überhaupt nicht verwenden.
 ```elixir
   @doc "Check if a account has a non-empty address"
   @spec has_address?(%Account{}) :: boolean()
@@ -115,7 +118,7 @@ Für einen weiteren Test betrachten wir z. B. nur die beiden Benutzerkonten. Wir
 
 Oft kommt es vor, dass man für eine Reihe an Tests eine minimal geänderte Grundlage braucht. Man könnte alle Objekte im zuvor kennengelernten Setup duplizieren und dann abändern. Dadurch würde man viel Doppelung bekommen und viel Übersicht verlieren. Mit Hilfe von `describe` können wir Tests zu einem Block zusammenfassen. Dies ist oft schon für eine bessere Übersicht sinnvoll. Innerhalb `describe` können wir dann ein Setup anhand Funktionen definieren, die den Kontext erstellen, verändern, erweitern oder reduzieren.  
 
-Dafür brauchen wir eine Funktion, die einen Kontext nimmt und wieder zurückgibt. Wir definieren uns zwei Funktionen: Eine, die alle Produkte auf Verfügbarkeit 0 setzt und eine, die eine Liste mit allen Produkten dem Kontext hinzufügt:
+Dafür brauchen wir eine Funktion, die einen Kontext entgegennimmt und wieder zurückgibt. Wir definieren uns zwei Funktionen: Eine, die alle Produkte auf Verfügbarkeit 0 setzt und eine, die eine Liste mit allen Produkten dem Kontext hinzufügt:
 ```elixir
   # Make all products unavailable
   defp context_products_unavailable(%{pRasen: pRasen, pKabel: pKabel} = context) do
@@ -132,7 +135,7 @@ Dafür brauchen wir eine Funktion, die einen Kontext nimmt und wieder zurückgib
     # This duplicates the data in the context, we don't delete context.pRasen & context.pKabel
   end
 ```
-Im ersten Beispiel verwenden wir erneut die Pipe-Syntax, um `pRasen` und `pKabel` zu überschreiben. In `context_put_products_to_list` vereinen wir den alten Kontext mit einer Map, die unser neues Feld enthält. Wir möchten die folgenden beiden Implementierungen testen:
+Im ersten Beispiel verwenden wir erneut die Pipe-Syntax, um `pRasen` und `pKabel` zu überschreiben. In `context_put_products_to_list` vereinen wir den alten Kontext mit einer Map, die unser neues Feld enthält. Wir möchten die folgenden zwei Implementierungen testen:
 ```elixir
   @doc "Check if we can buy a product"
   @spec buyable?(%Product{}) :: boolean()
@@ -146,7 +149,7 @@ Im ersten Beispiel verwenden wir erneut die Pipe-Syntax, um `pRasen` und `pKabel
     Enum.filter(products, fn p -> p.available <= 0 end)
   end
 ```
-Wir können uns jetzt zwei getrennte Gruppen mit `describe` definieren: Tests mit nicht verfügbaren Produkten bekommen als Setup einen Kontext, der durch `context_products_unavailable` und `context_put_products_to_list` geschleift wurde. Tests mit verfügbaren Produkten bekommen hingegen nur den Kontext bearbeitet durch die Funktion, welche die Produkte in eine Liste packt.
+Wir können uns jetzt zwei getrennte Gruppen mit `describe` definieren: Tests mit nicht verfügbaren Produkten bekommen als Setup einen Kontext, der durch `context_products_unavailable` und `context_put_products_to_list` geschleift wurde. Tests mit verfügbaren Produkten verwenden hingegen den Kontext nur bearbeitet durch die Funktion, welche die Produkte in eine Liste packt.
 ```elixir
   describe "functionality with no available products:" do
     setup [:context_products_unavailable, :context_put_products_to_list]
@@ -171,9 +174,9 @@ Wir können uns jetzt zwei getrennte Gruppen mit `describe` definieren: Tests mi
     end
   end
 ```
-Die bei `describe` angegebenen Titel werden an den eigentlichen Testtitel vorangestellt (siehe `mix test --trace`). Mit `setup` am Anfang von `describe` geben wir eine Liste von Funktionsnamen als Atome an. Durch diese Funktion wird der globale Kontext von links nach rechts durchgereicht, bevor er einem Testfall übergeben wird.  
+Die bei `describe` angegebenen Titel werden an den eigentlichen Testtitel vorangestellt (siehe `mix test --trace`). Mit dem Aufruf von `setup` am Anfang des `describe`-Blocks geben wir eine Liste von Funktionsnamen als Atome an. Durch diese Funktion wird der globale Kontext von links nach rechts durchgereicht, bevor er einem Testfall übergeben wird.  
 
 ## Fazit
 
-Mit `setup` können wir Beispieldaten oder andere Vorarbeiten übersichtlich zu Kontexten struktuieren. Für jeden Testfall wird dieser Kontext neu erstellt und wie wir oben gesehen haben, ganz oder teilweise mittels Pattern Matching verfügbar gemacht. Mit Funktionen, die einen Kontext konsumieren und einen Kontext wieder zurück geben, können wir mit `describe` Tests gruppieren und mit beliebigen Kontext-Funktionen die Beispieldaten modifizieren. Darüber hinaus kann man sich viele weitere Anwendungsfälle für ein Test-Setup vorstellen. Eine Idee wäre, eine externe Datenbank zu löschen und inital mit Daten zu befüllen. Jeder Test hätte dadurch einen festen Datenbestand und funktioniert unabhängig von anderen Tests. In diesem Fall muss aber darauf geachtet werden, dass die Tests nicht parallel ausgeführt werden, was der Standardeinstellung entspricht.
+Mit `setup` können wir Beispieldaten oder andere Vorarbeiten übersichtlich zu Kontexten struktuieren. Für jeden Testfall wird dieser Kontext neu erstellt und wie wir oben gesehen haben, ganz oder teilweise mittels Pattern Matching verfügbar gemacht. Mit Funktionen, die einen Kontext konsumieren und einen Kontext zurück geben, können wir mit Hilfe von `describe` Tests gruppieren und mit beliebigen Kontext-Funktionen die Beispieldaten modifizieren. Darüber hinaus kann man sich viele weitere Anwendungsfälle für ein Test-Setup vorstellen. Eine Idee wäre, eine externe Datenbank zu löschen und inital mit Daten zu befüllen. Jeder Test hätte dadurch einen festen Datenbestand und funktioniert unabhängig von anderen Tests. In diesem Fall muss aber darauf geachtet werden, dass die Tests nicht parallel ausgeführt werden, was der Standardeinstellung entspricht.
 <!-- more end -->
