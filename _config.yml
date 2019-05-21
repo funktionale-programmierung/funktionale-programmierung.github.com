@@ -108,6 +108,7 @@ authors:
   bastian-senst:
     name: Bastian Senst
     image: /author/bastian-senst.jpg
+    href: "https://github.com/bholst"
     about: 'Bastian Senst hat einen Master-Abschluss in Informatik von der Universität Kiel. Seit 2014 ist er Softwareentwickler bei der <a href="http://www.checkpad.de">factis research GmbH</a>.'
   alex-gremm:
     name: Alexandros Gremm
@@ -146,3 +147,8 @@ authors:
   timo-vonholtz:
     name: Timo von Holtz
     image: /author/timo-vonholtz.jpg
+    href:
+  stephan-guenther:
+    name: Stephan Günther
+    href:
+    about: 'Stephan Günther hat einen Diplom-Abschluss in Informatik der Hochschule Furtwangen. Seit 2014 ist er Softwareentwickler bei der <a href="http://checkpad.de">factis research GmbH</a>.'

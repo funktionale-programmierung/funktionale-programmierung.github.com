@@ -5,23 +5,43 @@ author: bastian-senst
 tags: []
 ---
 
-Thema dieses Artikels ist das Datenmodell, wie [Checkpad MED](https://www.checkpad.de/)
-Benutzereingaben und deren
-Änderungen speichert. Im Krankenhaus ist Checkpad unter anderem eine Kollaborationsplattform.
+Heute geht es um ein Datenmodell für verteilte Anwendung zur Speicherung von fortlaufenden
+Benutzereingaben in einem verteilten System.
+In der Praxis hat sich dieses Datenmodell seit mehreren Jahren in unserem
+Produkt Checkpad MED sehr bewährt.
+Im Krankenhaus ist Checkpad unter anderem eine Kollaborationsplattform.
 Formulare und Checklisten werden ausgefüllt, Medikamente angeordnet, Aufgaben werden erstellt und
 bearbeitet. All das passiert auch an mobilen Endgeräten direkt am Patientenbett.
-
 Die mobilen Geräte können dabei jederzeit auch offline benutzt werden. Offline-Nutzung ist dabei nicht
-nur lesend, sondern auch schreibend möglich. Dadurch, dass es sich bei Checkpad um ein verteiltes
-System handelt, hat man ähnliche Fragestellungen wie bei der verteilen Bearbeitung von
-Quellcode oder Textdateien, für die sich über die Zeit verschiedene Versionsverwaltungssysteme
-entwickelt haben (RCS, CVS bis hin zu Git).
+nur lesend, sondern auch schreibend möglich.
+
+Wie enstscheided man also, welche Daten sich ergeben, wenn mehrere Benutzer gleichzeit oder
+durch Offline-Nutzung voneinander getrennt eine Änderung durchführen.
+Einfachste verteilte Systeme lösen dieses Problem gar nicht. Der Benutzer, der als letztes einen
+Datensatz schreibt, gewinnt und überschreibt mögliche Änderungen anderer Benutzer. Eine offline
+Benutzung mit mehreren Benutzern ist hier für die meisten Einsatzzwecke nicht denkbar. Zu leicht
+überschreibt ein Benutzer die Änderung eines anderen.
+
+In der Praxis haben sich häufig Locks etabliert, z.B. bei der Bearbeitung von gemeinsamen
+Office-Dokumenten auf einem Fileshare. Auf der Implementierungsseite gibt es hier einige — zum Teil
+gelöste — Schwierigkeiten. Man muss die Locks z.B. rechtzeitig wieder Freigeben.
+Wie unterscheidet man
+dabei einen Client, der nicht mehr erreichbar ist, von einem, der gerade offline an dem Dokument
+arbeitet. Für die Bearbeitung von Dokumenten mag dieses Verfahren ein akzeptabler weg sein, unser
+Datenmodell soll aber die verschiedensten Anwendungsfälle unterstützen.
+
+Wir haben uns in Checkpad für eine andere Lösung entscheiden. Für jede Änderung speichern wir nur
+die Änderung. Wir speichern das was nötig ist, um aus dem alten Zustand, den die Benutzerin gesehen
+hat, den neuen Zustand berechnen kann. Diese Änderungsinformation nennen wir _Action_. Durch
+hintereinanderanwenden der Actions kommt man dann zu dem _Snapshot_, den wir dem Benutzer anzeigen
+können. Um einen konsistenten Zustand zu erreichen werden die Daten schließlich von einer zentralen
+Instanz, in unserem Fall der Checkpad-Server, in eine verbindliche Reihenfolge gebracht.
 
 Design
 ------
 
-Dieser Artikel beschreibt das Design anhand einer simplen Checkliste am Patienten, die bei der
-Aufnahme des Patienten ausgefüllt werden soll.
+Dieser Artikel beschreibt das Design des Datenmodells anhand einer simplen Checkliste am Patienten,
+die bei der Aufnahme des Patienten ausgefüllt werden soll.
 
 ```
 Aufnahmebogen ausgefüllt und unterschrieben         [ja] [nein] [entfällt]
@@ -41,7 +61,7 @@ Die gespeicherten Daten für diese konkrete Liste sieht so aus:
 ```
 
 Daten werden in Checkpad an _Entities_ gespeichert. In unserem Fall ist die Entity der
-Patient für die die Checkliste ausgefüllt wurde: `{ kind: "Patient", id:  "1"}`.
+Patient für die die Checkliste ausgefüllt wurde: `{ kind: "Patient", id: "4567042" }`.
 Zu jeder Art von Daten gibt es einen _Namespace_. Hier hießt der Namespace: `check_admission_onk`.
 An dieser Stelle ist der Namespace erstmal nur dieser Name.
 Zu jeder Entity kann es dann für jeden Namespace ein _Datafield_ geben. In diesem Datafield
@@ -50,7 +70,7 @@ Zur Veranschaulichung kann man die Daten zu einer Entity so darstellen:
 
 ```json
 {
-    "entity": { "kind": "Patient", "id": "1" },
+    "entity": { "kind": "Patient", "id": "4567042" },
     "namespaces": {
         "diagnosis": "Rezidiv ITP",
         "check_admission_onk": {
