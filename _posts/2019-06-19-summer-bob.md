@@ -8,10 +8,11 @@ tags: ["BOB", "Konferenz"]
 
 [![Sommer-BOB 2019](https://bobkonf.de/images/bobkonf_header_2019-summer.jpg)](https://bobkonf.de/2019-summer/)
 
-Dieses Jahr veranstalten wir einmalig eine [Sommer-BOB
-Spezial](https://bobkonf.de/2019-summer/), und zwar am 21. August 2019
-in Berlin, diesmal im [Scandic Hotel Potsdamer
-Platz](https://www.scandichotels.com/hotels/germany/berlin/scandic-berlin-potsdamer-platz),
+Dieses Jahr veranstalten wir einmalig eine
+[Sommer-BOB](https://bobkonf.de/2019-summer/).  Sie findet am 21. August 2019
+in Berlin im [Scandic Hotel Potsdamer
+Platz](https://www.scandichotels.com/hotels/germany/berlin/scandic-berlin-potsdamer-platz)
+statt,
 gemeinsam mit der [International Conference on
 Functional Programming](https://icfp19.sigplan.org/).
 
@@ -33,8 +34,8 @@ ist eröffnet, es gibt Frühbucher-Rabatte bis zum 18. Juli.
 
 Anlass für die Sommer-BOB ist die [International Conference on
 Functional Programming](https://icfp19.sigplan.org/), die größte
-Forschungskonferenz zur funktionalen Programmierung, in vom
-18.-23. August in Berlin stattfindet, ebenfalls im Scandic.
+Forschungskonferenz zur funktionalen Programmierung, die vom
+18.-23. August in Berlin stattfindet, ebenfalls im Scandic Hotel.
 BOB-Teilnehmer können sich am 21.8. auch ICFP-Talks ansehen und
 umgekehrt.
 
@@ -62,7 +63,7 @@ href="https://www.haskell.org/haskell-symposium/2019/index.html">Haskell</a>,
 <a href="https://icfp19.sigplan.org/home/erlang-2019">Erlang</a>, <a
 href="https://icfp19.sigplan.org/home/ocaml-2019">OCaml</a> und der
 großartige <a href="http://functional-art.org/">Workshop on Functional
-Art, Music, Modeling and Design</a>.  Außerdem wird die FARM am
+Art, Music, Modeling and Design (FARM)</a>.  Außerdem wird die FARM am
 Freitag, dem 23.8. von einem Abend mit algorithmischer Kunst
 abgeschlossen, ein echtes Erlebnis.
 
