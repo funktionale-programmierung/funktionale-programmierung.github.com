@@ -50,8 +50,7 @@ In einführenden Beispielen lernt man immer nur einfache 3-Zeiler-Tests kennen. 
     }
   end
 ```
-Diese Definitionen hätten wir normalerweise einzeln in eigenen Dateien gepackt, wir können diese aber auch direkt vor dem Modul `Fehlerfrei` in `lib/fehlerfrei.ex` definieren. Mit `defstruct` definieren wir den Datentyp. `@type t()` legt eine Typsignatur für `%__MODULE__{}` fest, also für `%Account{}` bzw. `%Product{}`. 
-
+Diese Definitionen hätten wir normalerweise einzeln in eigenen Dateien gepackt, wir können diese aber auch direkt vor dem Modul `Fehlerfrei` in `lib/fehlerfrei.ex` definieren. Mit `defstruct` definieren wir den Datentyp. `@type t()` legt eine Typsignatur für `%__MODULE__{}` fest, also für `%Account{}` bzw. `%Product{}`.
 Damit erstellen wir uns jetzt Beispieldaten. Da wir bei Tests in einem Modul sind, könnten wir diese Definitionen von Testdaten einfach außerhalb der Tests definieren, würden dann aber schnell die Übersicht verlieren.
 Elixir bietet uns daher die Möglichkeit, einen Test-Kontext aufzubauen. Wir definieren uns am Anfang ein `setup`, z. B. mit Datenobjekten als _Structs_. In unserem Beispiel legen wir Instanzen von Produkten und Benutzerkonten fest:
 ```elixir
