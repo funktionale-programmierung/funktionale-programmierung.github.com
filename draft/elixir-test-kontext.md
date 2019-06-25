@@ -50,10 +50,10 @@ In einführenden Beispielen lernt man immer nur einfache 3-Zeiler-Tests kennen. 
     }
   end
 ```
-Diese Definitionen hätten wir normalerweise einzeln in eigenen Dateien gepackt, wir können diese aber auch direkt vor dem Modul `Fehlerfrei` in `lib/fehlerfrei.ex` definieren. 
+Diese Definitionen hätten wir normalerweise einzeln in eigenen Dateien gepackt, wir können diese aber auch direkt vor dem Modul `Fehlerfrei` in `lib/fehlerfrei.ex` definieren. Mit `defstruct` definieren wir den Datentyp. `@type t()` legt eine Typsignatur für `%__MODULE__{}` fest, also für `%Account{}` bzw. `%Product{}`. 
 
-Damit erstellen wir uns jetzt Beispieldaten. Da wir bei Tests in einem Modul sind, könnten wir diese Definitionen von Testdaten einfach außerhalb der Tests definieren, analog zu modulweiten Definitionen.
-Wir verlieren dann schnell die Übersicht. Elixir bietet uns daher die Möglichkeit, einen Test-Kontext aufzubauen. Wir definieren uns am Anfang ein `setup`, z. B. mit Datenobjekten als _Structs_. In unserem Beispiel legen wir Instanzen von Produkten und Benutzerkonten fest:
+Damit erstellen wir uns jetzt Beispieldaten. Da wir bei Tests in einem Modul sind, könnten wir diese Definitionen von Testdaten einfach außerhalb der Tests definieren, würden dann aber schnell die Übersicht verlieren.
+Elixir bietet uns daher die Möglichkeit, einen Test-Kontext aufzubauen. Wir definieren uns am Anfang ein `setup`, z. B. mit Datenobjekten als _Structs_. In unserem Beispiel legen wir Instanzen von Produkten und Benutzerkonten fest:
 ```elixir
  setup do
     pRasen = %Product{id: "10000815",
@@ -85,7 +85,7 @@ Wir verlieren dann schnell die Übersicht. Elixir bietet uns daher die Möglichk
     }
   end
 ```
-Am Ende von `setup` steht der Rückgabewert. Das ist ein Tupel mit `:ok` und z. B. einer Keyword-Liste (die eckigen Klammern werden hier oft weg gelassen, zum besseren Verständnis: `{:ok, [a1: objekt1, ...]}`). In unseren Tests können wir jetzt den übergebenen Kontext an eine Variable binden, z. B. an `context` im folgendem Testfall, der die zuvor definierte Funktion `change_availability` überprüft:
+Am Ende von `setup` steht der Rückgabewert. Das ist ein Tupel mit `:ok` und z. B. einer Keyword-Liste (die eckigen Klammern werden hier oft weg gelassen, zum besseren Verständnis: `{:ok, [a1: objekt1, ...]}`). Dieser Wert wird jedem Test als Parameter übergeben. In unseren Tests binden wir diesen übergebenen Kontext an eine Variable, z. B. an `context` im folgendem Testfall, der die zuvor definierte Funktion `change_availability` überprüft:
 ```elixir
   @doc "Change availability of a products."
   @spec change_availability(%Product{}, integer()) :: %Product{}
@@ -100,7 +100,7 @@ Am Ende von `setup` steht der Rückgabewert. Das ist ein Tupel mit `:ok` und z. 
 ```
 In `change_availability` benutzen wir die Pipe-Syntax (`|`) innerhalb eines Structs, mit der man einen vorhandenen Struct in seinen Feldern verändern kann.  
 
-Für einen weiteren Test betrachten wir nur die beiden Benutzerkonten. Wir müssen nicht zwangsweise den ganzen Kontext in den Test einbinden. Da Elixir Pattern Matching anwendet, können wir einzelne Teile des Kontexts direkt an Variablen binden und andere überhaupt nicht verwenden.
+Für einen weiteren Test betrachten wir nur die beiden Benutzerkonten. Wir müssen nicht zwangsweise den ganzen übergebenen Kontext im Test verfügbar machen. Mithilfe von Pattern Matching, können wir einzelne Teile des Kontexts direkt an Variablen binden und andere überhaupt nicht verwenden.
 ```elixir
   @doc "Check if a account has a non-empty address"
   @spec has_address?(%Account{}) :: boolean()
@@ -116,9 +116,9 @@ Für einen weiteren Test betrachten wir nur die beiden Benutzerkonten. Wir müss
 
 ## Kontexte staffeln, ändern, ...
 
-Oft kommt es vor, dass man für eine Reihe an Tests eine minimal geänderte Grundlage braucht. Man könnte alle Objekte im zuvor kennengelernten Setup duplizieren und dann abändern. Dadurch würde man viel Doppelung bekommen und viel Übersicht verlieren. Mit Hilfe von `describe` können wir Tests zu einem Block zusammenfassen. Dies ist oft schon für eine bessere Übersicht sinnvoll. Innerhalb `describe` können wir dann ein Setup anhand Funktionen definieren, die den Kontext erstellen, verändern, erweitern oder reduzieren.  
+Oft kommt es vor, dass man für eine Reihe an Tests eine minimal geänderte Grundlage braucht. Man könnte alle Objekte im zuvor kennengelernten Setup duplizieren und dann abändern. Dadurch würde man viel Doppelung bekommen und viel Übersicht verlieren. Mit Hilfe von `describe` können wir Tests zu einem Block zusammenfassen. Dies ist oft schon für eine bessere Übersicht sinnvoll. Innerhalb von `describe` können wir dann ein Setup anhand von Funktionen definieren, die den Kontext erstellen, verändern, erweitern oder reduzieren.  
 
-Dafür brauchen wir eine Funktion, die einen Kontext entgegennimmt und wieder zurückgibt. Wir definieren uns zwei Funktionen: Eine, die alle Produkte auf Verfügbarkeit 0 setzt und eine, die eine Liste mit allen Produkten dem Kontext hinzufügt:
+Dafür brauchen wir eine Funktion, die einen Kontext entgegennimmt und wieder zurückgibt. Wir definieren uns zwei Funktionen: Eine, die die Produkte auf Verfügbarkeit 0 setzt und eine, die eine Liste mit allen Produkten dem Kontext hinzufügt:
 ```elixir
   # Make all products unavailable
   defp context_products_unavailable(%{pRasen: pRasen, pKabel: pKabel} = context) do
