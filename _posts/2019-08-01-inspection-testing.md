@@ -9,6 +9,8 @@ Funktionale Tests, also Tests die das Ergebnis einer Berechnung überprüfen, un
 
 Für GHC, dem Standard-Compiler für Haskell, gibt es genau zu diesem Zweck die Library [inspection-testing](https://github.com/nomeata/inspection-testing). Hierzu gab es auf der letzten BOB-Konferenz in Berlin auch einen [Vortrag](https://bobkonf.de/2019/breitner.html).
 
+<!-- more start -->
+
 ## Motivierendes Beispiel
 
 ```haskell
