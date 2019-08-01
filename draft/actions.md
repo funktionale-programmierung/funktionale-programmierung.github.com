@@ -15,7 +15,7 @@ bearbeitet. All das passiert auch an mobilen Endgeräten direkt am Patientenbett
 Die mobilen Geräte können dabei jederzeit auch offline benutzt werden. Offline-Nutzung ist dabei nicht
 nur lesend, sondern auch schreibend möglich.
 
-Wie enstscheidet man also, welche Daten sich ergeben, wenn mehrere Benutzer gleichzeitig oder
+Wie entscheidet man also, welche Daten sich ergeben, wenn mehrere Benutzer gleichzeitig oder
 durch Offline-Nutzung voneinander getrennt eine Änderung durchführen.
 Einfache verteilte Systeme lösen dieses Problem gar nicht. Der Benutzer, der als letztes einen
 Datensatz schreibt, gewinnt und überschreibt mögliche Änderungen anderer Benutzer. Eine
@@ -139,7 +139,7 @@ Eigenschaften und Annahmen
 
 Persistent müssen jeweils nur die Actions gespeichert werden. Der Snapshot kann jederzeit durch
 Hintereinanderausführung der Actions neu berechnet werden. Aus Performancegründen wird am Server
-aber trotzdem der Snapshot gespeichert. Der Client erhält, ebenfalls aus Performancegründen auch
+aber trotzdem der Snapshot gespeichert. Der Client erhält, ebenfalls aus Performancegründen, auch
 nur diesen Snapshot und die Information, welche Actions dort schon berücksichtigt sind.
 
 Actions können von verschiedenen Codeständen unterschiedlich
