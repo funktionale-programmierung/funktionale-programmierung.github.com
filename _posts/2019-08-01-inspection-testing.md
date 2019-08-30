@@ -9,6 +9,8 @@ Funktionale Tests, also Tests die das Ergebnis einer Berechnung überprüfen, un
 
 Für GHC, dem Standard-Compiler für Haskell, gibt es genau zu diesem Zweck die Library [inspection-testing](https://github.com/nomeata/inspection-testing). Hierzu gab es auf der letzten BOB-Konferenz in Berlin auch einen [Vortrag](https://bobkonf.de/2019/breitner.html).
 
+<!-- more start -->
+
 ## Motivierendes Beispiel
 
 ```haskell
@@ -25,7 +27,7 @@ isJust2 (Just _) = True
 
 Die beiden Funktionen geben zurück ob der übergebene Wert den `Just` Konstruktor verwendet. Diese Funktion existiert auch in der Standard-Library als [isJust](https://www.stackage.org/haddock/lts-13.18/base-4.12.0.0/Data-Maybe.html#v:isJust).
 
-Ob die die beiden Funktionen äquivalent sind, könnte man jetzt z. B. mit QuickCheck testen. Wir würden aber gerne wissen, ob GHC in beiden Fällen exakt den gleichen Code generiert damit wir lesbaren komponierten Code schreiben können, aber dafür nicht mit schlechterer Performance bezahlen müssen.
+Ob die beiden Funktionen äquivalent sind, könnte man jetzt z. B. mit QuickCheck testen. Wir würden aber gerne wissen, ob GHC in beiden Fällen exakt den gleichen Code generiert damit wir lesbaren komponierten Code schreiben können, aber dafür nicht mit schlechterer Performance bezahlen müssen.
 
 Diesen Test kann man jetzt mittels inspection-testing realisieren:
 
@@ -81,7 +83,7 @@ inspection-testing.hs: error:
          unexpected failures: 1
 ```
 
-In der Ausgabe sehen wir welche Obligation fehlgeschlagen ist und für beide Seiten der Gleichung (`LHS` und `RHS`) jeweils den generierten Code. Die Ausgabe stellt hier ist kein Haskell dar, sondern Core, die interne Repräsentation eines Haskell-Moduls im GHC. Damit enthält sie aber auch viele Annotationen, die es schwer machen den eigentlichen Unterschied der beiden Fälle zu sehen. Man kann den Großteil dessen ausblenden:
+In der Ausgabe sehen wir welche Obligation fehlgeschlagen ist und für beide Seiten der Gleichung (`LHS` und `RHS`) jeweils den generierten Code. Die Ausgabe stellt hier kein Haskell dar, sondern Core, die interne Repräsentation eines Haskell-Moduls im GHC. Damit enthält sie aber auch viele Annotationen, die es schwer machen den eigentlichen Unterschied der beiden Fälle zu sehen. Man kann den Großteil dessen ausblenden:
 
 ```
 $ stack ghc --package inspection-testing inspection-testing.hs -- -dsuppress-idinfo -dsuppress-coercions -dsuppress-type-applications -dsuppress-module-prefixes -dsuppress-type-signatures -dsuppress-uniques

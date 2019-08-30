@@ -156,5 +156,5 @@ Die Test-Helfer-Datei wird vor jedem Testdurchlauf ausgeführt. Wir können sie 
 
 Da Elixir recht jung ist, konnte das Tooling um die Tests sehr strukturiert und durchdacht aufgebaut werden. Ältere Sprachen wachsen oder verändern sich mit der Zeit und tun sich hier deutlich schwerer. Elixir profitiert insbesondere von der Detailliertheit bei Fehlern oder der dynamisch gesteuerten Ausgabe mit _trace_, Einschränkungen, etc.. Das macht Tests schreiben deutlich angenehmer.  
 
-Das Test-Tooling von Elixir bietet uns noch einiges mehr: Wir können Fehlermeldungen oder Logging sehr einfach mit testen oder mit Test-Kontexten für jeden Test einen vordefinierten Ausgangszustand bereitstellen. Diese Themen und auch _Doctest_ werden wir in einem späteren Artikel betrachten.
+Das Test-Tooling von Elixir bietet uns noch einiges mehr: Wir können Fehlermeldungen oder Logging sehr einfach mit testen oder mit [Test-Kontexten](https://funktionale-programmierung.de/2019/06/27/elixir-test-kontext.html) für jeden Test einen vordefinierten Ausgangszustand bereitstellen. Diese Themen und auch _Doctest_ werden wir in späteren Artikel betrachten.
 <!-- more end -->
