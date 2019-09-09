@@ -9,8 +9,9 @@ tags: ["Clojure", "Makro", "macro", "defmacro", "quote", "syntaxquote", "gensym"
 Dieser Blogpost ist eine Fortführung von [Makros in
 Clojure](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html).
 Wir werden weitere Makro-Begriffe, wie zum Beispiel das *Syntax-Quote*,
-kennenlernen und uns mit Makro-Hygiene beschäftigen. Es empfiehlt sich, den
-vorherigen Beitrag gelesen zu haben.
+kennenlernen und uns mit Makro-Hygiene beschäftigen. Dies wird es uns
+erleichtern, auch komplexere Makros fehlerfrei zu schreiben. Es empfiehlt sich,
+den vorherigen Beitrag gelesen zu haben.
 
 <!-- more start -->
 
@@ -24,17 +25,16 @@ zu finden. Wir empfehlen, ihn während des Lesens Stück für Stück auszuführe
 Im [vorherigen
 Blogpost](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html)
 dieser Reihe haben wir bereits das Apostroph `'` kennengelernt. Das wurde
-benutzt, um Symbole "herzustellen". `'if` gibt nach Auswertung das Symbol `if`
-zurück. Doch `'` kann noch mehr, als bisher beschrieben: `'` ist syntaktischer
-Zucker für die Funktion `quote`. `quote` (um genau zu sein ist `quote` eine
-sogenannte [*special form*](https://clojure.org/reference/special_forms)) gibt
-ihren übergebenen Parameter *unausgewertet* zurück. `(quote (+ 1 2))` gibt
-demnach also die *Liste* `(+ 1 2)` mit dem Symbol `+` und den beiden Zahlen `1`
-und `2` zurück (und nicht etwa den Wert `3`). Statt `(list 'if true "Hallo"
-nil)` hätten wir also im vorherigen Blogpost auch `'(if true "Hallo" nil)`
-schreiben können.
+benutzt, um Symbole zu erzeugen. Zum Beispiel gibt `'if` nach Auswertung das
+Symbol `if` zurück. Doch `'` kann noch mehr als bisher beschrieben: `'` ist
+syntaktischer Zucker für die Funktion `quote`. `quote` ist eine sogenannte
+[*special form*](https://clojure.org/reference/special_forms)). Sie gibt ihren
+übergebenen Parameter *unausgewertet* zurück. `(quote (+ 1 2))` gibt demnach die
+*Liste* `(+ 1 2)` mit dem Symbol `+` und den beiden Zahlen `1` und `2` zurück,
+nicht den Wert `3`. Statt `(list 'if true "Hallo" nil)` hätten wir also im
+vorherigen Blogpost auch `'(if true "Hallo" nil)` schreiben können.
 
-Doch unser `my-when`-Makro würde gequotet, also so
+Doch unser `my-when`-Makro würde mit Apostroph
 
 ```clojure
 (defmacro my-when
@@ -67,10 +67,10 @@ für den es den syntaktischen Zucker `~` gibt. Hier ein Beispiel:
 ```
 
 Wir sehen also, dass im Syntax-Quote-Beispiel der Ausdruck `(+ 1 2)` ausgewertet
-wurde. Doch es ist noch mehr passiert: Syntax-Quote löst Symbole im aktuellen
-Kontext auf und gibt ein voll-qualifiziertes Symbol zurück, deshalb
-`clojure.core/+` statt einfach nur `+`. Mit Syntax-Quote können wir nun das
-`my-when`-Makro wie gewünscht schreiben:
+wurde. Doch es ist noch mehr passiert: Syntax-Quote stellt die Bindung der
+Symbole im aktuellen Kontext her und gibt ein voll-qualifiziertes Symbol zurück,
+deshalb auch `clojure.core/+` statt einfach nur `+`. Mit Syntax-Quote können wir
+nun das `my-when`-Makro wie gewünscht schreiben:
 
 ```clojure
 (defmacro my-when
@@ -89,12 +89,12 @@ von `my-when` angepasst werden muss: Statt zwei fixen Parametern `pred` und
 `then` darf `my-when` nun eine variable Anzahl an Parametern konsumieren: `[pred
 & thens]`. Wie schon im vorherigen Blogpost erwähnt, ist es sinnvoll, sich zu
 überlegen, welcher Quellcode vom Makro erzeugt werden soll. Da wir in `my-when`
-unterliegend das `if` benutzen, müssen wir die `thens` in einen `do`-Ausdruck
-packen. Der Code
+unterliegend `if` benutzen, müssen wir die Elemente der `thens`-Liste in einen
+`do`-Ausdruck platzieren. Der Code
 
 ```clojure
 (my-when (= 1 1)
-  (println "Ich will was ausdrucken, bevor ich einen Wert zurückgebe")
+  (println "Ich will was ausgeben, bevor ich einen Wert zurückgebe")
   "Hallo")
 
 ```
@@ -103,7 +103,7 @@ soll also folgenden Code
 
 ```clojure
 (if (= 1 1)
-  (do (println "Ich will was ausdrucken, bevor ich einen Wert zurückgebe")
+  (do (println "Ich will was ausgeben, bevor ich einen Wert zurückgebe")
       "Hallo")
   nil)
 ```
@@ -112,7 +112,7 @@ produzieren. Im `my-when`-Makro `~then` einfach durch `(do ~thens)` zu ersetzen
 wäre falsch, denn daraus würde
 
 ```clojure
-(do ((println "Ich will was ausdrucken, bevor ich einen Wert zurückgebe")
+(do ((println "Ich will was ausgeben, bevor ich einen Wert zurückgebe")
       "Hallo"))
 ```
 
@@ -129,7 +129,7 @@ Beispiel:
   (println `(1 2 ~@thens 6 7))) ; => (1 2 3 4 5 6 7)
 ```
 
-Unser erweitertes `my-when`-Makro sieht nun also so aus:
+Unser erweitertes `my-when`-Makro sieht nun wie folgt aus:
 
 ```clojure
 (defmacro my-when+ [pred & thens]
@@ -162,11 +162,9 @@ Doch nun benutzt ein anderer Ausdruck `my-first`:
 ```
 
 Dies liefert die Exception `java.lang.Long cannot be cast to clojure.lang.IFn`,
-da nun `first` an `1` gebunden ist, und somit während der Makro-Expansion der
-Ausdruck `(1 ["A" "B" "C"])` entsteht.
-
-Wir können das Problem beheben, indem wir statt des Apostrophs das Syntax-Quote
-benutzen:
+da im Rumpf von `let` nun `first` an `1` gebunden ist, und somit der Ausdruck
+`(1 ["A" "B" "C"])` entsteht. Wir können den Fehler beheben, indem wir statt des
+Apostrophs das Syntax-Quote benutzen:
 
 ```clojure
 (defmacro my-first [lis]
@@ -223,11 +221,9 @@ das Syntax-Quote alle Symbole vollqualifiziert, wird während der Expansion `[x
 
 Doch was tun wir, wenn wir einen `let`-Ausdruck in unserem Makro benutzen
 wollen? Eine erste Idee wäre, sich im Makro ungewöhnliche Bezeichner für diese
-Bindungen auszudenken, also statt `x` `x12915` zu wählen. Doch ganz zufällig
-könnte es dennoch zu Namenskollisionen kommen (und dazu ist es als
-ProgrammiererIn auch noch mühselig, diesen Weg zu verfolgen). Clojure (und
-andere Lisp-Dialekte) lösen das mit der Funktion `gensym`, die ein global
-eindeutiges Symbol zurückgibt:
+Bindungen auszudenken, also statt `x` `x12915` zu wählen. Doch zufällig könnte
+es dennoch zu Namenskollisionen kommen. Clojure (und andere Lisp-Dialekte) lösen
+das mit der Funktion `gensym`, die ein global eindeutiges Symbol zurückgibt:
 
 ```clojure
 (gensym) ;; => G__33881
@@ -244,7 +240,7 @@ erzeugen, und das in der `let`-Form benutzen:
 ```
 
 Da dieses Konstrukt doch häufig beim Makro-Schreiben vorkommt, hat Clojure eine
-Funktionalität eingebaut, die das ganze abkürzt. Wir können statt Obigem auch
+Funktionalität eingebaut, die das abkürzt. Wir können statt Obigem auch
 schreiben:
 
 ```clojure
@@ -252,12 +248,14 @@ schreiben:
   `(let [sym# 0] ~a))
 ```
 
-`#` weist hier den Clojure-Compiler an, das Gensym automatisch zu generieren.
+`#` weist hier den Clojure-Compiler an, das Symbol automatisch, eindeutig zu
+generieren.
 
-## (ungewollte) mehrfache Auswertung
+## Ungewollte mehrfache Auswertung
 
-Warum wir unbedingt die `let`-Bindung innerhalb eines Makros brauchen, zeigt die
-dritte Fehlerquelle beim Makros-Schreiben: *(ungewollte) mehrfache Evaluation*.
+Warum wir unbedingt die `let`-Bindung innerhalb eines Makros benötigen, zeigt
+die dritte Fehlerquelle beim Makros-Schreiben: *(ungewollte) mehrfache
+Evaluation*.
 
 Das folgende Makro ist nicht unbedingt sinnvoll, aber zur Illustration gut
 geeignet:
@@ -269,11 +267,11 @@ geeignet:
      (str "Fehler bei der Berechnung.")))
 ```
 
-Angenommen, wir haben einen Ausdruck, der einen Seiteneffekt ausführt (z.B.
-einen Datenbankschreibzugriff oder sonstiges). Diesen Ausdruck dann dem
-`berechne`-Makro zu übergeben würde dazu führen, dass der Seiteneffekt (in der
-Konsequente) zweimal ausgeführt werden würde! Um das zu vermeiden, müssen wir
-das Ergebnis von `~x` an ein Symbol binden:
+Angenommen, wir haben einen Ausdruck, der einen Seiteneffekt ausführt (zum
+Beispiel einen Datenbankschreibzugriff). Diesen Ausdruck dem `berechne`-Makro zu
+übergeben würde dazu führen, dass der Seiteneffekt zweimal ausgeführt werden
+würde! Um das zu vermeiden, müssen wir das Ergebnis von `~x` an ein Symbol
+binden:
 
 ```clojure
 (defmacro berechne [x]
@@ -290,8 +288,8 @@ werden, der Clojure-Compiler kümmert sich darum.
 ## Fazit
 
 In diesem Blogpost haben wir weitere, wichtige Makro-Befehle kennengelernt. Das
-Syntax-Quote erleichtert uns nicht nur die Schreibweise von Makros, sondern
-durch das Benutzen des Syntax-Quotes vermeiden wir auch einige Stolpersteine beim
+Syntax-Quote erleichtert uns nicht nur die Schreibweise von Makros. Durch das
+Benutzen des Syntax-Quotes vermeiden wir einige Stolpersteine beim
 Makro-Schreiben.
 
 Für die Zukunft dürfen wir uns auf einen weiteren Blogpost freuen, welcher
