@@ -24,11 +24,11 @@ zu finden. Wir empfehlen, ihn während des Lesens Stück für Stück auszuführe
 
 Im [vorherigen
 Blogpost](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html)
-dieser Reihe haben wir bereits das Apostroph `'` kennengelernt. Das wurde
+dieser Reihe haben wir bereits den Apostroph `'` kennengelernt. Das wurde
 benutzt, um Symbole zu erzeugen. Zum Beispiel gibt `'if` nach Auswertung das
 Symbol `if` zurück. Doch `'` kann noch mehr als bisher beschrieben: `'` ist
 syntaktischer Zucker für die Funktion `quote`. `quote` ist eine sogenannte
-[*special form*](https://clojure.org/reference/special_forms)). Sie gibt ihren
+[*special form*](https://clojure.org/reference/special_forms). Sie gibt ihren
 übergebenen Parameter *unausgewertet* zurück. `(quote (+ 1 2))` gibt demnach die
 *Liste* `(+ 1 2)` mit dem Symbol `+` und den beiden Zahlen `1` und `2` zurück,
 nicht den Wert `3`. Statt `(list 'if true "Hallo" nil)` hätten wir also im
@@ -51,10 +51,12 @@ Symbole und nicht die von uns übergebenen Werte `(= 1 1)` und `"Hallo"`. Nun
 aber existieren für die Symbole `pred` und `then` zur *Laufzeit* (vermutlich)
 keine Bindungen, weshalb der Compiler eine Fehlermeldung wirft. Wir möchten
 also, dass im Rumpf des Makros `pred` durch den übergebenen Wert ersetzt wird.
-Dies ist in einem mit `'` versehenen Ausdruck nicht möglich. Dafür gibt es das
-*Syntax-Quote* `` ` ``. Innerhalb eines mit `` ` `` versehenen Ausdrucks ist es
-möglich, einzelne Ausdrücke ersetzen zu lassen. Dies macht der Befehl `unquote`,
-für den es den syntaktischen Zucker `~` gibt. Hier ein Beispiel:
+Dies ist in einem mit `'` versehenen Ausdruck nicht möglich.
+
+Dafür gibt es das *Syntax-Quote* `` ` ``. Innerhalb eines mit `` ` `` versehenen
+Ausdrucks ist es möglich, einzelne Ausdrücke ersetzen zu lassen. Dies macht der
+Befehl `unquote`, für den es den syntaktischen Zucker `~` gibt. Hier ein
+Beispiel:
 
 ```clojure
 ;; Normal gequotet
@@ -89,7 +91,7 @@ von `my-when` angepasst werden muss: Statt zwei fixen Parametern `pred` und
 `then` darf `my-when` nun eine variable Anzahl an Parametern konsumieren: `[pred
 & thens]`. Wie schon im vorherigen Blogpost erwähnt, ist es sinnvoll, sich zu
 überlegen, welcher Quellcode vom Makro erzeugt werden soll. Da wir in `my-when`
-unterliegend `if` benutzen, müssen wir die Elemente der `thens`-Liste in einen
+unterliegend `if` benutzen, müssen wir die Elemente der `thens`-Liste in einem
 `do`-Ausdruck platzieren. Der Code
 
 ```clojure
@@ -140,8 +142,8 @@ Unser erweitertes `my-when`-Makro sieht nun wie folgt aus:
 
 ## Makro-Hygiene
 
-Nachdem wir nun alle essenziellen Befehle über Makros kennengelernt haben,
-kommen wir zu einem wichtigen, etwas technischen Thema: Makro-Hygiene.
+Nachdem wir nun alle essenziellen Makro-Befehle kennengelernt haben, kommen wir
+zu einem wichtigen, etwas technischen Thema: Makro-Hygiene.
 
 Das Syntax-Quote ist dem einfachen Quote oft vorzuziehen, da es uns beim
 Makro-Schreiben etwas mehr unterstützt, Fehler zu vermeiden. Hier zunächst eine
@@ -189,7 +191,7 @@ Noch ein weiteres Hygiene-Problem sehen wir bei folgendem Code:
 ```
 
 Die meisten Aufrufe unserer vermeintlichen Identitätsfunktion `my-identity` tun
-das gewünschte, nämlich den übergebenen Ausdruck zurückzugeben. Doch was ist mit
+das Gewünschte, nämlich den übergebenen Ausdruck zurückzugeben. Doch was ist mit
 
 ```clojure
 (let [x "Hallo"]
@@ -231,7 +233,7 @@ das mit der Funktion `gensym`, die ein global eindeutiges Symbol zurückgibt:
 ```
 
 Damit können wir *während* der Makro-Expansionszeit ein eindeutiges Symbol
-erzeugen, und das in der `let`-Form benutzen:
+erzeugen und es in der `let`-Form benutzen:
 
 ```clojure
 (defmacro my-identity-2 [a]
@@ -248,8 +250,8 @@ schreiben:
   `(let [sym# 0] ~a))
 ```
 
-`#` weist hier den Clojure-Compiler an, das Symbol automatisch, eindeutig zu
-generieren.
+`#` weist hier den Clojure-Compiler an, via `gensym` ein neues, eindeutiges
+Symbol zu generieren.
 
 ## Ungewollte mehrfache Auswertung
 
@@ -269,7 +271,7 @@ geeignet:
 
 Angenommen, wir haben einen Ausdruck, der einen Seiteneffekt ausführt (zum
 Beispiel einen Datenbankschreibzugriff). Diesen Ausdruck dem `berechne`-Makro zu
-übergeben würde dazu führen, dass der Seiteneffekt zweimal ausgeführt werden
+übergeben, würde dazu führen, dass der Seiteneffekt zweimal ausgeführt werden
 würde! Um das zu vermeiden, müssen wir das Ergebnis von `~x` an ein Symbol
 binden:
 
@@ -277,12 +279,10 @@ binden:
 (defmacro berechne [x]
   `(let [result# ~x]
      (if result#
-       (str "Die Berechnungen haben geklappt! Das Ergebnis ist" result#)
+       (str "Die Berechnungen haben geklappt! Das Ergebnis ist " result#)
        (str "Fehler bei der Berechnung."))))
 ```
 
-Tatsächlich muss hier `result#` nicht mehr mit einer Tilde (`~`) versehen
-werden, der Clojure-Compiler kümmert sich darum.
 
 
 ## Fazit
