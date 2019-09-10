@@ -55,7 +55,7 @@ Dies ist in einem mit `'` versehenen Ausdruck nicht möglich.
 
 Dafür gibt es das *Syntax-Quote* `` ` ``. Innerhalb eines mit `` ` `` versehenen
 Ausdrucks ist es möglich, einzelne Ausdrücke ersetzen zu lassen. Dies macht der
-Befehl `unquote`, für den es den syntaktischen Zucker `~` gibt. Hier ein
+Ausdruck `unquote`, für den es den syntaktischen Zucker `~` gibt. Hier ein
 Beispiel:
 
 ```clojure
@@ -69,7 +69,9 @@ Beispiel:
 ```
 
 Wir sehen also, dass im Syntax-Quote-Beispiel der Ausdruck `(+ 1 2)` ausgewertet
-wurde. Doch es ist noch mehr passiert: Syntax-Quote stellt die Bindung der
+wurde.
+
+Doch es ist noch mehr passiert: Syntax-Quote stellt die Bindung der
 Symbole im aktuellen Kontext her und gibt ein voll-qualifiziertes Symbol zurück,
 deshalb auch `clojure.core/+` statt einfach nur `+`. Mit Syntax-Quote können wir
 nun das `my-when`-Makro wie gewünscht schreiben:
@@ -111,7 +113,7 @@ soll also folgenden Code
 ```
 
 produzieren. Im `my-when`-Makro `~then` einfach durch `(do ~thens)` zu ersetzen
-wäre falsch, denn daraus würde
+wäre allerdings falsch, denn daraus würde
 
 ```clojure
 (do ((println "Ich will was ausgeben, bevor ich einen Wert zurückgebe")
@@ -130,6 +132,9 @@ Beispiel:
   (println `(1 2 ~thens 6 7))   ; => (1 2 (3 4 5) 6 7)
   (println `(1 2 ~@thens 6 7))) ; => (1 2 3 4 5 6 7)
 ```
+
+Im zweiten Fall werden die Elemente der `thens`-Liste direkt in die
+andere Liste gesetzt.
 
 Unser erweitertes `my-when`-Makro sieht nun wie folgt aus:
 
