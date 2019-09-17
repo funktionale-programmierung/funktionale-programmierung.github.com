@@ -24,15 +24,19 @@ zu finden. Wir empfehlen, ihn während des Lesens Stück für Stück auszuführe
 
 Im [vorherigen
 Blogpost](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html)
-dieser Reihe haben wir bereits den Apostroph `'` kennengelernt. Das wurde
+dieser Reihe haben wir bereits den Apostroph `'` kennengelernt. Dieser wurde
 benutzt, um Symbole zu erzeugen. Zum Beispiel gibt `'if` nach Auswertung das
 Symbol `if` zurück. Doch `'` kann noch mehr als bisher beschrieben: `'` ist
-syntaktischer Zucker für die Funktion `quote`. `quote` ist eine sogenannte
-[*special form*](https://clojure.org/reference/special_forms). Sie gibt ihren
-übergebenen Parameter *unausgewertet* zurück. `(quote (+ 1 2))` gibt demnach die
-*Liste* `(+ 1 2)` mit dem Symbol `+` und den beiden Zahlen `1` und `2` zurück,
-nicht den Wert `3`. Statt `(list 'if true "Hallo" nil)` hätten wir also im
-vorherigen Blogpost auch `'(if true "Hallo" nil)` schreiben können.
+syntaktischer Zucker für die [*special
+form*](https://clojure.org/reference/special_forms) `quote`. `quote` liefert
+eine Datenstruktur, die ausgedruckt so aussieht, wie das, was in dem Quote
+steht. Damit kann es insbesondere dafür verwendet werden, eine Datenstruktur zu
+bauen, die ausgedruckt wie Code aussieht.
+
+`(quote (+ 1 2))` gibt demnach die *Liste* `(+ 1 2)` mit dem Symbol `+` und den
+beiden Zahlen `1` und `2` zurück, nicht den Wert `3`. Statt `(list 'if true
+"Hallo" nil)` hätten wir also im vorherigen Blogpost auch `'(if true "Hallo"
+nil)` schreiben können.
 
 Doch unser `my-when`-Makro würde mit Apostroph
 
@@ -49,9 +53,9 @@ zurückgibt, wird beispielsweise der Ausdruck `(my-when (= 1 1) "Hallo")` nach
 Makro-Expansion zu `(if pred then nil)`. Dabei sind `pred` und `then` lediglich
 Symbole und nicht die von uns übergebenen Werte `(= 1 1)` und `"Hallo"`. Nun
 aber existieren für die Symbole `pred` und `then` zur *Laufzeit* (vermutlich)
-keine Bindungen, weshalb der Compiler eine Fehlermeldung wirft. Wir möchten
-also, dass im Rumpf des Makros `pred` durch den übergebenen Wert ersetzt wird.
-Dies ist in einem mit `'` versehenen Ausdruck nicht möglich.
+keine Bindungen, weshalb die Laufzeitumgebung eine Fehlermeldung wirft. Wir
+möchten also, dass im Rumpf des Makros `pred` durch den übergebenen Wert ersetzt
+wird. Dies ist in einem mit `'` versehenen Ausdruck nicht möglich.
 
 Dafür gibt es das *Syntax-Quote* `` ` ``. Innerhalb eines mit `` ` `` versehenen
 Ausdrucks ist es möglich, einzelne Ausdrücke ersetzen zu lassen. Dies macht der
@@ -200,7 +204,7 @@ das Gewünschte, nämlich den übergebenen Ausdruck zurückzugeben. Doch was ist
 
 ```clojure
 (let [x "Hallo"]
-  (my-macro x))
+  (my-identity x))
 ```
 
 Genau, es wird `0` zurückgegeben und nicht `"Hallo"`, da das äußere `x` vom
@@ -255,8 +259,9 @@ schreiben:
   `(let [sym# 0] ~a))
 ```
 
-`#` weist hier den Clojure-Compiler an, via `gensym` ein neues, eindeutiges
-Symbol zu generieren.
+`sym#` weist hier den Clojure-Compiler an, via `gensym` ein neues, eindeutiges
+Symbol zu generieren, auf das im weiteren Verlauf mit `sym#` zugegriffen werden
+kann.
 
 ## Ungewollte mehrfache Auswertung
 
@@ -288,6 +293,9 @@ binden:
        (str "Fehler bei der Berechnung."))))
 ```
 
+Somit wird die Berechnung nur einmal in der `let`-Bindung durchgeführt und der
+berechnete Wert kann durch die Bindung an das generierte Symbol mehrfach im Code
+verwendet werden.
 
 
 ## Fazit
