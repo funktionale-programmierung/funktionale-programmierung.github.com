@@ -11,24 +11,6 @@ lsi: false
 kramdown:
   smart_quotes:   sbquo,lsquo,bdquo,ldquo
 
-sharing :
-  twitter :
-    size :
-    via :
-    count :
-  facebook :
-    appid : 205602882797935 # FIXME HARD
-    layout : button_count
-    font :
-    faces : false
-    width : 90
-  googleplus :
-    size : medium
-    width :
-    annotation : bubble
-  linkedin :
-    counter : right
-
 authors:
   michael-sperber:
     name: Michael Sperber

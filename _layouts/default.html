@@ -22,7 +22,7 @@
   href="http://funktionale-programmierung.de/rss.xml"
   title="Blog Funktionale Programmierung" />
   <link rel="shortcut icon" href="/img/fp.ico" />
-  <title>Funktionale Programmierung - 
+  <title>Funktionale Programmierung -
 {% if page.page_title %}
 {{ page.page_title }}
 {% else %}
@@ -31,6 +31,7 @@
   </title>
 
   <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script src="/socialshareprivacy/jquery.socialshareprivacy.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 <script type="text/javascript">
@@ -47,6 +48,29 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
+</script>
+
+<script type="text/javascript">
+function displaySharingButtons(elemId) {
+    $('#' + elemId).socialSharePrivacy({
+        services : {
+            facebook : {
+                'perma_option' : 'off',
+                'dummy_img': '/socialshareprivacy/images/dummy_facebook.png'
+            },
+            twitter : {
+                'perma_option' : 'off',
+                'dummy_img': '/socialshareprivacy/images/dummy_twitter.png'
+            },
+            gplus : {
+                'status' : 'off'
+            }
+        },
+        'css_path'  : '/socialshareprivacy/socialshareprivacy.css',
+        'lang_path' : '/socialshareprivacy/lang/',
+        'language'  : 'de'
+    });
+}
 </script>
 </head>
 

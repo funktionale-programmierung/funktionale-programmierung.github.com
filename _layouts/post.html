@@ -8,9 +8,10 @@ layout: default
         {% assign author_ = site.authors[page.author] %}
         <div class="post-author"> von <a href="{{ author_.href }}">{{ author_.name }}</a></div>
         <div class="post-sharing">
-            {% capture post_url %}http://funktionale-programmierung.de{{ page.url }}{% endcapture %}
-            {% capture post_title %}{{ page.title }}{% endcapture %}
-            {% include sharing %}
+          <div id="sharing-before"></div>
+          <script type="text/javascript">
+              displaySharingButtons("sharing-before");
+          </script>
         </div>
         <div class="post-content">{{ content }}</div>
         <hr/>
@@ -34,7 +35,10 @@ layout: default
         </div>
         <hr />
         <div class="post-sharing">
-            {% include sharing %}
+          <div id="sharing-after"></div>
+          <script type="text/javascript">
+            displaySharingButtons("sharing-after");
+          </script>
         </div>
         <!-- ?? div class="post-permalink">
              </div-->
