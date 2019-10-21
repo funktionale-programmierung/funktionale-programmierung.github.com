@@ -6,37 +6,36 @@ author: simon-haerer
 tags: ["algebraische Effekte", "Effekte", "algebraische", "Koka", "Monadentransformer", "Seiteneffekt", "Seiteneffekte"]
 ---
 
-Algebraische Effekte ermöglichen, Seiteneffekte elegant auszudrücken
-und ausführende Operationen zu kombinieren. Mit algebraischen
-Effekten können viele "pain points" der funktionalen Programmierung gelöst
-und Komplexität im Umgang mit Seiteneffekten vermieden werden. Dieser Artikel
-soll eine Einführung in algebraische Effekte geben und dem Leser anhand der
-Programmiersprache Koka die Vorteile und möglichen Anwendungen erläutern.
+Algebraische Effekte ermöglichen es, Seiteneffekte elegant auszudrücken und
+ausführende Operationen zu kombinieren. Mit algebraischen Effekten können viele
+"pain points" der funktionalen Programmierung gelöst und Komplexität im Umgang
+mit Seiteneffekten vermieden werden. Dieser Artikel soll eine Einführung in
+algebraische Effekte geben und dem Leser anhand der Programmiersprache Koka die
+Vorteile und möglichen Anwendungen erläutern.
 
 
 # Warum algebraische Effekte?
 
 Eine Definition von funktionaler Programmierung könnte das Bestreben
-sein, seiteneffektfrei, also "pure" zu programmieren. Natürlich ist dies in
+sein, seiteneffektfrei, also "pure" zu programmieren. Natürlich ist das in
 realen Anwendungen nicht vollständig durchsetzbar. In der Praxis wird daher
 versucht, zumindest große Teile einer Anwendung seitteneffektfrei zu
 implementieren.
 
-Um dies zu ermöglichen werden Konzepte, wie zum Beispiel Monaden, dazu
+Um dies zu ermöglichen, werden Konzepte, wie zum Beispiel Monaden, dazu
 verwendet, seiteneffektbehaftete Berechnung zuerst lediglich zu beschreiben
 und die Ausführung auf vorsichtig gewählte Stellen der Anwendung zu
 beschränken. So können große Teile getestet werden, ohne beispielsweise
 Umgebungen wie Datenbanken bereitstellen zu müssen.
 
 Leider kommen Monaden mit einem deutlichen Zusatzaufwand. In stark typisierten
-Sprachen behindern oft Typen das Formulieren der eigentlich wesentlichen Logik.
-Kommen mehrere Monaden zum Einsatz wird es besonders knifflig: Für die
-Kombination von Monaden existiert keine allgemeingültige Abstraktion. Die
-Kombination erfolgt in der Regel mit sogenannten Monadentransformatoren und
-diese müssen für jeden Monadenstapel neu gedacht und implementiert werden. Ist
-der Monadenstapel einmal programmiert, erfordern dessen Anwendung und
-Transformationen viele Hilfsfunktionen und die Komplexität der Handhabung ist
-nicht zu unterschätzen. 
+Sprachen behindern Typen oft das Formulieren der Domänenlogik. Kommen mehrere
+Monaden zum Einsatz wird es besonders knifflig: Für die Kombination von Monaden
+existiert keine allgemeingültige Abstraktion. Die Kombination erfolgt in der
+Regel mit sogenannten Monadentransformatoren und diese müssen für jeden
+Monadenstapel neu gedacht und implementiert werden. Ist der Monadenstapel einmal
+programmiert, erfordern dessen Anwendung und Transformationen viele
+Hilfsfunktionen.
 
 Algebraische Effekte hingegen sind einfach zu kombinieren. Das derzeit für
 Aufsehen erregende Konzept wurde bereits [2002 das erste Mal
@@ -70,8 +69,8 @@ Eine sichere Division in Koka könnte wie folgt aussehen:
 
 Eine Sache fällt sofort auf: Der Rückgabetyp der `div`-Prozedur ist nicht etwa
 nur `int`, sondern `<exn> int`. `exn` ist ein algebraischer Effekt der im
-Koka-Core mitgeliefert wird. Dieser beschreibt, dass die Prozedur eine
-Exception wirft. Äquivalent beschreibt der `console` Effekt die Ausgabe von
+Koka-Core mitgeliefert wird. Dieser beschreibt, dass die Prozedur eine Exception
+auslösen könnte. Äquivalent beschreibt der `console` Effekt die Ausgabe von
 Werten in die Konsole. Wie zu sehen ist, hat die main-Prozedur auch `exn` in
 ihrer Typsignatur, da `div` diesen Typ zurückgibt. Um zu verstehen, wie
 Exceptions in Koka funktionieren, implementieren wir diese selbst.
@@ -144,7 +143,7 @@ Fall `raise` und darauf zu handeln. Eingesetzt wird dieser Handler wie folgt:
     ;; "We are just dividing numbers! Or, aren't we?"
     ;; 0
 
-Der div-Aufruf in `safediv` steht in geschweiften Klammern. Das ist in Koka
+Der `div`-Aufruf in `safediv` steht in geschweiften Klammern. Das ist in Koka
 syntaktischer Zucker für anonyme Funktionen ohne Argumente. Die Catch-Funktion
 ignoriert die Nachricht in `raise` und der Handler gibt in diesem Fall einfach 0
 zurück.
@@ -152,17 +151,12 @@ zurück.
 Wie zu sehen ist, gibt die `safediv`-Prozedur lediglich einen Wert vom Typ `int`
 zurück, die Effektliste ist leer. In diesem Fall spricht man von einer totalen
 Funktion und die Liste kann ausgelassen werden. Auf diese Weise lassen sich
-Effekte in Koka behandeln und wie zu sehen ist, hilft das Typsystem dabei, die
-nicht behandelten Effekte zu verfolgen.
-
-Allein schon an diesem Beispiel zeigt sich, wie mächtig algebraische Effekte in
-Koka sind: Normalerweise sind Exceptions ein fest eingebauter Mechanismus, der
-tief in der Sprache verankert ist. Anhand von algebraischen Effekten ist es uns
-möglich, diese nachträglich zu implementieren.
+Effekte in Koka behandeln. Wie zu sehen ist, hilft das Typsystem dabei, die
+nicht behandelten Effekte zu verfolgen. 
 
 Im Folgenden werden wir die wahre Stärke von algebraischen Effekten
 kennenlernen. Wie eingangs erwähnt, kann aus einem Effekthandler zurück in den
-Code gesprungen werden. 
+Code gesprungen werden.
 
 
 # Eine Datenbank als Effekt
@@ -188,12 +182,12 @@ Benutzerverwaltung könnte durch Effekte wie folgt beschrieben werden:
       user.name
     }
 
-Bei beiden Effektoperationen soll das Programm, nachdem der Effekt ausführt
-wurde, mit deren Ergebnis dort forgeführt werden, wo der Effekt ausgelöst
+Bei beiden Effektoperationen soll das Programm, nachdem der Effekt ausgeführt
+wurde, mit deren Ergebnissen dort fortgeführt werden, wo der Effekt ausgelöst
 wurde. Ein Effekthandler, wie er beim Exceptionsbeispiel implementiert wurde,
 kommt also nicht infrage, da im Falle einer Exception der Programmfluss
-unterbrochen wird. Effekthandler ermöglichen jedoch, dass an die Stelle, an der
-der Effekt im Programm auftritt, zurückgesprungen wird:
+unterbrochen wird. Effekthandler ermöglichen es jedoch, dass an die Stelle, an
+der der Effekt im Programm auftritt, zurückgesprungen wird:
 
 
     val database-handler = handler {
@@ -210,7 +204,7 @@ der Effekt im Programm auftritt, zurückgesprungen wird:
 
 Die Definition dieses Handlers unterscheidet sich von der des Exceptionhandlers: 
 
--   Der Handler enthält die `return`-Anweisung. Diese sagt in diesem Beispiel
+-   Der Handler enthält eine `return`-Anweisung. Diese sagt in diesem Beispiel
     lediglich, dass ein Wert, der kein Effekt ist, vom Handler einfach
     zurückgegeben wird.
 
@@ -221,20 +215,20 @@ Die Definition dieses Handlers unterscheidet sich von der des Exceptionhandlers:
 
 -   Es wird die `handler`-Prozedur, statt der `handle`-Prozedur verwendet.
     Dabei handelt es sich um eine Hilfsfunktion, die wiederrum eine Funktion
-    zurückgibt. Die zurückgegebene Funktion kann in der `main`-Prozedur zu
+    zurückgibt. Die zurückgegebene Funktion kann, wie in der `main`-Prozedur zu
     sehen ist, als Handler verwendet werden.
 
 Dieses Anwendungsbeispiel macht deutlich, wie algebraische Effekte in der
-Praxis eingesetzt werden können, um Seiteneffekt abzubilden. Sie erlauben uns
+Praxis eingesetzt werden können, um Seiteneffekt abzubilden. Sie erlauben uns,
 Programme zu schreiben, in denen wir Seiteneffekte auf Typebene beschreiben,
 auf Werteebene jedoch weitgehend ignorieren können.
 
 Bringt man algebraische Effekthandler an wenigen, sorgfältig ausgewählten
 Punkten ins Programm ein, können diese mit wenig Aufwand ausgetauscht werden.
-Dann ist es ein leichtes etwa die Datenbanktechnologie durch einen neuen
+Dann ist es ein Leichtes etwa die Datenbanktechnologie durch einen neuen
 Handler auszutauschen oder gar die Benutzerverwaltung durch einen externen
 Service zu ersetzen. Möchte man in Unit-Tests ohne echte Datenbank testen,
-stubbt man diese durch einen Map basierten Key-Value store, indem ein
+stubbt man diese durch einen Map basierten Key-Value-Store, indem ein
 geeigneter Handler implementiert wird.
 
 
@@ -256,7 +250,7 @@ Implementierung der `add-user-with-name`-Prozedur an:
     }
     
 Wie zu sehen ist, wird der Exceptioneffekt in die Typsignatur aufgenommen. Nun
-müssten wir lediglich einen Handler implementieren, der die Exception
+müssen wir lediglich einen Handler implementieren, der die Exception
 abarbeitet:
 
     public fun main() {
@@ -266,7 +260,7 @@ abarbeitet:
     }
 
 
-  Das Kombinieren von algebraischen Effekten ist sehr einfach.
+  Wie man sieht, ist das Kombinieren von algebraischen Effekten sehr einfach.
 
 
 # Fazit
@@ -278,11 +272,11 @@ werden und warum dieses Konzept sehr vielversprechend ist.
 
 Algebraische Effekte sind bisher in wenigen Sprachen als natives Feature
 implementiert. Der populärste Vertreter ist Multicore-OCaml. Dort sind Effekte
-jedoch _unchecked_. Das bedeutet, dass der Compiler nicht darauf hinweißt, dass
+jedoch _unchecked_. Das bedeutet, dass der Compiler nicht darauf hinweist, dass
 ein Effekt unbehandelt ist. Für andere Sprachen wie Haskell und Scala gibt es
 Bibliotheken, die die Implementierung mit algebraischen Effekten ermöglichen.
 Allerdings sind die Effekte hier monadisch auf Werteebene implementiert. Daher
-leben diese Programme oft vollständig in den jeweiligen Monaden und eine
+leben diese Programme oft vollständig in den jeweiligen Monaden. Eine
 einfache Behandlung von Werten ohne monadische Kommandos, wie bei Koka, ist
 nicht möglich.
 
@@ -290,7 +284,7 @@ Am Beispiel Koka sehen wir jedoch, wie einfach und intuitiv die Programmierung
 mit algbraischen Effekten in Zukunft sein kann. Algebraische Effekte lösen viele
 Schwierigkeiten, die in der funktionalen Programmierung entstehen und für
 zusätzliche Komplexität sorgen. Wir hoffen, dass algebraische Effekte als
-Sprach-Feature Einzug in die von uns verwendeten Sprachen finden.
+Sprachfeature Einzug in weitere Programmiersprachen finden.
 
 In einem kommenden Blogpost werden wir weitere Möglichkeiten, die Effekte bieten, am
 Beispiel Koka aufzeigen. Dazu zählen spannende Mechanismen, wie zum Beispiel
