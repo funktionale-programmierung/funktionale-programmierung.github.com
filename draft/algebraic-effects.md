@@ -19,18 +19,18 @@ Vorteile und möglichen Anwendungen erläutern.
 Eine Definition von funktionaler Programmierung könnte das Bestreben
 sein, seiteneffektfrei, also "pure" zu programmieren. Natürlich ist das in
 realen Anwendungen nicht vollständig durchsetzbar. In der Praxis wird daher
-versucht, zumindest große Teile einer Anwendung seitteneffektfrei zu
+versucht, zumindest große Teile einer Anwendung seiteneffektfrei zu
 implementieren.
 
-Um dies zu ermöglichen, werden Konzepte, wie zum Beispiel Monaden, dazu
-verwendet, seiteneffektbehaftete Berechnung zuerst lediglich zu beschreiben
+Um dies zu ermöglichen, werden Konzepte wie zum Beispiel Monaden, dazu
+verwendet, seiteneffektbehaftete Berechnungen zuerst lediglich zu beschreiben
 und die Ausführung auf vorsichtig gewählte Stellen der Anwendung zu
 beschränken. So können große Teile getestet werden, ohne beispielsweise
 Umgebungen wie Datenbanken bereitstellen zu müssen.
 
 Leider kommen Monaden mit einem deutlichen Zusatzaufwand. In stark typisierten
 Sprachen behindern Typen oft das Formulieren der Domänenlogik. Kommen mehrere
-Monaden zum Einsatz wird es besonders knifflig: Für die Kombination von Monaden
+Monaden zum Einsatz, wird es besonders knifflig: Für die Kombination von Monaden
 existiert keine allgemeingültige Abstraktion. Die Kombination erfolgt in der
 Regel mit sogenannten Monadentransformatoren und diese müssen für jeden
 Monadenstapel neu gedacht und implementiert werden. Ist der Monadenstapel einmal
@@ -38,12 +38,12 @@ programmiert, erfordern dessen Anwendung und Transformationen viele
 Hilfsfunktionen.
 
 Algebraische Effekte hingegen sind einfach zu kombinieren. Das derzeit für
-Aufsehen erregende Konzept wurde bereits [2002 das erste Mal
+Aufsehen sorgende Konzept wurde bereits [2002 das erste Mal
 beschrieben](http://homepages.inf.ed.ac.uk/gdp/publications/alg_ops_gen_effects.pdf).
 Algebraische Effekte lassen sich am besten als Exceptions beschreiben, die
 zusätzlich die Möglichkeit bieten, wieder an die Codestelle, an der sie
 ausgelöst wurden, zurückzuspringen. Wie dies die oben beschriebene Problematik
-der seiteneffektfreien Programmierung lösen soll, wird im folgenden Anhand von
+der seiteneffektfreien Programmierung lösen soll, wird im folgenden anhand von
 Codebeispielen in der Programmiersprache Koka verdeutlicht.
 
 # Koka
@@ -68,10 +68,10 @@ Eine sichere Division in Koka könnte wie folgt aussehen:
     }
 
 Eine Sache fällt sofort auf: Der Rückgabetyp der `div`-Prozedur ist nicht etwa
-nur `int`, sondern `<exn> int`. `exn` ist ein algebraischer Effekt der im
+nur `int`, sondern `<exn> int`. `exn` ist ein algebraischer Effekt, der im
 Koka-Core mitgeliefert wird. Dieser beschreibt, dass die Prozedur eine Exception
 auslösen könnte. Äquivalent beschreibt der `console` Effekt die Ausgabe von
-Werten in die Konsole. Wie zu sehen ist, hat die main-Prozedur auch `exn` in
+Werten in die Konsole. Wie zu sehen ist, hat die `main`-Prozedur auch `exn` in
 ihrer Typsignatur, da `div` diesen Typ zurückgibt. Um zu verstehen, wie
 Exceptions in Koka funktionieren, implementieren wir diese selbst.
 
