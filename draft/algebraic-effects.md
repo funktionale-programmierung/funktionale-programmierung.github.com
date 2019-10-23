@@ -17,7 +17,7 @@ Anwendungen.
 
 # Warum algebraische Effekte?
 
-Eine Komponente von funktionaler Programmierung ist das Bestreben sein,
+Eine Komponente der funktionalen Programmierung ist das Bestreben,
 seiteneffektfrei, also "pure" zu programmieren. Natürlich ist das in realen
 Anwendungen nicht vollständig durchsetzbar. In der Praxis wird daher versucht,
 zumindest große Teile einer Anwendung seiteneffektfrei zu implementieren.
