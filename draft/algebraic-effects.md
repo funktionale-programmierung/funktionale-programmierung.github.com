@@ -22,7 +22,7 @@ seiteneffektfrei, also "pure" zu programmieren. Natürlich ist das in realen
 Anwendungen nicht vollständig durchsetzbar. In der Praxis wird daher versucht,
 zumindest große Teile einer Anwendung seiteneffektfrei zu implementieren.
 
-Um das zu ermöglichen, werden Konzepte wie zum Beispiel Monaden, dazu
+Um das zu ermöglichen, werden Konzepte wie zum Beispiel Monaden dazu
 verwendet, seiteneffektbehaftete Berechnungen zuerst lediglich zu beschreiben
 und die Ausführung auf sorgfältig gewählte Stellen der Anwendung zu
 beschränken. So können große Teile getestet werden, ohne beispielsweise
