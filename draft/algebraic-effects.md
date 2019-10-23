@@ -254,6 +254,7 @@ müssen wir lediglich einen Handler implementieren, der die Exception abarbeitet
       my-catch({ 
         database-handler({add-user-with-name("Bob", "Bobbig")})
       }, fun(_msg){ -1 })
+      () // the main-function always returns unit
     }
 
 
