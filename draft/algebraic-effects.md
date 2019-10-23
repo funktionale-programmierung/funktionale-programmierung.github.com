@@ -8,23 +8,23 @@ tags: ["algebraische Effekte", "Effekte", "algebraische", "Koka", "Monadentransf
 
 Algebraische Effekte ermöglichen es, Seiteneffekte elegant auszudrücken und
 ausführende Operationen zu kombinieren. Mit algebraischen Effekten können viele
-"pain points" der funktionalen Programmierung gelöst und Komplexität im Umgang
-mit Seiteneffekten vermieden werden. Dieser Artikel soll eine Einführung in
-algebraische Effekte geben und dem Leser anhand der Programmiersprache Koka die
-Vorteile und möglichen Anwendungen erläutern.
+"pain points" der funktionalen Programmierung gelöst werden. Insbesondere
+reduzieren sie die Komplexität, die aus dem Umgang mit Seiteneffekten entsteht.
+Dieser Artikel gibt anhand der Programmiersprache Koka eine Einführung in
+algebraische Effekte und erläuert dem Leser die Vorteile und möglichen
+Anwendungen.
 
 
 # Warum algebraische Effekte?
 
-Eine Definition von funktionaler Programmierung könnte das Bestreben
-sein, seiteneffektfrei, also "pure" zu programmieren. Natürlich ist das in
-realen Anwendungen nicht vollständig durchsetzbar. In der Praxis wird daher
-versucht, zumindest große Teile einer Anwendung seiteneffektfrei zu
-implementieren.
+Eine Komponente von funktionaler Programmierung ist das Bestreben sein,
+seiteneffektfrei, also "pure" zu programmieren. Natürlich ist das in realen
+Anwendungen nicht vollständig durchsetzbar. In der Praxis wird daher versucht,
+zumindest große Teile einer Anwendung seiteneffektfrei zu implementieren.
 
-Um dies zu ermöglichen, werden Konzepte wie zum Beispiel Monaden, dazu
+Um das zu ermöglichen, werden Konzepte wie zum Beispiel Monaden, dazu
 verwendet, seiteneffektbehaftete Berechnungen zuerst lediglich zu beschreiben
-und die Ausführung auf vorsichtig gewählte Stellen der Anwendung zu
+und die Ausführung auf sorgfältig gewählte Stellen der Anwendung zu
 beschränken. So können große Teile getestet werden, ohne beispielsweise
 Umgebungen wie Datenbanken bereitstellen zu müssen.
 
@@ -42,18 +42,18 @@ Aufsehen sorgende Konzept wurde bereits [2002 das erste Mal
 beschrieben](http://homepages.inf.ed.ac.uk/gdp/publications/alg_ops_gen_effects.pdf).
 Algebraische Effekte lassen sich am besten als Exceptions beschreiben, die
 zusätzlich die Möglichkeit bieten, wieder an die Codestelle, an der sie
-ausgelöst wurden, zurückzuspringen. Wie dies die oben beschriebene Problematik
-der seiteneffektfreien Programmierung lösen soll, wird im folgenden anhand von
+ausgelöst wurden, zurückzuspringen. Wie das die oben beschriebene Problematik
+der seiteneffektfreien Programmierung löst, wird im folgenden anhand von
 Codebeispielen in der Programmiersprache Koka verdeutlicht.
 
 # Koka
 
-Koka ist eine funktionale Programmiersprache, die ursprünglich von Microsoft
-Research zur Forschung an algebraischen Effekten entwickelt wurde. Heute gibt es
-bereits [ernstzunehmende Anwendungen](https://www.madoko.net/), die in Koka
-implementiert sind. In Koka ist die Trennung von Werten und
-seiteneffektbehafteten Operationen als Besonderheit direkt in die Sprache
-implementiert.
+[Koka](https://github.com/koka-lang/koka) ist eine funktionale
+Programmiersprache, die ursprünglich von Microsoft Research zur Forschung an
+algebraischen Effekten entwickelt wurde. Heute gibt es bereits [ernstzunehmende
+Anwendungen](https://www.madoko.net/), die in Koka implementiert sind. In Koka
+ist die Trennung von Werten und seiteneffektbehafteten Operationen als
+Besonderheit direkt in die Sprache implementiert.
 
 Eine sichere Division in Koka könnte wie folgt aussehen:
 
@@ -70,10 +70,10 @@ Eine sichere Division in Koka könnte wie folgt aussehen:
 Eine Sache fällt sofort auf: Der Rückgabetyp der `div`-Prozedur ist nicht etwa
 nur `int`, sondern `<exn> int`. `exn` ist ein algebraischer Effekt, der im
 Koka-Core mitgeliefert wird. Dieser beschreibt, dass die Prozedur eine Exception
-auslösen könnte. Äquivalent beschreibt der `console` Effekt die Ausgabe von
+auslösen könnte. Analog beschreibt der `console` Effekt die Ausgabe von
 Werten in die Konsole. Wie zu sehen ist, hat die `main`-Prozedur auch `exn` in
 ihrer Typsignatur, da `div` diesen Typ zurückgibt. Um zu verstehen, wie
-Exceptions in Koka funktionieren, implementieren wir diese selbst.
+Exceptions in Koka funktionieren, implementieren wir sie einmal selbst.
 
 
 
@@ -88,7 +88,7 @@ Ein algebraischer Effekt ist ein Name und eine Menge an Operationen:
 
 Unser Effekt `exception` besteht demnach aus einer `raise` Methode, parallel
 zur obigen `throw`-Methode. Diese nimmt eine Zeichenfolge entgegen und gibt
-etwas vom Typ `a` zurück, dazu später mehr. Die obige `div`-Prozedur kann
+etwas vom Typ `a` zurück. Die obige `div`-Prozedur kann
 damit wie folgt umgebaut werden:
 
     
@@ -148,11 +148,11 @@ syntaktischer Zucker für anonyme Funktionen ohne Argumente. Die Catch-Funktion
 ignoriert die Nachricht in `raise` und der Handler gibt in diesem Fall einfach 0
 zurück.
 
-Wie zu sehen ist, gibt die `safediv`-Prozedur lediglich einen Wert vom Typ `int`
+Wie man sieht, gibt die `safediv`-Prozedur lediglich einen Wert vom Typ `int`
 zurück, die Effektliste ist leer. In diesem Fall spricht man von einer totalen
 Funktion und die Liste kann ausgelassen werden. Auf diese Weise lassen sich
-Effekte in Koka behandeln. Wie zu sehen ist, hilft das Typsystem dabei, die
-nicht behandelten Effekte zu verfolgen. 
+Effekte in Koka behandeln. Das Typsystem hilft uns dabei, die nicht behandelten
+Effekte zu verfolgen.
 
 Im Folgenden werden wir die wahre Stärke von algebraischen Effekten
 kennenlernen. Wie eingangs erwähnt, kann aus einem Effekthandler zurück in den
@@ -198,7 +198,7 @@ der der Effekt im Programm auftritt, zurückgesprungen wird:
     
     fun main() {
       database-handler({add-user-with-name("Bob", "Bobbig")})
-      ()
+      () // the main-function always returns unit
     }
 
 
@@ -224,12 +224,11 @@ Programme zu schreiben, in denen wir Seiteneffekte auf Typebene beschreiben,
 auf Werteebene jedoch weitgehend ignorieren können.
 
 Bringt man algebraische Effekthandler an wenigen, sorgfältig ausgewählten
-Punkten ins Programm ein, können diese mit wenig Aufwand ausgetauscht werden.
-Dann ist es ein Leichtes etwa die Datenbanktechnologie durch einen neuen
-Handler auszutauschen oder gar die Benutzerverwaltung durch einen externen
-Service zu ersetzen. Möchte man in Unit-Tests ohne echte Datenbank testen,
-stubbt man diese durch einen Map basierten Key-Value-Store, indem ein
-geeigneter Handler implementiert wird.
+Punkten ins Programm ein, können sie mit wenig Aufwand ausgetauscht werden. Dann
+ist es ein Leichtes etwa die Datenbanktechnologie durch einen neuen Handler
+auszutauschen oder gar die Benutzerverwaltung durch einen externen Service zu
+ersetzen. Möchte man in Unit-Tests ohne echte Datenbank testen, stubbt man sie
+durch einen Key-Value-Store, indem ein geeigneter Handler implementiert wird.
 
 
 # Effekte kombinieren
@@ -249,9 +248,8 @@ Implementierung der `add-user-with-name`-Prozedur an:
         add-user(firstname + " " + lastname)
     }
     
-Wie zu sehen ist, wird der Exceptioneffekt in die Typsignatur aufgenommen. Nun
-müssen wir lediglich einen Handler implementieren, der die Exception
-abarbeitet:
+Wir sehen, das der Exceptioneffekt in die Typsignatur aufgenommen wird. Nun
+müssen wir lediglich einen Handler implementieren, der die Exception abarbeitet:
 
     public fun main() {
       custom-catch({ 
@@ -260,7 +258,7 @@ abarbeitet:
     }
 
 
-  Wie man sieht, ist das Kombinieren von algebraischen Effekten sehr einfach.
+Das Kombinieren von algebraischen Effekten ist sehr einfach.
 
 
 # Fazit
