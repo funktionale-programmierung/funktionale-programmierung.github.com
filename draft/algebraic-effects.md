@@ -82,57 +82,56 @@ Exceptions in Koka funktionieren, implementieren wir sie einmal selbst.
 Koka macht es uns einfach, eigene algebraische Effekte zu definieren.
 Ein algebraischer Effekt ist ein Name und eine Menge an Operationen:
 
-    effect exception {
-      fun raise(msg : string) : a
+    effect my-exception {
+      fun my-throw(msg : string) : a
     }
 
-Unser Effekt `exception` besteht demnach aus einer `raise` Methode, parallel
+Unser Effekt `my-exception` besteht demnach aus einer `my-throw` Methode, parallel
 zur obigen `throw`-Methode. Diese nimmt eine Zeichenfolge entgegen und gibt
 etwas vom Typ `a` zurück. Die obige `div`-Prozedur kann
 damit wie folgt umgebaut werden:
 
     
-    fun div(a : int, b: int) : <exception> int {
-      if(b == 0) then raise("Division by Zero")
+    fun div(a : int, b: int) : <my-exception> int {
+      if(b == 0) then my-thow("Division by Zero")
       else a / b
     }
     
-    public fun main() : <console, exception> () {
+    public fun main() : <console, my-exception> () {
       println("We are just dividing numbers! Or, aren't we?")
       println(div(6,2))
     }
 
 Die eingebauten Effekte `exn` und `console` werden außerhalb der Main-Prozedur
 abgehandelt. Der Koka-Compiler wird sich jedoch beschweren, dass der Effekt
-`exception` nicht abgehandelt wird. 
+`my-exception` nicht abgehandelt wird. 
 
     (1, 0): error: there are unhandled effects for the main expression
-      inferred effect: <b/exception,console>
+      inferred effect: <b/my-exception,console>
       hint           : wrap the main function in a handler
 
-Wir müssen also für den `exception`-Effekt einen Handler implementieren.
-Ein Handler ist eine Methode, die angibt, was passiert werden soll, wenn ein
-Effekt auftritt. Gerne wird hier auch von Kontext gesprochen. Bei Exceptions
-bedeutet das, dass wir ein try-catch-Konstrukt definieren werden. Das kann wie
-folgt aussehen:
+Wir müssen also für den `my-exception`-Effekt einen Handler implementieren. Ein
+Handler ist eine Methode, die angibt, was passiert, wenn ein Effekt auftritt.
+Gerne wird hier auch von Kontext gesprochen. Bei Exceptions bedeutet das, dass
+wir ein try-catch-Konstrukt definieren werden. Das kann wie folgt aussehen:
 
     
-    fun custom-catch(try-fun, catch-fun)  {
+    fun my-catch(try-fun, catch-fun)  {
       handle(try-fun) {
-        raise(msg) -> catch-fun(msg)
+        my-throw(msg) -> catch-fun(msg)
       }
     }
 
-Die Prozedur `custom-catch` nimmt eine nullstellige Funktion `try-fun` und
+Die Prozedur `my-catch` nimmt eine nullstellige Funktion `try-fun` und
 eine einstellige Funktion `catch-fun`, die den Catch-Block repräsentiert und
-der die Nachricht, die `raise` übergeben wird, entgegen. `handle` ist
+der die Nachricht, die `my-throw` übergeben wird, entgegen. `handle` ist
 eine Koka-Core-Prozedur. Sie nimmt eine Funktion entgegen und wertet diese aus.
 `handle` erlaubt dabei auf mögliche Effektoperationen zu hören, in unserem
-Fall `raise` und darauf zu handeln. Eingesetzt wird dieser Handler wie folgt:
+Fall `my-throw` und darauf zu handeln. Eingesetzt wird dieser Handler wie folgt:
 
     
     fun safediv(a : int, b: int) : int {
-      custom-catch({div(a,b)}, fun(_msg){0})
+      my-catch({div(a,b)}, fun(_msg){0})
     }
 
     public fun main() : <console> () {
@@ -145,7 +144,7 @@ Fall `raise` und darauf zu handeln. Eingesetzt wird dieser Handler wie folgt:
 
 Der `div`-Aufruf in `safediv` steht in geschweiften Klammern. Das ist in Koka
 syntaktischer Zucker für anonyme Funktionen ohne Argumente. Die Catch-Funktion
-ignoriert die Nachricht in `raise` und der Handler gibt in diesem Fall einfach 0
+ignoriert die Nachricht in `my-throw` und der Handler gibt in diesem Fall einfach 0
 zurück.
 
 Wie man sieht, gibt die `safediv`-Prozedur lediglich einen Wert vom Typ `int`
@@ -227,7 +226,7 @@ Bringt man algebraische Effekthandler an wenigen, sorgfältig ausgewählten
 Punkten ins Programm ein, können sie mit wenig Aufwand ausgetauscht werden. Dann
 ist es ein Leichtes etwa die Datenbanktechnologie durch einen neuen Handler
 auszutauschen oder gar die Benutzerverwaltung durch einen externen Service zu
-ersetzen. Möchte man in Unit-Tests ohne echte Datenbank testen, stubbt man sie
+ersetzen. Möchte man in Unit-Tests ohne echte Datenbank testen, ersetzt man sie
 durch einen Key-Value-Store, indem ein geeigneter Handler implementiert wird.
 
 
@@ -243,7 +242,7 @@ Implementierung der `add-user-with-name`-Prozedur an:
     fun add-user-with-name(firstname: string, lastname: string): 
                                             <user-repository, exception> int {
       if(firstname.vector.length == 0 || lastname.vector.length == 0) then
-        raise("first- or lastname empty")
+        my-throw("first- or lastname empty")
       else
         add-user(firstname + " " + lastname)
     }
@@ -252,7 +251,7 @@ Wir sehen, das der Exceptioneffekt in die Typsignatur aufgenommen wird. Nun
 müssen wir lediglich einen Handler implementieren, der die Exception abarbeitet:
 
     public fun main() {
-      custom-catch({ 
+      my-catch({ 
         database-handler({add-user-with-name("Bob", "Bobbig")})
       }, fun(_msg){ -1 })
     }
