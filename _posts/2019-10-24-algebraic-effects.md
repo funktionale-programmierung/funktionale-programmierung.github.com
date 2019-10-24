@@ -14,6 +14,8 @@ Dieser Artikel gibt anhand der Programmiersprache Koka eine Einführung in
 algebraische Effekte und erläuert dem Leser die Vorteile und möglichen
 Anwendungen.
 
+<!-- more start -->
+
 
 # Warum algebraische Effekte?
 
