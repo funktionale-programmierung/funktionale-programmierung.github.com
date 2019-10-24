@@ -132,7 +132,7 @@ eine Koka-Core-Prozedur. Sie nimmt eine Funktion entgegen und wertet diese aus.
 Fall `my-throw` und darauf zu handeln. Eingesetzt wird dieser Handler wie folgt:
 
     
-    fun safediv(a : int, b: int) : int {
+    fun safediv(a : int, b: int) : <> int {
       my-catch({div(a,b)}, fun(_msg){0})
     }
 
@@ -151,9 +151,8 @@ zurück.
 
 Wie man sieht, gibt die `safediv`-Prozedur lediglich einen Wert vom Typ `int`
 zurück, die Effektliste ist leer. In diesem Fall spricht man von einer totalen
-Funktion und die Liste kann ausgelassen werden. Auf diese Weise lassen sich
-Effekte in Koka behandeln. Das Typsystem hilft uns dabei, die nicht behandelten
-Effekte zu verfolgen.
+Funktion. Auf diese Weise lassen sich Effekte in Koka behandeln. Das Typsystem
+hilft uns dabei, die nicht behandelten Effekte zu verfolgen.
 
 Im Folgenden werden wir die wahre Stärke von algebraischen Effekten
 kennenlernen. Wie eingangs erwähnt, kann aus einem Effekthandler zurück in den
@@ -185,7 +184,7 @@ Benutzerverwaltung könnte durch Effekte wie folgt beschrieben werden:
 
 Bei beiden Effektoperationen soll das Programm, nachdem der Effekt ausgeführt
 wurde, mit deren Ergebnissen dort fortgeführt werden, wo der Effekt ausgelöst
-wurde. Ein Effekthandler, wie er beim Exceptionsbeispiel implementiert wurde,
+wurde. Ein Effekthandler, in der Art wie er Exceptionsbeispiel implementiert wurde,
 kommt also nicht infrage, da im Falle einer Exception der Programmfluss
 unterbrochen wird. Effekthandler ermöglichen es jedoch, dass an die Stelle, an
 der der Effekt im Programm auftritt, zurückgesprungen wird:
