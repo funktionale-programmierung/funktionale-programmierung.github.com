@@ -11,7 +11,7 @@ ausführende Operationen zu kombinieren. Mit algebraischen Effekten können viel
 "pain points" der funktionalen Programmierung gelöst werden. Insbesondere
 reduzieren sie die Komplexität, die aus dem Umgang mit Seiteneffekten entsteht.
 Dieser Artikel gibt anhand der Programmiersprache Koka eine Einführung in
-algebraische Effekte und erläuert dem Leser die Vorteile und möglichen
+algebraische Effekte und erläutert dem Leser die Vorteile und möglichen
 Anwendungen.
 
 <!-- more start -->
@@ -45,7 +45,7 @@ beschrieben](http://homepages.inf.ed.ac.uk/gdp/publications/alg_ops_gen_effects.
 Algebraische Effekte lassen sich am besten als Exceptions beschreiben, die
 zusätzlich die Möglichkeit bieten, wieder an die Codestelle, an der sie
 ausgelöst wurden, zurückzuspringen. Wie das die oben beschriebene Problematik
-der seiteneffektfreien Programmierung löst, wird im folgenden anhand von
+der seiteneffektfreien Programmierung löst, wird im Folgenden anhand von
 Codebeispielen in der Programmiersprache Koka verdeutlicht.
 
 # Koka
@@ -225,7 +225,7 @@ auf Werteebene jedoch weitgehend ignorieren können.
 
 Bringt man algebraische Effekthandler an wenigen, sorgfältig ausgewählten
 Punkten ins Programm ein, können sie mit wenig Aufwand ausgetauscht werden. Dann
-ist es ein Leichtes etwa die Datenbanktechnologie durch einen neuen Handler
+ist es ein Leichtes, etwa die Datenbanktechnologie durch einen neuen Handler
 auszutauschen oder gar die Benutzerverwaltung durch einen externen Service zu
 ersetzen. Möchte man in Unit-Tests ohne echte Datenbank testen, ersetzt man sie
 durch einen Key-Value-Store, indem ein geeigneter Handler implementiert wird.
