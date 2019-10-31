@@ -95,7 +95,7 @@ damit wie folgt umgebaut werden:
 
     
     fun div(a : int, b: int) : <my-exception> int {
-      if(b == 0) then my-thow("Division by Zero")
+      if(b == 0) then my-throw("Division by Zero")
       else a / b
     }
     
@@ -241,7 +241,7 @@ Implementierung der `add-user-with-name`-Prozedur an:
 
 
     fun add-user-with-name(firstname: string, lastname: string): 
-                                            <user-repository, exception> int {
+                                            <user-repository, my-exception> int {
       if(firstname.vector.length == 0 || lastname.vector.length == 0) then
         my-throw("first- or lastname empty")
       else
