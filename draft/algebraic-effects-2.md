@@ -13,8 +13,10 @@ ausgeloste Person beschenkt, bieten einen schönen Mittelweg. Wie uns
 algebraische Effekte bei der Zuteilung von Schenkenden zu Beschenkten helfen
 können, erfahren wir in diesem Blogpost. Dazu lernen wir den Zufallseffekt
 kennen und sehen, wie mehrfaches Zurückspringen in den Code funktioniert. Zum
-Verständnis dieses Artikels sollte der interessierte Leser bereits den ersten
-Teil zu algebraischen Effekten in Koka gelesen und verstanden haben.
+Verständnis dieses Artikels sollte der interessierte Leser bereits [den ersten
+Teil zu algebraischen Effekten in
+Koka](https://funktionale-programmierung.de/2019/10/24/algebraic-effects.html)
+gelesen und verstanden haben.
 
 <!-- more start -->
 
@@ -286,5 +288,6 @@ können, die dann einfach austauschbar ist. Dies ist hilfreich beim Testen oder
 beim Austausch von Technologien. Generell lässt sich sehr einfach Beschreibung
 und Implementierung entkoppeln.
 
-Der vollständige Code ist wie immer auf Github zu finden---damit steht
-Weihnachten nichts mehr im Wege!
+Der vollständige Code ist wie immer [auf
+Github](https://github.com/smoes/algebraic-effects-blogpost-2/blob/master/code.kk)
+zu finden---damit steht Weihnachten nichts mehr im Wege!
