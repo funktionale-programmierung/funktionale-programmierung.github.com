@@ -228,7 +228,7 @@ wurde.
 
 Mit etwas Wichtel-Glück erhalten wir nach einigen Versuchen möglicherweise die
 folgende Zuteilung: `(Jaqueline, Timothy), (Denise, O'Shaughnessy), (Blake, Aaron),
-(Timothy, Denise), (Aaron, Blake), (O'Shaughnessy, Jaqueline)`, wobei stets die
+(Timothy, Denise),` `(Aaron, Blake), (O'Shaughnessy, Jaqueline)`, wobei stets die
 erste Person die zweite beschenkt.
 
 
