@@ -14,7 +14,7 @@ die interessanten Vorträge einfach nochmal Revue passieren lassen
 möchten, finden Sie in diesem Blogartikel eine kurze Zusammenfassung
 der Beiträge. Sie können Folien und Videoaufzeichnungen hierzu auch auf
 [YouTube](https://www.youtube.com/channel/UC2svxmX1Bfyaln2bs9ZsyGA) anschauen oder über das
-[Programm der Konferenz](https://bobkonf.de/2019-summer/en/program.html) aufrufen.
+[Programm der Konferenz](https://bobkonf.de/2019-summer/program.html) aufrufen.
 
 Diversity & Sponsoring
 ---------
@@ -60,6 +60,6 @@ Ausblick
 
 Am Freitag, 28. Februar 2020 findet die nächste reguläre [BOB Konferenz](https://bobkonf.de/2020/) statt. Das Programm unterteilt sich dabei wie üblich in zwei Vortragssäale, sowie zwei kleinere Räume mit 90-minütigen Tutorials. Dabei haben wir aus zahlreichen Einreichungen das beste aus der Szene der funktionalen Programmierung für Sie zusammengestellt: [Programm](https://bobkonf.de/2020/de/program.html).
 
-Die [Registrierung](https://bobkonf.de/2020-summer/registration.html) ist eröffnet. Bis zum *20. Januar 2020* gibt es noch Frühbucher-Rabatt! Die Teilnahme an den Tutorials ist auf Grund der Raumgrößen limitiert. Bei der Registrierung können Sie sich für Tutorials anmelden. Beachten Sie, dass hier _First Come - First Serve_ gilt.
+Die [Registrierung](https://bobkonf.de/2020/registration.html) ist eröffnet. Bis zum *20. Januar 2020* gibt es noch Frühbucher-Rabatt! Die Teilnahme an den Tutorials ist auf Grund der Raumgrößen limitiert. Bei der Registrierung können Sie sich für Tutorials anmelden. Beachten Sie, dass hier _First Come - First Serve_ gilt.
 
 Wir freuen uns auf Ihren Besuch.
