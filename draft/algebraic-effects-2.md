@@ -281,8 +281,8 @@ Wie sich mehrfache Rückspringe in der Praxis bewähren werden, bleibt zu zeigen
 Ein übermäßiger Einsatz dieser Technik führt möglicherweise zu schwer
 nachzuvollziehenden Kontrollflüssen.
 
-2. Der einfache Austausch unseres Effekthandlers hat große Auswirkungen auf das
-Programm gehabt. Dazu mussten wir nicht einmal die eigentliche Programmlogik
+2. Der einfache Austausch unseres Effekthandlers hatte große Auswirkungen auf
+das Programm. Dazu mussten wir nicht einmal die eigentliche Programmlogik
 abändern. Das bedeutet, dass wir anhand von Handlern über Logik abstrahieren
 können, die dann einfach austauschbar ist. Dies ist hilfreich beim Testen oder
 beim Austausch von Technologien. Generell lässt sich sehr einfach Beschreibung
