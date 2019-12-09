@@ -22,15 +22,6 @@ Diversity & Sponsoring
 Neben technischen Vorträgen und Tutorials rund um die neuen Techniken und Technologien im Bereich der Softwareentwicklung ist ein besonderes Anliegen der Konferenz das Thema _Diversity_, also die Einbindung Menschen aller Gruppen. Wir konnten 2019 die Vielfalt der Teilnehmerinnen und Teilnehmer durch verschiedene Maßnahmen wie
 Freitickets und Reiskostenzuschüsse nochmal steigern.
 
-Ein herzlicher Dank soll an dieser Stelle auch an unsere Sponsoren gehen, durch
-deren Unterstützung solche Fördermaßnahmen erst möglich werden.
-
-* [frobese](https://frobese.de/) (Goldsponsor)
-* [Wertgarantie](https://www.wertgarantie.de/) (Goldsponsor)
-* Bronzesponsoren:
-  * [GfU](https://www.gfu.net/)
-  * [TNG](https://www.tngtech.com/)
-
 Vorträge des _Practice Tracks_
 --------
 
