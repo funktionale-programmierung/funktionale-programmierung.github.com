@@ -1,33 +1,34 @@
 ---
 layout: post
 description: "Algebraische-Effekte-2"
-title: "Weinachtswichteln mit algebraischen Effekten"
+title: "Weihnachtswichteln mit algebraischen Effekten"
 author: simon-haerer
 tags: ["algebraische Effekte", "Effekte", "algebraische", "weihnachten", "wichteln", "Koka", "Monadentransformer", "Seiteneffekt", "Seiteneffekte", "algebraic effects", "algebraic", "effects"]
 ---
 
-Weihnachten steht vor der Türe und der Geschenkewahnsinn beginnt. Viele
+Weihnachten steht vor der Tür und der Geschenkewahnsinn beginnt. Viele
 Feierwillige entscheiden sich jedoch dazu, nicht daran teilzunehmen. Konzepte,
-wie zum Beispiel das Weihnachtswichteln, bei dem eine Person eine einzige
-zufällig ausgeloste Person beschenkt, bieten einen schönen Mittelweg. Wie uns
+wie zum Beispiel das Weihnachtswichteln, bei dem eine Person eine zufällig
+ausgeloste Person beschenkt, bieten einen schönen Mittelweg. Wie uns
 algebraische Effekte bei der Zuteilung von Schenkenden zu Beschenkten helfen
-können, erfahren wir in diesem folgenden Blogpost. Dazu lernen wir den
-Zufallseffekt kennen und lernen, wie mehrfaches Zurückspringen in den Code
-funktioniert.
+können, erfahren wir in diesem Blogpost. Dazu lernen wir den Zufallseffekt
+kennen und sehen, wie mehrfaches Zurückspringen in den Code funktioniert. Zum
+Verständnis dieses Artikels sollte der interessierte Leser bereits den ersten
+Teil zu algebraischen Effekten in Koka gelesen und verstanden haben.
 
 <!-- more start -->
 
 
 # Weihnachtswichteln mit Paaren
 
-Beim Weihnachtswichteln geht es darum, anstelle aller Feiernden eine zufällig
-ausgewählte Person zu beschenken. Oft wird die Auslosung so gestaltet, dass
-geheim bleibt, wer wen beschenkt. Nehmen Paare teil, ist es manchmal erwünscht,
-dass diese sich nicht gegenseitig beschenken, da sie sich sowieso beschenken. Um
-die wunderbare Welt der algebraischen Effekt mit weihnachtlicher Stimmung zu
-verbinden, werden wir eine automatische Zuteilung für die
-Weihnachtswichtel-Zuteilung in Koka programmieren. Es gelten die folgenden
-festlichen Anforderungen:
+Beim Weihnachtswichteln geht es darum, anstelle aller Feiernden nur eine
+zufällig ausgewählte Person zu beschenken. Oft wird die Auslosung so gestaltet,
+dass geheim bleibt, wer wen beschenkt. Nehmen Paare teil, ist es manchmal
+erwünscht, dass diese sich nicht gegenseitig beschenken, da sie sich meist
+sowieso beschenken. Um die wunderbare Welt der algebraischen Effekt mit
+weihnachtlicher Stimmung zu verbinden, werden wir eine automatische Zuteilung
+für die Weihnachtswichtel-Zuteilung in Koka programmieren. Es gelten die
+folgenden festlichen Anforderungen:
 
 1. Jeder Teilnehmer schenkt genau einmal
 
@@ -41,34 +42,36 @@ festlichen Anforderungen:
 
 
 Um eine Zuteilung zu finden, implementieren wir zunächst eine sehr einfache
-Version, die unter Zuhilfenahme des Zufallseffekts versucht eine, zufällige
-Zuteilung zu erstellen. Sollte diese den festlichen Anforderungen genügen, die
-Zuteilung zurückgegeben, anderenfalls fällt das Weihnachtswichteln aus.
+Version, die unter Zuhilfenahme des Zufallseffekts versucht, eine zufällige
+Zuteilung zu erstellen. Sollte diese den festlichen Anforderungen genügen, so
+gibt sie die Zuteilung zurück, anderenfalls fällt das Weihnachtswichteln aus.
 
 
 # Frohe Helferlein
 
-Zuerst modellieren wir die passende Domäme:
+Zuerst modellieren wir die passende Domäne:
 
 
-    // Eine Person ist string, der dessen Name repräsentiert
+    // Eine Person ist ein string, der dessen Name repräsentiert
     alias person = string
 
     // Ein Teilnehmer ist eines der folgenden:
     // - ein Single, das eine Person repräsentiert.
-    // - ein Paar, dass zwei Personen repräsentiert, die sich gegenseitig nicht beschänken dürfen.
+    // - ein Paar, das zwei Personen repräsentiert, 
+    //   welche sich gegenseitig nicht beschänken dürfen.
     type participant {
       Single(p : person)
       Pair(p1 : person, p2 : person)
     }
 
-    // Eine Zuordnung besteht aus einer Person, die die zweite Person beschenkt.
+    // Eine Zuordnung besteht zwei Personen, 
+    // wobei die erste die zweite beschenkt.
     alias matching = (person, person)
 
 
 Wir definieren nun einige Hilfsfunktionen, die wir später benötigen werden:
 
-    // Überprüft ob eine Zuordnung einem vorhandenen Paar entspricht
+    // Überprüft ob eine Zuordnung einem Paar aus `participants` entspricht
     fun is-pair(matching : matching, participants : list<participant>) : <exn, div> bool {
       val (z1, z2) = matching
       match(participants){
@@ -80,12 +83,15 @@ Wir definieren nun einige Hilfsfunktionen, die wir später benötigen werden:
         Nil -> False
       } 
     }
-    
+   
+    // Überprüft ob eine Zuordnung aus nur einer Person besteht
     fun is-self-giving(matching : matching) {
       val (z1, z2) = matching
       z1 == z2
     }
     
+    // Überprüft ob die Zuordnung nicht selbst-scheckend ist und
+    // kein Paar mit den selben Personen vorhanden ist
     fun is-valid-matching(matching : matching, participants : list<participant>) {
       !is-self-giving(matching) && !is-pair(matching, participants)
     }
@@ -114,11 +120,11 @@ Effekt:
     }
 
 
-Dieser algebraische Effekt nimmt zwei Listen von Personen entgegen soll ein
-zufällig gewähltes Element aus der ersten und eines aus der zweiten zurückgebe
+Dieser algebraische Effekt nimmt zwei Listen von Personen entgegen und soll ein
+zufällig gewähltes Element aus der ersten und eines aus der zweiten zurückgeben.
 
 
-    // Hilfsfunktion um alle Personen aus einer Liste von Teilnehmer zu extrahieren
+    // Hilfsfunktion um alle Personen aus einer Liste von Teilnehmern zu extrahieren
     fun flatten-participants(participants: list<participant>) : <> list<person>  {...}
 
     // Hilfsfunktion um ein Element aus einer Liste zu entfernen
@@ -145,6 +151,7 @@ zufällig gewähltes Element aus der ersten und eines aus der zweiten zurückgeb
           }}
         Nil -> Just(matchings)}}
 
+    // Findet vielleicht eine Zuteilung von Weihnachtswichteln
     fun find-matching(participants : list<participant>) : <div, random, exn> maybe<list<matching>>{
       val persons = flatten-participants(participants) 
       find-matching-helper(persons, persons, participants, [])
@@ -171,7 +178,7 @@ abgebrochen. Es wird `Nothing` zurückgegeben und damit signalisiert, dass keine
 Zuteilung gefunden werden konnte.
 
 Haben wir keine Elemente mehr in den beiden Personenlisten, geben wir das
-akkumulierte Ergebniss in `matches`, verpackt in `Just` zurück.
+akkumulierte Ergebniss, dass sich in `matches` befindet, verpackt in `Just`, zurück.
 
 # Effekthandler unter dem Christbaum
 
@@ -180,6 +187,7 @@ viel weihnachtlichem Glück am Fest der Wunder ein passendes Wichtel-Setup
 finden:
 
 
+    // Gibt ein zufälliges Element aus einer Liste zurück
     fun random-element(x : list<a>) : <ndet, exn> a {
       val r-idx = random-int() % x.length
       match(x[r-idx]){
@@ -188,6 +196,9 @@ finden:
       }
     }
 
+    // Handler für den random Effekt, gibt bei random-pair 
+    // ein Tuple aus einer zufälligen Element der ersten 
+    // und einem zufälligen Element der zweiten Liste zurück
     val random-pair-handler = handler {
       return x -> x 
       random-pair(a, b) -> resume((random-element(a), random-element(b)))
@@ -198,10 +209,11 @@ Die Funktion `random-element` selektiert ein zufälliges Element aus einer Liste
 Die eingebaute Funktion `random-int()` gibt einen zufälligen Integer zurück und
 lößt den Effekt `ndet` aus, der im Koka-Core vorhanden ist und nicht von uns
 abgehandelt werden muss. Er beschreibt nicht-deterministische Ereignisse, wie
-das generieren von Zufallszahlen. Der `random-pair-handler` springt also mit
-einem zufälligen Element beider Listen dahin zurück, wo der Effekt ausgelößt
+das Generieren von Zufallszahlen. Der `random-pair-handler` springt also mit
+einem zufälligen Element beider Listen dahin zurück, wo der Effekt ausgelöst
 wurde.
 
+    // Main-Funktion, berechnet eine Weihnachtswichtel-Zuordnung
     public fun main()  {
       val participants = [Pair("Aaron", "Jaqueline"), Pair("Denise", "Blake"),
                           Single("Timothy"), Single("O'Shaughnessy")]
@@ -213,21 +225,23 @@ wurde.
 
 
 Mit etwas Wichtel-Glück erhalten wir nach einigen Versuchen möglicherweise die
-folgende Zuteilung: (Jaqueline, Timothy), (Denise O'Shaughnessy), (Blake, Aaron),
-(Timothy, Denise), (Aaron, Blake), (O'Shaughnessy, Jaqueline), wobei stets die
-erste Person die Zweite beschenkt.
+folgende Zuteilung: `(Jaqueline, Timothy), (Denise, O'Shaughnessy), (Blake, Aaron),
+(Timothy, Denise), (Aaron, Blake), (O'Shaughnessy, Jaqueline)`, wobei stets die
+erste Person die zweite beschenkt.
 
 
 # Effektwunder
 
 Nun haben wir eine sehr einfache Version der Zuteilung implementiert. Wie könnte
-eine intelligente algorithmische Version aussehen? Eine Möglichkeit wäre, die
+eine intelligente, algorithmische Version aussehen? Eine Möglichkeit wäre, die
 Zuteilung anhand eines Graphenalgorithmus zu finden. Allerdings gibt es noch
 eine einfachere Methode. Effekthandler erlauben es mehrfach in den Code
-zurückzuspringen. Warum also, probieren wir nicht alle Wichtel-Zuteilungen durch?
-Dazu müssen wir nichteinmal die Logik der Implementierung anpassen, sondern nur
+zurückzuspringen. Warum also probieren wir nicht alle Wichtel-Zuteilungen durch?
+Dazu müssen wir nicht einmal die Logik der Implementierung anpassen, sondern nur
 den Effekthandler:
 
+    // Handler für den random Effekt, spring bei random-pair 
+    // mehrfach in den Code zurück
     val random-pair-handler-on-steroids = handler {
       return x -> [x]
       random-pair(a, b) -> {
@@ -237,7 +251,7 @@ den Effekthandler:
     }
 
 Dieser Handler selektiert ein zufälliges Element aus der ersten Liste und
-springt mithilfe der schon bekannte `resume`-Anweisung mehrfach zurück zum
+springt mithilfe der schon bekannten `resume`-Anweisung mehrfach zurück zum
 Aufrufer. Dies erreichen wir, indem wir über alle Elemente in `b` falten und mit
 diesen gepaart mit dem zufälligen Element aus `a` zurückspringen. 
 
@@ -254,20 +268,20 @@ validen Zuteilungen zurück.
 # Und die Moral von der Geschichte
 
 Natürlich ist das Programm ineffizient. Es berechnet *alle* möglichen
-Zuteilungen. Bereits bei 20 Teilnehmer dauert es über 30 Minuten, alle
+Zuteilungen. Bereits bei 20 Teilnehmern dauert es über 30 Minuten, alle
 Zuteilungen zu berechnen. Nichtsdestotrotz sollen in diesem Blogpost
 zwei Botschaften illustriert werden:
 
 1. Es ist möglich, mehrfach aus einem Handler zum Aufrufer des Effekts
-zurückzuspringen. Dies eröffnet ungeahnte Möglichkeiten, in unserem Beispiel in
+zurückzuspringen. Das eröffnet ungeahnte Möglichkeiten, in unserem Beispiel in
 der Kombinatorik. Auch die Abbildung algorithmischer Kontrollflüsse ist denkbar.
-Wie sich dies in der Praxis schlagen wird bleibt zu zeigen. Ein übermäßiger
-Einsatz dieser Technik führt möglicherweise zu schwer nachzuvollziehenden
-Kontrollflüssen.
+Wie sich mehrfache Rückspringe in der Praxis bewähren werden, bleibt zu zeigen.
+Ein übermäßiger Einsatz dieser Technik führt möglicherweise zu schwer
+nachzuvollziehenden Kontrollflüssen.
 
 2. Der einfache Austausch unseres Effekthandlers hat große Auswirkungen auf das
 Programm gehabt. Dazu mussten wir nicht einmal die eigentliche Programmlogik
-abändern. Dies bedeutet, dass wir anhand von Handlern über Logik abstrahieren
+abändern. Das bedeutet, dass wir anhand von Handlern über Logik abstrahieren
 können, die dann einfach austauschbar ist. Dies ist hilfreich beim Testen oder
 beim Austausch von Technologien. Generell lässt sich sehr einfach Beschreibung
 und Implementierung entkoppeln.
