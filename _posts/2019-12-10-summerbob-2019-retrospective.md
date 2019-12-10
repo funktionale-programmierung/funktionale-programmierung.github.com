@@ -20,7 +20,7 @@ Diversity & Sponsoring
 ---------
 
 Neben technischen Vorträgen und Tutorials rund um die neuen Techniken und Technologien im Bereich der Softwareentwicklung ist ein besonderes Anliegen der Konferenz das Thema _Diversity_, also die Einbindung Menschen aller Gruppen. Wir konnten 2019 die Vielfalt der Teilnehmerinnen und Teilnehmer durch verschiedene Maßnahmen wie
-Freitickets und Reiskostenzuschüsse nochmal steigern.
+Freitickets und Reisekostenzuschüsse nochmal steigern.
 
 Vorträge des _Practice Tracks_
 --------
