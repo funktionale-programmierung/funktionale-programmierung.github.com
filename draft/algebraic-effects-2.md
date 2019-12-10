@@ -7,7 +7,7 @@ tags: ["algebraische Effekte", "Effekte", "algebraische", "weihnachten", "wichte
 ---
 
 Weihnachten steht vor der Tür und der Geschenkewahnsinn beginnt. Viele
-Feierwillige entscheiden sich jedoch dazu, nicht daran teilzunehmen. Konzepte,
+Feierwillige entscheiden sich jedoch dazu, nicht daran teilzunehmen. Konzepte
 wie zum Beispiel das Weihnachtswichteln, bei dem eine Person eine zufällig
 ausgeloste Person beschenkt, bieten einen schönen Mittelweg. Wie uns
 algebraische Effekte bei der Zuteilung von Schenkenden zu Beschenkten helfen
@@ -54,13 +54,13 @@ gibt sie die Zuteilung zurück, anderenfalls fällt das Weihnachtswichteln aus.
 Zuerst modellieren wir die passende Domäne:
 
 
-    // Eine Person ist ein string, der dessen Name repräsentiert
+    // Eine Person ist ein string, der deren Namen repräsentiert
     alias person = string
 
     // Ein Teilnehmer ist eines der folgenden:
     // - ein Single, das eine Person repräsentiert.
     // - ein Paar, das zwei Personen repräsentiert, 
-    //   welche sich gegenseitig nicht beschänken dürfen.
+    //   welche sich gegenseitig nicht beschenken dürfen.
     type participant {
       Single(p : person)
       Pair(p1 : person, p2 : person)
@@ -199,7 +199,7 @@ finden:
     }
 
     // Handler für den random Effekt, gibt bei random-pair 
-    // ein Tuple aus einer zufälligen Element der ersten 
+    // ein Tuple aus einem zufälligen Element der ersten 
     // und einem zufälligen Element der zweiten Liste zurück
     val random-pair-handler = handler {
       return x -> x 
