@@ -164,7 +164,7 @@ Die Implementierung der Wichtel-Zuteilung finden wir in der `find-matching-helpe
 Funktion. Diese nimmt zwei Listen von Personen entgegen: `not-yet-giving`
 beinhaltet alle Personen, die noch nicht schenken, `not-yet-receiving` alle, die
 noch nicht beschenkt werden. Aufgrund der Anforderungen 1 und 2 müssen wir beide
-Listen mitführen. Die Liste `participants` beinhaltet Informationen darüber in
+Listen mitführen. Die Liste `participants` beinhaltet Informationen darüber, in
 welchen Verhältniss die Personen stehen und wird benötigt, um Anforderung 3 zu
 überprüfen. In `matchings` werden die gefundenen Zuteilungen mitgeführt. 
 
