@@ -5,7 +5,7 @@ author: tim-digel
 tags: ["BOB", "Konferenz"]
 ---
 
-Unsere Konferenz BOB war anlässlich der in Berlin stattfinden ICFP mit einer weiteren Ausgabe im August aktiv. Die [Summer-BOB](https://bobkonf.de/2019-summer/) war die 6. Auflage der Konferenz und fand kolokalisiert mit der _International Conference on Functional Programming_ (ICFP) in den Räumen des Sandic Hotel Berlin statt. 80 Teilnehmerinnen und zahlreiche Besucher der ICFP brachten die Raumkapzitäten des _Practice Tracks_ und _Research Tracks_ an ihre Grenzen.
+Unsere Konferenz BOB war anlässlich der in Berlin stattfinden ICFP mit einer weiteren Ausgabe im August aktiv. Die [Sommer-BOB](https://bobkonf.de/2019-summer/) war die 6. Auflage der Konferenz und fand kolokalisiert mit der _International Conference on Functional Programming_ (ICFP) in den Räumen des Sandic Hotel Berlin statt. 80 Teilnehmerinnen und zahlreiche Besucher der ICFP brachten die Raumkapzitäten des _Practice Tracks_ und _Research Tracks_ an ihre Grenzen.
 
 <!-- more start -->
 
@@ -49,7 +49,7 @@ Erfahrungen in _Deep Learning_ in Zusammenhang mit funktionaler Programmierung.
 Ausblick
 --------
 
-Am Freitag, 28. Februar 2020, findet die nächste reguläre [BOB-Konferenz](https://bobkonf.de/2020/) statt. Das Programm unterteilt sich dabei wie üblich in zwei Vortragssäle sowie zwei kleinere Räume mit 90-minütigen Tutorials. Dabei haben wir aus zahlreichen Einreichungen das Beste aus der Szene der funktionalen Programmierung für Sie zusammengestellt: [Programm](https://bobkonf.de/2020/de/program.html).
+Am Freitag, 28. Februar 2020, findet die nächste reguläre [BOB-Konferenz](https://bobkonf.de/2020/) statt. Das Programm unterteilt sich dabei wie üblich in zwei Vortragssäle sowie zwei kleinere Räume mit 90-minütigen Tutorials. Dabei haben wir aus zahlreichen Einreichungen das Beste aus der Szene der funktionalen Programmierung für Sie zusammengestellt: [Das Programm gibt es hier.](https://bobkonf.de/2020/de/program.html).
 
 Die [Registrierung](https://bobkonf.de/2020/registration.html) ist eröffnet. Bis zum *20. Januar 2020* gibt es noch Frühbucher-Rabatt! Die Teilnahme an den Tutorials ist auf Grund der Raumgrößen limitiert. Bei der Registrierung können Sie sich für Tutorials anmelden. Beachten Sie, dass hier _First Come - First Serve_ gilt.
 
