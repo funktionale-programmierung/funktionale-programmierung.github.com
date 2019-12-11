@@ -5,7 +5,7 @@ author: tim-digel
 tags: ["BOB", "Konferenz"]
 ---
 
-Unsere Konferenz BOB war anlässlich der in Berlin stattfinden ICFP mit einer weiteren Ausgabe im August aktiv. Die [Sommer-BOB](https://bobkonf.de/2019-summer/) war die 6. Auflage der Konferenz und fand kolokalisiert mit der _International Conference on Functional Programming_ (ICFP) in den Räumen des Sandic Hotel Berlin statt. 80 Teilnehmerinnen und zahlreiche Besucher der ICFP brachten die Raumkapzitäten des _Practice Tracks_ und _Research Tracks_ an ihre Grenzen.
+Unsere Konferenz BOB war anlässlich der in Berlin stattfinden ICFP mit einer weiteren Ausgabe im August aktiv. Die [Sommer-BOB](https://bobkonf.de/2019-summer/) war die 6. Auflage der Konferenz und fand kolokalisiert mit der _International Conference on Functional Programming_ (ICFP) in den Räumen des Sandic Hotel Berlin statt. 80 Teilnehmerinnen und zahlreiche Besucher der ICFP brachten die Raumkapazitäten des _Practice Tracks_ und _Research Tracks_ an ihre Grenzen.
 
 <!-- more start -->
 
