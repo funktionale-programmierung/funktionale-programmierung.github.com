@@ -11,7 +11,7 @@ tags: ["BOB", "Konferenz"]
 
 Nach der (Sommer-)BOB ist vor der BOB! 
 Die Vorbereitungen für die [BOB 2020](http://bobkonf.de/2020/) sind
-abgeschlossen: Am Freitag, 28.2.2020 findet die siebte BOB in Berlin
+abgeschlossen: Am Freitag, dem 28.2.2020, findet die siebte BOB in Berlin
 statt, und das [Programm](http://bobkonf.de/2020/program.html) hat die
 gewohnte Vielfalt und Qualität zu allem, was in der
 Softwareentwicklung zum Besten zählt.
@@ -79,12 +79,12 @@ statt.  Die Anmeldung ist
 gibt außerdem eine Reihe von Rabatten und kostenlosen Tickets für
 unterrepräsentierte Gruppen.
 
-### RacketFest und :clojureD
+### Racketfest und :clojureD
 
 Die BOB tritt dieses Mal gleich im Dreierpack auf.  Am Tag vor der BOB
 ist das [Racketfest](https://racketfest.com/), am Tag danach endlich
 wieder die
-[:clojured](http://clojured.de/).  Wie immer gibt es Rabatte für die
+[:clojureD](http://clojured.de/).  Wie immer gibt es Rabatte für die
 Registrierung bei mehreren von diesen Konferenzen.
 
 <!-- more end -->
