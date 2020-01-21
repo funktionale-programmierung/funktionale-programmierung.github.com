@@ -68,7 +68,7 @@ Die Datei erscheint im Projektmappen-Explorer an letzter Stelle. Die Dateien wer
 
 ## Live-Kompilierung mit IntelliSense
 
-Wir bearbeiten unsere neu erstelle Modul-Datei und definieren uns die Kreiszahl. Dabei fügen wir zuerst am Ende von `module MeinModul` ein `=`-Zeichen an.
+Wir bearbeiten unsere neu erstellte Modul-Datei und definieren uns die Kreiszahl. Dabei fügen wir zuerst am Ende von `module MeinModul` ein `=`-Zeichen an.
 ```fsharp
 module MeinModul = 
 
@@ -99,13 +99,13 @@ Durch Angabe des Namensraum, gefolgt von der Modulbezeichnung, können wir alle 
 
 ## Test-Infrastruktur
 
-Da auch bei der Rundung von Pi Fehler entstehen können erstellen wir unmittelbar unseren ersten Testfall. Wir legen uns im Projektmappen-Explorer einen Ordner _Test_ an und erstellen darin die Quellcodedatei `MeinModulTest.fs`. Wir schieben mit _ALT + PFEIL UNTEN_ die _Program.fs_ wieder an die letzte Stelle. Die dort markierte _main_-Methode muss immer in der letzten Datei stehen. Falls erneut die Meldung bzgl. Namespace- oder Moduldeklaration erscheint, müssen wir wie oben beschrieben unser Projekte _ErsteSchritte_ ent- und erneut laden.  
+Da auch bei der Rundung von Pi Fehler entstehen können erstellen wir unmittelbar unseren ersten Testfall. Wir legen uns im Projektmappen-Explorer einen Ordner _Test_ an und erstellen darin die Quellcodedatei `MeinModulTest.fs`. Wir schieben mit _ALT + PFEIL UNTEN_ die _Program.fs_ wieder an die letzte Stelle. Die dort markierte _main_-Methode muss immer in der letzten Datei stehen. Falls erneut die Meldung bzgl. Namespace- oder Moduldeklaration erscheint, müssen wir wie oben beschrieben unser Projekt _ErsteSchritte_ ent- und erneut laden.  
 
 Als Test-Framework benutzen wir im Folgenden _NUnit_ und _FsUnit_. Diese Pakete installieren wir mit _NuGet_.
 
 ## Pakete mit NuGet installieren
 
-Im Projektmappen-Explorer können wir im Kontextmenü eines Projekts (Solution) oder im Kontextmenü der Projektmappe (Workspace) mit _NuGet Pakete verwalten_ bzw. _NuGet Pakete für Projektmappe verwalten_ den Paketmanager aufrufen. Je nach dem was wir wählen, installieren wir das Paket sichtbar für das Projekt oder für die ganze Projektmappe und damit für alle Projekte.  
+Im Projektmappen-Explorer können wir über das Kontextmenü eines Projekts (Solution) oder im Kontextmenü der Projektmappe (Workspace) den Paketmanager aufrufen (_NuGet Pakete verwalten_ bzw. _NuGet Pakete für Projektmappe verwalten_). Je nach dem was wir wählen, installieren wir das Paket für ein einzelnes Projekt oder für die ganze Projektmappe und damit sichtbar für alle Projekte.  
 
 Um ein Paket zu installieren suchen wir ein Paket im Reiter _Durchsuchen_. Wir setzen rechts den Haken vor _Projekt_ und gehen auf _Installieren_. Nach Bestätigung einer Meldung wird das Paket installiert. Wir installieren die Pakete:
 
@@ -123,13 +123,13 @@ module MeinModulTest =
     open NUnit.Framework
     open FsUnit
 ```
-Ein Testfall besteht aus der Markierung `[<Test>]` und einer Funktionsdefinition. Dabei gibt der Funktionsname den Testnamen an. Damit dieser auch Leerstellen und beliebige Groß-/Kleinschreibung enthalten kann, fassen wir diesen in doppelte einfache Anführungszeichen `\`\`` ein. Zum Beispiel:
+Ein Testfall besteht aus der Markierung `[<Test>]` und einer Funktionsdefinition. Dabei gibt der Funktionsname den Testnamen an. Damit dieser auch Leerstellen und beliebige Groß-/Kleinschreibung enthalten kann, fassen wir diesen in doppelte _Backticks_ ``` `` ``` ein. Zum Beispiel:
 ```fsharp
 [<Test>]
 let ``Defintion of Pi`` () =
    ErsteSchritte.MeinModul.pi |> should equal 3.141M
 ```
-Um den Testfall auszuführen gehen wir in den Test-Explorer (_Ansicht_, _Test-Explorer_) und drücken auf den Vorspulen-Pfeil _Alle Tests ausführen_. Damit wird das Projekt gebaut und unser Testfall wird vom Test-Explorer gefunden. Drücken wir erneut _Alle Tests ausführen_ wird er ausgeführt und sollte auch grün werden.  
+Um den Testfall auszuführen, gehen wir in den Test-Explorer (_Ansicht_, _Test-Explorer_) und drücken auf den Vorspulen-Pfeil _Alle Tests ausführen_. Damit wird das Projekt gebaut und unser Testfall wird vom Test-Explorer gefunden. Drücken wir erneut _Alle Tests ausführen_ wird er ausgeführt und sollte auch grün werden.  
 
 [![Visual Studio Testfall & Testexplorer](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-tests.jpg "Visual Studio Testfall & Testexplorer")](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-tests.jpg)
 
