@@ -6,7 +6,7 @@ author: tim-digel
 tags: ["F#", "F Sharp", "Visual Studio", "Einführung", "Erste Schritte", "Projekt", "Start"]
 ---
 
-F# (F Sharp) ist eine von Microsoft entwickelte funktionale Programmiersprache im _.NET_-Universum. Die Syntax erinnert sehr stark an _OCaml_. Microsoft bietet mit _Visual Studio_ eine komplette Entwicklungsumgebung an, die neben F# auch mit vielen weiteren Sprachen zurecht kommt. In diesem Blogpost sehen wir uns erste Schritte im Zusammenspiel von F# mit Visual Code an und erläutern einige ungewöhnliche Eigenarten. Erklärungen zum Syntax von F# lassen wir weitestgehend außer acht. Dafür verweisen wir auf einen zeitnah erscheinenden Blogartikel zum Kennenlernen von F#.  
+F# (F Sharp) ist eine von Microsoft entwickelte funktionale Programmiersprache im _.NET_-Universum. Die Syntax erinnert sehr stark an _OCaml_. Microsoft bietet mit _Visual Studio_ eine komplette Entwicklungsumgebung an, die neben F# auch mit vielen weiteren Sprachen zurecht kommt. In diesem Blogpost sehen wir uns erste Schritte im Zusammenspiel von F# mit Visual Code an und erläutern einige ungewöhnliche Eigenarten. Erklärungen zur Syntax von F# lassen wir weitestgehend außer acht. Dafür verweisen wir auf einen zeitnah erscheinenden Blogartikel zum Kennenlernen von F#.  
 <!-- more start -->
 
 ## Bevor es los geht
@@ -57,7 +57,7 @@ Um die Ausgabe sehen zu können, kann die Ausführung auch mit offenbleibendem T
 
 Alternativ können wir die Zeile mit der `0` markieren und im Kontextmenü _Haltepunkt_, _Haltepunkt einfügen_ auswählen. Wenn wir nun auf Start gehen, unterbricht Visual Studio vor dieser Stelle die Ausführung. Als Folge davon können wir die Ausgabe in der Konsole betrachten, indem wir das Konsolenfenster in den Vordergrund bringen. Sobald wir auf den Button _Weiter_ drücken, wird der Haltepunkt durchlaufen und unser Beispielprogramm ist beendet. Durch Rechtsklick auf den links sichtbaren Haltepunkt und _Haltepunkt löschen_ können wir diesen wieder entfernen.  
 
-Haltepunkte eignen sich später sehr gut zum Debuggen. Hält das Programm an einem Haltepunkt an, wird der Weter aller verfügbarerVariablen angezeigt, wenn man die Maus darüber hält.
+Haltepunkte eignen sich später sehr gut zum Debuggen. Hält das Programm an einem Haltepunkt an, wird der Wert aller verfügbarer Variablen angezeigt, wenn man die Maus darüber hält.
 
 ## Projektmappen-Explorer
 
@@ -86,7 +86,7 @@ Wir fügen der _MeinModul.fs_ als erste Zeile
 ```fsharp
 namespace ErsteSchritte
 ```
-hinzu. Das Programm startet jetzt ohne Fehlermeldung. Eventuell. bleibt die vorherige Meldung noch in der _Fehlerliste_ sichtbar. Um dies zu lösen, klicken wir rechts auf _ErsteSchritte_ im Projektmappen-Explorer und wählen zuerst _Projekt entladen_ und anschließend _Projekt erneut laden_. Dieses Verhalten hängt mit der neu erstellten _MeinModul.fs_ und der dynamischen Generierung/Überprüfung mit _IntelliSense_ zusammen. _IntelliSense_ kompiliert ständig im Hintergrund, um so Meldungen über falschen Syntax, nicht passende Typen oder sonstige Fehler aufmerksam zu machen. Entsprechende Stellen werden rot unterstrichen. Zusätzlich sind sie in der _Fehlerliste_ sichtbar, sofern dort der Modus _Nur IntelliSense_ oder _Erstellen + IntelliSense_ gewählt ist.
+hinzu. Das Programm startet jetzt ohne Fehlermeldung. Eventuell bleibt die vorherige Meldung noch in der _Fehlerliste_ sichtbar. Um dies zu lösen, klicken wir rechts auf _ErsteSchritte_ im Projektmappen-Explorer und wählen zuerst _Projekt entladen_ und anschließend _Projekt erneut laden_. Dieses Verhalten hängt mit der neu erstellten _MeinModul.fs_ und der dynamischen Generierung/Überprüfung mit _IntelliSense_ zusammen. _IntelliSense_ kompiliert ständig im Hintergrund, um so Meldungen über falschen Syntax, nicht passende Typen oder sonstige Fehler aufmerksam zu machen. Entsprechende Stellen werden rot unterstrichen. Zusätzlich sind sie in der _Fehlerliste_ sichtbar, sofern dort der Modus _Nur IntelliSense_ oder _Erstellen + IntelliSense_ gewählt ist.
 Außerdem bietet uns _IntelliSense_ die Möglichkeit der Autovervollständigung.
 
 ## Aufruf einer Funktion
@@ -99,13 +99,13 @@ Durch Angabe des Namensraums, gefolgt von der Modulbezeichnung, können wir alle
 
 ## Test-Infrastruktur
 
-Da auch bei der Rundung von Pi Fehler entstehen, können erstellen wir unmittelbar unseren ersten Testfall. Wir legen uns im Projektmappen-Explorer einen Ordner _Test_ an und erstellen darin die Quellcodedatei `MeinModulTest.fs`. Wir schieben mit _ALT + PFEIL UNTEN_ die _Program.fs_ wieder an die letzte Stelle. Die dort markierte _main_-Methode muss immer in der letzten Datei stehen. Falls erneut die Meldung bzgl. Namespace- oder Moduldeklaration erscheint, müssen wir wie oben beschrieben unser Projekt _ErsteSchritte_ ent- und erneut laden.  
+Da auch bei der Rundung von Pi Fehler entstehen können, erstellen wir unmittelbar unseren ersten Testfall. Wir legen uns im Projektmappen-Explorer einen Ordner _Test_ an und erstellen darin die Quellcodedatei `MeinModulTest.fs`. Wir schieben mit _ALT + PFEIL UNTEN_ die _Program.fs_ wieder an die letzte Stelle. Die dort markierte _main_-Methode muss immer in der letzten Datei stehen. Falls erneut die Meldung bzgl. Namespace- oder Moduldeklaration erscheint, müssen wir wie oben beschrieben unser Projekt _ErsteSchritte_ ent- und erneut laden.  
 
 Als Test-Framework benutzen wir im Folgenden _NUnit_ und _FsUnit_. Diese Pakete installieren wir mit _NuGet_.
 
 ## Pakete mit NuGet installieren
 
-Im Projektmappen-Explorer können wir über das Kontextmenü eines Projekts (Solution) oder im Kontextmenü der Projektmappe (Workspace) den Paketmanager aufrufen (_NuGet Pakete verwalten_ bzw. _NuGet Pakete für Projektmappe verwalten_). Je nach dem was wir wählen, installieren wir das Paket für ein einzelnes Projekt oder für die ganze Projektmappe und damit sichtbar für alle Projekte.  
+Im Projektmappen-Explorer können wir über das Kontextmenü eines Projekts (Solution) oder im Kontextmenü der Projektmappe (Workspace) den Paketmanager aufrufen (_NuGet Pakete verwalten_ bzw. _NuGet Pakete für Projektmappe verwalten_). Je nachdem was wir wählen, installieren wir das Paket für ein einzelnes Projekt oder für die ganze Projektmappe und damit sichtbar für alle Projekte.  
 
 Um ein Paket zu installieren, suchen wir ein Paket im Reiter _Durchsuchen_. Wir setzen rechts den Haken vor _Projekt_ und gehen auf _Installieren_. Nach Bestätigung einer Meldung wird das Paket installiert. Wir installieren die Pakete:
 
@@ -133,7 +133,7 @@ Um den Testfall auszuführen, gehen wir in den Test-Explorer (_Ansicht_, _Test-E
 
 [![Visual Studio Testfall & Testexplorer](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-tests.jpg "Visual Studio Testfall & Testexplorer")](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-tests.jpg)
 
-Die Tests werden nach Projekten, Namensräume und Modulen gruppiert. In unserem Fall scheint das übermäßig komplex zu sein. Bei mehreren hundert Tests kommen später, insbesondere durch die Verwendung von Namensräumen, einzelne Test-Module weiter gruppiert werden. Innerhalb eines Moduls werden die Tests nach ihrer Position in der Datei sortiert.
+Die Tests werden nach Projekten, Namensräume und Modulen gruppiert. In unserem Fall scheint das übermäßig komplex zu sein. Bei mehreren hundert Tests können später, insbesondere durch die Verwendung von Namensräumen, einzelne Test-Module weiter gruppiert werden. Innerhalb eines Moduls werden die Tests nach ihrer Position in der Datei sortiert.
 
 ## Fazit
 
