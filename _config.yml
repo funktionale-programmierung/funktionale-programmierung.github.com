@@ -126,6 +126,11 @@ authors:
     image: /author/kaan-sahin.png
     href:
     about: 'Kaan Sahin ist Software-Architekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a>. Sein besonderes Interesse gilt der funktionalen Programmierung und LISP-Dialekten.'
+  markus-schlegel:
+    name: Markus Schlegel
+    image: /author/markus-schlegel.jpg
+    href: "https://twitter.com/markus_schlegel"
+    about: 'Markus Schlegel ist Softwarearchitekt bei der <a href="http://www.active-group.de/">Active Group GmbH</a>. Markus hat 2013 die funktionale Programmierung für sich entdeckt und schläft seither wieder ruhig.'
   timo-vonholtz:
     name: Timo von Holtz
     image: /author/timo-vonholtz.jpg
