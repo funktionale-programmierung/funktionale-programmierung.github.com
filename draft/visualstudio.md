@@ -11,7 +11,8 @@ F# (F Sharp) ist eine von Microsoft entwickelte funktionale Programmiersprache i
 
 ## Bevor es los geht
 
-Visual Studio ist in der vollumfänglichen Variante nur für Windows verfügbar und ist nicht zu verwechseln mit _Visual Studio Code_. Visual Studio ist in der [Community Edition](https://visualstudio.microsoft.com/de/vs/community/) kostenlos installierbar. Wir wählen bei der Installation das zusätzliche Paket (Workload) _.NET Desktopentwicklung_ aus. F# ist in Visual Studio direkt enthalten.  
+Visual Studio ist in der vollumfänglichen Variante nur für Windows verfügbar und ist nicht zu verwechseln mit _Visual Studio Code_. Visual Studio ist in der [Community Edition](https://visualstudio.microsoft.com/de/vs/community/) kostenlos installierbar. Für MacOS ist [Visual Studio für Mac](https://visualstudio.microsoft.com/de/vs/mac/) mit annährend gleichem Funktionsumfang verfügbar.  
+Wir wählen bei der Installation das zusätzliche Paket (Workload) _.NET Desktopentwicklung_ aus. F# ist in Visual Studio direkt enthalten.  
 
 Wir öffnen Visual Studio und wählen _Neues Projekt erstellen_ auf dem Willkommensbildschirm. Im Suchfeld geben wir _F#_ ein und wählen _Konsolenanwendung (.NET Framework)_. Um das Projekt zu erstellen, vergeben wir im nächsten Schritt noch den Namen _ErsteSchritte_ und wählen einen Speicherort aus.  
 
@@ -33,7 +34,7 @@ val it : int = 0
 ```
 führen. Da wir nur einen Wert eingegeben haben, bindet _F# Interactive_ diesen an die mutierbare Variable `it`. Wir können in späteren Anweisungen den Bezeichner `it` verwenden, um den Wert abzurufen, analog zur `ANS`-Funktionalität bei Taschenrechnern, die den letzten errechneten Wert (_Answer_) repräsentiert.  
 
-Im Fenster von `F# Interactive` lassen sich auch direkt Anweisungen eintippen, z. B.:
+Im Fenster von _F# Interactive_ lassen sich auch direkt Anweisungen eintippen, z. B.:
 ```fsharp
 4 + 5;;
 ```
