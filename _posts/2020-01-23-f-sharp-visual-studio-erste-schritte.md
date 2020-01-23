@@ -1,6 +1,6 @@
 ---
 layout: post
-description: Wie man sich Daten für Tests zurecht legen kann
+description: Projekterstellung, F# Interactive, Haltepunkte, Tests und vieles mehr
 title: "Erste Schritte mit F# in Visual Studio"
 author: tim-digel
 tags: ["F#", "F Sharp", "Visual Studio", "Einführung", "Erste Schritte", "Projekt", "Start"]
