@@ -20,7 +20,7 @@ Wir öffnen Visual Studio und wählen _Neues Projekt erstellen_ auf dem Willkomm
 
 Das folgende Bild zeigt dem Aufbau in unserem neu angelegten Projekt.  
 
-[![Visual Studio Übersicht](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-neues-projekt.jpg "Visual Studio Übersicht")](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-neues-projekt.jpg)
+[![Visual Studio Übersicht](/files/2020-01-23-f-sharp-visual-studio-erste-schritte/visual-studio-neues-projekt.jpg "Visual Studio Übersicht")](/files/2020-01-23-f-sharp-visual-studio-erste-schritte/visual-studio-neues-projekt.jpg)
 
 Links oben (1) ist die beispielhafte _Program.fs_-Datei geöffnet. Rechts (2) sehen wir den _Projektmappen-Explorer_. In unserer Projektmappe (Workspace) _ErsteSchritte_ haben wir momentan nur das gleichnamige Projekt (Solution) _ErsteSchritte_. In einer Projektmappe können verschiedene Projekte angelegt werden. Dabei kann jedes Projekt andere Abhängigkeiten und Einstellungen haben (siehe [Abschnitt Pakete mit NuGet installieren](#pakete-mit-nuget-installieren)).  
 
@@ -81,7 +81,7 @@ module MeinModul =
 Wenn wir nun auf _Starten_ gehen, erhalten wir folgende Fehlermeldung: _Dateien in Bibliotheken oder Anwendungen mit mehreren Dateien müssen mit einer Namespace- oder Moduldeklaration beginnen. [...] Nur in der letzten Quelldatei einer Anwendung darf eine solche Deklaration ausgelassen werden._
 
 
-[![Visual Studio Fehlermeldung Namespace](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-fehlermeldung.jpg "Visual Studio Fehlermeldung Namespace")](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-fehlermeldung.jpg)
+[![Visual Studio Fehlermeldung Namespace](/files/2020-01-23-f-sharp-visual-studio-erste-schritte/visual-studio-fehlermeldung.jpg "Visual Studio Fehlermeldung Namespace")](/files/2020-01-23-f-sharp-visual-studio-erste-schritte/visual-studio-fehlermeldung.jpg)
 
 Wir fügen der _MeinModul.fs_ als erste Zeile
 ```fsharp
@@ -132,7 +132,7 @@ let ``Defintion of Pi`` () =
 ```
 Um den Testfall auszuführen, gehen wir in den Test-Explorer (_Ansicht_, _Test-Explorer_) und drücken auf den Vorspulen-Pfeil _Alle Tests ausführen_. Damit wird das Projekt gebaut und unser Testfall wird vom Test-Explorer gefunden. Drücken wir erneut _Alle Tests ausführen_, wird er ausgeführt und sollte auch bestanden werden.  
 
-[![Visual Studio Testfall & Testexplorer](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-tests.jpg "Visual Studio Testfall & Testexplorer")](2020-01-20-f-sharp-visual-studio-erste-schritte/visual-studio-tests.jpg)
+[![Visual Studio Testfall & Testexplorer](/files/2020-01-23-f-sharp-visual-studio-erste-schritte/visual-studio-tests.jpg "Visual Studio Testfall & Testexplorer")](/files/2020-01-23-f-sharp-visual-studio-erste-schritte/visual-studio-tests.jpg)
 
 Die Tests werden nach Projekten, Namensräume und Modulen gruppiert. In unserem Fall scheint das übermäßig komplex zu sein. Bei mehreren hundert Tests können später, insbesondere durch die Verwendung von Namensräumen, einzelne Test-Module weiter gruppiert werden. Innerhalb eines Moduls werden die Tests nach ihrer Position in der Datei sortiert.
 
