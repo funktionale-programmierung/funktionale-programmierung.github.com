@@ -6,7 +6,6 @@ author: markus-schlegel
 tags: ["z3", "Logische Programmierung", "Erste Schritte", "Einführung", "Projekt"]
 ---
 
-<!-- Deklarative Programmierung -->
 Der Schritt von der imperativen Programmierung zur funktionalen
 Programmierung ist auch ein Schritt hin zu einem deklarativen
 Programmierstil. Wir beschreiben die Lösung eines Problems, anstatt
@@ -16,7 +15,6 @@ deklarativen Stils ist, dass er die Kommunikation zwischen den
 beteiligten Menschen vereinfacht und sei es nur die Kommunikation
 zwischen der Entwicklerin und ihr selbst.
 
-<!-- Funktionale Programmierung nicht deklarativ genug, Schritte als Unterscheidungsmerkmal -->
 Die funktionale Programmierung ist zwar deklarativer als die
 imperative Programmierung, aber ein Konzept von Schritten finden wir
 auch in der funktionalen Programmierung noch. Die Problemlösungen, die
@@ -32,7 +30,6 @@ Sudoku. Bei Sudoku hängt beinahe alles mit allem zusammen. In jeder
 Entscheidung müssen wir beachten, dass die Entscheidung einen Einfluss
 auf fast alle anderen Felder des Spiels hat.
 
-<!-- Ausblick -->
 In diesem Artikel werden wir anhand eines kleinen Praxisbeispiels die
 logische Programmierung kennenlernen. Wir übersetzen ein typisches
 Ressourcenplanungsproblem in das SMT-LIB-2-Format und schicken dieses
@@ -41,14 +38,12 @@ ist die derzeit mächtigste logische Programmierumgebung.
 
 <!-- more start -->
 
-<!-- Beispielproblem -->
 Seminartag: Anna, Sarah, Martha, Salma und Daisy brauchen jeweils
 einen Sitzplatz, aber Anna will nicht neben Sarah sitzen und Martha
 und Salma müssen am selben Tisch sitzen. Wir möchten jeder
 Seminarteilnehmerin einen Sitzplatz zuordnen und dabei alle Wünsche,
 Regeln und sonstigen Einschränkungen beachten.
 
-<!-- Beispielproblem schwer funktional zu lösen -->
 Die Beschreibung des Problems hat uns einen Satz gekostet. Die
 Charakterisierung der Lösung konnten wir auch in einem einzigen Satz
 angeben. Das Problem sollte also eigentlich mit einem deklarativen
@@ -61,7 +56,6 @@ aufteilen lässt. Hat der deklarative Ansatz also versagt?
 
 ## Logische Programmierung
 
-<!-- Motivation logische Programmierung -->
 Vielleicht ist die funktionale Programmierung einfach noch nicht
 deklarativ genug? Wenn wir von der funktionalen Programmierung noch
 einen Schritt weiter in Richtung deklarative Programmierung gehen,
