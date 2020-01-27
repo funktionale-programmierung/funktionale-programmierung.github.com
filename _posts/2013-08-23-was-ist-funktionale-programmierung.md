@@ -39,7 +39,7 @@ Die zwei wichtigsten Paradigmen sind das _imperative Paradigma_, und
 das _deklarative Paradigma_. Nach dem imperativen Paradigma beschreibt
 man eine Berechnung als Folge von _Anweisungen_, die einen
 Programmzustand modifizieren, der am Ende das Ergebnis der Berechnung
-enthält. Man beschreibung also _wie_ man zu dem Ergebnis gelangt.
+enthält. Man beschreibt also _wie_ man zu dem Ergebnis gelangt.
 
 Nach dem deklarativen Paradigma beschreibt man eine Berechnung als
 einen _Ausdruck_, der zu einem Ergebnis _ausgewertet_ werden kann, und
