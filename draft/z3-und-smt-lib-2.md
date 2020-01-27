@@ -6,16 +6,17 @@ author: markus-schlegel
 tags: ["z3", "Logische Programmierung", "Erste Schritte", "Einführung", "Projekt"]
 ---
 
+<!-- Deklarative Programmierung -->
 Der Schritt von der imperativen Programmierung zur funktionalen
-Programmierung ist auch ein Schritt hin zu einem deklarativeren
+Programmierung ist auch ein Schritt hin zu einem deklarativen
 Programmierstil. Wir beschreiben die Lösung eines Problems, anstatt
 den Computer Schritt für Schritt anzuweisen, welche konkreten Hebel er
-ziehen und welche Knöpfe er drücken muss. Der erste Vorteil dieses
+ziehen und welche Knöpfe er drücken muss. Der große Vorteil dieses
 deklarativen Stils ist, dass er die Kommunikation zwischen den
-beteiligten Menschen vereinfacht. Der zweite Vorteil ist, dass ein
-beschreibender Programmierstil es besser erlaubt, auf
-Anforderungsänderungen einzugehen.
+beteiligten Menschen vereinfacht und sei es nur die Kommunikation
+zwischen der Entwicklerin und ihr selbst.
 
+<!-- Funktionale Programmierung nicht deklarativ genug, Schritte als Unterscheidungsmerkmal -->
 Die funktionale Programmierung ist zwar deklarativer als die
 imperative Programmierung, aber ein Konzept von Schritten finden wir
 auch in der funktionalen Programmierung noch. Die Problemlösungen, die
@@ -29,51 +30,60 @@ Es gibt aber auch Probleme, die sich nicht so einfach in Teilprobleme
 aufschneiden lassen. Man denke an klassische Rätselaufgaben wie
 Sudoku. Bei Sudoku hängt beinahe alles mit allem zusammen. In jeder
 Entscheidung müssen wir beachten, dass die Entscheidung einen Einfluss
-auf fast alle anderen Felder des Spiels hat. In diesem Artikel werden
-wir die logische Programmierung kennenlernen, um mit solchen schwer
-greifbaren Problemen umzugehen.
+auf fast alle anderen Felder des Spiels hat.
 
+<!-- Ausblick -->
+In diesem Artikel werden wir anhand eines kleinen Praxisbeispiels die
+logische Programmierung kennenlernen. Wir übersetzen ein typisches
+Ressourcenplanungsproblem in das SMT-LIB-2-Format und schicken dieses
+dann an das Programm z3. z3 wird von Microsoft Research entwickelt und
+ist die derzeit mächtigste logische Programmierumgebung.
 
 <!-- more start -->
 
-Das Spiel Sudoku ist schnell erklärt. Es gibt ein Spielfeld aus 3x3
-Blöcken mit jeweils 3x3 Feldern. Die Felder bilden also 9 Reihen und 9
-Spalten. Ziel des Spiels ist es, jedem Feld eine Zahl von 1 bis 9
-zuzuweisen und zwar so, dass jede Zahl in jeder Reihe, jeder Spalte
-und jedem Block nur einmal auftritt. Meistens sind einige Felder
-bereits vorausgefüllt.
+<!-- Beispielproblem -->
+Seminartag: Anna, Sarah, Martha, Salma und Daisy brauchen jeweils
+einen Sitzplatz, aber Anna will nicht neben Sarah sitzen und Martha
+und Salma müssen am selben Tisch sitzen. Wir möchten jeder
+Seminarteilnehmerin einen Sitzplatz zuordnen und dabei alle Wünsche,
+Regeln und sonstigen Einschränkungen beachten.
 
-Die Beschreibung des Spielfelds hat uns zwei kurze Sätze gekostet. Die
-Charakterisierung der Lösung konnten wir auch in einem Satz angeben.
-Sudoku sollte also eigentlich mit einem deklarativen Programmierstil
-leicht zu lösen sein. Aber selbst mit funktionaler Programmierung
-müssen wir hier lange rätseln, um einen effizienten Algorithmus zu
-finden. Das liegt, wie in der Einleitung bereits angedeutet, daran,
-dass sich das Problem schwer in Teilprobleme aufteilen lässt. Hat der
-deklarative Ansatz also versagt?
+<!-- Beispielproblem schwer funktional zu lösen -->
+Die Beschreibung des Problems hat uns einen Satz gekostet. Die
+Charakterisierung der Lösung konnten wir auch in einem einzigen Satz
+angeben. Das Problem sollte also eigentlich mit einem deklarativen
+Programmierstil leicht zu lösen sein. Aber selbst mit funktionaler
+Programmierung müssen wir hier lange rätseln, um einen effizienten
+Algorithmus zu finden. Das liegt, wie in der Einleitung bereits
+angedeutet, daran, dass sich das Problem schwer in Teilprobleme
+aufteilen lässt. Hat der deklarative Ansatz also versagt?
 
 
 ## Logische Programmierung
 
+<!-- Motivation logische Programmierung -->
 Vielleicht ist die funktionale Programmierung einfach noch nicht
 deklarativ genug? Wenn wir von der funktionalen Programmierung noch
 einen Schritt weiter in Richtung deklarative Programmierung gehen,
 dann landen wir bei der logischen Programmierung. In der logischen
 Programmierung bleibt uns gar nichts anderes übrig als deklarativ
 vorzugehen. Es gibt einfach keine anderen Werkzeuge als die
-Beschreibung. Wir werden deshalb im folgenden Sudoku mithilfe der
-logischen Programmierung lösen, um zu sehen, wie praktikabel dieser
-Ansatz ist. Zunächst müssen wir dazu verstehen, welche Theorie hinter
-der logischen Programmierung steht.
+Beschreibung. Wir werden deshalb im folgenden das Seminarproblem
+mithilfe der logischen Programmierung lösen, um zu sehen, wie
+praktikabel dieser Ansatz ist. Zunächst müssen wir dazu verstehen,
+welche Theorie hinter der logischen Programmierung steht.
 
 
-## Die Aussagenlogik und das SAT-Problem
+## Das SAT-Problem
 
-z3 ist ein sogenannter SAT-Solver. SAT steht für englisch
-_Satisfiability_ und beschreibt eines der schwierigsten Probleme in
-der theoretischen Informatik, das [Erfüllbarkeitsproblem der
+Die logische Programmierumgebung, die wir nutzen möchten, wird von
+Microsoft z3 bereitgestellt. z3 ist ein sogenannter SAT-Solver. SAT
+steht für englisch Satisfiability. Es handelt sich dabei um den Namen
+eines der schwierigsten Probleme in der theoretischen Informatik, dem
+[Erfüllbarkeitsproblem der
 Aussagenlogik](https://de.wikipedia.org/wiki/Erfüllbarkeitsproblem_der_Aussagenlogik).
-Sudoku und viele andere Rätsel sind Abwandlungen dieses SAT-Problems.
+Viele Resourcenplanungsprobleme sind Ausprägungen dieses Problems, so
+auch unser Seminarproblem.
 
 Die Aussagenlogik besteht aus Variablen, Und-Verknüpfungen,
 Oder-Verknüpfungen, Negation und den beiden Wahrheitswerten `true` und
@@ -101,13 +111,14 @@ einfach Wahrheitswerte zuweisen. Die Wahrheitswerte der Ausdrücke
 hängen von den Wahrheitswerten der Variablen ab.
 
 ```
-(x oder y) und (x und (nicht z))
+   (x oder y) und (x und (nicht z))
 ```
 
 Wir können uns aber eine ganz zentrale Frage stellen: Gibt es
-überhaupt eine Lösung, bei der jeder Variablen ein fester Wahrheitswert
-zugeordnet wird und der Gesamtausdruck zu true ausgewertet werden
-kann? Und falls ja: welche Wahrheitswerte nehmen dann die Variablen an?
+überhaupt eine Lösung, bei der jeder Variablen ein fester
+Wahrheitswert zugeordnet wird und der Gesamtausdruck zu true
+ausgewertet werden kann? Und falls ja: welche Wahrheitswerte nehmen
+dann die Variablen an?
 
 Das Beispiel oben hat mindestens eine gültige Zuordnung. Wenn wir für
 x true, für y false und für z false einsetzen, wertet der Ausdruck zu
@@ -127,78 +138,63 @@ Kombinationen entspricht hier dem Suchraum und der wird schon für
 moderate Probleminstanzen enorm groß.
 
 
-## Sudoku als aussagenlogisches Problem
+## z3
 
-Auch bei Sudoku könnten wir alle Zahlenkombinationen durchprobieren.
-Es gibt insgesamt 9x9=81 Felder. Wenn wir annehmen, dass 21 Felder
-schon vorausgefüllt sind, bleiben noch 60 Felder, die wir mit den
-Zahlen von 1 bis 9 ausfüllen müssen. Das sind dann 10 hoch 60
-Möglichkeiten. Viel Spaß!
+Wir wollen also davon Abstand nehmen, unser Seminarproblem mit einem
+selbst entworfenen Algorithmus zu lösen, weil das Problem nicht
+greifbar ist, was daran liegen könnte, dass es sich um eine Form des
+SAT-Problems handelt: Wir stehen vor einem riesigen Suchraum, der
+exponentiell mit der Größe des Problems wächst. Eine schrittweise
+Zerlegung des Problems in Teilprobleme finden wir auch nicht auf Anhieb.
 
-Wir wählen einen anderen Weg. Wir formulieren ein gegebenes
-Sudokuspielfeld als aussagenlogisches Programm und lassen dann z3
-darauf los. z3 ist ein allgemeiner Problemlöser für SAT-Probleme. Die
-Software wird von Microsoft Research entwickelt und enthält das Wissen
-aus jahrzehntelanger Forschung zu dieser Klasse von schwierigen
-Problemen. Entsprechend schnell kann z3 solche Probleme lösen.
+Das SAT-Problem ist theoretisch zwar ein sehr schwieriges, aber zum
+Glück nur im schlimmsten Fall. In der Praxis sind die meisten
+konkreten Probleme trotzdem in angemessener Zeit lösbar. Das liegt
+daran, dass die SAT-Probleme, die in der Praxis auftreten, doch noch
+etwas mehr Struktur enthalten, als das theoretisch allgemeinste
+Problem. Forscher haben jahrzehntelang versucht, diese Struktur
+auszunutzen, um solche Probleme zu bezwingen. Vor einigen Jahren
+erzielte die Wissenschaft den Durchbruch. Die eigentlich schwierigen
+Probleme konnten plötzlich in Sekundenschnelle gelöst werden. Im
+SAT-Solver z3 von Microsoft Research laufen all diese
+wissenschaftlichen Fortschritte zusammen und sind damit auch für
+Praktiker nutzbar.
 
-### z3 und SMT-LIB 2
+Wir könnten also unser Seminarproblem in ein SAT-Problem übersetzen
+und dann z3 die schwierige Arbeit erledigen lassen. Genau das wollen
+wir im Folgenden tun. Dazu müssen wir zunächst das Format
+kennenlernen, in welchem z3 diese SAT-Probleme entgegennimmt.
+
+
+## SMT-LIB 2
 
 z3 nimmt SAT-Probleme im speziellen Format [SMT-LIB
 2](http://smtlib.cs.uiowa.edu) entgegen. SMT-LIB 2 ist eine logische
 Programmiersprache für SAT-Probleme. Ein SMT-LIB-2-Programm teilt sich
-in drei Teile auf: Datentypdeklarationen, Variablendeklarationen und
-Assertions. Betrachten wir zunächst eine abgespeckte Variante des
-Sudokuspiels. Wir haben nur eine einzelne Reihe aus neun Felder, denen
-wir jeweils unterschiedliche Ziffern zuweisen möchten. Wir können in
-SMT-LIB zunächst die neun Ziffern mit einer Datentypdeklaration beschreiben:
+in zwei Teile auf: Variablendeklarationen und Assertions. Wir können
+das oben beschriebene SAT-Problem in SMT-LIB 2 wie folgt ausdrücken:
 
 ```scheme
-(declare-datatypes () ((Ziffer Eins Zwei Drei Vier Fuenf Sechs Sieben Acht Neun)))
+(declare-const x Bool)
+(declare-const y Bool)
+(declare-const z Bool)
+
+(assert
+  (and
+    (or x y)
+    (and x (not z))))
+
+(check-sat)
+(get-model)
 ```
 
-Dieser Datentyp beschreibt eine geschlossene Aufzählung, ist also ein
-Enum-Typ. Wir können für die neun Felder jetzt Variablen mit diesem
-Typen anlegen:
-
-```scheme
-(declare-const x1 Ziffer)
-(declare-const x2 Ziffer)
-(declare-const x3 Ziffer)
-(declare-const x4 Ziffer)
-(declare-const x5 Ziffer)
-(declare-const x6 Ziffer)
-(declare-const x7 Ziffer)
-(declare-const x8 Ziffer)
-(declare-const x9 Ziffer)
-```
-
-Die Variablen können also die Werte `Eins`, `Zwei`, `Drei` und so
-weiter annehmen. Jetzt möchten wir noch ausdrücken, dass die neun
-Variablen alle unterschiedliche Werte erhalten sollen. Das können wir
-mithilfe einer Assertion bewerkstelligen. Wir wollen zuerst bestimmen,
-dass die Variablen `x1` und `x2` unterschiedliche Werte bekommen:
-
-```scheme
-(assert (not (= x1 x2)))
-```
-
-Diese Ungleichheit gilt auch für `x1` und `x3`. Wir können diese
-Bedingung mit `and` an die erste Bedingung anhängen:
-
-```scheme
-(assert (and (not (= x1 x2))
-             (not (= x1 x3))))
-```
-
-Wenn wir das bis zum bitteren Ende so weitermachen, werden wir zum
-Hirsch. SMT-LIB 2 bietet deshalb eine Funktion `distinct`, um
-ausdrücken zu können, dass mehrere Werte unterschiedlich sein
-sollen:
-
-```scheme
-(assert (distinct x11 x12 x13 x14 x15 x16 x17 x18 x19))
-```
+In den ersten drei Zeilen deklarieren wir die drei Variablen x, y, und
+z. Danach folgt die Assertion, also der Ausdruck, den wir gerne zu
+true ausgewertet sehen möchten. In der vorletzten Zeile geben wir die
+Anweisung, das Problem auf Erfüllbarkeit zu prüfen. Wenn das Problem
+erfüllbar ist, dann gibt es auch ein Modell, also eine
+Variablenbelegung, die die Erfüllbarkeit beweist. Dieses Modell lassen
+wir uns mit `(get-model)` in der letzten Zeile ausgeben.
 
 z3 kann im Web direkt ausprobiert werden. Wir können unser Programm in
 den [Online-Editor](https://rise4fun.com/Z3/) übertragen und von z3
@@ -207,48 +203,308 @@ ausführen lassen. Die Ausgabe lautet:
 ```scheme
 sat
 (model 
-  (define-fun x13 () Ziffer
-    Fuenf)
-  (define-fun x16 () Ziffer
-    Vier)
-  (define-fun x17 () Ziffer
-    Sechs)
-  (define-fun x18 () Ziffer
-    Sieben)
-  (define-fun x14 () Ziffer
-    Drei)
-  (define-fun x12 () Ziffer
-    Eins)
-  (define-fun x19 () Ziffer
-    Zwei)
-  (define-fun x15 () Ziffer
-    Neun)
-  (define-fun x11 () Ziffer
-    Acht)
-  )
+  (define-fun z () Bool
+    false)
+  (define-fun x () Bool
+    true)
+)
 ```
 
-Wir sehen, dass z3 ein Modell gefunden hat. Das Modell sieht auch so
-aus, wie wir uns das vorgestellt haben. Der Online-Editor ist sehr
-hilfreich für iteratives Modellieren. Wir können zwischendurch immer
-mal wieder schauen, ob die produzierten Ergebnisse auch unseren
-Erwartungen entsprechen. Falls das nicht der Fall ist, haben wir einen
-Fehler in der Spezifikation gemacht.
-
-Um ein komplettes 9x9-Sudokufeld zu beschreiben, benötigen wir 81
-Variablen. Wir nennen die Variablen für die Ziffern `xij` für `i` als
-Zeilennummer und `j` als Spaltennummer. Für jede Zeile und Spalte
-benötigen wir dann eine Assertion mit `distinct` wie oben. Wir
-brauchen auch noch neun weitere `distinct`-Assertions für die neun
-Blöcke. Zu guter Letzt werden einige Felder vorausgefüllt sein. Diese
-Vorbelegungen müssen wir auch noch in Assertions packen. Wenn
-beispielsweise das Feld in der dritten Zeile und sechsten Spalte eine
-9 enthält, müssen wir folgende Assertion hinzufügen:
+Wir sehen, dass z3 ein Modell gefunden hat. Die Variable z ist in
+diesem Modell false und die Variable x ist true. Die Variable y
+scheint unerheblich zu sein, darf also sowohl true als auch false
+sein. Um diesen Verdacht zu bestätigen, können wir z3 so
+konfigurieren, dass es uns immer ein vollständiges Modell ausgibt.
+Dazu fügen wir am Anfang des Programms den Ausdruck `(set-option
+:model_evaluator.completion true)` hinzu. Um dann einen Ausdruck
+auszuwerten, können wir `eval` verwenden. Das ganze Programm sieht
+dann so aus:
 
 ```scheme
-(assert (= 9 x36))
+(set-option :model_evaluator.completion true)
+(declare-const x Bool)
+(declare-const y Bool)
+(declare-const z Bool)
+
+(assert
+  (and
+    (or x y)
+    (and x (not z))))
+
+(check-sat)
+(eval x)
+(eval y)
+(eval z)
 ```
 
-Das komplette Programm ist sehr lang, weshalb wir es hier nicht
-listen. z3 braucht für die Berechnung der Lösung des Programms nur
-wenige Sekunden.
+SMT-LIB 2 erlaubt auch die Verwendung von Funktionen. Diese Funktionen
+verhalten sich etwas anders als Funktionen in herkömmlichen Sprachen.
+In SMT-LIB 2 müssen wir die Funktionen nicht selbst implementieren.
+Wir sagen lediglich, dass es eine Funktion gibt und spezifizieren dann
+von außen einige Einschränkungen darüber, wie sich die Funktion zu
+verhalten hat.
+
+```scheme
+(declare-fun f (Bool) Int)
+
+(assert (= 5 (f false)))
+(assert (> (f true) 23))
+
+(check-sat)
+(get-model)
+```
+
+Hier sehen wir, wie mit `declare-fun` eine Funktion deklariert wird.
+Wir sagen lediglich, dass die Funktion Bool-Werte (true oder false)
+auf Ganzzahlen abbildet. Desweiteren sagen wir, dass die Funktion auf
+false angewendet zu 5 auswerten soll. Auf true angewendet soll die
+Funktion eine Zahl größer 23 zurückgeben. z3 generiert jetzt für uns
+eine Implementierung der Funktion. Die Ausgabe sieht so aus:
+
+```scheme
+sat
+(model 
+  (define-fun f ((x!0 Bool)) Int
+    (ite (= x!0 false) 5
+    (ite (= x!0 true) 24
+      5)))
+)
+```
+
+z3 hat wieder ein Modell gefunden und uns dabei die Funktion `f`
+implementiert. `ite` steht für "if then else". Die Implementierung
+sagt, dass die Funktion 5 zurück gibt, wenn die Eingabe false ist.
+Wenn die Eingabe true ist, gibt sie 24 zurück.
+
+
+## Das Seminarproblem in SMT-LIB 2
+
+Mit diesen Werkzeugen können wir jetzt unser eigentliches Problem
+mithilfe von z3 lösen.
+
+
+### Die Umgebung
+
+Wir wollen als Erstes die Teilnehmerinnen in SMT-LIB 2 abbilden. Die
+Gesamtheit aller Teilnehmerinnen bildet eine Menge. Der entsprechende
+Typ ist damit eine geschlossene Aufzählung, ein Enum-Typ. Wir können
+Enums in SMT-LIB 2 mit `declare-datatypes` erstellen:
+
+```scheme
+(declare-datatypes () ((Teilnehmerin Anna Sarah Martha Salma Daisy)))
+```
+
+`Teilnehmerin` ist jetzt ein Typ-Name wie `Integer`. `Anna`, `Sarah`,
+`Martha`, `Salma` und `Daisy` sind die Werte, die Variablen dieses
+Typen annehmen können.
+
+Wir übersetzen Tische und Plätze genauso in Enum-Typen:
+
+```scheme
+(declare-datatypes () ((Tisch id-tisch-1 id-tisch-2 id-tisch-3)))
+(declare-datatypes () ((Platz id-platz-a id-platz-b id-platz-c
+                              id-platz-d id-platz-e id-platz-f)))
+```
+
+Jetzt fehlt uns noch die Zuordnung von Tischen zu Plätzen. Jeder Tisch
+hat einen Platz links und einen Platz rechts. Es gibt mehrere
+Möglichkeiten, diesen Zusammenhang zu modellieren. Wir entscheiden uns
+dafür, zwei Funktionen einzuführen: `platz-links` und `platz-rechts`,
+die jeweils einen Tisch auf einen Platz abbilden.
+
+```scheme
+(declare-fun platz-links (Tisch) Platz)
+(declare-fun platz-rechts (Tisch) Platz)
+```
+
+Wenn wir jetzt keine weiteren Angaben machen, generiert uns z3
+automatisch eine Implementierung dieser zwei Funktionen. Das ist in
+diesem Fall noch nicht das, was wir wollen. Wir wissen genau, wie sich
+die Funktionen zu verhalten haben. Entsprechend müssen wir die
+Funktionen in SMT-LIB noch mithilfe einiger Assertions einschränken:
+
+```scheme
+(assert (= (platz-links id-tisch-1) id-platz-a))
+(assert (= (platz-rechts id-tisch-1) id-platz-b))
+
+(assert (= (platz-links id-tisch-2) id-platz-c))
+(assert (= (platz-rechts id-tisch-2) id-platz-d))
+
+(assert (= (platz-links id-tisch-3) id-platz-e))
+(assert (= (platz-rechts id-tisch-3) id-platz-f))
+```
+
+Zu diesem Zeitpunkt haben wir unsere Modellierung so festgezurrt, dass
+z3 gar nichts berechnen muss. Alles ist schon da. Das ist auch richtig
+so, denn bisher haben wir nur das Universum beschrieben, innerhalb
+dessen wir nun ein Problem lösen möchten.
+
+
+### Die Beschreibung der Lösung
+
+Die nächste Frage, die wir uns stellen müssen, ist: wie soll eine
+Lösung aussehen? Wir möchten Teilnehmerinnen und Sitzplätze
+verknüpfen, also eine Abbildunge zwischen diesen beiden Mengen finden.
+Die Abbildung ist jedoch nicht beliebig. Jeder Teilnehmerin soll genau
+ein Platz zugeordnet werden. Diese Eigenschaft wird von einer Funktion
+erfüllt:
+
+```scheme
+(declare-fun loesung (Teilnehmerin) Platz)
+```
+
+Das gesamte bisherige Programm sieht damit wie folgt aus.
+
+```scheme
+(set-option :model_evaluator.completion true)
+
+(declare-datatypes () ((Teilnehmerin id-anna id-sarah id-martha id-salma id-daisy)))
+
+(declare-datatypes () ((Tisch id-tisch-1 id-tisch-2 id-tisch-3)))
+(declare-datatypes () ((Platz id-platz-a id-platz-b id-platz-c
+                              id-platz-d id-platz-e id-platz-f)))
+
+(declare-fun platz-links (Tisch) Platz)
+(declare-fun platz-rechts (Tisch) Platz)
+
+(assert (= (platz-links id-tisch-1) id-platz-a))
+(assert (= (platz-rechts id-tisch-1) id-platz-b))
+
+(assert (= (platz-links id-tisch-2) id-platz-c))
+(assert (= (platz-rechts id-tisch-2) id-platz-d))
+
+(assert (= (platz-links id-tisch-3) id-platz-e))
+(assert (= (platz-rechts id-tisch-3) id-platz-f))
+
+(declare-fun loesung (Teilnehmerin) Platz)
+
+(check-sat)
+(get-model)
+(eval (loesung id-anna))
+(eval (loesung id-sarah))
+(eval (loesung id-martha))
+(eval (loesung id-salma))
+(eval (loesung id-daisy))
+```
+
+Um an die Plätze der fünf Teilnehmerinnen zu gelangen, verwenden wir
+ganz am Ende wieder `eval`.
+
+Wir können das so definierte Programm im Online-Editor ausprobieren.
+Ein großer Vorteil des Online-Editors ist, dass wir iterativ
+modellieren können und so sehr schnell sehen, wo unsere
+Spezifikationen noch Lücken haben. In diesem Fall gibt uns z3 direkt
+eine unerwünschte "falsche" Lösung. Alle fünf Teilnehmerinnen werden
+auf den selben Platz gesetzt! Diese Lösung entspricht jedoch
+tatsächlich unserer bisherigen Spezifikation. Wir haben also
+vergessen, einige wichtige Angaben zu spezifizieren.
+
+Wir möchten, dass jeder Platz von maximal einer Teilnehmerin besetzt
+wird. Die Funktion, die Teilnehmerinnen auf Plätze abbildet, muss also
+[injektiv](https://de.wikipedia.org/wiki/Injektive_Funktion) sein. Wir
+können die Formel für Injektivität eins zu eins in SMT-LIB 2 ausdrücken.
+
+```scheme
+(declare-fun loesung (Teilnehmerin) Platz)
+
+(assert (forall ((t1 Teilnehmerin))
+          (forall ((t2 Teilnehmerin))
+            (=> (= (loesung t1) (loesung t2))
+                (= t1 t2)))))
+```
+
+In der Assertion verwenden wir ein neues Konstrukt, den sogenannten
+Allquantor `forall`. `forall` nimmt als erstes Argument ein Paar aus
+einem frischen Variablennamen und einem Typen und als zweites Argument
+einen Ausdruck, worin der neue Variablenname verwendet wird. Der
+gesamte, allquantifizierte Ausdruck wird nur dann wahr, wenn der
+innere Ausdruck für alle Variablenbelegung wahr ist.
+
+Die Assertion sagt aus, dass zwei Teilnehmerinnen nur dann auf den
+selben Platz abgebildet werden dürfen, wenn es sich um ein und
+dieselbe Teilnehmerin handelt. Mit diesem Zusatz erhalten wir eine
+gültige Lösung von z3.
+
+
+### Die Regeln
+
+Jetzt müssen wir noch die Regel "Anna will nicht neben Sarah sitzen"
+umsetzen. Dieses Verbot müssen wir in eine weitere Assertion in dem
+SMT-LIB-2-Programm übersetzen. Dazu müssen wir uns klar werden, was
+das Verbot genau ausdrückt. Was bedeutet es, nebeneinander zu sitzen?
+Zum Zwecke dieses Artikels sagen wir, dass zwei Teilnehmerinnen
+nebeneinandersitzen, wenn sie am selben Tisch sitzen. Zwei
+Teilnehmerinnen Anna und Sarah sitzen am selben Tisch T, wenn entweder
+Anna am linken Platz des Tisches T und Sarah am rechten Platz des
+Tisches T sitzt, oder umgekehrt. Es darf also keinen solchen Tisch T
+geben. Wir können dafür einen neuen Quantor benutzen, den
+Existenzquantor `exists`:
+
+```scheme
+(assert (not (exists ((t Tisch))
+               (or
+                 (and
+                   (= (loesung id-anna)
+                      (platz-links t))
+                   (= (loesung id-sarah)
+                      (platz-rechts t)))
+                 (and
+                   (= (loesung id-anna)
+                      (platz-rechts t))
+                   (= (loesung id-sarah)
+                      (platz-links t)))))))
+```
+
+Das Nebensitzergebot mit Martha und Salma sieht ganz ähnlich aus. Der
+einzige Unterschied ist, dass das `not` am Anfang entfällt.
+
+```scheme
+(assert (exists ((t Tisch))
+           (or
+             (and
+               (= (loesung id-martha)
+                  (platz-links t))
+               (= (loesung id-salma)
+                  (platz-rechts t)))
+             (and
+               (= (loesung id-martha)
+                  (platz-rechts t))
+               (= (loesung id-salma)
+                  (platz-links t))))))
+```
+
+Wenn wir diese zwei Assertions zum Programm hinzufügen, erhalten wir
+vom Online-Editor wieder eine Lösung, die dieses Mal allen unseren
+Anforderungen genügt. Wir haben das Seminarproblem in weniger als 60
+Zeilen Code beschrieben und automatisch lösen lassen. z3 braucht für
+die Berechnung der Lösung auf einem modernen Rechner weniger als eine
+Sekunde.
+
+
+## Abschließende Gedanken
+
+Wir haben jetzt ein schwieriges Problem in ein SAT-Problem übersetzt
+und den allgemeinen Problemlöser z3 darauf angesetzt, das Problem zu
+lösen, anstatt uns selbst einen komplizierten Algorithmus auszudenken.
+z3 kann solche Probleme erstaunlich schnell lösen, obwohl es sich
+theoretisch um die schwierigsten Probleme handelt, die die Informatik
+zu bieten hat. Allgemeine Problemlöser wie z3 finden in diesen
+Problemen noch genug Struktur, um mithilfe einiger Tricks schnell zu
+Ergebnissen zu gelangen. Ist das nicht eigentlich unintuitiv? Die
+Struktur, die z3 ausnutzt ist schließlich von Anfang an in der
+Probleminstanz enthalten. Durch die Übersetzung in ein SAT-Problem
+geht wahrscheinlich sogar noch Struktur verloren. Ist es nicht doch
+so, dass wir uns mit dem Wissen über das ursprüngliche Problem selbst
+einen viel schnelleren Algorithmus ausdenken könnten?
+
+Theoretisch ist die Antwort auf diese Frage Ja. Aber es verhält sich
+hier wahrscheinlich wie bei handoptimiertem Maschinencode. Theoretisch
+könnten wir als Programmierer jeden Compiler schlagen, indem wir
+Algorithmen ausschließlich in Maschinencode schreiben würden. In der
+Praxis sind Optimierungen in modernen Compilern aber so gut, dass sie
+in 99% der Fälle besseren Code produzieren können als ein Mensch. Der
+Mensch ist viel besser, abstrakt zu denken und den Dschungel an
+Informationen so aufzubereiten, dass er für spezialisierte Software
+wie z3 überhaupt verständlich wird.
+
+<!-- more end -->
