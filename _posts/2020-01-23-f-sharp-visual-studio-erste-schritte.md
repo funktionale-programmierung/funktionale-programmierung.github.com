@@ -1,7 +1,7 @@
 ---
 layout: post
 description: Projekterstellung, F# Interactive, Haltepunkte, Tests und vieles mehr
-title: "Erste Schritte mit F# in Visual Studio"
+title: "Einstieg in Visual Studio mit F#"
 author: tim-digel
 tags: ["F#", "F Sharp", "Visual Studio", "Einführung", "Erste Schritte", "Projekt", "Start"]
 ---
