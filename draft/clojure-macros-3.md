@@ -11,7 +11,7 @@ Clojure](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html)
 und [Makros in Clojure -
 2](https://funktionale-programmierung.de/2019/09/17/clojure-macros-2.html) die
 für die Praxis relevanten Makro-Befehle kennengelernt haben, widmen wir uns in
-diesem Blogpost einigen Beispielen zu Makros in Clojure. Insbesondere werden wir
+diesem Blogpost zwei Beispielen zu Makros in Clojure. Insbesondere werden wir
 unser eigenes Record-Makro erstellen. Es empfiehlt sich, die vorherigen Beiträge
 gelesen zu haben.
 
@@ -23,17 +23,17 @@ zu finden. Wir empfehlen, ihn während des Lesens Stück für Stück auszuführe
 
 ## Warmup
 
-Bisher haben wir nur Makros, die es schon in`clojure.core` gibt, nachgebaut.
+Bisher haben wir nur Makros, die es schon in `clojure.core` gibt, nachgebaut.
 Heute erweitern wir Clojure zum ersten Mal um ein neues, sinnvolles Makro! Das
 Konstrukt `when-let` ist ähnlich zu `when`, lässt jedoch zusätzlich den
 Testausdruck an ein Symbol binden:
 
 ```clojure
 (when-let [x (:name {:name "Bruno" :age 42})]
-  (str "Hello " x)) ;; => "Hello Bruno"
+  (str "Hello " x))       ; => "Hello Bruno"
 
 (when-let [x (:last-name {:name "Bruno" :age 42})]
-  (str "Hello Mr. " x)) ;; => nil
+  (str "Hello Mr. " x))   ; => nil
 
 ```
 
@@ -41,19 +41,19 @@ Wir hätten gerne eine `when-let`-Version, die mehrere Bindungen zulässt, aber
 abbricht, sobald ein Wert davon `nil` bzw. `false` ist:
 
 ```clojure
-(when-let* [r {:person {:name "Kim" :age "42"}}
-            person (:person r)
+(when-let* [m {:person {:name "Kim" :age "42"}}
+            person (:person m)
             name (:name person)]
-  (str "Der Person-Record " person " enthält den Namen " name))
+  (str "Die Person-Map " person " enthält den Namen " name))
 ```
 
 Bisher ist das nur so möglich:
 
 ```clojure
-(when-let [r {:person {:name "Kim" :age "42"}}]
-  (when-let [person (:person r)]
+(when-let [m {:person {:name "Kim" :age "42"}}]
+  (when-let [person (:person m)]
     (when-let [name (:name person)]
-      (str "Der Person-Record " person " enthält den Namen " name))))
+      (str "Die Person-Map " person " enthält den Namen " name))))
 ```
 
 Anhand dieses Codeschnipsels können wir direkt ableiten, was im Makro zu tun
@@ -79,13 +79,14 @@ Bindung einen `when-let`-Ausdruck erzeugen:
 Zuvor testen wir zur Makro-Expansionszeit, ob nicht grober Unfug bei der
 Benutzung von `when-let*` gemacht wurde. Dann überprüfen wir, ebenfalls zur
 Expansionszeit, ob der `bindings`-Vektor leer ist, es also keine Bindungen mehr
-zu erzeugen gilt. AlsKonsequente wird `body` zurückgeliefert, ansonsten bauen
+zu erzeugen gilt. Als Konsequente wird `body` zurückgeliefert, ansonsten bauen
 wir uns die Bindung für das erste `when-let` zusammen und rekursieren mit den
 restlichen Bindungen.
 
 Schön, dieses Makro ist eine echte Erleichterung sowohl für das Schreiben, als
 auch für die Lesbarkeit. Nun widmen wir uns einem weitaus umfangreicheren
-Makro-Beispiel, das so ähnlich tagtäglich von der Active Group benutzt wird.
+Makro-Beispiel, das in ähnlicher Form tagtäglich von uns Active
+Group-EntwicklerInnen benutzt wird.
 
 ## Das Record-Makro
 
@@ -103,7 +104,7 @@ das Computer-Beispiel aus obigem Beitrag. Nach Auswertung von
 (defrecord Computer [cpu ram hard-drive])
 ```
 
-können wir, mithilfe des dadurch zur Verfügung gestellten Record-Konstruktors
+können wir, mithilfe des dadurch zur Verfügung gestellten Recordkonstruktors
 `->Computer`, Computer-Records erstellen, die drei Felder besitzen, `cpu`,
 `ram` und `hard-drive`:
 
@@ -113,23 +114,18 @@ können wir, mithilfe des dadurch zur Verfügung gestellten Record-Konstruktors
 ```
 
 Weiter ist es möglich, via *Keywords* auf die einzelnen Felder zuzugreifen,
-beispielsweise liefert `(:ram office-pc)` den Wert `2` und `(:hard-drive
-gaming-pc)` den Wert `1000`.
+beispielsweise liefern `(:ram office-pc)` und `(:hard-drive gaming-pc)` die
+Werte `2` und `1000`.
 
-Wir schreiben nun unseren eigenen Recordtypkonstruktor! Dieser muss folgende
-Funktionen liefern: 
+Wir schreiben nun unseren eigenen Recordtypkonstruktor, `def-my-record`. Dieser
+muss folgende Funktionen liefern:
 
 - einen Recordkonstruktor
 - Feld-Selektoren
 - Typ-Prädikat
 
-Der Recordtypkonstruktor, wir werden ihn `def-my-record` nennen, muss mindestens
-folgende Argumente konsumieren:
-
-- Recordtyp-Name
-- Recordtypfelder-Namen
-
-Das Skelett des Recordtypkonstruktors sieht damit so aus:
+Als Argumente konsumiert er einen Recordtyp-Namen und Recordtypfelder-Namen. Das
+Skelett des Makros sieht dann so aus:
 
 ```clojure
 (defmacro def-my-record
@@ -148,7 +144,7 @@ Struktur eines Records verwenden wir eine Clojure-*Hashmap*.
 Ein nicht automatisch generierter Konstruktor für Computer-Records lautet:
 
 ```clojure
-(defn ->>Computer
+(defn ->>computer
   [cpu ram hard-drive]
   {:cpu cpu
    :ram ram
@@ -158,46 +154,42 @@ Ein nicht automatisch generierter Konstruktor für Computer-Records lautet:
 und wir können den Office-Computer via 
 
 ```clojure
-(->>Computer "Intel I5 6600 3600 MHz" 16 1000)
+(->>computer "Intel I5 6600 3600 MHz" 16 1000)
 ```
 
 erzeugen. 
 
 Nun zum Makro: Wir müssen also Code schreiben, der uns obigen Ausdruck als
 Clojure-Liste zurückgibt. Den Namen der Funktion erhalten wir durch
-Konkatenation von `"->>"` und `type-name`. De Parametervektor ist einfach der
-übergebene Feldnamen-Vektor. Schlussendlich erzeugen wir die Hashmap indem wir
+Konkatenation von `"->>"` und `type-name`. Der Parametervektor ist einfach der
+übergebene Feldnamen-Vektor. Schlussendlich erzeugen wir die Hashmap, indem wir
 über die Feldnamen-Liste iterieren und Tupel erzeugen:
 
 ```clojure
-(defmacro def-my-record1
+(defmacro def-my-record
   [type-name & field-names]
-  `(do
-     (defn ~(symbol (str "->>" type-name))
-       ~(vec field-names)
-       ~(into {}
-              (map (fn [field-name]
-                     [(keyword field-name) field-name])
-                   field-names)))))
+  `(defn ~(symbol (str "->>" type-name))
+     ~(vec field-names)
+     ~(into {}
+            (map (fn [field-name]
+                   [(keyword field-name) field-name])
+                 field-names))))
 ```
 
 Wir können mithilfe von `macroexpand-1` überprüfen, ob tatsächlich der
 gewünschte Code erzeugt wird:
 
 ```clojure
-(macroexpand-1 '(def-my-record1 Computer [cpu ram hard-drive]))
+(macroexpand-1 '(def-my-record computer [cpu ram hard-drive]))
 
---> (do 
-      (clojure.core/defn ->>Computer 
+;; => (clojure.core/defn ->>computer 
                          [cpu ram hard-drive] 
-                         {:cpu cpu, :ram ram, :hard-drive hard-drive}))
+                         {:cpu cpu, :ram ram, :hard-drive hard-drive})
 ```
 
-Der `do`-Befehl ist bis jetzt eigentlichnoch unnötig, wir werden ihn gleich,
-sobald der Recordtypkonstrukor mehrere Funktionen erzeugen soll, brauchen.
-
-Bevor wir dazu aber übergehen, wollen wir das Recordkonstruktor-Erzeugen noch
-auslagern:
+Da das Recordtypkonstruktor-Makro noch weitere Funktionen erzeugen wird, lagern
+wir, bevor wir fortfahren, das Recordkonstruktor-Erzeugen noch in eine eigene
+Funktion aus:
 
 ```clojure
 (defn create-record-constructor
@@ -219,33 +211,33 @@ Beim Testen der neuen Recordkonstruktor-Erzeugerfunktion müssen wir darauf
 achten, dass diese Symbole konsumiert:
 
 ```clojure
-(create-record-constructor 'Computer ['cpu 'ram 'hard-drive])
+(create-record-constructor 'computer ['cpu 'ram 'hard-drive])
 ```
 
 ### Selektoren
 
 Wir können nun eigene Recordtypen und dazugehörige Records erzeugen. Auf die
 einzelnen Feldwerte der Records ist es, wie bei den Clojure-`defrecord`s auch,
-bereits möglich, mit Keywords zugreifen:
+bereits möglich, mit Keywords zuzugreifen:
 
 ```clojure
-(:ram (->>Computer "Intel I5 6600 3600 MHz" 16 1000))
+(:ram (->>computer "Intel I5 6600 3600 MHz" 16 1000))
 
---> 16
+;; => 16
 
 ```
 
 Der Keywordzugriff ist in manchen Situationen jedoch problematisch: Ob ein
-Feldwert tatsächlich `nil` ist oder sich ein Vertipper (z. B. `:ran` statt
-`:ram`) eingeschlichen hat, ist hier nicht unterscheidbar! Deshalb erzeugen wir
-eigene Selektorfunktionen.
+Feldwert tatsächlich `nil` ist oder sich ein Vertipper (zum Beispiel `:ran`
+statt `:ram`) eingeschlichen hat, ist hier nicht unterscheidbar! Deshalb
+erzeugen wir eigene Selektorfunktionen.
 
 Hier der Code für einen nicht automatisch generierten Computer-Selektor:
 
 ```clojure
-(defn Computer-cpu
-  [Computer]
-  (:cpu Computer))
+(defn computer-cpu
+  [computer]
+  (:cpu computer))
 ```
 
 Für jeden Feldnamen muss solch eine Selektorfunktion erzeugt werden. Dazu lagern
@@ -270,24 +262,24 @@ In den Recordtypkonstruktor übernommen ergibt das:
      ~(create-record-constructor type-name field-names)
      ~@(create-record-accessors type-name field-names)))
 
-(def-my-record Computer [cpu ram hard-drive])
-(def office-pc (->>Computer "INTEL 3000 Mhz" 4 500))
-(Computer-hard-drive office-pc)
+(def-my-record computer [cpu ram hard-drive])
+(def office-pc (->>computer "INTEL 3000 Mhz" 4 500))
+(computer-hard-drive office-pc)
 
---> 500
+;; => 500
 ```
 
 ### Typ-Prädikat
 
 Um die Records auch sinnvoll benutzbar zu machen, benötigen wir noch eine
 Möglichkeit zur Überprüfung, ob ein Record eine Instanz eines bestimmten Typs
-ist. Clojure-Records machen das über `(instance? Computer my-computer)`. Bis
-jetzt gibt unsere Implementierung zu wenig her, um Records verschiedener Typen
-zu unterscheiden. Deshalb fügen wir den Metadaten der erzeugten Hashmap nun ein
-(Key:Val)-Paar `(:__type__ : type-name)` hinzu.
+ist. Clojure-Records machen das über `(instance? Computer my-computer)`. Unsere
+Implementierung ermöglicht uns das bis jetzt noch nicht; wir erzeugen
+schließlich nur eine einfache Hashmap ohne Typinformation. Deshalb fügen wir den
+Metadaten der Hashmap nun ein (Key:Val)-Paar `(:__type__ : type-name)` hinzu.
 
-In `create-record-constructor` müssen wir dazu den `(into {} ...)`-Asudruck um
-einen `vary-meta`-Aufruf
+In `create-record-constructor` müssen wir dazu den `(into {} ...)`-Ausdruck um
+einen `vary-meta`-Aufruf erweitern:
 
 ```clojure
 (vary-meta (into {}
@@ -297,18 +289,18 @@ einen `vary-meta`-Aufruf
            (fn [m] (assoc m :__type__ `'~type-name)))
 ```
 
-erweitern. Das kryptisch anmutende `` `'~type-name `` wird weiter unten
+Das kryptisch anmutende `` `'~type-name `` wird weiter unten
 erläutert.
 
-Nun zum *Typ-Prädikat*. Das Typ-Prädikat für `Computer` soll eine Funktion
-`Computer?` sein, sodass `(Computer? thing)` im Falle eines Computer-Records
+Nun zum *Typ-Prädikat*. Das Typ-Prädikat für `computer` soll eine Funktion
+`computer?` sein, sodass `(computer? thing)` im Falle eines Computer-Records
 `true` und ansonsten `false` zurückgibt. Als nicht generische Funktion würden
 wir sie so schreiben:
 
 ```clojure
-(defn Computer? 
+(defn computer? 
   [thing] 
-  (= 'Computer (:__type__ (meta thing))))
+  (= 'computer (:__type__ (meta thing))))
 ```
 
 Wir schreiben also eine Erzeugerfunktion, die zu gegebenen Typnamen eine
@@ -325,48 +317,36 @@ Funktion wie oben zurückgibt:
 Etwas befremdlich könnten `~'thing` und `'~type-name` wirken. Warum nicht
 einfach `thing` statt `~'thing`? Wie im [vorherigen
 Blogpost](https://funktionale-programmierung.de/2019/09/17/clojure-macros-2.html)
-bereits erläutert, qualifiziert das Syntax-Quote (`` ` ``) Symbole. `defn`
+bereits erläutert, qualifiziert das Syntax-Quote `` ` `` Symbole. `defn`
 akzeptiert in der Parameterliste jedoch keine qualifizierten Symbole. `'~` sorgt
 dafür, dass tatsächlich das übergebene Symbol (und nicht `type-name`) dasteht,
 zur Laufzeit aber nicht weiter evaluiert wird. Gleiche Begründung gilt bei ``
-`'~type-name `` aus dem `create-record-constructor`, hier nur das zusätzliche ``
-` ``, da zuvor unquotet wurde.
-
-
-## TODO das hier oben einfügen
-Wir benötigen das zusätzliche `do` um die beiden Funktionsdefinitionen herum,
-weil das Makro ansonsten zur Makro-Expansionszeit zwar beide Ausdrücke
-berechnen, aber nur den Letzten zurückgeben würde.
-## TODO 
+`'~type-name `` aus `create-record-constructor` von oben, hier nur noch
+zusätzlich `` ` ``, da zuvor unquotet wurde.
 
 Nun haben wir alles beisammen, um unsere Records sinnvoll benutzen zu können!
 
-
 ```clojure
-(def-my-record Car color)
-(def fire-truck (->>Car "red"))
-(:color fire-truck)        ; --> "red"
-(Car? fire-truck)          ; --> true
+(def-my-record car [color])
+(def fire-truck (->>car "red"))
+(car-color fire-truck)     ; => "red"
+(car? fire-truck)          ; => true
+(computer? fire-truck)     ; => false
 ```
-
-Durch `(macroexpand-1 '(def-my-record Car color))` können wir uns wieder zeigen
-lassen, ob unser Makro auch die gewünschten Funktionen erstellt.
-
-
-
-## TODO
-Warum eigene Records?
-- Keywordzugriff schlecht vs Accessor
-- instance? doof, besser eigenes Prädikat
-## TODO
-
 
 ## Fazit und Ausblick
 
-Mit Makros können wir auf elegante Art und Weise unsere Programmiersprache
-individuell an gegebene Problemstellungen anpassen. Die Notwendigkeit und
-Wichtigkeit von Makros wurde in diesem ersten Blogpost anhand eines Bedürfnisses
-(Spracherweiterung durch Record-Typen) dargestellt und die Handhabung von Makros
-über die stückweise Entwicklung des Record-Typen nähergebracht.
+Heute wurden zwei nützliche Makros vorgestellt. Das `when-let*`-Makro bringt
+bessere Lesbarkeit und Schreiberleichterung mit sich. Das Record-Makro nimmt der
+Entwicklerin nicht nur Schreibarbeit einzelner Funktionen ab, sondern ermöglicht
+ein erweitertes, datengesteuertes Programmieren. Die [Active Group
+GmbH](www.active-group.de) benutzt ein ähnliches
+[Makro](https://github.com/active-group/active-clojure) in der Entwicklung von
+Clojure-Programmen. 
+
+Neben zusammengesetzten Daten kommen *gemischte Daten* in der Modellierung von
+Programmen vor. In einem nächsten Blogpost werden wir mit Makros Summentypen in
+Clojure entwickeln und damit die Sprache noch weiter erweitern und an unsere
+Vorstellungen anpassen.
 
 <!-- more end -->
