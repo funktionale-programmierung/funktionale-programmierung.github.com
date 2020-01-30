@@ -31,7 +31,7 @@ einen
 [Blogpost](https://funktionale-programmierung.de/2015/04/27/clojure-records.html)
 verfasst. 
 
-Manche Dinge an den Clojure-Records stören jedoch bzw. verleiten zu Fehlern,
+Manche Dinge an den Clojure-Records stören jedoch und verleiten zu Fehlern,
 weshalb wir heute eine eigene Version schreiben wollen.
 
 ### Clojure-Records und die bereits bezahlte Rechnung
@@ -73,21 +73,21 @@ bestimmt: Ein Schreibfehler hat sich eingeschlichen; statt `:paid?` wird `:paid`
 benutzt. Ein Keywordzugriff auf eine Hashmap, in welcher das Keyword nicht
 vorhanden ist, liefert `nil` (näheres dazu z. B.
 [hier](https://stackoverflow.com/questions/6915531/why-does-using-keywords-or-symbols-as-functions-to-lookup-values-from-maps-work)).
-Das ist ärgerlich; solche Fehler fallen unter Umständen für lange Zeit nicht
-auf, da keine Fehlermeldung geworfen sondern ein valider, aber falscher Wert
-geliefert wird.
+Das ist ärgerlich; solche Fehler fallen unter Umständen lange Zeit nicht auf, da
+keine Fehlermeldung geworfen sondern ein valider, aber falscher Wert geliefert
+wird.
 
-Eine weitere Eigenheit von Clojure-Records kommt zutage, weil sie das
-Hashmap-Interface implementieren. Einem Record kann man problemlos weitere Paare
+Eine weitere Eigenheit von Clojure-Records kommt zustande, weil sie das
+Hashmap-Interface implementieren: Einem Record kann man problemlos weitere Paare
 mit `assoc` anfügen. Das allein ist noch nicht fragwürdig, aber dass das
-resultierende Ergebnis trotzdem noch denselben Typ von zuvor hat schon:
+resultierende Ergebnis trotzdem noch denselben Typ von zuvor hat, schon:
 
 ```clojure
 (def rb-2 (assoc restaurant-bill :velocity 100))
 
 rb-2
 ;; => #...Bill{:id 1, :iban "DEXY XYXY XYXY ...", 
-               :amount 48.0, :paid? true, :velocity 100}
+;;             :amount 48.0, :paid? true, :velocity 100}
 
 (instance? Bill rb-2)       ; => true
 ```
@@ -97,9 +97,9 @@ bauen uns deshalb selbst welche!
 
 ## Das Record-Makro
 
-Dazu benötigen wir zuallererst einen Recordtypkonstruktor. Clojure nennt seinen
-`defrecord`, wir wählen `def-record-type`. Folgende Funktionen müssen von ihm
-erzeugt werden:
+Dazu benötigen wir zuallererst einen Recordtypkonstruktor. Der in `clojure.core`
+enthaltene Konstruktor heißt `defrecord`, wir wählen `def-record-type`. Folgende
+Funktionen müssen von ihm erzeugt werden:
 
 - ein Recordkonstruktor
 - Feld-Selektoren
@@ -135,7 +135,7 @@ aussehen:
    :paid? paid?})
 ```
 
-Jetzt können wir die Restaurant-Rechnung via 
+Damit könnten wir eine Restaurant-Rechnung via 
 
 ```clojure
 (make-bill 1 "DEXY XYXY XYXY ..." 48.00 true)
@@ -143,11 +143,11 @@ Jetzt können wir die Restaurant-Rechnung via
 
 erzeugen. 
 
-Nun zum Makro: Wir müssen also Code schreiben, der uns obigen Ausdruck als
-Clojure-Liste zurückgibt. Den Namen der Funktion erhalten wir durch
-Konkatenation von `"make-"` und `type-name`. Der Parametervektor ist einfach der
-übergebene Feldnamen-Vektor. Schlussendlich erzeugen wir die Hashmap, indem wir
-über die Feldnamen-Liste iterieren und Tupel erzeugen:
+Wir müssen also ein Makro schreiben, der uns obigen Ausdruck als Clojure-Liste
+zurückgibt. Den Namen der Funktion erhalten wir durch Konkatenation von
+`"make-"` und `type-name`. Der Parametervektor ist einfach der übergebene
+Feldnamen-Vektor. Schlussendlich erzeugen wir die Hashmap, indem wir über die
+Feldnamen-Liste iterieren und Tupel erzeugen:
 
 ```clojure
 (defmacro def-record-type
@@ -164,7 +164,7 @@ Wir können mithilfe von `macroexpand-1` überprüfen, ob tatsächlich der
 gewünschte Code erzeugt wird:
 
 ```clojure
-(macroexpand-1 '(def-record-type-1 bill [id iban amount paid?]))
+(macroexpand-1 '(def-record-type bill [id iban amount paid?]))
 
 ;; => (clojure.core/defn make-bill
 ;;                       [id iban amount paid?]
@@ -172,8 +172,8 @@ gewünschte Code erzeugt wird:
 ```
 
 Da das Recordtypkonstruktor-Makro noch weitere Funktionen erzeugen wird, lagern
-wir, bevor wir fortfahren, das Erzeugen des Recordkonstruktors noch in eine
-eigene Funktion aus:
+wir, bevor wir fortfahren, das Erzeugen des Recordkonstruktors in eine eigene
+Funktion aus:
 
 ```clojure
 (defn create-record-constructor
@@ -192,7 +192,8 @@ eigene Funktion aus:
 ```
 
 Beim Testen der neuen Recordkonstruktor-Erzeugerfunktion müssen wir darauf
-achten, dass diese Symbole konsumiert:
+achten, dass diese Symbole konsumiert, da es sich um eine Funktion und nicht um
+ein Makro handelt:
 
 ```clojure
 (create-record-constructor 'bill ['id 'iban 'amount 'paid?])
@@ -208,13 +209,10 @@ bereits möglich, mit Keywords zuzugreifen:
 (:amount (make-bill 1 "DEXY XYXY XYXY ..." 48.00 true))
 
 ;; => 48.00
-
 ```
 
 Wie oben erläutert, ist der Keywordzugriff etwas problematisch und deshalb
-erzeugen wir Selektorfunktionen.
-
-Hier der Code für einen nicht automatisch generierten Bill-Selektor:
+erzeugen wir Selektorfunktionen. Diese könnten so aussehen:
 
 ```clojure
 (defn bill-amount
@@ -244,12 +242,15 @@ In den Recordtypkonstruktor übernommen ergibt das:
      ~(create-record-constructor type-name field-names)
      ~@(create-record-accessors type-name field-names)))
 
-(def-record-type-2 bill [id iban amount paid?])
+(def-record-type bill [id iban amount paid?])
 (def the-bill (make-bill 1 "DEXY XYXY XYXY ..." 48.00 true))
 
 (bill-paid? the-bill)
 ;; => true
 ```
+
+Der `~@`-Operator ist nötig, da eine Liste von Formen zurückgegeben wird, die an
+dieser Stelle eingebettet werden muss.
 
 ### Typ-Prädikat
 
@@ -339,21 +340,32 @@ Nun haben wir alles beisammen, um unsere Records sinnvoll benutzen zu können!
 (car? (assoc fire-truck :amount 23))  ; => false
 ```
 
+Wie zu sehen, ist `fire-truck` nach dem Hinzufügen eines weiteren Paares kein
+`car`-Record mehr. Auch das in der Motivation angesprochene Vertippen wird
+bereits vom Compiler verhindert:
+
+```clojure
+(bill-paid the-bill)
+
+;; => Unable to resolve symbol: bill-paid in this context
+```
+
 ## Fazit und Ausblick
 
 Das Record-Makro nimmt der Entwicklerin nicht nur Schreibarbeit einzelner
 Funktionen ab, sondern ermöglicht ein erweitertes, datenflussorientiertes
 Programmieren. Zwar ist es erfreulich, dass Clojure überhaupt Records zur
 Verfügung stellt, aber wie wir gesehen haben, stören einige
-Implementierungsentscheidungen. Diese konnten wir erfolgreich ausmerzen. Das
-eigentlich Hervorragende ist, dass unsere Implementierung auch ohne
-Clojure-Records funktioniert!
+Implementierungsentscheidungen. Clojure ermöglicht es uns mithilfe von Makros,
+bestehende Funktionalität zu erweitern oder ganz zu ersetzen. Das eigentlich
+Hervorragende ist, dass unsere Implementierung ohne Clojure-Records
+funktioniert!
 
 Natürlich sind die hier entworfenen Records nur beispielhaft zu sehen: Um den
 Rahmen des Blogposts nicht zu sprengen, sind ein paar fragwürdige Entscheidungen
 (z. B. für die unterliegende Struktur des Records eine Hashmap zu wählen)
 getroffen worden. Eine wirklich gute Alternative entwickelt und benutzt die
-[Active Group GmbH](www.active-group.de) in der Entwicklung von
+[Active Group GmbH](www.active-group.de) täglich in der Entwicklung von
 Clojure-Programmen:
 [active-clojure-Records](https://github.com/active-group/active-clojure).
 
