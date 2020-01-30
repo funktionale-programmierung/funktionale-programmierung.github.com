@@ -11,8 +11,8 @@ Clojure](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html)
 und [Makros in Clojure -
 2](https://funktionale-programmierung.de/2019/09/17/clojure-macros-2.html) die
 für die Praxis relevanten Makro-Befehle kennengelernt haben, widmen wir uns in
-diesem Blogpost zwei Beispielen zu Makros in Clojure. Insbesondere werden wir
-unser eigenes Record-Makro erstellen. Es empfiehlt sich, die vorherigen Beiträge
+diesem Blogpost einem umfangreichen Beispiel zu Makros in Clojure: Wir werden
+unser eigenes Record-Makro erstellen! Es empfiehlt sich, die vorherigen Beiträge
 gelesen zu haben.
 
 <!-- more start -->
@@ -21,114 +21,95 @@ gelesen zu haben.
 [Github](https://github.com/kaaninho/clojure-macros-example)
 zu finden. Wir empfehlen, ihn während des Lesens Stück für Stück auszuführen.*
 
-## Warmup
+## Records für zusammengesetzte Daten
 
-Bisher haben wir nur Makros, die es schon in `clojure.core` gibt, nachgebaut.
-Heute erweitern wir Clojure zum ersten Mal um ein neues, sinnvolles Makro! Das
-Konstrukt `when-let` ist ähnlich zu `when`, lässt jedoch zusätzlich den
-Testausdruck an ein Symbol binden:
+Immer dann, wenn ein Objekt aus mehreren Teilen besteht, haben wir es mit
+zusammengesetzten Daten zu tun. Diese modellieren wir in Clojure mit sogenannten
+*Records*. Der Kollege [Michael
+Sperber](https://www.active-group.de/teamplayer/05sperber.html) hat dazu bereits
+einen
+[Blogpost](https://funktionale-programmierung.de/2015/04/27/clojure-records.html)
+verfasst. 
 
-```clojure
-(when-let [x (:name {:name "Bruno" :age 42})]
-  (str "Hello " x))       ; => "Hello Bruno"
+Manche Dinge an den Clojure-Records stören jedoch bzw. verleiten zu Fehlern,
+weshalb wir heute eine eigene Version schreiben wollen.
 
-(when-let [x (:last-name {:name "Bruno" :age 42})]
-  (str "Hello Mr. " x))   ; => nil
+### Clojure-Records und die bereits bezahlte Rechnung
 
-```
-
-Wir hätten gerne eine `when-let`-Version, die mehrere Bindungen zulässt, aber
-abbricht, sobald ein Wert davon `nil` bzw. `false` ist:
-
-```clojure
-(when-let* [m {:person {:name "Kim" :age "42"}}
-            person (:person m)
-            name (:name person)]
-  (str "Die Person-Map " person " enthält den Namen " name))
-```
-
-Bisher ist das nur so möglich:
+Wir modellieren eine Rechnung mit gewöhnlichen Clojure-Records: Eine Rechnung
+besteh aus einer ID, einer IBAN, einem zu bezahlenden Betrag und einer
+Markierung, die anzeigt, ob eine Rechnung schon beglichen wurde oder nicht:
 
 ```clojure
-(when-let [m {:person {:name "Kim" :age "42"}}]
-  (when-let [person (:person m)]
-    (when-let [name (:name person)]
-      (str "Die Person-Map " person " enthält den Namen " name))))
+(defrecord Bill [id iban amount paid?])
+
+(def restaurant-bill (->Bill 1 "DEXY XYXY XYXY ..." 48.00 true))
+(def hospital-bill (->Bill 2 "DEYX YXYX YXYX ..." 10.00 false))
 ```
 
-Anhand dieses Codeschnipsels können wir direkt ableiten, was im Makro zu tun
-ist: Wir müssen rekursiv über die Bindungen in `bindings` iterieren und pro
-Bindung einen `when-let`-Ausdruck erzeugen:
+Mit `defrecord` lässt sich der neue Recordtyp `Bill` definieren. Ein
+`Bill`-Record wird mit dem Konstruktor `->Bill` und den jeweiligen Werten für
+die Felder erzeugt. Auf die einzelnen Bestandteile eines Records kann via
+*Keywords* zugegriffen werden: `(:id restaurant-bill)` und `(:amount
+hospital-bill)`liefern die Werte `1` und `10.00`.
+
+Um die Unzulänglichkeiten der Clojure-eigenen Records zu demonstrieren,
+betrachten wir eine Funktion `bills-to-pay`, die aus einer Liste von Rechnungen
+diejenigen entfernt, die schon beglichen worden sind:
 
 ```clojure
-(defmacro when-let*
-  [bindings & body]
-  (assert (vector? bindings) "bindings must be a vector")
-  (assert (= 0 (mod (count bindings) 2))
-          "when-let* requires an even number of forms in bindings")
-  (if (empty? bindings)
-    `(do
-       ~@body)
-    (let [sym (first bindings)
-          value (second bindings)]
-      `(when-let [~sym ~value]
-         (when-let* ~(vec (drop 2 bindings))
-           ~@body)))))
+(defn bills-to-pay
+  [bills]
+  (remove :paid bills))
+
+(bills-to-pay [restaurant-bill hospital-bill])
+;; => (#Bill{:id 1, :iban "DEXY XYXY XYXY ...", :amount 48.0, :paid? true}
+;;     #Bill{:id 2, :iban "DEYX YXYX YXYX ...", :amount 10.0, :paid? false})
 ```
 
-Zuvor testen wir zur Makro-Expansionszeit, ob nicht grober Unfug bei der
-Benutzung von `when-let*` gemacht wurde. Dann überprüfen wir, ebenfalls zur
-Expansionszeit, ob der `bindings`-Vektor leer ist, es also keine Bindungen mehr
-zu erzeugen gilt. Als Konsequente wird `body` zurückgeliefert, ansonsten bauen
-wir uns die Bindung für das erste `when-let` zusammen und rekursieren mit den
-restlichen Bindungen.
+Huch! (oder auch "Ja, holla die Waldfee!!") Wieso wurde die Restaurant-Rechnung
+nicht herausgefiltert? Die Rechnung wurde doch schon beglichen! Sie sehen es
+bestimmt: Ein Schreibfehler hat sich eingeschlichen; statt `:paid?` wird `:paid`
+benutzt. Ein Keywordzugriff auf eine Hashmap, in welcher das Keyword nicht
+vorhanden ist, liefert `nil` (näheres dazu z. B.
+[hier](https://stackoverflow.com/questions/6915531/why-does-using-keywords-or-symbols-as-functions-to-lookup-values-from-maps-work)).
+Das ist ärgerlich; solche Fehler fallen unter Umständen für lange Zeit nicht
+auf, da keine Fehlermeldung geworfen sondern ein valider, aber falscher Wert
+geliefert wird.
 
-Schön, dieses Makro ist eine echte Erleichterung sowohl für das Schreiben, als
-auch für die Lesbarkeit. Nun widmen wir uns einem weitaus umfangreicheren
-Makro-Beispiel, das in ähnlicher Form tagtäglich von uns Active
-Group-EntwicklerInnen benutzt wird.
+Eine weitere Eigenheit von Clojure-Records kommt zutage, weil sie das
+Hashmap-Interface implementieren. Einem Record kann man problemlos weitere Paare
+mit `assoc` anfügen. Das allein ist noch nicht fragwürdig, aber dass das
+resultierende Ergebnis trotzdem noch denselben Typ von zuvor hat schon:
+
+```clojure
+(def rb-2 (assoc restaurant-bill :velocity 100))
+
+rb-2
+;; => #...Bill{:id 1, :iban "DEXY XYXY XYXY ...", 
+               :amount 48.0, :paid? true, :velocity 100}
+
+(instance? Bill rb-2)       ; => true
+```
+
+`rb-2` ist *immer noch* ein `Bill`-Record! Wir wollen robustere Records und
+bauen uns deshalb selbst welche!
 
 ## Das Record-Makro
 
-Clojure bietet uns mit dem Typkonstruktor `defrecord` die Möglichkeit,
-sogenannte *zusammengesetzte Daten* zu erstellen. Dazu hat Kollege
-[Sperber](https://www.active-group.de/teamplayer/05sperber.html) bereits einen
-[Blogpost](https://funktionale-programmierung.de/2015/04/27/clojure-records.html)
-verfasst.
+Dazu benötigen wir zuallererst einen Recordtypkonstruktor. Clojure nennt seinen
+`defrecord`, wir wählen `def-record-type`. Folgende Funktionen müssen von ihm
+erzeugt werden:
 
-Deshalb gehen wir hier nicht weiter auf zusammengesetzte Daten ein, sondern
-erläutern nur noch kurz die Funktionsweise von Clojure-Records. Wir übernehmen
-das Computer-Beispiel aus obigem Beitrag. Nach Auswertung von
-
-```clojure
-(defrecord Computer [cpu ram hard-drive])
-```
-
-können wir, mithilfe des dadurch zur Verfügung gestellten Recordkonstruktors
-`->Computer`, Computer-Records erstellen, die drei Felder besitzen, `cpu`,
-`ram` und `hard-drive`:
-
-```clojure
-(def office-pc (->Computer "AMD Athlon XP 1700 MHz" 2 250))
-(def gaming-pc (->Computer "Intel I5 6600 3600 MHz" 16 1000))
-```
-
-Weiter ist es möglich, via *Keywords* auf die einzelnen Felder zuzugreifen,
-beispielsweise liefern `(:ram office-pc)` und `(:hard-drive gaming-pc)` die
-Werte `2` und `1000`.
-
-Wir schreiben nun unseren eigenen Recordtypkonstruktor, `def-my-record`. Dieser
-muss folgende Funktionen liefern:
-
-- einen Recordkonstruktor
+- ein Recordkonstruktor
 - Feld-Selektoren
 - Typ-Prädikat
 
 Als Argumente konsumiert er einen Recordtyp-Namen und Recordtypfelder-Namen. Das
-Skelett des Makros sieht dann so aus:
+Skelett des Makros sieht wie folgt aus:
 
 ```clojure
-(defmacro def-my-record
+(defmacro def-record-type
   [type-name & field-names]
   ...)
 ```
@@ -139,36 +120,39 @@ Im Rumpf werden die oben beschriebenen Funktionen erzeugt.
 
 Wir fangen mit der Implementierung des Recordkonstruktors an. Dieser soll nach
 Anwendung auf Feldwert-Argumente einen Record zurückgeben. Als unterliegende
-Struktur eines Records verwenden wir eine Clojure-*Hashmap*.
+Struktur eines Records verwenden wir der Einfachheit halber eine
+Clojure-*Hashmap*. Statt `->type-name` wählen wir `make-type-name` als Namen.
 
-Ein nicht automatisch generierter Konstruktor für Computer-Records lautet:
+Ein nicht automatisch generierter Konstruktor für Bill-Records könnte so
+aussehen:
 
 ```clojure
-(defn ->>computer
-  [cpu ram hard-drive]
-  {:cpu cpu
-   :ram ram
-   :hard-drive hard-drive}))
+(defn make-bill
+  [id iban amount paid?]
+  {:id id
+   :iban iban
+   :amount amount
+   :paid? paid?})
 ```
 
-und wir können den Office-Computer via 
+Jetzt können wir die Restaurant-Rechnung via 
 
 ```clojure
-(->>computer "Intel I5 6600 3600 MHz" 16 1000)
+(make-bill 1 "DEXY XYXY XYXY ..." 48.00 true)
 ```
 
 erzeugen. 
 
 Nun zum Makro: Wir müssen also Code schreiben, der uns obigen Ausdruck als
 Clojure-Liste zurückgibt. Den Namen der Funktion erhalten wir durch
-Konkatenation von `"->>"` und `type-name`. Der Parametervektor ist einfach der
+Konkatenation von `"make-"` und `type-name`. Der Parametervektor ist einfach der
 übergebene Feldnamen-Vektor. Schlussendlich erzeugen wir die Hashmap, indem wir
 über die Feldnamen-Liste iterieren und Tupel erzeugen:
 
 ```clojure
-(defmacro def-my-record
+(defmacro def-record-type
   [type-name & field-names]
-  `(defn ~(symbol (str "->>" type-name))
+  `(defn ~(symbol (str "make-" type-name))
      ~(vec field-names)
      ~(into {}
             (map (fn [field-name]
@@ -180,28 +164,28 @@ Wir können mithilfe von `macroexpand-1` überprüfen, ob tatsächlich der
 gewünschte Code erzeugt wird:
 
 ```clojure
-(macroexpand-1 '(def-my-record computer [cpu ram hard-drive]))
+(macroexpand-1 '(def-record-type-1 bill [id iban amount paid?]))
 
-;; => (clojure.core/defn ->>computer 
-                         [cpu ram hard-drive] 
-                         {:cpu cpu, :ram ram, :hard-drive hard-drive})
+;; => (clojure.core/defn make-bill
+;;                       [id iban amount paid?]
+;;                       {:id id, :iban iban, :amount amount, :paid? paid?})
 ```
 
 Da das Recordtypkonstruktor-Makro noch weitere Funktionen erzeugen wird, lagern
-wir, bevor wir fortfahren, das Recordkonstruktor-Erzeugen noch in eine eigene
-Funktion aus:
+wir, bevor wir fortfahren, das Erzeugen des Recordkonstruktors noch in eine
+eigene Funktion aus:
 
 ```clojure
 (defn create-record-constructor
   [type-name field-names]
-  `(defn ~(symbol (str "->>" type-name))
+  `(defn ~(symbol (str "make-" type-name))
      ~field-names
      ~(into {}
             (map (fn [field-name]
                    [(keyword field-name) field-name])
                  field-names))))
 
-(defmacro def-my-record
+(defmacro def-record-type
   [type-name field-names]
   `(do
      ~(create-record-constructor type-name field-names)))
@@ -211,7 +195,7 @@ Beim Testen der neuen Recordkonstruktor-Erzeugerfunktion müssen wir darauf
 achten, dass diese Symbole konsumiert:
 
 ```clojure
-(create-record-constructor 'computer ['cpu 'ram 'hard-drive])
+(create-record-constructor 'bill ['id 'iban 'amount 'paid?])
 ```
 
 ### Selektoren
@@ -221,23 +205,21 @@ einzelnen Feldwerte der Records ist es, wie bei den Clojure-`defrecord`s auch,
 bereits möglich, mit Keywords zuzugreifen:
 
 ```clojure
-(:ram (->>computer "Intel I5 6600 3600 MHz" 16 1000))
+(:amount (make-bill 1 "DEXY XYXY XYXY ..." 48.00 true))
 
-;; => 16
+;; => 48.00
 
 ```
 
-Der Keywordzugriff ist in manchen Situationen jedoch problematisch: Ob ein
-Feldwert tatsächlich `nil` ist oder sich ein Vertipper (zum Beispiel `:ran`
-statt `:ram`) eingeschlichen hat, ist hier nicht unterscheidbar! Deshalb
-erzeugen wir eigene Selektorfunktionen.
+Wie oben erläutert, ist der Keywordzugriff etwas problematisch und deshalb
+erzeugen wir Selektorfunktionen.
 
-Hier der Code für einen nicht automatisch generierten Computer-Selektor:
+Hier der Code für einen nicht automatisch generierten Bill-Selektor:
 
 ```clojure
-(defn computer-cpu
-  [computer]
-  (:cpu computer))
+(defn bill-amount
+  [bill]
+  (:amount bill))
 ```
 
 Für jeden Feldnamen muss solch eine Selektorfunktion erzeugt werden. Dazu lagern
@@ -256,27 +238,27 @@ wir die Recordselektoren-Erzeugerfunktion wieder aus dem Makro aus:
 In den Recordtypkonstruktor übernommen ergibt das:
 
 ```clojure
-(defmacro def-my-record
+(defmacro def-record-type
   [type-name field-names]
   `(do
      ~(create-record-constructor type-name field-names)
      ~@(create-record-accessors type-name field-names)))
 
-(def-my-record computer [cpu ram hard-drive])
-(def office-pc (->>computer "INTEL 3000 Mhz" 4 500))
-(computer-hard-drive office-pc)
+(def-record-type-2 bill [id iban amount paid?])
+(def the-bill (make-bill 1 "DEXY XYXY XYXY ..." 48.00 true))
 
-;; => 500
+(bill-paid? the-bill)
+;; => true
 ```
 
 ### Typ-Prädikat
 
 Um die Records auch sinnvoll benutzbar zu machen, benötigen wir noch eine
 Möglichkeit zur Überprüfung, ob ein Record eine Instanz eines bestimmten Typs
-ist. Clojure-Records machen das über `(instance? Computer my-computer)`. Unsere
-Implementierung ermöglicht uns das bis jetzt noch nicht; wir erzeugen
-schließlich nur eine einfache Hashmap ohne Typinformation. Deshalb fügen wir den
-Metadaten der Hashmap nun ein (Key:Val)-Paar `(:__type__ : type-name)` hinzu.
+ist. Clojure-Records machen das über `(instance? Bill my-bill)`. Unsere
+Implementierung ermöglicht uns das bis jetzt nicht; wir erzeugen schließlich nur
+eine einfache Hashmap ohne Typinformation. Deshalb fügen wir den Metadaten der
+Hashmap nun das Paar `(:__type__ : type-name)` hinzu.
 
 In `create-record-constructor` müssen wir dazu den `(into {} ...)`-Ausdruck um
 einen `vary-meta`-Aufruf erweitern:
@@ -292,15 +274,26 @@ einen `vary-meta`-Aufruf erweitern:
 Das kryptisch anmutende `` `'~type-name `` wird weiter unten
 erläutert.
 
-Nun zum *Typ-Prädikat*. Das Typ-Prädikat für `computer` soll eine Funktion
-`computer?` sein, sodass `(computer? thing)` im Falle eines Computer-Records
-`true` und ansonsten `false` zurückgibt. Als nicht generische Funktion würden
-wir sie so schreiben:
+Nun zum *Typ-Prädikat*. Das Typ-Prädikat für `bill` soll eine Funktion `bill?`
+sein, sodass `(bill? thing)` im Falle eines Bill-Records `true` und ansonsten
+`false` zurückgibt. Ein Objekt ist ein Bill-Record, wenn zwei Bedingungen
+erfüllt sind:
+
+1. der Typname ist in den Metainformationen vorhanden
+2. Genau die (und nur die) Felder des Recordtypkonstruktors finden sich als
+   Keywords in der unterliegenden Hashmap wieder
+
+Punkt 2 zieht eine weitere Bedingung mit sich: Das Objekt muss eine Hashmap
+sein. Ein nicht generische Prädikat für einen Bill-Record könnte so aussehen:
 
 ```clojure
-(defn computer? 
-  [thing] 
-  (= 'computer (:__type__ (meta thing))))
+(defn bill?
+    [thing]
+    (and
+     (= 'bill (:__type__ (meta thing)))
+     (map? thing)
+     (= (set (map keyword field-names))
+        (set (keys thing)))))
 ```
 
 Wir schreiben also eine Erzeugerfunktion, die zu gegebenen Typnamen eine
@@ -308,10 +301,14 @@ Funktion wie oben zurückgibt:
 
 ```clojure
 (defn create-predicate
-  [type-name]
+  [type-name field-names]
   `(defn ~(symbol (str type-name "?"))
      [~'thing]
-     (= '~type-name (:__type__ (meta ~'thing)))))
+     (and
+      (= '~type-name (:__type__ (meta ~'thing)))
+      (map? ~'thing)
+      (= ~(set (map keyword field-names))
+         (set (keys ~'thing))))))
 ```
 
 Etwas befremdlich könnten `~'thing` und `'~type-name` wirken. Warum nicht
@@ -321,28 +318,44 @@ bereits erläutert, qualifiziert das Syntax-Quote `` ` `` Symbole. `defn`
 akzeptiert in der Parameterliste jedoch keine qualifizierten Symbole. `'~` sorgt
 dafür, dass tatsächlich das übergebene Symbol (und nicht `type-name`) dasteht,
 zur Laufzeit aber nicht weiter evaluiert wird. Gleiche Begründung gilt bei ``
-`'~type-name `` aus `create-record-constructor` von oben, hier nur noch
-zusätzlich `` ` ``, da zuvor unquotet wurde.
+`'~type-name `` aus `create-record-constructor` von oben. Hier ist noch
+zusätzlich das `` ` `` nötig, da zuvor unquotet wurde.
+
+Im Ausdruck `~(set (map keyword field-names))` könnte das Unquote `~` auch vor
+`field-names` stehen. Dann aber würde das Mappen und Konvertieren in eine Menge
+zur Laufzeit geschehen; so wie es jetzt ist, geschieht das bereits zur
+Makro-Expansionszeit und ist damit etwas effizienter zur Laufzeit.
 
 Nun haben wir alles beisammen, um unsere Records sinnvoll benutzen zu können!
 
 ```clojure
-(def-my-record car [color])
-(def fire-truck (->>car "red"))
-(car-color fire-truck)     ; => "red"
-(car? fire-truck)          ; => true
-(computer? fire-truck)     ; => false
+(def-record-type car [color])
+(def-record-type bill [id iban amount paid?])
+(def fire-truck (make-car "red"))
+
+(car-color fire-truck)                ; => "red"
+(car? fire-truck)                     ; => true
+(bill? fire-truck)                    ; => false
+(car? (assoc fire-truck :amount 23))  ; => false
 ```
 
 ## Fazit und Ausblick
 
-Heute wurden zwei nützliche Makros vorgestellt. Das `when-let*`-Makro bringt
-bessere Lesbarkeit und Schreiberleichterung mit sich. Das Record-Makro nimmt der
-Entwicklerin nicht nur Schreibarbeit einzelner Funktionen ab, sondern ermöglicht
-ein erweitertes, datengesteuertes Programmieren. Die [Active Group
-GmbH](www.active-group.de) benutzt ein ähnliches
-[Makro](https://github.com/active-group/active-clojure) in der Entwicklung von
-Clojure-Programmen. 
+Das Record-Makro nimmt der Entwicklerin nicht nur Schreibarbeit einzelner
+Funktionen ab, sondern ermöglicht ein erweitertes, datenflussorientiertes
+Programmieren. Zwar ist es erfreulich, dass Clojure überhaupt Records zur
+Verfügung stellt, aber wie wir gesehen haben, stören einige
+Implementierungsentscheidungen. Diese konnten wir erfolgreich ausmerzen. Das
+eigentlich Hervorragende ist, dass unsere Implementierung auch ohne
+Clojure-Records funktioniert!
+
+Natürlich sind die hier entworfenen Records nur beispielhaft zu sehen: Um den
+Rahmen des Blogposts nicht zu sprengen, sind ein paar fragwürdige Entscheidungen
+(z. B. für die unterliegende Struktur des Records eine Hashmap zu wählen)
+getroffen worden. Eine wirklich gute Alternative entwickelt und benutzt die
+[Active Group GmbH](www.active-group.de) in der Entwicklung von
+Clojure-Programmen:
+[active-clojure-Records](https://github.com/active-group/active-clojure).
 
 Neben zusammengesetzten Daten kommen *gemischte Daten* in der Modellierung von
 Programmen vor. In einem nächsten Blogpost werden wir mit Makros Summentypen in
