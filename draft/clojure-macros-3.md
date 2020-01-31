@@ -11,9 +11,9 @@ Clojure](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html)
 und [Makros in Clojure -
 2](https://funktionale-programmierung.de/2019/09/17/clojure-macros-2.html) die
 für die Praxis relevanten Makro-Befehle kennengelernt haben, widmen wir uns in
-diesem Blogpost einem umfangreichen Beispiel zu Makros in Clojure: Wir werden
-unser eigenes Record-Makro erstellen! Es empfiehlt sich, die vorherigen Beiträge
-gelesen zu haben.
+diesem Blogpost einem umfangreichen Beispiel: Wir werden unser eigenes
+Record-Makro erstellen! Es empfiehlt sich, die vorherigen Beiträge gelesen zu
+haben.
 
 <!-- more start -->
 
@@ -25,11 +25,8 @@ zu finden. Wir empfehlen, ihn während des Lesens Stück für Stück auszuführe
 
 Immer dann, wenn ein Objekt aus mehreren Teilen besteht, haben wir es mit
 zusammengesetzten Daten zu tun. Diese modellieren wir in Clojure mit sogenannten
-*Records*. Der Kollege [Michael
-Sperber](https://www.active-group.de/teamplayer/05sperber.html) hat dazu bereits
-einen
-[Blogpost](https://funktionale-programmierung.de/2015/04/27/clojure-records.html)
-verfasst. 
+*Records*. Näheres dazu gibt es im Blogpost [Zusammengesetzte Daten in
+Clojure](https://funktionale-programmierung.de/2015/04/27/clojure-records.html).
 
 Manche Dinge an den Clojure-Records stören jedoch und verleiten zu Fehlern,
 weshalb wir heute eine eigene Version schreiben wollen.
@@ -37,7 +34,7 @@ weshalb wir heute eine eigene Version schreiben wollen.
 ### Clojure-Records und die bereits bezahlte Rechnung
 
 Wir modellieren eine Rechnung mit gewöhnlichen Clojure-Records: Eine Rechnung
-besteh aus einer ID, einer IBAN, einem zu bezahlenden Betrag und einer
+besteht aus einer ID, einer IBAN, einem zu bezahlenden Betrag und einer
 Markierung, die anzeigt, ob eine Rechnung schon beglichen wurde oder nicht:
 
 ```clojure
@@ -55,7 +52,9 @@ hospital-bill)`liefern die Werte `1` und `10.00`.
 
 Um die Unzulänglichkeiten der Clojure-eigenen Records zu demonstrieren,
 betrachten wir eine Funktion `bills-to-pay`, die aus einer Liste von Rechnungen
-diejenigen entfernt, die schon beglichen worden sind:
+diejenigen entfernt, die schon beglichen worden sind (`remove` ist eine
+eingebaute Funktion, die ein Prädikat und eine Liste konsumiert und alle
+Elemente der Liste, die das Prädikat erfüllen, aus der Liste entfernt):
 
 ```clojure
 (defn bills-to-pay
@@ -67,20 +66,20 @@ diejenigen entfernt, die schon beglichen worden sind:
 ;;     #Bill{:id 2, :iban "DEYX YXYX YXYX ...", :amount 10.0, :paid? false})
 ```
 
-Huch! (oder auch "Ja, holla die Waldfee!!") Wieso wurde die Restaurant-Rechnung
+Huch! (oder auch "Ja Holla, die Waldfee!!") Wieso wurde die Restaurant-Rechnung
 nicht herausgefiltert? Die Rechnung wurde doch schon beglichen! Sie sehen es
-bestimmt: Ein Schreibfehler hat sich eingeschlichen; statt `:paid?` wird `:paid`
+bestimmt: Ein Schreibfehler hat sich eingeschlichen, statt `:paid?` wird `:paid`
 benutzt. Ein Keywordzugriff auf eine Hashmap, in welcher das Keyword nicht
 vorhanden ist, liefert `nil` (näheres dazu z. B.
 [hier](https://stackoverflow.com/questions/6915531/why-does-using-keywords-or-symbols-as-functions-to-lookup-values-from-maps-work)).
-Das ist ärgerlich; solche Fehler fallen unter Umständen lange Zeit nicht auf, da
-keine Fehlermeldung geworfen sondern ein valider, aber falscher Wert geliefert
+Das ist ärgerlich. Solche Fehler fallen unter Umständen lange Zeit nicht auf, da
+keine Fehlermeldung geworfen, sondern ein valider, aber falscher Wert geliefert,
 wird.
 
-Eine weitere Eigenheit von Clojure-Records kommt zustande, weil sie das
-Hashmap-Interface implementieren: Einem Record kann man problemlos weitere Paare
-mit `assoc` anfügen. Das allein ist noch nicht fragwürdig, aber dass das
-resultierende Ergebnis trotzdem noch denselben Typ von zuvor hat, schon:
+Clojure-Records implementieren das Hashmap-Interface, was zu einer weiteren
+Eigenheit führt: Einem Record kann man problemlos weitere Paare mit `assoc`
+anfügen. Das allein ist noch nicht fragwürdig, aber dass das resultierende
+Ergebnis trotzdem noch denselben Typ von zuvor hat, schon:
 
 ```clojure
 (def rb-2 (assoc restaurant-bill :velocity 100))
@@ -97,7 +96,7 @@ bauen uns deshalb selbst welche!
 
 ## Das Record-Makro
 
-Dazu benötigen wir zuallererst einen Recordtypkonstruktor. Der in `clojure.core`
+Dazu benötigen wir als erstes einen Recordtypkonstruktor. Der in `clojure.core`
 enthaltene Konstruktor heißt `defrecord`, wir wählen `def-record-type`. Folgende
 Funktionen müssen von ihm erzeugt werden:
 
@@ -192,8 +191,8 @@ Funktion aus:
 ```
 
 Beim Testen der neuen Recordkonstruktor-Erzeugerfunktion müssen wir darauf
-achten, dass diese Symbole konsumiert, da es sich um eine Funktion und nicht um
-ein Makro handelt:
+achten, dass wir Symbole übergeben, da es sich um eine Funktion und nicht um ein
+Makro handelt:
 
 ```clojure
 (create-record-constructor 'bill ['id 'iban 'amount 'paid?])
@@ -202,8 +201,8 @@ ein Makro handelt:
 ### Selektoren
 
 Wir können nun eigene Recordtypen und dazugehörige Records erzeugen. Auf die
-einzelnen Feldwerte der Records ist es, wie bei den Clojure-`defrecord`s auch,
-bereits möglich, mit Keywords zuzugreifen:
+einzelnen Feldwerte der Records ist es, wie bei den eingebauten Clojure-Records
+auch, möglich, mit Keywords zuzugreifen:
 
 ```clojure
 (:amount (make-bill 1 "DEXY XYXY XYXY ..." 48.00 true))
@@ -275,17 +274,16 @@ einen `vary-meta`-Aufruf erweitern:
 Das kryptisch anmutende `` `'~type-name `` wird weiter unten
 erläutert.
 
-Nun zum *Typ-Prädikat*. Das Typ-Prädikat für `bill` soll eine Funktion `bill?`
-sein, sodass `(bill? thing)` im Falle eines Bill-Records `true` und ansonsten
-`false` zurückgibt. Ein Objekt ist ein Bill-Record, wenn zwei Bedingungen
-erfüllt sind:
+Nun zum *Typ-Prädikat*. Das soll eine Funktion `bill?` sein, sodass `(bill?
+thing)` im Falle eines Bill-Records `true` und ansonsten `false` zurückgibt. Ein
+Objekt ist ein Bill-Record, wenn zwei Bedingungen erfüllt sind:
 
 1. der Typname ist in den Metainformationen vorhanden
 2. Genau die (und nur die) Felder des Recordtypkonstruktors finden sich als
    Keywords in der unterliegenden Hashmap wieder
 
 Punkt 2 zieht eine weitere Bedingung mit sich: Das Objekt muss eine Hashmap
-sein. Ein nicht generische Prädikat für einen Bill-Record könnte so aussehen:
+sein. Ein nicht generisches Prädikat für einen Bill-Record könnte so aussehen:
 
 ```clojure
 (defn bill?
@@ -315,19 +313,19 @@ Funktion wie oben zurückgibt:
 Etwas befremdlich könnten `~'thing` und `'~type-name` wirken. Warum nicht
 einfach `thing` statt `~'thing`? Wie im [vorherigen
 Blogpost](https://funktionale-programmierung.de/2019/09/17/clojure-macros-2.html)
-bereits erläutert, qualifiziert das Syntax-Quote `` ` `` Symbole. `defn`
-akzeptiert in der Parameterliste jedoch keine qualifizierten Symbole. `'~` sorgt
-dafür, dass tatsächlich das übergebene Symbol (und nicht `type-name`) dasteht,
-zur Laufzeit aber nicht weiter evaluiert wird. Gleiche Begründung gilt bei ``
-`'~type-name `` aus `create-record-constructor` von oben. Hier ist noch
-zusätzlich das `` ` `` nötig, da zuvor unquotet wurde.
+erläutert, qualifiziert das Syntax-Quote `` ` `` Symbole. `defn` akzeptiert in
+der Parameterliste jedoch keine qualifizierten Symbole. `'~` sorgt dafür, dass
+tatsächlich das übergebene Symbol (und nicht `type-name`) dasteht, zur Laufzeit
+aber nicht weiter evaluiert wird. Gleiche Begründung gilt bei `` `'~type-name ``
+aus `create-record-constructor` von oben. Hier ist noch zusätzlich das `` ` ``
+nötig, da zuvor unquotet wurde.
 
 Im Ausdruck `~(set (map keyword field-names))` könnte das Unquote `~` auch vor
 `field-names` stehen. Dann aber würde das Mappen und Konvertieren in eine Menge
 zur Laufzeit geschehen; so wie es jetzt ist, geschieht das bereits zur
-Makro-Expansionszeit und ist damit etwas effizienter zur Laufzeit.
+Makro-Expansionszeit und es ist damit etwas schneller zur Laufzeit.
 
-Nun haben wir alles beisammen, um unsere Records sinnvoll benutzen zu können!
+Nun haben wir alles beisammen, um unsere Records sinnvoll nutzen zu können!
 
 ```clojure
 (def-record-type car [color])
