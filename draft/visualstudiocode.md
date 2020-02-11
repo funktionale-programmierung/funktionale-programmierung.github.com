@@ -7,16 +7,16 @@ tags: ["F#", "F Sharp", "Visual Studio Code", "VS Code", "Einführung", "Erste S
 ---
 
 In [Einstieg in Visual Studio mit F#](/2020/01/23/f-sharp-visual-studio-erste-schritte.html) haben wir im Schnelldurchgang die ersten Schritte im Zusammenhang mit Anwendungen in F# kennen gelernt. Wir haben dabei auf Visual Studio zurück gegriffen und uns somit auf Windows oder MacOS beschränkt.  
-Mit Visual Studio Code bietet Microsoft hingegen einen plattformunabhängigen Editor an. In diesem Blogpost zeigen wir ähnliche erste Schritte in F#, diesmal in Visual Studio Code unter einem linuxbasierten Betriebssystem. Dabei erhalten wir auch Einblicke in die Bedienung mit Kommoandozeilentools, die in nahezu gleicherweise unter Windows und MacOS anwendbar sind. Dieser Artikel geht an manchen Stellen weniger ins Detail als in [Einstieg in Visual Studio mit F#](/2020/01/23/f-sharp-visual-studio-erste-schritte.html), weswegen wir diesen Blogpost allen vorab empfehlen.
+Mit Visual Studio **Code*** bietet Microsoft hingegen einen plattformunabhängigen Editor an. In diesem Blogpost zeigen wir ähnliche erste Schritte in F#, diesmal in Visual Studio Code unter einem linuxbasierten Betriebssystem. Dabei erhalten wir auch Einblicke in die Bedienung mit Kommoandozeilentools, die in nahezu gleicherweise unter Windows und MacOS anwendbar sind. Dieser Artikel geht an manchen Stellen weniger ins Detail als in [Einstieg in Visual Studio mit F#](/2020/01/23/f-sharp-visual-studio-erste-schritte.html), weswegen wir diesen Blogpost allen vorab empfehlen.
 <!-- more start -->
 
 ## Installation
 
-Unter Windows genügt es Visual Studio zu installieren und die Entwicklung kann beginnen. Unter Linux benötigen wir etwas mehr. Wir installieren neben Visual Studio Code noch die _.NET SDK_, _Mono_ und einige Plugins für Visual Studio Code. Abhängig des verwendeten Betriebssystem muss hierfür jeder anders vorgehen. In unserem Blogartikel verwenden wir den [Nix-Paket-Manager](https://nixos.org/nix/) (siehe auch [Mit Nix raus aus der Versionshölle](/2018/02/19/nix.html)). Wir stellen unser Setup in einer nicht-invasiven Nix-Shell her, dazu führen wir einem Terminal
+Unter Windows genügt es Visual Studio zu installieren und die Entwicklung kann beginnen. Unter Linux benötigen wir etwas mehr. Wir installieren neben Visual Studio **Code** noch _.NET SDK_, _Mono_ und einige Plugins für Visual Studio Code. Abhängig des verwendeten Betriebssystem muss hierfür jeder anders vorgehen. In unserem Blogartikel verwenden wir den [Nix-Paket-Manager](https://nixos.org/nix/) (siehe auch [Mit Nix raus aus der Versionshölle](/2018/02/19/nix.html)). Wir stellen unser Setup in einer nicht-invasiven Nix-Shell her, dazu führen wir in einem Terminal
 ```sh
 NIXPKGS_ALLOW_UNFREE=1 nix-shell -p dotnet-sdk_3 -p vscode -p fsharp -p mono
 ```
-aus. Da die _.NET SDK_ nicht unter freier Lizenz steht, muss mit `NIXPKGS_ALLOW_UNFREE=1` die Installation explizit erlaubt werden. Wir befinden uns nun in einer virtuellen Umgebung mit installierten Paketen. Wir erstellen uns noch einen leeren Ordner und starten Visual Studio Code:
+aus. Da _.NET SDK_ nicht unter freier Lizenz steht, muss mit `NIXPKGS_ALLOW_UNFREE=1` die Installation explizit erlaubt werden. Wir befinden uns nun in einer virtuellen Umgebung mit den installierten Paketen. Wir erstellen uns einen leeren Ordner und starten Visual Studio Code:
 ```
 mkdir -p ersteschritte
 cd ersteschritte
@@ -28,7 +28,7 @@ Als nächste installieren wir die Erweiterungen _Ionide-fsharp_ und _C#_. In uns
 
 Mit dem Tastenkürzel _STRG + UMSCHALT + P_ erscheint eine Kommandoeingabezeile. Wir tippen _F#: New Project_. In den folgenden Abfragen wählen wir _Console Application_ als Anwendungstyp, `.` (aktuelles Verzeichnis) als Projektordner und _ErsteSchritte_ als Projektname.  
 
-Wir sehen links im _Explorer_ einige erstelle Dateien, unter anderem die _Program.fs_ mit einer beispielhaften _Main_-Methode. Unter _Terminal_, _Neues Terminal_ erhalten wir eine Betriebssystemkonsole. Wir führen unser Programm erstmalig aus:
+Wir sehen links im _Explorer_ einige erstellte Dateien, unter anderem die _Program.fs_ mit einer beispielhaften _Main_-Methode. Unter _Terminal_, _Neues Terminal_ erhalten wir eine Betriebssystemkonsole. Wir führen unser Programm erstmalig aus:
 ```sh
 dotnet run
 ```
@@ -65,8 +65,8 @@ Im Wert von `configurations` drücken wir zwischen den eckigen Klammern Enter un
     ]
 }
 ```
-Speichern wir `launch.json` und wählen wir erneut _Debuggen starten_ kommt die Meldung, dass der Task _build_ nicht gefunden wurde. In _launch.json_ haben wir `build` als `preLaunchTask` festgelegt, da wir unser Projekt vor dem Debuggen bauen müssen.  
-Wir wählen _Aufgabe konfigurieren_ gefolgt von _Datei task.json aus Vorlage erstellen aus_. Als Aufgabenvorlage nehmen wir `.NET Core`. Die automatisch erzeugte Vorlage ist für unseren Fall direkt passend.
+Wir speichern `launch.json` und wählen erneut _Debuggen starten_. Es kommt die Meldung, dass der Task _build_ nicht gefunden wurde. In _launch.json_ haben wir `build` als `preLaunchTask` festgelegt, da wir unser Projekt vor dem Debuggen bauen müssen.  
+Wir klicken auf _Aufgabe konfigurieren_ gefolgt von _Datei task.json aus Vorlage erstellen aus_. Als Aufgabenvorlage nehmen wir `.NET Core`. Die automatisch erzeugte Vorlage ist für unseren Fall direkt passend:
 ```fsharp
 {
     "version": "2.0.0",
@@ -89,7 +89,7 @@ Wir wählen _Aufgabe konfigurieren_ gefolgt von _Datei task.json aus Vorlage ers
     ]
 }
 ```
-Das Debuggen ist jetzt eingerichtet. Wir setzen in _Program.fs_ einen Haltepunkt auf `0`. Dazu klicken wir links neben der entsprechende Zeilennummer oder drücken _F9_ während der Cursor in dieser Zeile steht. Es erscheint ein roter Punkt am Anfang der Zeile.  
+Das Debuggen ist jetzt eingerichtet. Wir setzen in _Program.fs_ einen Haltepunkt auf `0`. Dazu klicken wir links neben die entsprechende Zeilennummer oder drücken _F9_ während der Cursor in dieser Zeile steht. Es erscheint ein roter Punkt am Anfang der Zeile.  
 
 [![Visual Studio Code Debuggen](/files/2020-02-15-f-sharp-visual-studio-code/debugging.png "Visual Studio Code Debuggen")](/files/2020-02-15-f-sharp-visual-studio-code/debugging.png)
 
@@ -136,7 +136,7 @@ Bei der nächsten Ausführung von `dotnet build` werden die Pakete heruntergelad
 
 ## Testfall definieren und ausführen
 
-Im Explorer von Visual Studio Code legen wir einen neuen Ordner `Test` an und darin die Date `MeinModulTest.fs`. Wir fügen das folgende Modul mit einem Testfall für unsere Funktion `MeinModul.pi` ein:
+Im Explorer von Visual Studio Code legen wir einen neuen Ordner `Test` an und darin die Datei `MeinModulTest.fs`. Wir fügen das folgende Modul mit einem Testfall für unsere Funktion `MeinModul.pi` ein:
 ```fsharp
 namespace ErsteSchritte.Test
 
