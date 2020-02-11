@@ -6,8 +6,8 @@ author: tim-digel
 tags: ["F#", "F Sharp", "Visual Studio Code", "VS Code", "Einführung", "Erste Schritte", "Projekt", "Start"]
 ---
 
-In [Einstieg in Visual Studio mit F#](/2020/01/23-f-sharp-visual-studio-erste-schritte.html) haben wir im Schnelldurchgang die ersten Schritte im Zusammenhang mit Anwendungen in F# kennen gelernt. Wir haben dabei auf Visual Studio zurück gegriffen und uns somit auf Windows oder MacOS beschränkt.  
-Mit Visual Studio Code bietet Microsoft hingegen einen plattformunabhängigen Editor an. In diesem Blogpost zeigen wir ähnliche erste Schritte in F#, diesmal in Visual Studio Code unter einem linuxbasierten Betriebssystem. Dabei erhalten wir auch Einblicke in die Bedienung mit Kommoandozeilentools, die in nahezu gleicherweise unter Windows und MacOS anwendbar sind. Dieser Artikel geht an manchen Stellen weniger ins Detail als in [Einstieg in Visual Studio mit F#](/2020/01/23-f-sharp-visual-studio-erste-schritte.html), weswegen wir diesen Blogpost allen vorab empfehlen.
+In [Einstieg in Visual Studio mit F#](/2020/01/23/f-sharp-visual-studio-erste-schritte.html) haben wir im Schnelldurchgang die ersten Schritte im Zusammenhang mit Anwendungen in F# kennen gelernt. Wir haben dabei auf Visual Studio zurück gegriffen und uns somit auf Windows oder MacOS beschränkt.  
+Mit Visual Studio Code bietet Microsoft hingegen einen plattformunabhängigen Editor an. In diesem Blogpost zeigen wir ähnliche erste Schritte in F#, diesmal in Visual Studio Code unter einem linuxbasierten Betriebssystem. Dabei erhalten wir auch Einblicke in die Bedienung mit Kommoandozeilentools, die in nahezu gleicherweise unter Windows und MacOS anwendbar sind. Dieser Artikel geht an manchen Stellen weniger ins Detail als in [Einstieg in Visual Studio mit F#](/2020/01/23/f-sharp-visual-studio-erste-schritte.html), weswegen wir diesen Blogpost allen vorab empfehlen.
 <!-- more start -->
 
 ## Installation
@@ -66,7 +66,7 @@ Im Wert von `configurations` drücken wir zwischen den eckigen Klammern Enter un
 }
 ```
 Speichern wir `launch.json` und wählen wir erneut _Debuggen starten_ kommt die Meldung, dass der Task _build_ nicht gefunden wurde. In _launch.json_ haben wir `build` als `preLaunchTask` festgelegt, da wir unser Projekt vor dem Debuggen bauen müssen.  
-Wir wählen _Aufgabe konfigurieren_ und wählen _Datei task.json aus Vorlage erstellen aus_. Als Aufgabenvorlage nehmen wir `.NET Core`. Die automatisch erzeugte Vorlage ist für unseren Fall direkt passend.
+Wir wählen _Aufgabe konfigurieren_ gefolgt von _Datei task.json aus Vorlage erstellen aus_. Als Aufgabenvorlage nehmen wir `.NET Core`. Die automatisch erzeugte Vorlage ist für unseren Fall direkt passend.
 ```fsharp
 {
     "version": "2.0.0",
@@ -154,7 +154,7 @@ Wir müssen die neue Datei noch als Referenz in unser Projekt aufnehmen. Wir fü
 ```
 zwischen die Zeilen mit _MeinModul.fs_ und _Program.fs_ ein.  
 
-Um die Tests auszuführen führen wir den Befehl `dotnet test` aus. Wir erhalten in etwas:
+Um die Tests auszuführen führen wir den Befehl `dotnet test` aus. Wir erhalten in etwa:
 ```sh
 user@rechner:~/ersteschritte 1$ dotnet test
 Testlauf für "/home/td/ersteschritte/bin/Debug/netcoreapp3.1/ErsteSchritte.dll" (.NETCoreApp,Version=v3.1)
