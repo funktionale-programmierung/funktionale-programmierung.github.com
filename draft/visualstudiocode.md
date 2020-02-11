@@ -103,7 +103,7 @@ namespace ErsteSchritte
 
 module MeinModul = 
 
-    /// Pi als gerundete Dezimalzahl
+    /// Pi als abgerundete Dezimalzahl
     let pi : decimal = 
         3.141M
 ```
