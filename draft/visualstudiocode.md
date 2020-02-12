@@ -6,29 +6,29 @@ author: tim-digel
 tags: ["F#", "F Sharp", "Visual Studio Code", "VS Code", "Einführung", "Erste Schritte", "Projekt", "Start"]
 ---
 
-In [Einstieg in Visual Studio mit F#](/2020/01/23-f-sharp-visual-studio-erste-schritte.html) haben wir im Schnelldurchgang die ersten Schritte im Zusammenhang mit Anwendungen in F# kennen gelernt. Wir haben dabei auf Visual Studio zurück gegriffen und uns somit auf Windows oder MacOS beschränkt.  
-Mit Visual Studio Code bietet Microsoft hingegen einen plattformunabhängigen Editor an. In diesem Blogpost zeigen wir ähnliche erste Schritte in F#, diesmal in Visual Studio Code unter einem linuxbasierten Betriebssystem. Dabei erhalten wir auch Einblicke in die Bedienung mit Kommoandozeilentools, die in nahezu gleicherweise unter Windows und MacOS anwendbar sind. Dieser Artikel geht an manchen Stellen weniger ins Detail als in [Einstieg in Visual Studio mit F#](/2020/01/23-f-sharp-visual-studio-erste-schritte.html), weswegen wir diesen Blogpost allen vorab empfehlen.
+In [Einstieg in Visual Studio mit F#](/2020/01/23/f-sharp-visual-studio-erste-schritte.html) haben wir im Schnelldurchgang die ersten Schritte im Zusammenhang mit Anwendungen in F# kennen gelernt. Dabei haben wir auf Visual Studio zurückgegriffen und uns somit auf Windows oder MacOS beschränkt.  
+Mit Visual Studio **Code** bietet Microsoft hingegen einen plattformunabhängigen Editor an. In diesem Blogpost zeigen wir ähnlich wie im vorherigen Post erste Schritte in F#, diesmal in Visual Studio Code unter einem linuxbasierten Betriebssystem. Dabei erhalten wir auch Einblicke in die Bedienung mit Kommoandozeilentools, die in nahezu gleicherweise unter Windows und MacOS anwendbar sind. Dieser Artikel geht an manchen Stellen weniger ins Detail als [Einstieg in Visual Studio mit F#](/2020/01/23/f-sharp-visual-studio-erste-schritte.html), weshalb wir diesen Blogpost vorab empfehlen.
 <!-- more start -->
 
 ## Installation
 
-Unter Windows genügt es Visual Studio zu installieren und die Entwicklung kann beginnen. Unter Linux benötigen wir etwas mehr. Wir installieren neben Visual Studio Code noch die _.NET SDK_, _Mono_ und einige Plugins für Visual Studio Code. Abhängig des verwendeten Betriebssystem muss hierfür jeder anders vorgehen. In unserem Blogartikel verwenden wir den [Nix-Paket-Manager](https://nixos.org/nix/) (siehe auch [Mit Nix raus aus der Versionshölle](/2018/02/19/nix.html)). Wir stellen unser Setup in einer nicht-invasiven Nix-Shell her, dazu führen wir einem Terminal
+Unter Windows genügt es, Visual Studio zu installieren und die Entwicklung kann beginnen. Unter Linux müssen wir mehr Aufwand betreiben. Wir installieren neben Visual Studio **Code** noch _.NET SDK_, _Mono_ und einige Plugins für Visual Studio Code. Abhängig des verwendeten Betriebssystems muss hierfür verschieden vorgegangen werden. In unserem Blogartikel verwenden wir den [Nix-Paket-Manager](https://nixos.org/nix/) (siehe auch [Mit Nix raus aus der Versionshölle](/2018/02/19/nix.html)). Wir stellen unser Setup in einer nicht-invasiven Nix-Shell her. Dazu führen wir in einem Terminal
 ```sh
 NIXPKGS_ALLOW_UNFREE=1 nix-shell -p dotnet-sdk_3 -p vscode -p fsharp -p mono
 ```
-aus. Da die _.NET SDK_ nicht unter freier Lizenz steht, muss mit `NIXPKGS_ALLOW_UNFREE=1` die Installation explizit erlaubt werden. Wir befinden uns nun in einer virtuellen Umgebung mit installierten Paketen. Wir erstellen uns noch einen leeren Ordner und starten Visual Studio Code:
+aus. Da _.NET SDK_ nicht unter freier Lizenz steht, muss mit `NIXPKGS_ALLOW_UNFREE=1` die Installation explizit erlaubt werden. Wir befinden uns nun in einer virtuellen Umgebung, die die installierten Pakete beinhaltet. Wir erstellen einen leeren Ordner und starten Visual Studio Code:
 ```
 mkdir -p ersteschritte
 cd ersteschritte
 code .
 ```
-Als nächste installieren wir die Erweiterungen _Ionide-fsharp_ und _C#_. In unserem Fall haben wir noch zusätzlich _German Language Pack for Visual Studio Code_ installiert.  
+Als nächstes installieren wir die Erweiterungen _Ionide-fsharp_ und _C#_. _C#_ wird später für die Funktionalität der Haltepunkte und des Debuggings benötigt. In unserem Fall haben wir noch zusätzlich _German Language Pack for Visual Studio Code_ installiert.  
 
 # Projekt erstellen
 
-Mit dem Tastenkürzel _STRG + UMSCHALT + P_ erscheint eine Kommandoeingabezeile. Wir tippen _F#: New Project_. In den folgenden Abfragen wählen wir _Console Application_ als Anwendungstyp, `.` (aktuelles Verzeichnis) als Projektordner und _ErsteSchritte_ als Projektname.  
+Mit dem Tastenkürzel _STRG + UMSCHALT + P_ erscheint eine Kommandozeileneingabe. Wir tippen _F#: New Project_. In den folgenden Abfragen wählen wir _Console Application_ als Anwendungstyp, `.` (aktuelles Verzeichnis) als Projektordner und _ErsteSchritte_ als Projektname.  
 
-Wir sehen links im _Explorer_ einige erstelle Dateien, unter anderem die _Program.fs_ mit einer beispielhaften _Main_-Methode. Unter _Terminal_, _Neues Terminal_ erhalten wir eine Betriebssystemkonsole. Wir führen unser Programm erstmalig aus:
+Wir sehen links im _Explorer_ einige erstellte Dateien, unter anderem die _Program.fs_ mit einer beispielhaften _Main_-Methode. Unter _Terminal_, _Neues Terminal_ erhalten wir eine Betriebssystemkonsole. Wir führen unser Programm erstmalig aus:
 ```sh
 dotnet run
 ```
@@ -36,7 +36,7 @@ Wir erhalten als Rückgabe wie erwartet `Hello World from F#!`.
 
 [![Visual Studio Code Übersicht](/files/2020-02-15-f-sharp-visual-studio-code/run-project.png "Visual Studio Code Übersicht")](/files/2020-02-15-f-sharp-visual-studio-code/run-project.png)
 
-In der obigen Abbildung sehen wir, dass die Typsignatur von `main` als `// string [] -> int` berechnet und angezeigt wird. Halten wir mit der Maus über eine Definition erhalten wir ebenfalls diese Information.
+In der obigen Abbildung sehen wir, dass die Typsignatur von `main` als `// string [] -> int` inferiert und angezeigt wird. Fahren wir mit dem Mauszeiger über eine Definition, erhalten wir ebenfalls diese Information.
 
 # F# Interactive
 
@@ -44,9 +44,9 @@ Auch in Visual Studio Code können wir die interaktive Repl von F# nutzen. Dazu 
 
 # Debugging & Haltepunkte
 
-Um unsere Anwendung in Visual Studio debuggen zu können, müssen wir einmalig eine Konfiguration anlegen. Wir gehen auf _Debuggen_, _Debuggen starten_ oder drücken _F5_. Als Umgebung wählen wir _.NET Core_. Darauf folgt eine Fehlermeldung, dass keine _.NET_-Konfiguration angelegt werden konnte. Ebenso öffnet sich die Datei `.vscode/launch.json`. Hier fügen wir unsere Konfiguration ein.  
+Um unsere Anwendung in Visual Studio Code debuggen zu können, müssen wir einmalig eine Konfiguration anlegen. Wir gehen auf _Debuggen_, _Debuggen starten_ oder drücken _F5_. Im erscheinenden Fenster wählen wir _.NET Core_. Darauf folgt die Fehlermeldung, dass keine _.NET_-Konfiguration angelegt werden konnte. Ebenso öffnet sich die Datei `.vscode/launch.json`. Hier fügen wir unsere Konfiguration ein.  
 
-Im Wert von `configurations` drücken wir zwischen den eckigen Klammern Enter und tippen `.NET`. In der erscheinenden Vorschlagsliste wählen wir _.NET: Launch .NET Core Console App_. Wir müssen die beiden Werte `<target-framework>` und `<project-name.dll>` eintragen. Wenn wir im Explorer von Visual Studio Code den Ordner `bin/Debug` öffnen, sehen wir das verwendete Framework inklusive Version. In diesem Ordner befindet sich auch die _dll_-Datei. Diese heißt normalerweise gleich wie das Projekt selbst. In unserem Fall sieht die _launch.json_ wie folgt aus:
+Im Wert von `configurations` drücken wir zwischen den eckigen Klammern _Enter_ und tippen `.NET`. In der erscheinenden Vorschlagsliste wählen wir _.NET: Launch .NET Core Console App_. Wir müssen die beiden Platzhalter `<target-framework>` und `<project-name.dll>` ersetzen. Wenn wir im Explorer von Visual Studio Code den Ordner `bin/Debug` öffnen, sehen wir das verwendete Framework inklusive Version. In diesem Ordner befindet sich auch die _dll_-Datei. Diese heißt normalerweise gleich wie das Projekt selbst. In unserem Fall sieht die _launch.json_ wie folgt aus:
 ```json
 {
     "version": "0.2.0",
@@ -65,8 +65,8 @@ Im Wert von `configurations` drücken wir zwischen den eckigen Klammern Enter un
     ]
 }
 ```
-Speichern wir `launch.json` und wählen wir erneut _Debuggen starten_ kommt die Meldung, dass der Task _build_ nicht gefunden wurde. In _launch.json_ haben wir `build` als `preLaunchTask` festgelegt, da wir unser Projekt vor dem Debuggen bauen müssen.  
-Wir wählen _Aufgabe konfigurieren_ und wählen _Datei task.json aus Vorlage erstellen aus_. Als Aufgabenvorlage nehmen wir `.NET Core`. Die automatisch erzeugte Vorlage ist für unseren Fall direkt passend.
+Wir speichern `launch.json` und wählen erneut _Debuggen starten_. Es kommt die Meldung, dass der Task _build_ nicht gefunden wurde. In _launch.json_ haben wir `build` als `preLaunchTask` festgelegt, da wir unser Projekt vor dem Debuggen bauen müssen.  
+Wir klicken auf _Aufgabe konfigurieren_ gefolgt von _Datei task.json aus Vorlage erstellen_. Als Aufgabenvorlage nehmen wir `.NET Core`. Die automatisch erzeugte Vorlage ist für unseren Fall passend:
 ```fsharp
 {
     "version": "2.0.0",
@@ -89,21 +89,21 @@ Wir wählen _Aufgabe konfigurieren_ und wählen _Datei task.json aus Vorlage ers
     ]
 }
 ```
-Das Debuggen ist jetzt eingerichtet. Wir setzen in _Program.fs_ einen Haltepunkt auf `0`. Dazu klicken wir links neben der entsprechende Zeilennummer oder drücken _F9_ während der Cursor in dieser Zeile steht. Es erscheint ein roter Punkt am Anfang der Zeile.  
+Das Debuggen ist jetzt eingerichtet. Wir setzen in _Program.fs_ einen Haltepunkt auf `0`. Dazu klicken wir links neben die entsprechende Zeilennummer oder drücken _F9_ während der Cursor in dieser Zeile steht. Es erscheint ein roter Punkt am Anfang der Zeile.  
 
 [![Visual Studio Code Debuggen](/files/2020-02-15-f-sharp-visual-studio-code/debugging.png "Visual Studio Code Debuggen")](/files/2020-02-15-f-sharp-visual-studio-code/debugging.png)
 
-Mit _Debuggen starten_ wird unser Projekt gebaut und ausgeführt. Die Ausführung bleibt am Haltepunkt stehen. Links werden die Werte der bisher berechneten Variablen angezeigt. Oben erscheint eine kleine Videorecorder-Navigation, mit der wir fortsetzen, pausieren, abbrechen oder weiter springen können. Wir drücken einmal auf _Weiter_. Der Haltepunkt wird durchlaufen und das Programm ist beendet. Wir entfernen den Haltepunkt wieder.
+Mit _Debuggen starten_ wird unser Projekt gebaut und ausgeführt. Die Ausführung bleibt am Haltepunkt stehen. Links werden die Werte der bisher berechneten Variablen angezeigt. Oben erscheint eine kleine Videorecorder-Navigation, mit der wir fortsetzen, pausieren, abbrechen oder weiter springen können. Wir drücken einmal auf _Weiter_. Der Haltepunkt wird durchlaufen und das Programm ist beendet. Wir entfernen den Haltepunkt wieder, analog zum Hinzufügen.
 
 ## Neue Datei hinzufügen
 
-Wir möchten eine neue Datei hinzufügen. Im Explorer-Bereich wählen wir _Neue Datei_ im Kontextmenü und benennen sie _MeinModul.fs_. Wir geben der Datei einen Namensraum und definieren uns ein Modul mit einem gerundeten Wert von Pi:
+Möchten wir eine neue Datei hinzufügen, wählen wir im Explorer-Bereich _Neue Datei_ im Kontextmenü und benennen sie _MeinModul.fs_. Wir geben der Datei einen Namensraum und definieren uns ein Modul mit einem abgerundeten Wert von Pi:
 ```fsharp
 namespace ErsteSchritte
 
 module MeinModul = 
 
-    /// Pi als gerundete Dezimalzahl
+    /// Pi als abgerundete Dezimalzahl
     let pi : decimal = 
         3.141M
 ```
@@ -111,11 +111,11 @@ Weiter ändern wir in der Zeile `printfn` der _Program.fs_ ab zu:
 ```fsharp
 printfn "%A" ErsteSchritte.MeinModul.pi
 ```
-IntelliSense, unsere ständige Echtzeitkompilierung, unterstreicht unmittelbar den Aufruf von `ErsteSchritte`. Wir müssen die neue Datei noch unserem Projekt hinzufügen. Dazu öffnen wir _ErsteSchritte.fsproj_ und fügen die Zeile
+IntelliSense, die ständige Echtzeitkompilierung von F#, unterstreicht unmittelbar den Aufruf von `ErsteSchritte`. Wir müssen die neue Datei noch unserem Projekt hinzufügen. Dazu öffnen wir _ErsteSchritte.fsproj_ und fügen die Zeile
 ```xml
 <Compile Include="MeinModul.fs" />
 ```
-oberhalb der gleichlautenden Zeile für _Program.fs_ ein. Die Reihenfolge ist hier maßgebend. Die _Program.fs_ beinhaltet den Einstiegspunkt und muss als letztes definiert sein. Ggf. müssen wir _Program.fs_ neu öffnen. Der Aufruf _ErsteSchritte.MeinModul.pi_ sollte nun bekannt sein. Starten wir das Programm indem wir `dotnet run` in der Konsole ausführen. Wir erhalten:
+oberhalb der gleichlautenden Zeile für _Program.fs_ ein. Die Reihenfolge ist hier maßgebend. Die _Program.fs_ beinhaltet den Einstiegspunkt und muss als letztes definiert sein. Ggf. müssen wir _Program.fs_ neu öffnen. Der Aufruf _ErsteSchritte.MeinModul.pi_ sollte nun bekannt sein. `dotnet run` in der Konsole ausgeführt liefert uns:
 ```sh
 user@rechner:~/ersteschritte$ dotnet run
 3.141M
@@ -123,7 +123,7 @@ user@rechner:~/ersteschritte$ dotnet run
 
 ## Pakete installieren
 
-Im nächsten Schritt möchten wir Testfälle definieren. Dafür benutzen wir mit _NUnit_ und _FSUnit_ entsprechend Test-Frameworks. Um die benötigten Pakete zu installieren, bearbeiten wir `ErsteSchritte.fsproj` und fügen vor `</project>` folgende Pakete an:
+Im nächsten Schritt definieren wir Testfälle. Dafür benutzen wir die Test-Frameworks _NUnit_ und _FSUnit_. Um die benötigten Pakete zu installieren, bearbeiten wir `ErsteSchritte.fsproj` und fügen vor `</Project>` folgende Pakete an:
 ```xml
   <ItemGroup>
     <PackageReference Include="FsUnit" Version="3.8.0" />
@@ -136,7 +136,7 @@ Bei der nächsten Ausführung von `dotnet build` werden die Pakete heruntergelad
 
 ## Testfall definieren und ausführen
 
-Im Explorer von Visual Studio Code legen wir einen neuen Ordner `Test` an und darin die Date `MeinModulTest.fs`. Wir fügen das folgende Modul mit einem Testfall für unsere Funktion `MeinModul.pi` ein:
+Im Explorer von Visual Studio Code legen wir einen neuen Ordner `Test` an und darin die Datei `MeinModulTest.fs`. Wir fügen das folgende Modul mit einem Testfall für unsere Funktion `MeinModul.pi` ein:
 ```fsharp
 namespace ErsteSchritte.Test
 
@@ -154,7 +154,7 @@ Wir müssen die neue Datei noch als Referenz in unser Projekt aufnehmen. Wir fü
 ```
 zwischen die Zeilen mit _MeinModul.fs_ und _Program.fs_ ein.  
 
-Um die Tests auszuführen führen wir den Befehl `dotnet test` aus. Wir erhalten in etwas:
+Um die Tests auszuführen, führen wir den Befehl `dotnet test` aus. Wir erhalten in etwa:
 ```sh
 user@rechner:~/ersteschritte 1$ dotnet test
 Testlauf für "/home/td/ersteschritte/bin/Debug/netcoreapp3.1/ErsteSchritte.dll" (.NETCoreApp,Version=v3.1)
@@ -173,6 +173,6 @@ Gesamtzahl Tests: 1
 
 ## Fazit
 
-Auch unter Betriebssystemen abseits von Windows können wir _.NET-Core_-Anwendungen mit F# entwickeln. Visual Studio Code mit dem Plugin _Ionide_ bieten uns hierfür eine gute Basis. Im Vergleich zu Visual Studio unter Windows müssen wir mehr mit der Konsole arbeiten und einige Einstellungen von Hand vornehmen. Am Ende können aber Dinge wie das Projekt zu bauen, Debuggen mit Haltepunkten oder Testfälle ähnlich einfach genutzt werden.  
+Auch unter Betriebssystemen abseits von Windows können wir _.NET-Core_-Anwendungen mit F# entwickeln. Visual Studio Code und das Plugin _Ionide_ bieten uns hierfür eine gute Basis. Im Vergleich zu Visual Studio unter Windows müssen wir mehr mit der Konsole arbeiten und einige Einstellungen von Hand vornehmen. Am Ende können aber Dinge, wie das Projekt zu bauen, Debuggen mit Haltepunkten oder Testfälle ähnlich einfach genutzt werden.  
 
-In einem weiteren Blogartikel werden wir die Sprache F# selbst kennen lernen. Dabei spielt es dann keine Rolle mehr, ob wir mit Visual Studio unter Windows oder wie hier gezeigt mit Visual Studio Code arbeiten.
+In einem weiteren Blogartikel werden wir die Sprache F# selbst kennen lernen. Dabei spielt es dann keine Rolle mehr, ob wir mit Visual Studio unter Windows oder wie hier mit Visual Studio Code arbeiten.

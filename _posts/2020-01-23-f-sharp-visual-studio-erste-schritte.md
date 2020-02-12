@@ -73,7 +73,7 @@ Wir bearbeiten unsere neu erstellte Modul-Datei und definieren die Kreiszahl. Da
 ```fsharp
 module MeinModul = 
 
-    /// Pi als gerundete Dezimalzahl
+    /// Pi als abgerundete Dezimalzahl
     let pi : decimal = 
         3.141M
 ```
