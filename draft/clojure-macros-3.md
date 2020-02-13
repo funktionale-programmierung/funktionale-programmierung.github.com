@@ -73,7 +73,7 @@ benutzt. Ein Keywordzugriff auf eine Hashmap, in welcher das Keyword nicht
 vorhanden ist, liefert `nil` (näheres dazu z. B.
 [hier](https://stackoverflow.com/questions/6915531/why-does-using-keywords-or-symbols-as-functions-to-lookup-values-from-maps-work)).
 Das ist ärgerlich. Solche Fehler fallen unter Umständen lange Zeit nicht auf, da
-keine Fehlermeldung geworfen, sondern ein valider, aber falscher Wert geliefert,
+keine Fehlermeldung geworfen, sondern ein valider, aber falscher Wert geliefert
 wird.
 
 Clojure-Records implementieren das Hashmap-Interface, was zu einer weiteren
