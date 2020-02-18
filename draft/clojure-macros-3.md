@@ -48,7 +48,7 @@ Mit `defrecord` lässt sich der neue Recordtyp `Bill` definieren. Ein
 `Bill`-Record wird mit dem Konstruktor `->Bill` und den jeweiligen Werten für
 die Felder erzeugt. Auf die einzelnen Bestandteile eines Records kann via
 *Keywords* zugegriffen werden: `(:id restaurant-bill)` und `(:amount
-hospital-bill)`liefern die Werte `1` und `10.00`.
+hospital-bill)` liefern die Werte `1` und `10.00`.
 
 Um die Unzulänglichkeiten der Clojure-eigenen Records zu demonstrieren,
 betrachten wir eine Funktion `bills-to-pay`, die aus einer Liste von Rechnungen
@@ -363,7 +363,7 @@ Natürlich sind die hier entworfenen Records nur beispielhaft zu sehen: Um den
 Rahmen des Blogposts nicht zu sprengen, sind ein paar fragwürdige Entscheidungen
 (z. B. für die unterliegende Struktur des Records eine Hashmap zu wählen)
 getroffen worden. Eine wirklich gute Alternative entwickelt und benutzt die
-[Active Group GmbH](www.active-group.de) täglich in der Entwicklung von
+[Active Group GmbH](http://www.active-group.de) täglich in der Entwicklung von
 Clojure-Programmen:
 [active-clojure-Records](https://github.com/active-group/active-clojure).
 
