@@ -12,11 +12,11 @@ Mit Visual Studio **Code** bietet Microsoft hingegen einen plattformunabhängige
 
 ## Installation
 
-Unter Windows genügt es, Visual Studio zu installieren und die Entwicklung kann beginnen. Unter Linux müssen wir mehr Aufwand betreiben. Wir installieren neben Visual Studio **Code** noch _.NET SDK_, _Mono_ und einige Plugins für Visual Studio Code. Abhängig des verwendeten Betriebssystems muss hierfür verschieden vorgegangen werden. In unserem Blogartikel verwenden wir den [Nix-Paket-Manager](https://nixos.org/nix/) (siehe auch [Mit Nix raus aus der Versionshölle](/2018/02/19/nix.html)). Wir stellen unser Setup in einer nicht-invasiven Nix-Shell her. Dazu führen wir in einem Terminal
+Unter Windows genügt es, Visual Studio zu installieren und die Entwicklung kann beginnen. Unter Linux müssen wir mehr Aufwand betreiben. Wir installieren neben [Visual Studio **Code**](https://code.visualstudio.com) noch _.NET SDK_, _Mono_ und einige Plugins für Visual Studio Code. Abhängig des verwendeten Betriebssystems muss hierfür verschieden vorgegangen werden. In unserem Blogartikel verwenden wir den [Nix-Paket-Manager](https://nixos.org/nix/) (siehe auch [Mit Nix raus aus der Versionshölle](/2018/02/19/nix.html)). Wir stellen unser Setup in einer nicht-invasiven Nix-Shell her. Dazu führen wir in einem Terminal
 ```sh
 NIXPKGS_ALLOW_UNFREE=1 nix-shell -p dotnet-sdk_3 -p vscode -p fsharp -p mono
 ```
-aus. Da _.NET SDK_ nicht unter freier Lizenz steht, muss mit `NIXPKGS_ALLOW_UNFREE=1` die Installation explizit erlaubt werden. Wir befinden uns nun in einer virtuellen Umgebung, die die installierten Pakete beinhaltet. Wir erstellen einen leeren Ordner und starten Visual Studio Code:
+aus. Da _.NET SDK_ nicht unter freier Lizenz steht, muss mit `NIXPKGS_ALLOW_UNFREE=1` die Installation explizit erlaubt werden. Wir befinden uns nun in einer virtuellen Umgebung, die die installierten Pakete und Visual Studio Code beinhaltet. Wir erstellen einen leeren Ordner und starten Visual Studio Code:
 ```
 mkdir -p ersteschritte
 cd ersteschritte
@@ -46,7 +46,7 @@ Auch in Visual Studio Code können wir die interaktive Repl von F# nutzen. Dazu 
 
 Um unsere Anwendung in Visual Studio Code debuggen zu können, müssen wir einmalig eine Konfiguration anlegen. Wir gehen auf _Debuggen_, _Debuggen starten_ oder drücken _F5_. Im erscheinenden Fenster wählen wir _.NET Core_. Darauf folgt die Fehlermeldung, dass keine _.NET_-Konfiguration angelegt werden konnte. Ebenso öffnet sich die Datei `.vscode/launch.json`. Hier fügen wir unsere Konfiguration ein.  
 
-Im Wert von `configurations` drücken wir zwischen den eckigen Klammern _Enter_ und tippen `.NET`. In der erscheinenden Vorschlagsliste wählen wir _.NET: Launch .NET Core Console App_. Wir müssen die beiden Platzhalter `<target-framework>` und `<project-name.dll>` ersetzen. Wenn wir im Explorer von Visual Studio Code den Ordner `bin/Debug` öffnen, sehen wir das verwendete Framework inklusive Version. In diesem Ordner befindet sich auch die _dll_-Datei. Diese heißt normalerweise gleich wie das Projekt selbst. In unserem Fall sieht die _launch.json_ wie folgt aus:
+Im Wert von `configurations` drücken wir zwischen den eckigen Klammern _Enter_ und tippen `.NET`. In der erscheinenden Vorschlagsliste wählen wir _.NET: Launch .NET Core Console App_. Wir müssen die beiden Platzhalter `<target-framework>` und `<project-name.dll>` ersetzen und dafür die richtige Version des Frameworks und den Namen der _dll_-Datei ermitteln: Wenn wir im Explorer von Visual Studio Code den Ordner `bin/Debug` öffnen, sehen wir das verwendete Framework inklusive Version. In diesem Ordner befindet sich auch die _dll_-Datei. Diese heißt normalerweise gleich wie das Projekt selbst. In unserem Fall sieht die _launch.json_ mit den beiden ermittelten Werten `netcoreapp3.1` und `ErsteSchritte.dll` wie folgt aus:
 ```json
 {
     "version": "0.2.0",
