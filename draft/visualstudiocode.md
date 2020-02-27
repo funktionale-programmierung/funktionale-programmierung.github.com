@@ -34,7 +34,7 @@ dotnet run
 ```
 Wir erhalten als Rückgabe wie erwartet `Hello World from F#!`.
 
-[![Visual Studio Code Übersicht](/files/2020-02-15-f-sharp-visual-studio-code/run-project.png "Visual Studio Code Übersicht")](/files/2020-02-15-f-sharp-visual-studio-code/run-project.png)
+[![Visual Studio Code Übersicht](/files/2020-03-02-f-sharp-visual-studio-code/run-project.png "Visual Studio Code Übersicht")](/files/2020-03-02-f-sharp-visual-studio-code/run-project.png)
 
 In der obigen Abbildung sehen wir, dass die Typsignatur von `main` als `// string [] -> int` inferiert und angezeigt wird. Fahren wir mit dem Mauszeiger über eine Definition, erhalten wir ebenfalls diese Information.
 
@@ -91,7 +91,7 @@ Wir klicken auf _Aufgabe konfigurieren_ gefolgt von _Datei task.json aus Vorlage
 ```
 Das Debuggen ist jetzt eingerichtet. Wir setzen in _Program.fs_ einen Haltepunkt auf `0`. Dazu klicken wir links neben die entsprechende Zeilennummer oder drücken _F9_ während der Cursor in dieser Zeile steht. Es erscheint ein roter Punkt am Anfang der Zeile.  
 
-[![Visual Studio Code Debuggen](/files/2020-02-15-f-sharp-visual-studio-code/debugging.png "Visual Studio Code Debuggen")](/files/2020-02-15-f-sharp-visual-studio-code/debugging.png)
+[![Visual Studio Code Debuggen](/files/2020-03-02-f-sharp-visual-studio-code/debugging.png "Visual Studio Code Debuggen")](/files/2020-03-02-f-sharp-visual-studio-code/debugging.png)
 
 Mit _Debuggen starten_ wird unser Projekt gebaut und ausgeführt. Die Ausführung bleibt am Haltepunkt stehen. Links werden die Werte der bisher berechneten Variablen angezeigt. Oben erscheint eine kleine Videorecorder-Navigation, mit der wir fortsetzen, pausieren, abbrechen oder weiter springen können. Wir drücken einmal auf _Weiter_. Der Haltepunkt wird durchlaufen und das Programm ist beendet. Wir entfernen den Haltepunkt wieder, analog zum Hinzufügen.
 
