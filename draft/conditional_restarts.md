@@ -302,7 +302,7 @@ verwendet werden, in denen die echte Datenbank nicht verfügbar ist. Die Funktio
 
 ## Fazit
 
-Wie zu sehen ist, sind Conditional Restarts ein Mechanismus, der als Grundlagen
+Wie zu sehen ist, sind Conditional Restarts ein Mechanismus, der als Grundlage
 für viele hilfreiche Techniken dienen kann. Dabei sind Conditional Restarts
 keine Neuentdeckung, es gibt sie schon mehrere Jahrzehnte. Dennoch sieht man
 sie außerhalb von Common Lisp kaum im Einsatz. 
