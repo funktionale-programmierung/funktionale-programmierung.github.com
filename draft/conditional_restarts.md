@@ -8,7 +8,7 @@ tags: ["common lisp", "conditional", "restarts", "conditional restarts", "effekt
 
 Viele unserer Blogposts beschäftigen sich damit, wie effektbehaftete Programme
 beschrieben und getestet werden können. Dabei kommen freie Monaden oder
-algebraische Effekte zum Einsatz---Effektsysteme sind gerade ein heises Thema.
+algebraische Effekte zum Einsatz---Effektsysteme sind gerade ein heißes Thema.
 Common Lisp denkt sich: Das ist ein alter Hut. Denn mit Conditional Restarts ist
 ein mächtiger Mechanismus zur Abbildung von Effekten im Sprachkern vorhanden.
 Wir haben diesen in Clojure nachprogrammiert und werden Conditional Restarts in
@@ -31,9 +31,9 @@ Fehler umgegangen werden soll. Schlägt das Verarbeiten einer Eingabe fehl oder
 stützt der Datenbankservice ab, soll dies abgefangen und möglichst reibungslos
 verarbeitet werden. In der Regel geht es bei der Fehlerbehandlung um die
 Bearbeitung von Einflüssen von Seiteneffekten, also unvorhersehbarem Verhalten.
-Verschiedene Sprachen und Paradigmen bieten hier unterschiedliche Lösungen:
-Dies reicht von Exceptions, über den Einsatz von Monaden, um Seiteneffekte an
-den Rand der Ausführung zu drängen, um sie dort explizit abzuhandeln, bis hin zu
+Verschiedene Sprachen und Paradigmen bieten hier unterschiedliche Lösungen: Dies
+reicht von Exceptions, über den Einsatz von Monaden, um Seiteneffekte an den
+Rand der Ausführung zu drängen, um sie dort explizit abzuhandeln, bis hin zu
 "let it crash".
 
 Während Monaden dem Programmierer meist zusätzliche ungewünschte Komplexität
@@ -57,12 +57,13 @@ alte Sprache implementiert Conditional Restarts: bedingte Neustarts. Wir werden
 in diesem Blogpost eine kleine Clojure Bibliothek namens Simple Restarts
 verwenden, um Conditional Restarts zu erklären. Diese bietet eine einfache
 Implementierung von Conditional Restarts, die sich syntaktisch nahe an das
-Common Lisp-Original hält. Im Folgeblogpost wird die Implementierung dieser
+Common-Lisp-Original hält. Im Folgeblogpost wird die Implementierung dieser
 Bibliothek diskutiert.
 
 Die Bibliothek kann auf [Github](https://github.com/smoes/simple-restarts)
  gefunden oder über [Clojars](https://clojars.org/simple-restarts) eingebunden
- werden. Alle Code-Beispiele sind zudem auf [Github verfügbar.](https://github.com/smoes/blogpost-conditional-restarts).
+ werden. Alle Code-Beispiele sind zudem auf [Github
+ verfügbar.](https://github.com/smoes/blogpost-conditional-restarts).
 
 
 ## Der klassiche Zeilenparser
@@ -99,9 +100,9 @@ Fehlerfall kontextabhängig ist. Und hier kommen Conditional Restarts ins Spiel.
 
 Wie der Name bereits sagt, benötigen wir Conditions. Conditions sind ein Mittel,
 um einen bestimmten Zustand zu signalisieren, zum Beispiel einen Fehlerzustand.
-Um einen Zustand zu definierenm benutzen wir `defcondition` aus der verwendeten
+Um einen Zustand zu definieren, benutzen wir `defcondition` aus der verwendeten
 Bibliothek. Eine Condition kann Argumente entgegennehmen, die bei der späteren
-Verarbeitung verwendet werden können, hier `line`.
+Verarbeitung verwendet werden können, hier `line`:
 
 
 {% highlight clojure %}
@@ -128,19 +129,19 @@ eine Condition mehr als nur Fehler repräsentieren kann.
 
 ## Restarts
 
-Mögliche Wiedereinsteigspunkte im Falle einer Condition, werden über sogenannte
+Mögliche Wiedereinsteigspunkte im Falle einer Condition werden über sogenannte
 Restarts definiert. Diese können wir an frei wählbaren Punkten in unserem
 Program definieren, sie müssen im Stack nur unterhalb der Condition liegen, zum
 Beispiel in der `parse-lines`-Funktion.
 
 Restarts werden jeweils über einen Namen und eine Funktion definiert, die
 beschreibt, wie der Neustart abläuft. Die Funktion kann Argumente
-entgegennehmen, die wir anhand von Handlern (nächster Abschnitt) übergeben
+entgegennehmen, die wir anhand von Handlern (siehe nächster Abschnitt) übergeben
 können. Restarts werden in der `restart-case`-Funktion definiert. Diese nimmt
-als ersten Argument eine Funktion entgegen, für deren bei der Ausführung
+als erstes Argument eine Funktion entgegen, für deren bei der Ausführung
 ausgelöste Conditions die Restarts gültig sein sollen. Im Folgenden sind zwei
 Restarts definiert, einer, der eine fehlerhafte Zeile in der interaktiven
-Konsole einfach überspringt und einer, der im Compiler-Fall zum Abbruch führt.
+Konsole einfach überspringt und ein weiterer, der im Compiler-Fall zum Abbruch führt:
 
 
 {% highlight clojure %}
@@ -172,7 +173,7 @@ Restarts ermöglichen verschiedene Strategien:
 - Rückgabe eines Standardwertes
 - ...
 
-Im folgenden Abschnitt wird erklärt, wie wir vom auslösen einer Condition zu einem
+Im folgenden Abschnitt wird erklärt, wie wir vom Auslösen einer Condition zu einem
 passenden Restart kommen.
 
 
@@ -180,7 +181,7 @@ passenden Restart kommen.
 
 Handler behandeln Conditions und geben an, welcher Restart ausgeführt werden
 soll. Handler werden im Stack weiter unten definiert, als die Restarts. In
-unserem Beispiel kann das der Aufrufer der `parse-lines` Funktion machen. 
+unserem Beispiel kann das der Aufrufer der `parse-lines`-Funktion machen. 
 
 Ein Handler ist eine Funktion, die für eine bestimmte Condition deren Argumente
 entgegennimmt und einen Befehl zur Ausführung eines Restarts zurückgibt. Handler
@@ -200,9 +201,9 @@ Auführung der Handler gebunden werden soll:
 
 In diesem Beispiel wurde die Funktion `parse-lines` für den Compiler-Fall
 spezialisiert, indem der Handler für die `invalid-line-error`-Condition den
-Restart `:abort` auswählt. Dazu gibt der Handler `invoke-restart` mit dem Namen
-des Restarts und Parametern, die dem Restart übergeben werden sollen, zurück.
-Ein `parse-lines-console` würde als restart hingegen `:skip-line` wählen:
+Restart `:abort` auswählt. Dazu gibt der Handler `invoke-restart`, das den Namen
+des Restarts und Parameter enthält, die dem Restart übergeben werden sollen, zurück.
+Ein `parse-lines-console` würde als Restart hingegen `:skip-line` wählen:
 
 {% highlight clojure %}
 
@@ -219,7 +220,7 @@ gebundener Handler zu der jeweiligen Condition ausgeführt und anhand des
 Rückgabewertes zum passenden Restart gesprungen. Die Funktion, die im Restart
 definiert wurde, wird ausgeführt und damit die Ausführung fortgesetzt.
 
-Conditional Restarts erlauben es also von außen das Verhalten im Falle einer
+Conditional Restarts erlauben es, von außen das Verhalten im Falle einer
 vorher definierten Condition zu bestimmen. Anders als bei Exceptions haben wir
 durch Restarts viele Möglichkeiten auf die Conditions zu reagieren und den
 normalen Programmfluss weiterzuführen. Wie im folgenden Abschnitt gezeigt wird,
@@ -228,11 +229,13 @@ ermöglichen Conditional Restarts weit mehr, als nur Fehlerbehandlung.
 
 ## Effekte mit Conditional Restarts
 
-Im Artikel über Koka wurde gezeigt, wie Effekte verwendet werden, um
-kontextabhängige Behandlung zu ermöglichen. Ein gerne verwendetes Beispiel sind
-Datenbankoperationen, die sich in Tests anders handhaben lassen, als in
-Produktion, wo die echte Datenbank läuft. Conditional Restarts können verwendet
-werden, um diese Mechanik nachzustellen:
+Im Artikel über
+[Koka](https://funktionale-programmierung.de/2019/10/24/algebraic-effects.html)
+wurde gezeigt, wie Effekte verwendet werden, um kontextabhängige Behandlung zu
+ermöglichen. Ein gerne verwendetes Beispiel sind Datenbankoperationen, die sich
+in Tests anders handhaben lassen, als in Produktion, wo die echte Datenbank
+läuft. Conditional Restarts können verwendet werden, um diese Mechanik
+nachzustellen:
 
 {% highlight clojure %}
 
@@ -299,9 +302,9 @@ verwendet werden, in denen die echte Datenbank nicht verfügbar ist. Die Funktio
 
 ## Fazit
 
-Wie zu sehen ist sind Conditional Restarts ein Mechanismus, der als Grundlagen
+Wie zu sehen ist, sind Conditional Restarts ein Mechanismus, der als Grundlagen
 für viele hilfreiche Techniken dienen kann. Dabei sind Conditional Restarts
-keine Neuentdeckung, es gibt sie schon mehrere Jahrzente. Dennoch sieht man
+keine Neuentdeckung, es gibt sie schon mehrere Jahrzehnte. Dennoch sieht man
 sie außerhalb von Common Lisp kaum im Einsatz. 
 
 Wir haben gezeigt, dass man sich mit Conditional Restarts die Komplexität von
@@ -311,7 +314,7 @@ gebunden werden, zum Beispiel in den Routen-Definitionen eines Webservers. Das
 ermöglicht den einfachen Austausch, etwa für Tests. Beschreibung lässt sich von
 Ausführung auf natürliche Art und Weise entkoppeln.
 
-Bei der Behandlung von Fehlern helfen die Restarts dabei, das Program trotzdem
+Bei der Behandlung von Fehlern helfen die Restarts, das Program trotzdem
 dort fortzusetzen, wo der Fehler aufgetreten ist---abermals abhängig vom
 Einsatzkontext des Programmcodes.
 
