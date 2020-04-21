@@ -273,12 +273,10 @@ Konstrukt verwendet werden kann. Es fehlt nur noch ein Handler:
 (defn database-put [k v]
   (swap! db-atom assoc k v))
 
-
 (defn database-interpreter [op params]
   (case op
     :get (apply database-get params)
     :put (apply database-put params)))
-
 
 (defn database-handler [op params]
   (invoke-restart :return-value (database-interpreter op params)))
