@@ -28,7 +28,7 @@ Neben Kenntnissen von Clojure hilft es dem Leser, die vorausgegangenen Artikel
 
 Beim Entwickeln von Software steht man immer wieder vor der Frage, wie mit
 Fehler umgegangen werden soll. Schlägt das Verarbeiten einer Eingabe fehl oder
-stützt der Datenbankservice ab, soll dies abgefangen und möglichst reibungslos
+stürzt der Datenbankservice ab, soll dies abgefangen und möglichst reibungslos
 verarbeitet werden. In der Regel geht es bei der Fehlerbehandlung um die
 Bearbeitung von Einflüssen von Seiteneffekten, also unvorhersehbarem Verhalten.
 Verschiedene Sprachen und Paradigmen bieten hier unterschiedliche Lösungen: Dies
@@ -129,7 +129,7 @@ eine Condition mehr als nur Fehler repräsentieren kann.
 
 ## Restarts
 
-Mögliche Wiedereinsteigspunkte im Falle einer Condition werden über sogenannte
+Mögliche Wiedereinstiegspunkte im Falle einer Condition werden über sogenannte
 Restarts definiert. Diese können wir an frei wählbaren Punkten in unserem
 Program definieren, sie müssen im Stack nur unterhalb der Condition liegen, zum
 Beispiel in der `parse-lines`-Funktion.
@@ -183,11 +183,11 @@ Handler behandeln Conditions und geben an, welcher Restart ausgeführt werden
 soll. Handler werden im Stack weiter unten definiert, als die Restarts. In
 unserem Beispiel kann das der Aufrufer der `parse-lines`-Funktion machen. 
 
-Ein Handler ist eine Funktion, die für eine bestimmte Condition deren Argumente
+Ein Handler ist eine Funktion, die die Argumente einer bestimmten Condition
 entgegennimmt und einen Befehl zur Ausführung eines Restarts zurückgibt. Handler
-werden über das Macro `bind-handler` stets an eine Condition gebunden.
+werden über das Makro `bind-handler` stets an eine Condition gebunden.
 `bind-handler` nimmt als letztes Argument außerdem Code entgegen, für dessen
-Auführung der Handler gebunden werden soll:
+Ausführung der Handler gebunden werden soll:
 
 {% highlight clojure %}
 
@@ -233,7 +233,7 @@ Im Artikel über
 [Koka](https://funktionale-programmierung.de/2019/10/24/algebraic-effects.html)
 wurde gezeigt, wie Effekte verwendet werden, um kontextabhängige Behandlung zu
 ermöglichen. Ein gerne verwendetes Beispiel sind Datenbankoperationen, die sich
-in Tests anders handhaben lassen, als in Produktion, wo die echte Datenbank
+in Tests anders handhaben lassen als in Produktion, wo die echte Datenbank
 läuft. Conditional Restarts können verwendet werden, um diese Mechanik
 nachzustellen:
 
@@ -256,7 +256,7 @@ nachzustellen:
       
       
 Dazu wird zuerst eine Condition `database-effect` definiert, die eine Operation
-und Parameter entgegennimmt. Die Operation ist in diesem Fall lediglich ein
+und Parameter entgegennimmt. Die Datenbank ist in diesem Fall lediglich ein
 Atom, das später interpretiert wird. Die Funktion `database` konstruiert den
 Datenbank-Effekt, feuert ihn ab und definiert den Wiedereinstieg im selben
 Aufruf. Der zugehörige Restart gibt den Wert, der durch den Handler übergeben
@@ -306,10 +306,11 @@ keine Neuentdeckung, es gibt sie schon mehrere Jahrzehnte. Dennoch sieht man
 sie außerhalb von Common Lisp kaum im Einsatz. 
 
 Wir haben gezeigt, dass man sich mit Conditional Restarts die Komplexität von
-Monaden sparen kann und trotzdem die Behandlung von Seiteneffekten spielend
-leicht austauschen kann. Inbesondere können Handler am Rande der Ausführung
-gebunden werden, zum Beispiel in den Routen-Definitionen eines Webservers. Das
-ermöglicht den einfachen Austausch, etwa für Tests. Beschreibung lässt sich von
+Monaden sparen und trotzdem die Behandlung von Seiteneffekten spielend leicht
+austauschen kann. Inbesondere können Handler am Rande der Ausführung gebunden
+werden, zum Beispiel in den Routen-Definitionen eines Webservers. Das ermöglicht
+den einfachen Austausch, etwa für Tests, indem für die Ausführung der
+Businesslogik ein anderer Handler gebunden wird. Beschreibung lässt sich von
 Ausführung auf natürliche Art und Weise entkoppeln.
 
 Bei der Behandlung von Fehlern helfen die Restarts, das Program trotzdem
