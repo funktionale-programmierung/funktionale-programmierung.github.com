@@ -3,7 +3,7 @@ layout: post
 description: "Conditional Restarts in Clojure"
 title: "Ein alter Hut: Conditional Restarts" 
 author: simon-haerer
-tags: ["Praxis", "freie", "Monade", "Scala"]
+tags: ["common lisp", "conditional", "restarts", "conditional restarts", "effekte", "fehler"]
 ---
 
 Viele unserer Blogposts beschäftigen sich damit, wie effektbehaftete Programme
@@ -21,7 +21,7 @@ Einsatzmöglichkeiten aufgezeigt.
 ## Voraussetzungen
 
 Neben Kenntnissen von Clojure hilft es dem Leser, die vorausgegangenen Artikel
-über Koka-Effekte gelesen zu haben.
+über [Koka-Effekte](https://funktionale-programmierung.de/2019/10/24/algebraic-effects.html) gelesen zu haben.
 
 
 ## Über Fehler, Seiteneffekte und Neuanfänge
@@ -40,7 +40,7 @@ Während Monaden dem Programmierer meist zusätzliche ungewünschte Komplexität
 aufbürden, kommen auch Exceptions mit Limitierungen: So lassen sich zwar Fehler
 in tieferen Callstack-Frames abfangen, doch was dann? Meist reicht es nur für
 ein Graceful Shutdown, denn der Wiedereinstieg an der Stelle des Auftretens des
-Fehlers ist nicht so einfach möglich, der Programfluss wird unterbrochen.
+Fehlers ist nicht so einfach möglich. Der Programfluss wird unterbrochen.
 
 Im Folgenden betrachten einen mächtigen Mechanimus, der die genannten Nachteile
 von Exceptions beseitigt und somit für weit mehr als Fehlerbehandlung verwendet
@@ -60,32 +60,39 @@ Implementierung von Conditional Restarts, die sich syntaktisch nahe an das
 Common Lisp-Original hält. Im Folgeblogpost wird die Implementierung dieser
 Bibliothek diskutiert.
 
-Die Bibliothek kann auf Github gefunden oder über Clojars eingebunden werden.
+Die Bibliothek kann auf [Github](https://github.com/smoes/simple-restarts)
+ gefunden oder über [Clojars](https://clojars.org/simple-restarts) eingebunden
+ werden. Alle Code-Beispiele sind zudem auf [Github verfügbar.](https://github.com/smoes/blogpost-conditional-restarts).
 
 
 ## Der klassiche Zeilenparser
 
 In den meisten Beispielen über Conditional Restarts wird ein Parser zur
 Veranschaulichung verwendet, der in verschiedenen Kontexten Eingaben (also
-Seiteneffekte) verarbeitet. Einmal wird dieser von einem Compiler aus
-aufgerufen, einmal aus einer interaktiven Konsole. Der Compiler soll im Falle
-eines Fehlers das Parsen abbrechen, die Benutzerkonsole unbeirrt die nächste
-Eingabe entgegennehmen. Die Grundfunktionalität des Parsers ist hier vereinfacht
-implementiert:
+Seiteneffekte) unterschiedlich verarbeitet. Einmal wird dieser von einem
+Compiler aus aufgerufen, einmal aus einer interaktiven Konsole. Der Compiler
+soll im Falle eines Fehlers das Parsen abbrechen, die Benutzerkonsole unbeirrt
+die nächste Eingabe entgegennehmen. Die Grundfunktionalität des Parsers ist hier
+vereinfacht implementiert:
 
-    (defn parse-line [line]
-        (if (valid? line)
-          (do-parse line)
-          (error "invalid line!")))
+
+{% highlight clojure %}
+
+(defn parse-line [line]
+    (if (valid? line)
+      (do-parse line)
+      (error "invalid line!")))
           
-    (defn parse-lines []
-        (for [line some-source]
-            (parse-line line)))
+(defn parse-lines []
+    (for [line some-source]
+        (parse-line line)))
+
+{% endhighlight %}
             
 Die Funktionen sind exemplarisch zu verstehen, weder `do-parse`, `error` noch
-`some-source` werden weiter definiert. Interessant ist die Frage, wie mit dem
-Fehler, der aus `error` resultiert umgegangen werden soll. Und hier kommen
-Conditional Restarts ins Spiel.
+`some-source` werden weiter erklärt. Interessant ist die Frage, wie mit dem
+Fehler, der aus `error` resultiert umgegangen werden soll, da das Verhalten im
+Fehlerfall kontextabhängig ist. Und hier kommen Conditional Restarts ins Spiel.
 
 
 ## Conditions
@@ -96,16 +103,25 @@ Um einen Zustand zu definierenm benutzen wir `defcondition` aus der verwendeten
 Bibliothek. Eine Condition kann Argumente entgegennehmen, die bei der späteren
 Verarbeitung verwendet werden können, hier `line`.
 
-    (defcondition invalid-line-error [line])
+
+{% highlight clojure %}
+
+(defcondition invalid-line-error [line])
+
+{% endhighlight %}
 
 Nun erzeugen wir die Condition anstelle des Fehlers und signalisieren zudem
 gleich, dass die Condition behandelt werden soll, indem wir `fire-condition`
 aufrufen:
 
-    (defn parse-line [line]
-        (if (valid? line)
-          (do-parse line)
-          (fire-condition (invalid-line-error line))))
+{% highlight clojure %}
+
+(defn parse-line [line]
+    (if (valid? line)
+      (do-parse line)
+      (fire-condition (invalid-line-error line))))
+
+{% endhighlight %}
 
 In diesem Beispiel ist die Condition ein Fehler, jedoch wird später klar, dass
 eine Condition mehr als nur Fehler repräsentieren kann.
@@ -114,32 +130,37 @@ eine Condition mehr als nur Fehler repräsentieren kann.
 
 Mögliche Wiedereinsteigspunkte im Falle einer Condition, werden über sogenannte
 Restarts definiert. Diese können wir an frei wählbaren Punkten in unserem
-Program definieren, sie müssen im Stack nur unterhalb der Condition liegen, in
-unserem Fall zum Beispiel in der `parse-lines`-Funktion. 
+Program definieren, sie müssen im Stack nur unterhalb der Condition liegen, zum
+Beispiel in der `parse-lines`-Funktion.
 
-Restarts haben jeweils einen Namen und eine Funktion, die angibt, wie weiter
-vorgangen wird. Die Funktion kann Argumente entgegennehmen, die wir anhand von
-Handlern (nächster Abschnitt) übergeben können. Restarts werden in der
-`restart-case`-Funktion definiert. Diese nimmt eine Funktion entgegen, für deren
-Conditions die Restarts gültig sein sollen. Im Folgenden sind zwei Restarts
-definiert, einer, der eine fehlerhafte Zeile in der interaktiven Konsole einfach
-überspringt und einer, der im Compiler-Fall zum Abbruch führt.
+Restarts werden jeweils über einen Namen und eine Funktion definiert, die
+beschreibt, wie der Neustart abläuft. Die Funktion kann Argumente
+entgegennehmen, die wir anhand von Handlern (nächster Abschnitt) übergeben
+können. Restarts werden in der `restart-case`-Funktion definiert. Diese nimmt
+als ersten Argument eine Funktion entgegen, für deren bei der Ausführung
+ausgelöste Conditions die Restarts gültig sein sollen. Im Folgenden sind zwei
+Restarts definiert, einer, der eine fehlerhafte Zeile in der interaktiven
+Konsole einfach überspringt und einer, der im Compiler-Fall zum Abbruch führt.
 
 
-    (defn parse-lines []
-        (for [line some-source]
-            (restart-case (parse-line line)
-               (restart :skip-line 
-                   (fn [line]
-                       (println "Skipping line " line))) 
-               (restart :abort
-                   (fn [line] 
-                       (println "Aborting after invalid line " line)
-                       ;; abort parsing via other condition or exception
-                       ;; ...
-                       )))))
+{% highlight clojure %}
+
+(defn parse-lines []
+    (for [line some-source]
+        (restart-case (parse-line line)
+           (restart :skip-line 
+               (fn [line]
+                   (println "Skipping line " line))) 
+           (restart :abort
+               (fn [line] 
+                   (println "Aborting after invalid line " line)
+                   ;; abort parsing via other condition or exception
+                   ;; ...
+                   )))))
+
+{% endhighlight %}
                
-Das Restart mit dem Namen `:skip-line` macht nichts, außer den Fehler auszugeben
+Der Restart mit dem Namen `:skip-line` macht nichts, außer den Fehler auszugeben
 und die nächste Schleifeniteration zuzulassen.
 
 Restarts ermöglichen verschiedene Strategien:
@@ -151,7 +172,7 @@ Restarts ermöglichen verschiedene Strategien:
 - Rückgabe eines Standardwertes
 - ...
 
-Im folgenden Abschnitt wird erklärt, wie wir von der Condition zu einem
+Im folgenden Abschnitt wird erklärt, wie wir vom auslösen einer Condition zu einem
 passenden Restart kommen.
 
 
@@ -162,31 +183,38 @@ soll. Handler werden im Stack weiter unten definiert, als die Restarts. In
 unserem Beispiel kann das der Aufrufer der `parse-lines` Funktion machen. 
 
 Ein Handler ist eine Funktion, die für eine bestimmte Condition deren Argumente
-entgegennimmt und ein Restart zurückgibt. Handler werden über das Macro
-`bind-handler` stets an eine Condition gebunden. `bind-handler` nimmt als
-letztes Argument außerdem Code entgegen, für dessen Auführung der Handler
-gebunden werden soll:
+entgegennimmt und einen Befehl zur Ausführung eines Restarts zurückgibt. Handler
+werden über das Macro `bind-handler` stets an eine Condition gebunden.
+`bind-handler` nimmt als letztes Argument außerdem Code entgegen, für dessen
+Auführung der Handler gebunden werden soll:
 
-    (defn parse-lines-compiler []
-       (handler-bind 
-           [invalid-line-error (fn [line]
-                                   (invoke-restart :abort line))] 
-           (parse-lines)))
+{% highlight clojure %}
 
-In diesem Beispiel wurde die Funktion `parse-lines` mit einem Handler für den
-Compiler-Fall spezialisiert, indem der Handler für die
-`invalid-line-error`-Condition das Restart `:abort` auswählt. Dazu gibt der
-Handler `invoke-restart` mit dem Namen des Restarts und Parametern, die dem
-Restart übergeben werden sollen, zurück. Ein `parse-lines-console` würde als
-restart hingegen `:skip-line` wählen:
+(defn parse-lines-compiler []
+   (handler-bind 
+       [invalid-line-error (fn [line]
+                               (invoke-restart :abort line))] 
+       (parse-lines)))
+       
+{% endhighlight %}
 
-    (defn parse-lines-console []
-       (handler-bind 
-           [invalid-line-error (fn [line]
-                                   (invoke-restart :skip-line line))] 
-           (parse-lines)))
+In diesem Beispiel wurde die Funktion `parse-lines` für den Compiler-Fall
+spezialisiert, indem der Handler für die `invalid-line-error`-Condition den
+Restart `:abort` auswählt. Dazu gibt der Handler `invoke-restart` mit dem Namen
+des Restarts und Parametern, die dem Restart übergeben werden sollen, zurück.
+Ein `parse-lines-console` würde als restart hingegen `:skip-line` wählen:
 
-Wird der Code ausgeführt, wird im Fehlerfall die Condition ausgelößt, ein
+{% highlight clojure %}
+
+(defn parse-lines-console []
+   (handler-bind 
+       [invalid-line-error (fn [line]
+                               (invoke-restart :skip-line line))] 
+       (parse-lines)))
+
+{% endhighlight %}
+
+Wird der Code ausgeführt, wird im Fehlerfall die Condition ausgelöst, ein
 gebundener Handler zu der jeweiligen Condition ausgeführt und anhand des
 Rückgabewertes zum passenden Restart gesprungen. Die Funktion, die im Restart
 definiert wurde, wird ausgeführt und damit die Ausführung fortgesetzt.
@@ -206,20 +234,22 @@ Datenbankoperationen, die sich in Tests anders handhaben lassen, als in
 Produktion, wo die echte Datenbank läuft. Conditional Restarts können verwendet
 werden, um diese Mechanik nachzustellen:
 
+{% highlight clojure %}
 
-    (defcondition database-effect [op params])
+(defcondition database-effect [op params])
 
-    (defn database [op & params]
-      (restart-case
-        (fire-condition (database-effect op params))
-        (restart :return-value identity)))
+(defn database [op & params]
+  (restart-case
+    (fire-condition (database-effect op params))
+    (restart :return-value identity)))
 
+(defn do-database-stuff []
+  (database :put 1 "Kaan")
+  (database :put 2 "Tim")
+  (database :put 3 "Simon")
+  [(database :get 2) (database :get 1) (database :get 3)])
 
-    (defn do-database-stuff []
-      (database :put 1 "Kaan")
-      (database :put 2 "Tim")
-      (database :put 3 "Simon")
-      [(database :get 2) (database :get 1) (database :get 3)])
+{% endhighlight %}
       
       
 Dazu wird zuerst eine Condition `database-effect` definiert, die eine Operation
@@ -230,30 +260,32 @@ Aufruf. Der zugehörige Restart gibt den Wert, der durch den Handler übergeben
 wird, unverändert zurück. Die Funktion `do-database-stuff` zeigt, wie dieses
 Konstrukt verwendet werden kann. Es fehlt nur noch ein Handler:
 
+{% highlight clojure %}
 
-    (def db-atom (atom {}))
+(def db-atom (atom {}))
 
-    (defn database-get [k]
-      (get @db-atom k))
+(defn database-get [k]
+  (get @db-atom k))
 
-    (defn database-put [k v]
-      (swap! db-atom assoc k v))
-
-
-    (defn database-interpreter [op params]
-      (case op
-        :get (apply database-get params)
-        :put (apply database-put params)))
+(defn database-put [k v]
+  (swap! db-atom assoc k v))
 
 
-    (defn database-handler [op params]
-      (invoke-restart :return-value (database-interpreter op params)))
+(defn database-interpreter [op params]
+  (case op
+    :get (apply database-get params)
+    :put (apply database-put params)))
 
-    (defn do-database-stuff-handled []
-      (handler-bind
-        [database-effect database-handler]
-        (do-database-stuff)))
+
+(defn database-handler [op params]
+  (invoke-restart :return-value (database-interpreter op params)))
+
+(defn do-database-stuff-handled []
+  (handler-bind
+    [database-effect database-handler]
+    (do-database-stuff)))
     
+{% endhighlight %}
 
 `database-handler` nimmt die Operation und deren Parameter entgegen und gibt sie
 an einen Interpreter weiter. Dieser wertet die jeweiligen Aufrufe gegen ein Atom
@@ -276,11 +308,12 @@ Wir haben gezeigt, dass man sich mit Conditional Restarts die Komplexität von
 Monaden sparen kann und trotzdem die Behandlung von Seiteneffekten spielend
 leicht austauschen kann. Inbesondere können Handler am Rande der Ausführung
 gebunden werden, zum Beispiel in den Routen-Definitionen eines Webservers. Das
-ermöglicht den einfachen Austausch, etwa für Tests. 
+ermöglicht den einfachen Austausch, etwa für Tests. Beschreibung lässt sich von
+Ausführung auf natürliche Art und Weise entkoppeln.
 
 Bei der Behandlung von Fehlern helfen die Restarts dabei, das Program trotzdem
 dort fortzusetzen, wo der Fehler aufgetreten ist---abermals abhängig vom
 Einsatzkontext des Programmcodes.
 
-In einem folgenden Blogpost werden wir uns den Code von SimpleConditions genauer
+In einem folgenden Blogpost werden wir uns den Code von Simple Restarts genauer
 ansehen und verstehen, wie die Bibliothek implementiert ist.
