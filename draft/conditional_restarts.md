@@ -57,7 +57,7 @@ alte Sprache implementiert Conditional Restarts: bedingte Neustarts. Wir werden
 in diesem Blogpost eine kleine Clojure Bibliothek namens Simple Restarts
 verwenden, um Conditional Restarts zu erklären. Diese bietet eine einfache
 Implementierung von Conditional Restarts, die sich syntaktisch nahe an das
-Common-Lisp-Original hält. Im Folgeblogpost wird die Implementierung dieser
+Common Lisp-Original hält. Im Folgeblogpost wird die Implementierung dieser
 Bibliothek diskutiert.
 
 Die Bibliothek kann auf [Github](https://github.com/smoes/simple-restarts)
