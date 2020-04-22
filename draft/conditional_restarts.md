@@ -180,7 +180,9 @@ passenden Restart kommen.
 ## Handler
 
 Handler behandeln Conditions und geben an, welcher Restart ausgeführt werden
-soll. Handler werden im Stack abermals weiter oben definiert, als die Restarts.
+soll. Handler werden analog zu `try-catch` implementiert und zwar derart, dass
+Restarts behandelt werden oder: Handler müssen vor dem Werfen von Conditions
+gebunden werden und die Bindung muss an den gewünschten Restarts vorhanden sein.
 In unserem Beispiel kann das der Aufrufer der `parse-lines`-Funktion machen.
 
 Ein Handler ist eine Funktion, die die Argumente einer bestimmten Condition
