@@ -38,11 +38,11 @@ Rand der Ausführung zu drängen, um sie dort explizit abzuhandeln, bis hin zu
 
 Während Monaden dem Programmierer meist zusätzliche ungewünschte Komplexität
 aufbürden, kommen auch Exceptions mit Limitierungen: So lassen sich zwar Fehler
-in tieferen Callstack-Frames abfangen, doch was dann? Meist reicht es nur für
+in höheren Callstack-Frames abfangen, doch was dann? Meist reicht es nur für
 ein Graceful Shutdown, denn der Wiedereinstieg an der Stelle des Auftretens des
 Fehlers ist nicht so einfach möglich. Der Programfluss wird unterbrochen.
 
-Im Folgenden betrachten einen mächtigen Mechanimus, der die genannten Nachteile
+Im Folgenden betrachten wir einen mächtigen Mechanimus, der die genannten Nachteile
 von Exceptions beseitigt und somit für weit mehr als Fehlerbehandlung verwendet
 werden kann.
 
@@ -131,8 +131,8 @@ eine Condition mehr als nur Fehler repräsentieren kann.
 
 Mögliche Wiedereinstiegspunkte im Falle einer Condition werden über sogenannte
 Restarts definiert. Diese können wir an frei wählbaren Punkten in unserem
-Program definieren, sie müssen im Stack nur unterhalb der Condition liegen, zum
-Beispiel in der `parse-lines`-Funktion.
+Program definieren, sie müssen ähnlich wie `try-catch` bei Exceptions
+oberhalb der Condition definiert sein, zum Beispiel in der `parse-lines`-Funktion.
 
 Restarts werden jeweils über einen Namen und eine Funktion definiert, die
 beschreibt, wie der Neustart abläuft. Die Funktion kann Argumente
@@ -180,8 +180,8 @@ passenden Restart kommen.
 ## Handler
 
 Handler behandeln Conditions und geben an, welcher Restart ausgeführt werden
-soll. Handler werden im Stack weiter unten definiert, als die Restarts. In
-unserem Beispiel kann das der Aufrufer der `parse-lines`-Funktion machen. 
+soll. Handler werden im Stack abermals weiter oben definiert, als die Restarts.
+In unserem Beispiel kann das der Aufrufer der `parse-lines`-Funktion machen.
 
 Ein Handler ist eine Funktion, die die Argumente einer bestimmten Condition
 entgegennimmt und einen Befehl zur Ausführung eines Restarts zurückgibt. Handler
