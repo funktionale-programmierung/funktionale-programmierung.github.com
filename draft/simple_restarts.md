@@ -1,7 +1,7 @@
 ---
 layout: post
 description: "Conditional Restarts in Clojure"
-title: "Conditional Restarts: Hinter den Kulissen" 
+title: "Simple Restarts: Hinter den Kulissen" 
 author: simon-haerer
 tags: ["common lisp", "conditional", "restarts", "conditional restarts", "effekte", "fehler", "clojure"]
 ---
