@@ -10,7 +10,7 @@ Im vorherigen Blogpost haben wir Conditional Restarts in Clojure kennen gelernt
 und dabei die Bibliothek "Simple Restarts" verwendet. Diese Bibliothek wurde als
 Anschauungsbeispiel erstellt, um Conditional Restarts in Clojure zu erklären. In
 diesem Blogpost werden wir einen Blick hinter die Kulissen werfen und verstehen,
-wie die Magie hinter Simple Restarts implementiert ist: Eine lehrreiche Reise
+wie die Magie hinter "Simple Restarts" implementiert ist: Eine lehrreiche Reise
 voller Illusion, Überraschungen und "Aha!"s.
 
 <!-- more start -->
@@ -20,7 +20,8 @@ voller Illusion, Überraschungen und "Aha!"s.
 Neben guten Kenntnissen in Clojure, sollte der Leser die [Einführung zu
 Conditional
 Restarts](https://funktionale-programmierung.de/2020/04/24/conditional-restarts.html),
-die auf "Simple Restarts" aufbaut, gelesen haben. Außerdem ist unsere Blogreihe zu
+die auf "Simple Restarts" aufbaut, gelesen haben. Außerdem ist unsere Blogreihe
+zu
 [Macros](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html)
 in
 [Clojure](https://funktionale-programmierung.de/2019/09/17/clojure-macros-2.html)
@@ -28,8 +29,8 @@ sehr zu empfehlen, da ein großer Teil der Bibliothek mithilfe von Macros
 implementiert wurde. Insbesondere der [dritte
 Teil](https://funktionale-programmierung.de/2020/02/18/clojure-macros-3.html)
 der Serie ist wichtig, denn neben Macros kommen auch Records aus [Active
-Clojure](https://github.com/active-group/active-clojure) zum Einsatz, um Daten
-zu beschreiben.
+Clojure](https://github.com/active-group/active-clojure) zum Einsatz, um
+zusammengesetzte Daten zu beschreiben.
 
 
 ## Den Call-Stack hinauf und wieder hinunter
@@ -47,8 +48,7 @@ weitere Funktion auf, wird der Vorgang wiederholt, der Stack wächst. Ist eine
 Funktion abgearbeitet, wird sie vom Stack entfernt und die Berechnungen wird
 nach der Stelle fortgesetzt, an der das Frame auf den Stack gelegt wurde.
 
-Historisch bedingt wächst der Stack nach unten, während der Heap, also Werte wie
-Variablen, die im Speicher stehen, nach oben wächst.
+Historisch bedingt wächst der Stack nach unten:
 
 <div id="center" style="padding: 40px 0px">
   <img src="/files/conditional-restarts/callstacks.png"/> 
@@ -98,7 +98,7 @@ Identifiers trägt und die Parameter entgegen nimmt:
 
 {% endhighlight %}
      
-Wird also `(example-condition 1 2 3)` aufgerufen, wird ein Record erzeugt, dass
+Wird also `(example-condition 1 2 3)` aufgerufen, wird ein Record erzeugt, das
 die Variable `example-condition` der Funktion selbst als Identifier beinhaltet,
 sowie die Vector `[1 2 3]` im Feld `condition-params`.
 
@@ -130,7 +130,7 @@ aktuell gültigen Handlern mitzuführen:
 
 {% endhighlight %}
 
-Mit der Core-Funktion `binding` fügen wir die an `bind-handler` übergebenen
+Mit der eingebauten Funktion `binding` fügen wir die an `bind-handler` übergebenen
 Condition-Handler-Paare in die dynamischen Map `*handlers*` ein. Die Map
 verwendet die durch die Condition-Definitionen definierten Funktionen als
 Schlüssel, die Werte sind die Handler-Funktionen, die im Vektor jeweils an
@@ -154,7 +154,6 @@ verwendet wird, um aus der dynamischen Map den passenden Handler auszuwählen.
   (if-let [handler (get *handlers* name)]
     handler
     (throw (ex-info "No handler found" {:condition name}))))
-
 
 (defn fire-condition [condition]
   (let [condition-name (condition-name condition)
@@ -185,12 +184,10 @@ Sowohl Restarts also auch Restart-Invocations sind lediglich Daten:
   [n restart-name
    invocation-function restart-invocation-function])
 
-
 (rec/define-record-type RestartInvocation
   (make-restart-invocation restart-name params) restart-invocation?
   [restart-name restart-invocation-restart-name
    params restart-invocation-params])
-
 
 (defn invoke-restart [sym & params]
   (make-restart-invocation sym params))
@@ -242,7 +239,6 @@ kommuniziert, fangen wir diese im Macro auf:
         (throw e)))
     (throw e)))
 
-
 (defmacro restart-case [body & restarts]
   `(try
     ~body
@@ -260,22 +256,22 @@ extrahiert und der passende Restart aus der Liste der übergebenen Restarts gesu
 Existiert kein passender Restart, wird die Exception erneut geworfen. Es kann ja
 sein, dass ein passender Restart in höheren Stack-Frames definiert wurde. Findet
 sich ein solcher Restart, wird die Wiedereinstiegsfunktion ausgewertet---Und
-fertig ist das Künststück._
+fertig ist das Kunststück.
 
 
 # Fazit
 
-In diesem Blogpost haben wir die Tricks, die hinter der Simple Restarts
-Bibliothek stehen nachvollzogen. Es wurde gezeigt wie die zwei Mechanismen,
-Bindings und Exceptions, verwendet werden, um bidirektional über den Stack
-hinweg zu kommunizieren. Macros helfen dabei, wie Illusionen, über die
+In diesem Blogpost haben wir die Tricks, die hinter der "Simple
+Restarts"-Bibliothek stehen nachvollzogen. Es wurde gezeigt wie die zwei
+Mechanismen, Bindings und Exceptions, verwendet werden, um bidirektional über
+den Stack hinweg zu kommunizieren. Macros helfen dabei, wie Illusionen, über die
 eigentlichen Vorgänge hinwegzutäuschen und ermöglichen es dem Anwender der
 Bibliothek ohne Verständnis der Interna, Sachverhalte abzubilden--wir
 Informatiker nennen dies Abstraktion. Lisps und ihr mächtiges Macrosystem
 erleichtern die Implementierung solcher Bibliotheken enorm.
 
-Die Bibliothek hat auch Schwächen: Neben Fehlerbehandlung, lässt sich Verwendung
-von Exceptions nicht vollständig vor dem Answender verbergen: Fängt dieser an
+Die Bibliothek hat auch Schwächen: Neben Fehlerbehandlung lässt sich Verwendung
+von Exceptions nicht vollständig vor dem Anwender verbergen: Fängt dieser an
 einer Stelle alle Exceptions ab, funktioniert auch der Restart-Mechanismus nicht
 mehr. Dies könnte vom Anwender nicht gewollt sein und aus Unwissenheit über die
 Interna der Bibliothek passieren. Für Anschauungszwecke reicht der
