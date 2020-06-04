@@ -151,18 +151,20 @@ verwendet wird, um aus der dynamischen Map den passenden Handler auszuwählen.
 
 {% highlight clojure %}
 
+(def exception-identifier ::restart-invocation)
+
 (defn condition-handler [name]
   (if-let [handler (get *handlers* name)]
     handler
     (throw (ex-info "No handler found" {:condition name}))))
 
 (defn fire-condition [condition]
-  (let [condition-name (condition-name condition)
-        handler (condition-handler condition-name)
-        res (apply handler (condition-params condition))]
-    (if (restart-invocation? res)
-      (throw (ex-info "" {:type :restart-invocation
-                          :restart-invocation res}))
+  (let [handler        (-> condition condition-identifier condition-handler)
+        params         (condition-params condition)
+        handler-result (apply handler params)]
+    (if (restart-invocation? handler-result)
+      (throw (ex-info "" {:type           exception-identifier
+                          :handler-result handler-result}))
       (throw (ex-info "No restart invocation returned" {:handler handler})))))
 
 {% endhighlight %}
@@ -171,7 +173,7 @@ verwendet wird, um aus der dynamischen Map den passenden Handler auszuwählen.
 Handler ausgwählt und dieser anhand der Condition-Parameter ausgewertet. Handler
 müssen stets eine Restart-Invocation (siehe folgenden Abschnitt) zurückgeben.
 Die Funktion lässt im nächsten Schritt eine Exception fallen, die diese
-Restart-Invocation beinhaltet und vom Typ `:restart-invocation` ist.
+Restart-Invocation beinhaltet und vom Typ `::restart-invocation` ist.
 
 
 # Restart und Restart-Invocation
@@ -224,19 +226,19 @@ kommuniziert, fangen wir diese im Makro auf:
 {% highlight clojure %}
 
 (defn restart-invocation-exception? [e]
-  (= (:type (ex-data e)) :restart-invocation))
+  (= (:type (ex-data e)) exception-identifier))
 
 (defn find-restart [restarts name]
   (first (filter (fn [restart] (= (restart-name restart) name)) restarts)))
 
-(defn restart-case-catch [e restarts]
+(defn restart-case-catch [e available-restarts]
   (if (restart-invocation-exception? e)
-    (let [res     (:restart-invocation (ex-data e))
-          name    (restart-invocation-restart-name res)
-          params  (restart-invocation-params res)
-          restart (find-restart restarts name)]
-      (if restart
-        (apply (restart-invocation-function restart) params)
+    (let [handler-result   (:handler-result (ex-data e))
+          restart-name     (restart-invocation-restart-name handler-result)
+          restart-params   (restart-invocation-params handler-result)]
+
+      (if-let [restart (find-restart available-restarts restart-name)]
+        (apply (restart-invocation-function restart) restart-params)
         (throw e)))
     (throw e)))
 
