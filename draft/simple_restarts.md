@@ -37,15 +37,15 @@ zusammengesetzte Daten zu beschreiben.
 
 Conditional Restarts ermöglichen das Zusammenspiel von Restarts und Handlern und
 das Auslösen von Conditions über mehrere Funktionsaufrufe hinweg. Daher werden
-wir im Folgenden den Call-Stack genauer betrachten und verstehen, wie dieser
-funktioniert, um Conditional Restarts zu begreifen.
+wir zunächst den Call-Stack genauer betrachten und verstehen, wie dieser
+funktioniert, um dann Conditional Restarts zu begreifen.
 
 Wird eine Funktion aufgerufen, legt ein Prozessor ein Frame auf den Call-Stack.
 Dieser Frame beinhaltet unter anderem die Argumente der Funktion, aber auch
 [andere wichtige Informationen.](https://de.wikipedia.org/wiki/Aufrufstapel)
 Ruft die aufgerufene Funktion wiederum eine
 weitere Funktion auf, wird der Vorgang wiederholt, der Stack wächst. Ist eine
-Funktion abgearbeitet, wird sie vom Stack entfernt und die Berechnungen wird
+Funktion abgearbeitet, wird sie vom Stack entfernt und die Berechnungen werden
 nach der Stelle fortgesetzt, an der der Frame auf den Stack gelegt wurde.
 
 Historisch bedingt wächst der Stack nach unten:
@@ -54,8 +54,8 @@ Historisch bedingt wächst der Stack nach unten:
   <img src="/files/conditional-restarts/callstacks.png"/> 
 </div>
 
-Wird `foo` aufgerufen und somit wiederum `bar`, liegen beide Funktionen auf dem
-Stack (b). Durch die Auswertung von `bar` kommt `baz` hinzu (c), dass nach vollständiger
+Wird `foo` aufgerufen und somit `bar`, liegen beide Funktionen auf dem
+Stack (b). Durch die Auswertung von `bar` kommt `baz` hinzu (c), das nach vollständiger
 Auswertung wieder entfernt wird (d).
 
 Doch was hat dies mit Conditional Restarts zu tun? Um im Falle einer Condition
@@ -64,7 +64,7 @@ vorherigen Frames nach dem ersten passenden Restart suchen. Beispielsweise
 müssen wir die Ausführung in `baz` unterbrechen und im Stack rückwärts in `bar`
 und dann in `foo` nach passenden Restarts suchen. Ebenso müssen wir aber dafür
 sorgen, dass die Handler, die definieren, welcher Restart infrage kommt, in den
-tieferen Stack-Frames bekannt sind: So muss ein Handler, der in der foo definiert
+tieferen Stack-Frames bekannt sind: So muss ein Handler, der in der `foo` definiert
 ist, in `bar` und `baz` sichtbar sein.
 
 Wir benötigen also die Möglichkeit, Informationen in tiefere Stack-Frames zu
@@ -78,7 +78,7 @@ Makros, um die Illusion perfekt zu machen.
 ## Binden der Handler
 
 Bevor es so richtig losgeht, implementieren wir ein Makro, um Conditions zu
-definieren. Um eine Condition zu beschreiben, führen wir ein Record mit den
+definieren. Um eine Condition zu beschreiben, führen wir einen Record mit den
 Feldern `identifier` und `parameters` ein. In dem Makro zur Definition einer
 Condition `defcondition` definieren wir einfach eine Funktion, die den Namen des
 Identifiers trägt und die Parameter entgegen nimmt:
@@ -100,7 +100,7 @@ Identifiers trägt und die Parameter entgegen nimmt:
 {% endhighlight %}
      
 Wird also `(example-condition 1 2 3)` aufgerufen, wird ein Record erzeugt, welcher
-die Variable `example-condition` der Funktion selbst als Identifier beinhaltet,
+das definierte Symbol `example-condition` der Funktion selbst als Identifier beinhaltet,
 sowie den Vektor `[1 2 3]` im Feld `condition-params`.
 
 Diese Condition kann in der Bibliothek dazu verwendet werden, Handler zu binden: 
@@ -117,7 +117,7 @@ Diese Condition kann in der Bibliothek dazu verwendet werden, Handler zu binden:
 
 Um dieses Makro zu implementieren, verwenden wir Clojure-Bindings in Verbindung
 mit [dynamischen Variablen](https://clojure.org/reference/vars). Diese erlauben
-es uns, Variablen neu zu binden (_per thread_). Die Idee ist, eine Map von
+es uns, Variablen neu zu binden (_pro Thread_). Die Idee ist, eine Map von
 aktuell gültigen Handlern mitzuführen:
 
 {% highlight clojure %}
@@ -143,8 +143,8 @@ Code stehen kann, der vorerst nicht ausgeführt wird. Wie die Funktion
 # Conditions abfeuern
 
 Sind die Handler erstmal in tieferen Stackframes sichtbar, kann das Feuerwerk
-beginnen: Conditions können ausgelöst werden, vom Handler bearbeitet und eine
-Exception geworfen werden, um in höheren Stackframes zu einem passenden Restart
+beginnen: Conditions können ausgelöst, vom Handler bearbeitet und
+Exceptions geworfen werden, um in höheren Stackframes zu einem passenden Restart
 zu gelangen. Wir implementieren die Funktion `fire-condition`, die eine Instanz
 einer Condition entgegennimmt und eine Funktion `condition-handler`, die
 verwendet wird, um aus der dynamischen Map den passenden Handler auszuwählen.
