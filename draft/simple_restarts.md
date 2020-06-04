@@ -224,7 +224,7 @@ kommuniziert, fangen wir diese im Makro auf:
 {% highlight clojure %}
 
 (defn restart-invocation-exception? [e]
-  (= (:type e) :restart-invocation))
+  (= (:type (ex-data e)) :restart-invocation))
 
 (defn find-restart [restarts name]
   (first (filter (fn [restart] (= (restart-name restart) name)) restarts)))
