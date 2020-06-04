@@ -22,13 +22,13 @@ Conditional
 Restarts](https://funktionale-programmierung.de/2020/04/24/conditional-restarts.html),
 die auf "Simple Restarts" aufbaut, gelesen haben. Außerdem ist unsere Blogreihe
 zu
-[Macros](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html)
+[Makros](https://funktionale-programmierung.de/2019/01/30/clojure-macros.html)
 in
 [Clojure](https://funktionale-programmierung.de/2019/09/17/clojure-macros-2.html)
-sehr zu empfehlen, da ein großer Teil der Bibliothek mithilfe von Macros
+sehr zu empfehlen, da ein großer Teil der Bibliothek mithilfe von Makros
 implementiert wurde. Insbesondere der [dritte
 Teil](https://funktionale-programmierung.de/2020/02/18/clojure-macros-3.html)
-der Serie ist wichtig, denn neben Macros kommen auch Records aus [Active
+der Serie ist wichtig, denn neben Makros kommen auch Records aus [Active
 Clojure](https://github.com/active-group/active-clojure) zum Einsatz, um
 zusammengesetzte Daten zu beschreiben.
 
@@ -37,16 +37,16 @@ zusammengesetzte Daten zu beschreiben.
 
 Conditional Restarts ermöglichen das Zusammenspiel von Restarts und Handlern und
 das Auslösen von Conditions über mehrere Funktionsaufrufe hinweg. Daher werden
-wir uns im Folgenden den Call-Stack genauer betrachten und verstehen, wie dieser
+wir im Folgenden den Call-Stack genauer betrachten und verstehen, wie dieser
 funktioniert, um Conditional Restarts zu begreifen.
 
 Wird eine Funktion aufgerufen, legt ein Prozessor ein Frame auf den Call-Stack.
-Dieses Frame beinhaltet unter anderem die Argumente der Funktion, aber auch
-[andere wichtige Informationen.](https://de.wikipedia.org/wiki/Aufrufstapel).
-Ruft die aufgerufene Funktion widerrum eine
+Dieser Frame beinhaltet unter anderem die Argumente der Funktion, aber auch
+[andere wichtige Informationen.](https://de.wikipedia.org/wiki/Aufrufstapel)
+Ruft die aufgerufene Funktion wiederum eine
 weitere Funktion auf, wird der Vorgang wiederholt, der Stack wächst. Ist eine
 Funktion abgearbeitet, wird sie vom Stack entfernt und die Berechnungen wird
-nach der Stelle fortgesetzt, an der das Frame auf den Stack gelegt wurde.
+nach der Stelle fortgesetzt, an der der Frame auf den Stack gelegt wurde.
 
 Historisch bedingt wächst der Stack nach unten:
 
@@ -54,7 +54,7 @@ Historisch bedingt wächst der Stack nach unten:
   <img src="/files/conditional-restarts/callstacks.png"/> 
 </div>
 
-Wird `foo` aufgerufen und somit wiederrum `bar`, liegen beide Funktionen auf dem
+Wird `foo` aufgerufen und somit wiederum `bar`, liegen beide Funktionen auf dem
 Stack (b). Durch die Auswertung von `bar` kommt `baz` hinzu (c), dass nach vollständiger
 Auswertung wieder entfernt wird (d).
 
@@ -62,23 +62,24 @@ Doch was hat dies mit Conditional Restarts zu tun? Um im Falle einer Condition
 den passenden Restart zu finden, müssen wir im Stack zurück und sukzessive in den
 vorherigen Frames nach dem ersten passenden Restart suchen. Beispielsweise
 müssen wir die Ausführung in `baz` unterbrechen und im Stack rückwärts in `bar`
-und dann `foo` nach passenden Restarts suchen. Ebenso müssen wir aber dafür
+und dann in `foo` nach passenden Restarts suchen. Ebenso müssen wir aber dafür
 sorgen, dass die Handler, die definieren, welcher Restart infrage kommt, in den
-tieferen Stack-Frames bekannt sind: So muss ein Handler der in der foo definiert
+tieferen Stack-Frames bekannt sind: So muss ein Handler, der in der foo definiert
 ist, in `bar` und `baz` sichtbar sein.
 
 Wir benötigen also die Möglichkeit, Informationen in tiefere Stack-Frames zu
-reichen, aber auch wieder zurück springen. Clojure zwei Mechanismen, die
-das ermöglichen: [Bindings](https://clojuredocs.org/clojure.core/binding) und
+reichen, aber auch die, wieder zurückzuspringen. Clojure bietet zwei
+Mechanismen, die das ermöglichen:
+[Bindings](https://clojuredocs.org/clojure.core/binding) und
 [Exceptions](https://clojuredocs.org/clojure.core/ex-info). Zudem verwenden wir
-Macros, um die Illusion perfekt zu machen.
+Makros, um die Illusion perfekt zu machen.
 
 
 ## Binden der Handler
 
-Bevor es so richtig losgeht, implementieren wir ein Macro, um Conditions zu
+Bevor es so richtig losgeht, implementieren wir ein Makro, um Conditions zu
 definieren. Um eine Condition zu beschreiben, führen wir ein Record mit den
-Feldern `identifier` und `parameters` ein. In dem Macro zur Definition einer
+Feldern `identifier` und `parameters` ein. In dem Makro zur Definition einer
 Condition `defcondition` definieren wir einfach eine Funktion, die den Namen des
 Identifiers trägt und die Parameter entgegen nimmt:
 
@@ -98,9 +99,9 @@ Identifiers trägt und die Parameter entgegen nimmt:
 
 {% endhighlight %}
      
-Wird also `(example-condition 1 2 3)` aufgerufen, wird ein Record erzeugt, das
+Wird also `(example-condition 1 2 3)` aufgerufen, wird ein Record erzeugt, welcher
 die Variable `example-condition` der Funktion selbst als Identifier beinhaltet,
-sowie die Vector `[1 2 3]` im Feld `condition-params`.
+sowie den Vektor `[1 2 3]` im Feld `condition-params`.
 
 Diese Condition kann in der Bibliothek dazu verwendet werden, Handler zu binden: 
 
@@ -114,7 +115,7 @@ Diese Condition kann in der Bibliothek dazu verwendet werden, Handler zu binden:
 
 {% endhighlight %}
 
-Um dieses Macro zu implementieren, verwenden wir Clojure-Bindings in Verbindung
+Um dieses Makro zu implementieren, verwenden wir Clojure-Bindings in Verbindung
 mit [dynamischen Variablen](https://clojure.org/reference/vars). Diese erlauben
 es uns, Variablen neu zu binden (_per thread_). Die Idee ist, eine Map von
 aktuell gültigen Handlern mitzuführen:
@@ -130,12 +131,12 @@ aktuell gültigen Handlern mitzuführen:
 
 {% endhighlight %}
 
-Mit der eingebauten Funktion `binding` fügen wir die an `bind-handler` übergebenen
-Condition-Handler-Paare in die dynamischen Map `*handlers*` ein. Die Map
-verwendet die durch die Condition-Definitionen definierten Funktionen als
+Mit der eingebauten Funktion `binding` fügen wir die an `bind-handler`
+übergebenen Condition-Handler-Paare in die dynamischen Map `*handlers*` ein. Die
+Map verwendet die durch die Condition-Definitionen definierten Funktionen als
 Schlüssel, die Werte sind die Handler-Funktionen, die im Vektor jeweils an
-gerader Stelle stehen. Wir verwenden hier ein Macro, da in `body` abiträrer Code
-stehen kann, der vorerst nicht ausgeführt wird. Wie die Funktion
+gerader Stelle stehen. Wir verwenden hier ein Makro, da in `body` beliebiger
+Code stehen kann, der vorerst nicht ausgeführt wird. Wie die Funktion
 `invoke-restart` implementiert ist, erfahren wir später.
 
 
@@ -145,7 +146,7 @@ Sind die Handler erstmal in tieferen Stackframes sichtbar, kann das Feuerwerk
 beginnen: Conditions können ausgelöst werden, vom Handler bearbeitet und eine
 Exception geworfen werden, um in höheren Stackframes zu einem passenden Restart
 zu gelangen. Wir implementieren die Funktion `fire-condition`, die eine Instanz
-einer Condition entgegennimmt und eine Funktion `condition-handler` die
+einer Condition entgegennimmt und eine Funktion `condition-handler`, die
 verwendet wird, um aus der dynamischen Map den passenden Handler auszuwählen.
 
 {% highlight clojure %}
@@ -214,10 +215,10 @@ werden:
 
 {% endhighlight %}
                
-`restart-case` nimmt einen Ausdruck entgegen, der ausgwertet werden soll und
-eine Liste von Restarts die im Falle einer Condition für diesen Ausdruck gelten
+`restart-case` nimmt einen Ausdruck entgegen, der ausgewertet werden soll und
+eine Liste von Restarts, die im Falle einer Condition für diesen Ausdruck gelten
 sollen. Da das Auslösen einer Condition über Exceptions den Stack aufwärts
-kommuniziert, fangen wir diese im Macro auf:
+kommuniziert, fangen wir diese im Makro auf:
 
 
 {% highlight clojure %}
@@ -255,22 +256,22 @@ extrahiert und der passende Restart aus der Liste der übergebenen Restarts gesu
 
 Existiert kein passender Restart, wird die Exception erneut geworfen. Es kann ja
 sein, dass ein passender Restart in höheren Stack-Frames definiert wurde. Findet
-sich ein solcher Restart, wird die Wiedereinstiegsfunktion ausgewertet---Und
+sich ein solcher Restart, wird die Wiedereinstiegsfunktion ausgewertet---und
 fertig ist das Kunststück.
 
 
 # Fazit
 
 In diesem Blogpost haben wir die Tricks, die hinter der "Simple
-Restarts"-Bibliothek stehen nachvollzogen. Es wurde gezeigt wie die zwei
+Restarts"-Bibliothek stehen, nachvollzogen. Es wurde gezeigt, wie die zwei
 Mechanismen, Bindings und Exceptions, verwendet werden, um bidirektional über
-den Stack hinweg zu kommunizieren. Macros helfen dabei, wie Illusionen, über die
+den Stack hinweg zu kommunizieren. Makros helfen dabei, wie Illusionen, über die
 eigentlichen Vorgänge hinwegzutäuschen und ermöglichen es dem Anwender der
-Bibliothek ohne Verständnis der Interna, Sachverhalte abzubilden--wir
-Informatiker nennen dies Abstraktion. Lisps und ihr mächtiges Macrosystem
+Bibliothek ohne Verständnis der Interna, Sachverhalte abzubilden---wir
+Informatiker nennen dies Abstraktion. Lisps und ihr mächtiges Makrosystem
 erleichtern die Implementierung solcher Bibliotheken enorm.
 
-Die Bibliothek hat auch Schwächen: Neben Fehlerbehandlung lässt sich Verwendung
+Die Bibliothek hat auch Schwächen: Neben Fehlerbehandlung lässt sich die Verwendung
 von Exceptions nicht vollständig vor dem Anwender verbergen: Fängt dieser an
 einer Stelle alle Exceptions ab, funktioniert auch der Restart-Mechanismus nicht
 mehr. Dies könnte vom Anwender nicht gewollt sein und aus Unwissenheit über die
