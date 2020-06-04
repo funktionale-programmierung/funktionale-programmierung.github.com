@@ -48,7 +48,7 @@ weitere Funktion auf, wird der Vorgang wiederholt, der Stack wächst. Ist eine
 Funktion abgearbeitet, wird sie vom Stack entfernt und die Berechnungen werden
 nach der Stelle fortgesetzt, an der der Frame auf den Stack gelegt wurde.
 
-Historisch bedingt wächst der Stack nach unten:
+Historisch bedingt wächst der Call-Stack nach unten:
 
 <div id="center" style="padding: 40px 0px">
   <img src="/files/conditional-restarts/callstacks.png"/> 
