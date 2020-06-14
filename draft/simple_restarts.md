@@ -60,12 +60,39 @@ Auswertung wieder entfernt wird (d).
 
 Doch was hat dies mit Conditional Restarts zu tun? Um im Falle einer Condition
 den passenden Restart zu finden, müssen wir im Stack zurück und sukzessive in den
-vorherigen Frames nach dem ersten passenden Restart suchen. Beispielsweise
-müssen wir die Ausführung in `baz` unterbrechen und im Stack rückwärts in `bar`
-und dann in `foo` nach passenden Restarts suchen. Ebenso müssen wir aber dafür
-sorgen, dass die Handler, die definieren, welcher Restart infrage kommt, in den
-tieferen Stack-Frames bekannt sind: So muss ein Handler, der in der `foo` definiert
-ist, in `bar` und `baz` sichtbar sein.
+vorherigen Frames nach dem ersten passenden Restart suchen. Nehmen wir an, dass
+`foo`, `bar` und `baz` mit folgendem Inhalt, unter zuhilfenahme von "Simple
+Restarts" gefüllt werden:
+
+
+{% highlight clojure %}
+
+(defcondition example-condition [a b c])
+
+(defn baz []
+    (raise-condition (example-condition 1 2 3)))
+
+(defn bar []
+   (restart-case 
+       (baz)
+       (restart :my-restart identity)))
+
+
+(defn foo []
+   (handler-bind 
+      [example-condition (fn [a b c] (invoke-restart :my-restart [a b c]))]
+      
+      (bar)))
+
+
+(foo)
+
+{% endhighlight %}
+
+Es muss nun möglich sein, die Ausführung von `baz` zu unterbrechen und im Stack
+rückwärts in `bar` nach passenden Restarts suchen. Ebenso müssen wir aber dafür
+sorgen, dass der Handler, der in `foo` angibt, welcher Restart ausgelöst wird, in den
+tieferen Stack-Frames bekannt ist.
 
 Wir benötigen also die Möglichkeit, Informationen in tiefere Stack-Frames zu
 reichen, aber auch die, wieder zurückzuspringen. Clojure bietet zwei
@@ -101,13 +128,14 @@ Identifiers trägt und die Parameter entgegen nimmt:
      
 Wird also `(example-condition 1 2 3)` aufgerufen, wird ein Record erzeugt, welcher
 das definierte Symbol `example-condition` der Funktion selbst als Identifier beinhaltet,
-sowie den Vektor `[1 2 3]` im Feld `condition-params`.
+sowie den Vektor `[1 2 3]` im Feld `condition-params`. Durch das Macro ist es
+möglich, eine Definition zu erzeugen, die Implementierungsdetails verbirgt.
 
 Diese Condition kann in der Bibliothek dazu verwendet werden, Handler zu binden: 
 
 {% highlight clojure %}
 
-(bind-handler 
+(handler-bind 
    [example-condition (fn [a] (invoke-restart :my-restart a))]
    ;; Code für den die Bindung des Handler gelten soll:
    ...
@@ -131,7 +159,7 @@ aktuell gültigen Handlern mitzuführen:
 
 {% endhighlight %}
 
-Mit der eingebauten Funktion `binding` fügen wir die an `bind-handler`
+Mit der eingebauten Funktion `binding` fügen wir die an `handler-bind`
 übergebenen Condition-Handler-Paare in die dynamischen Map `*handlers*` ein. Die
 Map verwendet die durch die Condition-Definitionen definierten Funktionen als
 Schlüssel, die Werte sind die Handler-Funktionen, die im Vektor jeweils an
