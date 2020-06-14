@@ -40,13 +40,14 @@ das Auslösen von Conditions über mehrere Funktionsaufrufe hinweg. Daher werden
 wir zunächst den Call-Stack genauer betrachten und verstehen, wie dieser
 funktioniert, um dann Conditional Restarts zu begreifen.
 
-Wird eine Funktion aufgerufen, legt ein Prozessor ein Frame auf den Call-Stack.
-Dieser Frame beinhaltet unter anderem die Argumente der Funktion, aber auch
-[andere wichtige Informationen.](https://de.wikipedia.org/wiki/Aufrufstapel)
-Ruft die aufgerufene Funktion wiederum eine
-weitere Funktion auf, wird der Vorgang wiederholt, der Stack wächst. Ist eine
-Funktion abgearbeitet, wird sie vom Stack entfernt und die Berechnungen werden
-nach der Stelle fortgesetzt, an der der Frame auf den Stack gelegt wurde.
+Wird eine Funktion aufgerufen, legt ein Prozessor oder eine virtuelle Maschine
+ein Frame auf den Call-Stack. Dieser Frame beinhaltet unter anderem die
+Argumente der Funktion, aber auch [andere wichtige
+Informationen.](https://de.wikipedia.org/wiki/Aufrufstapel) Ruft die aufgerufene
+Funktion wiederum eine weitere Funktion auf, wird der Vorgang wiederholt, der
+Stack wächst. Ist eine Funktion abgearbeitet, wird sie vom Stack entfernt und
+die Berechnungen werden nach der Stelle fortgesetzt, an der der Frame auf den
+Stack gelegt wurde.
 
 Historisch bedingt wächst der Call-Stack nach unten:
 
