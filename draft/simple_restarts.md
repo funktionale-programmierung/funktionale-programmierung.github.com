@@ -61,8 +61,8 @@ Auswertung wieder entfernt wird (d).
 Doch was hat dies mit Conditional Restarts zu tun? Um im Falle einer Condition
 den passenden Restart zu finden, müssen wir im Stack zurück und sukzessive in den
 vorherigen Frames nach dem ersten passenden Restart suchen. Nehmen wir an, dass
-`foo`, `bar` und `baz` mit folgendem Inhalt, unter zuhilfenahme von "Simple
-Restarts" gefüllt werden:
+`foo`, `bar` und `baz` mit folgendem Inhalt, unter Zuhilfenahme von "Simple
+Restarts", gefüllt sind:
 
 
 {% highlight clojure %}
@@ -77,13 +77,10 @@ Restarts" gefüllt werden:
        (baz)
        (restart :my-restart identity)))
 
-
 (defn foo []
    (handler-bind 
       [example-condition (fn [a b c] (invoke-restart :my-restart [a b c]))]
-      
       (bar)))
-
 
 (foo)
 
@@ -92,7 +89,7 @@ Restarts" gefüllt werden:
 Es muss nun möglich sein, die Ausführung von `baz` zu unterbrechen und im Stack
 rückwärts in `bar` nach passenden Restarts suchen. Ebenso müssen wir aber dafür
 sorgen, dass der Handler, der in `foo` angibt, welcher Restart ausgelöst wird, in den
-tieferen Stack-Frames bekannt ist.
+tieferen Stack-Frames (Aufruf von `baz`) bekannt ist.
 
 Wir benötigen also die Möglichkeit, Informationen in tiefere Stack-Frames zu
 reichen, aber auch die, wieder zurückzuspringen. Clojure bietet zwei
