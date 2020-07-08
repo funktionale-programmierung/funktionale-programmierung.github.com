@@ -112,7 +112,7 @@ nebeneinander, so lang es Platz hat, und dann untereinander sortiert. Hier wird
 also nicht nur stur eine "Vorgehen" befolgt ("breche pro Attribut-Wert-Paar um"),
 sondern der vorhandene Platz ausgenutzt.
 
-Obwohl die Beispiele aus zwei Unterschiedlichen Domänen kommen (Programmiersprache
+Obwohl die Beispiele aus zwei unterschiedlichen Domänen kommen (Programmiersprache
 Common Lisp und Auszeichnungssprache XML), können beide mit dem hier vorgestellten
 Pretty-Printer behandelt werden. Das wird dadurch ermöglicht, dass eine
 Metasprache für Dokumente, die schön ausgedruckt werden sollen, entwickelt wird.
@@ -132,18 +132,20 @@ Umbrüchen und Einrückungen. Dann wählt der Pretty-Printer aus dieser Menge vo
 Dokumenten das *beste* aus. Das *beste* hierbei ist das, das jede Zeile möglichst
 gut ausnutzt, aber dennoch die vorgegebene Breite nicht überschreitet.
 
-Wie das nun implementiert wird -- besonders in Hinblick auf Effizienz (es können
-einige Tausend bis Millionen Alternativ-Dokumente entstehen) -- sehen wir in den
-nächsten Paragraphen.
+In diesem Blogpost wollen wir unser Augenmerk auf die Verwendung der
+Pretty-Printer-DSL setzen. Wie die eigentliche DSL implementiert ist -- besonders
+in Hinblick auf Effizienz (es könnten einige Tausend bis Millionen
+Alternativ-Dokumente entstehen) -- sehen wir in einem folgenden Blogpost.
 
 ## Die Pretty-Printer-Dokumentensprache
 
-Unsere Pretty-Printer-DSL besteht aus Dokumenten, die wiederum aus (einfachen)
-Texten, Zeilenumbrüchen und Einrückungen bestehen. Diese Bestandteile lassen sich
+Unsere Pretty-Printer-DSL besteht aus Dokumenten und Operatoren, die auf diesen
+arbeiten. Wir benutzen ab jetzt Haskell-Syntax, um dem Ganzen Form zu geben. 
 
-## Sechs Operatoren für das Glück
 
-Folgende sechs Operatoren werden gebraucht, um ein Dokument in unserer
+### Sechs Operatoren für das Glück
+
+Folgende sechs Operatoren stehen zur Verfügung, um ein Dokument in unserer
 Prettyprinter-Sprache zu beschreiben:
 
 ```haskell
@@ -163,6 +165,44 @@ und dem neutralen Element `nil` ein Monoid). `text` wandelt eine Zeichenkette in
 ein Dokument um, `line` beschreibt einen Zeilenumbruch und `nest` rückt ein
 Dokument ein. Zu guter Letzt gibt `layout` ein als String gerendertes Dokument
 zurück.
+
+Beispielsweise würde folgendes Dokument
+
+```haskell
+doc =
+  text "<p>" <> 
+  nest 2 (
+    line <> text "<a>" <> text "This is a link" <> text "</a>" <>
+    line <> text "Some text"
+  ) <>
+  line <> text "</p>"
+```
+
+mit Hilfe von `layout` so ausgedruckt werden:
+
+```bash
+<p>
+  <a>This is a link</a>
+  Some text
+</p>
+```
+
+Oben war die Rede von mehreren Dokumenten, aus denen das beste ausgewählt wird.
+Hier ist bisher nichts davon zu sehen. Die Sprache benötigt für diese Erweiterung
+eine weitere Operation (`group`) und eine Erweiterung des Begriffs Dokument: 
+
+## Snippets
+
+Ein Dokument ist ein Summentyp aus Text, Zeilenumbruch mit Einrückung und dem
+leeren Dokument.
+
+```haskell
+Doc = Nil
+    | String `Text` Doc 
+    | Int `Line` Doc
+```
+
+
 
 
 
