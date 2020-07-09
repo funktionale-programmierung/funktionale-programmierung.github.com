@@ -3,7 +3,7 @@ layout: post
 description: "A prettier printer implemented in Clojure"
 title: "Aufgehübscht! -- Pretty-Printing"
 author: kaan-sahin
-tags: "pretty", "print", "printing", "clojure", "wadler"]
+tags: ["pretty", "print", "printing", "clojure", "wadler"]
 ---
 
 Um ein (verschachteltes) Objekt komfortabel untersuchen zu können, wird eine
@@ -109,8 +109,8 @@ Das erste Beispiel zeigt wieder den Idealfall: Der gesamte `em`-Ausdruck wird in
 eine Zeile in den Fließtext eingebettet, kein Umbruch nötig, da die Maximalbreite
 nicht überschritten wird. Die Attribute des `p`-Elements werden zunächst
 nebeneinander, so lang es Platz hat, und dann untereinander sortiert. Hier wird
-also nicht nur stur eine "Vorgehen" befolgt ("breche pro Attribut-Wert-Paar um"),
-sondern der vorhandene Platz ausgenutzt.
+also nicht nur stur ein "Vorgehen" befolgt ("breche pro Attribut-Wert-Paar um"),
+sondern der vorhandene Platz sinnvoll ausgenutzt.
 
 Obwohl die Beispiele aus zwei unterschiedlichen Domänen kommen (Programmiersprache
 Common Lisp und Auszeichnungssprache XML), können beide mit dem hier vorgestellten
@@ -127,15 +127,15 @@ TODO: Verlinke auf Beispiel eines anderen Blogposts zu DSLs
 ## Strategie des Prettier Printers
 
 Der Pretty-Printer nimmt eine Beschreibung eines Dokuments entgegen und erzeugt
-daraus viele Alternativ-Dokumente. Diese unterscheiden sich im Format bzgl.
-Umbrüchen und Einrückungen. Dann wählt der Pretty-Printer aus dieser Menge von
-Dokumenten das *beste* aus. Das *beste* hierbei ist das, das jede Zeile möglichst
-gut ausnutzt, aber dennoch die vorgegebene Breite nicht überschreitet.
+daraus viele Layouts. Diese unterscheiden sich im Format bzgl. Umbrüchen und
+Einrückungen. Dann wählt der Pretty-Printer aus dieser Menge von Layouts das
+*beste* aus. Das *beste* hierbei ist das, das jede Zeile möglichst gut ausnutzt,
+aber dennoch die vorgegebene Breite nicht überschreitet.
 
 In diesem Blogpost wollen wir unser Augenmerk auf die Verwendung der
 Pretty-Printer-DSL setzen. Wie die eigentliche DSL implementiert ist -- besonders
-in Hinblick auf Effizienz (es könnten einige Tausend bis Millionen
-Alternativ-Dokumente entstehen) -- sehen wir in einem folgenden Blogpost.
+in Hinblick auf Effizienz (es könnten einige Tausend bis Millionen Layouts
+entstehen) -- sehen wir in einem folgenden Blogpost.
 
 ## Die Pretty-Printer-Dokumentensprache
 
@@ -180,18 +180,72 @@ doc =
 
 mit Hilfe von `layout` so ausgedruckt werden:
 
-```bash
+```xml
 <p>
   <a>This is a link</a>
   Some text
 </p>
 ```
 
-Oben war die Rede von mehreren Dokumenten, aus denen das beste ausgewählt wird.
-Hier ist bisher nichts davon zu sehen. Die Sprache benötigt für diese Erweiterung
-eine weitere Operation (`group`) und eine Erweiterung des Begriffs Dokument: 
+### Erst die Masse, dann die Klasse
+
+Oben war die Rede von mehreren Layouts, aus denen das beste ausgewählt wird. Hier
+ist bisher nichts davon zu sehen. Die Sprache benötigt dafür noch eine weitere
+Operation (`group`) und eine Erweiterung des Begriffs "Dokument": Wenn ab jetzt
+"Dokument" gesagt wird, meint dies eine Sammlung mehrerer möglicher Layouts
+(desselben Dokuments). Diese müssen jedoch von derselben Struktur sein und dürfen
+sich nur in Zeilenumbrüchen und Einrückungen unterscheiden. Doch wie kommen wir
+überhaupt zu verschiedenen Layouts? `group` ist hier der Schlüssel:
+
+```haskell
+group      :: Doc -> Doc
+```
+
+`group` nimmt ein Dokument (Sammlung mehrerer Layouts) und fügt dieser Sammlung
+ein neues Layout hinzu, in welchem jeder Zeilenumbruch durch ein Leerzeichen
+ersetzt wird. Wenn wir also `group` auf unser oben definiertes Dokument `doc`
+anweden, würde das folgende Layout hinzukommen:
+
+```xml
+<p> <a>This is a link</a> Some text </p>
+```
+
+Unser Pretty-Printer stellt zusätzlich die Funktion `pretty` bereit:
+
+```haskell
+pretty     :: Int -> Doc -> Doc
+```
+
+Diese wählt aus der übergebenen Sammlung von Layouts das beste für die ebenfalls
+übergebene Maximalbreite aus. Hier zur Verdeutlichung obiges Dokument im
+Zusammenspiel mit `pretty` und verschiedenen Maximalbreiten:
+
+```haskell
+twoLayouts = group doc
+
+layout $ pretty 30 twoLayouts
+
+-- --> 
+-- <p>
+--   <a>This is a link</a>
+--   Some text
+-- </p>
+
+layout $ pretty 60 twoLayouts
+
+-- -->
+-- <p> <a>This is a link</a> Some text </p>
+``` 
+
+Das einzeilige Layout ist für obigen Aufruf zu lang. Im unteren Aufruf
+unterschreiten beide Layouts die geforderte Maximalbreite. Somit wird hier das
+einzeilige gewählt, da dieses die (erste) Zeile größtmöglich ausnutzt.
+
+
+
 
 ## Snippets
+
 
 Ein Dokument ist ein Summentyp aus Text, Zeilenumbruch mit Einrückung und dem
 leeren Dokument.
@@ -202,6 +256,14 @@ Doc = Nil
     | Int `Line` Doc
 ```
 
+
+Code von grouped 
+```haskell
+text "<p>" <> 
+text " " <> text "<a>" <> text "This is a link" <> text "</a>" <>
+text " " <> text "Some text" <>
+text " " <> text "</p>"
+```
 
 
 
