@@ -1,7 +1,7 @@
 ---
 layout: post
 description: "A prettier printer"
-title: "Aufgehübscht! -- Pretty-Printing"
+title: "Aufgehübscht! &mdash; Pretty-Printing"
 author: kaan-sahin
 tags: ["pretty", "print", "printing", "haskell", "wadler"]
 ---
@@ -20,9 +20,9 @@ Quellcode hervorbringen, der komplexe Programme elegant ermöglicht.
 
 <!-- more start -->
 
-*Hinweis: Der komplette Code ist auf
-TODO [Github](https://github.com/kaaninho/a-prettier-printer)
-zu finden. Wir empfehlen, ihn während des Lesens Stück für Stück auszuführen.*
+*Hinweis: Der komplette Code des Pretty-Printers ist auf
+[Github](https://github.com/kaaninho/a-prettier-printer)
+zu finden. Viel Spaß beim Ausprobieren!
 
 ## The Good, the Bad and the Ugly
 
