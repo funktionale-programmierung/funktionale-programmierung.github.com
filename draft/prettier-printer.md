@@ -13,10 +13,10 @@ einen Blick ersichtlich ist. Wir schauen uns heute die Pretty-Printing-Strategie
 aus
 [Philip Wadler](http://homepages.inf.ed.ac.uk/wadler/)s
 Paper
-[A prettier printer](http://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf)
+["A prettier printer"](http://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf)
 (1997) an und sehen daran ein weiteres Mal, dass Datenmodellierung und
-Abstraktion der funktionalen Programmierung wunderbar einfachen und konzisen
-Quellcode hervorbringen, der komplexe Programme elegant ermöglicht.
+Abstraktion der funktionalen Programmierung zu wunderbar einfachem und konzisem
+Quellcode führen, der komplexe Domänen elegant beschreibt.
 
 <!-- more start -->
 
@@ -28,8 +28,8 @@ zu finden. Viel Spaß beim Ausprobieren!
 
 Wir werden im Folgenden LISP-Ausdrücke betrachten. Bei ihnen ist es von
 besonderer Wichtigkeit, die interne Struktur ersichtlich zu machen und damit den
-Sinn von guten Pretty-Printern zu motivieren. Hier ein gutes, ein nicht ganz
-gelungenes und ein ganz und gar nicht gelungenes (Pretty-)Printing der
+Sinn von guten Pretty-Printern zu motivieren. Hier ein gelungenes, ein nicht
+ganz gelungenes und ein ganz und gar nicht gelungenes (Pretty-)Printing der
 Fakultätsfunktion:
 
 ```lisp
@@ -56,11 +56,11 @@ Fangen wir unten an: Es wurde kein Pretty-Printer verwendet, sondern der Code
 einfach auf die verfügbare Breite von 30 Zeichen gedruckt. Sehr ungeschickt ist,
 dass wegen fehlender Einrückung nicht ersichtlich ist, welcher Ausdruck Teil
 eines anderen Ausdrucks ist. Im zweiten Beispiel ist dies schon wesentlich
-besser ersichtlich, da Subausdrücke jeweils um ein Zeichen eingerückt sind.
-Zudem erzeugen die Zeilenumbrüche noch mehr Struktur. Hier ist jedoch zu
-bemängeln, dass zu "aggressiv" umgebrochen wird. Das hat schlechtere Lesbarkeit
-und mehr Zeilen im Pretty-Print zur Folge. Das erste Beispiel lässt den Kopf und
-Rumpf einer Funktionsdefinition besonders gut erkennen.
+besser, da Subausdrücke jeweils um ein Zeichen eingerückt sind. Zudem erzeugen
+die Zeilenumbrüche noch mehr Struktur. Hier ist jedoch zu bemängeln, dass zu
+"aggressiv" umgebrochen wird. Das hat schlechtere Lesbarkeit und mehr Zeilen im
+Pretty-Print zur Folge. Das erste Beispiel lässt den Kopf und Rumpf einer
+Funktionsdefinition besonders gut erkennen.
 
 Als weiteres Beispiel XML-Code in drei geprinteten Varianten (dieses Mal mit 30
 Zeichen Maximalbreite):
@@ -109,22 +109,22 @@ a <a href="http://www.eg.com/"
 ```
 
 Das erste Beispiel zeigt wieder den Idealfall: Der gesamte `em`-Ausdruck wird in
-eine Zeile in den Fließtext eingebettet, kein Umbruch nötig, da die Maximalbreite
-nicht überschritten wird. Die Attribute des `p`-Elements werden zunächst
-nebeneinander, so lang es Platz hat, und dann untereinander sortiert. Hier wird
-also nicht nur stur ein "Vorgehen" befolgt ("breche pro Attribut-Wert-Paar um"),
-sondern der vorhandene Platz sinnvoll ausgenutzt.
+eine Zeile in den Fließtext eingebettet. Es ist kein Umbruch nötig, da die
+Maximalbreite nicht überschritten wird. Die Attribute des `p`-Elements werden
+zunächst nebeneinander, so lang es Platz hat, und dann untereinander sortiert.
+Hier wird also nicht nur stur ein "Vorgehen" befolgt ("breche pro
+Attribut-Wert-Paar um"), sondern der vorhandene Platz sinnvoll ausgenutzt.
 
-Obwohl die Beispiele aus zwei unterschiedlichen Domänen kommen (Programmiersprache
-Common Lisp und Auszeichnungssprache XML), können beide mit dem hier vorgestellten
-Pretty-Printer behandelt werden. Das wird dadurch ermöglicht, dass eine
-Metasprache für Dokumente, die schön ausgedruckt werden sollen, entwickelt wird.
-Dann erst wird für den Anwendungsfall bestimmt, wie man Objekte in diese
-Metasprache übersetzt. Die Vorgehensweise, eine beschreibende Zwischensprache zu
-entwerfen, ist in der funktionalen Programmierung gang und gäbe. Man nennt sie
-auch *domänenspezifische Sprachen* (domain specific languages im Englischen, kurz
-DSL). 
-TODO: Verlinke auf Beispiel eines anderen Blogposts zu DSLs
+Obwohl die Beispiele aus zwei unterschiedlichen Domänen kommen
+(Programmiersprache Common Lisp und Auszeichnungssprache XML), können beide mit
+dem hier vorgestellten Pretty-Printer behandelt werden. Das wird dadurch
+ermöglicht, dass eine Metasprache für Dokumente, die schön ausgedruckt werden
+sollen, entwickelt wird. Dann erst wird für den Anwendungsfall bestimmt, wie man
+Objekte in diese Metasprache übersetzt. Die Vorgehensweise, eine beschreibende
+Zwischensprache zu entwerfen &mdash eine sogenannte *domänenspezifische
+Sprache* (domain specific language im Englischen, kurz DSL), ist in der
+funktionalen Programmierung gang und gäbe. TODO: Verlinke auf Beispiel eines
+anderen Blogposts zu DSLs
 
 
 ## Strategie des Prettier Printers
@@ -142,8 +142,9 @@ entstehen) -- sehen wir in einem folgenden Blogpost.
 
 ## Die Pretty-Printer-Dokumentensprache
 
-Unsere Pretty-Printer-DSL besteht aus Dokumenten und Operatoren, die auf diesen
-arbeiten. Wir benutzen ab jetzt Haskell-Syntax, um dem Ganzen Form zu geben. 
+Unsere Pretty-Printer-DSL besteht aus Dokumenten und Kombinatoren, das heißt
+Operatoren, die auf diesen Dokumenten arbeiten. Wir benutzen ab jetzt
+Haskell-Syntax, um dem Ganzen Form zu geben.
 
 
 ### Sechs Operatoren für das Glück
@@ -160,8 +161,8 @@ nest       :: Int -> Doc -> Doc
 layout     :: Doc -> String
 ```
 
-Dabei fügt `<>` zwei Dokumente aneinander (man sagt auch "konkatenieren"). Das
-Resultat ist wieder ein Dokument. `nil` ist das sogenannte leere Dokument.
+Dabei fügt `<>` zwei Dokumente aneinander (man sagt auch es "konkateniert" sie).
+Das Resultat ist wieder ein Dokument. `nil` ist das sogenannte leere Dokument.
 Beliebige Dokumente bleiben bei Konkatenation mit `nil` unverändert (etwas
 mathematischer ausgedrückt bildet also die Menge aller Dokumente zusammen mit
 der assoziativen Verknüpfung `<>` und dem neutralen Element `nil` ein Monoid).
@@ -181,7 +182,7 @@ doc =
   line <> text "</p>"
 ```
 
-mit Hilfe von `layout` so ausgedruckt werden:
+mit Hilfe von `layout` so ausgedruckt:
 
 ```xml
 <p>
@@ -192,22 +193,22 @@ mit Hilfe von `layout` so ausgedruckt werden:
 
 ### Erst die Masse, dann die Klasse
 
-Oben war die Rede von mehreren Layouts, aus denen das beste ausgewählt wird. Hier
-ist bisher nichts davon zu sehen. Die Sprache benötigt dafür noch eine weitere
-Operation (`group`) und eine Erweiterung des Begriffs "Dokument": Wenn ab jetzt
+Oben war die Rede von mehreren Layouts, aus denen das beste ausgewählt wird.
+Hier ist bisher nichts davon zu sehen. Die Sprache benötigt dafür noch eine
+Erweiterung des Begriffs "Dokument" und eine weitere Operation: Wenn ab jetzt
 "Dokument" gesagt wird, meint dies eine Sammlung mehrerer möglicher Layouts
-(desselben Dokuments). Diese müssen jedoch von derselben Struktur sein und dürfen
-sich nur in Zeilenumbrüchen und Einrückungen unterscheiden. Doch wie kommen wir
-überhaupt zu verschiedenen Layouts? `group` ist hier der Schlüssel:
+(desselben Dokuments). Diese müssen jedoch von derselben Struktur sein und
+dürfen sich nur in Zeilenumbrüchen und Einrückungen unterscheiden. Doch wie
+kommen wir überhaupt zu verschiedenen Layouts? `group` ist hier der Schlüssel:
 
 ```haskell
-group      :: Doc -> Doc
+group :: Doc -> Doc
 ```
 
 `group` nimmt ein Dokument (Sammlung mehrerer Layouts) und fügt dieser Sammlung
 ein neues Layout hinzu, in welchem jeder Zeilenumbruch durch ein Leerzeichen
 ersetzt wird. Wenn wir also `group` auf unser oben definiertes Dokument `doc`
-anweden, würde das folgende Layout hinzukommen:
+anwenden, käme das folgende Layout hinzu:
 
 ```xml
 <p> <a>This is a link</a> Some text </p>
@@ -216,7 +217,7 @@ anweden, würde das folgende Layout hinzukommen:
 Unser Pretty-Printer stellt zusätzlich die Funktion `pretty` bereit:
 
 ```haskell
-pretty     :: Int -> Doc -> Doc
+pretty :: Int -> Doc -> Doc
 ```
 
 Diese wählt aus der übergebenen Sammlung von Layouts das beste für die ebenfalls
@@ -250,7 +251,7 @@ einzeilige gewählt, da dieses die (erste) Zeile größtmöglich ausnutzt.
 Zum Schluss des Blogposts wollen wir uns noch anschauen, wie solch eine
 Übersetzung von Domänencode, hier im speziellen XML-Code, in die
 Pretty-Printer-DSL aussehen könnte. Wenn wir tatsächlichen XML-Code benutzen
-wollten, müssten wir diesen zunächst Parsen, um ihn in einer für uns
+wollten, müssten wir diesen zunächst parsen, um ihn in einer für uns
 handhabbaren Form zu haben. Wir nehmen der Einfachheit halber an, dies sei
 bereits geschehen und die Repräsentation von XML-Code sähe wie folgt aus:
 
@@ -264,7 +265,7 @@ data Att   = Att String String
 Ein XML-Element ist ein gemischter Datentyp. Entweder es ist ein tatsächliches
 Element, das aus einer Zeichenkette (das ist der Name des Elements), einer Liste
 an Attributen und einer Liste an weiteren XML-Elementen besteht. Oder es ist nur
-eine einfache Zeichenkette. Ein Attribut besteht aus zwei Zeichenketten, dem
+eine einfache Zeichenkette. Ein Attribut besteht aus zwei Zeichenketten: dem
 Namen des Attributs und dessen Wert. Die Repräsentation von `<p color="red">
 Hallo </p>` ist demnach:
 
@@ -280,8 +281,8 @@ attToDOC :: Att -> DOC
 attToDOC (Att k v) = text k <> text "=\"" <> text v <> text "\""
 ```
 
-Ein Tag wollen wir so drucken lassen, dass es auf nur eine Zeile gedruckt wird,
-falls alle Attribute auf diese passen. Ansonsten soll nach dem Tag-Namen
+Ein Tag wollen wir so drucken lassen, dass es nur dann auf eine Zeile gedruckt
+wird, falls alle Attribute auf diese passen. Ansonsten soll nach dem Tag-Namen
 umgebrochen und um zwei Zeichen eingerückt werden. Zudem soll dann auch nach
 jedem Attributpaar umgebrochen werden:
 
@@ -290,8 +291,8 @@ tagToDOC :: String -> [Att] -> DOC
 tagToDOC n [] = text "<" <> text n <> text ">"
 tagToDOC n atts = group
                     (text "<" <> text n <>
-                      (nest 2 (line <> concatDOCs (map attToDOC atts))) <>
-                      line <> text ">")
+                     (nest 2 (line <> concatDOCs (map attToDOC atts))) <>
+                     line <> text ">")
 ```
 
 `group` um den gesamten Ausdruck macht die Wahl zwischen "alles auf eine Zeile"
@@ -336,7 +337,7 @@ xml   = Elt "p" [
         ] [
           Txt "Here is some",
           Elt "em" [] [Txt "emphasized"],
-          Txt "Text",
+          Txt "text",
           Txt "Here is a",
           Elt "a" [Att "href" "http://example.org"]
             [Txt "link"],
@@ -344,7 +345,7 @@ xml   = Elt "p" [
           ]
 ```
 
-Wird mit `layout $ pretty 30 xml` bzw. `layout $ pretty 60 xml` so ausgedruckt:
+wird mit `layout $ pretty 30 xml` bzw. `layout $ pretty 60 xml` so ausgedruckt:
 
 ```xml
 <p
@@ -354,7 +355,7 @@ Wird mit `layout $ pretty 30 xml` bzw. `layout $ pretty 60 xml` so ausgedruckt:
 >
  Here is some
   <em>  emphasized </em>
-  Text. Here is a
+  text. Here is a
   <a
     href="http://example.org"
   >
@@ -367,7 +368,7 @@ Wird mit `layout $ pretty 30 xml` bzw. `layout $ pretty 60 xml` so ausgedruckt:
 <p color="red" font="Times" size="10" >
  Here is some
   <em>  emphasized </em>
-  Text. Here is a
+  text. Here is a
   <a href="http://example.org" >  link </a>
   elsewhere.
 </p>
@@ -377,11 +378,11 @@ Wie wir sehen, kommt diese Implementierung noch nicht ganz an die Beispiele von
 oben heran: Dort wurden mehrere Attributpaare (wenn möglich) sogar auf eine
 Zeile gedruckt. Zudem gibt es unschöne Leerzeichen an gewissen Stellen. Wie man
 das elegant verbessern kann, werden wir im nächsten Blogpost sehen, wenn wir uns
-Hilfs- und Komfortfunktionen für unseren Pretty-Printer schreiben.
+dort Hilfs- und Komfortfunktionen für unseren Pretty-Printer schreiben.
 
 ## Fazit
 
-Der heutige Blogpost zeigt,dass es nur wenige Operatoren braucht, um eine
+Der heutige Blogpost zeigt, dass es nur wenige Operatoren braucht, um eine
 mächtige Sprache zu entwickeln. Das besonders Schöne an der Sprache ist, dass,
 wie so oft in der funktionalen Programmierung, kleinere Dinge zusammengestöpselt
 werden zu größeren. In einem nächsten Blogpost schauen wir uns an, wie der
