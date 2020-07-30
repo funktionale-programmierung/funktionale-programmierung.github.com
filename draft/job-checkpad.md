@@ -1,15 +1,15 @@
 ---
 layout: post
 description: Beschreibung
-title: "Checkpad sucht Softwareentwicklerinnen und Softwarenetwickler"
+title: "Checkpad sucht Softwareentwicklerinnen und Softwareentwickler"
 author: stefan-wehr
 tags: ["Job", "haskell", "Checkpad"]
 ---
 
 Wir von Checkpad suchen eine Softwareentwicklerin oder einen
 Softwareentwickler mit Schwerpunkt funktionaler Programmierung an unserem
-Standort in Freiburg! Unser Produkt Checkpad ist eine web-basierte und
-mobile Softwarelösung, mit der viele Arbeitsabläufe im Krankenhaus
+Standort in Freiburg! Unser Produkt Checkpad besteht aus einer web-basierten und
+einer mobilen Softwarelösung, mit der viele Arbeitsabläufe im Krankenhaus
 einfacher und effizienter gestaltet werden können. Wir setzen zwar nicht
 ausschließlich funktionale Programmiersprachen ein, ein großer Teil der
 Software ist aber in Haskell geschrieben und auch beim Einsatz andere
@@ -23,7 +23,7 @@ Die Codebasis von Checkpad besteht aus über 350.000 Zeilen Haskell, ungefähr
 Objective-C. Mit unserer docker-basierten Build- und Release-Pipeline
 bringen wir neu entwickelte Features schnell zum Kunden, oft schon am
 selben Tag! Statische Typsysteme, Tests und eine gute Softwarearchitektur
-ermöglichen uns, eine konstante hohe Softwarequalität zu liefern.
+ermöglichen uns, eine konstant hohe Softwarequalität zu liefern.
 
 Zur Weiterentwicklung von Checkpad benötigen wir Unterstützung, denn die
 Zahl der Krankenhäuser, die unsere Software benutzen, ist in letzter Zeit
