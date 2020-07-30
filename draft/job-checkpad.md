@@ -19,7 +19,7 @@ funktionalen Design- und Architekturprinzipien leiten.
 <!-- more start -->
 
 Die Codebasis von Checkpad besteht aus über 350.000 Zeilen Haskell, ungefähr
-dieselbe Anzahl Zeilen an Typescript Code sowie Flutter/Dart, Scala und
+260.000 Zeilen an Typescript-Code sowie Flutter/Dart, Scala und
 Objective-C. Mit unserer docker-basierten Build- und Release-Pipeline
 bringen wir neu entwickelte Features schnell zum Kunden, oft schon am
 selben Tag! Statische Typsysteme, Tests und eine gute Softwarearchitektur
@@ -43,5 +43,7 @@ Erfolg bei.
 * Wir reden mit unseren Kunden um herauszufinden, wie wir am besten
   weiterhelfen können.
 
-Wenn Sie Interesse oder Fragen haben, schreiben Sie bitte eine Email an
-jobs@cp-med.com.
+Wenn Sie Interesse oder Fragen haben, schreiben Sie uns bitte eine [Email](mailto:jobs@cp-med.com).
+Mehr Information finden Sie möglicherweise auch in
+unserem [reddit Post](https://www.reddit.com/r/haskell/comments/hy8tuv/medical_solutions_with_haskelltypescript_in/)
+oder unserem [Flyer](http://cp-med.com/jobs/2020-flyer.pdf).
