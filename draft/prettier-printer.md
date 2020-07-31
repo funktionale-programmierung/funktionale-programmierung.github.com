@@ -9,14 +9,14 @@ tags: ["pretty", "print", "printing", "haskell", "wadler"]
 Um ein (verschachteltes) Objekt komfortabel untersuchen zu können, wird eine
 gute Darstellung desselben in Form von Text benötigt. Pretty-Printer versuchen
 genau das: Dinge so auf den Bildschirm zu drucken, dass die interne Struktur auf
-einen Blick ersichtlich ist. Wir schauen uns heute die Pretty-Printing-Strategie
-aus
-[Philip Wadler](http://homepages.inf.ed.ac.uk/wadler/)s
-Paper
-["A prettier printer"](http://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf)
-(1997) an und sehen daran ein weiteres Mal, dass Datenmodellierung und
-Abstraktion der funktionalen Programmierung zu wunderbar einfachem und konzisem
-Quellcode führen, der komplexe Domänen elegant beschreibt.
+einen Blick ersichtlich ist. Wir schauen uns heute den Pretty-Printer aus
+[Philip Wadlers](http://homepages.inf.ed.ac.uk/wadler/) Paper ["A prettier
+printer"](http://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf)
+(1997) an, dessen Besonderheit die Anwedung von Algebra auf Design und
+Implementierung ist. Daran werden wir ein weiteres Mal sehen, dass
+Datenmodellierung und Abstraktion der funktionalen Programmierung zu wunderbar
+einfachem und konzisem Quellcode führen, der komplexe Domänen elegant
+beschreibt.
 
 <!-- more start -->
 
@@ -56,11 +56,11 @@ Fangen wir unten an: Es wurde kein Pretty-Printer verwendet, sondern der Code
 einfach auf die verfügbare Breite von 30 Zeichen gedruckt. Sehr ungeschickt ist,
 dass wegen fehlender Einrückung nicht ersichtlich ist, welcher Ausdruck Teil
 eines anderen Ausdrucks ist. Im zweiten Beispiel ist dies schon wesentlich
-besser, da Subausdrücke jeweils um ein Zeichen eingerückt sind. Zudem erzeugen
-die Zeilenumbrüche noch mehr Struktur. Hier ist jedoch zu bemängeln, dass zu
-"aggressiv" umgebrochen wird. Das hat schlechtere Lesbarkeit und mehr Zeilen im
-Pretty-Print zur Folge. Das erste Beispiel lässt den Kopf und Rumpf einer
-Funktionsdefinition besonders gut erkennen.
+besser, da verschachtelte Ausdrücke jeweils um ein Zeichen eingerückt sind.
+Zudem erzeugen die Zeilenumbrüche noch mehr Struktur. Hier ist jedoch zu
+bemängeln, dass zu "aggressiv" umgebrochen wird. Das hat schlechtere Lesbarkeit
+und mehr Zeilen im Pretty-Print zur Folge. Das erste Beispiel lässt den Kopf und
+Rumpf einer Funktionsdefinition besonders gut erkennen.
 
 Als weiteres Beispiel XML-Code in drei geprinteten Varianten (dieses Mal mit 30
 Zeichen Maximalbreite):
@@ -113,7 +113,8 @@ eine Zeile in den Fließtext eingebettet. Es ist kein Umbruch nötig, da die
 Maximalbreite nicht überschritten wird. Die Attribute des `p`-Elements werden
 zunächst nebeneinander, so lang es Platz hat, und dann untereinander sortiert.
 Hier wird also nicht nur stur ein "Vorgehen" befolgt ("breche pro
-Attribut-Wert-Paar um"), sondern der vorhandene Platz sinnvoll ausgenutzt.
+Attribut-Wert-Paar um"), sondern der vorhandene Platz sinnvoll ausgenutzt. Die
+beiden anderen Beispiele sind aus obigen Gründen keine gelungenen Layouts.
 
 Obwohl die Beispiele aus zwei unterschiedlichen Domänen kommen
 (Programmiersprache Common Lisp und Auszeichnungssprache XML), können beide mit
@@ -121,10 +122,11 @@ dem hier vorgestellten Pretty-Printer behandelt werden. Das wird dadurch
 ermöglicht, dass eine Metasprache für Dokumente, die schön ausgedruckt werden
 sollen, entwickelt wird. Dann erst wird für den Anwendungsfall bestimmt, wie man
 Objekte in diese Metasprache übersetzt. Die Vorgehensweise, eine beschreibende
-Zwischensprache zu entwerfen &mdash eine sogenannte *domänenspezifische
+Zwischensprache zu entwerfen &mdash; eine sogenannte *domänenspezifische
 Sprache* (domain specific language im Englischen, kurz DSL), ist in der
-funktionalen Programmierung gang und gäbe. TODO: Verlinke auf Beispiel eines
-anderen Blogposts zu DSLs
+funktionalen Programmierung gang und gäbe. Im Blogpost
+[Systematisch eingebettete DSLs entwickeln in Clojure](https://funktionale-programmierung.de/2013/06/27/dsl-clojure.html)
+werden DSLs ausführlich beschrieben.
 
 
 ## Strategie des Prettier Printers
@@ -144,12 +146,12 @@ entstehen) -- sehen wir in einem folgenden Blogpost.
 
 Unsere Pretty-Printer-DSL besteht aus Dokumenten und Kombinatoren, das heißt
 Operatoren, die auf diesen Dokumenten arbeiten. Wir benutzen ab jetzt
-Haskell-Syntax, um dem Ganzen Form zu geben.
+Haskell-Syntax, um die Funktionssignaturen und Typen zu beschreiben.
 
 
 ### Sechs Operatoren für das Glück
 
-Folgende sechs Operatoren stehen zur Verfügung, um ein Dokument in unserer
+Folgende fünf Operatoren stehen zur Verfügung, um ein Dokument in unserer
 Pretty-Printer-Sprache zu beschreiben:
 
 ```haskell
@@ -158,7 +160,6 @@ nil        :: Doc
 text       :: String -> Doc
 line       :: Doc
 nest       :: Int -> Doc -> Doc
-layout     :: Doc -> String
 ```
 
 Dabei fügt `<>` zwei Dokumente aneinander (man sagt auch es "konkateniert" sie).
@@ -167,10 +168,20 @@ Beliebige Dokumente bleiben bei Konkatenation mit `nil` unverändert (etwas
 mathematischer ausgedrückt bildet also die Menge aller Dokumente zusammen mit
 der assoziativen Verknüpfung `<>` und dem neutralen Element `nil` ein Monoid).
 `text` wandelt eine Zeichenkette in ein Dokument um, `line` beschreibt einen
-Zeilenumbruch und `nest` rückt ein Dokument ein. Zu guter Letzt gibt `layout`
-ein als String gerendertes Dokument zurück.
+Zeilenumbruch und `nest` rückt ein Dokument ein.
 
-Beispielsweise würde folgendes Dokument
+Hinzu kommt ein sechster Operator, `layout`, der ein als String gerendertes
+Dokument zurückgibt:
+
+```haskell
+layout     :: Doc -> String
+```
+
+An den fünf Operatoren und `layout` ist die in der funktionalen Programmierung
+häufig vorkommende Trennung von Beschreibung und Ausführung wunderbar
+ersichtlich.
+
+Das folgende, mit den obigen Operatoren beschriebene Dokument
 
 ```haskell
 doc =
@@ -182,7 +193,7 @@ doc =
   line <> text "</p>"
 ```
 
-mit Hilfe von `layout` so ausgedruckt:
+wird mit Hilfe von `layout` so ausgedruckt:
 
 ```xml
 <p>
@@ -199,7 +210,8 @@ Erweiterung des Begriffs "Dokument" und eine weitere Operation: Wenn ab jetzt
 "Dokument" gesagt wird, meint dies eine Sammlung mehrerer möglicher Layouts
 (desselben Dokuments). Diese müssen jedoch von derselben Struktur sein und
 dürfen sich nur in Zeilenumbrüchen und Einrückungen unterscheiden. Doch wie
-kommen wir überhaupt zu verschiedenen Layouts? `group` ist hier der Schlüssel:
+kommen wir überhaupt zu verschiedenen Variationen eines Layouts? `group` ist
+hier der Schlüssel:
 
 ```haskell
 group :: Doc -> Doc
@@ -208,7 +220,7 @@ group :: Doc -> Doc
 `group` nimmt ein Dokument (Sammlung mehrerer Layouts) und fügt dieser Sammlung
 ein neues Layout hinzu, in welchem jeder Zeilenumbruch durch ein Leerzeichen
 ersetzt wird. Wenn wir also `group` auf unser oben definiertes Dokument `doc`
-anwenden, käme das folgende Layout hinzu:
+anwenden, käme das folgende Layout hinzu (nach Anwendung von `layout`):
 
 ```xml
 <p> <a>This is a link</a> Some text </p>
@@ -384,7 +396,7 @@ dort Hilfs- und Komfortfunktionen für unseren Pretty-Printer schreiben.
 
 Der heutige Blogpost zeigt, dass es nur wenige Operatoren braucht, um eine
 mächtige Sprache zu entwickeln. Das besonders Schöne an der Sprache ist, dass,
-wie so oft in der funktionalen Programmierung, kleinere Dinge zusammengestöpselt
+wie so oft in der funktionalen Programmierung, kleinere Dinge zusammengefügt
 werden zu größeren. In einem nächsten Blogpost schauen wir uns an, wie der
 Pretty-Printer genau implementiert ist und optimieren unser XML-Beispiel.
 
