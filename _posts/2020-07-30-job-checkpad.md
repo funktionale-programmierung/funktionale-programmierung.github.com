@@ -44,6 +44,6 @@ Erfolg bei.
   weiterhelfen können.
 
 Wenn Sie Interesse oder Fragen haben, schreiben Sie uns bitte eine [Email](mailto:jobs@cp-med.com).
-Mehr Information finden Sie möglicherweise auch in
+Mehr Information finden Sie auch in
 unserem [reddit Post](https://www.reddit.com/r/haskell/comments/hy8tuv/medical_solutions_with_haskelltypescript_in/)
-oder unserem [Flyer](http://cp-med.com/jobs/2020-flyer.pdf).
+oder auf unserer [Webseite](https://www.cpmed.de/jobs).
