@@ -3,7 +3,7 @@ layout: post
 description: "A prettier printer"
 title: "Aufgehübscht! &mdash; Pretty-Printing"
 author: kaan-sahin
-tags: ["pretty", "print", "printing", "haskell", "wadler"]
+tags: ["pretty", "printer", "printing", "haskell", "dsl", "wadler"]
 ---
 
 Um ein (verschachteltes) Objekt komfortabel untersuchen zu können, wird eine
@@ -15,7 +15,7 @@ printer"](http://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf)
 (1997) an, dessen Besonderheit die Anwedung von Algebra auf Design und
 Implementierung ist. Daran werden wir ein weiteres Mal sehen, dass
 Datenmodellierung und Abstraktion der funktionalen Programmierung zu wunderbar
-einfachem und konzisem Quellcode führen, der komplexe Domänen elegant
+einfachem und prägnantem Quellcode führen, der komplexe Domänen elegant
 beschreibt.
 
 <!-- more start -->
@@ -268,10 +268,10 @@ handhabbaren Form zu haben. Wir nehmen der Einfachheit halber an, dies sei
 bereits geschehen und die Repräsentation von XML-Code sähe wie folgt aus:
 
 ```haskell
-data XML   = Elt String [Att] [XML]
-           | Txt String 
+data XML = Element String [Attribute] [XML]
+         | Txt String
 
-data Att   = Att String String
+data Attribute = Attribute String String
 ```
 
 Ein XML-Element ist ein gemischter Datentyp. Entweder es ist ein tatsächliches
@@ -282,15 +282,15 @@ Namen des Attributs und dessen Wert. Die Repräsentation von `<p color="red">
 Hallo </p>` ist demnach:
 
 ```haskell
-Elt "p" [Att "color" "\"red\""] [Txt "Hallo"]
+Element "p" [Attribute "color" "\"red\""] [Txt "Hallo"]
 ```
 
 Fangen wir mit den Attributen an. Ein Attributpaar soll immer in eine Zeile
 gedruckt werden:
 
 ```haskell
-attToDOC :: Att -> DOC
-attToDOC (Att k v) = text k <> text "=\"" <> text v <> text "\""
+attToDOC :: Attribute -> DOC
+attToDOC (Attribute key value) = text key <> text "=\"" <> text value <> text "\""
 ```
 
 Ein Tag wollen wir so drucken lassen, dass es nur dann auf eine Zeile gedruckt
@@ -299,12 +299,12 @@ umgebrochen und um zwei Zeichen eingerückt werden. Zudem soll dann auch nach
 jedem Attributpaar umgebrochen werden:
 
 ```haskell
-tagToDOC :: String -> [Att] -> DOC
-tagToDOC n [] = text "<" <> text n <> text ">"
-tagToDOC n atts = group
-                    (text "<" <> text n <>
-                     (nest 2 (line <> concatDOCs (map attToDOC atts))) <>
-                     line <> text ">")
+tagToDOC :: String -> [Attribute] -> DOC
+tagToDOC name [] = text "<" <> text name <> text ">"
+tagToDOC name attributes = group
+                           (text "<" <> text name <>
+                            (nest 2 (line <> concatDOCs (map attToDOC attributes))) <>
+                            line <> text ">")
 ```
 
 `group` um den gesamten Ausdruck macht die Wahl zwischen "alles auf eine Zeile"
@@ -326,12 +326,12 @@ ganzes Element auszudrucken:
 
 ```haskell
 xmlToDOC :: XML -> DOC
-xmlToDOC (Txt s)         = text s
-xmlToDOC (Elt n a xmls)  = group
-                             (tagToDOC n a </>
-                              nest 2 (group line <>
-                                      concatDOCs (map xmlToDOC xmls)) </>
-                              text "</" <> text n <> text ">")
+xmlToDOC (Txt string)                    = text string
+xmlToDOC (Element name attributes xmls)  = group
+                                           (tagToDOC name attributes </>
+                                            nest 2 (group line <>
+                                                    concatDOCs (map xmlToDOC xmls)) </>
+                                            text "</" <> text name <> text ">")
 ```
 
 Im einfachen Textfall erzeugen wir nur ein `TEXT`-Dokument. Wenn wir ein Element
@@ -342,16 +342,15 @@ lassen.
 Das Dokument
 
 ```haskell
-xml   = Elt "p" [
-          Att "color" "red",
-          Att "font" "Times",
-          Att "size" "10"
+xml   = Element "p" [
+          Attribute "color" "red",
+          Attribute "font" "Times",
+          Attribute "size" "10"
         ] [
           Txt "Here is some",
-          Elt "em" [] [Txt "emphasized"],
-          Txt "text",
-          Txt "Here is a",
-          Elt "a" [Att "href" "http://example.org"]
+          Element "em" [] [Txt "emphasized"],
+          Txt "Text. Here is a",
+          Element "a" [Attribute "href" "http://example.org"]
             [Txt "link"],
           Txt "elsewhere."
           ]
