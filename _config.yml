@@ -140,3 +140,8 @@ authors:
     name: Stephan Günther
     href:
     about: 'Stephan Günther hat einen Diplom-Abschluss in Informatik der Hochschule Furtwangen. Seit 2014 ist er Softwareentwickler bei der <a href="https://www.cpmed.de">Medilyse GmbH</a>.'
+  lars-hupel:
+    name: Lars Hupel
+    href: https://lars.hupel.info/
+    image: /author/lars-hupel.jpg
+    about: 'Lars ist Consultant bei <a href="https://www.innoq.com/">INNOQ</a> in München und ist bekannt als einer der Gründer der Typelevel-Initiative, die sich der Entwicklung von typgetriebenen Scala-Bibliotheken in einer einsteigerfreundlichen Umgebung verschrieben hat. Er spricht oft auf Konferenzen und ist im Open-Source-Umfeld in Scala unterwegs. Außerdem programmiert und redet er gern über Haskell, Prolog und Rust.'
