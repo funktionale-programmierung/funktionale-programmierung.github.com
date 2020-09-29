@@ -7,7 +7,7 @@ tags: ["typescript", "javascript"]
 ---
 
 TypeScript ist eine Programmiersprache mit einigen Besonderheiten:
-Im Gegensatz zu den allermeisten anderen getypten Programmiersprachen wurde sie als Aufsatz für JavaScript entwickelt.
+Im Gegensatz zu den allermeisten anderen getypten Programmiersprachen wurde sie als Aufsatz für JavaScript (JS) entwickelt.
 Dabei hat Microsoft besonderen Wert darauf gelegt, dass sich die Sprache möglichst nahtlos in die bestehenden Ökosysteme (Node.js und Browser) integriert.
 Das wird dadurch erreicht, dass die TypeScript-Syntax „bloß“ die Typen zu JavaScript hinzufügt und die Kompilierung aus dem Entfernen der Typannotationen besteht.
 Damit hat sich TypeScript zum de-facto Standard entwickelt, wenn es darum geht, typsichere Anwendungen auf JS-Basis zu bauen.
@@ -31,15 +31,14 @@ NaN
 
 Gewünscht ist solches Verhalten in den wenigsten Fällen.
 
-Mittlerweile wurden gängige Features, wie Klassen-basierte Vererbung in JavaScript eingeführt.
-Diese Entwicklungen werden maßgeblich vom [TC39](https://github.com/tc39/), dem Standardisierungsgremium hinter JS vorangetrieben.
+Mittlerweile wurden gängige Features, wie Klassen-basierte Vererbung, in JavaScript eingeführt.
+Diese Entwicklungen werden maßgeblich vom [TC39](https://github.com/tc39/), dem Standardisierungsgremium hinter JS, vorangetrieben.
 In jedem neuen Standard sind mehr praktische Tools vorhanden, um bessere Software zu schreiben.
-Als Beispiel sei die „optionale Verkettung“ genannt, die in anderen Sprachen (z.B. Kotlin) als „Elvis operator“ bekannt ist.
+Als Beispiel sei die „optionale Verkettung“ genannt, die in anderen Sprachen (z. B. Kotlin) als „Elvis operator“ bekannt ist.
 
 Das grundlegende Problem besteht aber weiterhin:
-sehr viel JavaScript-Code wird in Browsern ausgeführt.
-Dort ist es schwierig bis unmöglich, mit den gängigen Observability-Praktiken Fehler festzustellen oder gar zu debuggen, denn:
-es gibt eine unbegrenzte Anzahl von Computern, die den Code im Browser ausführen.
+Sehr viel JavaScript-Code wird in Browsern ausgeführt.
+Dort ist es schwierig bis unmöglich, mit den gängigen Observability-Praktiken Fehler festzustellen oder gar zu debuggen, da es eine unbegrenzte Anzahl an Computern gibt, die den Code im Browser ausführen.
 
 ## Typen, aber wie?
 
@@ -81,8 +80,8 @@ interface Server {
 ```
 
 In diesem oberflächlich sehr einfachen Anwendungsfall kann man bereits eine Reihe von interessanten Features erkennen.
-Zum einen erlaubt TypeScript praktisch beliebiges Overloading von Methoden.
-Dieses Overloading ist allerdings nur in Deklarationen zulässig.
+Zum einen erlaubt TypeScript praktisch beliebiges Überladen von Methoden.
+Dieses Überladen ist allerdings nur in Deklarationen zulässig.
 Für jede Methode darf es nur höchstens eine Implementierung geben, die dann zur Laufzeit prüfen muss, welche konkrete Signatur aufgerufen worden ist.
 Bei einem gegebenen Aufruf von `server.on` prüft der Typchecker also lediglich, ob mindestens eine überladene Deklaration passt, und überlässt den Rest der aufgerufenen Funktion.
 
@@ -103,12 +102,12 @@ Sogar Array-Literale sind zulässig:
 const e: [1, "foo"] = [1, "foo"];
 ```
 
-Diese dienen in JavaScript dem Ersatz von Tupeln.
+Diese dienen in JavaScript als Ersatz von Tupeln.
 
 ## Objekte und Eigenschaften
 
-Während obiges z.B. auch in Scala realisierbar ist, hat TypeScripts Typsystem auch einige Alleinstellungsmerkmale.
-Ein gängiges Programmiermuster in JavaScript ist es, einer Funktion ein beliebiges Objekt zu übergeben, sowie einen Liste von Strings, welche Namen von Feldern in diesem Objekt sind:
+Während obiges z. B. auch in Scala realisierbar ist, hat TypeScripts Typsystem auch einige Alleinstellungsmerkmale.
+Ein gängiges Programmiermuster in JavaScript ist es, einer Funktion ein beliebiges Objekt zu übergeben, sowie eine Liste von Strings, welche Namen von Feldern in diesem Objekt sind:
 
 ```javascript
 const obj = { x: 3, y: 4, z: 5 };
@@ -145,7 +144,7 @@ validateObject(obj, ["a"]);
 ```
 
 Hier wurde inferiert, dass der Schlüsselraum von `obj` genau dem Summentyp `"x" | "y" | "z"` entspricht.
-Allerdings hört die Mächtigkeit des Typsystems dort auf, wo man z.B. die Eindeutigkeit von Array-Elementen prüfen möchte.
+Allerdings hört die Mächtigkeit des Typsystems dort auf, wo man z. B. die Eindeutigkeit von Array-Elementen prüfen möchte.
 Der folgende, möglicherweise ungewollte Aufruf, wird akzeptiert:
 
 ```typescript
@@ -163,12 +162,12 @@ obj: { x: number; y: number; z: number; }
 ```
 
 Doch selbst wenn wir ein Interface für dieses Objekt definiert hätten:
-Interfaces und sogar Klassen für TypeScript nichts anderes als Typ-Aliase, denn im JavaScript-Universum herrscht _Duck Typing_.
+Interfaces und sogar Klassen sind für TypeScript nichts anderes als Typ-Aliase, denn im JavaScript-Universum herrscht _Duck Typing_.
 Konsequenterweise sind sämtliche Typprüfungen auf Objekttypen strukturell.
 Das ist an sich nichts neues (einige ML-artige Sprachen nutzen dies für Records).
 TypeScript hat es aber im großen Stil umgesetzt, denn die klassischen OOP-Sprachen nutzen ausschließlich nominales Subtyping.
 
-Für diese strukturellen Typen gibt es in TypeScript nur wenige Ausnahmen; z.B. werden gleich benannte private Felder in Klassen als verschieden betrachtet, wenn diese in separaten Dateien definiert sind.
+Für diese strukturellen Typen gibt es in TypeScript nur wenige Ausnahmen; z. B. werden gleich benannte private Felder in Klassen als verschieden betrachtet, wenn diese in separaten Dateien definiert sind.
 Dies war eine gezielte Designentscheidung, um die Vermischung von Implementierungsdetails verschiedener Bibliotheken zu vermeiden.
 
 ## Narrowing
@@ -206,7 +205,7 @@ function draw(shape: Shape) {
 ```
 
 Im Fall `"rect"` muss es sich um ein `Rectangle` handeln, so dass der Compiler Zugriff auf `height` und `width` gewährt.
-Die Nutzung von `switch` ist nicht notwendig; auch anderer Kontrollfluss (z.B. `if`) wird analysiert.
+Die Nutzung von `switch` ist nicht notwendig; auch anderer Kontrollfluss (z. B. `if`) wird analysiert.
 
 Obwohl der Mechanismus, statische Information aus dynamischen zu extrahieren, zum Standardrepertoire von abhängig-getypten Programmiersprachen gehört, handelt es sich bei TypeScript eher um einen "glücklichen Unfall".
 Der folgende Code funktioniert nämlich nicht:
@@ -231,13 +230,13 @@ Nicht nur, dass hier `shape` nicht auf `Rectangle` eingegrenzt werden kann, auch
 Abgesehen von diesen Einschränkungen ist das Narrowing in TypeScript derart mächtig, dass es sehr oft in der Praxis benutzt wird.
 
 Der Vollständigkeit halber sei noch erwähnt, dass es in der reinen Lehre der Typsysteme nicht gestattet ist, dass sich der Typ ein und desselben Symbols (hier `shape`) auf Basis seiner lexikalischen Verwendung ändert.
-Doch da z.B. auch [Kotlin](https://kotlinlang.org/docs/reference/typecasts.html) mit dieser Tradition gebrochen hat, ist dieser Kampf – genau wie der Kampf gegen die Begriffe „Transpilation“ und „isomorphes JavaScript“ – längst verloren.
+Doch da z. B. auch [Kotlin](https://kotlinlang.org/docs/reference/typecasts.html) mit dieser Tradition gebrochen hat, ist dieser Kampf – genau wie der Kampf gegen die Begriffe „Transpilation“ und „isomorphes JavaScript“ – längst verloren.
 
 ## Werte in Typen
 
 Wir haben bisher einige Konstrukte gesehen, die die bei klassischen ML-artigen Typsystemen gegebene Barriere zwischen Typen und Werten aufweicht.
 Als Zwischenstand können wir festhalten, dass TypeScript an einigen Stellen (Wert-)Literale in Typausdrücken zulässt.
-Anhand dieser Literale können z.B. Elementtypen ausgerechnet oder Varianten einer überladenen Methode selektiert werden.
+Anhand dieser Literale können z. B. Elementtypen ausgerechnet oder Varianten einer überladenen Methode selektiert werden.
 
 Aber hier hört es noch lange nicht auf.
 Wir können auch primitive Berechnungen mit Typen machen.
@@ -288,7 +287,7 @@ if (event === "close") {
 }
 ```
 
-Das Narrowing von TypeScript schlägt auch hier fehl: die Einschränkung von `event` auf das Literal `"close"` wird nicht auf `handler` propagiert.
+Das Narrowing von TypeScript schlägt auch hier fehl: Die Einschränkung von `event` auf das Literal `"close"` wird nicht auf `handler` propagiert.
 
 Man kann sich hier auch wieder mit Casten begnügen; andernfalls bleibt nur noch, weitere Indirektionen zu bemühen.
 In diesem Artikel soll es aber eher um das Typsystem gehen, daher werde ich nicht weiter auf die Implementierung eingehen.[^foot-ts]
@@ -323,4 +322,3 @@ Da ist es verschmerzbar, wenn das Typsystem sich manchmal selbst im Wege steht.
 [^foot-ts]: Tatsächlich passiert das relativ oft, dass man in TypeScript zwar komplexe Typberechnungen hinschreiben kann, aber der Compiler nicht in der Lage ist, einen Ausdruck mit einem solchen Typen korrekt zu erfassen. Das erzeugt die etwas seltsame Situation, dass manche Typen in TypeScript zwar _de jure_ bewohnt sind, _de facto_ aber nicht. Man kann das mit der Situation in Rust vergleichen, wo manche Konstrukte, die nach außen hin fein säuberlich linear getypt sind, intern mit `unsafe`-Blöcken implementiert werden müssen.
 
 <!-- more end -->
-
