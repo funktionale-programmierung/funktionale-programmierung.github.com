@@ -162,10 +162,10 @@ obj: { x: number; y: number; z: number; }
 ```
 
 Doch selbst wenn wir ein Interface für dieses Objekt definiert hätten:
-Interfaces und sogar Klassen sind für TypeScript nichts anderes als Typ-Aliase, denn im JavaScript-Universum herrscht _Duck Typing_.
-Konsequenterweise sind sämtliche Typprüfungen auf Objekttypen strukturell.
+Interfaces und sogar Klassen sind für TypeScript nichts anderes als Typ-Aliase, denn im JavaScript-Universum herrscht [_Duck Typing_](https://de.wikipedia.org/wiki/Duck-Typing).
+Konsequenterweise sind sämtliche [Typprüfungen auf Objekttypen strukturell](https://wiki.c2.com/?StructuralSubtyping).
 Das ist an sich nichts neues (einige ML-artige Sprachen nutzen dies für Records).
-TypeScript hat es aber im großen Stil umgesetzt, denn die klassischen OOP-Sprachen nutzen ausschließlich nominales Subtyping.
+TypeScript hat es aber im großen Stil umgesetzt, denn die klassischen OOP-Sprachen nutzen ausschließlich [nominales Subtyping](https://wiki.c2.com/?NominativeAndStructuralTyping).
 
 Für diese strukturellen Typen gibt es in TypeScript nur wenige Ausnahmen; z. B. werden gleich benannte private Felder in Klassen als verschieden betrachtet, wenn diese in separaten Dateien definiert sind.
 Dies war eine gezielte Designentscheidung, um die Vermischung von Implementierungsdetails verschiedener Bibliotheken zu vermeiden.
