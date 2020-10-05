@@ -226,6 +226,10 @@ function scale<T extends Shape>(shape: T): T {
 ```
 
 Nicht nur, dass hier `shape` nicht auf `Rectangle` eingegrenzt werden kann, auch das `return`-Statement kann so nicht funktionieren.[^foot-unsound]
+In bestimmten Fällen kann es aber auch umgekehrt vorkommen, dass der Compiler offensichtlich inkorrekte Ausdrücke akzeptiert, was zwei gängige Ursachen haben kann:
+
+1. der Typ `any` wird an unerwartetet Stelle inferiert (was man durch ein Compiler-Flag verhindern kann); ein Typ, der mit allen beliebigen Ausdrücken kompatibel ist
+2. man läuft in eine [Unsoundness des Compilers](https://www.typescriptlang.org/docs/handbook/type-compatibility.html)
 
 Abgesehen von diesen Einschränkungen ist das Narrowing in TypeScript derart mächtig, dass es sehr oft in der Praxis benutzt wird.
 
@@ -273,8 +277,6 @@ Wie zu erwarten, wird beim Aufruf von `on` korrekt der Typ des Callbacks inferie
 server.on("close", (err? /* any */) => {});
 server.on("request", (req /* Request */, res /* Response */) => {})
 ```
-
-
 
 Diese Schreibweise hat allerdings einen Pferdefuß.
 Möchte man dieses Interface implementieren, dann könnte man geneigt sein, folgendes in der `on`-Methode zu schreiben:
