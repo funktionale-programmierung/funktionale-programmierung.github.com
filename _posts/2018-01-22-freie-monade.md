@@ -174,7 +174,7 @@ In Cats wird die Natürliche Transformation von `A` nach `B` durch den Typ `A ~>
 val state: AddressState[List[Address]] = FreeApp.removeBielefeld.foldMap(StateInterpreter.interpet)
 // Ausführung der State-Monade
 val initialStorage = Map(1 -> Address(1, "Santa Clause", "Santa Street", "Bielefeld", "77777", "Santa Inc"))
-val (storage, bielefelder) = state.run(initialStorage)
+val (storage, bielefelder) = state.run(initialStorage).value
 
 {% endhighlight %}
 
