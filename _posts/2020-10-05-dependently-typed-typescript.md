@@ -117,7 +117,7 @@ validateObject(obj, ["x", "y"]);
 
 Unsere Erwartung an TypeScript ist hier, dass ein Aufruf mit dem String `"a"` einen Typfehler produzieren sollte.
 
-Bevor wir uns das genauer anschauen können, müssen wir uns kurz den Property-Zugriff in JavaScript verschaffen.
+Bevor wir uns das genauer anschauen können, müssen wir uns kurz einen Überblick über den Property-Zugriff in JavaScript verschaffen.
 Folgende beide Zeilen sind äquivalent zueinander:
 
 ```javascript
