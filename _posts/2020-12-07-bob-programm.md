@@ -8,17 +8,17 @@ tags: ["BOB", "Konferenz"]
 
 ![BOB 2021](https://bobkonf.de/images/bob_head_2021-date-de.png)
             
-Am Freitag, dem 26.2.2021, findet die [BOB
+Am Freitag, 26.2.2021, findet die [BOB
 2021](http://bobkonf.de/2021/) statt - inzwischen schon die achte BOB.
 Das [Programm](http://bobkonf.de/2021/program.html) ist wieder eine
 bunte Mischung von Themen, die eines eint: Es geht um das Beste in der
 Softwareentwicklung, und wir haben uns wieder vorgenommen, allen
-Teilnehmer:innen etwas nützliches für die eigene Arbeit mitzugeben.
+Teilnehmer:innen etwas Nützliches für die eigene Arbeit mitzugeben.
 
 Eine Änderung gibt es - natürlich: "Due to the pandemic" kann die BOB
-nicht am gewohnten Ort in Berlin stattfinden sondern wird virtuell
+nicht am gewohnten Ort in Berlin stattfinden, sondern wird virtuell
 passieren.  Am genauen Online-Format arbeiten wir noch, werden aber
-vor allem den sozialen Aspekt der BOB berücksichtigen, der trotz mit
+vor allem den sozialen Aspekt der BOB berücksichtigen, der neben den mit
 Talks und Tutorials gepacktem Zeitplan immer am meisten Freude
 gebracht hat.
 
@@ -39,7 +39,7 @@ den Tutorials.
 ## Vorträge
 
 Bei den [Vorträgen](http://bobkonf.de/2021/program.html) geht es
-natürlich wieder oft um funktionale Programmierung.  So geht es um
+wieder oft um funktionale Programmierung.  So bei
 [Haskell](https://bobkonf.de/2021/penner.html) (auch
 [hier](https://bobkonf.de/2021/mcleay.html),
 [hier](https://bobkonf.de/2021/thoma.html) und
@@ -64,13 +64,13 @@ An Tutorial-Themen sind
 [SwiftUI](https://bobkonf.de/2021/tharr.html),
 [Tagebuchführen](https://bobkonf.de/2021/laube.html),
 [Haskell-Heaps](https://bobkonf.de/2021/breitner.html) und
-[Musik](https://bobkonf.de/2021/cardenas.html)
+[Musik](https://bobkonf.de/2021/cardenas.html) mit dabei.
 
 ## Anmeldung
 
 Die Anmeldung ist
 [online](http://bobkonf.de/2021/registration.html) möglich.  Bis zum
-30.12. gibt es noch Frühbucher-Rabatt, danach wird es etwas teurer.  Es
+31.12. gibt es noch Frühbucher-Rabatt, danach wird es etwas teurer.  Es
 gibt außerdem eine Reihe von Rabatten und kostenlosen Tickets für
 unterrepräsentierte Gruppen.
 
