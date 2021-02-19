@@ -11,9 +11,9 @@ GmbH](https://www.active-group.de/), eine der Betreiberinnen dieses
 Blogs) bieten ja schon seit geraumer Zeit offene [Schulungen in
 funktionaler
 Softwarearchitektur](https://www.active-group.de/schulung/funar.html)
-an.  Neuerdings sind dazu auch noch eine Grundausbildung in
-Softwarearchitektur und und eine Schulung "Flexible
-Softwararchitekturen" herausgekommen, beide iSAQB-akkreditiert.
+an.  Neuerdings sind auch noch eine Grundausbildung in
+Softwarearchitektur und eine Schulung "Flexible
+Softwararchitekturen" dazugekommen, beide iSAQB-akkreditiert.
 
 <!-- more start -->
 
