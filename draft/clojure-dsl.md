@@ -34,8 +34,8 @@ jedem Substantiv in einer Domänenbeschreibung ein Objekt werden: Ein
 Bild sollte demnach durch ein Objekt repräsentiert werden.
 
 Exemplarisch ist das zum Beispiel Java in AWT so, wo es ein Interface
-`java.awt.image.Image`{.verbatim} gibt, mit der relevanten
-Implementierung `BufferedImage`{.verbatim}. Diese Klasse hat zum
+`java.awt.image.Image` gibt, mit der relevanten
+Implementierung `BufferedImage`. Diese Klasse hat zum
 Beispiel diese Methode:
 
 ```java
@@ -43,7 +43,7 @@ void setRGB(int x, int y, int rgb)
 ```
 
 Sie setzt also in einem Raster aus Pixeln einen Pixel auf eine bestimmte
-Farbe. Ein `BufferedImage`{.verbatim} ist also zunächst also noch gar
+Farbe. Ein `BufferedImage` ist also zunächst also noch gar
 nicht das gewünschte Bild: das entsteht erst noch durch eine Folge von
 Methodenaufrufen, welche die Farbe bestimmter Pixel ändert. Die Idee
 "ein Bild besteht aus rechteckig angeordneten Pixeln jeweils bestimmter
@@ -61,8 +61,8 @@ Dieser Artikel zeichnet seine Idee vereinfacht in Clojure nach.
 
 Den Anfang macht die Datenmodellierung: Die Begriffe "Stelle" und
 "Farbe" müssen modelliert werden, bevor es so richtig losgeht. Eine
-"Stelle" wird als kartesische Koordinaten mit `x`{.verbatim}- und
-`y`{.verbatim}-Feldern modelliert. In Clojure sieht das so aus:
+"Stelle" wird als kartesische Koordinaten mit `x`- und
+`y`-Feldern modelliert. In Clojure sieht das so aus:
 
 ```clojure
 (defrecord Point [x y])
@@ -70,28 +70,28 @@ Den Anfang macht die Datenmodellierung: Die Begriffe "Stelle" und
 
 Man kann schon sehen, dass Clojure ein Lisp-Dialekt ist, das heißt
 zusammengehörende Konstrukte immer von Klammern umschlossen sind. Das
-`defrecord`{.verbatim} kennzeichnet die Definition eines *Records*, also
-eines Typs für zusammengesetzt Daten mit `x`{.verbatim}- und
-`y`{.verbatim}-Feld. In Java wäre das ein "Plain Old Java Object", und
+`defrecord` kennzeichnet die Definition eines *Records*, also
+eines Typs für zusammengesetzt Daten mit `x`- und
+`y`-Feld. In Java wäre das ein "Plain Old Java Object", und
 in der Tat erzeugt Clojure für die obige Deklaration eine POJO-Klasse
-dafür namens `Point`{.verbatim} mit `x`{.verbatim}- und
-`y`{.verbatim}-Feldern.
+dafür namens `Point` mit `x`- und
+`y`-Feldern.
 
 Die Record-Deklaration zeigt, dass Clojure eine *dynamisch getypte*
-Sprache ist: Man muss bei `x`{.verbatim} und `y`{.verbatim} nicht
+Sprache ist: Man muss bei `x` und `y` nicht
 angeben, welche Typen sie haben, die werden erst zur Laufzeit
 entschieden. Für Koordinaten werden natürlich hier immer Zahlen
 verwendet.
 
-Den Konstruktor von `Point`{.verbatim} heißt in Clojure
-`Point.`{.verbatim} (also mit Punkt hinter dem Namen), und entsprechend
+Den Konstruktor von `Point` heißt in Clojure
+`Point.` (also mit Punkt hinter dem Namen), und entsprechend
 sieht die Konstruktion eines Punkts zum Beispiel so aus:
 
 ```clojure
 (Point. 1 2)
 ```
 
-Zwei Beispielpunkte namens `point1`{.verbatim} und `point2`{.verbatim}
+Zwei Beispielpunkte namens `point1` und `point2`
 werden folgendermaßen definiert:
 
 ```clojure
@@ -99,23 +99,23 @@ werden folgendermaßen definiert:
 (def point2 (Point. 0.5 4))
 ```
 
-Für `Point`{.verbatim} sind außerdem automatisch zwei Getter definiert
-mit den Namen `:x`{.verbatim} und `:y`{.verbatim}. Anders als in Java
+Für `Point` sind außerdem automatisch zwei Getter definiert
+mit den Namen `:x` und `:y`. Anders als in Java
 sind dies aber keine Methoden (die sind in Clojure eher verpönt),
 sondern *Funktionen*. Aufgerufen werden auch mit Klammern drum, wie
 folgt zum Beispiel:
 
--   `(:x point1)`{.verbatim} liefert 1
--   `(:y point2)`{.verbatim} liefert 4
+-   `(:x point1)` liefert 1
+-   `(:y point2)` liefert 4
 
-Eine Farbe ist in diesem Artikel ein Boolean `true`{.verbatim} oder
-`false`{.verbatim} - für schwarz respektive weiß. (Das ist leicht zu
+Eine Farbe ist in diesem Artikel ein Boolean `true` oder
+`false` - für schwarz respektive weiß. (Das ist leicht zu
 verallgemeinern auf beliebige Farben und Transparenz, macht aber diesen
 Artikel kürzer.)
 
 Koordinaten und Farben sind also definiert: Ein Bild ist eine Funktion,
-die für Koordinaten - ein `Point`{.verbatim}-Objekt eine Farbe liefert -
-`true`{.verbatim} oder `false`{.verbatim}. Hier ist ein Beispiel:
+die für Koordinaten - ein `Point`-Objekt eine Farbe liefert -
+`true` oder `false`. Hier ist ein Beispiel:
 
 ```clojure
 (defn vstrip
@@ -123,35 +123,35 @@ die für Koordinaten - ein `Point`{.verbatim}-Objekt eine Farbe liefert -
   (<= (Math/abs (:x p)) 0.5))
 ```
 
-`defn`{.verbatim} definiert in Clojure eine Funktion, in diesem Fall
-eine, die `vstrip`{.verbatim} heißt und - in eckigen Klammern - einen
-Parameter namens `p`{.verbatim} hat. In Clojure - da es eine funktionale
+`defn` definiert in Clojure eine Funktion, in diesem Fall
+eine, die `vstrip` heißt und - in eckigen Klammern - einen
+Parameter namens `p` hat. In Clojure - da es eine funktionale
 Sprache ist - liefert *jede* Funktion einen Wert, darum wäre
-`return`{.verbatim} redundant: Die Funktion liefert also das Ergebnis
-eines Vergleichs mit `<\=`{.verbatim}. Hier sieht man, dass auch
-`<\=`{.verbatim} nur eine Funktion in Clojure ist und entsprechend vor
+`return` redundant: Die Funktion liefert also das Ergebnis
+eines Vergleichs mit `<\=`. Hier sieht man, dass auch
+`<\=` nur eine Funktion in Clojure ist und entsprechend vor
 die Argumente und mit Klammern drum geschrieben wird.
-`Math/abs`{.verbatim} ist die statische Java-Methode aus der
-`Math`{.verbatim}-Klasse. Die Funktion liefert also `true`{.verbatim},
-wenn die X-Koordinate von `p`{.verbatim} zwischen -0,5 und +0,5 liegt,
-sonst `false`{.verbatim}.
+`Math/abs` ist die statische Java-Methode aus der
+`Math`-Klasse. Die Funktion liefert also `true`,
+wenn die X-Koordinate von `p` zwischen -0,5 und +0,5 liegt,
+sonst `false`.
 
 Um herauszubekommen, welche Farbe eine an bestimmten Koordinaten sitzt,
-kann `vstrip`{.verbatim} einfach aufgerufen werden:
+kann `vstrip` einfach aufgerufen werden:
 
--   `(vstrip (Point. 0 0))`{.verbatim} liefert `true`{.verbatim}
+-   `(vstrip (Point. 0 0))` liefert `true`
     (schwarz)
--   `(vstrip (Point. 0.6 0))`{.verbatim} liefert `false`{.verbatim}
+-   `(vstrip (Point. 0.6 0))` liefert `false`
     (weiß)
 
 Das Bild sieht entsprechend so aus:
 
-[![](vstrip.png)](file:vstrip.png)
+<img src="/files/clojure-dsl/vstrip.png"/>
 
 ... also genauer gesagt, ein Ausschnitt des Bildes von jeweils -2 bis
 +2, denn das Bild ist zumindest konzeptuell unendlich groß.
 
-`vstrip`{.verbatim} ist ziemlich langweilig. Marginal interessanter ist
+`vstrip` ist ziemlich langweilig. Marginal interessanter ist
 das hier:
 
 ```clojure
@@ -160,14 +160,14 @@ das hier:
   (even? (int (Math/floor (:x p)))))
 ```
 
-[![](vstripes.png)](file:vstripes.png)
+<img src="/files/clojure-dsl/vstripes.png"/>
 
-Die Funktion `int`{.verbatim} macht ein Integer aus dem
-`double`{.verbatim}, das bei `Math/floor`{.verbatim} herausgekommen ist,
-und die Funktion `even?`{.verbatim} testet, ob ein Integer gerade ist
+Die Funktion `int` macht ein Integer aus dem
+`double`, das bei `Math/floor` herausgekommen ist,
+und die Funktion `even?` testet, ob ein Integer gerade ist
 oder nicht. Das Fragezeichen gehört in Clojure zum Namen und ist
 Konvention für Funktionen, die ein Boolean liefern - in Java würde die
-Funktion `isEven`{.verbatim} heißen.
+Funktion `isEven` heißen.
 
 Die gleiche Idee lässt sich auch in der Horizontalen verwirklichen:
 
@@ -185,12 +185,12 @@ Weg vom Gefängnismuster geht es mit einer Tischdecke:
   (even? (+ (int (Math/floor (:x p))) (int (Math/floor (:y p))))))
 ```
 
-[![](checker.png)](file:checker.png)
+<img src="/files/clojure-dsl/checker.png"/>
 
 So ein bißchen kann man schon sehen, wo der Unterschied zwischen der
 objektorientierten Herangehensweise von
-`java.awt.image.Image`{.verbatim} und diesem funktionalen Modell:
-`java.awt.image.Image`{.verbatim} ist geprägt durch eine
+`java.awt.image.Image` und diesem funktionalen Modell:
+`java.awt.image.Image` ist geprägt durch eine
 Implementierungsidee (Pixel), während die funktionale Sicht auf der
 "mathematischen Essenz" der Idee eines Bildes beruht. Zur
 Implementierung - wie also aus der Darstellung ein Bild auf dem
@@ -199,9 +199,9 @@ das kommt noch.)
 
 # Kombinatormodelle
 
-Das Bild `checker`{.verbatim} mit dem Schachbrettmuster wurde oben
-"direkt" definiert. Aber `checkers`{.verbatim} kann auch mit Hilfe von
-`vstripes`{.verbatim} und `hstripes`{.verbatim} definiert werden:
+Das Bild `checker` mit dem Schachbrettmuster wurde oben
+"direkt" definiert. Aber `checkers` kann auch mit Hilfe von
+`vstripes` und `hstripes` definiert werden:
 
 ```clojure
 (defn checker
@@ -209,14 +209,14 @@ Das Bild `checker`{.verbatim} mit dem Schachbrettmuster wurde oben
   (not= (vstripes p) (hstripes p)))
 ```
 
-Die Funktion `not\=`{.verbatim} testet auf "nicht gleich", also
-effektiv ein Exklusiv-Oder auf den Farben von `vstripes`{.verbatim} und
-`hstripes`{.verbatim}. Das `p`{.verbatim} wird von `checker`{.verbatim}
-an `vstripes`{.verbatim} und `hstripes`{.verbatim} durchgeschleift: Die
+Die Funktion `not\=` testet auf "nicht gleich", also
+effektiv ein Exklusiv-Oder auf den Farben von `vstripes` und
+`hstripes`. Das `p` wird von `checker`
+an `vstripes` und `hstripes` durchgeschleift: Die
 beiden Bilder werden also quasi als ganzes xor-kombiniert.
 
 Diese Idee - zwei Bilder xor-kombinireen - kann man aus
-`checker`{.verbatim} herausabstrahieren. Das sieht dann so aus:
+`checker` herausabstrahieren. Das sieht dann so aus:
 
 ```clojure
 (defn img-xor
@@ -226,26 +226,26 @@ Diese Idee - zwei Bilder xor-kombinireen - kann man aus
 ```
 
 (Der Bindestrich gehört zum Namen - in Java würde man einen Underscore
-`_`{.verbatim} schreiben.)
+`_` schreiben.)
 
 Diese Funktion nimmt zwei Bilder - wie zum Beispiel
-`vstripes`{.verbatim} oder `hstripes`{.verbatim} als Argumente und
-liefert wieder ein Bild - also eine Funktion. Das `fn`{.verbatim} ist
+`vstripes` oder `hstripes` als Argumente und
+liefert wieder ein Bild - also eine Funktion. Das `fn` ist
 das Clojure-Pendant zum Lambda-Ausdruck in Java und stellt eine Funktion
-her, die in diesem Fall ein `Point`{.verbatim}-Objekt akzeptiert und
+her, die in diesem Fall ein `Point`-Objekt akzeptiert und
 eine Farbe liefert, mit dem gleichen Rumpf wie schon zuletzt bei
-`checker`{.verbatim}. Das kann jetzt so definiert werden:
+`checker`. Das kann jetzt so definiert werden:
 
 ```clojure
 (def checker
   (img-xor hstripes vstripes))
 ```
 
-... und damit ist sofort die Essenz von `checker`{.verbatim} klar
+... und damit ist sofort die Essenz von `checker` klar
 (hoffentlich), die bei der ersten Definition doch schwieriger zu sehen
 war.
 
-Die Implementierung von Funktionen wie `img-xor`{.verbatim}, die auf
+Die Implementierung von Funktionen wie `img-xor`, die auf
 Bildern als ganzes operieren (sogenannte *Kombinatoren*), macht aus
 Clojure zusammen mit einer Library dieser Funktionen effektiv eine
 domänenspezifische Sprache.
@@ -254,10 +254,10 @@ domänenspezifische Sprache.
 
 Hier ist ein weiteres Bild:
 
-[![](polar-checker.png)](file:polar-checker.png)
+<img src="/files/clojure-dsl/polar-checker.png"/>
 
 Intuitiv kann man sehen, dass es eine ähnliche Idee wie
-`checker`{.verbatim} umsetzt - nur irgendwie im Kreis statt im Quadrat.
+`checker` umsetzt - nur irgendwie im Kreis statt im Quadrat.
 Ideal wäre, wenn gerade das Konezpt "im Kreis statt im Quadrat" als
 Code ausgedrückt werden könnte. Und tatsächlich gibt es ja Koordinaten,
 die im Kreis statt im Quadrat funktionieren, sogenannte
@@ -267,7 +267,7 @@ Ursprung gezeichnet wird. Die Polarkoordinaten sind dann die Länge des
 Strahls (auch der *Radius*, meist *r*) und der Winkel des Strahls zur
 X-Achse (meist *ρ*).
 
-[polar-coordinates.pdf](docview:polar-coordinates.pdf::1)
+<img src="/files/clojure-dsl/polar-coordinates.png"/>
 
 Das heißt, die kartesischen Quadratkoordinaten müssten nur in
 Polarkoordinaten umgerechnet werden. Das macht folgende Funktion, deren
@@ -280,7 +280,7 @@ Formel man aus einer handelsüblichen Formelsammlung beziehen kann:
           (Math/atan2 (:x p) (:y p))))
 ```
 
-Die Hilfsfunktion `distance-from-origin`{.verbatim} berechnet den
+Die Hilfsfunktion `distance-from-origin` berechnet den
 Abstand vom Ursprung, ebenfalls mit einer Standardformel:
 
 ```clojure
@@ -293,8 +293,8 @@ Für das obige Bild wechselt die Farbe bei einer Kreisumdrehung insgesamt
 20mal - also 10mal hin und zurück. Entsprechend muss der Winkel in den
 Polarkoordinaten angepasst werden, so dass eine Kreisumdrehung - zweimal
 Pi - gerade 20 entspricht. Das verallgemeinert folgende Hilfsfunktion
-`turn`{.verbatim}, die bei Polarkoordinaten den Winkel (der im
-`y`{.verbatim}-Feld steht) entsprechend skaliert:
+`turn`, die bei Polarkoordinaten den Winkel (der im
+`y`-Feld steht) entsprechend skaliert:
 
 ```clojure
 (defn turn
@@ -305,19 +305,19 @@ Pi - gerade 20 entspricht. Das verallgemeinert folgende Hilfsfunktion
                (/ n Math/PI)))))
 ```
 
-Die `turn`{.verbatim}-Funktion akzeptiert also als Parameter
-`n`{.verbatim} die Anzahl der Farbwechsel pro Umdrehung und liefert eine
-Funktion, die ein `Point`{.verbatim}-Objekt entsprechend transformiert.
+Die `turn`-Funktion akzeptiert also als Parameter
+`n` die Anzahl der Farbwechsel pro Umdrehung und liefert eine
+Funktion, die ein `Point`-Objekt entsprechend transformiert.
 
 Um jetzt das Schachbrettmuster im Kreis zu bilden, müssen die
-Koordinaten zunächst mal mit `to-polar`{.verbatim} in Polarkoordinaten
-umgewandelt und dann mit `turn`{.verbatim} der Winkel skaliert werden,
-damit das ursprüngliche `checker`{.verbatim} dann die Farbe ausrechnen
+Koordinaten zunächst mal mit `to-polar` in Polarkoordinaten
+umgewandelt und dann mit `turn` der Winkel skaliert werden,
+damit das ursprüngliche `checker` dann die Farbe ausrechnen
 kann. Die Koordinaten werden also durch eine kleine Pipeline geleitet,
 die aus drei Funktionen besteht. Mathematisch gesehen werden die
 Funktionen *komponiert*, darum heißt die eingebaute Funktion in Clojure
-dafür auch `comp`{.verbatim} und wird so benutzt, um
-`polar-checker`{.verbatim} zu definieren:
+dafür auch `comp` und wird so benutzt, um
+`polar-checker` zu definieren:
 
 ```clojure
 (defn polar-checker
@@ -346,7 +346,7 @@ Das kann man benutzen, um auf den Polarkoordinaten Transformationen
 durchzuführen, indem die Koordinaten erst ins Polarformat überführt
 werden, dann transformiert, und dann in kartesische Koordinaten
 zurückgerechnet werden. Auch das ist eine Pipeline mit
-`comp`{.verbatim}:
+`comp`:
 
 ```clojure
 (defn from-polar-transformation
@@ -374,7 +374,7 @@ Das folgende Bild:
   (comp checker invert-polar-radius))
 ```
 
-[![](rad-invert.png)](file:rad-invert.png)
+<img src="/files/clojure-dsl/rad-invert.png"/>
 
 Der Aufsatz von Conal Elliott (1) liefert noch mehr und schönere
 Beispiele, inklusive psychedelische Animationen.
@@ -398,7 +398,7 @@ deklariert:
            java.awt.image.BufferedImage))
 ```
 
-Damit kann die Funktion `image->bitmap`{.verbatim} aus dem Clojure-Image
+Damit kann die Funktion `image->bitmap` aus dem Clojure-Image
 eine handfeste Bitmap machen. Hier ist der Header dieser Funktion:
 
 ```clojure
@@ -407,14 +407,14 @@ eine handfeste Bitmap machen. Hier ist der Header dieser Funktion:
 ```
 
 Der Pfeil im Namen ist Konvention für Funktionen, die ein Objekt in ein
-anderes konvertieren. Bei den Parametern ist `image`{.verbatim} das
-Clojure-Bild, `width`{.verbatim} und `height`{.verbatim} sind Höhe und
-Breite des Bildes in Pixel, und `x-min`{.verbatim}, `x-max`{.verbatim},
-`y-min`{.verbatim} und `y-max`{.verbatim} sind der
+anderes konvertieren. Bei den Parametern ist `image` das
+Clojure-Bild, `width` und `height` sind Höhe und
+Breite des Bildes in Pixel, und `x-min`, `x-max`,
+`y-min` und `y-max` sind der
 Koordinaten-Ausschnitt aus dem Bild, der angezeigt werden soll.
 
 Als nächstes werden einige lokale Variablen gebunden, das geht in
-Clojure mit dem Konstrukt `let`{.verbatim}: Dort stehen in eckigen
+Clojure mit dem Konstrukt `let`: Dort stehen in eckigen
 Klammern die Namen lokaler Variablen und Ausdrücke für deren Werte,
 danach können die lokalen Variablen verwendet werden:
 
@@ -429,25 +429,25 @@ danach können die lokalen Variablen verwendet werden:
                 (double height))]
 ```
 
-Für die erste Variable `buffered-image`{.verbatim} erzeugt die Funktion
-ein `BufferedImage`{.verbatim}-Objekt, in das die Funktion das Bild
-hineinmalen wird. Wie bei den Records ist `BufferedImage.`{.verbatim}
+Für die erste Variable `buffered-image` erzeugt die Funktion
+ein `BufferedImage`-Objekt, in das die Funktion das Bild
+hineinmalen wird. Wie bei den Records ist `BufferedImage.`
 der Name des Konstruktors für diese Klasse. Danach wird aus
-`buffered-image`{.verbatim} der Grafik-Context extrahiert -
-`BufferedImage`{.verbatim} hat dafür die Methode
-`getGraphics`{.verbatim}. Der Java-Aufruf dieser Methode
-`buffered-image.getGraphics()`{.verbatim} wird in Clojure als
-Funktionsaufruf mit `.getGraphics`{.verbatim} geschrieben.
+`buffered-image` der Grafik-Context extrahiert -
+`BufferedImage` hat dafür die Methode
+`getGraphics`. Der Java-Aufruf dieser Methode
+`buffered-image.getGraphics()` wird in Clojure als
+Funktionsaufruf mit `.getGraphics` geschrieben.
 
-Die beiden Bindungen für `xinc`{.verbatim} und `yinc`{.verbatim} rechnen
+Die beiden Bindungen für `xinc` und `yinc` rechnen
 schließlich aus, wie breit und wie hoch ein Pixel im Koordinatensystem
-des Bildes sind. (Die Funktion `double`{.verbatim} macht aus den
-Integern `width`{.verbatim} und `height`{.verbatim} jeweils Doubles.)
+des Bildes sind. (Die Funktion `double` macht aus den
+Integern `width` und `height` jeweils Doubles.)
 
 Jetzt muss die Funktion über die Pixel des Bildes extrahieren, jeweils
 die Farbe ermitteln, diese im Grafik-Context als kleine Rechtecke malen
-und schließlich am Ende das `BufferedImage`{.verbatim}-Objekt
-zurückliefern. Das `doseq`{.verbatim}-Konstrukt ist das Pendant zum
+und schließlich am Ende das `BufferedImage`-Objekt
+zurückliefern. Das `doseq`-Konstrukt ist das Pendant zum
 "foreach" und Java und führt hier zwei geschachtelte Schleifen über
 alle Pixel des Bildes aus:
 
@@ -464,7 +464,7 @@ alle Pixel des Bildes aus:
     buffered-image))
 ```
 
-Das Image-Objekt, das `image->bitmap`{.verbatim} liefert, kann nun zum
+Das Image-Objekt, das `image->bitmap` liefert, kann nun zum
 Beispiel in einem Fenster angezeigt werden mit folgender Funktion, die
 nahezu auschließlich aus Aufrufen von Java-Methoden besteht:
 
