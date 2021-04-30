@@ -16,8 +16,8 @@ es auch, und damit schnell und leicht erlernbar. Was ist die
 Anziehungskraft dieser winzigen Sprache gegen den Goliath Java?
 
 Zwei Dinge sind da besonders relevant: Clojure-Programme sind kompakter
-als ihre Java-Pendants und ermöglichen damit die Konzentation
-wesentliche. Wichtiger noch: Clojure ist eine *funktionale* Sprache und
+als ihre Java-Pendants und ermöglichen damit die Konzentration auf das
+Wesentliche. Wichtiger noch: Clojure ist eine *funktionale* Sprache und
 ermöglicht damit oft eine andere Sicht auf die Domäne als das klassisch
 objektorientierte Java. Dieser Artikel demonstriert das anhand einer
 kleinen domänenspezifischen Sprache für Bilder. Vorkenntnisse in Clojure
@@ -33,7 +33,7 @@ Bilder gehen. Aus Sicht der objektorientierten Programmierung sollte aus
 jedem Substantiv in einer Domänenbeschreibung ein Objekt werden: Ein
 Bild sollte demnach durch ein Objekt repräsentiert werden.
 
-Exemplarisch ist das zum Beispiel Java in AWT so, wo es ein Interface
+Exemplarisch ist das zum Beispiel in Java-AWT so, wo es ein Interface
 `java.awt.image.Image` gibt, mit der relevanten
 Implementierung `BufferedImage`. Diese Klasse hat zum
 Beispiel diese Methode:
@@ -43,14 +43,14 @@ void setRGB(int x, int y, int rgb)
 ```
 
 Sie setzt also in einem Raster aus Pixeln einen Pixel auf eine bestimmte
-Farbe. Ein `BufferedImage` ist also zunächst also noch gar
+Farbe. Ein `BufferedImage` ist also zunächst noch gar
 nicht das gewünschte Bild: das entsteht erst noch durch eine Folge von
 Methodenaufrufen, welche die Farbe bestimmter Pixel ändert. Die Idee
 "ein Bild besteht aus rechteckig angeordneten Pixeln jeweils bestimmter
 Farbe" ist sehr technisch.
 
 Die funktionale Programmierung beantwortet die Frage "Was ist ein
-Bild?" auf höherer Ebene zu beantworten. Wenn Menschen ein Bild
+Bild?" auf höherer Ebene. Wenn Menschen ein Bild
 betrachten, so sehen sie an jeder Stelle des Bildes eine bestimmte
 Farbe. Das Konzept des "Pixels" nehmen Menschen nicht direkt wahr. Die
 Idee "an jeder Stelle des Bildes eine bestimmte Farbe" lässt sich aber
@@ -71,7 +71,7 @@ Den Anfang macht die Datenmodellierung: Die Begriffe "Stelle" und
 Man kann schon sehen, dass Clojure ein Lisp-Dialekt ist, das heißt
 zusammengehörende Konstrukte immer von Klammern umschlossen sind. Das
 `defrecord` kennzeichnet die Definition eines *Records*, also
-eines Typs für zusammengesetzt Daten mit `x`- und
+eines Typs für zusammengesetzte Daten mit `x`- und
 `y`-Feld. In Java wäre das ein "Plain Old Java Object", und
 in der Tat erzeugt Clojure für die obige Deklaration eine POJO-Klasse
 dafür namens `Point` mit `x`- und
@@ -83,20 +83,20 @@ angeben, welche Typen sie haben, die werden erst zur Laufzeit
 entschieden. Für Koordinaten werden natürlich hier immer Zahlen
 verwendet.
 
-Den Konstruktor von `Point` heißt in Clojure
-`Point.` (also mit Punkt hinter dem Namen), und entsprechend
+Der Konstruktor von `Point` heißt in Clojure
+`->Point` (also mit Pfeil vor dem Namen), und entsprechend
 sieht die Konstruktion eines Punkts zum Beispiel so aus:
 
 ```clojure
-(Point. 1 2)
+(->Point 1 2)
 ```
 
 Zwei Beispielpunkte namens `point1` und `point2`
 werden folgendermaßen definiert:
 
 ```clojure
-(def point1 (Point. 1 2))
-(def point2 (Point. 0.5 4))
+(def point1 (->Point 1 2))
+(def point2 (->Point 0.5 4))
 ```
 
 Für `Point` sind außerdem automatisch zwei Getter definiert
@@ -109,7 +109,7 @@ folgt zum Beispiel:
 -   `(:y point2)` liefert 4
 
 Eine Farbe ist in diesem Artikel ein Boolean `true` oder
-`false` - für schwarz respektive weiß. (Das ist leicht zu
+`false` für schwarz respektive weiß. (Das ist leicht zu
 verallgemeinern auf beliebige Farben und Transparenz, macht aber diesen
 Artikel kürzer.)
 
@@ -136,12 +136,12 @@ die Argumente und mit Klammern drum geschrieben wird.
 wenn die X-Koordinate von `p` zwischen -0,5 und +0,5 liegt,
 sonst `false`.
 
-Um herauszubekommen, welche Farbe eine an bestimmten Koordinaten sitzt,
+Um herauszubekommen, welche Farbe an bestimmten Koordinaten sitzt,
 kann `vstrip` einfach aufgerufen werden:
 
--   `(vstrip (Point. 0 0))` liefert `true`
+-   `(vstrip (->Point 0 0))` liefert `true`
     (schwarz)
--   `(vstrip (Point. 0.6 0))` liefert `false`
+-   `(vstrip (->Point 0.6 0))` liefert `false`
     (weiß)
 
 Das Bild sieht entsprechend so aus:
@@ -189,7 +189,7 @@ Weg vom Gefängnismuster geht es mit einer Tischdecke:
 
 So ein bißchen kann man schon sehen, wo der Unterschied zwischen der
 objektorientierten Herangehensweise von
-`java.awt.image.Image` und diesem funktionalen Modell:
+`java.awt.image.Image` und diesem funktionalen Modell liegt:
 `java.awt.image.Image` ist geprägt durch eine
 Implementierungsidee (Pixel), während die funktionale Sicht auf der
 "mathematischen Essenz" der Idee eines Bildes beruht. Zur
@@ -215,7 +215,7 @@ effektiv ein Exklusiv-Oder auf den Farben von `vstripes` und
 an `vstripes` und `hstripes` durchgeschleift: Die
 beiden Bilder werden also quasi als ganzes xor-kombiniert.
 
-Diese Idee - zwei Bilder xor-kombinireen - kann man aus
+Diese Idee - zwei Bilder xor-kombinieren - kann man aus
 `checker` herausabstrahieren. Das sieht dann so aus:
 
 ```clojure
@@ -276,7 +276,7 @@ Formel man aus einer handelsüblichen Formelsammlung beziehen kann:
 ```clojure
 (defn to-polar
   [p]
-  (Point. (distance-from-origin (:x p) (:y p))
+  (->Point (distance-from-origin (:x p) (:y p))
           (Math/atan2 (:x p) (:y p))))
 ```
 
@@ -300,7 +300,7 @@ Pi - gerade 20 entspricht. Das verallgemeinert folgende Hilfsfunktion
 (defn turn
   [n]
   (fn [p]
-    (Point. (:x p)
+    (->Point (:x p)
             (* (:y p)
                (/ n Math/PI)))))
 ```
@@ -336,7 +336,7 @@ kartesische Koordinaten zurückrechnen:
 ```clojure
 (defn from-polar
   [p]
-  (Point. (* (:x p) (Math/cos (:y p)))
+  (->Point (* (:x p) (Math/cos (:y p)))
           (* (:x p) (Math/sin (:y p)))))
 ```
 
@@ -358,16 +358,17 @@ Die folgende Funktion bildet so den Kehrwert des Polarradius, stülpt
 also quasi innen nach außen:
 
 ```clojure
-(def rad-invert-polar
+(def invert-polar-radius
   (from-polar-transformation
    (fn [p]
-     (Point. (if (zero? (:x p))
-               0.0
-               (/ 1.0 (:x p)))
-             (:y p)))))
+     (->Point (if (zero? (:x p))
+                0.0
+                (/ 1.0 (:x p)))
+              (:y p)))))
 ```
 
-Das folgende Bild:
+Das folgende Bild schaltet `checker` und `ìnvert-polar-radius`
+hintereinander:
 
 ```clojure
 (def rad-invert-checker
@@ -376,7 +377,7 @@ Das folgende Bild:
 
 <img src="/files/clojure-dsl/rad-invert.png"/>
 
-Der Aufsatz von Conal Elliott (1) liefert noch mehr und schönere
+Der [Aufsatz von Conal Elliott](http://conal.net/papers/functional-images/) iefert noch mehr und schönere
 Beispiele, inklusive psychedelische Animationen.
 
 # Bilder auf den Bildschirm!
@@ -454,7 +455,7 @@ alle Pixel des Bildes aus:
 ```clojure
     (doseq [x (range 0 width)
             y (range 0 height)]
-      (let [black? (image (Point. (+ x-min (* xinc x)) (+ y-min (* yinc y))))
+      (let [black? (image (->Point (+ x-min (* xinc x)) (+ y-min (* yinc y))))
             color (if black?
                     Color/BLACK
                     Color/WHITE)]
