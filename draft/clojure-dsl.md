@@ -128,8 +128,8 @@ eine, die `vstrip` heißt und - in eckigen Klammern - einen
 Parameter namens `p` hat. In Clojure - da es eine funktionale
 Sprache ist - liefert *jede* Funktion einen Wert, darum wäre
 `return` redundant: Die Funktion liefert also das Ergebnis
-eines Vergleichs mit `<\=`. Hier sieht man, dass auch
-`<\=` nur eine Funktion in Clojure ist und entsprechend vor
+eines Vergleichs mit `<=`. Hier sieht man, dass auch
+`<=` nur eine Funktion in Clojure ist und entsprechend vor
 die Argumente und mit Klammern drum geschrieben wird.
 `Math/abs` ist die statische Java-Methode aus der
 `Math`-Klasse. Die Funktion liefert also `true`,
@@ -209,7 +209,7 @@ Das Bild `checker` mit dem Schachbrettmuster wurde oben
   (not= (vstripes p) (hstripes p)))
 ```
 
-Die Funktion `not\=` testet auf "nicht gleich", also
+Die Funktion `not=` testet auf "nicht gleich", also
 effektiv ein Exklusiv-Oder auf den Farben von `vstripes` und
 `hstripes`. Das `p` wird von `checker`
 an `vstripes` und `hstripes` durchgeschleift: Die
@@ -277,7 +277,7 @@ Formel man aus einer handelsüblichen Formelsammlung beziehen kann:
 (defn to-polar
   [p]
   (->Point (distance-from-origin (:x p) (:y p))
-          (Math/atan2 (:x p) (:y p))))
+           (Math/atan2 (:x p) (:y p))))
 ```
 
 Die Hilfsfunktion `distance-from-origin` berechnet den
@@ -301,8 +301,8 @@ Pi - gerade 20 entspricht. Das verallgemeinert folgende Hilfsfunktion
   [n]
   (fn [p]
     (->Point (:x p)
-            (* (:y p)
-               (/ n Math/PI)))))
+             (* (:y p)
+             (/ n Math/PI)))))
 ```
 
 Die `turn`-Funktion akzeptiert also als Parameter
@@ -337,7 +337,7 @@ kartesische Koordinaten zurückrechnen:
 (defn from-polar
   [p]
   (->Point (* (:x p) (Math/cos (:y p)))
-          (* (:x p) (Math/sin (:y p)))))
+           (* (:x p) (Math/sin (:y p)))))
 ```
 
 (Auch diese Formel liefert die Formelsammlung.)
