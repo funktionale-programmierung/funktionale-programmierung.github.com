@@ -12,7 +12,7 @@ haben es eine neue Syntax sowie einige Neuerungen an der Sprache
 in Scala 3 geschafft.  In dieser Blogpost-Reihe werden einige der interessanten
 Neuerungen im Detail vorgestellt.  In diesem ersten Teil der Reihe wird der 
 "quiet mode" vorgestellt. Dabei handelt es sich um eine alternative Syntax, die
-mit Blockbildung mit Einrückung vornimmt, statt mit geschweiften Klammern.
+mit Einrückungen Blockbildung vornimmt, statt mit geschweiften Klammern.
 
 
 <!-- more start -->
