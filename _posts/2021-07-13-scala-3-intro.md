@@ -51,33 +51,33 @@ Betrachten wir die folgende kleine Scala-Klasse und deren Companion-Object.
 
 {% highlight scala %}
 
-case class Bottle(content: String, volume: Float, current_volume: Float){
+case class Bottle(content: String, volume: Float, currentVolume: Float){
 
-  def fill(additional_volume: Float) : Bottle = {
-    val maybe_new_volume = volume + additional_volume 
-    if(maybe_new_volume > volume){
-      this.copy(current_volume = maybe_new_volume) 
+  def fill(additionalVolume: Float) : Bottle = {
+    val maybeNewVolume = volume + additionalVolume 
+    if(maybeNewVolume > volume){
+      this.copy(currentVolume = maybeNewVolume) 
     } else {
-      this.copy(current_volume = maybe_new_volume) 
+      this.copy(currentVolume = maybeNewVolume) 
     }
   }
 
   def empty() : Bottle = {
-    this.copy(current_volume = 0f)
+    this.copy(currentVolume = 0f)
   }
 
-  def is_empty() : Boolean = {
+  def isEmpty() : Boolean = {
     this.volume == 0f
   }
 }
 
 
 object Bottle{
-   def empty_many(bottles : List[Bottle]) : List[Bottle] = {
+   def emptyMany(bottles : List[Bottle]) : List[Bottle] = {
      bottles.map{ x => x.empty() }
    }
 
-   def fill_many(bottles : List[Bottle], volume: Float) : List[Bottle] = {
+   def fillMany(bottles : List[Bottle], volume: Float) : List[Bottle] = {
      for{
        bottle <- bottles
      } yield bottle.fill(volume))
@@ -91,30 +91,30 @@ können wir die Klasse mit der neuen Syntaxvariante auch wie folgt beschreiben:
 
 {% highlight scala %}
 
-case class Bottle(content: String, volume: Float, current_volume: Float):
+case class Bottle(content: String, volume: Float, currentVolume: Float):
 
-  def fill(additional_volume: Float) : Bottle = 
-    val maybe_new_volume = volume + additional_volume 
-    if maybe_new_volume > volume then
-      this.copy(current_volume = maybe_new_volume) 
+  def fill(additionalVolume: Float) : Bottle = 
+    val maybeNewVolume = volume + additionalVolume 
+    if maybeNewVolume > volume then
+      this.copy(currentVolume = maybeNewVolume) 
     else
-      this.copy(current_volume = maybe_new_volume) 
+      this.copy(currentVolume = maybeNewVolume) 
 
   def empty() : Bottle = 
-    this.copy(current_volume = 0f)
+    this.copy(currentVolume = 0f)
 
-  def is_empty() : Boolean = 
+  def isEmpty() : Boolean = 
     this.volume == 0f
 
 
 object Bottle:
-   def empty_many(bottles : List[Bottle]) : List[Bottle] = 
+   def emptyMany(bottles : List[Bottle]) : List[Bottle] = 
      import language.experimental.fewerBraces
      bottles.map:
        x => 
          x.empty()
 
-   def fill_many(bottles : List[Bottle], volume: Float) : List[Bottle] =
+   def fillMany(bottles : List[Bottle], volume: Float) : List[Bottle] =
      for bottle <- bottles 
        yield bottle.fill(volume)
 
@@ -182,8 +182,8 @@ for a <- List(1, 2, 3)
 
 // for-Schleife als imperative for-Schleife mit Rückgabewert unit
 for a <- List(1, 2, 3) do
-   val twice_a = a * 2
-   println(twice_a)
+   val twiceA = a * 2
+   println(twiceA)
    
 
 {% endhighlight %}
@@ -192,14 +192,14 @@ for a <- List(1, 2, 3) do
 
 ## Noch weniger Klammern
 
-Im übersetzten Code sieht man im Companion-Object in der Methode `empty_many`
+Im übersetzten Code sieht man im Companion-Object in der Methode `emptyMany`
 den Import des Packages `fewerBraces`. Dieses Feature ist ausgelagert, da es im
 Vorfeld noch kontroverser diskutiert wurde als die Syntaxumstellung ohnehin
 schon.
 
 In Scala zwei gibt es die Möglichkeit, Statement-Blöcke und Definitionen von
 anonymen Funktionen in geschweiften Klammer vorzunehmen, wie im Code-Beispiel
-für Scala 2 in der `empty_many`-Methode zu sehen. Mit dem Import von
+für Scala 2 in der `emptyMany`-Methode zu sehen. Mit dem Import von
 `fewerBraces` in der _Scala 3_-Variante dieser Methode können alle durch
 geschweifte Klammern definierten Blöcke von nun an mit einem Doppelpunkt
 eingeleitet und durch Einrückungen vom Rest abgegrenzt werden. Wird
