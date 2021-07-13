@@ -145,8 +145,8 @@ Leerzeichen als auch Tabs beschrieben werden. Dabei können Leerzeichen und Tabs
 gemischt verwendet werden. Vier Tabs und zwei
 Leerzeichen zählen weniger als vier Tabs und drei Leerzeichen. Vier Tabs und zwei
 Leerzeichen sind äquivalent zu sechs Leerzeichen. Mancher kennt diese Möglichkeit 
-der Kombination von Leerzeichen und Tabs zur Einrückung eventuell [aus Haskell](https://www.youtube.com/watch?v=uKpPJV0hhCY). 
-Die
+der Kombination von Leerzeichen und Tabs zur Einrückung eventuell [aus
+Haskell](https://www.youtube.com/watch?v=uKpPJV0hhCY). Die
 [Scala-Dokumentation](https://dotty.epfl.ch/docs/reference/other-new-features/indentation.html#spaces-vs-tabs)
 selbst
 erwähnt, dass das Mischen der beiden nicht praktikabel ist und vermieden werden
@@ -177,11 +177,11 @@ formulieren. Von diesen Schlüsselwörtern gibt es noch mehr:
 {% highlight scala %}
 
 # for-Schleife als monadische Anweisung 
-for a <- [1, 2, 3] 
+for a <- List(1, 2, 3) 
    yield a * 2
 
 # for-Schleife als imperative for-Schleife mit Rückgabewert unit
-for a <- [1, 2, 3] do
+for a <- List(1, 2, 3) do
    val twice_a = a * 2
    println(twice_a)
    
