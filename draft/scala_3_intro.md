@@ -176,11 +176,11 @@ formulieren. Von diesen Schlüsselwörtern gibt es noch mehr:
 
 {% highlight scala %}
 
-# for-Schleife als monadische Anweisung 
+// for-Schleife als monadische Anweisung 
 for a <- List(1, 2, 3) 
    yield a * 2
 
-# for-Schleife als imperative for-Schleife mit Rückgabewert unit
+// for-Schleife als imperative for-Schleife mit Rückgabewert unit
 for a <- List(1, 2, 3) do
    val twice_a = a * 2
    println(twice_a)
