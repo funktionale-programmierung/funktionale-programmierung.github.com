@@ -6,7 +6,7 @@ author: simon-haerer
 tags: ["scala", "3", "syntax"]
 ---
 
-Nach 8 Jahren, 28000 commits und 7400 pull-requests war es am 14. Mai 2021
+Nach 8 Jahren, 28000 commits und 7400 Pull-Requests war es am 14. Mai 2021
 endlich so weit: Scala 3 wurde veröffentlicht. Neben dem neuen Compiler "Dotty"
 haben es eine neue Syntax sowie einige Neuerungen an der Sprache
 in Scala 3 geschafft.  In dieser Blogpost-Reihe werden einige der interessanten

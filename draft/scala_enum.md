@@ -6,7 +6,7 @@ author: simon-haerer
 tags: ["scala", "3", "adt", "enum"]
 ---
 
-Nach 8 Jahren, 28000 commits und 7400 pull-requests war es am 14. Mai 2021
+Nach 8 Jahren, 28000 commits und 7400 Pull-Requests war es am 14. Mai 2021
 endlich so weit: Scala 3 wurde veröffentlicht. Neben dem neuen Compiler "Dotty"
 haben es eine neue Syntax sowie einige Neuerungen an der Sprache
 in Scala 3 geschafft. In diesem Blogpost der Serie über interessante Neuerungen werden
@@ -21,9 +21,9 @@ ermüdende Definition von algebraischen Datentypen eleganter zu gestalten.
 Zwar werden Neuerungen und Änderungen in der Sprache von Grund auf erläutert und
 Vergleiche zu Scala 2 ausführlich erklärt, dennoch unterstützt die Kenntnis von
 Scala 2 das Verständnis dieses Blogposts. [Im ersten
-Blogpost dieser Reige](http://localhost:4000/2021/07/13/scala-3-intro.html) wurde die neue
-einrückungsbasierte Syntax in Scala 3 vorgestellt. Da diese in diesem Post 
-verwendet wird, ist es hilfreich, diesen Artikel gelesen zu haben.
+Blogpost dieser Reihe](http://localhost:4000/2021/07/13/scala-3-intro.html)
+wurde in die Scala 3 neue einrückungsbasierte Syntax vorgestellt. Da diese in
+diesem Post verwendet wird, ist es hilfreich, diesen Artikel gelesen zu haben.
 
 
 ## Von Enums und Aufzählungen
@@ -34,7 +34,7 @@ _auf_ (engl. enumerate).
 
 Im vorherigen Blogpost haben wir Flaschen gefüllt. Die Flüssigkeit wurde durch
 einen String beschrieben. Dies wollen wir jetzt ändern und modellieren den
-Sachverhalt durch _Scala 3_-Enums. Dabei vergleichen _Scala 2_- mit _Scala 3_-Code:
+Sachverhalt durch _Scala 3_-Enums. Dabei vergleichen wir _Scala 2_- mit _Scala 3_-Code:
 
 
 {% highlight scala %}
@@ -86,27 +86,27 @@ end Liquid
 {% endhighlight %}
 
 Die _Scala 3_-Version des Codes unterscheidet sich in der Definition des Enums
-deutlich von der in Scala 2 verwendeten. Während die Definition eines Enum in
+deutlich von der in Scala 2. Während die Definition eines Enum in
 Scala 2 über Vererbung an ein Objekt passiert, ist die Definition in
 Scala 3 in die Sprache eingebaut. Das Schlüsselwort `enum` ist in Scala 3 neu
 hinzugekommen.
 
 Die Implementierungen der Hilfsfunktionalität (`isJuice` und `juices`)
-unterscheidet sich in beiden Fällen, abgesehen von der Syntax, nicht
+unterscheiden sich in beiden Fällen, abgesehen von der Syntax, nicht
 signifikant. Dennoch gibt es ein paar
 nicht sofort ersichtliche Unterschiede der Definitionen. Während
 `Liquid.AppleJuice` in Scala 2 vom Typ `Liquid.Value` ist, ist es in der _Scala
-3_-Variante vom Typ `Liquid`. Das `enum` Schlüsselwort erzeugt also
-einen neuen Typen, die aufgezählten Werte sind von eben diesem. 
+3_-Variante vom Typ `Liquid`. Das `enum`-Schlüsselwort erzeugt also
+einen neuen Typ, die aufgezählten Werte sind von eben diesem. 
 Matchen wir auf die Werte eines Enums in Scala 3, vergessen
 dabei jedoch einen aus der Aufzählung, bekommen wir vom Compiler eine Warnung,
 dass das Matching nicht erschöpfend sei. Diese Warnung wird beim _Scala 2_-Code
 nicht ausgegeben. Das erinnert den aufmerksamen Scala-Enthusiasten an etwas,
 oder etwa nicht? 
 
-## Vom Enum zum Summentypen
+## Vom Enum zum Summentyp
 
-Das Keyword `enum` wird in Scala 3 außerdem verwendet, um Summentypen zu
+Das Keyword `enum` wird in Scala 3 außerdem verwendet, um Summentyp zu
 definieren. Die entstehenden Typen können dabei selbst zusammengesetzte
 Datentypen sein. Beispielsweise können wir die Flüssigkeiten auch so
 beschreiben:
@@ -147,7 +147,7 @@ Dieser Code ist nicht sonderlich deklarativ. Die Erweiterung des Traits mit
 [sauber
 inferieren](https://underscore.io/blog/posts/2015/06/04/more-on-sealed.html) kann.
 Damit bietet uns `enum` aus Scala 3 eine deutlich kürzere und sprechende
-Definitionsmöglichkeit von Summentypen, deren Resultat genauso funktioniert, wie
+Definitionsmöglichkeit von Summentypen, deren Resultat genauso funktioniert wie
 aus Scala 2 gewohnt, einschließlich erschöpfendem Matching.
 
 
@@ -161,14 +161,14 @@ definieren:
 {% highlight scala %}
 
 enum Parts:
-   case GramsPer100Milliliter(grams: Double)
-   case KilogramsPerLiter(kilogramms: Double)
+   case GramsPer100Milliliters(grams: Double)
+   case KilogramsPerLiter(kilograms: Double)
 
 import Parts._
 
 enum FruitWithSugar[T](sugarContent: T):
    def sugar : T = sugarContent
-   case Orange extends FruitWithSugar(GramsPer100Milliliter(1.2))
+   case Orange extends FruitWithSugar(GramsPer100Milliliters(1.2))
    case Apple extends FruitWithSugar(KilogramsPerLiter(0.002))
 
 {% endhighlight %}
@@ -185,7 +185,7 @@ Im ersten Beispiel zu den _Scala 3_-Enums haben wir alle Säfte aus dem Enum
 `Liquid` anhand von `Liquid.values.filter(isJuice)` gefiltert. Ein Enum hat eine
 Funktion `values`, die alle zum Enum zugehörigen Werte zurückgibt. Rufen wir
 diese Funktion jedoch auf dem `Liquid`-Enum aus dem Abschnitt _Vom Enum zum
-Summentypen_ auf, bekommen wir folgende Fehlermeldung: 
+Summentyp_ auf, bekommen wir folgende Fehlermeldung: 
 
 ```
 1 |Liquid.values
@@ -200,8 +200,8 @@ Diese Version von `Liquid` beinhaltet einen zusammengesetzten Typen, nämlich
 Die vorgesehenen Enum-Funktionen wie `values` aber auch `valueOf`
 funktionieren nun nicht mehr.
 
-Im Hintergrund wird beim Kompilieren der `enum`
-Anweisung Scala-Code erzeugt. Diesen Vorgang nennt man auch _desugaring_.
+Im Hintergrund wird beim Kompilieren der `enum`-Anweisung Scala-Code erzeugt.
+Diesen Vorgang nennt man auch _desugaring_.
 Folgendes passiert:
 
 * Für das Enum wird in jedem Fall ein Companion-Objekt angelegt.
@@ -229,7 +229,7 @@ sondern eine Klassendefinition erzeugt wird.
 
 Enums in Scala 3 gehen in die richtige Richtung: Die ermüdende Definition von
 Summentypen wird einfacher und verständlicher. Eine kurze und sprechende
-Definition, wie sie bereits in anderen Sprachen wie Haskell oder F#
+Definition, wie sie bereits in anderen Sprachen wie Rust, Haskell oder F#
 vorhanden war, erhält nun endlich auch Einzug in Scala. 
 Dass dabei mithilfe von `enum` klassische Enums, aber auch Summentypen definiert
 werden können, die jeweils unterschiedliche Funktionalität bereitstellen, ist
