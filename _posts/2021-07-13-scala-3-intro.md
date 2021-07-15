@@ -20,7 +20,7 @@ mit Einrückungen Blockbildung vornimmt, statt mit geschweiften Klammern.
 ## Voraussetzungen
 
 Zwar werden Neuerungen und Änderungen in der Sprache von Grund auf erläutert und
-Vergleiche zu Scala 2 ausführlich erklärt, dennoch unterstützt die Kenntniss von
+Vergleiche zu Scala 2 ausführlich erklärt, dennoch unterstützt die Kenntnis von
 Scala 2 das Verständnis dieses Blogposts.
 
 
