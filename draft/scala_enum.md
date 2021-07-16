@@ -57,7 +57,6 @@ object Liquid extends Enumeration {
 
 {% endhighlight %}
 
-
 {% highlight scala %}
 
 // Scala 3
@@ -97,7 +96,10 @@ signifikant. Dennoch gibt es ein paar
 nicht sofort ersichtliche Unterschiede der Definitionen. Während
 `Liquid.AppleJuice` in Scala 2 vom Typ `Liquid.Value` ist, ist es in der _Scala
 3_-Variante vom Typ `Liquid`. Das `enum`-Schlüsselwort erzeugt also
-einen neuen Typ, die aufgezählten Werte sind von eben diesem. 
+einen neuen Typ, die aufgezählten Werte sind von eben diesem. Dass sich hier
+unter der Haube einiges geändert hat, ist gut, denn Enums in Scala 2 waren
+[misslungen](https://medium.com/@yuriigorbylov/scala-enumerations-hell-5bdba2c1216).
+
 Matchen wir auf die Werte eines Enums in Scala 3, vergessen
 dabei jedoch einen aus der Aufzählung, bekommen wir vom Compiler eine Warnung,
 dass das Matching nicht erschöpfend sei. Diese Warnung wird beim _Scala 2_-Code
