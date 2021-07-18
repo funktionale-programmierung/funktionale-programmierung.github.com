@@ -1,0 +1,244 @@
+---
+layout: post
+description: "Scala 3 Enums und ADTs im Detail"
+title: "Eins für zwei - Scala 3 Enums" 
+author: simon-haerer
+tags: ["scala", "3", "adt", "enum"]
+---
+
+Nach 8 Jahren, 28000 commits und 7400 Pull-Requests war es am 14. Mai 2021
+endlich so weit: Scala 3 wurde veröffentlicht. Neben dem neuen Compiler "Dotty"
+haben es eine neue Syntax sowie einige Neuerungen an der Sprache
+in Scala 3 geschafft. In diesem Blogpost der Serie über interessante Neuerungen werden
+wir Enums genauer unter die Lupe nehmen. Diese sind nicht nur klassische Enums,
+um Wertemengen aufzuzählen. Tatsächlich werden sie verwendet, um die in Scala 2
+ermüdende Definition von algebraischen Datentypen eleganter zu gestalten. 
+
+<!-- more start -->
+
+## Voraussetzungen
+
+Zwar werden Neuerungen und Änderungen in der Sprache von Grund auf erläutert und
+Vergleiche zu Scala 2 ausführlich erklärt, dennoch unterstützt die Kenntnis von
+Scala 2 das Verständnis dieses Blogposts. [Im ersten
+Blogpost dieser Reihe](http://localhost:4000/2021/07/13/scala-3-intro.html)
+wurde in die Scala 3 neue einrückungsbasierte Syntax vorgestellt. Da diese in
+diesem Post verwendet wird, ist es hilfreich, diesen Artikel gelesen zu haben.
+
+
+## Von Enums und Aufzählungen
+
+Enums werden in Scala verwendet, um einen Typ zu definieren, der aus einer
+Menge von benannten Werten besteht. Man _zählt_ diese Werte in der Definition
+_auf_ (engl. enumerate).
+
+Im vorherigen Blogpost haben wir Flaschen gefüllt. Die Flüssigkeit wurde durch
+einen String beschrieben. Dies wollen wir jetzt ändern und modellieren den
+Sachverhalt durch _Scala 3_-Enums. Dabei vergleichen wir _Scala 2_- mit _Scala 3_-Code:
+
+
+{% highlight scala %}
+
+// Scala 2
+
+object Liquid extends Enumeration {
+  type Liquid = Value
+  val AppleJuice, OrangeJuice, Beer, Water = Value
+
+  def isJuice(liquid : Liquid) : Boolean = 
+    liquid match {
+      case AppleJuice => true
+      case OrangeJuice => true
+      case _ => false
+    }
+
+  val juices = Liquid.values.filter(isJuice)
+}
+
+{% endhighlight %}
+
+{% highlight scala %}
+
+// Scala 3
+
+enum Liquid:
+   case AppleJuice
+   case OrangeJuice
+   case Beer
+   case Water
+
+
+object Liquid:
+
+  import Liquid._
+
+  def isJuice(liquid: Liquid) : Boolean = 
+    liquid match 
+      case AppleJuice => true
+      case OrangeJuice => true
+      case _ => false
+
+  val juices = Liquid.values.filter(isJuice)
+
+end Liquid
+
+{% endhighlight %}
+
+Die _Scala 3_-Version des Codes unterscheidet sich in der Definition des Enums
+deutlich von der in Scala 2. Während die Definition eines Enum in
+Scala 2 über Vererbung an ein Objekt passiert, ist die Definition in
+Scala 3 in die Sprache eingebaut. Das Schlüsselwort `enum` ist in Scala 3 neu
+hinzugekommen.
+
+Die Implementierungen der Hilfsfunktionalität (`isJuice` und `juices`)
+unterscheiden sich in beiden Fällen, abgesehen von der Syntax, nicht
+signifikant. Dennoch gibt es ein paar
+nicht sofort ersichtliche Unterschiede der Definitionen. Während
+`Liquid.AppleJuice` in Scala 2 vom Typ `Liquid.Value` ist, ist es in der _Scala
+3_-Variante vom Typ `Liquid`. Das `enum`-Schlüsselwort erzeugt also
+einen neuen Typ, die aufgezählten Werte sind von eben diesem. Dass sich hier
+unter der Haube einiges geändert hat, ist gut, denn Enums in Scala 2 waren
+[misslungen](https://medium.com/@yuriigorbylov/scala-enumerations-hell-5bdba2c1216).
+
+Matchen wir auf die Werte eines Enums in Scala 3, vergessen
+dabei jedoch einen aus der Aufzählung, bekommen wir vom Compiler eine Warnung,
+dass das Matching nicht erschöpfend sei. Diese Warnung wird beim _Scala 2_-Code
+nicht ausgegeben. Das erinnert den aufmerksamen Scala-Enthusiasten an etwas,
+oder etwa nicht? 
+
+## Vom Enum zum Summentyp
+
+Das Keyword `enum` wird in Scala 3 außerdem verwendet, um Summentyp zu
+definieren. Die entstehenden Typen können dabei selbst zusammengesetzte
+Datentypen sein. Beispielsweise können wir die Flüssigkeiten auch so
+beschreiben:
+
+{% highlight scala %}
+
+enum Fruit:
+   case Apple
+   case Orange
+
+enum Liquid:
+   case Juice(fruit: Fruit)
+   case Beer
+   case Water
+
+{% endhighlight %}
+
+Juice (zu Deutsch: Saft) ist nun ein Typ, dessen Konstruktor selbst ein weiteres
+Argument entgegennimmt, nämlich eine Frucht. In Scala 2 werden solche
+Summentypen bisher basierend auf sogenannten `sealed traits` definiert:
+
+
+{% highlight scala %}
+
+sealed trait Fruit extends Product with Serializable
+final case object Apple extends Fruit
+final case object Orange extends Fruit
+
+sealed trait Liquid extends Product with Serializable
+final case class Juice(fruit: Fruit) extends Liquid
+final case object Beer extends Liquid
+final case object Water extends Liquid
+
+{% endhighlight %}
+
+Dieser Code ist nicht sonderlich deklarativ. Die Erweiterung des Traits mit
+`Product with Serializable` ist in Scala 2 nötig, damit der Compiler die Typen
+[sauber
+inferieren](https://underscore.io/blog/posts/2015/06/04/more-on-sealed.html) kann.
+Damit bietet uns `enum` aus Scala 3 eine deutlich kürzere und sprechende
+Definitionsmöglichkeit von Summentypen, deren Resultat genauso funktioniert wie
+aus Scala 2 gewohnt, einschließlich erschöpfendem Matching.
+
+
+## Parameter, Typparameter & Vererbung
+
+Enums selbst können Parameter und Typparameter entgegennehmen, um
+beispielsweise Methoden auf allen Werten des Enums oder Summentyps zu
+definieren: 
+
+
+{% highlight scala %}
+
+enum Parts:
+   case GramsPer100Milliliters(grams: Double)
+   case KilogramsPerLiter(kilograms: Double)
+
+import Parts._
+
+enum FruitWithSugar[T](sugarContent: T):
+   def sugar : T = sugarContent
+   case Orange extends FruitWithSugar(GramsPer100Milliliters(1.2))
+   case Apple extends FruitWithSugar(KilogramsPerLiter(0.002))
+
+{% endhighlight %}
+
+In diesem Codebeispiel wurde eine Methode auf einem parametrisierten Enum
+implementiert, die an die Kinder vererbt wird. Dabei können sogar Typparameter
+gesetzt und inferiert werden. Der Zuckergehalt einer Frucht kann nun mit
+`FruitWithSugar.Orange.sugar` abgerufen werden.
+
+
+## Enum oder Summentyp oder beides?
+
+Im ersten Beispiel zu den _Scala 3_-Enums haben wir alle Säfte aus dem Enum
+`Liquid` anhand von `Liquid.values.filter(isJuice)` gefiltert. Ein Enum hat eine
+Funktion `values`, die alle zum Enum zugehörigen Werte zurückgibt. Rufen wir
+diese Funktion jedoch auf dem `Liquid`-Enum aus dem Abschnitt _Vom Enum zum
+Summentyp_ auf, bekommen wir folgende Fehlermeldung: 
+
+```
+1 |Liquid.values
+  |^^^^^^^^^^^^^
+  |value values is not a member of object Liquid.
+  |Although class Liquid is an enum, it has non-singleton cases,
+  |meaning a values array is not defined
+```
+
+Diese Version von `Liquid` beinhaltet einen zusammengesetzten Typen, nämlich
+`Juice`, dessen Werte unter Zuhilfename einer Frucht konstruiert werden.
+Die vorgesehenen Enum-Funktionen wie `values` aber auch `valueOf`
+funktionieren nun nicht mehr.
+
+Im Hintergrund wird beim Kompilieren der `enum`-Anweisung Scala-Code erzeugt.
+Diesen Vorgang nennt man auch _desugaring_.
+Folgendes passiert:
+
+* Für das Enum wird in jedem Fall ein Companion-Objekt angelegt.
+* Fälle mit Parametern werden in Klassendefinitionen übersetzt.
+* Fälle ohne Parameter, aber mit `extend`-Anweisung, werden in Instanzen der durch
+die Enum-Definition erzeugten Elternklasse als `val` gebunden.
+* Für klassische Enum-Werte ohne Parameter und ohne `extend` werden Werte
+analog zur _Scala 2_-Version gebunden.
+
+Die Regeln sind kompliziert und [können hier nachgelesen werden](https://github.com/lampepfl/dotty/issues/1970).
+
+Haben wir also keinen wirklichen Enum mehr, sobald zusammengesetzte Daten in
+`enum` definiert werden?
+
+Darüber lässt sich sicher streiten. Jedoch ist es seltsam, dass hier für die
+Definition zweier unterschiedlicher Konzepte dasselbe Schlüsselwort verwendet
+wird. Die Konzepte ähneln sich zwar, doch eine Trennung wäre hier schön
+gewesen. Das wird besonders deutlich, wenn wir die komplizierten Regeln im
+[verlinkten Issue](https://github.com/lampepfl/dotty/issues/1970)
+betrachten. Die Methode `value` kann beispielsweise bei zusammengesetzten
+Kindern im Enum nicht mehr funktionieren, da hier kein Wert gebunden,
+sondern eine Klassendefinition erzeugt wird.
+
+## Fazit
+
+Enums in Scala 3 gehen in die richtige Richtung: Die ermüdende Definition von
+Summentypen wird einfacher und verständlicher. Eine kurze und sprechende
+Definition, wie sie bereits in anderen Sprachen wie Rust, Haskell oder F#
+vorhanden war, erhält nun endlich auch Einzug in Scala. 
+Dass dabei mithilfe von `enum` klassische Enums, aber auch Summentypen definiert
+werden können, die jeweils unterschiedliche Funktionalität bereitstellen, ist
+zwar unschön, aber kein Showstopper. Dennoch sollte man sich die 
+[Regeln zum desugaring](https://github.com/lampepfl/dotty/issues/1970)
+ansehen, um nachvollziehen zu können, was im Hintergrund passiert.
+
+An anderer Stelle, etwa bei den `implicits` macht es Scala 3 hingegen
+richtig und trennt nun, was semantisch unterschiedlich sein sollte. Dazu dann
+mehr im nächsten Blogpost.
