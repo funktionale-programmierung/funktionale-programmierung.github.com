@@ -6,7 +6,7 @@ author: simon-haerer
 tags: ["scala", "3", "adt", "enum"]
 ---
 
-Nach 8 Jahren, 28000 commits und 7400 Pull-Requests war es am 14. Mai 2021
+Nach 8 Jahren, 28000 Commits und 7400 Pull-Requests war es am 14. Mai 2021
 endlich so weit: Scala 3 wurde veröffentlicht. Neben dem neuen Compiler "Dotty"
 haben es eine neue Syntax sowie einige Neuerungen an der Sprache
 in Scala 3 geschafft. In diesem Blogpost der Serie über interessante Neuerungen werden
@@ -85,7 +85,7 @@ end Liquid
 {% endhighlight %}
 
 Die _Scala 3_-Version des Codes unterscheidet sich in der Definition des Enums
-deutlich von der in Scala 2. Während die Definition eines Enum in
+deutlich von der in Scala 2. Während die Definition eines Enums in
 Scala 2 über Vererbung an ein Objekt passiert, ist die Definition in
 Scala 3 in die Sprache eingebaut. Das Schlüsselwort `enum` ist in Scala 3 neu
 hinzugekommen.
@@ -126,7 +126,7 @@ enum Liquid:
 
 {% endhighlight %}
 
-Juice (zu Deutsch: Saft) ist nun ein Typ, dessen Konstruktor selbst ein weiteres
+Juice (zu Deutsch: Saft) ist nun ein Typ, dessen Konstruktor selbst ein 
 Argument entgegennimmt, nämlich eine Frucht. In Scala 2 werden solche
 Summentypen bisher basierend auf sogenannten `sealed traits` definiert:
 
@@ -148,7 +148,7 @@ Dieser Code ist nicht sonderlich deklarativ. Die Erweiterung des Traits mit
 `Product with Serializable` ist in Scala 2 nötig, damit der Compiler die Typen
 [sauber
 inferieren](https://underscore.io/blog/posts/2015/06/04/more-on-sealed.html) kann.
-Damit bietet uns `enum` aus Scala 3 eine deutlich kürzere und sprechende
+Damit bietet uns `enum` aus Scala 3 eine deutlich kürzere und sprechendere
 Definitionsmöglichkeit von Summentypen, deren Resultat genauso funktioniert wie
 aus Scala 2 gewohnt, einschließlich erschöpfendem Matching.
 
@@ -203,7 +203,7 @@ Die vorgesehenen Enum-Funktionen wie `values` aber auch `valueOf`
 funktionieren nun nicht mehr.
 
 Im Hintergrund wird beim Kompilieren der `enum`-Anweisung Scala-Code erzeugt.
-Diesen Vorgang nennt man auch _desugaring_.
+Diesen Vorgang nennt man auch _Desugaring_.
 Folgendes passiert:
 
 * Für das Enum wird in jedem Fall ein Companion-Objekt angelegt.
@@ -236,9 +236,9 @@ vorhanden war, erhält nun endlich auch Einzug in Scala.
 Dass dabei mithilfe von `enum` klassische Enums, aber auch Summentypen definiert
 werden können, die jeweils unterschiedliche Funktionalität bereitstellen, ist
 zwar unschön, aber kein Showstopper. Dennoch sollte man sich die 
-[Regeln zum desugaring](https://github.com/lampepfl/dotty/issues/1970)
+[Regeln zum Desugaring](https://github.com/lampepfl/dotty/issues/1970)
 ansehen, um nachvollziehen zu können, was im Hintergrund passiert.
 
-An anderer Stelle, etwa bei den `implicits` macht es Scala 3 hingegen
+An anderer Stelle, etwa bei den `implicits`, macht es Scala 3 hingegen
 richtig und trennt nun, was semantisch unterschiedlich sein sollte. Dazu dann
 mehr im nächsten Blogpost.
