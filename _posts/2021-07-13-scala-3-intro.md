@@ -54,9 +54,9 @@ Betrachten wir die folgende kleine Scala-Klasse und deren Companion-Object.
 case class Bottle(content: String, volume: Float, currentVolume: Float){
 
   def fill(additionalVolume: Float) : Bottle = {
-    val maybeNewVolume = volume + additionalVolume 
+    val maybeNewVolume = currentVolume + additionalVolume 
     if(maybeNewVolume > volume){
-      this.copy(currentVolume = maybeNewVolume) 
+      this.copy(currentVolume = volume) 
     } else {
       this.copy(currentVolume = maybeNewVolume) 
     }
@@ -94,9 +94,9 @@ können wir die Klasse mit der neuen Syntaxvariante auch wie folgt beschreiben:
 case class Bottle(content: String, volume: Float, currentVolume: Float):
 
   def fill(additionalVolume: Float) : Bottle = 
-    val maybeNewVolume = volume + additionalVolume 
+    val maybeNewVolume = currentVolume + additionalVolume 
     if maybeNewVolume > volume then
-      this.copy(currentVolume = maybeNewVolume) 
+      this.copy(currentVolume = volume) 
     else
       this.copy(currentVolume = maybeNewVolume) 
 
