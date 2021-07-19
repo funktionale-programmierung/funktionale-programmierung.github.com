@@ -6,11 +6,11 @@ author: simon-haerer
 tags: ["scala", "3", "syntax"]
 ---
 
-Nach 8 Jahren, 28000 commits und 7400 Pull-Requests war es am 14. Mai 2021
+Nach 8 Jahren, 28000 Commits und 7400 Pull-Requests war es am 14. Mai 2021
 endlich so weit: Scala 3 wurde veröffentlicht. Neben dem neuen Compiler "Dotty"
 haben es eine neue Syntax sowie einige Neuerungen an der Sprache
 in Scala 3 geschafft.  In dieser Blogpost-Reihe werden einige der interessanten
-Neuerungen im Detail vorgestellt.  In diesem ersten Teil der Reihe wird der 
+Neuerungen im Detail diskutiert.  In diesem ersten Teil der Reihe wird der 
 "quiet mode" vorgestellt. Dabei handelt es sich um eine alternative Syntax, die
 mit Einrückungen Blockbildung vornimmt, statt mit geschweiften Klammern.
 
@@ -39,8 +39,8 @@ für Feedback zu dieser Neuerung 579 Beiträge und es gibt dort hitzige
 Diskussionen zu entdecken. 
 
 Scala 3 setzt diesem Feature noch die Krone auf und macht es optional.  Das
-bedeutet nicht nur, dass die (geschweifte) klammerfreie Syntax an und aus
-geschaltet werden kann. Beide Syntaxvarianten können parallel verwendet und
+bedeutet nicht nur, dass die (geschweifte) klammerfreie Syntax an- und
+ausgeschaltet werden kann. Beide Syntaxvarianten können parallel verwendet und
 miteinander vermischt werden. Dass hier die Befürchtung aufkommt, dass eine
 fragmentierte Syntaxlandschaft entsteht, ist durchaus nachvollziehbar.
 
@@ -167,7 +167,7 @@ Im obigen Beispiel sieht man im _Scala 3_-Code ein neues Schlüsselwort: `then`.
 Dieses Schlüsselwort ist nötig, um eine If-Anweisung klammerfrei eindeutig zu
 formulieren. Von diesen Schlüsselwörtern gibt es noch mehr:
 
-* die Bedingung einer while-Schleifen wird von einem `do` abgeschlossen
+* die Bedingung einer while-Schleife wird von einem `do` abgeschlossen
 * der Rumpf einer for-Schleife kann sowohl von `yield` als auch `do`
   abgeschlossen werden. `yield` funktioniert wie bisher, beschreibt also eine
   monadische Anwendung, `do` hingegen definiert eine klassische for-Schleife
@@ -198,12 +198,12 @@ Vorfeld noch kontroverser diskutiert wurde als die Syntaxumstellung ohnehin
 schon.
 
 In Scala zwei gibt es die Möglichkeit, Statement-Blöcke und Definitionen von
-anonymen Funktionen in geschweiften Klammer vorzunehmen, wie im Code-Beispiel
+anonymen Funktionen in geschweiften Klammern vorzunehmen, wie im Code-Beispiel
 für Scala 2 in der `emptyMany`-Methode zu sehen. Mit dem Import von
 `fewerBraces` in der _Scala 3_-Variante dieser Methode können alle durch
 geschweifte Klammern definierten Blöcke von nun an mit einem Doppelpunkt
 eingeleitet und durch Einrückungen vom Rest abgegrenzt werden. Wird
-dieser Import nicht verwendet gibt es keine Möglichkeit die Definition der
+dieser Import nicht verwendet, gibt es keine Möglichkeit, die Definition der
 `empty-many`-Methode ohne geschweifte Klammern zu beschreiben.
 
 
