@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Rückblick & Vorschau auf unsere Konferenz BOB 2019"
+title: "Rückblick und Vorschau auf unsere Konferenz BOB 2019"
 author: stefan-wehr
 tags: ["BOB", "Konferenz"]
 ---
