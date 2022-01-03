@@ -1,7 +1,7 @@
 ---
 layout: post
 description: "A prettier printer"
-title: "Aufgehübscht! &mdash; Pretty-Printing"
+title: "Aufgehübscht! - Pretty-Printing"
 author: kaan-sahin
 tags: ["pretty", "printer", "printing", "haskell", "dsl", "wadler"]
 ---
