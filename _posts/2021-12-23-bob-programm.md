@@ -9,7 +9,7 @@ tags: ["BOB", "Konferenz"]
 ![BOB 2022](https://bobkonf.de/images/bobkonf_header_2022_date_2to1.png)
 
 Das Programm der [BOB 2022](http://bobkonf.de/2022/) steht: Am
-Freitag, dem 11.3.2022, findet die neunte BOB in Berlin statt, und das
+Freitag, dem 11.3.2022, findet die neunte BOB virtuell bei Gather statt, und das
 [Programm](http://bobkonf.de/2022/program.html) ist erstklassig.  Das
 Programmkommitee hatte das Vergnügen und die Qual, aus einem breiten
 Feld von Vorschlägen auszusuchen: Viele tolle Einreichungen mussten
