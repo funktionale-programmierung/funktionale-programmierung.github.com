@@ -49,7 +49,7 @@ finden, der `say` implementiert. In diesem Fall wird mithilfe von
 resultierenden Objekts aufgerufen. Warum ist diese Implementierung
 gefährlich?
 
-Ist der Code komplexer, als in unserem Beispiel, oder greifen mehrere
+Ist der Code komplexer als in unserem Beispiel, oder greifen mehrere
 Implicit Conversions ineinander, ist es oft sehr schwierig,
 den Code nachzuvollziehen. Fast alle, die in Scala-Projekten
 gearbeitet haben, haben bereits mit großen Fragezeichen auf den Code
@@ -63,8 +63,8 @@ Methoden aufrufbar sind, das diese eigentlich nicht implementiert.
 Darüber hinaus wird durch die Syntax selbst nicht sofort ersichtlich,
 was das eigentliche Vorhaben ist: nämlich eine Konvertierung zu
 implementieren. Man kann also sagen, Implicit Conversions sind in
-Scala 2 zu einfach und zu implizit definierbar gemessen daran, was für
-Risiken und Probleme sie in Projekten einführen.
+Scala 2 zu einfach und zu implizit definierbar, gemessen daran, was
+für Risiken und Probleme sie in Projekten einführen.
 
 Scala 3 führt hierfür einen gesonderten Typen ein:
 `Conversion`. Dieser wird mit dem neuen Keyword `given` als implizit
@@ -85,11 +85,13 @@ deklariert und drückt das Vorhaben deutlich expliziter aus:
 Diese neue Syntax soll das Implementieren von impliziten
 Konvertierungen deutlich bewusster und reflektierter gestalten.
 
-Weitere Mechanismen, wie _Extension Methods_, die ebenfalls später
-vorgestellt werden, erlauben die Umsetzung von funktionalen
-Programmiermustern ohne Implicit Conversions zu verwenden. Damit will
-man in Scala 3 erreichen, dass Implicit Conversions weit weniger zum
-Einsatz kommen.
+
+Den Absatz hier würde ich streichen oder verschieben:
+
+Weitere Mechanismen, wie _Extension Methods_, die später vorgestellt
+werden, erlauben die Umsetzung von funktionalen Programmiermustern
+ohne Implicit Conversions zu verwenden. Damit will man in Scala 3
+erreichen, dass Implicit Conversions weit weniger zum Einsatz kommen.
 
 Darüber hinaus kann man Instanzen, die mit `given` definiert werden,
 nicht mehr einfach nebenbei mit einer Wildcard importieren, sondern
@@ -129,7 +131,7 @@ genauen Typ der zu importierenden `given`-Instanz definiert:
       "arrrrr!".say
 
 Dieses Vorgehen sorgt für eine wesentlich bessere Nachvollziehbarkeit
-der bereitgestellten Implicits und macht Debuggen um vieles
+der bereitgestellten Implicits und macht das Debuggen um vieles
 einfacher. Zudem ist das Fehlerpotential durch ungewolltes Importieren
 verringert.
   
@@ -137,7 +139,7 @@ verringert.
 ## using in Parametern
 
 Implicit Conversions sind nur ein Anwendungsfall des
-`implicit`-Keywords. Die Übergabe von implizite Argumenten in
+`implicit`-Keywords. Die Übergabe von impliziten Argumenten in
 Funktionen, Methoden und Konstruktoren ist ein beliebtes Mittel, um
 Typklassen, Kontext und Dependency-Injection zu realisieren. Die
 Definition solcher Objekte funktioniert nun auch über das
@@ -165,10 +167,13 @@ Standard-Bibliothek verwenden können, die eine Ordnung für einen
 bestimmten Typen erwarten. `sortBy` ist eine solche Methode und hat
 hier einen im Aufruf nicht sichtbaren zweiten Parameter `using
 Sorting[...]`. (Anmerkung: Das Keyword `with` ist eine Abkürzung für
-`= new Ordering[Parrot]`, wie beim vorangegangenen Codebeispiel der
-Konvertierung verwendet.)
+`= new Ordering[Parrot]:`. Im vorangegangenen Codebeispiel der
+Konvertierung haben wir `new Conversion[String, Parrot]:` noch
+ausgeschrieben.)
 
-Die Definition eines `using`-Parameters, sehen wir beispielhaft in
+Der letzte Satz ist auch noch nicht top formuliert. Idk.
+
+Die Definition eines `using`-Parameters sehen wir beispielhaft in
 `doSomethingWithParrots`.
 
 Wollen wir den impliziten Parameter explizit übergeben, müssen wir auch
@@ -176,7 +181,7 @@ das `using`-Keyword verwenden:
 
     List(Parrot("hello!"), Parrot("bye!")).sortBy({x => x})(using parrotOrdering)
 
-Dies lößt einen Syntax-Konflikt, der mit Implicits und
+Dies löst einen Syntax-Konflikt, der mit Implicits und
 `apply`-Funktionen in Scala 2 auftritt:
 
     def someMap(implicit i : Int) : Map[String, Int] = ???
@@ -243,7 +248,7 @@ der Implementierung solcher muss in Zukunft keine Implicit Conversion
 mehr verwendet werden.
 
   
-## Résumé
+## Resümee
 
 Auch bei den Implicits macht Scala 3 wieder einiges besser: Durch
 explizitere Syntax und schärfere Trennung wird nachvollziehbarer, was
