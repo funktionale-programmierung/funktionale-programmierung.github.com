@@ -21,7 +21,7 @@ Implicits explizit zu definieren und damit das Keyword `implicit`
 schließlich loszuwerden.
 
 
-# Implicit Conversions
+## Implicit Conversions
 
 Tauchen wir direkt ein und betrachten wir einen beliebten
 Anwendungsfall von Implicits aus Scala 2: Implicit Conversions. Im
@@ -96,7 +96,7 @@ nicht mehr einfach nebenbei mit einer Wildcard importieren, sondern
 muss dies explizit machen, wie im Folgenden erklärt wird.
 
 
-# Importieren von `given`-Instanzen
+## Importieren von `given`-Instanzen
 
 Wollen wir die Implicit Conversions aus dem Objekt `Animals` in einem
 anderen Objekt verwenden, müssen wir diese importieren. Das geht in
@@ -134,7 +134,7 @@ einfacher. Zudem ist das Fehlerpotential durch ungewolltes Importieren
 verringert.
   
   
-# using in Parametern
+## using in Parametern
 
 Implicit Conversions sind nur ein Anwendungsfall des
 `implicit`-Keywords. Die Übergabe von implizite Argumenten in
@@ -197,7 +197,7 @@ Dies lößt einen Syntax-Konflikt, der mit Implicits und
 
 
   
-# Extension Methods
+## Extension Methods
 
 In Scala sind Methoden das gängige Mittel, um Funktionalität für ein
 Objekt oder eine Klasse bereitzustellen. Manchmal hat man keinen
@@ -243,7 +243,7 @@ der Implementierung solcher muss in Zukunft keine Implicit Conversion
 mehr verwendet werden.
 
   
-# Resume
+## Résumé
 
 Auch bei den Implicits macht Scala 3 wieder einiges besser: Durch
 explizitere Syntax und schärfere Trennung wird nachvollziehbarer, was
