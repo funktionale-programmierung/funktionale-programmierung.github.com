@@ -114,10 +114,10 @@ importieren, muss man dies nun explizit angeben:
 
     object Main:
       // importiert die given-Instanz nicht:
-      // import Animal._ 
+      // import Animals._ 
       
       // importiert alle given-Instanzen aus Animal
-      import Animal.given
+      import Animals.given
       "arrrrr!".say
 
 Dies kann und sollte man noch expliziter machen, indem man den
@@ -208,7 +208,7 @@ hierzu ein Pattern, das Implicit Conversions verwendet:
 
 
     object Main {
-      import Animal.Parrot
+      import Animals.Parrot
 
       implicit class ParrotWithIQ(p : Parrot()) {
          def iq() : Int = p.sentence.length
@@ -227,7 +227,7 @@ steht, hat Scala 3 sogenannte Extension Methods eingeführt. Das
 sieht dann so aus:
 
     object Main:
-      import Animal.Parrot
+      import Animals.Parrot
       
       extension (p: Parrot)
         def iq() : Int = p.sentence.length
