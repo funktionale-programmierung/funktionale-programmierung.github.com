@@ -244,15 +244,18 @@ Auch bei den Implicits macht Scala 3 wieder einiges besser: Durch
 explizitere Syntax und schärfere Trennung wird nachvollziehbarer, was
 die Intentionen sind. Mögliche Fehlerquellen werden damit
 reduziert. Ob dies auch ausreicht, um die Komplexität in großen
-Projekten beherrschbar zu halten, wird sich herausstellen.
+Projekten beherrschbar zu halten, wird sich herausstellen. Langfristig
+soll das Keyword `implicit` aus der Sprache verschwinden.
 
 Warum man mit Scala 3 nicht noch expliziter wurde und nur den halben
 Weg gegangen ist, ist unverständlich. Wie bei den Extension Methods,
-die nun klar definiert sind, hätte man auch bei Conversions eine
-deutlichere Syntax wählen können und diese nicht erneut mit den
-übrigen `given`-Instanzen vermischen sollen. Auch Typklassen sind in
-der Implementierung ein wohl definiertes Muster und auch hier hätte
-Scala 3 noch expliziter sein dürfen, um diese weiter abzugrenzen.
+die nun in der Syntax klar ausgetrennt wurden, hätte man auch bei
+Conversions eine explizitere Syntax wählen können. Stattdessen, findet
+die Unterscheidung auf Typebene statt und syntaktisch werden diese
+erneut mit den übrigen `given`-Instanzen vermischt. Auch Typklassen
+sind in der Implementierung ein wohl definiertes Muster und auch hier
+hätte Scala 3 noch expliziter sein dürfen, um diese weiter
+abzugrenzen.
 
 Im nächsten Blogpost dieser Reihe werden wir eine weitere spannende
 Neuerung von Scala 3 unter die Lupe nehmen: Union Types.
