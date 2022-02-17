@@ -250,7 +250,7 @@ soll das Keyword `implicit` aus der Sprache verschwinden.
 Warum man mit Scala 3 nicht noch expliziter wurde und nur den halben
 Weg gegangen ist, ist unverständlich. Wie bei den Extension Methods,
 die nun in der Syntax klar ausgetrennt wurden, hätte man auch bei
-Conversions eine explizitere Syntax wählen können. Stattdessen, findet
+Conversions eine explizitere Syntax wählen können. Stattdessen findet
 die Unterscheidung auf Typebene statt und syntaktisch werden diese
 erneut mit den übrigen `given`-Instanzen vermischt. Auch Typklassen
 sind in der Implementierung ein wohl definiertes Muster und auch hier
