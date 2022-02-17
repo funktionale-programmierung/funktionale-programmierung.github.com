@@ -1,6 +1,6 @@
 ---
 layout: post
-description: Scala 3 implicits
+description: Scala 3 Implicits
 title: "Scala 3: Explizite Implicits"
 author: simon-haerer
 tags: ["Scala", "Scala 3", "Implicits", "Implicit Conversions", "Extension Methods", "Type Classes"]
@@ -23,7 +23,7 @@ schließlich loszuwerden.
 
 ## Implicit Conversions
 
-Tauchen wir direkt ein und betrachten wir einen beliebten
+Tauchen wir direkt ein und betrachten einen beliebten
 Anwendungsfall von Implicits aus Scala 2: Implicit Conversions. Im
 folgenden Codebeispiel wird eine Funktion `stringToParrot` als
 implizit definiert, um einen String automatisch in einen Papageien
@@ -43,7 +43,7 @@ umwandeln zu können.
       
 
 Beim Aufruf der Methode `say` versucht der Scala-Compiler durch
-in der Umgebung vorhandene Implicit Conversions einen Typen zu
+in der Umgebung vorhandene Implicit Conversions einen Typ zu
 finden, der `say` implementiert. In diesem Fall wird mithilfe von
 `stringToParrot` also ein Papagei erzeugt und die Methode `say` des
 resultierenden Objekts aufgerufen. Warum ist diese Implementierung
@@ -51,14 +51,14 @@ gefährlich?
 
 Ist der Code komplexer als in unserem Beispiel, oder greifen mehrere
 Implicit Conversions ineinander, ist es oft sehr schwierig,
-den Code nachzuvollziehen. Fast alle, die in Scala-Projekten
+den Code nachzuvollziehen. Viele, die in Scala-Projekten
 gearbeitet haben, haben bereits mit großen Fragezeichen auf den Code
-gestarrt und sich beispielsweise gefragt, warum ein String auf
-magische Weise die Eigenschaften eines Papageis erfüllt. In Scala 2
+gestarrt und sich beispielsweise gewundert, warum ein String auf
+magische Weise das Verhalten eines Papageis aufweist. In Scala 2
 können Implicit Conversions einfach mit einem Wildcard-Import
 eingebunden werden und oft ist es ohne sehr gute IDE und lange Suche
 unmöglich herauszufinden, warum auf einem Objekt
-Methoden aufrufbar sind, das diese eigentlich nicht implementiert.
+Methoden aufrufbar sind, die dieses eigentlich nicht implementiert.
 
 Darüber hinaus wird durch die Syntax selbst nicht sofort ersichtlich,
 was das eigentliche Vorhaben ist: nämlich eine Konvertierung zu
@@ -66,7 +66,7 @@ implementieren. Man kann also sagen, Implicit Conversions sind in
 Scala 2 zu einfach und zu implizit definierbar, gemessen daran, was für
 Risiken und Probleme sie in Projekten einführen.
 
-Scala 3 führt hierfür einen gesonderten Typen ein:
+Scala 3 führt hierfür einen gesonderten Typ ein:
 `Conversion`. Dieser wird mit dem neuen Keyword `given` als implizit
 deklariert und drückt das Vorhaben deutlich expliziter aus:
 
@@ -87,7 +87,7 @@ Konvertierungen deutlich bewusster und reflektierter gestalten.
 
 Darüber hinaus kann man Instanzen, die mit `given` definiert werden,
 nicht mehr einfach nebenbei mit einer Wildcard importieren, sondern
-muss dies explizit machen, wie im Folgenden erklärt wird.
+muss dies explizit tun, wie im Folgenden erklärt wird.
 
 
 ## Importieren von `given`-Instanzen
@@ -154,9 +154,9 @@ annotiert:
 
 Im Beispiel implementieren wir eine Typklasse, die eine Ordnung für
 Papageien anhand ihrer Satzlänge definiert. Dazu implementieren wir
-das bestehende Trait `Odering`, das wir in vielen Methoden der
+das bestehende Trait `Ordering`, das wir in vielen Methoden der
 Standard-Bibliothek verwenden können, die eine Ordnung für einen
-bestimmten Typen erwarten. `sortBy` ist eine solche Methode und hat
+bestimmten Typ erwarten. `sortBy` ist eine solche Methode und hat
 hier einen im Aufruf nicht sichtbaren zweiten Parameter `using
 Sorting[...]`. (Anmerkung: Das Keyword `with` ist eine Abkürzung für
 `= new Ordering[Parrot]`. Im vorangegangenen Codebeispiel der Implicit
@@ -214,7 +214,7 @@ hierzu ein Pattern, das Implicit Conversions verwendet:
 
 
 Zwar verwenden wir hier einen Sonderfall, nämlich implizite Klassen,
-jedoch lässt sich das ganze auch mit Konversionen, wie beim
+jedoch lässt sich das ganze auch mit Konvertierungen, wie beim
 `stringToParrot`-Beispiel realisieren.
 
 Da bei der Definition dieses Patterns wieder Mechanik über Vorhaben
