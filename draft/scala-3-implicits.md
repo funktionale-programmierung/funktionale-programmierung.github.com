@@ -3,7 +3,7 @@ layout: post
 description: Scala 3 implicits
 title: "Scala 3: Explizite Implicits"
 author: simon-haerer
-tags: ["tag1", "tag2", "tag3"]
+tags: ["Scala", "Scala 3", "Implicits", "Implicit Conversions", "Extension Methods", "Type Classes"]
 ---
 
 
