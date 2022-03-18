@@ -115,7 +115,7 @@ aber schachtelt:
 ## Intersection-Types
 
 Intersection-Types stellen die Schnittmenge von Typen dar. Das
-bedeutet, dass wir einen neuen Typen definieren können, dessen
+bedeutet, dass wir einen neuen Typ definieren können, dessen
 mögliche Werte nur die Werte der Schnittmenge von Werten anderer Typen
 sind. Sinn ergibt das vor allem in Verbindung mit Traits und Mixins:
 
