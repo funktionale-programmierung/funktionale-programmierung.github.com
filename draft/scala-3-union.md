@@ -61,7 +61,7 @@ angezeigt, dass der Typ `Int` dabei nicht abgedeckt ist.
 Union-Types vereinigen also Mengen von möglichen Werten, die von den
 Subtypen angenommen werden können. Im folgenden Beispiel ist es daher
 bei einem vorliegenden Wert auf Typeebene unmöglich zu unterscheiden,
-ob ein Benutzername oder eine ID gemeint ist. Der resultierende Typ
+ob ein Benutzername oder eine ID gemeint ist. Der echte Typ
 von `UsernameOrId` ist `String`:
 
     object UnionTypes:
