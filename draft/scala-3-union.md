@@ -61,8 +61,8 @@ angezeigt, dass der Typ `Int` dabei nicht abgedeckt ist.
 Union-Types vereinigen also Mengen von möglichen Werten, die von den
 Subtypen angenommen werden können. Im folgenden Beispiel ist es daher
 bei einem vorliegenden Wert auf Typeebene unmöglich zu unterscheiden,
-ob ein Benutzername oder eine ID gemeint ist. Der echte Typ
-von `UsernameOrId` ist `String`:
+ob ein Benutzername oder eine ID gemeint ist. Da beide den Subtyp `String`
+haben. Der resultierende Type von `UsernameOrId` ist daher auch nur `String`:
 
     object UnionTypes:
         type Username = String
@@ -103,7 +103,9 @@ aber schachtelt:
 
  Union-Types stellen sich also als wesentlich flexibler heraus. So
  können beispielsweise auch in Funktionsdefinitionen die
- Eingabeparameter ad hoc einfach um zusätzliche Typen erweitert werden.
+ Eingabeparameter ad hoc einfach um zusätzliche Typen erweitert werden:
+ 
+     def foo(x : UnionTypes.UsernameOrId | EMail) = ???
 
  Union-Types sind kommutativ, das bedeutet, dass `A | B` den gleichen
  Typ beschreibt, wie `B | A`. Zudem ist der Operator assoziativ: `A |
@@ -113,10 +115,9 @@ aber schachtelt:
 ## Intersection-Types
 
 Intersection-Types stellen die Schnittmenge von Typen dar. Das
-bedeutet, dass wir neue Typen definieren können, die als Menge aller
-möglichen Werte die Schnittmengen der Werte anderer Typen haben. Sinn
-ergibt das vorallem in Verbindung mit Traits und Mixins:
-
+bedeutet, dass wir einen neuen Typen definieren können, dessen
+mögliche Werte nur die Werte der Schnittmenge von Werten anderer Typen
+sind. Sinn ergibt das vor allem in Verbindung mit Traits und Mixins:
 
     trait Editable:
        def edit : Unit
@@ -140,7 +141,7 @@ kommutativ. Intersection-Types gab es in Scala 2 bereits, ausgedrückt
 durch den `with`-Operator. 
 
 
-## Resume
+## Resümee
 
 Union- und Intersection-Types sind willkommene Erweiterungen in
 Scala 3. Eine sprechende Syntax und klar definierte Specs 
