@@ -20,12 +20,12 @@ Typen abgrenzen, wird in diesem Blogpost erörtert.
 
 <!-- more start -->
 
-## Union Types
+## Union-Types
 
-Einer der zwei Typen, die in diesem Blogpost beleuchtet werden, sollen
-sind Union-Types oder auch Vereinigungen. Es wird anhand des
-`|`-Operators ein neuer Typ definiert, der sich aus der Vereinigung
-mehrerer Typen zusammensetzt:
+Einer der zwei Typklassen, die in diesem Blogpost beleuchtet werden
+sollen, sind Union-Types oder auch Vereinigungen. Es wird anhand des
+`|`-Operators ein neuer Typ definiert, der die Vereinigung mehrerer
+Typen repräsentiert:
 
     object UnionTypes:
       type StringOrInt = String | Int
@@ -56,7 +56,7 @@ wurden:
 
 
 In diesem Beispiel würde gewarnt, dass _non-exhaustive_ gematcht wird und
-angezeigt, dass der Typ `Int` dabei nicht abgedeckt wird. 
+angezeigt, dass der Typ `Int` dabei nicht abgedeckt ist. 
     
 Union-Types vereinigen also Mengen von möglichen Werten, die von den
 Subtypen angenommen werden können. Im folgenden Beispiel ist es daher
@@ -74,7 +74,7 @@ von `UsernameOrId` ist `String`:
 In diesem Fall sollten sogenannte _tagged unions_ oder auch
 Summentypen verwenden werden:
 
-    object Sumtypes:
+    object SumTypes:
 
        enum UsernameOrId:
            case Username(name: String)
@@ -83,11 +83,11 @@ Summentypen verwenden werden:
 
 Der Nachteil hierbei ist, dass sich dieser Typ im Nachhinein nicht
 flach erweitern lässt. Wollen wir noch die E-Mail-Adresse als
-möglichen Wert an anderer Stelle hinzuzufügen, muss ein neuer
-Summentyp implementiert werden, der entweder obiges dupliziert, oder
+möglichen Wert an anderer Stelle hinzufügen, muss ein neuer
+Summentyp implementiert werden, der entweder Obiges dupliziert, oder
 aber schachtelt:
 
-    object OtherSumtypes:
+    object OtherSumTypes:
        enum UsernameOrIdOrEmail:
            case EMail(email: ???)
            case UsernameOrId(usernameOrId: UsernameOrId)
@@ -110,12 +110,12 @@ aber schachtelt:
  (B | C)` ist äquivalent zu `(A | B) | C`.
 
 
-## Intersection Types
+## Intersection-Types
 
 Intersection-Types stellen die Schnittmenge von Typen dar. Das
 bedeutet, dass wir neue Typen definieren können, die als Menge aller
-möglichen Werte die Schnittmengen anderer Typen haben. Sinn ergibt das
-vorallem in Verbindung mit Traits und Mixins:
+möglichen Werte die Schnittmengen der Werte anderer Typen haben. Sinn
+ergibt das vorallem in Verbindung mit Traits und Mixins:
 
 
     trait Editable:
@@ -123,8 +123,6 @@ vorallem in Verbindung mit Traits und Mixins:
     
     trait Deletable:
        def delete : Unit
-    
-    case object SomeEntity extends Editable with Deletable
     
     object IntersectionTypes:
        def foo(entity : Editable & Deletable) : Unit =
@@ -134,8 +132,9 @@ vorallem in Verbindung mit Traits und Mixins:
 Wir implementieren eine Funktion `foo`, die den Typ des
 Eingabeparameters `entity` derart definiert, dass dieser `Editable`
 _und_ `Deletable` ist. Dazu wird der neue `&`-Operator
-verwendent. `SomeEntity` hat den gewünschten Typ.
-
+verwendet. Ein Objekt mit dem gewünschten Typ kann zum Beispiel durch 
+`case object SomeEntity extends Editable with Deletable` definiert werden.
+    
 Wie Union-Types sind Intersection-Types assoziativ und
 kommutativ. Intersection-Types gab es in Scala 2 bereits, ausgedrückt
 durch den `with`-Operator. 
@@ -143,11 +142,11 @@ durch den `with`-Operator.
 
 ## Resume
 
-Union- und Intersection-Types sind eine willkommene Erweiterung in
+Union- und Intersection-Types sind willkommene Erweiterungen in
 Scala 3. Eine sprechende Syntax und klar definierte Specs 
 erlauben eine intuitive Verwendung und bringen mehr Flexibilität in
 die Sprache. Während es in Scala 2 bereits so etwas wie
-Intersection-Types gab, freuen wir aus darauf die neuen Möglichkeiten
+Intersection-Types gab, freuen wir uns darauf, die neuen Möglichkeiten,
 die Union-Types bieten in verschiedenen Projekten auszuschöpfen.
 
 Im nächsten Blogpost dieser Reihe werden wir eine weitere spannende
