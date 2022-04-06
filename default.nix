@@ -1,4 +1,5 @@
-with import <nixpkgs> { };
+with import (fetchTarball
+  "https://github.com/NixOS/nixpkgs/archive/refs/tags/21.11.tar.gz") { };
 
 let
   jekyll_env = bundlerEnv {
