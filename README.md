@@ -99,8 +99,8 @@ Wenn du `nix` installiert hast, kannst du den Blog jetzt auch
 vernünftig bauen, d. h. ohne lokal von irgendwelchen globalen Paketen
 abhängig zu sein.
 
-Dazu einfach im Rootverzeichnis der Projekts =nix-shell= aufrufen.
-Das sollte dazu führen, dass alles notwendige in der =nix-shell= zur
+Dazu einfach im Rootverzeichnis der Projekts `nix-shell` aufrufen.
+Das sollte dazu führen, dass alles notwendige in der `nix-shell` zur
 Verfügung steht und der Blog auch direkt gebaut wird und aktualisiert
 wird.
 
