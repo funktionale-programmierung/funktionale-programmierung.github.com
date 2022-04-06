@@ -89,6 +89,33 @@ Um das Blog lokal zu erzeugen benötigst du jekyll in Version 3.8.0 oder neuer..
 
 Sobald jekyll installiert ist, kannst du aus dem Toplevel-Verzeichnis mittels `./run-local-server.sh` das Blog generieren und einen Webserver starten. Das Blog ist dann über http://127.0.0.1:4000 verfügbar.
 
+*Hinweis*: Es gibt auch eine auf `nix` basierende Variante den Blog zu
+bauen.  Diese hängt nicht von anderen auf eurem System installierten
+Paketen (außer natürlich von `nix`) selbst ab.
+
+# Nix
+
+Wenn du `nix` installiert hast, kannst du den Blog jetzt auch
+vernünftig bauen, d. h. ohne lokal von irgendwelchen globalen Paketen
+abhängig zu sein.
+
+Dazu einfach im Rootverzeichnis der Projekts =nix-shell= aufrufen.
+Das sollte dazu führen, dass alles notwendige in der =nix-shell= zur
+Verfügung steht und der Blog auch direkt gebaut wird und aktualisiert
+wird.
+
+*Achtung*: Beim ersten Aufruf kann es gerne mal einige Zeit dauern,
+bis alles gebaut ist.  In folgenden Sessions sollte es -- wenn sich am
+Gemset nichts ändert, schnell gehen.
+
+## Aktualisierungen der Pakete
+
+Die nix-Umgebung benutzt das generierte `gemset.nix`.  Um das zu
+aktualisieren, liegt im Wurzelverzeichnis das
+`make-gemlock.sh`-Skript.  Die daraus generierten Dateien
+(`gemset.nix` und `Gemfile.lock`) gehören zur Versionskontrolle des
+Blogs und müssen daher immer eingecheckt werden.
+
 Veröffentlichen
 ==
 
