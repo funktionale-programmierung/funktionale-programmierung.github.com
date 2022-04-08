@@ -52,7 +52,7 @@ data UserRole = ADMIN | DEVELOPER | REPORTER
 
 data User = { userName  :: String
             , userEmail :: String
-            , userRole  :: Role }
+            , userRole  :: UserRole }
 
 -- Beispiele
 marco = User "Marco" "marco.schneider@active-group.de" DEVELOPER
@@ -119,7 +119,7 @@ makeUser name email role =
  ```
 
 Naja, so richtig zufrieden macht das nicht.  Außerdem explodiert die
-Anzahl an fällen, die wir in immer weiteren Verzweigungen prüfen
+Anzahl an Fällen, die wir in immer weiteren Verzweigungen prüfen
 müssen.  So wird das nichts.
 
 Allerdings haben wir etwas darüber gelernt, was wir eigentlich wollen:
@@ -230,9 +230,9 @@ combineValidations (Fail es) (Fail fs) = Fail (es ++ fs)  -- von oben
 combineValidations (Fail es) _ = Fail es
 ```
 
-Okay, wir haben fast alle Fälle abgedeckt -- soweit auch nicht weiter
-schwer.  Um den Haskellcomplier glücklich zu machen, brauchen wir noch
-zwei Fälle:
+Okay, wir haben zwei von vier Fällen abgedeckt -- soweit, so einfach.
+Um den Haskellcomplier glücklich zu machen, brauchen wir noch zwei
+Fälle:
 
 1. Links ein Erfolg, rechts ein Fehler
 2. Links ein Erfolg, rechts ein Erfolg
@@ -259,7 +259,7 @@ applyOkFunctionToValidation f (Ok c) = Ok $ f c
 
 Was steht hier?  Unter der Annahme, dass wir aus einem `Ok` auf der
 linken Seite eine Funktion bekommen, können wir
-`applyOkFunctionToValidation` verwenden, den Wert auf der rechten
+`applyOkFunctionToValidation` verwenden, um den Wert auf der rechten
 Seite darauf anzuwenden.  Ein `Fail` auf der rechten Seite bleibt ein
 Fehler (er planzt sich also gewissermaßen die Berechung entlang fort)
 und bleibt unverändert.  Ein `Ok` hat ein weiteres `Ok` zur Folge,
@@ -349,12 +349,13 @@ makeValidation User
 ```
 
 Das sieht jetzt vermutlich erst mal magisch aus: Warum wird aus
-`makeValidation User` plötzlich eine Validationsfunktion, wenn sie
-doch nur sich selbst zurück gibt.  Es führt kein Weg daran vorbei, wir
-müssen uns kurz ansehen, wie man sich die einzelnen Substitutionen
-vorstellen kann (wichtig: das dient nur der Verantschaulichung und
-entspricht nicht wirklich der Ausfühungsmaschinerie).  Dabei trenne
-jeweils die Repräsentation der Ausfühungsschritte durch ein `=>`:
+`makeValidation User` plötzlich eine Validierungsfunktion, wenn sie
+doch den ursprünglichen Konstruktor einwickelt.  Es führt kein Weg
+daran vorbei, wir müssen uns kurz ansehen, wie man sich die einzelnen
+Substitutionen vorstellen kann (wichtig: das dient nur der
+Verantschaulichung und entspricht nicht wirklich der
+Ausfühungsmaschinerie).  Dabei trenne ich jeweils die Repräsentation
+der Ausführungsschritte durch ein `=>`:
 
 ```Haskell
 makeValidation User
@@ -362,30 +363,30 @@ makeValidation User
   `combineValidations` (validateEmail "marco.schneider.at.active-group.de")
   `combineValidations` (validateUserRole "DEVELOPER")
 
-=> -- Einsetzen der Definition von `User`
+=> Einsetzen der Definition von `User`
 
 (Ok (\name email role -> User name admin role))
   `combineValidations` (validateNonemptyString "Marco")
   `combineValidations` (validateEmail "marco.schneider@active-group.de")
   `combineValidations` (validateUserRole "DEVELOPER")
 
-=> -- Ergebnis der ersten rechten Seite
+=> Ergebnis der ersten rechten Seite
 
 (Ok (\name email role -> User name admin role))
   `combineValidations` (Ok "Marco")
   `combineValidations` (validateEmail "marco.schneider@active-group.de")
   `combineValidations` (validateUserRole "DEVELOPER")
 
-=> -- Einsetzen des ersten Ergebnisses in die linke Seite
+=> Einsetzen des ersten Ergebnisses in die linke Seite
 
 (Ok (\email role -> User "Marco" admin role))
   `combineValidations` (validateEmail "marco.schneider@active-group.de")
   `combineValidations` (validateUserRole "DEVELOPER")
 
-=> -- jetzt wiederholt sich das ganze für die restlichen Argumente
+=> Jetzt wiederholt sich das ganze für die restlichen Argumente
 
 (Ok (\email role -> User "Marco" admin role))
-  `combineValidations` "marco.schneider@active-group.de"
+  `combineValidations` (Ok "marco.schneider@active-group.de")
   `combineValidations` (validateUserRole "DEVELOPER")
 
 => 
@@ -396,7 +397,7 @@ makeValidation User
 =>
 
 (Ok (\role -> User "Marco" "marco.schneider@active.group" role))
-  `combineValidations` DEVELOPER
+  `combineValidations` (Ok DEVELOPER)
 
 =>
 
@@ -471,8 +472,9 @@ allgemeinere Eigenschaften und Strukturen in unserem Code zu finden
 (oder ihn von Anfang an so zu gestalten).  Ein Beispiel zur
 Herangehensweise bei uns im Hause ist das "Finde-den-Funktor-Spiel" ™,
 denn: Wo sich ein Funktor versteckt, ist vielleicht auch ein
-Applikative Funktor, ist vielleicht auch eine Monade.  Oder allgemein:
-Findet man erst ein bisschen Struktur, ist da meistens auch mehr.
+applikativer Funktor, ist vielleicht auch eine Monade.  Oder
+allgemein: Findet man erst ein bisschen Struktur, ist da meistens auch
+mehr.
 
 Wer schon weiß, was einen Funktor in der Programmierung ausmacht, hat
 ihn weiter oben schon entdeckt.  In Haskell schreibt man ihn als
@@ -567,8 +569,9 @@ validateUser name email role =
 
 Netterweise bekommen wir (wie schon beim `Functor`) alles geschenkt,
 was sonst noch für applikative Funktoren zu haben ist.  Nur ein
-kleines Beispiel: der `<$>`-Operator macht die Validierung noch ein
-kleines bisschen hübscher:
+kleines Beispiel: der `<$>`-Operator (`(<$>) :: Functor f => (a -> b)
+-> f a -> f b` oder auch `fmap` für Applikative Funktoren) macht die
+Validierung noch ein kleines bisschen hübscher:
 
 ```Haskell
 validateUser email name role =
@@ -577,7 +580,9 @@ validateUser email name role =
        <*> validateUserRole "DEVELOPER"
 ```
 
-Oder, wem die kuriosen `<*>`- und `<$>`-Symbole zu wild sind:
+Wem die kuriosen `<*>`- und `<$>`-Symbole zu wild sind, kann auch
+`liftA3` (`Applicative f => (a -> b -> c -> d) -> f a -> f b -> f
+c -> f d`) verwenden:
 
 ```Haskell
 validateUser email name role =
