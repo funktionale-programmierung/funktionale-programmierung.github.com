@@ -47,7 +47,7 @@ Eine Rolle ist eines der folgenden:
 Für die Implementierung verwenden wir die Programmiersprache Haskell.
 Da könnte das folgendermaßen aussehen:
 
-``` Haskell
+```haskell
 data UserRole = ADMIN | DEVELOPER | REPORTER
 
 data User = { userName  :: String
@@ -69,7 +69,7 @@ System eindringen.
 Natürlich hält uns nichts davon ab, einen Konstruktor für `User` zu
 schreiben, der genau das abfängt:
 
-``` Haskell
+```haskell
 type Error = String
 
 makeUser :: String -> String -> Role -> Either Error User
@@ -82,7 +82,7 @@ Super, Problem gelöst.  Wenn alles glatt läuft, bekommen wir einen
 `Right User`, andernfalls einen `Left Error`.  Obwohl, was ist, wenn
 der Username leer ist?  Ein zweiter Versuch:
 
-``` Haskell
+```haskell
 type Error = String
 
 makeUser :: String -> String -> Role -> Either Error User
@@ -97,7 +97,7 @@ Besser?  Kaum: Was ist, wenn sowohl der Name leer ist als auch die
 wissen, nicht nur den ersten.  Das heißt aber auch, dass wir eine
 andere Signatur brauchen (mit einer Liste von Fehlern für `Left`).
 
-``` Haskell
+```haskell
 type Error = String
 type Errors = [Error]
 
@@ -139,7 +139,7 @@ Validierungsergebnissen entspricht.  So ein Ergebnis ist eines der Folgenden:
 - Eine erfolgreiche Validierung (`Ok <wert>`) eines Wertes, oder
 - eine Menge an Fehlern, die bei der Validierung auftraten (`Fail Errors`).
 
-```Haskell
+```haskell
 type Errors = [String]
 
 data Validation c = Ok c 
@@ -153,7 +153,7 @@ lassen sich Validierungen für Werte beliebigen Typs angeben.
 Als nächstes schreiben wir ein paar Funktionen, die unsere
 Validierungen von oben kapseln:
 
-```Haskell
+```haskell
 -- | Validate that `candidate` is not empty.
 validateNonemptyString :: String -> Validation String
 validateNonemptyString candidate
@@ -177,7 +177,7 @@ validateUserRole candidate
 
 Damit können wir schon mal einzelne Validierungen vornehmen:
 
-``` Haskell
+```haskell
 validateNonemptyString "ok"
 -- Ok "ok" : Validation String
 validateNonemptyString ""
@@ -207,7 +207,7 @@ zuerst die Kombination von zwei Fehlerfällen an: Da beide Fehler aus
 Listen von Fehlermeldungen bestehen, können wir diese aneinanderhängen
 und behalten alle Informationen.  Das klingt doch gut!
 
-``` Haskell
+```haskell
 combineValidations :: Validation a -> Validation a -> Validation a
 combineValidations (Fail es) (Fail fs) = Fail (es ++ fs)
 ```
@@ -222,7 +222,7 @@ Seite werden wir also ohnehin nicht glücklikch, auch wenn rechts ein
 Erfolg steht.  Also lassen wir die rechte Seite in dem Fall einfach
 weg:
 
-``` Haskell
+```haskell
 combineValidations :: Validation a -> Validation a -> Validation a
 combineValidations (Fail es) (Fail fs) = Fail (es ++ fs)  -- von oben
 -- Wenn linkerhand ein Fehler ist und rechts ein Erfolg,
@@ -246,7 +246,7 @@ zu tun, als stünde Links ein `Ok` dessen Wert eine Funktion ist, die
 weiß, was mit dem Wert rechts zu tun ist.  Wenn wir das ein mal kurz
 schlucken, dann geht es hier entlang:
 
-```Haskell
+```haskell
 applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
 -- Nun, ein Misserfolg bleibt ein Misserfolg, 
 applyOkFunctionToValidation _ (Fail es) = Fail es
@@ -275,7 +275,7 @@ nicht verwendet (bisher hat uns nur der Fehler interessiert und der
 hat nichts mit `a` zu tun).  Ein Glück!  Damit ist
 `combineValidations` fertig und kann benutzt werden.
 
-```Haskell
+```haskell
 applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
 applyOkFunctionToValidation _ (Fail es) = Fail es
 applyOkFunctionToValidation f (Ok c) = Ok $ f c
@@ -300,7 +300,7 @@ Haskell bietet uns schon die Funktion `id : a -> a` an, die immer
 exakt ihr Argument zurück gibt.  Wickeln wir das in ein `Ok`, sieht
 das Ganze so aus.
 
-```Haskell
+```haskell
 (Ok id) `combineValidations` validateNonemptyString ""
 -- Fail ["not a nonempty string"]
 (Ok id) `combineValidations` validateNonemptyString "Marco"
@@ -311,7 +311,7 @@ Hilft uns das?  Ein bisschen.  Eigentlich ist es nämlich egal, welche
 Funktion im `Ok` steckt.  Wir können also ganz allgemein aus jeder
 Funktion eine Validierung machen:
 
-```Haskell
+```haskell
 makeValidation x = Ok x
 
 makeValidation reverse `combineValidations` validateNonemptyString "Marco"
@@ -322,7 +322,7 @@ Bringt nicht viel, funktioniert aber.  Obwohl, hilft irgendwie schon
 auch, denn ganz unauffällig hat sich hier eine Lösung für Punkte zwei
 und drei von oben eingeschichen.
 
-```Haskell
+```haskell
 makeValidation User
   `combineValidations` (validateNonemptyString "Marco")
   `combineValidations` (validateEmail "marco.schneider@active-group.de")
@@ -332,7 +332,7 @@ makeValidation User
 
 Wer es nicht glaubt, kann gerne die Fehlerfälle überprüfen:
 
-```Haskell
+```haskell
 -- Alles falsch
 makeValidation User
   `combineValidations` (validateNonemptyString "")
@@ -357,7 +357,7 @@ Verantschaulichung und entspricht nicht wirklich der
 Ausfühungsmaschinerie).  Dabei trenne ich jeweils die Repräsentation
 der Ausführungsschritte durch ein `=>`:
 
-```Haskell
+```haskell
 makeValidation User
   `combineValidations` (validateNonemptyString "")
   `combineValidations` (validateEmail "marco.schneider.at.active-group.de")
@@ -407,7 +407,7 @@ makeValidation User
 Tadaa.  Alles in Ordnung.  Analog für den Fall, dass Fehler auftreten
 (wir steigen ein wo es spannend wird):
 
-```Haskell
+```haskell
 (Ok (\email role -> User "Marco" admin role))
   `combineValidations` (validateEmail "marco.schneider.at.active-group.de")
   `combineValidations` (validateUserRole "DEVELOPER")
@@ -434,7 +434,7 @@ Beispiel Clojure) müssen wir uns ein bisschen mehr anstrengen.
 Damit haben wir tatsächlich alles an der Hand, um unsere
 Validierungsfunktion zu schreiben:
 
-```Haskell
+```haskell
 validateUser :: String -> String -> String -> Validation User
 validateUser name email role =
 	makeValidation User
@@ -480,7 +480,7 @@ Wer schon weiß, was einen Funktor in der Programmierung ausmacht, hat
 ihn weiter oben schon entdeckt.  In Haskell schreibt man ihn als
 Typklasse so auf:
 
-``` Haskell
+```haskell
 class Funktor f where
   fmap :: (a -> b) -> f a -> f b
 ```
@@ -488,7 +488,7 @@ class Funktor f where
 Um jetzt nicht in metaphern darüber zu verfallen, was ein Funktor
 *ist*, zeige ich lieber, wo sich oben der Funktor versteckt hat.  Wenn wir die Signatur von `fmap` anschauen, sieht das verdächtig nach `applyOkFunctionToValidation` aus!
 
-``` Haskell
+```haskell
 fmap                        :: (a -> b) -> f a -> f b
 applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
 ```
@@ -496,7 +496,7 @@ applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
 Wir könnten also ganz allgemein sagen, dass unsere `Validation` ein
 Funktor ist:
 
-``` Haskell
+```haskell
 instance Functor Validation where
   fmap _ (Fail es) = Fail es
   fmap f (Ok c)    = Ok $ f c
@@ -507,7 +507,7 @@ instance Functor Validation where
 Mit diesem Wissen bewaffnet, können eine erste kleine Änderungen am
 Code von oben durchführen.
 
-``` Haskell
+```haskell
 combineValidations :: Validation (a -> b) -> Validation a -> Validation b
 combineValidations (Fail es) (Fail fs) = Fail (es ++ fs)
 combineValidations (Fail es) _         = Fail es
@@ -534,7 +534,7 @@ Schauen wir uns wieder zuerst die Definition der entsprechende
 Typklasse in Haskell an, fokussiert auf den Teil, der uns
 interessiert:
 
-```Haskell
+```haskell
 class Functor f => Applicative f where
   pure  :: a -> f a
   (<*>) :: f (a -> b) -> f a -> f b
@@ -542,7 +542,7 @@ class Functor f => Applicative f where
 
 Beide Signaturen könnten uns bereits bekannt vorkommen:
 
-```Haskell
+```haskell
 pure           :: a ->          f a
 makeValidation :: a -> Validation a
 
@@ -551,7 +551,7 @@ combineValidations :: Validation (a -> b) -> Validation a -> Validation b
 ```
 
 Dann setzen wir mal ein:
-```Haskell
+```haskell
 instance Applicative Validation where
   pure  = makeValidation
   (<*>) = combineValidations
@@ -559,7 +559,7 @@ instance Applicative Validation where
 
 Un zu guter Letzt:
 
-```Haskell
+```haskell
 validateUser :: String -> String -> String -> Validation User
 validateUser name email role =
 	pure User <*> validateNonemptyString name
@@ -573,7 +573,7 @@ kleines Beispiel: der `<$>`-Operator (`(<$>) :: Functor f => (a -> b)
 -> f a -> f b` oder auch `fmap` für Applikative Funktoren) macht die
 Validierung noch ein kleines bisschen hübscher:
 
-```Haskell
+```haskell
 validateUser email name role =
   User <$> validateNonemptyString "Marco"
        <*> validateEmail "marco.schneider@active-group.de"
@@ -584,7 +584,7 @@ Wem die kuriosen `<*>`- und `<$>`-Symbole zu wild sind, kann auch
 `liftA3` (`Applicative f => (a -> b -> c -> d) -> f a -> f b -> f
 c -> f d`) verwenden:
 
-```Haskell
+```haskell
 validateUser email name role =
   liftA3 User (validateNonemptyString "Marco")
               (validateEmail "marco.schneider@active-group.de")
