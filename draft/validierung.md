@@ -18,7 +18,7 @@ zeigen, wie wir sie *tatsächlich* tagtäglich in der Praxis anwenden.
 
 Heute beschäftigen wir uns mit dem Thema *Datenvalidierung* und
 zeigen, wie *applikative Funktoren* dabei helfen, Ungereimtheiten in
-Daten in Daten systematisch aufzusammeln und zu verwerten.
+Daten systematisch aufzusammeln und zu verwerten.
 
 # JSON möchte validiert werden
 
@@ -34,7 +34,7 @@ serialisierte Werte müssen unserer Erwartung entsprechen, um in
 interne Datentypen umgewandelt werden zu können.
 
 Für das folgende Beispiel gehen wir von folgender Datenanalyse aus.
-Ein:e `User`:in besteht aus:
+Ein:e Nutzer:in besteht aus:
 - einem Namen
 - einer Emailadresse
 - einer Rolle
@@ -60,9 +60,9 @@ simon = User "Simon" "simon.haerer.at.active-gropu.de" DEVELOPER
 ```
 
 Die zwei Beispiele im Code zeigen direkt ein Problem: Wir wissen zwar,
-dass `simon`s Emailadresse nicht valide ist, wenn wir sie aber direkt
-aus einem JSON-Objekt lesen, hält uns nichts davon ab, eine solche
-Invarante (*"jede Emailadresse enthält ein "@"-Symbol"*) zu
+dass die Emailadresse von Simon nicht valide ist, wenn wir sie aber
+direkt aus einem JSON-Objekt lesen, hält uns nichts davon ab, eine
+solche Invarante (*"jede Emailadresse enthält ein "@"-Symbol"*) zu
 ignorieren.  Wir müssen die Daten also irgendwie validieren, bevor sie
 weiter ins System eindringen.
 
@@ -130,10 +130,10 @@ Allerdings -- denke ich -- haben wir etwas darüber gelernt, was wir
 eigentlich wollen:
 
 1. Wir wollen jede Validierungen für sich durchführen können
-2. Mehrere Validierungen aneinanderhängen
-3. Eine Validierungsfunktion schreiben, die dann ein validiertes
-   Ergebnis zurück gibt, wenn alles in Ordnung ist **oder** eine Liste
-   **aller** Fehler, falls etwas nicht stimmt.
+2. Wir wollen mehrere Validierungen aneinanderhängen können
+3. Wir wollen eine Validierungsfunktion schreiben, die genau dann ein
+   validiertes Ergebnis zurück gibt, wenn alles in Ordnung ist
+   **oder** eine Liste **aller** Fehler, falls etwas nicht stimmt.
    
 # Validierungsfunktionen
 
@@ -148,7 +148,7 @@ ein Ergebnis ist eines der Folgenden:
 type Errors = [String]
 
 data Validation c = Ok c 
-                  | Fail Errors deriving
+                  | Fail Errors
 ```
 
 Unsere `Validation` repräsentiert das Ergebnis einer Validierung.  Sie
@@ -217,12 +217,13 @@ combineValidations :: Validation a -> Validation a -> Validation a
 combineValidations (Fail es) (Fail fs) = Fail (es ++ fs)
 ```
 
-Der Haskellcompiler natürlich noch unzufrieden: Was ist, wenn links,
-rechts oder sogar an beiden Stellen der Funktion ein `Ok` steht?
+Der Haskellcompiler ist natürlich noch unzufrieden: Was ist, wenn
+links, rechts oder sogar an beiden Stellen der Funktion ein `Ok`
+steht?
 
 Unsere dritte Anforderungen meint: *Entweder* ein valides Ergebnis
 oder *alle* Fehler.  Mit nur einem `Fail` auf der linken Seite wissen
-wir schon, dass es nur noch auf ein `Fail` herauslaufen kann, auch
+wir schon, dass es nur noch auf ein `Fail` hinauslaufen kann, auch
 wenn rechts ein Erfolg steht.  Also lassen wir die rechte Seite in dem
 Fall einfach weg:
 
@@ -241,11 +242,11 @@ Fälle:
 1. Links ein Erfolg, rechts ein Fehler
 2. Links ein Erfolg, rechts ein Erfolg
 
-Jetzt brauche ich von Ihnen etwas Vertrauensvorschuss: Wir
-funktionalen Programmierer:innen haben nicht so fürchterliche viele
-Werkzeuge zur Verfügung.  Wir können nicht viel anderes als Funktionen
-mit Argumenten zu füttern und zu schauen, was rauskommt (oder im Fall
-von Haskell so lange probieren, bis der Compiler sein Okay gibt).  Uns
+Das klingt jetzt erst mal komisch, aber: Wir funktionalen
+Programmierer:innen haben nicht so fürchterlich viele Werkzeuge zur
+Verfügung.  Wir können nicht viel anderes als Funktionen mit
+Argumenten zu füttern und zu schauen, was rauskommt (oder im Fall von
+Haskell so lange probieren, bis der Compiler sein Okay gibt).  Uns
 bleibt an dieser Stelle also nicht viel anderes übrig, also einfach so
 zu tun, als stünde Links ein `Ok` dessen Wert eine Funktion ist, die
 weiß, was mit dem Wert rechts zu tun ist.  Wenn wir das ein mal kurz
@@ -266,19 +267,20 @@ Was steht hier?  Unter der Annahme, dass wir aus einem `Ok` auf der
 linken Seite eine Funktion bekommen, können wir
 `applyOkFunctionToValidation` verwenden, um den Wert auf der rechten
 Seite darauf anzuwenden.  Ein `Fail` auf der rechten Seite bleibt ein
-Fehler (er planzt sich also gewissermaßen die Berechung entlang fort)
+Fehler (er pflanzt sich also gewissermaßen die Berechung entlang fort)
 und bleibt unverändert.  Ein `Ok` hat ein weiteres `Ok` zur Folge,
 indem das in das linke `Ok` gewickelte `f` darauf angewendet wird.  So
 haben wir aus zwei Erfolgen einen gemacht.
 
 Jetzt könnten wir `applyOkFunctionToValidation` fast in
 `combineValidations` einsetzen, wäre nicht dessen Typsignatur
-`Validation c -> Validation c -> Validation c` im Weg -- wir brauchen ein
-`Validation (a -> b) -> Validation a -> Validation b`.
-Glücklicherweise haben wir das `a` in der Signatur bisher noch gar
-nicht verwendet (bisher hat uns nur der Fehler interessiert und der
-hat nichts mit `a` zu tun).  Ein Glück!  Damit ist
-`combineValidations` fertig und kann benutzt werden.
+`Validation c -> Validation c -> Validation c` im Weg -- wir brauchen
+ein `Validation (a -> b) -> Validation a -> Validation b`.  Wer genau
+aufgepasst hat, hat aber gemerkt: Wir haben das `a` in der Signatur
+bisher noch gar nicht verwendet (bisher hat uns nur der Fehler
+interessiert und der hat nichts mit `a` zu tun).  Wir können also die
+Signatur problemlos ändern.  Damit ist `combineValidations` fertig und
+kann benutzt werden.
 
 ```haskell
 applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
@@ -296,7 +298,7 @@ combineValidations (Ok f) v = applyOkFunctionToValidation f v
 Ja, irgendwie schon.  Dummerweise können wir unsere oben definierten
 Validierungsfunktionen nämlich jetzt nicht mehr ohne Weiteres als
 erstes Argument für `combineValidations` benutzen -- wir wollen ja
-eine Funktion im `Ok`.  Um das auch Problem aus der Welt zu schaffen,
+eine Funktion im `Ok`.  Um auch das Problem aus der Welt zu schaffen,
 nehmen wir einen letzten Umweg.
 
 Stellen wir uns vor, wir haben eine Validierung links, die, kombiniert
@@ -325,7 +327,7 @@ makeValidation reverse `combineValidations` validateNonemptyString "Marco"
 
 Bringt nicht viel, funktioniert aber.  Obwohl, hilft irgendwie schon,
 denn ganz unauffällig hat sich hier eine Lösung für Punkte zwei und
-drei von oben eingeschichen.
+drei von oben eingeschlichen.
 
 ```haskell
 makeValidation User
@@ -358,7 +360,7 @@ Das sieht jetzt vermutlich erst mal magisch aus: Warum wird aus
 doch den ursprünglichen Konstruktor einwickelt.  Es führt kein Weg
 daran vorbei, wir müssen uns kurz ansehen, wie man sich die einzelnen
 Substitutionen vorstellen kann (wichtig: das dient nur der
-Verantschaulichung und entspricht nicht wirklich der
+Veranschaulichung und entspricht nicht wirklich der
 Ausfühungsmaschinerie).  Dabei trenne ich jeweils die Repräsentation
 der Ausführungsschritte durch ein `=>`:
 
@@ -416,22 +418,30 @@ Presto!  Alles in Ordnung.  Analog für den Fall, dass Fehler auftreten
 (Ok (\email role -> User "Marco" admin role))
   `combineValidations` (validateEmail "marco.schneider.at.active-group.de")
   `combineValidations` (validateUserRole "DEVELOPER")
+
 =>
+
 (Ok (\email role -> User "Marco" admin role))
   `combineValidations` (Fail ["not an email"])
   `combineValidations` (validateUserRole "DEVELOPER")
+
 => Wir erinnern uns an oben:  Fehler rechts fressen `Ok`s links
+
 (Fail ["not an email"])
   `combineValidations` (validateUserRole "dummy")
+
 => Und haben wir erst mal den Fehler, sammeln wir die restilchen Fehler nur noch zusammen.
+
 (Fail ["not an email"])
   `combineValidations` (Fail ["not a role"])
+
 =>
+
 (Fail ["not an email" "not a role"])
 ```
 
 Was uns hier im Hintegrund hilft, ist, dass Haskell Funktionen
-partiell anzuwenden kann.  Das heißt eine Funktion mit drei Argumenten
+partiell anwenden kann.  Das heißt eine Funktion mit drei Argumenten
 hat, wenn wir ein Argument anwenden, eine Funktion mit zwei Argumenten
 als Ergebnis.  In Sprachen, in denen das nicht der Fall ist (wie zum
 Beispiel Clojure) müssen wir uns ein bisschen mehr anstrengen.
@@ -451,15 +461,12 @@ validateUser name email role =
 Der offizielle Teil ist geschafft, denn unsere drei Kriterien von ob
 oben sind erfüllt:
 
-1. Wir wollen jede Validierungen für sich durchführen können
-   **:check:** indem wir Funktionen schreiben, die `Validation`s als
-   Ergebnis haben
-2. Mehrere Validierungen aneinanderhängen: **:check** mit
-   `combineValidations`
+1. Wir wollen jede Validierungen für sich durchführen können -> indem
+   wir Funktionen schreiben, die `Validation`s als Ergebnis haben
+2. Mehrere Validierungen aneinanderhängen -> mit `combineValidations`
 3. Eine Validierungsfunktion schreiben, die dann ein validiertes
    Ergebnis zurück gibt, wenn alles in Ordnung ist **oder** eine Liste
-   **aller** Fehler, falls etwas nicht stimmt. **:check** mit
-   `validateUser`
+   **aller** Fehler, falls etwas nicht stimmt -> mit `validateUser`
 
 Der Praxisteil ist damit beendet.  Wir haben uns angesehen, wir wir
 komponierbare Validationsfunktionen für beliebige Datentypen schreiben
@@ -490,7 +497,7 @@ class Funktor f where
   fmap :: (a -> b) -> f a -> f b
 ```
 
-Um jetzt nicht in metaphern darüber zu verfallen, was ein Funktor
+Um jetzt nicht in Metaphern darüber zu verfallen, was ein Funktor
 *ist*, zeige ich lieber, wo sich oben der Funktor versteckt hat.  Wenn
 wir die Signatur von `fmap` anschauen, sieht das verdächtig nach
 `applyOkFunctionToValidation` aus!
@@ -511,8 +518,8 @@ instance Functor Validation where
   -- fmap = applyOkFunctionToValidation
 ```
 
-Mit diesem Wissen bewaffnet, können eine erste kleine Änderungen am
-Code von oben durchführen.
+Mit diesem Wissen bewaffnet, können wir eine erste kleine Änderungen
+am Code von oben durchführen.
 
 ```haskell
 combineValidations :: Validation (a -> b) -> Validation a -> Validation b
@@ -525,7 +532,7 @@ Das sieht nicht nach viel aus, ist aber doch schon einiges.  Unsere
 Verwendung von `fmap` an dieser Stelle (und natürlich die
 Implementierung von `Functor`) signalisieren allen Lesenden, dass 
 
-- hier bestimmte Gesetze gelten (zu gesetzen bitten die Warnung weiter
+- hier bestimmte Gesetze gelten (zu Gesetzen bitte die Warnung weiter
   unten nicht übersehen)
 - aller Code aller Bibliotheken, die sonst noch etwas mit Funktoren
   anzufangen wissen, für uns auch verwendbar ist.
@@ -605,11 +612,11 @@ make <$> foo <*> bar <*> baz
 `foo`, `bar` und `baz` in beliebiger Reihenfolge auszurechen -- oder
 in beliebigem Kontext (so lange die Typen "passen")!  Das heißt, dass
 ich beispielsweise entscheiden könnte, meine Implementierung von `<*>`
-so zu schreiben, dass jedes Argument auf einem eigenen Thread läuft
-und das Ergebnis aufgerufen wird, wenn alle parallelen Berechnunngen
-*fertig* sind.  Das gilt dann natürlich für jede Instanz von
-`Applicative`, die sich an die Gesetze hält -- in dem Fall an das
-Assoziativgesetz.
+so zu schreiben, dass jedes Argument auf einem eigenen Thread
+ausgewertet wrid und das Ergebnis aufgerufen wird, wenn alle
+parallelen Berechnunngen *fertig* sind.  Das gilt dann natürlich für
+jede Instanz von `Applicative`, die sich an die Gesetze hält -- in dem
+Fall an das Assoziativgesetz.
 
 ```haskell
 pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
@@ -617,7 +624,7 @@ pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
 
 Es soll also gelten: Die Anwendung der Komposition `pure (.) <*> u <*>
 v <*> w` ist äquivalent dazu, `u` auf das Ergebnis von `v <*> w`
-anzuwenden (oder einfacher gesagt: Komposition Appliktiver Werte mit
+anzuwenden (oder einfacher gesagt: Komposition applikativer Werte mit
 `pure (.)` verhält sich wie Komposition von Funktionen mit `.`).  Es
 soll also *egal sein, in welcher Reihenfolge das Ergebnis berechnet
 wird*.
@@ -645,5 +652,4 @@ aus:
 Haskell gibt uns leider nicht die richtigen Mittel an die Hand um
 sicherzustellen, dass die jeweiligen Gesetze auch von der Instanz
 eingehalten werden.  Zu zeigen, dass unsere Instanzen korrekt sind,
-sprengt allerdings den Rahmen dieses ohnehin schon viel zu langen
-Posts.
+sprengt allerdings den Rahmen dieses ohnehin schon langen Posts.
