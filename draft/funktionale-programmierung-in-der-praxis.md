@@ -2,8 +2,6 @@
 layout: post
 description: Funktionale Programmierung in der Praxis
 title: "Neue Reihe: Funktionale Programmierung in der Praxis"
-author: marco-schneider
-tags: ["praxis", "fp", "funktionale programmierung"]
 ---
 
 Wir starten eine neue Reihe zum Thema "Funktionale Programmierung in der
@@ -27,21 +25,21 @@ Beispiele geben, wie Konzepte der funktionalen Programmierung -- wie
 wir sie auch in unseren
 [Schulungen](https://www.active-group.de/schulung/) vermitteln -- in
 der Praxis angewendet werden.  Backendendentwicklung, reproduzierbare
-Builds, komponierbare Webkomponenten: Für Alle sollte etwas dabei
+Builds, komponierbare Webkomponenten: Für alle sollte etwas dabei
 sein.
 
-Artikeln zu diesen Themen können sie in den nächsten Wochen und
-Monaten erwarten:
+Artikel zu diesen Themen können Sie in den nächsten Wochen und Monaten
+erwarten:
 
-- Datenvalidierung mit applikative Funktoren
+- Datenvalidierung mit applikativen Funktoren
 - Pretty-Printing II: Laziness FTW
-- Type Lambdas in Scala 3
+- Type-Lambdas in Scala 3
 - Deep Learning mit ConCat
-- Composable UI Components
+- Komponierbare UI-Komponenten
 - Nix
 - Return of the DES, mit Polysemy
 - Effektvoll serviert: Polysemy und Servant
-- Event streaming systeme mit Riemann
+- Eventstreaming-Systeme mit Riemann
 
-Wir sind gespannt und freuen uns darauf, diese Reihe und vielleicht
+Wir sind gespannt und freuen uns darauf diese Reihe und vielleicht
 noch mehr umzusetzen.
