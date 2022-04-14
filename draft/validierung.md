@@ -24,16 +24,16 @@ Daten in Daten systematisch aufzusammeln und zu verwerten.
 
 Webservices kommunizieren gerne in Form von JSON-Objekten miteinander,
 die von User:innen und anderen Serivces in unserer Applikation landen.
-Wie wir alle wissen, ist das JSON-Format durch die schmale Anzahl von
-Typen recht eingeschränkt.  Das bedeutet in der Praxis, dass komplexe
-Datentypen in der Regel in Strings serialisiert werden.  Außerdem
-haben wir oft bestimmte Anforderungen an die Form des konkreten
-Datums: Ein `"username"` soll nicht leer sein, eine `"email"` sollte
-zumindest ein `"@"`-Symbol enthalten und serialisierte Werte müssen
-unserer Deserialisierung entsprechen, um in interne Datentypen
-umgewandelt werden zu können.
+Es ist kein Geheimnis, dass das JSON-Format durch seine schmale Anzahl
+von Typen recht eingeschränkt ist.  Das bedeutet in der Praxis, dass
+komplexe Datentypen in der Regel in Strings serialisiert werden.
+Außerdem haben wir oft bestimmte Anforderungen an die Form des
+konkreten Datums: Ein `"username"` soll nicht leer sein, eine
+`"email"` sollte zumindest ein `"@"`-Symbol enthalten und
+serialisierte Werte müssen unserer Erwartung entsprechen, um in
+interne Datentypen umgewandelt werden zu können.
 
-Für das folgende Beispiel gehen wir von folgender Datendefiniton aus.
+Für das folgende Beispiel gehen wir von folgender Datenanalyse aus.
 Ein:e `User`:in besteht aus:
 - einem Namen
 - einer Emailadresse
@@ -48,7 +48,7 @@ Für die Implementierung verwenden wir die Programmiersprache Haskell.
 Da könnte das folgendermaßen aussehen:
 
 ```haskell
-data UserRole = ADMIN | DEVELOPER | REPORTER
+data UserRole = ADMIN | DEVELOPER | REPORTER
 
 data User = { userName  :: String
             , userEmail :: String
@@ -62,12 +62,16 @@ simon = User "Simon" "simon.haerer.at.active-gropu.de" DEVELOPER
 Die zwei Beispiele im Code zeigen direkt ein Problem: Wir wissen zwar,
 dass `simon`s Emailadresse nicht valide ist, wenn wir sie aber direkt
 aus einem JSON-Objekt lesen, hält uns nichts davon ab, eine solche
-Invarante (*jede Emailadresse enthält ein "@"-Symbol*) zu ignorieren.
-Wir müssen die Daten also irgendwie validieren, bevor sie weiter ins
-System eindringen.
+Invarante (*"jede Emailadresse enthält ein "@"-Symbol"*) zu
+ignorieren.  Wir müssen die Daten also irgendwie validieren, bevor sie
+weiter ins System eindringen.
 
 Natürlich hält uns nichts davon ab, einen Konstruktor für `User` zu
-schreiben, der genau das abfängt:
+schreiben, der solche Fehler abfängt.  Wir benutzen für das Ergebnis
+`Either a b = Left a | Right b`:
+
+- Einen Fehler signalisiert man mit `Left a`
+- Einen Erfolg signalisiert man mit `Right b`
 
 ```haskell
 type Error = String
@@ -87,12 +91,12 @@ type Error = String
 
 makeUser :: String -> String -> Role -> Either Error User
 makeUser name email role
-  | null name        = Left "not a nonempty string"
+  | null name        = Left "not a nonempty string"
   | '@' `elem` email = Right $ User name email role
   | otherwise        = Left "not a valid email"
 ```
 
-Besser?  Kaum: Was ist, wenn sowohl der Name leer ist als auch die
+Etwas besser.  Was ist, wenn sowohl der `name` leer ist als auch die
 `email` kein `'@'` enthält?  Wir wollen schließlich alle Fehler
 wissen, nicht nur den ersten.  Das heißt aber auch, dass wir eine
 andere Signatur brauchen (mit einer Liste von Fehlern für `Left`).
@@ -122,7 +126,8 @@ Naja, so richtig zufrieden macht das nicht.  Außerdem explodiert die
 Anzahl an Fällen, die wir in immer weiteren Verzweigungen prüfen
 müssen.  So wird das nichts.
 
-Allerdings haben wir etwas darüber gelernt, was wir eigentlich wollen:
+Allerdings -- denke ich -- haben wir etwas darüber gelernt, was wir
+eigentlich wollen:
 
 1. Wir wollen jede Validierungen für sich durchführen können
 2. Mehrere Validierungen aneinanderhängen
@@ -133,8 +138,8 @@ Allerdings haben wir etwas darüber gelernt, was wir eigentlich wollen:
 # Validierungsfunktionen
 
 Um dem Ganzen etwas Struktur zu geben, definieren wir zuerst einen
-Datentyp, der analog unserer Erkundung des Gebiets von oben unseren
-Validierungsergebnissen entspricht.  So ein Ergebnis ist eines der Folgenden:
+eigenen Datentyp der unseren Validierungsergebnissen entspricht.  So
+ein Ergebnis ist eines der Folgenden:
 
 - Eine erfolgreiche Validierung (`Ok <wert>`) eines Wertes, oder
 - eine Menge an Fehlern, die bei der Validierung auftraten (`Fail Errors`).
@@ -143,7 +148,7 @@ Validierungsergebnissen entspricht.  So ein Ergebnis ist eines der Folgenden:
 type Errors = [String]
 
 data Validation c = Ok c 
-                  | Fail Errors deriving (Show, Eq)
+                  | Fail Errors deriving
 ```
 
 Unsere `Validation` repräsentiert das Ergebnis einer Validierung.  Sie
@@ -151,10 +156,10 @@ ist parameterisiert über den Typ einen Kandidatenwerts `c`.  Damit
 lassen sich Validierungen für Werte beliebigen Typs angeben.
 
 Als nächstes schreiben wir ein paar Funktionen, die unsere
-Validierungen von oben kapseln:
+Validierungen von oben darstellen:
 
 ```haskell
--- | Validate that `candidate` is not empty.
+-- | Validate that `candidate` is not the empty string.
 validateNonemptyString :: String -> Validation String
 validateNonemptyString candidate
   | null candidate = Fail ["not a nonempty string"]
@@ -202,25 +207,24 @@ kombinieren).
 
 ## Kombinieren von Ergebnissen
 
-Was bedeutet es, mehrere Ergebnisse zu kombinieren?  Schauen wir uns
-zuerst die Kombination von zwei Fehlerfällen an: Da beide Fehler aus
-Listen von Fehlermeldungen bestehen, können wir diese aneinanderhängen
-und behalten alle Informationen.  Das klingt doch gut!
+Schauen wir uns zuerst die Kombination von zwei Fehlerfällen an: Da
+beide Fehler aus Listen von Fehlermeldungen bestehen, können wir diese
+aneinanderhängen und behalten alle Informationen.  Das klingt doch
+gut!
 
 ```haskell
 combineValidations :: Validation a -> Validation a -> Validation a
 combineValidations (Fail es) (Fail fs) = Fail (es ++ fs)
 ```
 
-Gut? Nein, überhaupt nicht gut!  Der Haskellcompiler ist zurecht
-unzufrieden: Was ist denn, wenn links, rechts oder sogar an beiden
-Stellen der Funktion ein `Ok` steht?
+Der Haskellcompiler natürlich noch unzufrieden: Was ist, wenn links,
+rechts oder sogar an beiden Stellen der Funktion ein `Ok` steht?
 
 Unsere dritte Anforderungen meint: *Entweder* ein valides Ergebnis
-oder *alle* Fehler.  Mit nur einem invaliden Ergebnis auf der linken
-Seite werden wir also ohnehin nicht glücklikch, auch wenn rechts ein
-Erfolg steht.  Also lassen wir die rechte Seite in dem Fall einfach
-weg:
+oder *alle* Fehler.  Mit nur einem `Fail` auf der linken Seite wissen
+wir schon, dass es nur noch auf ein `Fail` herauslaufen kann, auch
+wenn rechts ein Erfolg steht.  Also lassen wir die rechte Seite in dem
+Fall einfach weg:
 
 ```haskell
 combineValidations :: Validation a -> Validation a -> Validation a
@@ -238,13 +242,14 @@ Fälle:
 2. Links ein Erfolg, rechts ein Erfolg
 
 Jetzt brauche ich von Ihnen etwas Vertrauensvorschuss: Wir
-funktionalen Programmierer:innen können nicht viel anderes als
-Funktionen mit Argumenten zu füttern und zu schauen, was rauskommt
-(und im Idealfall den Compiler dabei nicht unglücklich machen).  Uns
+funktionalen Programmierer:innen haben nicht so fürchterliche viele
+Werkzeuge zur Verfügung.  Wir können nicht viel anderes als Funktionen
+mit Argumenten zu füttern und zu schauen, was rauskommt (oder im Fall
+von Haskell so lange probieren, bis der Compiler sein Okay gibt).  Uns
 bleibt an dieser Stelle also nicht viel anderes übrig, also einfach so
 zu tun, als stünde Links ein `Ok` dessen Wert eine Funktion ist, die
 weiß, was mit dem Wert rechts zu tun ist.  Wenn wir das ein mal kurz
-schlucken, dann geht es hier entlang:
+schlucken, können wir uns dafür eine kleine Hilfsfunktion schreiben.
 
 ```haskell
 applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
@@ -263,8 +268,8 @@ linken Seite eine Funktion bekommen, können wir
 Seite darauf anzuwenden.  Ein `Fail` auf der rechten Seite bleibt ein
 Fehler (er planzt sich also gewissermaßen die Berechung entlang fort)
 und bleibt unverändert.  Ein `Ok` hat ein weiteres `Ok` zur Folge,
-indem das in das linke `Ok` gewickelte `f` darauf angewendet wird.
-Damit haben wir aus zwei Erfolgen einen gemacht.
+indem das in das linke `Ok` gewickelte `f` darauf angewendet wird.  So
+haben wir aus zwei Erfolgen einen gemacht.
 
 Jetzt könnten wir `applyOkFunctionToValidation` fast in
 `combineValidations` einsetzen, wäre nicht dessen Typsignatur
@@ -289,10 +294,10 @@ combineValidations (Ok f) v = applyOkFunctionToValidation f v
 ## Fehlt da nicht etwas?
 
 Ja, irgendwie schon.  Dummerweise können wir unsere oben definierten
-Validierungsfunktionen nämlich jetzt nicht mehr ohne weiteres als
+Validierungsfunktionen nämlich jetzt nicht mehr ohne Weiteres als
 erstes Argument für `combineValidations` benutzen -- wir wollen ja
-eine Funktion im `Ok`.  Um das Problem auch noch aus der Welt zu
-schaffen, nehmen wir noch einen letzten Umweg.
+eine Funktion im `Ok`.  Um das auch Problem aus der Welt zu schaffen,
+nehmen wir einen letzten Umweg.
 
 Stellen wir uns vor, wir haben eine Validierung links, die, kombiniert
 mit einer Validierung rechts, immer das rechte Ergebnis zurück gibt.
@@ -318,9 +323,9 @@ makeValidation reverse `combineValidations` validateNonemptyString "Marco"
 -- Ok "ocraM"
 ```
 
-Bringt nicht viel, funktioniert aber.  Obwohl, hilft irgendwie schon
-auch, denn ganz unauffällig hat sich hier eine Lösung für Punkte zwei
-und drei von oben eingeschichen.
+Bringt nicht viel, funktioniert aber.  Obwohl, hilft irgendwie schon,
+denn ganz unauffällig hat sich hier eine Lösung für Punkte zwei und
+drei von oben eingeschichen.
 
 ```haskell
 makeValidation User
@@ -404,7 +409,7 @@ makeValidation User
 (Ok (User "Marco" "marco.schneider@active.group" DEVELOPER))
 ```
 
-Tadaa.  Alles in Ordnung.  Analog für den Fall, dass Fehler auftreten
+Presto!  Alles in Ordnung.  Analog für den Fall, dass Fehler auftreten
 (wir steigen ein wo es spannend wird):
 
 ```haskell
@@ -417,7 +422,7 @@ Tadaa.  Alles in Ordnung.  Analog für den Fall, dass Fehler auftreten
   `combineValidations` (validateUserRole "DEVELOPER")
 => Wir erinnern uns an oben:  Fehler rechts fressen `Ok`s links
 (Fail ["not an email"])
-  `combineValidations` (validateUserRole "DEVELOPER")
+  `combineValidations` (validateUserRole "dummy")
 => Und haben wir erst mal den Fehler, sammeln wir die restilchen Fehler nur noch zusammen.
 (Fail ["not an email"])
   `combineValidations` (Fail ["not a role"])
@@ -425,10 +430,10 @@ Tadaa.  Alles in Ordnung.  Analog für den Fall, dass Fehler auftreten
 (Fail ["not an email" "not a role"])
 ```
 
-Was uns hier natürlich hilft, ist, dass Haskell so nett ist Funktionen
-partiell anzuwenden.  Das heißt eine Funktion mit drei Argumenten hat,
-wenn wir ein Argument anwenden, eine Funktion mit zwei Argumenten als
-Ergebnis.  In Sprachen, in denen das nicht der Fall ist (wie zum
+Was uns hier im Hintegrund hilft, ist, dass Haskell Funktionen
+partiell anzuwenden kann.  Das heißt eine Funktion mit drei Argumenten
+hat, wenn wir ein Argument anwenden, eine Funktion mit zwei Argumenten
+als Ergebnis.  In Sprachen, in denen das nicht der Fall ist (wie zum
 Beispiel Clojure) müssen wir uns ein bisschen mehr anstrengen.
 
 Damit haben wir tatsächlich alles an der Hand, um unsere
@@ -443,8 +448,8 @@ validateUser name email role =
 	  `combineValidations` validateUserRole role
 ```
 
-Der offizielle Teil ist damit geschafft und unsere drei Kriterien von
-ob oben sind erfüllt:
+Der offizielle Teil ist geschafft, denn unsere drei Kriterien von ob
+oben sind erfüllt:
 
 1. Wir wollen jede Validierungen für sich durchführen können
    **:check:** indem wir Funktionen schreiben, die `Validation`s als
@@ -470,10 +475,10 @@ weitervergnügen.
 Als funktionale Programmierer:innen sind wir immer daran interessiert,
 allgemeinere Eigenschaften und Strukturen in unserem Code zu finden
 (oder ihn von Anfang an so zu gestalten).  Ein Beispiel zur
-Herangehensweise bei uns im Hause ist das "Finde-den-Funktor-Spiel" ™,
+Herangehensweise bei uns im Hause ist das "Finde-den-Funktor-Spiel"™,
 denn: Wo sich ein Funktor versteckt, ist vielleicht auch ein
 applikativer Funktor, ist vielleicht auch eine Monade.  Oder
-allgemein: Findet man erst ein bisschen Struktur, ist da meistens auch
+allgemein: Findet man erst ein bisschen Struktur, ist da meistens noch
 mehr.
 
 Wer schon weiß, was einen Funktor in der Programmierung ausmacht, hat
@@ -486,10 +491,12 @@ class Funktor f where
 ```
 
 Um jetzt nicht in metaphern darüber zu verfallen, was ein Funktor
-*ist*, zeige ich lieber, wo sich oben der Funktor versteckt hat.  Wenn wir die Signatur von `fmap` anschauen, sieht das verdächtig nach `applyOkFunctionToValidation` aus!
+*ist*, zeige ich lieber, wo sich oben der Funktor versteckt hat.  Wenn
+wir die Signatur von `fmap` anschauen, sieht das verdächtig nach
+`applyOkFunctionToValidation` aus!
 
 ```haskell
-fmap                        :: (a -> b) -> f a -> f b
+fmap                        :: (a -> b) ->          f a ->          f b
 applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
 ```
 
@@ -520,9 +527,8 @@ Implementierung von `Functor`) signalisieren allen Lesenden, dass
 
 - hier bestimmte Gesetze gelten (zu gesetzen bitten die Warnung weiter
   unten nicht übersehen)
-- Alles, was für Funktoren sonst noch gilt und aller Code aller
-  Bibliotheken, die sonst noch etwas mit Funktoren anzufangen wissen,
-  für uns auch verwendbar sind.
+- aller Code aller Bibliotheken, die sonst noch etwas mit Funktoren
+  anzufangen wissen, für uns auch verwendbar ist.
 
 ## Applikativer Funktor
 
@@ -531,8 +537,7 @@ vesteckt ist -- sonst wäre der Titel des Posts eine ganz schöne
 Nullnummer.
 
 Schauen wir uns wieder zuerst die Definition der entsprechende
-Typklasse in Haskell an, fokussiert auf den Teil, der uns
-interessiert:
+Typklasse in Haskell an:
 
 ```haskell
 class Functor f => Applicative f where
@@ -580,22 +585,58 @@ validateUser email name role =
        <*> validateUserRole "DEVELOPER"
 ```
 
-Wem die kuriosen `<*>`- und `<$>`-Symbole zu wild sind, kann auch
-`liftA3` (`Applicative f => (a -> b -> c -> d) -> f a -> f b -> f
-c -> f d`) verwenden:
+# Was bringt mir das Ganze?
+
+Völlig zurecht könnten Sie sich jetzt fragen, warum wir den ganzen
+Aufwand betreiben.  Warum den Funktor suchen?  Und gar applikative
+Funktoren?  Da wir uns hier mit der *praktischen* Anwendung von
+funktionaler Programmierung beschäftigen, möchte ich nur ein Detail
+herauspicken.
+
+Wenn man sich die Typsignatur von `(<*>) :: f (a -> b) -> f a -> f b`
+(oder auch die Definition) anschaut, fällt auf: Die einzelnen
+Argumente sind voneinander unabhängig.  Das heißt, ich bin theoretisch
+frei im Ausdruck
 
 ```haskell
-validateUser email name role =
-  liftA3 User (validateNonemptyString "Marco")
-              (validateEmail "marco.schneider@active-group.de")
-              (validateUserRole "DEVELOPER")
+make <$> foo <*> bar <*> baz
 ```
 
-**Wichtig**: Noch eine Bemerkung zum Thema Typklassen und Signaturen.
-Nur, weil die Signaturen von Funktionen so aussehen, als könnten Sie
-zu einer Typklasse passen, heißt das noch lange nicht, dass daraus
-auch eine *korrekte* Typklasse wird.  Ein solche Klasse besteht in der
-Regel aus:
+`foo`, `bar` und `baz` in beliebiger Reihenfolge auszurechen -- oder
+in beliebigem Kontext (so lange die Typen "passen")!  Das heißt, dass
+ich beispielsweise entscheiden könnte, meine Implementierung von `<*>`
+so zu schreiben, dass jedes Argument auf einem eigenen Thread läuft
+und das Ergebnis aufgerufen wird, wenn alle parallelen Berechnunngen
+*fertig* sind.  Das gilt dann natürlich für jede Instanz von
+`Applicative`, die sich an die Gesetze hält -- in dem Fall an das
+Assoziativgesetz.
+
+```haskell
+pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
+```
+
+Es soll also gelten: Die Anwendung der Komposition `pure (.) <*> u <*>
+v <*> w` ist äquivalent dazu, `u` auf das Ergebnis von `v <*> w`
+anzuwenden (oder einfacher gesagt: Komposition Appliktiver Werte mit
+`pure (.)` verhält sich wie Komposition von Funktionen mit `.`).  Es
+soll also *egal sein, in welcher Reihenfolge das Ergebnis berechnet
+wird*.
+
+# Fazit
+
+Wir haben Ihnen eine Variante der Datenvalidierung in der funktionalen
+Programmierpraxis vorgestellt.  Dazu haben wir einen applikativen
+Funktor verwendet und gezeigt, dass wir damit sehr einfach
+Teilergebnisse miteinander kombinieren können und so immer genau
+Bescheid wissen, was alles falsch lief.
+
+# Wichtiger Nachklapp
+
+Noch eine Bemerkung zum Thema Typklassen und Signaturen.  Nur, weil
+die Signaturen von Funktionen so aussehen, als könnten Sie zu einer
+Typklasse passen, heißt das noch lange nicht, dass daraus auch eine
+*korrekte* Typklasse wird.  Ein solche Klasse besteht in der Regel
+aus:
 
 1. Einer Menge von Operationen (`fmap` oder `pure` plus `<*>`).
 2. Einer Menge an Gesetzen, die für Werte des Typs unter diesen

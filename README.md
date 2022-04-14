@@ -95,8 +95,8 @@ Paketen (außer natürlich von `nix`) selbst ab.
 
 # Nix
 
-Wenn du `nix` installiert hast, kannst du den Blog jetzt auch
-vernünftig bauen, d. h. ohne lokal von irgendwelchen globalen Paketen
+Wenn du `nix` installiert hast, kannst du den Blog jetzt auch mit
+`nix` bauen, d. h. ohne lokal von irgendwelchen globalen Paketen
 abhängig zu sein.
 
 Dazu einfach im Rootverzeichnis der Projekts `nix-shell` aufrufen.
