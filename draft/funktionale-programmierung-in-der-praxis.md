@@ -15,12 +15,12 @@ Praxis".
 > das denn in der Praxis funktionieren?
 
 Viele Programmierer:innen, die sich mit funktionaler Programmierung
-beschäftigen, werden diese Bemerkungen kennen.  Auch uns bei der
-Active Group erreicht sie immer wieder auf Konferenzen, nach
-Schulungen bei Kund:innen oder online.  Grund genug, ein bisschen aus
-dem Nähkästchen zu plaudern und Ihnen -- so es Sie interessiert --
-einen Einblick in die alltägliche Verwendung der funktionalen
-Programmierung in der Industrie zu geben.
+beschäftigen, werden diese Bemerkungen in der einen oder anderen
+Ausführung kennen.  Auch uns bei der Active Group erreicht sie immer
+wieder auf Konferenzen, nach Schulungen bei Kund:innen oder online.
+Grund genug, ein bisschen aus dem Nähkästchen zu plaudern und Ihnen --
+so es Sie interessiert -- einen Einblick in die alltägliche Verwendung
+der funktionalen Programmierung in der Industrie zu geben.
 
 Wir werden in einer Reihe von Artikeln verschiedene *konkrete*
 Beispiele geben, wie Konzepte der funktionalen Programmierung -- wie
@@ -43,4 +43,5 @@ Monaten erwarten:
 - Effektvoll serviert: Polysemy und Servant
 - Event streaming systeme mit Riemann
 
-Wir sind gespannt und freuen uns darauf, diese Reihe und vielleicht noch mehr umzusetzen.
+Wir sind gespannt und freuen uns darauf, diese Reihe und vielleicht
+noch mehr umzusetzen.
