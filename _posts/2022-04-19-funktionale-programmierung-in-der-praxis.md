@@ -4,8 +4,8 @@ description: Funktionale Programmierung in der Praxis
 title: "Neue Reihe: Funktionale Programmierung in der Praxis"
 ---
 
-Wir starten eine neue Reihe zum Thema "Funktionale Programmierung in der
-Praxis".
+Mit diesem Post starten wir unsere neue Reihe zum Thema "Funktionale
+Programmierung in der Praxis".
 
 <!-- more start -->
 
@@ -24,7 +24,7 @@ Wir werden in einer Reihe von Artikeln verschiedene *konkrete*
 Beispiele geben, wie Konzepte der funktionalen Programmierung -- wie
 wir sie auch in unseren
 [Schulungen](https://www.active-group.de/schulung/) vermitteln -- in
-der Praxis angewendet werden.  Backendendentwicklung, reproduzierbare
+der Praxis angewendet werden.  Backendentwicklung, reproduzierbare
 Builds, komponierbare Webkomponenten: Für alle sollte etwas dabei
 sein.
 
@@ -41,5 +41,5 @@ erwarten:
 - Effektvoll serviert: Polysemy und Servant
 - Eventstreaming-Systeme mit Riemann
 
-Wir sind gespannt und freuen uns darauf diese Reihe und vielleicht
+Wir sind gespannt und freuen uns darauf, diese Reihe und vielleicht
 noch mehr umzusetzen.
