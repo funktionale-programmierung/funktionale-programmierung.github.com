@@ -2,6 +2,7 @@
 layout: post
 description: Funktionale Programmierung in der Praxis
 title: "Neue Reihe: Funktionale Programmierung in der Praxis"
+author: fp-staff
 ---
 
 Mit diesem Post starten wir unsere neue Reihe zum Thema "Funktionale
