@@ -56,19 +56,19 @@ data User = { userName  :: String
 
 -- Beispiele
 marco = User "Marco" "marco.schneider@active-group.de" DEVELOPER
-simon = User "Simon" "simon.haerer.at.active-gropu.de" DEVELOPER
+simon = User "Simon" "simon.haerer.at.active-group.de" DEVELOPER
 ```
 
 Die zwei Beispiele im Code zeigen direkt ein Problem: Wir wissen zwar,
 dass die Emailadresse von Simon nicht valide ist, wenn wir sie aber
 direkt aus einem JSON-Objekt lesen, hält uns nichts davon ab, eine
-solche Invarante (*"jede Emailadresse enthält ein "@"-Symbol"*) zu
+solche Invariante (*"jede Emailadresse enthält ein "@"-Symbol"*) zu
 ignorieren.  Wir müssen die Daten also irgendwie validieren, bevor sie
 weiter ins System eindringen.
 
-Natürlich hält uns nichts davon ab, einen Konstruktor für `User` zu
-schreiben, der solche Fehler abfängt.  Wir benutzen für das Ergebnis
-`Either a b = Left a | Right b`:
+Wir könnten natürlich, einen Konstruktor für `User` zu schreiben, der
+solche Fehler abfängt.  Wir benutzen für das Ergebnis `Either a b =
+Left a | Right b`:
 
 - Einen Fehler signalisiert man mit `Left a`
 - Einen Erfolg signalisiert man mit `Right b`
@@ -157,7 +157,7 @@ data Validation c = Ok c
 ```
 
 Unsere `Validation` repräsentiert das Ergebnis einer Validierung.  Sie
-ist parameterisiert über den Typ einen Kandidatenwerts `c`.  Damit
+ist parameterisiert über den Typ eines Kandidatenwerts `c`.  Damit
 lassen sich Validierungen für Werte beliebigen Typs angeben.
 
 Als nächstes schreiben wir ein paar Funktionen, die unsere
@@ -249,13 +249,13 @@ Fälle:
 
 Das klingt jetzt erst mal komisch, aber: Wir funktionalen
 Programmierer:innen haben nicht so fürchterlich viele Werkzeuge zur
-Verfügung.  Wir können nicht viel anderes als Funktionen mit
-Argumenten zu füttern und zu schauen, was rauskommt (oder im Fall von
-Haskell so lange probieren, bis der Compiler sein Okay gibt).  Uns
-bleibt an dieser Stelle also nicht viel anderes übrig, also einfach so
-zu tun, als stünde Links ein `Ok` dessen Wert eine Funktion ist, die
-weiß, was mit dem Wert rechts zu tun ist.  Wenn wir das ein mal kurz
-schlucken, können wir uns dafür eine kleine Hilfsfunktion schreiben.
+Verfügung.  Wir können Funktionen mit Argumenten zu füttern und zu
+schauen, was rauskommt (oder im Fall von Haskell so lange probieren,
+bis der Compiler sein Okay gibt).  Uns bleibt an dieser Stelle also
+nicht viel anderes übrig, als einfach so zu tun, als stünde links ein
+`Ok` dessen Wert eine Funktion ist, die weiß, was mit dem Wert rechts
+zu tun ist.  Wenn wir das einmal kurz schlucken, können wir uns dafür
+eine kleine Hilfsfunktion schreiben.
 
 ```haskell
 applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
@@ -272,7 +272,7 @@ Was steht hier?  Unter der Annahme, dass wir aus einem `Ok` auf der
 linken Seite eine Funktion bekommen, können wir
 `applyOkFunctionToValidation` verwenden, um den Wert auf der rechten
 Seite darauf anzuwenden.  Ein `Fail` auf der rechten Seite bleibt ein
-Fehler (er pflanzt sich also gewissermaßen die Berechung entlang fort)
+Fehler (er pflanzt sich also gewissermaßen der Berechung entlang fort)
 und bleibt unverändert.  Ein `Ok` hat ein weiteres `Ok` zur Folge,
 indem das in das linke `Ok` gewickelte `f` darauf angewendet wird.  So
 haben wir aus zwei Erfolgen einen gemacht.
@@ -362,7 +362,7 @@ makeValidation User
 
 Das sieht jetzt vermutlich erst mal magisch aus: Warum wird aus
 `makeValidation User` plötzlich eine Validierungsfunktion, wenn sie
-doch den ursprünglichen Konstruktor einwickelt.  Es führt kein Weg
+doch nur den ursprünglichen Konstruktor einwickelt?  Es führt kein Weg
 daran vorbei, wir müssen uns kurz ansehen, wie man sich die einzelnen
 Substitutionen vorstellen kann (wichtig: das dient nur der
 Veranschaulichung und entspricht nicht wirklich der
@@ -372,7 +372,7 @@ der Ausführungsschritte durch ein `=>`:
 ```haskell
 makeValidation User
   `combineValidations` (validateNonemptyString "")
-  `combineValidations` (validateEmail "marco.schneider.at.active-group.de")
+  `combineValidations` (validateEmail "marco.schneider@active-group.de")
   `combineValidations` (validateUserRole "DEVELOPER")
 
 => Einsetzen der Definition von `User`
@@ -464,20 +464,20 @@ validateUser name email role =
 	  `combineValidations` validateUserRole role
 ```
 
-Der offizielle Teil ist geschafft, denn unsere drei Kriterien von ob
-oben sind erfüllt:
+Der offizielle Teil ist geschafft, denn unsere drei Kriterien von oben
+sind erfüllt.  Wir wollen
 
-1. Wir wollen jede Validierungen für sich durchführen können -> indem
-   wir Funktionen schreiben, die `Validation`s als Ergebnis haben
+1. jede Validierungen für sich durchführen können -> wir
+   schreiben Funktionen die `Validation`s als Ergebnis haben
 2. Mehrere Validierungen aneinanderhängen -> mit `combineValidations`
-3. Eine Validierungsfunktion schreiben, die dann ein validiertes
+3. eine Validierungsfunktion schreiben, die dann ein validiertes
    Ergebnis zurück gibt, wenn alles in Ordnung ist **oder** eine Liste
    **aller** Fehler, falls etwas nicht stimmt -> mit `validateUser`
 
 Der Praxisteil ist damit beendet.  Wir haben uns angesehen, wir wir
-komponierbare Validationsfunktionen für beliebige Datentypen schreiben
-können, wie man sie miteinander verknüpft und dabei sicher sein kann,
-wirklich alle Fehler mitzunehmen.
+komponierbare Validierungsfunktionen für beliebige Datentypen
+schreiben können, wie man sie miteinander verknüpft und dabei sicher
+sein kann, wirklich alle Fehler mitzunehmen.
 
 Wer sich allerdings fragt, was daran jetzt so unheimlich applikativ
 ist und wo sich der Funktor versteckt, kann sich unten
@@ -536,7 +536,7 @@ combineValidations (Ok f)    v         = fmap f v
 
 Das sieht nicht nach viel aus, ist aber doch schon einiges.  Unsere
 Verwendung von `fmap` an dieser Stelle (und natürlich die
-Implementierung von `Functor`) signalisieren allen Lesenden, dass 
+Implementierung von `Functor`) signalisiert allen Lesenden, dass
 
 - hier bestimmte Gesetze gelten (zu Gesetzen bitte die Warnung weiter
   unten nicht übersehen)
@@ -545,8 +545,8 @@ Implementierung von `Functor`) signalisieren allen Lesenden, dass
 
 ## Applikativer Funktor
 
-Irgendwie war ja schon klar, dass hier auch ein Applikativer Funktor
-vesteckt ist -- sonst wäre der Titel des Posts eine ganz schöne
+Irgendwie war ja schon klar, dass hier auch ein applikativer Funktor
+versteckt ist -- sonst wäre der Titel des Posts eine ganz schöne
 Nullnummer.
 
 Schauen wir uns wieder zuerst die Definition der entsprechende
@@ -619,8 +619,8 @@ make <$> foo <*> bar <*> baz
 in beliebigem Kontext (so lange die Typen "passen")!  Das heißt, dass
 ich beispielsweise entscheiden könnte, meine Implementierung von `<*>`
 so zu schreiben, dass jedes Argument auf einem eigenen Thread
-ausgewertet wrid und das Ergebnis aufgerufen wird, wenn alle
-parallelen Berechnunngen *fertig* sind.  Das gilt dann natürlich für
+ausgewertet wird und das Ergebnis aufgerufen wird, wenn alle
+parallelen Berechnungen *fertig* sind.  Das gilt dann natürlich für
 jede Instanz von `Applicative`, die sich an die Gesetze hält -- in dem
 Fall an das Assoziativgesetz.
 
@@ -645,17 +645,17 @@ Bescheid wissen, was alles falsch lief.
 
 # Wichtiger Nachklapp
 
-Noch eine Bemerkung zum Thema Typklassen und Signaturen.  Nur, weil
-die Signaturen von Funktionen so aussehen, als könnten Sie zu einer
+Noch eine Bemerkung zum Thema Typklassen und Signaturen.  Nur weil die
+Signaturen von Funktionen so aussehen, als könnten Sie zu einer
 Typklasse passen, heißt das noch lange nicht, dass daraus auch eine
-*korrekte* Typklasse wird.  Ein solche Klasse besteht in der Regel
+*korrekte* Typklasse wird.  Eine solche Klasse besteht in der Regel
 aus:
 
-1. Einer Menge von Operationen (`fmap` oder `pure` plus `<*>`).
+1. Einer Menge von Operationen (`fmap` oder `pure` plus `<*>`)
 2. Einer Menge an Gesetzen, die für Werte des Typs unter diesen
-   Operationen gelten müssen.
+   Operationen gelten müssen
 
-Haskell gibt uns leider nicht die richtigen Mittel an die Hand um
+Haskell gibt uns leider nicht die richtigen Mittel an die Hand, um
 sicherzustellen, dass die jeweiligen Gesetze auch von der Instanz
 eingehalten werden.  Zu zeigen, dass unsere Instanzen korrekt sind,
 sprengt allerdings den Rahmen dieses ohnehin schon langen Posts.
