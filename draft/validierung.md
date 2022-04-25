@@ -25,7 +25,7 @@ Daten systematisch aufzusammeln und zu verwerten.
 Webservices kommunizieren gerne in Form von JSON-Objekten miteinander,
 die von User:innen und anderen Serivces in unserer Applikation landen.
 Es ist kein Geheimnis, dass das JSON-Format durch seine schmale Anzahl
-von Typen recht eingeschränkt ist.  Das bedeutet in der Praxis, dass
+von Typen eingeschränkt ist.  Das bedeutet in der Praxis, dass
 komplexe Datentypen in der Regel in Strings serialisiert werden.
 Außerdem haben wir oft bestimmte Anforderungen an die Form des
 konkreten Datums: Ein `"username"` soll nicht leer sein, eine
@@ -36,7 +36,7 @@ interne Datentypen umgewandelt werden zu können.
 Für das folgende Beispiel gehen wir von folgender Datenanalyse aus.
 Ein:e Nutzer:in besteht aus:
 - einem Namen
-- einer Emailadresse
+- einer E-Mail-Adresse
 - einer Rolle
 
 Eine Rolle ist eines der folgenden:
@@ -60,7 +60,7 @@ simon = User "Simon" "simon.haerer.at.active-group.de" DEVELOPER
 ```
 
 Die zwei Beispiele im Code zeigen direkt ein Problem: Wir wissen zwar,
-dass die Emailadresse von Simon nicht valide ist, wenn wir sie aber
+dass die E-Mail-Adresse von Simon nicht valide ist, wenn wir sie aber
 direkt aus einem JSON-Objekt lesen, hält uns nichts davon ab, eine
 solche Invariante (*"jede Emailadresse enthält ein "@"-Symbol"*) zu
 ignorieren.  Wir müssen die Daten also irgendwie validieren, bevor sie
@@ -68,7 +68,7 @@ weiter ins System eindringen.
 
 Wir könnten natürlich, einen Konstruktor für `User` zu schreiben, der
 solche Fehler abfängt.  Wir benutzen für das Ergebnis `Either a b =
-Left a | Right b`:
+Left a | Right b`.  Dabei gilt:
 
 - Einen Fehler signalisiert man mit `Left a`
 - Einen Erfolg signalisiert man mit `Right b`
@@ -82,7 +82,7 @@ makeUser name email role
   | otherwise        = Left  "not a valid email"
 ```
 
-Super, Problem gelöst.  Wenn alles glatt läuft, bekommen wir einen
+Super, Problem gelöst.  Wenn alles glattläuft, bekommen wir einen
 `Right User`, andernfalls einen `Left Error`.  Obwohl, was ist, wenn
 der Username leer ist?  Ein zweiter Versuch:
 
@@ -96,10 +96,11 @@ makeUser name email role
   | otherwise        = Left "not a valid email"
 ```
 
-Etwas besser.  Was ist, wenn sowohl der `name` leer ist als auch die
-`email` kein `'@'` enthält?  Wir wollen schließlich alle Fehler
-wissen, nicht nur den ersten.  Das heißt aber auch, dass wir eine
-andere Signatur brauchen (mit einer Liste von Fehlern für `Left`).
+Das ist etwas besser.  Was ist, wenn sowohl der `name` leer ist als
+auch die `email` kein `'@'` enthält?  Wir wollen schließlich alle
+Fehler wissen, nicht nur den ersten.  Das heißt aber auch, dass wir
+eine andere Signatur brauchen (mit einer Liste von Fehlern für
+`Left`).
 
 ```haskell
 type Error = String
@@ -130,16 +131,16 @@ Allerdings -- denke ich -- haben wir etwas darüber gelernt, was wir
 eigentlich wollen:
 
 1. Wir wollen jede Validierungen für sich durchführen können
-2. Wir wollen mehrere Validierungen aneinanderhängen können
+2. Wir wollen mehrere Validierungen kombinieren können
 3. Wir wollen eine Validierungsfunktion schreiben, die genau dann ein
-   validiertes Ergebnis zurück gibt, wenn alles in Ordnung ist
+   validiertes Ergebnis zurückgibt, wenn alles in Ordnung ist
    **oder** eine Liste **aller** Fehler, falls etwas nicht stimmt.
    
 # Validierungsfunktionen
 
 Um dem Ganzen etwas Struktur zu geben, definieren wir zuerst einen
-eigenen Datentyp der unseren Validierungsergebnissen entspricht.  So
-ein Ergebnis ist eines der Folgenden:
+eigenen Datentyp der unseren Validierungsergebnissen entspricht.  Ein
+solches Ergebnis ist eines der folgenden:
 
 - Eine erfolgreiche Validierung (`Ok <wert>`) eines Wertes, oder
 - eine Liste von Fehlern, die bei der Validierung auftraten (`Fail
@@ -160,7 +161,7 @@ Unsere `Validation` repräsentiert das Ergebnis einer Validierung.  Sie
 ist parameterisiert über den Typ eines Kandidatenwerts `c`.  Damit
 lassen sich Validierungen für Werte beliebigen Typs angeben.
 
-Als nächstes schreiben wir ein paar Funktionen, die unsere
+Als Nächstes schreiben wir ein paar Funktionen, die unsere
 Validierungen von oben darstellen:
 
 ```haskell
@@ -207,8 +208,8 @@ validateUserRole "unknown"
 ```
 
 Punkt eins (jede Validierung für sich durchführen) ist damit abgehakt.
-Jetzt wollen wir allerdings mehrere Ergebnisse aneinanderhängen (oder
-kombinieren).
+Jetzt wollen wir allerdings mehrere Ergebnisse miteinander
+kombinieren.
 
 ## Kombinieren von Ergebnissen
 
@@ -226,7 +227,7 @@ Der Haskellcompiler ist natürlich noch unzufrieden: Was ist, wenn
 links, rechts oder sogar an beiden Stellen der Funktion ein `Ok`
 steht?
 
-Unsere dritte Anforderungen meint: *Entweder* ein valides Ergebnis
+Unsere dritte Anforderungen fordert: *Entweder* ein valides Ergebnis
 oder *alle* Fehler.  Mit nur einem `Fail` auf der linken Seite wissen
 wir schon, dass es nur noch auf ein `Fail` hinauslaufen kann, auch
 wenn rechts ein Erfolg steht.  Also lassen wir die rechte Seite in dem
@@ -240,7 +241,7 @@ combineValidations (Fail es) (Fail fs) = Fail (es ++ fs)  -- von oben
 combineValidations (Fail es) _ = Fail es
 ```
 
-Okay, wir haben zwei von vier Fällen abgedeckt -- soweit, so einfach.
+Okay, wir haben zwei von vier Fällen abgedeckt -- so weit, so einfach.
 Um den Haskellcomplier glücklich zu machen, brauchen wir noch zwei
 Fälle:
 
@@ -250,12 +251,12 @@ Fälle:
 Das klingt jetzt erst mal komisch, aber: Wir funktionalen
 Programmierer:innen haben nicht so fürchterlich viele Werkzeuge zur
 Verfügung.  Wir können Funktionen mit Argumenten zu füttern und zu
-schauen, was rauskommt (oder im Fall von Haskell so lange probieren,
-bis der Compiler sein Okay gibt).  Uns bleibt an dieser Stelle also
-nicht viel anderes übrig, als einfach so zu tun, als stünde links ein
-`Ok` dessen Wert eine Funktion ist, die weiß, was mit dem Wert rechts
-zu tun ist.  Wenn wir das einmal kurz schlucken, können wir uns dafür
-eine kleine Hilfsfunktion schreiben.
+schauen, was das Ergebnis ist (oder im Fall von Haskell so lange
+probieren, bis der Compiler sein *Okay* gibt).  Uns bleibt an dieser
+Stelle also nicht viel anderes übrig, als einfach so zu tun, als
+stünde links ein `Ok` dessen Wert eine Funktion ist, die weiß, was mit
+dem Wert rechts zu tun ist.  Wenn wir das einmal kurz schlucken,
+können wir uns dafür eine kleine Hilfsfunktion schreiben.
 
 ```haskell
 applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
@@ -307,10 +308,10 @@ eine Funktion im `Ok`.  Um auch das Problem aus der Welt zu schaffen,
 nehmen wir einen letzten Umweg.
 
 Stellen wir uns vor, wir haben eine Validierung links, die, kombiniert
-mit einer Validierung rechts, immer das rechte Ergebnis zurück gibt.
-Haskell bietet uns schon die Funktion `id : a -> a` an, die immer
-exakt ihr Argument zurück gibt.  Wickeln wir das in ein `Ok`, sieht
-das Ganze so aus.
+mit einer Validierung rechts, immer das rechte Ergebnis zurückgibt.
+Haskell bietet uns schon die Funktion `id : a -> a` an, deren Ergebnis
+immer exakt ihr Argument ist.  Wickeln wir das in ein `Ok`, sieht das
+Ganze so aus.
 
 ```haskell
 (Ok id) `combineValidations` validateNonemptyString ""
@@ -320,7 +321,7 @@ das Ganze so aus.
 ```
 
 Hilft uns das?  Ein bisschen.  Eigentlich ist es nämlich egal, welche
-Funktion im `Ok` steckt.  Wir können also ganz allgemein aus jeder
+Funktion in `Ok` steckt.  Wir können also ganz allgemein aus jeder
 Funktion eine Validierung machen:
 
 ```haskell
@@ -474,7 +475,7 @@ sind erfüllt.  Wir wollen
    Ergebnis zurück gibt, wenn alles in Ordnung ist **oder** eine Liste
    **aller** Fehler, falls etwas nicht stimmt -> mit `validateUser`
 
-Der Praxisteil ist damit beendet.  Wir haben uns angesehen, wir wir
+Der Praxisteil ist damit beendet.  Wir haben uns angesehen, wie wir
 komponierbare Validierungsfunktionen für beliebige Datentypen
 schreiben können, wie man sie miteinander verknüpft und dabei sicher
 sein kann, wirklich alle Fehler mitzunehmen.
@@ -524,7 +525,7 @@ instance Functor Validation where
   -- fmap = applyOkFunctionToValidation
 ```
 
-Mit diesem Wissen bewaffnet, können wir eine erste kleine Änderungen
+Mit diesem Wissen ausgerüstet, können wir eine erste kleine Änderungen
 am Code von oben durchführen.
 
 ```haskell
@@ -575,7 +576,7 @@ instance Applicative Validation where
   (<*>) = combineValidations
 ```
 
-Un zu guter Letzt:
+Und zu guter Letzt:
 
 ```haskell
 validateUser :: String -> String -> String -> Validation User
