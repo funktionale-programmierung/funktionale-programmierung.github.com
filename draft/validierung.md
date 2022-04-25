@@ -20,7 +20,7 @@ Heute beschäftigen wir uns mit dem Thema *Datenvalidierung* und
 zeigen, wie *applikative Funktoren* dabei helfen, Ungereimtheiten in
 Daten systematisch aufzusammeln und zu verwerten.
 
-# JSON möchte validiert werden
+# Wir wollen JSON validieren
 
 Webservices kommunizieren gerne in Form von JSON-Objekten miteinander,
 die von User:innen und anderen Serivces in unserer Applikation landen.
@@ -78,8 +78,8 @@ type Error = String
 
 makeUser :: String -> String -> Role -> Either Error User
 makeUser name email role
-  | '@' `elem` email = Right $ User name email role
-  | otherwise        = Left  $ "not a valid email"
+  | '@' `elem` email = Right (User name email role)
+  | otherwise        = Left  "not a valid email"
 ```
 
 Super, Problem gelöst.  Wenn alles glatt läuft, bekommen wir einen
@@ -92,7 +92,7 @@ type Error = String
 makeUser :: String -> String -> Role -> Either Error User
 makeUser name email role
   | null name        = Left "not a nonempty string"
-  | '@' `elem` email = Right $ User name email role
+  | '@' `elem` email = Right (User name email role)
   | otherwise        = Left "not a valid email"
 ```
 
@@ -107,9 +107,9 @@ type Errors = [Error]
 
 makeUser :: String -> String -> UserRole -> Either Errors User
 makeUser name email role =
-  let nameOk = not $ null name
+  let nameOk = not (null name)
       emailOk = '@' `elem` email
-      rightUser = Right $ User name email role
+      rightUser = Right (User name email role)
   in
     if nameOk && emailOk
     then rightUser
@@ -142,7 +142,12 @@ eigenen Datentyp der unseren Validierungsergebnissen entspricht.  So
 ein Ergebnis ist eines der Folgenden:
 
 - Eine erfolgreiche Validierung (`Ok <wert>`) eines Wertes, oder
-- eine Menge an Fehlern, die bei der Validierung auftraten (`Fail Errors`).
+- eine Liste von Fehlern, die bei der Validierung auftraten (`Fail
+  Errors`).  Warum eine Liste?  Stellen wir uns die Validierung eines
+  Webformulars mit mehr als einem Formularfeld vor.  Es würde nerven,
+  immer nur einen Fehler gesagt zu bekommen, um nach dessen Korrektur
+  den nächsten Fehler zu sehen.  Wir möchten darum lieber alle Fehler
+  auf ein mal haben.
 
 ```haskell
 type Errors = [String]
@@ -260,7 +265,7 @@ applyOkFunctionToValidation _ (Fail es) = Fail es
 -- in den Erfolg eingewickelt ist und wenden `f` darauf an.  Wenn man
 -- sich die Typsignatur anschaut, bleibt (außer der trivialen Lösung)
 -- auch nicht viel anderes übrig.
-applyOkFunctionToValidation f (Ok c) = Ok $ f c
+applyOkFunctionToValidation f (Ok c) = Ok (f c)
 ```
 
 Was steht hier?  Unter der Annahme, dass wir aus einem `Ok` auf der
@@ -285,7 +290,7 @@ kann benutzt werden.
 ```haskell
 applyOkFunctionToValidation :: (a -> b) -> Validation a -> Validation b
 applyOkFunctionToValidation _ (Fail es) = Fail es
-applyOkFunctionToValidation f (Ok c) = Ok $ f c
+applyOkFunctionToValidation f (Ok c) = Ok (f c)
 
 combineValidations :: Validation (a -> b) -> Validation a -> Validation b
 combineValidations (Fail es) (Fail fs) = Fail (es ++ fs)
@@ -440,11 +445,12 @@ Presto!  Alles in Ordnung.  Analog für den Fall, dass Fehler auftreten
 (Fail ["not an email" "not a role"])
 ```
 
-Was uns hier im Hintegrund hilft, ist, dass Haskell Funktionen
-partiell anwenden kann.  Das heißt eine Funktion mit drei Argumenten
-hat, wenn wir ein Argument anwenden, eine Funktion mit zwei Argumenten
-als Ergebnis.  In Sprachen, in denen das nicht der Fall ist (wie zum
-Beispiel Clojure) müssen wir uns ein bisschen mehr anstrengen.
+Was uns hier im Hintegrund hilft, ist, dass in Haskell Funktionen
+partiell angewendet werden können.  Das heißt eine Funktion mit drei
+Argumenten hat, wenn wir ein Argument anwenden, eine Funktion mit zwei
+Argumenten als Ergebnis.  In Sprachen, in denen das nicht der Fall ist
+(wie zum Beispiel Clojure) müssen wir uns ein bisschen mehr
+anstrengen.
 
 Damit haben wir tatsächlich alles an der Hand, um unsere
 Validierungsfunktion zu schreiben:
@@ -513,7 +519,7 @@ Funktor ist:
 ```haskell
 instance Functor Validation where
   fmap _ (Fail es) = Fail es
-  fmap f (Ok c)    = Ok $ f c
+  fmap f (Ok c)    = Ok (f c)
   -- oder einfacher
   -- fmap = applyOkFunctionToValidation
 ```
@@ -582,8 +588,8 @@ validateUser name email role =
 Netterweise bekommen wir (wie schon beim `Functor`) alles geschenkt,
 was sonst noch für applikative Funktoren zu haben ist.  Nur ein
 kleines Beispiel: der `<$>`-Operator (`(<$>) :: Functor f => (a -> b)
--> f a -> f b` oder auch `fmap` für Applikative Funktoren) macht die
-Validierung noch ein kleines bisschen hübscher:
+-> f a -> f b,` wobei `(<$>) = fmap`) macht die Validierung noch ein
+kleines bisschen hübscher:
 
 ```haskell
 validateUser email name role =
