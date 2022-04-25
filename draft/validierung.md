@@ -110,10 +110,9 @@ makeUser :: String -> String -> UserRole -> Either Errors User
 makeUser name email role =
   let nameOk = not (null name)
       emailOk = '@' `elem` email
-      rightUser = Right (User name email role)
   in
     if nameOk && emailOk
-    then rightUser
+    then Right (User name email role)
     else
       if nameOk && not emailOk
       then Left ["not a valid email"]
@@ -436,7 +435,7 @@ Presto!  Alles in Ordnung.  Analog für den Fall, dass Fehler auftreten
 (Fail ["not an email"])
   `combineValidations` (validateUserRole "dummy")
 
-=> Und haben wir erst mal den Fehler, sammeln wir die restilchen Fehler nur noch zusammen.
+=> Und haben wir erst mal den Fehler, sammeln wir die restlichen Fehler nur noch zusammen.
 
 (Fail ["not an email"])
   `combineValidations` (Fail ["not a role"])
@@ -643,6 +642,9 @@ Programmierpraxis vorgestellt.  Dazu haben wir einen applikativen
 Funktor verwendet und gezeigt, dass wir damit sehr einfach
 Teilergebnisse miteinander kombinieren können und so immer genau
 Bescheid wissen, was alles falsch lief.
+
+Der begleitende Quellcode für diesen Artikel [ist auf
+Github](https://github.com/neshtea/applikative-validierung) zu finden.
 
 # Wichtiger Nachklapp
 
