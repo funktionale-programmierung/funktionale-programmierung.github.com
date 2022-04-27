@@ -649,7 +649,7 @@ Github](https://github.com/neshtea/applikative-validierung) zu finden.
 # Wichtiger Nachklapp
 
 Noch eine Bemerkung zum Thema Typklassen und Signaturen.  Nur weil die
-Signaturen von Funktionen so aussehen, als könnten Sie zu einer
+Signaturen von Funktionen so aussehen, als könnten sie zu einer
 Typklasse passen, heißt das noch lange nicht, dass daraus auch eine
 *korrekte* Typklasse wird.  Eine solche Klasse besteht in der Regel
 aus:
