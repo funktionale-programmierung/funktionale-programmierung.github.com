@@ -66,7 +66,7 @@ solche Invariante (*"jede Emailadresse enthält ein "@"-Symbol"*) zu
 ignorieren.  Wir müssen die Daten also irgendwie validieren, bevor sie
 weiter ins System eindringen.
 
-Wir könnten natürlich, einen Konstruktor für `User` zu schreiben, der
+Wir könnten natürlich einen Konstruktor für `User` schreiben, der
 solche Fehler abfängt.  Wir benutzen für das Ergebnis `Either a b =
 Left a | Right b`.  Dabei gilt:
 
@@ -249,7 +249,7 @@ Fälle:
 
 Das klingt jetzt erst mal komisch, aber: Wir funktionalen
 Programmierer:innen haben nicht so fürchterlich viele Werkzeuge zur
-Verfügung.  Wir können Funktionen mit Argumenten zu füttern und zu
+Verfügung.  Wir können Funktionen mit Argumenten füttern und
 schauen, was das Ergebnis ist (oder im Fall von Haskell so lange
 probieren, bis der Compiler sein *Okay* gibt).  Uns bleibt an dieser
 Stelle also nicht viel anderes übrig, als einfach so zu tun, als
