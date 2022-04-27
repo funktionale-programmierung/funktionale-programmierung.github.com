@@ -32,7 +32,8 @@ sein.
 Artikel zu diesen Themen können Sie in den nächsten Wochen und Monaten
 erwarten:
 
-- Datenvalidierung mit applikativen Funktoren
+- [Datenvalidierung mit applikativen
+  Funktoren](/2022/04/26/validierung-mit-applikativen-funktoren.html)
 - Pretty-Printing II: Laziness FTW
 - Type-Lambdas in Scala 3
 - Deep Learning mit ConCat
