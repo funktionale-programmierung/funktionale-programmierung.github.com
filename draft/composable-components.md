@@ -69,7 +69,7 @@ mithilfe der Kombinatoren `comp` bzw. `juxt`.
 ## Webkomponenten
 
 Soviel zur Funktionskomposition, die recht einfach ist wenn man sich
-auf einstellige Funktionen beschränkt. Ausserdem ist das einzige was
+auf einstellige Funktionen beschränkt. Außerdem ist das einzige was
 Funktionen bei Benutzung "leisten", einmalig aus einem Argument ein
 Ergebnis zu berechnen. In diesem Artikel soll es ja aber um die
 Komposition von Webkomponenten gehen. Unter Webkomponenten versteht
@@ -82,7 +82,7 @@ Man kann Webkomponenten daher als etwas betrachten, das wiederholt mit
 neuen Daten "aufgerufen" wird, und, losgelöst davon, mehrfach neue
 Daten zurückgeben kann.[^events] Das kann im Allgemeinen sehr komplex
 sein: die eine Komponente hat zwei Eingaben und drei Werte die durch
-sie verändert werden sollen, die nächste 2 Eingaben und eine
+sie verändert werden sollen, die nächste zwei Eingaben und eine
 "Ausgabe". Dies führt in der Praxis zu sehr spezifischen Komponenten
 mit sehr viel langweiligem "Boilerplate-Code" und geringer
 Wiederverwendbarkeit. Analog zu Funktionen, können wir diese
@@ -91,7 +91,7 @@ ermöglichen.
 
 Dazu definieren wir Komponenten als etwas mit nur einer Eingabe und
 einem "Rückgabewert" oder Ausgabe, vom selben Typ. Da Rückgaben mehr
-als einmal möglich sein sollen (ggf. sogar 0 mal), modellieren wir die
+als einmal möglich sein sollen (ggf. sogar null mal), modellieren wir die
 Rückgabe mit einem Callback, der mehrfach von der Komponente
 aufgerufen werden kann um einen neuen Wert zu signalisieren. Eine
 einfache Komponente zur Modifikation eines Strings durch den User kann
