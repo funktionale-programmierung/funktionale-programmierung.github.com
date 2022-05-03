@@ -62,6 +62,7 @@ PLATFORMS
   x86_64-darwin
   x86_64-darwin-17
   x86_64-linux
+  arm64-darwin-20
 
 DEPENDENCIES
   jekyll
