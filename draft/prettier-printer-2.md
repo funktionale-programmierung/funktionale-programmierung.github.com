@@ -1,7 +1,7 @@
 ---
 layout: post
-description: "A prettier printer -- implementation details"
-title: "Pretty-Printing -- Laziness FTW"
+description: "A prettier printer &mdash; implementation details"
+title: "Pretty-Printing II &mdash; Laziness FTW"
 author: kaan-sahin
 tags: ["pretty", "print", "printing", "haskell", "wadler"]
 ---
@@ -18,8 +18,8 @@ Wadler](http://homepages.inf.ed.ac.uk/wadler/)s Paper "A prettier printer"
 (1997) angeschaut und verstanden, wie wir allein mit seinen sechs Operatoren
 eine Dokumentensprache beschreiben und damit schöne Pretty-Prints erstellen
 können. In diesem Post wollen wir uns die eigentliche Implementierung ansehen
-und verstehen, warum -- trotz der Erzeugung von Tausenden bis Millionen
-möglichen Layouts -- der Algorithmus sehr effizient ist.
+und verstehen, warum &mdash trotz der Erzeugung von vielen möglichen Layouts
+&mdash der Algorithmus sehr effizient ist.
 
 <!-- more start -->
 
@@ -98,8 +98,8 @@ doc = Text "Hallo!"
 
 ### Operatoren unter die Lupe
 
-Da die Beschreibung eines Dokuments so simpel ist, ist es auch genau so simpel,
-diese in tatsächlichen Text -- also eine ausdruckbare Zeichenkette -- zu
+Da die Beschreibung eines Dokuments so simpel ist, ist es auch genauso simpel,
+diese in tatsächlichen Text &mdash also eine ausdruckbare Zeichenkette &mdash zu
 überführen. `layout` muss nur wissen, wie es aus `Text`-, `Line`- und
 `Nil`-Objekten (?Werten?) einen String macht:
 
@@ -158,10 +158,10 @@ doc3 = text "Hallo" <> line <> line
                   <> nest 2 (line <> text "- enthalten"))
 ```
 
-### Von einem Dokument zu mehreren -- `group`
+### Von einem Dokument zu mehreren &mdash; `group`
 
 Die Operatoren zur Beschreibung eines Dokuments wären geschafft! Wie im
-vorherigen Blogpost erwähnt, spielt `group` eine wichtige Rolle: Mit `group`
+vorherigen Blogpost erwähnt, spielt `group` eine wichtige Rolle: mit `group`
 lassen sich alternative Layouts eines Dokuments erstellen. Dafür haben wir
 damals die Definition von `Doc`, ohne es im Code aufzuschreiben, erweitert: Ein
 Dokument kann jetzt auch eine Sammlung mehrerer (äquivalenter!) Dokumente sein.
@@ -190,8 +190,7 @@ doc <> (Union doc1 doc2) = Union (doc <> doc1) (doc <> doc2)
 übergebenen Dokument, und einem dem übergebenen *äquivalenten* Dokument zurück.
 Im zweiten Dokument werden alle Umbrüche und Einrückungen entfernt und durch
 Leerzeichen ersetzt. "Äquivalent" meint hier also "gleich bis auf
-Umbrüche/Einrückung". Wir implementieren `group` mit Hilfe zweier
-Hilfsfunktionen:
+Umbrüche/Einrückung". Wir implementieren `group` mit zwei Hilfsfunktionen:
 
 ```haskell
 (<|>) :: Doc -> Doc -> Doc
@@ -216,9 +215,9 @@ doc1 <|> doc2 = Union doc1 doc2
 Leerzeichen:
 
 ```haskell
-flatten Nil = Nil
-flatten (Text str doc) = Text str (flatten doc)
-flatten (Line n doc) = Text " " (flatten doc)
+flatten Nil               = Nil
+flatten (Text str doc)    = Text str (flatten doc)
+flatten (Line n doc)      = Text " " (flatten doc)
 flatten (Union doc1 doc2) = flatten doc1
 ```
 
@@ -242,40 +241,127 @@ Endnutzerin nicht zur Verfügung stellen, und `group` durch seine Definition die
 obige Bedingung an `Union` erfüllt, muss beim Benutzen des Pretty-Printers der
 Bedingung keine Achtung gegeben werden.
 
-## Aus der Masse die Klasse
+## Aus der Masse die Klasse -- das Beste unter vielen
 
-Um ein Gefühl dafür zu bekommen, wie so eine große Anzahl an Dokumenten, die
-erzeugt werden, zustande kommt, hier ein einfaches Rechenbeispiel. Im letzten
-Blogpost haben wir uns die Funktion `xmlToDOC` angeschaut, die aus der
-Repräsentation eines XML-Elements eine Sammlung von Dokumenten erstellt. Hier
-sind zwei `group`-Aufrufe zu sehen und in `tagToDOC` versteckt sich noch ein
-dritter:
+Durch `group` entstehen also viele Layouts mit verschiedenen Anzahlen an
+Umbrüchen und Einrückungen. Jetzt müssen wir nur noch das beste aus diesen
+auswählen:
 
-```haskell
-xmlToDOC :: XML -> DOC
-xmlToDOC (Element name attributes xmls)
-      = group (tagToDOC name attributes
-               </> nest 2 (group line <> concatDOCs (map xmlToDOC xmls)) 
-               </> text "</" <> text name <> text ">")
-```
+> Das _beste_ hierbei ist das, das jede Zeile möglichst gut ausnutzt,
+> aber dennoch die vorgegebene Breite nicht überschreitet.
 
-Nehmen wir den einfachsten Fall an: Nur ein Element, das keine Kinder hat
-(`xmls` ist also eine leere Liste). Dann erzeugt `xmlToDOC` 6 Dokumente. Ein
-weiterer Fall: Ein Element mit zwei Kinderknoten: 
-
-Die Funktion `pretty` nimmt eine Maximalbreite und eine Dokumentensammlung
-entgegen und gibt das bestmögliche Dokument zurück (im Sinne von: überschreitet
-nicht die Maximalbreite aber nutzt die Zeilen größtmöglich aus). Dazu benötigen
-wir `best`, `better` und `fits`:
+Die Funktion `best` macht genau das. Sie benötigt als Parameter die vorgegebene
+Maximalbreite und die Anzahl an Zeichen, die auf der aktuellen Zeile schon
+verbraucht sind:
 
 ```haskell
 best :: Int -> Int -> Doc -> Doc
-best width charsLeft Nil               = Nil
-best width charsLeft (Text str doc)    = Text str (best width (charsLeft - (length str)) doc)
-best width charsLeft (Line n doc)      = Line n (best width (width - n) doc)
-best width charsleft (Union doc1 doc2) = better (best width charsLeft doc1)
-                                                (best width charsLeft doc2)
+best width charsUsed Nil               = Nil
+best width charsUsed (Text str doc)    = Text str (best width (charsUsed + length str) doc)
+best width charsUsed (Line n doc)      = Line n (best width (width - n) doc)
+best width charsUsed (Union doc1 doc2) = better width charsUsed
+                                                (best width charsUsed doc1)
+                                                (best width charsUsed doc2)
 ```
 
+Wir sehen, dass `best` höchst rekursiv ist, die Dokumente auseinander nimmt und
+jedes Objekt der Dokumentensprache untersucht. Interessant ist vor allem der
+`Union`-Fall. Hier wird mithilfe von `better` zwischen zwei möglichen Layouts
+entschieden. `better` ist eine einfache Verzweigung, die als Vergleichsoperator
+`fits` benutzt:
+
+```haskell
+better :: Int -> Int -> Doc -> Doc -> Doc
+better width charsUsed doc1 doc2 = if fits (width - charsUsed) doc1 then doc1 else doc2
+
+fits :: Int -> Doc -> Bool
+fits charsLeft _ | charsLeft < 0 = False
+fits _ Nil                       = True
+fits _ (Line _ doc)              = True
+fits charsLeft (Text str doc)    = fits (charsLeft - length str) doc
+```
+
+Damit haben wir nun alle Zutaten, um den Pretty-Printer fertigzustellen. Um ein
+Dokument schön auszudrucken, können wir `pretty` benutzen:
+
+```
+pretty :: Int -> Doc -> Doc
+pretty width doc = best width 0 doc
+```
+
+Sehr gut! Aber halt mal, der `best`-Algorithmus untersucht viele Dokumente und
+schaut darin auf jedes einzelne Objekt und steigt rekursiv ab und auf und ab und
+auf ... ist das nicht höchst ineffizient?
+
+## Faul but clever
+
+Tatsächlich ist der Algorithmus aus zwei Gründen dennoch effizient:
+
+1. die geschickte Implementierung von Dokumenten bzw. `Union`
+2. (Haskells) Laziness
+
+Zu Punkt 1: In der Definition von `better` entscheiden wir uns beim `if` direkt
+für das erste Dokument, wenn es auf die Maximalbreite passt. Warum ist das
+korrekt? Das allererste ("linkeste") Dokument ist das Dokument, das am meisten
+Platz auf den Zeilen ausnutzt, da wir bei `Union` oben eben genau das gefordert
+hatten! In gängigen Programmiersprachen ist `if` als "Kurzschlussauswertung"
+(short-circuit evaluation) implementiert, das heißt, wenn die Bedingung wahr
+ist, wird die Alternative erst gar nicht ausgewertet. Damit verschwinden bei uns
+auf einen Schlag etliche Dokumente, die gar nicht erst beachtet werden.
+
+Zu Punkt 2: Haskell macht nicht nur Kurzschlussauswertung, sondern geht noch
+viel weiter: es wertet alle Daten nur nach Bedarf aus. Man sagt dazu auch *Lazy
+Evaluation*. Das heißt bei uns, dass Dokumente oft gar nicht vollständig
+aufgebaut werden, sondern, da schon unterwegs klar ist, dass sie nicht auf die
+verfügbare Breite passen, direkt verworfen. Das können wir zum Beispiel bei
+`better` bzw. bei `fits` im Fall von `Text` sehen: wenn `(charsLeft - length)`
+kleiner als Null ist, wird `doc` nicht weiter ausgewertet, sondern direkt
+`False` zurückgegeben, und mit dem rechten Dokument weitergemacht.
+
+### Wir zählen `best`-Aufrufe
+
+Um einen Eindruck zu bekommen, wie viel Ersparnis sich durch die Laziness
+ergibt, schauen wir uns einen `pretty`-Aufruf mit eingeschalteter und
+ausgeschalteter Laziness an. Hierfür nehmen wir folgende, wirklich
+überschaubare, Clojure-Map her:
+
+```clojure
+{:aaa {:bb 1 :cccc {:aa 12}}
+ :ddd 24
+ :eeeee 122
+ :ff 12}
+```
+
+und pretty-printen sie mit einer Maximalbreite von 20 Zeichen. Heraus kommt:
+
+```clojure
+{:aaa {:bb 1
+       :cccc {:aa 12 }
+      }:ddd 24
+ :eeeee 122 :ff 12 }
+```
+
+Bei strikter Auswertung wurden hierfür 1640 rekursive Aufrufe von `best`
+benötigt! Mit Lazy Evaluation nur 120. Die große Map
+
+```clojure
+{:a {:a 0, :b 1, :c 2, :d 3, :e 4},
+ :b {:a 0, :b 1, :c 2, :d 3, :e 4},
+ :c {:a 0, :b 1, :c 2, :d 3, :e 4},
+ :d {:a 0, :b 1, :c 2, :d 3, :e 4},
+ :e {:a 0, :b 1, :c 2, :d 3, :e 4}}
+```
+
+zwingt bei strikter Auswertung das System sogar in die Knie und stürzt ab. Mit
+Lazy Evaluation sind es nur 636 rekursive Aufrufe.
+
+## Fazit
+
+Im heutigen Blogpost haben wir uns die Implementierung der algebraischen
+Operatoren des Pretty Printers von Philip Wadler angeschaut. Die rekursive
+Dokumentenstruktur hat es uns ermöglicht, kurzen, prägnanten, gut verständlichen
+Code zu schreiben. Haskells Bedarfsauswertung und die geschickte Wahl von
+Bedingungen an die Dokumentensammlungen machen den Algorithmus dabei nicht nur
+schlank, sondern auch noch sehr effizient.
 
 <!-- more end -->
