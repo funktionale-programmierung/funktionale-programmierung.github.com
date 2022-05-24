@@ -18,8 +18,8 @@ Wadler](http://homepages.inf.ed.ac.uk/wadler/)s Paper "A prettier printer"
 (1997) angeschaut und verstanden, wie wir allein mit seinen sechs Operatoren
 eine Dokumentensprache beschreiben und damit schöne Pretty-Prints erstellen
 können. In diesem Post wollen wir uns die eigentliche Implementierung ansehen
-und verstehen, warum &mdash trotz der Erzeugung von vielen möglichen Layouts
-&mdash der Algorithmus sehr effizient ist.
+und verstehen, warum &mdash; trotz der Erzeugung von vielen möglichen Layouts
+&mdash; der Algorithmus sehr effizient ist.
 
 <!-- more start -->
 
@@ -64,7 +64,7 @@ Doc = Nil
 ```
 
 Dabei besteht `Text` wiederum aus zwei Teilen: einem `String` (das ist eine
-Zeichenkette auf einer Zeile) und einem darauf folgendem weiteren Dokument. Ein
+Zeichenkette auf einer Zeile) und einem darauf folgenden weiteren Dokument. Ein
 `Line`-Element besteht ebenso aus zwei Teilen: einer Zahl `n`, die die
 Einrückung um `n` Zeichen beschreibt und einem weiteren Dokument. Wie wir sehen,
 ist die Definition von `Doc` rekursiv! Damit die Rekursion ein Ende finden kann,
@@ -83,7 +83,6 @@ Wir schreiben schöne Texte, die
 sieht als Dokument `Doc` so aus:
 
 ```haskell
-
 doc = Text "Hallo!" 
       (Line 0
        (Line 0
@@ -96,12 +95,12 @@ doc = Text "Hallo!"
               (Text "- enthalten" Nil)))))))))
 ```
 
-### Operatoren unter die Lupe
+### Operatoren unter der Lupe
 
 Da die Beschreibung eines Dokuments so simpel ist, ist es auch genauso simpel,
-diese in tatsächlichen Text &mdash also eine ausdruckbare Zeichenkette &mdash zu
+diese in tatsächlichen Text &mdash; also eine ausdruckbare Zeichenkette &mdash; zu
 überführen. `layout` muss nur wissen, wie es aus `Text`-, `Line`- und
-`Nil`-Objekten (?Werten?) einen String macht:
+`Nil`-Werten einen String macht:
 
 ```haskell
 layout :: Doc -> String
@@ -109,7 +108,6 @@ layout Nil               = ""
 layout (Text string doc) = string ++ layout doc
 layout (Line indent doc) = "\n" ++ (take indent $ repeat ' ') ++ layout doc
 ```
-
 
 Die drei Operatoren `nil`, `text` und `line` erzeugen entsprechende Dokumente so:
 
@@ -132,10 +130,9 @@ nest n (Line indent doc) = Line (n + indent) (nest n doc)
 ```
 
 Der geneigten Leserin fällt in der dritten Zeile eine auf den ersten Blick
-falsch erscheinende Definition auf: `nest` rückt `Text` nicht ein! Dies bringt
-den technischen Vorteil mit sich, nur einen Verknüpfungsoperator zu benötigen.
-Dafür benötigen wir jedoch einen expliziten Umbruch vor `Text`, um diesen
-tatsächlich einzurücken.
+falsch erscheinende Definition auf: `nest` erzeugt im `Text`-Fall kein
+`Line`-Element, rückt also `Text` nicht ein! Das heißt wir benötigen einen
+expliziten Umbruch vor `Text`, um diesen tatsächlich einzurücken.
 
 Um zwei Dokumente aneinanderzufügen, müssen wir schlussendlich noch `<>`
 definieren. Hier sehen wir, wie aus den "flachen" (assoziativen)
@@ -186,8 +183,8 @@ nest n (Union doc1 doc2) = Union (nest n doc1) (nest n doc2)
 doc <> (Union doc1 doc2) = Union (doc <> doc1) (doc <> doc2)
 ```
 
-`group` nimmt ein Dokument entgegen, und gibt eine Sammlung bestehend aus dem
-übergebenen Dokument, und einem dem übergebenen *äquivalenten* Dokument zurück.
+`group` nimmt ein Dokument entgegen und gibt eine Sammlung bestehend aus dem
+übergebenen Dokument sowie einem zum übergebenen *äquivalenten* Dokument zurück.
 Im zweiten Dokument werden alle Umbrüche und Einrückungen entfernt und durch
 Leerzeichen ersetzt. "Äquivalent" meint hier also "gleich bis auf
 Umbrüche/Einrückung". Wir implementieren `group` mit zwei Hilfsfunktionen:
@@ -200,8 +197,8 @@ flatten :: Doc -> Doc
 `<|>` übernimmt dabei den Job, zwei Dokumente zu einer Vereinigung von
 Dokumenten zu machen. Hierbei ist wichtig zu beachten: 
 
-> Die Dokumente haben eine Reihenfolge, links steht immer das Dokument, das in
-> der ersten Zeile *mehr* (oder gleich viele) Zeichen stehen hat, als das
+> Die Dokumente haben eine Reihenfolge: Links steht immer das Dokument, das in
+> der ersten Zeile *mehr* (oder gleich viele) Zeichen stehen hat als das
 > andere.
 
 Warum wir diese Ordnung benötigen, wird später ersichtlich. Die Implementierung
@@ -239,15 +236,15 @@ group doc = flatten doc <|> doc
 Hier bekommen wir direkt ein Geschenk: Dadurch, dass wir `flatten` und `<|>` der
 Endnutzerin nicht zur Verfügung stellen, und `group` durch seine Definition die
 obige Bedingung an `Union` erfüllt, muss beim Benutzen des Pretty-Printers der
-Bedingung keine Achtung gegeben werden.
+Bedingung keine Acht gegeben werden.
 
 ## Aus der Masse die Klasse -- das Beste unter vielen
 
 Durch `group` entstehen also viele Layouts mit verschiedenen Anzahlen an
-Umbrüchen und Einrückungen. Jetzt müssen wir nur noch das beste aus diesen
+Umbrüchen und Einrückungen. Jetzt müssen wir nur noch das Beste aus diesen
 auswählen:
 
-> Das _beste_ hierbei ist das, das jede Zeile möglichst gut ausnutzt,
+> Das _Beste_ hierbei ist das, das jede Zeile möglichst gut ausnutzt,
 > aber dennoch die vorgegebene Breite nicht überschreitet.
 
 Die Funktion `best` macht genau das. Sie benötigt als Parameter die vorgegebene
@@ -264,7 +261,7 @@ best width charsUsed (Union doc1 doc2) = better width charsUsed
                                                 (best width charsUsed doc2)
 ```
 
-Wir sehen, dass `best` höchst rekursiv ist, die Dokumente auseinander nimmt und
+Wir sehen, dass `best` höchst rekursiv ist, die Dokumente auseinandernimmt und
 jedes Objekt der Dokumentensprache untersucht. Interessant ist vor allem der
 `Union`-Fall. Hier wird mithilfe von `better` zwischen zwei möglichen Layouts
 entschieden. `better` ist eine einfache Verzweigung, die als Vergleichsoperator
@@ -272,7 +269,8 @@ entschieden. `better` ist eine einfache Verzweigung, die als Vergleichsoperator
 
 ```haskell
 better :: Int -> Int -> Doc -> Doc -> Doc
-better width charsUsed doc1 doc2 = if fits (width - charsUsed) doc1 then doc1 else doc2
+better width charsUsed doc1 doc2 =
+  if fits (width - charsUsed) doc1 then doc1 else doc2
 
 fits :: Int -> Doc -> Bool
 fits charsLeft _ | charsLeft < 0 = False
@@ -293,7 +291,7 @@ Sehr gut! Aber halt mal, der `best`-Algorithmus untersucht viele Dokumente und
 schaut darin auf jedes einzelne Objekt und steigt rekursiv ab und auf und ab und
 auf ... ist das nicht höchst ineffizient?
 
-## Faul but clever
+## Faul aber clever
 
 Tatsächlich ist der Algorithmus aus zwei Gründen dennoch effizient:
 
@@ -310,10 +308,10 @@ ist, wird die Alternative erst gar nicht ausgewertet. Damit verschwinden bei uns
 auf einen Schlag etliche Dokumente, die gar nicht erst beachtet werden.
 
 Zu Punkt 2: Haskell macht nicht nur Kurzschlussauswertung, sondern geht noch
-viel weiter: es wertet alle Daten nur nach Bedarf aus. Man sagt dazu auch *Lazy
-Evaluation*. Das heißt bei uns, dass Dokumente oft gar nicht vollständig
-aufgebaut werden, sondern, da schon unterwegs klar ist, dass sie nicht auf die
-verfügbare Breite passen, direkt verworfen. Das können wir zum Beispiel bei
+viel weiter: es wertet alle Daten nur nach Bedarf aus. Der Fachbegriff
+dazu lautet *Lazy Evaluation*. Das heißt bei uns, dass Dokumente oft gar nicht vollständig
+aufgebaut werden, sondern &mdash; da schon unterwegs klar ist, dass sie nicht auf die
+verfügbare Breite passen &mdash; direkt verworfen. Das können wir zum Beispiel bei
 `better` bzw. bei `fits` im Fall von `Text` sehen: wenn `(charsLeft - length)`
 kleiner als Null ist, wird `doc` nicht weiter ausgewertet, sondern direkt
 `False` zurückgegeben, und mit dem rechten Dokument weitergemacht.
@@ -360,7 +358,7 @@ Lazy Evaluation sind es nur 636 rekursive Aufrufe.
 Im heutigen Blogpost haben wir uns die Implementierung der algebraischen
 Operatoren des Pretty Printers von Philip Wadler angeschaut. Die rekursive
 Dokumentenstruktur hat es uns ermöglicht, kurzen, prägnanten, gut verständlichen
-Code zu schreiben. Haskells Bedarfsauswertung und die geschickte Wahl von
+Code zu schreiben. Haskells Lazy Evaluation und die geschickte Wahl von
 Bedingungen an die Dokumentensammlungen machen den Algorithmus dabei nicht nur
 schlank, sondern auch noch sehr effizient.
 
