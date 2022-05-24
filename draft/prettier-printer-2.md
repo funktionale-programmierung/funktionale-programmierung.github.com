@@ -106,7 +106,7 @@ diese in tatsächlichen Text &mdash; also eine ausdruckbare Zeichenkette &mdash;
 layout :: Doc -> String
 layout Nil               = ""
 layout (Text string doc) = string ++ layout doc
-layout (Line indent doc) = "\n" ++ (take indent $ repeat ' ') ++ layout doc
+layout (Line indent doc) = "\n" ++ replicate indent ' ' ++ layout doc
 ```
 
 Die drei Operatoren `nil`, `text` und `line` erzeugen entsprechende Dokumente so:
