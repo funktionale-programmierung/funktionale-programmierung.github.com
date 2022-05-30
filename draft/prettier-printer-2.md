@@ -31,7 +31,7 @@ gelesen zu haben. Begleitender Quellcode zum Pretty-Printer ist auf
 ## Wie funktioniert die Dokumentensprache?
 
 Zur Erinnerung hier noch einmal die sechs Operatoren, mit denen wir Dokumente
-beschreiben bzw. rendern können:
+beschreiben und rendern können:
 
 ```haskell
 (<>)       :: Doc -> Doc -> Doc
@@ -53,9 +53,9 @@ könnten wir bei Folgendem herauskommen:
 
 > Ein Text besteht aus Zeichenketten und Umbrüchen mit eventuellen Einrückungen.
 
-In Haskell-Code übertragen bedeutet das, dass `Doc` ein gemischter Datentyp aus
-`Text` und `Line` ist. Zusätzlich kommt noch, aus technischem Grund, das "leere"
-Dokument `Nil` hinzu:
+In Haskell kann man `Doc` durch einen gemischten Datentyp aus `Text` und `Line`
+ausdrücken. Zusätzlich kommt noch, aus technischem Grund, das "leere" Dokument
+`Nil` hinzu:
 
 ```haskell
 Doc = Nil
@@ -98,9 +98,8 @@ doc = Text "Hallo!"
 ### Operatoren unter der Lupe
 
 Da die Beschreibung eines Dokuments so simpel ist, ist es auch genauso simpel,
-diese in tatsächlichen Text &mdash; also eine ausdruckbare Zeichenkette &mdash; zu
-überführen. `layout` muss nur wissen, wie es aus `Text`-, `Line`- und
-`Nil`-Werten einen String macht:
+diese in eine ausdruckbare Zeichenkette &mdash; zu überführen. `layout` muss nur
+wissen, wie es aus `Text`-, `Line`- und `Nil`-Werten einen String macht:
 
 ```haskell
 layout :: Doc -> String
@@ -159,9 +158,11 @@ doc3 = text "Hallo" <> line <> line
 
 Die Operatoren zur Beschreibung eines Dokuments wären geschafft! Wie im
 vorherigen Blogpost erwähnt, spielt `group` eine wichtige Rolle: mit `group`
-lassen sich alternative Layouts eines Dokuments erstellen. Dafür haben wir
-damals die Definition von `Doc`, ohne es im Code aufzuschreiben, erweitert: Ein
-Dokument kann jetzt auch eine Sammlung mehrerer (äquivalenter!) Dokumente sein.
+lassen sich alternative Layouts eines Dokuments erstellen. Später wird dann aus
+diesen verschiedenen Layouts das beste ausgewählt. Für alternative Layouts haben
+wir damals die Definition von `Doc`, ohne es im Code aufzuschreiben, erweitert:
+Ein Dokument kann jetzt auch eine Sammlung mehrerer (äquivalenter!) Dokumente
+sein.
 
 Um das in unserer Definition widerzuspiegeln, bedarf es glücklicherweise nur
 einer weiteren Zeile:
@@ -361,5 +362,4 @@ Dokumentenstruktur hat es uns ermöglicht, kurzen, prägnanten, gut verständlic
 Code zu schreiben. Haskells Lazy Evaluation und die geschickte Wahl von
 Bedingungen an die Dokumentensammlungen machen den Algorithmus dabei nicht nur
 schlank, sondern auch noch sehr effizient.
-
 <!-- more end -->
