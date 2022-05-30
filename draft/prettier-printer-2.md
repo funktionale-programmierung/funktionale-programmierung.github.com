@@ -144,7 +144,7 @@ Line n doc <> doc2   = Line n (doc <> doc2)
 Nil <> doc           = doc
 ```
 
-Der Beispielparagraph von oben sieht mit Operatoren so aus:
+Der Beispielabsatz von oben sieht mit Operatoren so aus:
 
 ```haskell
 doc3 = text "Hallo" <> line <> line
@@ -221,7 +221,7 @@ flatten (Union doc1 doc2) = flatten doc1
 
 Die letzte Zeile ist besonders einfach, da wir ja oben gefordert haben, dass nur
 äquivalente Dokumente zu einer Sammlung von Dokumenten zusammengefasst werden
-dürfen. Damit gilt:
+dürfen. Damit gilt für zwei Dokumente aus einem `Union doc1 doc2`:
 
 ```haskell
 flatten doc1 = flatten doc2
@@ -236,8 +236,8 @@ group doc = flatten doc <|> doc
 
 Hier bekommen wir direkt ein Geschenk: Dadurch, dass wir `flatten` und `<|>` der
 Endnutzerin nicht zur Verfügung stellen, und `group` durch seine Definition die
-obige Bedingung an `Union` erfüllt, muss beim Benutzen des Pretty-Printers der
-Bedingung keine Acht gegeben werden.
+obige Bedingung an `Union` erfüllt, muss der Endnutzer beim Benutzen des
+Pretty-Printers der Bedingung keine Acht geben.
 
 ## Aus der Masse die Klasse -- das Beste unter vielen
 
@@ -302,7 +302,7 @@ Tatsächlich ist der Algorithmus aus zwei Gründen dennoch effizient:
 Zu Punkt 1: In der Definition von `better` entscheiden wir uns beim `if` direkt
 für das erste Dokument, wenn es auf die Maximalbreite passt. Warum ist das
 korrekt? Das allererste ("linkeste") Dokument ist das Dokument, das am meisten
-Platz auf den Zeilen ausnutzt, da wir bei `Union` oben eben genau das gefordert
+Platz auf den Zeilen ausnutzt, da wir bei `<|>` oben eben genau das gefordert
 hatten! In gängigen Programmiersprachen ist `if` als "Kurzschlussauswertung"
 (short-circuit evaluation) implementiert, das heißt, wenn die Bedingung wahr
 ist, wird die Alternative erst gar nicht ausgewertet. Damit verschwinden bei uns
