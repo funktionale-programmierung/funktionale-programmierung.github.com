@@ -1,7 +1,7 @@
 ---
 layout: post
-description: "A prettier printer &mdash; implementation details"
-title: "Pretty-Printing II &mdash; Laziness FTW"
+description: "A prettier printer - implementation details"
+title: "Pretty-Printing II - Laziness FTW"
 author: kaan-sahin
 tags: ["pretty", "printing", "haskell", "wadler", "laziness", "lazy"]
 ---
