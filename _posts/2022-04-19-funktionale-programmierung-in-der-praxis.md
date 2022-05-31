@@ -10,6 +10,9 @@ Programmierung in der Praxis".
 
 <!-- more start -->
 
+*Update 31. Mai 2022* Link zu "Pretty-Printing II: Lazyness FTW"
+hinzugefügt.
+
 > Funktionale Programmierung sieht ja schon cool aus, aber: Wie soll
 > das denn in der Praxis funktionieren?
 
@@ -34,7 +37,7 @@ erwarten:
 
 - [Datenvalidierung mit applikativen
   Funktoren](/2022/04/26/validierung-mit-applikativen-funktoren.html)
-- Pretty-Printing II: Laziness FTW
+- [Pretty-Printing II: Laziness FTW](/2022/05/30/prettier-printer-2.html)
 - Type-Lambdas in Scala 3
 - Deep Learning mit ConCat
 - Komponierbare UI-Komponenten
