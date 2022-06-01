@@ -47,7 +47,7 @@ Tupel packt.
 Ein wichtiges Merkmal der funktionalen Programmiersprachen ist, dass
 Funktionen "first class values" sind, d.h. sie sind genau wie Zahlen
 oder Strings _Werte_ der Programmiersprache. Und das wiederum
-bedeutet, dass man sogenannte /Higher-Order-Funktionen/ schreiben
+bedeutet, dass man sogenannte _Higher-Order-Funktionen_ schreiben
 kann. Das sind Funktionen die andere Funktionen als Argument erhalten,
 oder neue Funktionen erstellen und zurückgeben können. Damit kann man
 auch Funktionen schreiben, die eine bestimmte Art der
@@ -92,13 +92,13 @@ Dazu definieren wir Komponenten als etwas, das auf einem einzelnen
 Wert eines bestimmten Typs operiert. Die Komponente sollte dabei auf
 einen solchen Wert anzeigen können und, als Reaktion auf eine Aktion
 des Users, die Möglichkeit haben eine Änderung dieses Werts
-veranlassen. Dies entspricht in etwa den soganennaten /controlled
-components/ in React. Das ist ähnlich wie bei den Funktionen keine
+veranlassen. Dies entspricht in etwa den soganennaten _controlled
+components_ in React. Das ist genauso wie bei den Funktionen keine
 Einschränkung der Allgemeinheit von Komponenten, da aus mehreren
 Werten immer ein einzelner gemacht werden kann, und bei einer Änderung
 des Werts auch nur ein Teil aktualisiert werden kann. Außerdem kann
-eine Webkomponente auch /statisch/ sein, d.h. den aktuellen Wert
-ignorieren und dem User keine Änderung ermöglichen.
+eine Webkomponente auch _statisch_ sein, d.h. den aktuellen Wert
+ignorieren und dem User einfach keine Änderung ermöglichen.
 
 Eine einfache Komponente zur Modifikation eines Strings durch den User
 kann in diesem Modell dann z.B. so aussehen:
@@ -113,16 +113,13 @@ function textinput(value, onChange) {
 
 Zu beachten ist, dass die Funktion `textinput` selbst die Komponente
 darstellt, nicht deren Rückgabe! Jede Funktion die einen `value` und
-einen `onChange`-Callback als Argument haben, wollen wir als
-Komponente bezeichnen. Die Rückgabe dieser Funktion muß dann ein
-fertiges "React-Element" sein; in diesem Fall ein INPUT-Element.
+einen `onChange`-Callback als Argument hat, ist eine Komponente. Die
+Rückgabe dieser Funktion muß dann ein fertiges "React-Element" sein;
+in diesem Fall ein INPUT-Element.
 
-Solche Funktionen sind in React-Anwendungen gar nicht unüblich, aber
-man ist dort eben nicht auf nur eine Ein-/Ausgabe beschränkt. Dadurch
-gibt es allerlei "React-Komponenten", die nicht diesem Schema
-folgen. Die Festelegung, dass jede Komponente so aussehen muß,
-ermöglicht uns aber die Implementierung allgemein verwendbarer
-Kombinatoren und damit die einfache Komponierbarkeit.
+Die Festelegung, dass jede Komponente so aussehen muß, ermöglicht uns
+die Implementierung allgemein verwendbarer Kombinatoren und damit
+die einfache Komponierbarkeit.
 
 ### Komponierbarkeit
 
@@ -139,7 +136,7 @@ function cdiv(c1, c2) {
 ```
 
 Die Funktion `cdiv` ist dabei, analog zu den Funktions-Kombinatoren
-`comp` und `juxt` von oben, ein _Kombinator_ für Komponenten, die eine
+`comp` und `juxt` von oben, ein _Kombinator für Komponenten_, die eine
 neue Komponente auf Basis der beiden Komponenten `c1` und `c2`
 zurückgibt.
 
@@ -189,8 +186,8 @@ cdiv(focus('firstname', textinput),
      focus('lastname', textinput))
 ```
 
-Zu beachten ist dabei, dass diese Webkomponenten auch /referenziell
-transparent/ sind. D.h. obwohl die Komponente `textinput` hier zweimal
+Zu beachten ist dabei, dass diese Webkomponenten auch _referenziell
+transparent_ sind. D.h. obwohl die Komponente `textinput` hier zweimal
 verwendet wird, erhält man natürlich zwei separate Eingabefelder in
 der Webanwendung: die Komponenten haben keine Identität.
 
@@ -202,7 +199,7 @@ an:
 ```jsx
 function text(str) {
   function (value, onChange) {
-    return <React.Fragment>{str}</React.Fragment>
+    return <>{str}</>
   }
 }
 ```
