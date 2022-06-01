@@ -21,11 +21,11 @@ machen. Dabei kann es je nach Art dieser Dinge verschiedenste
 Möglichkeiten der Komposition geben.
 
 Ein klassisches Beispiel sind Funktionen. Wenn man sich auf einstellige
-Funktionen beschränkt, kann man diese z.B. leicht hintereinander als
+Funktionen beschränkt, kann man diese z.B. leicht hintereinander oder
 auch nebeneinander[^juxt] ausführen:
 
 ```javascript
-var f = function (x) { return g(h(x)); }       // hintereinader
+var f = function (x) { return g(h(x)); }       // hintereinander
 
 var f = function (x) { return [g(x), h(x)]; }  // nebeneinander
 ```
@@ -57,7 +57,7 @@ dabei oft `comp` (kurz für "compose"), die Nebeneinanderausführung oft
 function comp(g, h) {
   return function(x) { g(h(x)) }
 }
-var f = comp(g, h)   // hintereinader
+var f = comp(g, h)   // hintereinander
 
 function juxt(g, h) {
   return function(x) { [g(x), h(x)] }
@@ -189,7 +189,7 @@ cdiv(focus('firstname', textinput),
 
 Eine Komponente muß übrigens die obligatorische Eingabe oder den
 Callback gar nicht benutzen. Um zum Beispielt einfach nur einen
-statischen Text anzuzeigen, bietet sich folgende Definiton an:
+statischen Text anzuzeigen, bietet sich folgende Definition an:
 
 ```jsx
 function text(str) {
