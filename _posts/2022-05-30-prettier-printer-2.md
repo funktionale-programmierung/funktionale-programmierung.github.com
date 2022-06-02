@@ -98,7 +98,7 @@ doc = Text "Hallo!"
 ### Operatoren unter der Lupe
 
 Da die Beschreibung eines Dokuments so simpel ist, ist es auch genauso simpel,
-diese in eine ausdruckbare Zeichenkette &mdash; zu überführen. `layout` muss nur
+diese in eine ausdruckbare Zeichenkette zu überführen. `layout` muss nur
 wissen, wie es aus `Text`-, `Line`- und `Nil`-Werten einen String macht:
 
 ```haskell
