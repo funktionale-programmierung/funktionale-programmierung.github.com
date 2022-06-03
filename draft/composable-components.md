@@ -11,19 +11,19 @@ Webkomponenten_ vor, aufbauend auf der beliebten Bibliothek
 [React](https://reactjs.org/). Komponierbarkeit ist ein Schlüssel zu
 guter Testbarkeit und maximal wiederverwendbarem Code in der
 funktionalen Programmierung.  Grundkenntnisse in JavaScript und React
-werden vorrausgesetzt.
+werden vorausgesetzt.
 
 <!-- more start -->
 
 ## Funktionskomposition
 
 Unter Komposition versteht man in der funktionalen Programmierung ganz
-allgemein aus zwei Dingen einer Art ein Ding derselben Art zu
+allgemein aus zwei Dingen einer Art, ein Ding derselben Art zu
 machen. Dabei kann es je nach Art dieser Dinge verschiedenste
 Möglichkeiten der Komposition geben.
 
 Ein klassisches Beispiel sind Funktionen. Wenn man sich auf einstellige
-Funktionen beschränkt, kann man diese z.B. leicht hintereinander oder
+Funktionen beschränkt, kann man diese z. B. leicht hintereinander oder
 auch nebeneinander[^juxt] ausführen:
 
 ```javascript
@@ -40,12 +40,12 @@ von `g` und `h` zurückgegeben.
 
 Die Einschränkung auf einstellige Funktionen stellt dabei keine
 grundsätzliche Einschränkung der Ausdrucksstärke dar, da man jede
-Funktionen mit mehreren Argumenten immer in eine Funktion mit nur
-einem Argument umwandeln kann, indem man z.B. alle Argumente in ein
+Funktion mit mehreren Argumenten immer in eine Funktion mit nur
+einem Argument umwandeln kann, indem man z. B. alle Argumente in ein
 Tupel packt.
 
 Ein wichtiges Merkmal der funktionalen Programmiersprachen ist, dass
-Funktionen "first class values" sind, d.h. sie sind genau wie Zahlen
+Funktionen "first class values" sind, d. h. sie sind genau wie Zahlen
 oder Strings _Werte_ der Programmiersprache. Und das wiederum
 bedeutet, dass man sogenannte _Higher-Order-Funktionen_ schreiben
 kann. Das sind Funktionen die andere Funktionen als Argument erhalten,
@@ -73,7 +73,7 @@ mithilfe der Kombinatoren `comp` bzw. `juxt`.
 
 ## Webkomponenten
 
-Soviel zur Funktionskomposition, die recht einfach ist wenn man sich
+Soviel zur Funktionskomposition, die recht einfach ist, wenn man sich
 auf einstellige Funktionen beschränkt. In diesem Artikel soll es ja
 aber um die Komposition von Webkomponenten gehen. Als Webkomponente
 wollen wir hier einen Teil einer Webanwendung oder Webseite verstehen,
@@ -81,27 +81,27 @@ in die ein User über eine längere Zeit Eingaben tätigen kann, oder in
 der sich ändernde Informationen angezeigt werden.[^events]
 
 Das kann im Allgemeinen sehr komplex sein: die eine Komponente hat
-zwei Eingaben und drei Werte die durch sie verändert werden sollen,
+zwei Eingaben und drei Werte, die durch sie verändert werden sollen,
 die nächste zwei Eingaben und eine "Ausgabe". Dies führt in der Praxis
 zu sehr spezifischen Komponenten mit sehr viel langweiligem
 "Boilerplate-Code" und geringer Wiederverwendbarkeit. Analog zu
-Funktionen können wir diese Komplexität aber reduzieren um eine
+Funktionen können wir diese Komplexität aber reduzieren, um eine
 bessere Komponierbarkeit zu ermöglichen.
 
 Dazu definieren wir Komponenten als etwas, das auf einem einzelnen
 Wert eines bestimmten Typs operiert. Die Komponente sollte dabei auf
 einen solchen Wert anzeigen können und, als Reaktion auf eine Aktion
 des Users, die Möglichkeit haben eine Änderung dieses Werts
-veranlassen. Dies entspricht in etwa den soganennaten _controlled
-components_ in React. Das ist genauso wie bei den Funktionen keine
+veranlassen. Dies entspricht in etwa den sogenannten _controlled
+components_ in React. Das ist, genauso wie bei den Funktionen, keine
 Einschränkung der Allgemeinheit von Komponenten, da aus mehreren
 Werten immer ein einzelner gemacht werden kann, und bei einer Änderung
 des Werts auch nur ein Teil aktualisiert werden kann. Außerdem kann
-eine Webkomponente auch _statisch_ sein, d.h. den aktuellen Wert
-ignorieren und dem User einfach keine Änderung ermöglichen.
+eine Webkomponente auch _statisch_ sein, d. h. den aktuellen Wert
+ignorieren, und dem User einfach keine Änderung ermöglichen.
 
 Eine einfache Komponente zur Modifikation eines Strings durch den User
-kann in diesem Modell dann z.B. so aussehen:
+kann in diesem Modell dann z. B. so aussehen:
 
 ```jsx
 function textinput(value, onChange) {
@@ -112,12 +112,12 @@ function textinput(value, onChange) {
 ```
 
 Zu beachten ist, dass die Funktion `textinput` selbst die Komponente
-darstellt, nicht deren Rückgabe! Jede Funktion die einen `value` und
+darstellt, nicht deren Rückgabe! Jede Funktion, die einen `value` und
 einen `onChange`-Callback als Argument hat, ist eine Komponente. Die
-Rückgabe dieser Funktion muß dann ein fertiges "React-Element" sein;
+Rückgabe dieser Funktion muss dann ein fertiges "React-Element" sein;
 in diesem Fall ein INPUT-Element.
 
-Die Festelegung, dass jede Komponente so aussehen muß, ermöglicht uns
+Die Festlegung, dass jede Komponente so aussehen muss, ermöglicht uns
 die Implementierung allgemein verwendbarer Kombinatoren und damit
 die einfache Komponierbarkeit.
 
@@ -142,7 +142,7 @@ zurückgibt.
 
 In diesem Fall findet keine Änderung an den eingehenden oder
 ausgehenden Werten der Komponenten `c1` und `c2` statt. Die erzeugte
-Komponente gibt den Wert den sie bekommt direkt "nach unten" an `c1`
+Komponente gibt den Wert, den sie bekommt direkt "nach unten" an `c1`
 und `c2` weiter, und jede Änderung, egal von welcher Komponente, wird
 direkt "nach oben" durchgereicht.
 
@@ -187,12 +187,12 @@ cdiv(focus('firstname', textinput),
 ```
 
 Zu beachten ist dabei, dass diese Webkomponenten auch _referenziell
-transparent_ sind. D.h. obwohl die Komponente `textinput` hier zweimal
+transparent_ sind. D. h. obwohl die Komponente `textinput` hier zweimal
 verwendet wird, erhält man natürlich zwei separate Eingabefelder in
 der Webanwendung: die Komponenten haben keine Identität.
 
-Eine Komponente muß übrigens, wie oben erwähnt, die obligatorische
-Eingabe oder den Callback gar nicht benutzen. Um zum Beispielt einfach
+Eine Komponente muss übrigens, wie oben erwähnt, die obligatorische
+Eingabe oder den Callback gar nicht benutzen. Um zum Beispiel einfach
 nur einen statischen Text anzuzeigen, bietet sich folgende Definition
 an:
 
@@ -225,7 +225,7 @@ cdiv(focus('fistname', labelled_textinput("Vorname:"))
 
 Man beachte, dass die Verschachtelung hier eine andere ist als
 vorher. Die Komponenten, die von der Funktion `text` zurückgegeben
-werden, bekamen vorher einen Objekt als `value` übergeben, aber jetzt
+werden, bekamen vorher ein Objekt als `value` übergeben, aber jetzt
 einen String. Dadurch dass diese den Wert aber gar nicht benutzen oder
 modifizieren, kann man sie quasi beliebig mit anderen Komponenten
 kombinieren.
@@ -234,7 +234,7 @@ kombinieren.
 
 Wir haben jetzt also ein Modell für Komponenten gefunden, das uns
 wirklich _komponierbare Komponenten_ gibt, inklusive der Definition
-von Funktionen die Komponenten als Argumente erwarten oder neue
+von Funktionen, die Komponenten als Argumente erwarten oder neue
 Komponenten zurückgeben können. Dies reduziert Boilerplate-Code und
 schafft mächtige Abtraktionsmöglichkeiten.
 
