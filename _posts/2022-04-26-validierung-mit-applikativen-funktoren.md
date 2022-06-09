@@ -662,3 +662,10 @@ Haskell gibt uns leider nicht die richtigen Mittel an die Hand, um
 sicherzustellen, dass die jeweiligen Gesetze auch von der Instanz
 eingehalten werden.  Zu zeigen, dass unsere Instanzen korrekt sind,
 sprengt allerdings den Rahmen dieses ohnehin schon langen Posts.
+
+*Update 9. Juli 2022* Selbstverständlich hat die applikative
+Validierung nichts mit Haskell oder gar statischer Typisierung zu tun.
+Zu sehen ist das zum Beispiel in unserer Clojure-Bibliothek
+[`active-clojure` ()](https://github.com/active-group/active-clojure).
+Hier finden Sie eine Implementierung applikativer Funktoren in der
+dynamisch typsisierten Sprache [Clojure](https://clojure.org/).
