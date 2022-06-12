@@ -668,4 +668,4 @@ Validierung nichts mit Haskell oder gar statischer Typisierung zu tun.
 Zu sehen ist das zum Beispiel in unserer Clojure-Bibliothek
 [`active-clojure`](https://github.com/active-group/active-clojure#applicative-validation).
 Hier finden Sie eine Implementierung applikativer Funktoren in der
-dynamisch typsisierten Sprache [Clojure](https://clojure.org/).
+dynamisch typisierten Sprache [Clojure](https://clojure.org/).
