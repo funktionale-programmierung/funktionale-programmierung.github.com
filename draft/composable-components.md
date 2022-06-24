@@ -10,7 +10,7 @@ Dieser Artikel stellt ein Modell für wirklich _komponierbare
 Webkomponenten_ vor, aufbauend auf der beliebten Bibliothek
 [React](https://reactjs.org/). Komponierbarkeit ist ein Schlüssel zu
 guter Testbarkeit und maximal wiederverwendbarem Code in der
-funktionalen Programmierung.  Grundkenntnisse in JavaScript und React
+funktionalen Programmierung. Grundkenntnisse in JavaScript und React
 werden vorausgesetzt.
 
 <!-- more start -->
@@ -80,7 +80,7 @@ wollen wir hier einen Teil einer Webanwendung oder Webseite verstehen,
 in die ein User über eine längere Zeit Eingaben tätigen kann, oder in
 der sich ändernde Informationen angezeigt werden.[^events]
 
-Das kann im Allgemeinen sehr komplex sein: die eine Komponente hat
+Das kann im Allgemeinen sehr komplex sein: Die eine Komponente hat
 zwei Eingaben und drei Werte, die durch sie verändert werden sollen,
 die nächste zwei Eingaben und eine "Ausgabe". Dies führt in der Praxis
 zu sehr spezifischen Komponenten mit sehr viel langweiligem
@@ -241,7 +241,7 @@ schafft mächtige Abtraktionsmöglichkeiten.
 ## Reacl-c
 
 Die hier vorgestellten Implementierungen stellt nur die Grundidee für
-komponierbare Komponenten in vereinfachter Form dar.  Um produktiv
+komponierbare Komponenten in vereinfachter Form dar. Um produktiv
 einsetzbar zu sein, braucht es ein etwas verfeinertes Modell und noch
 eine ganze Reihe von Erweiterungen und Details in der Schnittstelle zu
 React, die den Umfang dieses Artikels sprengen würden. Wir, die Active
