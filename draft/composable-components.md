@@ -89,16 +89,16 @@ Funktionen können wir diese Komplexität aber reduzieren, um eine
 bessere Komponierbarkeit zu ermöglichen.
 
 Dazu definieren wir Komponenten als etwas, das auf einem einzelnen
-Wert eines bestimmten Typs operiert. Die Komponente sollte dabei auf
-einen solchen Wert anzeigen können und, als Reaktion auf eine Aktion
-des Users, die Möglichkeit haben eine Änderung dieses Werts
-veranlassen. Dies entspricht in etwa den sogenannten _controlled
-components_ in React. Das ist, genauso wie bei den Funktionen, keine
-Einschränkung der Allgemeinheit von Komponenten, da aus mehreren
-Werten immer ein einzelner gemacht werden kann, und bei einer Änderung
-des Werts auch nur ein Teil aktualisiert werden kann. Außerdem kann
-eine Webkomponente auch _statisch_ sein, d. h. den aktuellen Wert
-ignorieren, und dem User einfach keine Änderung ermöglichen.
+Wert eines bestimmten Typs operiert. Die Komponente sollte dabei einen
+solchen Wert anzeigen können und, als Reaktion auf eine Aktion des
+Users, eine Änderung dieses Werts veranlassen können. Dies entspricht
+in etwa den sogenannten _controlled components_ in React. Das ist,
+genauso wie bei den Funktionen, keine Einschränkung der Allgemeinheit
+von Komponenten, da aus mehreren Werten immer ein einzelner gemacht
+werden kann, und bei einer Änderung des Werts auch nur ein Teil
+aktualisiert werden kann. Außerdem kann eine Webkomponente auch
+_statisch_ sein, d. h. den aktuellen Wert ignorieren, und dem User
+einfach keine Änderung ermöglichen.
 
 Eine einfache Komponente zur Modifikation eines Strings durch den User
 kann in diesem Modell dann z. B. so aussehen:
