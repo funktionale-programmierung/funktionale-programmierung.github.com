@@ -38,9 +38,9 @@ erwarten:
 - [Datenvalidierung mit applikativen
   Funktoren](/2022/04/26/validierung-mit-applikativen-funktoren.html)
 - [Pretty-Printing II: Laziness FTW](/2022/05/30/prettier-printer-2.html)
-- Type-Lambdas in Scala 3
+- [Komponierbare UI-Komponenten](/2022/06/30/composable-components.html)
 - Deep Learning mit ConCat
-- Komponierbare UI-Komponenten
+- Type-Lambdas in Scala 3
 - Nix
 - Return of the DES, mit Polysemy
 - Effektvoll serviert: Polysemy und Servant
