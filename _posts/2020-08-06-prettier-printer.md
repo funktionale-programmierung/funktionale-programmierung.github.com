@@ -122,7 +122,7 @@ dem hier vorgestellten Pretty-Printer behandelt werden. Das wird dadurch
 ermöglicht, dass eine Metasprache für Dokumente, die schön ausgedruckt werden
 sollen, entwickelt wird. Dann erst wird für den Anwendungsfall bestimmt, wie man
 Objekte in diese Metasprache übersetzt. Die Vorgehensweise, eine beschreibende
-Zwischensprache zu entwerfen &mdash; eine sogenannte *domänenspezifische
+Zwischensprache zu entwerfen &ndash; eine sogenannte *domänenspezifische
 Sprache* (domain specific language im Englischen, kurz DSL), ist in der
 funktionalen Programmierung gang und gäbe. Im Blogpost
 [Systematisch eingebettete DSLs entwickeln in Clojure](https://funktionale-programmierung.de/2013/06/27/dsl-clojure.html)
