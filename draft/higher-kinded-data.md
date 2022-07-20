@@ -7,14 +7,14 @@ tags: ["higher-kinded data","haskell"]
 ---
 
 In diesem Artikel werden wir sehen, wie wir mit *Higher-Kinded Data* in Haskell
-Konfigurationen in unseren Programmen abbilden können.
+nutzen können, um Konfigurationen in unseren Programmen abzubilden.
 
 <!-- more start -->
 
 ## Erster Versuch ##
 
 Angenommen wir haben ein Programm, dass ein *Passwort*, die URL eines
-*Service* und dessen *Port* als Konfiguration benötigt.
+*Service*'s und dessen *Port* als Konfiguration benötigt.
 Diese Konfiguration könnten wir dann durch folgenden Datentype modelieren.
 
 ``` haskell
@@ -26,13 +26,13 @@ data Config = Config
   deriving (Show)
 `````````
 
-Angenommen die einzelnen Teile der Konfiguration sollen, zum Start des Programms,
+Wir nehmen an, dass die einzelnen Teile der Konfiguration, zum Start des Programms,
 aus Umgebungsvariablen ausgelesen werden. Wird eine Umgebungsvariable nicht gesetzt,
 oder kann der gegebene Wert nicht interpretiert werden, soll ein Standard-Wert
 verwendet werden. Zusätzlich muss das Passwort immer zur Laufzeit angegeben werden
 und besitzt deshalb keinen Standard-Wert.
 
-Die Funktion die all diese das umsetzt, könnte z.B. so aussehen:
+Die Funktion die all diese umsetzt, könnte z.B. so aussehen:
 
 ``` haskell
 getConfig :: IO Config
@@ -79,7 +79,7 @@ data Config' static dynamic = Config
 Wie wir sehen können wurden im Vergleich zum ersten `Config'` Datentyp zwei Typ-Parameter eingeführt.
 Diese markieren bestimme Felder als *dynamisch* oder *statisch*. Mit *dynamisch* ist gemeint, dass
 dies Feld nur zur Laufzeit einen Wert hat, *statische* Felder hingegen haben schon zur Compilezeit
-zugewiene Werte.
+zugewiesene Werte.
 
 Um diese Trennung auch auf Typ Ebene umzusetzten, definieren wir uns drei Typ-Aliase.
 
@@ -136,8 +136,9 @@ combineConfig
       (maybe defaultServicePort Identity port)
 ```
 
-`combineConfig` macht genau das, eine Konfiguration Feld für Feld zusammengesetzt. Dabei wird immer der Wert aus
-der `PartialConfig` dem aus der `DefaultConfig` vorgezogen.
+Die Funktion `combineConfig` macht genau das, sie setze eine Konfiguration Feld
+für Feld zusammen. Dabei wird immer der Wert aus der `PartialConfig` dem aus
+der `DefaultConfig` vorgezogen.
 
 Die Funktion `getConfig` nutzt dann nur die bisher definierten Funktionen.
 
@@ -149,12 +150,12 @@ getConfig = combineConfig defaultConfig <$> readinPartialConfig
 Mit unserer neuen Definition, des Konfigurations Datentyps, konnten wir einige Verbesserungen erzielen.
 An der Definition von `Config'` ist klar erkennbar, welche Felder Standard-Werte haben und welche nicht und
 es gibt einen Wert `defaultConfig` der alle diese Werte enthält.
-Leider ist der Code aber immernoch nicht wiederverwendbar. Für eine neue Konfiguration müssen wir immernoch
+Leider ist der Code immernoch nicht wiederverwendbar. Für eine neue Konfiguration müssen wir immernoch
 den Datentyp und alle Funktionen neu schreiben.
 
 ## Typfamilien zur Hilfe ##
 
-Um alle Probleme des vorherigen Ansatzes zu lösen, definieren wir uns eine `HKD` Typfamilie. So modelieren
+Um alle Probleme des vorherigen Ansatzes zu lösen, definieren wir uns die Typfamilie `HKD`. So modelieren
 wir das anwenden von Typfunktionen auf Typen.
 
 ``` haskell
@@ -165,7 +166,8 @@ type family HKD f a where
 ```
 
 Wir definieren das die Typfuntion `Identity` angewant auf einen Typ `a` immer den Typ `a` ergibt. Für alle
-anderen Typfuntionen `f` ist das Resultat einfach die Typfuntion angewant auf `a`, also `f a`. 
+anderen Typfuntionen `f` ist das Resultat einfach die Typfuntion angewant auf `a`, also `f a`.
+Durch diese Definition ersparen wir uns später unnötige aurufe von `Identity`.
 
 Unser Konfigurationstyp ist unverändert, bis auf den aufruf von `HKD` im Typ der einzelnen Felder. Außerdem
 müssen wir aus technischen Gründen noch eine Instanz der Typklasse `Generic` generieren lassen.
@@ -202,8 +204,8 @@ readinPartialConfig =
       <*> getPort
 ```
 
-Dadurch das wir bei der Definition von `Config'` die Typklasse `Generic` abgeleitet haben, haben wir jetzt die Funktion
-`genericApply` mit, dem im folgendem etwas vereinfachten, Typ zur Verfügung.
+Dadurch das wir bei der Definition von `Config'` die Typklasse `Generic` abgeleitet haben,
+steht uns jetzt die Funktion `genericApply`, mit dem im folgendem etwas vereinfachten Typ, zur Verfügung.
 
 ``` haskell
 genericApply :: c Identity Proxy -> c Maybe Identity -> c Identity Identity
@@ -238,8 +240,8 @@ Auch diese Definitionen können in die Bibliothek ausgelagert werden.
 ## Fazit ##
 
 Mit Hilfe von Typfunktionen und Higher-Kinded Data haben wir es geschafft, die Standard-Werte userer Konfiguration vom einlesen
-der dynamischen Werte zu trennen, wir konnten Typ Ebene klar machen welche Werte dynamisch und welche statisch bekannt sind und
-wir konnten das kombinieren von statischen und dynamischen Werten auslagern, sodass nur der interessante Teil neu geschrieben werden
+der dynamischen Werte zu trennen, wir konnten auf Typ Ebene klar machen welche Werte dynamisch und welche statisch bekannt sind und
+wir konnten die Funktion zu deren Kombination auslagern, sodass nur der interessante Teil neu geschrieben werden
 muss.
 
 <!-- more end -->
