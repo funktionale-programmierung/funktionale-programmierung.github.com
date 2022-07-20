@@ -6,7 +6,7 @@ author: felix-leitz
 tags: ["higher-kinded data","haskell"]
 ---
 
-In diesem Artikel werden wir sehen, wie wir mit *Higher-Kinded Data* in Haskell
+In diesem Artikel werden wir sehen, wie wir *Higher-Kinded Data* in Haskell
 nutzen können, um Konfigurationen in unseren Programmen abzubilden.
 
 <!-- more start -->
@@ -15,7 +15,7 @@ nutzen können, um Konfigurationen in unseren Programmen abzubilden.
 
 Angenommen wir haben ein Programm, dass ein *Passwort*, die URL eines
 *Service*'s und dessen *Port* als Konfiguration benötigt.
-Diese Konfiguration könnten wir dann durch folgenden Datentype modelieren.
+Diese Konfiguration könnten wir dann durch folgenden Datentyp modelieren.
 
 ``` haskell
 data Config = Config
@@ -24,7 +24,7 @@ data Config = Config
   , servicePort :: Int
   }
   deriving (Show)
-`````````
+```
 
 Wir nehmen an, dass die einzelnen Teile der Konfiguration, zum Start des Programms,
 aus Umgebungsvariablen ausgelesen werden. Wird eine Umgebungsvariable nicht gesetzt,
@@ -52,7 +52,7 @@ getUrl = lookupEnv "SERVICE_URL"
 
 getPort :: IO (Maybe Int)
 getPort = (readMaybe =<<) <$> lookupEnv "SERVICE_PORT"
-`````````
+```
 
 Wir sehen hier drei Hilfsfunktionen, die das einlesen und interpretieren der jeweiligen
 Teile der Konfiguration übernehmen. In der Funktion `getConfig` wird alles zusammengesetzt.
@@ -61,7 +61,7 @@ vereinigen der Standard-Werte mit den eingelesenen.
 
 Dieser Ansatz hat einige Probleme. Einerseits vermischt die Funktion `getConfig` das bauen
 der Konfiguration, das lesen der einzelnen Parameter und das zusammenbauen mit den
-Standart-Werten. Dies führt dazu, dass nicht direkt klar ist ob ein Feld einene Standard-Wert
+Standart-Werten. Dies führt dazu, dass nicht direkt klar ist ob ein Feld einen Standard-Wert
 hat und zusätzlich muss für den nächsten Konfigurations-Typ wieder alles neu geschrieben werden.
 
 ## Zweiter Versuch ##
@@ -76,7 +76,7 @@ data Config' static dynamic = Config
   }
 ```
 
-Wie wir sehen können wurden im Vergleich zum ersten `Config'` Datentyp zwei Typ-Parameter eingeführt.
+Wie wir sehen können, wurden im Vergleich zum ersten `Config'` Datentyp zwei Typ-Parameter eingeführt.
 Diese markieren bestimme Felder als *dynamisch* oder *statisch*. Mit *dynamisch* ist gemeint, dass
 dies Feld nur zur Laufzeit einen Wert hat, *statische* Felder hingegen haben schon zur Compilezeit
 zugewiesene Werte.
@@ -108,7 +108,7 @@ defaultConfig =
 Diese Definition enthält zwar nur die Werte die wir statisch kennen, allerdings sind hier noch störende
 aufrufe von `Proxy` und `Identity` nötig.
 
-Die Funktion die nun zur Laufzeit die Umgebungsvariablen einliest sieht wie folt aus:
+Die Funktion die nun zur Laufzeit die Umgebungsvariablen einliest sieht wie folgt aus:
 
 ``` haskell
 readinPartialConfig :: IO PartialConfig
@@ -165,11 +165,11 @@ type family HKD f a where
   HKD f a = f a
 ```
 
-Wir definieren das die Typfuntion `Identity` angewant auf einen Typ `a` immer den Typ `a` ergibt. Für alle
-anderen Typfuntionen `f` ist das Resultat einfach die Typfuntion angewant auf `a`, also `f a`.
-Durch diese Definition ersparen wir uns später unnötige aurufe von `Identity`.
+Wir definieren dass die Typfuntion `Identity` angewandt auf einen Typ `a` immer den Typ `a` ergibt. Für alle
+anderen Typfuntionen `f` ist das Resultat einfach die Typfuntion angewandt auf `a`, also `f a`.
+Durch diese Definition ersparen wir uns später unnötige Aurufe von `Identity`.
 
-Unser Konfigurationstyp ist unverändert, bis auf den aufruf von `HKD` im Typ der einzelnen Felder. Außerdem
+Unser Konfigurationstyp ist unverändert, bis auf den Aufruf von `HKD` im Typ der einzelnen Felder. Außerdem
 müssen wir aus technischen Gründen noch eine Instanz der Typklasse `Generic` generieren lassen.
 
 ``` haskell
@@ -211,7 +211,7 @@ steht uns jetzt die Funktion `genericApply`, mit dem im folgendem etwas vereinfa
 genericApply :: c Identity Proxy -> c Maybe Identity -> c Identity Identity
 ```
 
-Durch das ersetzen von der Typvariable `c` mit `Config'` erhalten wir den selben Typ wie für `combineConfig`.
+Durch das ersetzen der Typvariable `c` mit `Config'` erhalten wir den selben Typ wie für `combineConfig`.
 Damit haben wir alles um die Funktion `getConfig` zu bauen.
 
 ``` haskell
