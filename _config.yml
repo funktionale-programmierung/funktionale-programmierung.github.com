@@ -150,11 +150,11 @@ authors:
     href: 
     image: /author/hasse.jpg
     about: 'Sibylle ist Projektleiterin und Usability Engineer bei der <a href="https://www.active-group.de/">Active Group GmbH</a> in Tübingen.'
-  fp-staff:
-    name: Team
-    href: "https://funktionale-programmierung.de"
-    about: 'Das Team von <a href="https://funktionale-programmierung.de">Funktionale Programmierung</a>.'
   felix-leitz:
     name: Felix Leitz
     href: 
     about: 'Felix Leitz ist Software-Architekt bei der <a href="https://www.active-group.de/">Active Group GmbH</a> in Tübingen. Sein besonderes Interesse gilt der funktionalen Programmierung.'
+  fp-staff:
+    name: Team
+    href: "https://funktionale-programmierung.de"
+    about: 'Das Team von <a href="https://funktionale-programmierung.de">Funktionale Programmierung</a>.'

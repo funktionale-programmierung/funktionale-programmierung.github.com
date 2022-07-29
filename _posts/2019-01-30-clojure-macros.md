@@ -9,7 +9,7 @@ tags: ["Clojure", "Makro", "macro", "defmacro", "quote", "unquote", "backquote",
 *If you give someone Fortran, he has Fortran. If you give someone Lisp, he has any language he pleases.*
   ---Guy L. Steele
 
-Mit diesem &mdash; zugegebenermaßen provokanten &mdash; einführenden Zitat möchten wir Dir
+Mit diesem &ndash; zugegebenermaßen provokanten &ndash; einführenden Zitat möchten wir Dir
 das heutige Blogpost-Thema *Clojure Makros* näherbringen.
 Wir werden "Programme schreiben, die Programme schreiben"!
 
@@ -62,7 +62,7 @@ Schön, `(my-when true "Hallo Du")` liefert tatsächlich `"Hallo Du"` und
 `(my-when false "Hallo Du")` liefert `nil`.
 Doch Halt! Was passiert bei der Auswertung von
 `(my-when false (println "Ich sollte nicht geprintet werden"))`?
-Richtig, die Funktion druckt &mdash; trotz `false` als Bedingung &mdash;
+Richtig, die Funktion druckt &ndash; trotz `false` als Bedingung &ndash;
 den Satz "Ich sollte nicht geprintet werden" in die Konsole.
 
 Eine einfache Funktion erfüllt scheinbar unsere Anforderungen nicht ganz.

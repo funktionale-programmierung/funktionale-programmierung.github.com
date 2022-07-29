@@ -18,8 +18,8 @@ Wadler](http://homepages.inf.ed.ac.uk/wadler/)s Paper "A prettier printer"
 (1997) angeschaut und verstanden, wie wir allein mit seinen sechs Operatoren
 eine Dokumentensprache beschreiben und damit schöne Pretty-Prints erstellen
 können. In diesem Post wollen wir uns die eigentliche Implementierung ansehen
-und verstehen, warum &mdash; trotz der Erzeugung von vielen möglichen Layouts
-&mdash; der Algorithmus sehr effizient ist.
+und verstehen, warum &ndash; trotz der Erzeugung von vielen möglichen Layouts
+&ndash; der Algorithmus sehr effizient ist.
 
 <!-- more start -->
 
@@ -154,7 +154,7 @@ doc3 = text "Hallo" <> line <> line
                   <> nest 2 (line <> text "- enthalten"))
 ```
 
-### Von einem Dokument zu mehreren &mdash; `group`
+### Von einem Dokument zu mehreren &ndash; `group`
 
 Die Operatoren zur Beschreibung eines Dokuments wären geschafft! Wie im
 vorherigen Blogpost erwähnt, spielt `group` eine wichtige Rolle: mit `group`
@@ -311,8 +311,8 @@ auf einen Schlag etliche Dokumente, die gar nicht erst beachtet werden.
 Zu Punkt 2: Haskell macht nicht nur Kurzschlussauswertung, sondern geht noch
 viel weiter: es wertet alle Daten nur nach Bedarf aus. Der Fachbegriff
 dazu lautet *Lazy Evaluation*. Das heißt bei uns, dass Dokumente oft gar nicht vollständig
-aufgebaut werden, sondern &mdash; da schon unterwegs klar ist, dass sie nicht auf die
-verfügbare Breite passen &mdash; direkt verworfen. Das können wir zum Beispiel bei
+aufgebaut werden, sondern &ndash; da schon unterwegs klar ist, dass sie nicht auf die
+verfügbare Breite passen &ndash; direkt verworfen. Das können wir zum Beispiel bei
 `better` bzw. bei `fits` im Fall von `Text` sehen: wenn `(charsLeft - length)`
 kleiner als Null ist, wird `doc` nicht weiter ausgewertet, sondern direkt
 `False` zurückgegeben, und mit dem rechten Dokument weitergemacht.
