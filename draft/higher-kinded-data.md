@@ -6,8 +6,14 @@ author: felix-leitz
 tags: ["higher-kinded data","haskell"]
 ---
 
-In diesem Artikel werden wir sehen, wie wir *Higher-Kinded Data* in Haskell
-nutzen können, um Konfigurationen in unseren Programmen abzubilden.
+Viele Anwendungen verwenden Konfigurationen um ihr Verhalten zur Laufzeit
+zu beeinflussen. Die Parameter in diesen Konfigurationen können z.B.
+Standardwerte haben, die verwendet werden falls nichts anderes angegeben wird.
+Andere Werte, wie z.B. Passwörter, haben keine Standardwerte und müssen deshalb
+immer beim Start der Anwendung angegeben werden.
+
+In diesem Artikel werden wir über mehrere Iterationen sehen, wie wir mit
+*Higher-Kinded Data* in Haskell, Konfigurationen in unseren Programmen abbilden können.
 
 <!-- more start -->
 
@@ -18,7 +24,7 @@ nutzen können, um Konfigurationen in unseren Programmen abzubilden.
 
 Angenommen wir haben ein Programm, das ein *Passwort*, die *URL eines
 Services* und dessen *Port* als Konfiguration benötigt.
-Diese Konfiguration könnten wir dann durch folgenden Datentyp modellieren.
+Die Konfiguration könnten wir dann durch folgenden Datentyp modellieren.
 
 ``` haskell
 data Config = Config
@@ -29,7 +35,7 @@ data Config = Config
   deriving (Show)
 ```
 
-Wir nehmen an, dass die einzelnen Teile der Konfiguration zum Start des Programms
+Wir nehmen an, dass die einzelnen Teile der Konfiguration, zum Start des Programms,
 aus Umgebungsvariablen ausgelesen werden. Wird eine Umgebungsvariable nicht gesetzt,
 oder kann der gegebene Wert nicht interpretiert werden, soll ein Standardwert
 verwendet werden. Zusätzlich muss das Passwort immer zur Laufzeit angegeben werden
@@ -67,17 +73,16 @@ lookupEnv :: String -> IO (Maybe String)
 
 die den Wert einer Umgebungsvariable zurück gibt, sofern diese gesetzt ist.
 
-
 Wir sehen hier drei Hilfsfunktionen, die das Einlesen und Interpretieren der jeweiligen
 Teile der Konfiguration übernehmen. In der Funktion `getConfig` wird alles zusammengesetzt.
 Hier findet sowohl das Zusammenbauen des `Config`-Datentyps als auch das
 Vereinigen der Standardwerte mit den eingelesenen statt.
 
-Dieser Ansatz hat mindestens zwei Probleme: 
+Der Ansatz hat mindestens zwei Probleme: 
 
 - Die Funktion `getConfig` vermischt das Bauen der Konfiguration mit
   dem Lesen der einzelnen Parameter und dem Zusammenbauen mit
-  Standardwerten. Dies führt dazu, dass nicht direkt klar ist, ob ein
+  Standardwerten. Das führt dazu, dass nicht direkt klar ist, ob ein
   Feld einen Standardwert hat.
 - Weitere Konfigurations-Typen müssen ihre eigene `getConfig`-Funktion schreiben.
 
@@ -100,7 +105,7 @@ angegeben werden können, *statische* dagegen schon.
 
 Um die Semantik hinter `static` und `dynamic` zu implementieren, nutzen wir die zwei eingebauten Datentypen
 `Identity` und `Proxy`.
-`Identity a` ist ein Datentyp, der einen Wert vom Typ `a` enthält. Dies führt dazu, dass in allen Definitionen einer
+`Identity a` ist ein Datentyp, der einen Wert vom Typ `a` enthält. Das führt dazu, dass in allen Definitionen einer
 Konfiguration diese Werte vorhanden sein müssen.
 `Proxy a` dagegen enthält keinen Wert vom Typ `a`. Somit können wir ein Wert vom Typ `Proxy a`
 definiert, ohne einen Wert vom Typ `a` angeben zu müssen.
@@ -171,7 +176,7 @@ getConfig :: IO Config
 getConfig = combineConfig defaultConfig <$> readInPartialConfig
 ```
 
-Mit unserer neuen Definition des Konfigurationsdatentyps konnten wir das erste der obigen Probleme beheben:
+Mit unserer neuen Definition, des Konfigurationsdatentyps, konnten wir das erste der obigen Probleme beheben:
 An der Definition von `Config'` ist klar erkennbar, welche Felder Standardwerte haben und welche nicht und
 es gibt einen Wert `defaultConfig`, der alle diese Werte enthält.
 
@@ -255,7 +260,7 @@ getConfig = do
 Mit dieser Iteration von `Config'` haben wir es endlich geschafft. Für einen neuen Konfigurationstyp müssen wir nur noch
 den Typ, den Standardwert und das Einlesen der dynamischen Werte definieren. Das Kombinieren bekommen wir geschenkt.
 Insbesondere können die `HKD`-Typfamilie, die Funktion `genericApply` und die nötigen Hilfsfunktionen in eine Bibliothek
-ausgelagert werden, da sie unabhängig von der konkreten `Config'`-Definition sind.
+ausgelagert werden, da sie unabhängig von der `Config'` Definition immer gleich sind.
 
 Durch drei weitere kleine Typ-Aliase ist es sogar möglich, `Proxy` und `Identity` zu entfernen:
 
