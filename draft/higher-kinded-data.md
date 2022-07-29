@@ -275,7 +275,7 @@ dynamic = Proxy
 
 Auch diese Definitionen können in die Bibliothek ausgelagert werden.
 
-Final sieht das dann so aus:
+Final sieht die gesamte Definition der Konfiguration dann so aus:
 
 ``` haskell
 data Config' static dynamic = Config
