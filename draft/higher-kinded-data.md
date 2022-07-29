@@ -226,11 +226,11 @@ Analog für die partielle Konfiguration:
 
 ``` haskell
 readInPartialConfig :: IO PartialConfig
-readInPartialConfig =
-  Config
-    <$> getPassword
-      <*> getUrl
-      <*> getPort
+readInPartialConfig = do
+  password <- getPassword
+  url <- getUrl
+  port <- getPort
+  pure (Config password url port)
 ```
 
 Dadurch, dass wir bei der Definition von `Config'` die Typklasse `Generic` abgeleitet haben,
@@ -298,14 +298,16 @@ defaultConfig =
     }
   
 readInPartialConfig :: IO Config
-readInPartialConfig =
-  Config
-    <$> getPassword
-      <*> getUrl
-      <*> getPort
+readInPartialConfig =do
+  password <- getPassword
+  url <- getUrl
+  port <- getPort
+  pure (Config password url port)
 
 getConfig :: IO Config
-getConfig = genericApply defaultConfig <$> readInPartialConfig
+getConfig = do
+  partialConfig <- readInPartialConfig
+  pure (genericApply defaultConfig partialConfig)
 ```
 
 ## Fazit ##
