@@ -6,10 +6,10 @@ author: felix-leitz
 tags: ["higher-kinded data","haskell"]
 ---
 
-Viele Anwendungen verwenden Konfigurationen um ihr Verhalten zur Laufzeit
-zu beeinflussen. Die Parameter in diesen Konfigurationen können z.B.
+Viele Anwendungen verwenden Konfigurationen, um ihr Verhalten zur Laufzeit
+zu beeinflussen. Die Parameter in diesen Konfigurationen können z. B.
 Standardwerte haben, die verwendet werden falls nichts anderes angegeben wird.
-Andere Werte, wie z.B. Passwörter, haben keine Standardwerte und müssen deshalb
+Andere Werte, wie Passwörter, haben keine Standardwerte und müssen deshalb
 immer beim Start der Anwendung angegeben werden.
 
 In diesem Artikel werden wir über mehrere Iterationen sehen, wie wir mit
@@ -35,7 +35,7 @@ data Config = Config
   deriving (Show)
 ```
 
-Wir nehmen an, dass die einzelnen Teile der Konfiguration, zum Start des Programms,
+Wir nehmen an, dass die einzelnen Teile der Konfiguration zum Start des Programms
 aus Umgebungsvariablen ausgelesen werden. Wird eine Umgebungsvariable nicht gesetzt,
 oder kann der gegebene Wert nicht interpretiert werden, soll ein Standardwert
 verwendet werden. Zusätzlich muss das Passwort immer zur Laufzeit angegeben werden
@@ -100,15 +100,15 @@ data Config' static dynamic = Config
 
 Wie wir sehen, wurden im Vergleich zum ersten `Config'`-Datentyp zwei Typ-Parameter eingeführt.
 Beide Parameter sind Typ-Funktionen mit dem Kind `Type -> Type`. Durch die Wahl der beiden
-Typ-Funktionen können wir erreichen, dass *dynamische* Werte **nicht** zur Compile-Zeit
+Typ-Funktionen können wir im Folgenden erreichen, dass *dynamische* Werte **nicht** zur Compile-Zeit
 angegeben werden können, *statische* dagegen schon.
 
 Um die Semantik hinter `static` und `dynamic` zu implementieren, nutzen wir die zwei eingebauten Datentypen
 `Identity` und `Proxy`.
 `Identity a` ist ein Datentyp, der einen Wert vom Typ `a` enthält. Das führt dazu, dass in allen Definitionen einer
 Konfiguration diese Werte vorhanden sein müssen.
-`Proxy a` dagegen enthält keinen Wert vom Typ `a`. Somit können wir ein Wert vom Typ `Proxy a`
-definiert, ohne einen Wert vom Typ `a` angeben zu müssen.
+`Proxy a` dagegen enthält keinen Wert vom Typ `a`. Somit können wir einen Wert vom Typ `Proxy a`
+definieren, ohne einen Wert vom Typ `a` angeben zu müssen.
 
 Wir definieren uns die folgenden Typ-Aliase, um die Belegung von `static` und `dynamic` in verschiedenen
 Situationen klarer zu machen.
@@ -176,7 +176,7 @@ getConfig :: IO Config
 getConfig = combineConfig defaultConfig <$> readInPartialConfig
 ```
 
-Mit unserer neuen Definition, des Konfigurationsdatentyps, konnten wir das erste der obigen Probleme beheben:
+Mit unserer neuen Definition des Konfigurationsdatentyps, konnten wir das erste der obigen Probleme beheben:
 An der Definition von `Config'` ist klar erkennbar, welche Felder Standardwerte haben und welche nicht und
 es gibt einen Wert `defaultConfig`, der alle diese Werte enthält.
 
@@ -244,7 +244,7 @@ Diese Funktion übernimmt die Aufgabe von der Funktion `combineConfig`.
 Implementieren können wir sie mit Hilfe von `GHC.Generics`, ohne dabei die Definition von `Config'` zu benutzen.
 Somit kann `genericApply` in eine Bibliothek ausgelagert werden und muss nicht für jeden Konfigurationstyp neu
 geschrieben werden.
-Die genaue Implementierung führt hier jedoch zu weit, im verlinkten Github-Repo ist die Implementierung jedoch zu
+Die genaue Implementierung führt hier zu weit, im verlinkten Github-Repo ist sie zu
 finden.
 
 Durch das Ersetzen der Typvariable `c` mit `Config'` erhalten wir denselben Typ wie für `combineConfig`.
