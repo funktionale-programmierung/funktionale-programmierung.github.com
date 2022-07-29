@@ -11,6 +11,9 @@ nutzen können, um Konfigurationen in unseren Programmen abzubilden.
 
 <!-- more start -->
 
+*Hinweis: Begleitender Quellcode ist auf
+[Github](https://github.com/lzszt/blog-hkd) zu finden.*
+
 ## Erster Versuch ##
 
 Angenommen wir haben ein Programm, das ein *Passwort*, die *URL eines
@@ -104,8 +107,6 @@ type Config = Config' Identity Identity
 Somit gilt für partielle Konfigurationen, dass statische Werte potentiell angegeben werden können, statische Werte
 dagegen müssen angegeben werden.
 In einem Wert vom Typ `Config` müssen sowohl statische als auch dynamische Werte angegeben werden.
-
-
 
 Damit lässt sich nun eine Standard-Konfiguration definieren:
 
@@ -227,6 +228,8 @@ Diese Funktion übernimmt die Aufgabe von der Funktion `combineConfig`.
 Implementieren können wir sie mit Hilfe von `GHC.Generics`, ohne dabei die Definition von `Config'` zu benutzen.
 Somit kann `genericApply` in eine Bibliothek ausgelagert werden und muss nicht für jeden Konfigurationstyp neu
 geschrieben werden.
+Die genaue Implementierung führt hier jedoch zu weit, im verlinkten Github-Repo ist die Implementierung jedoch zu
+finden.
 
 Durch das Ersetzen der Typvariable `c` mit `Config'` erhalten wir denselben Typ wie für `combineConfig`.
 Damit haben wir alles, um die Funktion `getConfig` zu bauen:
