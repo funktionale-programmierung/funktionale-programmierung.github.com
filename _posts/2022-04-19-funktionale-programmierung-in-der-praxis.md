@@ -39,6 +39,7 @@ erwarten:
   Funktoren](/2022/04/26/validierung-mit-applikativen-funktoren.html)
 - [Pretty-Printing II: Laziness FTW](/2022/05/30/prettier-printer-2.html)
 - [Komponierbare UI-Komponenten](/2022/06/30/composable-components.html)
+- [Higher-Kinded Data für Konfigurationen in Haskell](/2022/07/29/higher-kinded-data.html)
 - Deep Learning mit ConCat
 - Type-Lambdas in Scala 3
 - Nix
