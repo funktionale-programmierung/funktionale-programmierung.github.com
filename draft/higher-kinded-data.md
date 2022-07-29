@@ -43,19 +43,30 @@ getConfig = do
   pw <- getPassword
   url <- fromMaybe "localhost" <$> getUrl
   port <- fromMaybe 8080 <$> getPort
-  pure $ Config pw url port
+  pure (Config pw url port)
 
 getPassword :: IO String
-getPassword =
-  fromMaybe (error "Environment variable PASSWORD not set")
-    <$> lookupEnv "PASSWORD"
+getPassword = do
+  mPassword <- lookupEnv "PASSWORD"
+  pure (fromMaybe (error "Environment variable PASSWORD not set") mPassword)
 
 getUrl :: IO (Maybe String)
 getUrl = lookupEnv "SERVICE_URL"
 
 getPort :: IO (Maybe Int)
-getPort = (readMaybe =<<) <$> lookupEnv "SERVICE_PORT"
+getPort = do
+  mPortStr <- lookupEnv "SERVICE_PORT"
+  pure (readMaybe =<< mPortStr) 
 ```
+
+Wir benutzen hier die Funktion:
+
+``` haskell
+lookupEnv :: String -> IO (Maybe String)
+```
+
+die den Wert einer Umgebungsvariable zurück gibt, sofern diese gesetzt ist.
+
 
 Wir sehen hier drei Hilfsfunktionen, die das Einlesen und Interpretieren der jeweiligen
 Teile der Konfiguration übernehmen. In der Funktion `getConfig` wird alles zusammengesetzt.
@@ -127,11 +138,11 @@ Die Funktion, die nun zur Laufzeit die Umgebungsvariablen einliest, sieht wie fo
 
 ``` haskell
 readInPartialConfig :: IO PartialConfig
-readInPartialConfig =
-  Config
-    <$> (Identity <$> getPassword)
-    <*> getUrl
-    <*> getPort
+readInPartialConfig = do
+  password <- Identity <$> getPassword
+  url <- getUrl
+  port <- getPort
+  pure (Config password url port)
 ```
 
 Hier ist zu beachten, dass sowohl die Url als auch der Port eingelesen werden können, aber nicht notwendigerweise
@@ -236,7 +247,9 @@ Damit haben wir alles, um die Funktion `getConfig` zu bauen:
 
 ``` haskell
 getConfig :: IO Config
-getConfig = genericApply defaultConfig <$> readInPartialConfig
+getConfig = do
+  partialConfig <- readInPartialConfig
+  pure (genericApply defaultConfig partialConfig)
 ```
 
 Mit dieser Iteration von `Config'` haben wir es endlich geschafft. Für einen neuen Konfigurationstyp müssen wir nur noch
