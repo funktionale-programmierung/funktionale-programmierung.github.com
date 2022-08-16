@@ -14,6 +14,13 @@ interessante Neuerungen werden wir über Typ-Lambdas sprechen.
 
 <!-- more start -->
 
+## Weitere Posts zu Scala 3
+
+- [Scala 3: Scala im neuen Gewand](https://funktionale-programmierung.de/2021/07/13/scala-3-intro.html)
+- [Eins für zwei - Scala 3 Enums](https://funktionale-programmierung.de/2021/07/19/scala-3-enum.html)
+- [Scala 3: Explizite Implicits](https://funktionale-programmierung.de/2022/02/18/scala-3-implicits.html)
+- [Scala 3: Über Vereinigungen und Schnittmengen](https://funktionale-programmierung.de/2022/03/21/scala-unions.html)
+
 ## "Higher-Kinded Types" in Scala
 
 Als getypte funktionale Sprache konnten wir in Scala schon immer über
