@@ -25,12 +25,11 @@ interessante Neuerungen werden wir über Typ-Lambdas sprechen.
 
 Als getypte funktionale Sprache konnten wir in Scala schon immer über
 Typen abstrahieren durch den Einsatz von *Typvariablen*, auch
-*Generics* genannt.  Zum Beispiel gibt es in der Collections-Library
-von Scala eine Definition von `List[A]`, der über den Typ der
-Listenelemente abstrahiert.  Das macht `List` zu einem
-*Typkonstruktor* beziehungsweise zu so einer Art Funktion auf
-Typebene, in Scala häufig auch als `List[_]` geschrieben um zu
-kennzeichnen, dass `List` einen Parameter braucht.
+*Generics* genannt. Zum Beispiel gibt es in der Collections-Library
+von Scala eine Definition von `List[A]`, die über den Typ der
+Listenelemente abstrahiert. Das macht `List` zu einem *Typkonstruktor*
+(einer Art Funktion auf Typebene), in Scala häufig auch als `List[_]`
+geschrieben, um zu kennzeichnen, dass `List` einen Parameter braucht.
 
 `List[_]` abstrahiert über "einfache" Typen.  Manchmal wollen wir aber
 über Typen wie `List[_]` abstrahieren.  Das gilt zum Beispiel bei
@@ -57,8 +56,8 @@ def listFunctor = new Functor[List] {
 Bei der Definition von `Functor` nörgelt aber der Scala-Compiler: "`F`
 does not take type parameters". Wenn bei einem Typparameter nichts
 dabeisteht, bedeutet dies, dass der Typparameter so ein "einfacher"
-Typ ist, also selbst keine Parameter hat.  Das können ausdrücken mit
-der `[_]`-Notation, so:
+Typ ist, also selbst keine Parameter hat. Das können wir ausdrücken
+mit der `[_]`-Notation, so:
 
 {% highlight scala %}
 trait Functor[F[_]] {
@@ -74,7 +73,7 @@ selbst.
 Damit ist `Functor` ein sogenannter "Higher-Kinded Type", also das
 Pendant zu einer Funktion höherer Ordnung auf der Werteebene.  (In
 diesem Begriff taucht der Begriff "Kind" auf, sozusagen der "Typ eines
-Typs", an dessen Form man diese Eigenschaft ablesen könnte.  Wir
+Typs", an dessen Form man diese Eigenschaft ablesen könnte).  Wir
 können den Kind-Begriff aber für die Zwecke dieses Blog-Posts
 ansonsten ignorieren.  Mehr dazu im gerade erschienen
 [Post](https://funktionale-programmierung.de/2022/07/29/higher-kinded-data.html)
@@ -86,7 +85,7 @@ meines Kollegen Felix Leitz.
 angeben, der einen Typparameter hat, also die Form `T[_]` hat.  Es
 gibt aber Funktoren, die diesen Typ nicht haben, zum Beispiel
 [`Either`](https://dotty.epfl.ch/api/scala/util/Either.html).  Das hat
-zwei Parameter, und zumindest in bezug auf einen von denen bildet
+zwei Parameter, und zumindest in Bezug auf einen von denen bildet
 `Either` auch einen Funktor, und das wollen wir natürlich auch mit
 einer `Functor`-Instanz bekanntgeben.
 
@@ -124,7 +123,7 @@ Compiler schon wieder.
 Wer will so hässlich leben?  Nicht nur ist das hässlich, sondern auch
 unintuitiv: Auf der Werteebene können wir doch anonyme Funktionen
 jederzeit konstruieren, warum geht das auf Typebene nicht?  In Scala 3
-zum Glück ist das behoben und es gibt "Lambda-Ausdrücke" auf
+ist das zum Glück behoben und es gibt "Lambda-Ausdrücke" auf
 Typebene.  So sieht das aus:
 
 {% highlight scala %}
@@ -136,7 +135,7 @@ Diese sogenannten [*Type
 Lambdas*](https://docs.scala-lang.org/scala3/reference/new-types/type-lambdas.html)
 machen Higher-Kinded Types schon deutlich angenehmer im Umgang.  
 
-Aber wenn wir schonmal soweit sind: Auf der Werteebene erlaubt Scala
+Aber wenn wir schon einmal soweit sind: Auf der Werteebene erlaubt Scala
 doch, Lambda-Ausdrücke kompakt mit `_` als Parameter hinzuschreiben,
 also zum Beispiel `_ + 1` als Kurzform für `{ x => x + 1 }`.  
 
@@ -145,9 +144,9 @@ das Compiler-Plugin [Kind
 Projector](https://github.com/typelevel/kind-projector) installiert
 haben, das genau diese Syntax auch auf Typebene unterstützt.  Dieses
 Plugin war so populär, dass auch die Scala-3-Macher Unterstützung für
-dessen Syntax eingebaut haben, allerdings [super-verwirrend
+dessen Syntax eingebaut haben, allerdings [super verwirrend
 dokumentiert](https://docs.scala-lang.org/scala3/reference/changed-features/wildcards.html).
-Da ist die Rede von mindestens drei Syntax-Varianten - auch nach
+Da ist die Rede von mindestens drei Syntax-Varianten – auch nach
 mehrmaligem Lesen wusste ich nicht, was ich in welcher Version tun
 muss, um welche Syntax zu bekommen.
 
@@ -168,7 +167,7 @@ lazy val root = (project in file("."))
     )
 {% endhighlight %}
 
-Alles andere macht nur Kopfschmerzen.  Und tatsache, dann geht's
+Alles andere macht nur Kopfschmerzen.  Und Tatsache, dann geht's
 ganz einfach:
 
 {% highlight scala %}
@@ -176,5 +175,4 @@ def eitherFunctor[Error] =
   new Functor[Either[Error, _]] { ... }
 {% endhighlight %}
 
-Super-Sache!
-
+Super Sache!
