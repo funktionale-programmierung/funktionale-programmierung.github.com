@@ -73,7 +73,7 @@ selbst.
 Damit ist `Functor` ein sogenannter "Higher-Kinded Type", also das
 Pendant zu einer Funktion höherer Ordnung auf der Werteebene.  (In
 diesem Begriff taucht der Begriff "Kind" auf, sozusagen der "Typ eines
-Typs", an dessen Form man diese Eigenschaft ablesen könnte).  Wir
+Typs", an dessen Form man diese Eigenschaft ablesen könnte.)  Wir
 können den Kind-Begriff aber für die Zwecke dieses Blog-Posts
 ansonsten ignorieren.  Mehr dazu im gerade erschienen
 [Post](https://funktionale-programmierung.de/2022/07/29/higher-kinded-data.html)
