@@ -43,7 +43,7 @@ trait Functor[F] {
 }
 {% endhighlight %}
 
-Wir wollen dann später diesen Trait instanzieren können mit
+Wir wollen dann später diesen Trait instanziieren können mit
 Definitionen wie dieser hier, wo für `F` `List` eingesetzt wird:
 
 {% highlight scala %}
