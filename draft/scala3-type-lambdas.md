@@ -109,8 +109,8 @@ Das entscheidende Stück Code ist das spektakulär hässliche:
 ({ type T[A] = Either[Error, A] })#T
 {% endhighlight %}
 
-Zur Erinnerung: `Either` ist zweistellig, `Functor` braucht aber eine
-einstellige Funktion.  In Scala 2 geht das nur, indem wir einen
+Zur Erinnerung: `Either` ist zweistellig, `Functor` braucht aber einen
+einstellige Typkonstruktor.  In Scala 2 geht das nur, indem wir einen
 passenden einstelligen Typ mit `type ... = ...` definieren.  Die
 geschweiften Klammern betten den in eine Umgebung mit Namen ein, aus
 der wir das `T` noch mit `#T` rausfrickeln müssen.  (Für den Fall,
