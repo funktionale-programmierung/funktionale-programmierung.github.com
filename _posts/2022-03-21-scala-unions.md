@@ -20,6 +20,11 @@ Typen abgrenzen, wird in diesem Blogpost erörtert.
 
 <!-- more start -->
 
+- [Scala 3: Scala im neuen Gewand](https://funktionale-programmierung.de/2021/07/13/scala-3-intro.html)
+- [Eins für zwei - Scala 3 Enums](https://funktionale-programmierung.de/2021/07/19/scala-3-enum.html)
+- [Scala 3: Explizite Implicits](https://funktionale-programmierung.de/2022/02/18/scala-3-implicits.html)
+- [Scala 3: Typ-Lambdas](https://funktionale-programmierung.de/2022/09/01/scala3-type-lambdas.html)
+
 ## Union-Types
 
 Einer der zwei Typklassen, die in diesem Blogpost beleuchtet werden

@@ -22,6 +22,11 @@ schließlich loszuwerden.
 
 <!-- more start -->
 
+- [Scala 3: Scala im neuen Gewand](https://funktionale-programmierung.de/2021/07/13/scala-3-intro.html)
+- [Eins für zwei - Scala 3 Enums](https://funktionale-programmierung.de/2021/07/19/scala-3-enum.html)
+- [Scala 3: Über Vereinigungen und Schnittmengen](https://funktionale-programmierung.de/2022/03/21/scala-unions.html)
+- [Scala 3: Typ-Lambdas](https://funktionale-programmierung.de/2022/09/01/scala3-type-lambdas.html)
+
 ## Implicit Conversions
 
 Tauchen wir direkt ein und betrachten einen beliebten

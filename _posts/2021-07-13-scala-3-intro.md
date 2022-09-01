@@ -12,10 +12,16 @@ haben es eine neue Syntax sowie einige Neuerungen an der Sprache
 in Scala 3 geschafft.  In dieser Blogpost-Reihe werden einige der interessanten
 Neuerungen im Detail diskutiert.  In diesem ersten Teil der Reihe wird der 
 "quiet mode" vorgestellt. Dabei handelt es sich um eine alternative Syntax, die
+
 mit Einrückungen Blockbildung vornimmt, statt mit geschweiften Klammern.
-
-
 <!-- more start -->
+
+## Weitere Posts zu Scala 3
+
+- [Eins für zwei - Scala 3 Enums](https://funktionale-programmierung.de/2021/07/19/scala-3-enum.html)
+- [Scala 3: Explizite Implicits](https://funktionale-programmierung.de/2022/02/18/scala-3-implicits.html)
+- [Scala 3: Über Vereinigungen und Schnittmengen](https://funktionale-programmierung.de/2022/03/21/scala-unions.html)
+- [Scala 3: Typ-Lambdas](https://funktionale-programmierung.de/2022/09/01/scala3-type-lambdas.html)
 
 ## Voraussetzungen
 
