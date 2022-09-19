@@ -1,406 +1,454 @@
 ---
 layout: post
-title: "Monitoring: mit Riemann Graphite-Events für die InfluxDB mappen"
-author: stephan-guenther
-tags: ["riemann", "InfluxDB", "Graphite", "Monitoring", "Clojure"]
+title: "Eventverarbeitung mit Riemann"
+author: marcus-crestani
+tags: ["Riemann", "InfluxDB", "Elasticsearch", "Logs", "Metriken", "Monitoring", "Clojure"]
 ---
 
-Im Folgenden geht es darum zu zeigen, wie man Riemann in einer bestehenden Montoring-Infrastruktur konfiguriert, damit eingehende Events im Graphite-Format in einer Influx-DB gespeichert und effizient durchsucht werden können.
+Riemann ist ein Stream-Processing-System, das sich hervorragend zum Sammeln und
+Verarbeiten von Events und Logs von Servern und Systemen eignet.  Wir verwenden
+Riemann erfolgreich produktiv in [sehr großen IT-Systemen als Kernstück für die
+Log- und Metrikverarbeitung und für das
+Monitoring](https://codetalks.de/speakers#talk-1345?event=7).
 
+Dabei nutzen wir Riemann zur Aufbereitung von Events und zum Weiterleiten an
+Langzeitspeichersysteme wie
+[Elasticsearch](https://www.elastic.co/elasticsearch/), in denen diese Events
+wiederum durch Benutzeroberflächen wie [Kibana](https://www.elastic.co/kibana/)
+komfortabel durchforstet werden können.  Oder Riemann kann Metriken in
+Zeitreihendatenbanken wie [InfluxDB](https://www.influxdata.com/) schreiben;
+diese Zeitreihen können dann durch Benutzeroberflächen wie
+[Grafana](https://grafana.com/) visualisiert werden oder können auch benutzt
+werden, um bei Fehlern und Problemen zu alarmieren.
 
-## Riemann ##
+Wir zeigen heute an einem Anwendungsbeispiel, wie man aus Logs mit Hilfe von
+Riemann Metriken extrahieren kann.
 
-Wenn man eine möglichst flexibele Lösungen für seine Monitoring-Infrastruktur braucht, ist
-[Riemann](http://riemann.io/) ein vielseitigs Tool, um diverse Event-Preprocessing funktionalitäten abzudecken.
+<!-- more start -->
 
-Dazu werden Events durch in [Clojure](https://clojure.org/) konfigurierte Pipelines gestreamt und and verschiedene Backends weitergeleitet.
+## Riemann
 
+Riemann selbst ist in Clojure geschrieben und kann auch in Clojure konfiguriert
+und programmiert werden.  Tatsächlich ist die Konfiguration einer
+Riemann-Instanz ein Clojure-Programm, dass mit Hilfe einer mächtigen und
+effizienten Stream-Processing-Sprache die Eventverarbeitung steuert.
 
-## InfluxDB ##
+Riemann ermöglicht es, Events durch Streams zu schicken, die diese Events
+filtern, verändern, kombinieren, aggregieren und projizieren können.  Es gibt
+dutzende eingebaute Streams und es ist sehr einfach, eigene Streams zu
+schreiben, da ein Stream lediglich eine Funktion ist, die ein Event akzeptiert.
 
-Die [InfluxDB](https://docs.influxdata.com/influxdb/) ist ein passendes Backend um Time-Based-Events persistet, kompakt und durchsuchbar zu speichern. Die Query-Language ([InfluxQL](https://docs.influxdata.com/influxdb/v1.7/query_language/data_download/)) ähnelt nicht nur vom Namen SQL.
+## Events
 
-Das Datenmodell kurz zusammengefasst: es werden pro Datenbank mehrere *Measurements* (Tabellen) gespeichert und jedes Measurement kann dabei beliebig viele *Fields* (Spalten) besitzen, mindestends jedoch die Felder `timestamp` und `value`.
-
-Jedes Measurement verhält sich dabei wie ein Key-Value-Store - beim Einfügen werden die Fields automatisch angelegt. Soll später über das Field in Queries gefiltert werden, muss beim Einfügen explizit definiert weden, dass dafür ein Index angelegt werden soll.
-
-
-## Problemstellung ##
-
-Riemann ist bereits installiert/vorhanden und erhält Events aus einer Quelle im Graphite-Format. Diese sollen an die InfluxDB geschrieben werden, so dass diese sich in der Auswertung mit InfluxQL performant abfragen lassen.
-
-
-### Graphite ###
-
-Events im Graphite-Format sind Textbasiert, flach strukturiert und besitzen diese Attribute.
-
-    <metric-path> <value> <timestamp>
-
-Die Komponenten im "metric-path" sind separiert durch Punkt.
-Beispiele sind:
-
-    servers.localhost.cpu.loadavg.1 0.64 1556273291
-    servers.localhost.cpu.loadavg.5 0.31 1556273291
-    servers.localhost.cpu.loadavg.10 0.12 1556273291
-    servers.localhost.cpu.loadavg.1 0.64 1556273291
-    servers.localhost.cpu.loadavg.5 0.31 1556273291
-    servers.localhost.cpu.loadavg.10 0.12 1556273291
-
-
-### Riemann und Beispiel-Config ###
-
-Füttert man Riemann mit diesen Graphite-Events, dann sollten diese in folgendem Input-Event-Format in Riemann ankommen:
+Events sind in Riemann als Maps repräsentiert, also als eine Menge von
+Schlüssel-Wert-Paaren, wie zum Beispiel dieses Event, das eine Logzeile einer
+Anfrage an einen Webserver repräsentiert:
 
 ```clojure
-{
-    :service "<metric-path>"
-    :time    <timestamp>
-    :metric  <value>
-    ...
-}
+(def request-event
+   {:timestamp   1663577804126
+    :method      "GET"
+    :request     "/index.html"
+    :requestor   "192.168.1.23"
+    :transaction "uid-82a9dda829"
+    :service     "webserver-request"
+    :host        "192.168.1.1"
+    :time        1})
 ```
 
-Eine einfache Beispiel-Konfiguration für Riemann (`riemann.config`) sieht dann so aus:
+Wir binden das Event an den Namen `request-event`, um es im Folgenden für unsere
+Tests verwenden zu können.  Riemann definiert einige besondere Felder wie zum
+Beispiel `:host` und `:service`, die in allen Events vorkommen; ansonsten gibt
+es keine Einschränkung, welche Felder und Werte ein Event enthalten kann.
+
+## Streams
+
+Ein einfacher Stream, der zum Beispiel Logevents von Metriken trennt und
+Logevents zur Langzeitspeicherung an einen Elasticsearch-Server und Metriken an
+eine InfluxDB-Zeitreihendatenbank weiterleitet, sieht so aus:
 
 ```clojure
-; Listen on all interfaces over TCP (5555)
-(let [host "0.0.0.0"]
-    (tcp-server {:host host}))
-
-(def influx-config {
-    :version :0.9
-    :host "influxdb.example.com"
-    :username "riemann"
-    :password "secret"})
-
-; Creates InfluxDB sinks for an specific database and optional tags
-(defn influx-sink [database & tags]
-    (let [cfg (merge influx-config {:db database})
-          withtags (if (empty? tags) cfg (assoc cfg :tag-fields (set tags)))]
-        (influxdb withtags)))
-
-(let [index (index)]
-    ; Inbound events will be passed to these streams:
-    (streams
-        (default :ttl 60
-            ; Index all events immediately
-            index
-
-            ; Push all events to InfluxDB database "my-db" ...
-            (where (not (state "expired"))
-                (influx-sink "my-db"))
-
-            ; Log expired events
-            (expired
-                (fn [event] (info "expired" event))))))
+(streams
+  (where
+    (metric nil)
+    elasticsearch-stream
+    (else
+      influxdb-stream)))
 ```
 
-Das InfluxDB backend mappt dabei automatisch die Event-Keys
+Ein `where`-Stream überprüft, ob durchfließende Events auf bestimmte Prädikate
+passen, hier bedeutet das Prädikat `(metric nil)`, dass ein Event kein Feld
+`:metric` enthält, was in unserem Beispiel wiederum bedeutet, dass ein Event
+keine Metrik ist (die Event-Taxonomie von Riemann nimmt an, dass sich Metriken
+durch die Existenz des Felds `:metric` von anderen Eventtypen unterscheiden).
+In diesem Fall fließt das Event an einen `elasticsearch-stream` weiter, der
+schließlich das Event an den Elasticsearch-Server schickt.  Im `else`-Zweig
+finden sich nur noch Metriken, die Riemann dann über den `influxdb-stream` an
+die InfluxDB weiterleitet.
 
-- `:service` auf `:measurement`
-- `:metric` auf `:value`
-- `:time` auf `:timestamp`
-
-Alle weiteren Keys (die für Riemann keine Bedeutung haben) werden beibehalten und in InfluxDB als *Fields* übertragen.
-
-
-## Splitting und Mapping ##
-
-Mit der Beispiel-Config werden nun alle Metric-Paths aus den Graphite-Events als Measurements in der InfluxDB gespeichert. Das ist aber nicht was man haben will, denn man kann so in InfluxQL keine Queries auf Teilen der Metric-Paths stellen.
-
-Das Attribute `:service` muss dazu aufgetrennt werden und wie Eingangs erläutert einige davon als *Tags* markiert werden, damit ein Index dafür angelegt wird.
-
-Dazu legen wir uns ein paar Hilfs-Funktionen an:
+Die Definition von `elasticsearch-stream` und `influxdb-stream` sehen so aus:
 
 ```clojure
-; Splits input string on period (if not quoted) and skip's empty parts
-(defn part-split [s]
-    (let [matches (re-seq #"([^\"][^\.]*)\.*|\"([^\"]+)\"\.*" s)]
-        (mapv #(first (remove nil? (rest %))) matches)))
+(def elasticsearch-stream
+  (tap :elasticsearch-stream elasticsearch))
 
-; Creates a event-matcher
-; (that splits key `k` by periods and matches if part at index `pos` is `value`
-(defn part-eq [k pos value]
-    (fn [event]
-        (let [parts (part-split (k event))]
-            (and (< pos (count parts)) (= value (parts pos))))))
-
-; Relocates a value in dictionary `m` from key `ksrc` to `kdest`
-(defn remap [m ksrc kdest]
-    (let [v (ksrc m)]
-        (dissoc (assoc m kdest v) ksrc)))
+(def influxdb-stream
+  (tap :influxdb-stream influxdb))
 ```
 
-Damit kann man schon mal beliebige Event-Keys auftrennen. Dann brauchen wir noch eine Funktion, die Events so tranformiert, dass bestimmte Teilstücke aus einem `:service` Key in andere Keys übertragen werden.
+Das `tap` in jeder dieser Definitionen ist ein Konstrukt, um Events abzugreifen,
+um sie für die Testfälle zu inspizieren.  Davon werden wir gleich Gebrauch
+machen.
 
-Um das flexibel zu halten, will man zusätzlich zum
-- Mapping der *Parts*
-- auch *Parts* verwerfen und nicht übertragen
-- oder noch nicht referenzierte *Parts* zu einem neuen Field zusammenfügen
-- einen Fallback definieren, falls das Splitting nicht erfolgreich war
+Die tatsächliche Definitionen von `elasticsearch` und von `influxdb` würden
+diesen Blogartikel sprengen, daher verlassen wir uns einfach auf Wunschdenken
+und gehen davon aus, dass sie das machen, was sie sollen, nämlich die
+ankommenden Events nach jeweils Elasticsearch beziehungsweise InfluxDB
+weiterleiten.  Für besonders Interessierte sei gesagt, dass wir für diese
+Streams die Implementierung aus unserer Riemann-Bibliothek
+[`active-riemann`](https://github.com/active-group/active-riemann) benutzen.
 
-Dazu folgende Hilfsfunktion:
+## Tests
+
+Unit-Tests sind unverzichtbar, auch unsere Stream-Definition müssen wir testen.
+Riemann bringt Unterstützung für Unit-Tests mit, wir können Tests mit `riemann
+test` auf der Kommandozeile laufen lassen.  Die Tests müssen wir aber erstmal
+schreiben.  Der erste Test stellt sicher, dass Events, die keine Metriken sind,
+nur im Elasticsearch landen:
 
 ```clojure
-; Modifies the event's :service by splitting it by "." and mapping these parts as
-; value to other fields or dropping some of them by index. All parts that are not
-; touched this way are joined by "." and will build a new field name. The value
-; of :metric will be stored in that field.
-; In case anything could be parsed, this modified event is passed to the 'good'
-; function, otherwise it will be passed to the 'bad' function.
-(defn graphite-map
-    ([mapped dropped good bad]
-        (graphite-map mapped dropped good bad nil))
-    ([mapped dropped good bad restkeyword]
-        (graphite-map mapped dropped good bad restkeyword :metric))
-    ([mapped dropped good bad restkeyword restfield]
-        (fn [event]
-            (let [parts (part-split (:service event))
-                  valid-map (if (empty? mapped) true (< (apply max (vals mapped)) (count parts)))
-                  valid-drop (if (empty? dropped) true (< (apply max dropped) (count parts)))]
-                (if (and valid-map valid-drop)
-                    (let [fields (reduce-kv (fn [m k v]
-                              (assoc m k (parts v))) {} mapped)
-                          others (let [used (set (apply conj (vals mapped) dropped))]
-                              (keep-indexed (fn [i p]
-                                  (if (not (contains? used i)) p)) parts))
-                          conv (if (empty? others) identity (fn [e]
-                              (let [restval (clojure.string/join "." others)]
-                                  (if (nil? restkeyword)
-                                      (remap e restfield (keyword restval))
-                                      (assoc e restkeyword restval)))))]
-                        (call-rescue (conv (merge event fields)) (list good)))
-                    (call-rescue event (list bad)))))))
+(deftest event-test
+  (let [actual (inject! [request-event])]
+    (is (= [request-event] (:elasticsearch-stream actual)))
+    (is (empty? (:influxdb-stream actual)))))
 ```
 
-Nun braucht man nur das ganze für seinen eigenen Anwendungszweck zusammenzustecken. Dazu als Beispiel folgende Hilfsfunktion, die dann noch in den input-stream eingebunden werden muss:
+Die Funktion `inject!` gibt es nur, um die Streams im Rahmen von Unit-Tests zu
+füttern.  Sie schickt eine Liste von Events in die definierten Streams, hier ist
+in der Liste nur ein Event, das weiter oben definierte `request-event`.  Der
+Rückgabewert von `inject!` enthält alle Events, die an den Stellen, die wir mit
+`tap` markiert haben, vorbeigekommen sind.  Da wir unseren Stream nach
+Elasticsearch mit `:elasticsearch-stream` belauschen, erwarten wir, dass wir
+genau dieses eine Event dort finden, weil unsere Streamdefinition es dort
+vorbeigeleitet hat.  Und da wir keine Metrik injiziert haben, erwarten wir, dass
+an `:influxdb-stream` keine Events vorbeigekommen sind, daher muss diese Liste
+leer sein, also auf das Prädikat `empty?` passen.
+
+Für den nächsten Test wollen wir eine Metrik injizieren, also machen wir uns
+eine Beispielmetrik.  Dafür bauen wir uns zuerst einen Hilfsfunktion, in der wir
+das Aussehen unserer Metrik abstrahieren.  Die Metrik hat ein Feld `:label` für
+den Bezeichner und ein Feld `:metric` für den metrischen Wert, den wir der
+Hilfsfunktion übergeben können:
+
 
 ```clojure
-; Detects known events in Graphite format (long :service) and converts them to
-; the InlfuxDB 0.9 format with added tags and pushes that into the InfluxDB sink.
-(defn graphite-split [database]
-    (let [unparsable (graphite-bad "_unparsable" (influx-sink database :host :meta))
-          unknown (graphite-bad "_unmapped" (influx-sink database :host :meta))]
-        (split*
-            (part-eq :service 1 "filesystem")
-                (let [influx (influx-sink database :host :mountpoint)
-                      mapping {:host 0, :mountpoint 2}
-                      dropping (list 1)]
-                    (graphite-map mapping dropping influx unparsable))
-            (part-eq :service 1 "postgres")
-                (let [influx (influx-sink database :host :database :table)
-                      mapping {:service 1, :host 0, :database 2, :table 3}
-                      dropping ()]
-                    (graphite-map mapping dropping influx unparsable))
-            (part-eq :service 1 "management")
-                (let [influx (influx-sink database :host :program :variable)
-                      mapping {:service 1, :host 0, :program 2}
-                      dropping ()]
-                    (graphite-map mapping dropping influx unparsable :variable))
-            unknown)))
-```
-```clojure
-(let [index (index)]
-    ; Inbound events will be passed to these streams:
-    (streams
-        (default :ttl 60
-            ; Index all events immediately.
-            index
-
-            ; Push split all events according to its rules and push them
-            ; to InfluxDB database "my-db" ...
-            (where (not (state "expired"))
-                (graphite-split "my-db"))
-
-            ; Log expired events.
-            (expired
-                (fn [event] (info "expired" event))))))
+(defn make-webserver-transaction-metric
+  [duration]
+  {:label  "webserver-transaction-duration-milliseconds"
+   :metric duration})
 ```
 
-Damit sollten dann diese Graphite-Events ...
-
-    myhost.filesystem./boot.iavail 124628 1557387008
-    myhost.postgres.SyncDb.world_graph_edges.seq_scan 234 1474461001
-    myhost.management.uigen.DbCache1.CountVar 16 1557387906
+Dann erzeugen wir unsere Beispielmetrik mit dem Wert 116:
 
 ```clojure
-{
-    :service myhost.filesystem./boot.iavail
-    :metric 124628
-    :time 1557387008
-}
-```
-```clojure
-{
-    :service myhost.postgres.SyncDb.world_graph_edges.seq_scan
-    :metric 234
-    :time 1474461001
-}
-```
-```clojure
-{
-    :service myhost.management.uigen.DbCache1.CountVar
-    :metric 16
-    :time 1557387906
-}
+(def example-metric (make-webserver-transaction-metric 116))
 ```
 
-... so transformiert und in die "my-db" geschrieben werden:
+Für den nächsten Testfall injizieren wir die Beispielmetrik:
 
 ```clojure
-{
-    :service filesystem   ; measurement
-    :host myhost          ; tag
-    :mountpoint /boot     ; tag
-    :iavail 124628        ; field
-    :time 1557387008
-}
-```
-```clojure
-{
-    :service postgres          ; measurement
-    :host myhost               ; tag
-    :database SyncDb           ; tag
-    :table world_graph_edges   ; tag
-    :seq_scan 234              ; field
-    :time 1474461001
-}
-```
-```clojure
-{
-    :service management           ; measurement
-    :host myhost                  ; tag
-    :program uigen                ; tag
-    :variable DbCache1.CountVar   ; tag
-    :metric 16                    ; field
-    :time 1557387906
-}
+(deftest metric-test
+  (let [actual (inject! [example-metric])]
+    (is (empty? (:elasticsearch-stream actual)))
+    (is (= [example-metric] (:influxdb-stream actual)))))
 ```
 
-## Tests ##
+Hier erwarten wir, dass an `:elasticsearch-stream` kein Event vorbeigekommen
+ist, dafür taucht die Beispielmetrik bei `:influxdb-stream` auf.  Alle Tests
+laufen durch.
 
-Funktioniert die konfiguration so wie erwartet? Am besten definiert man dazu direkt einige Tests in der `riemann.config`. Der Test-Runner ist dafür direkt in Riemann [integiert](http://riemann.io/howto.html#writing-tests). Für die Hilfsfunktionen könnte das so aussehen:
+## Webserver-Logs
+
+Für unser Anwendungsbeispiel nehmen wir an, dass auf einem ausgedachten
+Webserver Logs anfallen.  Die Anfragen schaffen es in dem oben beschriebenen
+Format in unser Riemann-System.[^1] Außer den Anfragen loggt der Webserver auch
+noch die Auslieferung der Antwort, ein Event dafür sieht so aus:
 
 ```clojure
-(tests
-
-    (deftest remap
-        (let [in {:a 42}
-              out {:b 42}]
-            (is (= out (riemann.config/remap in :a :b)))))
-
-    (deftest part-split
-        (let [in0 "first.second.third.\"fourth.with.data\".fifth"
-              out0 ["first", "second", "third", "fourth.with.data", "fifth"]
-              in1 "myhost.filesystem./.avail"
-              out1 ["myhost", "filesystem", "/", "avail"]]
-            (is (= out0 (riemann.config/part-split in0)))
-            (is (= out1 (riemann.config/part-split in1)))))
-
-    (deftest graphite-map
-        (let [in {:service "myhost.sync.eventlog.client-datasize.\"1ec32d51.e73afc36.76d9a7d1.1930d444\""
-                  :metric 42}
-              out (atom {})
-              outset #(swap! out (fn [prev] %1))
-              tester (fn [mapping dropping result]
-                  ((riemann.config/graphite-map mapping dropping #(outset %) #(outset %)) in)
-                  (is (= @out result)))]
-            (tester {:host 0
-                     :service 1
-                     :source 2
-                     :type 3} ;store non-mapped service-part as field
-                ()
-                {:host "myhost"
-                 :service "sync"
-                 :source "eventlog"
-                 :type "client-datasize"
-                 :1ec32d51.e73afc36.76d9a7d1.1930d444 42})
-            (tester {:host 0
-                     :service 1
-                     :source 2
-                     :type 3
-                     :device 4} ;do not touch metric if all parts are mapped
-                ()
-                {:host "myhost"
-                 :service "sync"
-                 :source "eventlog"
-                 :type "client-datasize"
-                 :device "1ec32d51.e73afc36.76d9a7d1.1930d444"
-                 :metric 42})
-            (tester {:host 0
-                     :service 1
-                     :device 4} ;join non-mapped parts by dots
-                ()
-                {:host "myhost"
-                 :service "sync"
-                 :device "1ec32d51.e73afc36.76d9a7d1.1930d444"
-                 :eventlog.client-datasize 42})
-            (tester {:host 0
-                     :service 1
-                     :device 4}
-                (list 2 3) ;drop unused parts
-                {:host "myhost"
-                 :service "sync"
-                 :device "1ec32d51.e73afc36.76d9a7d1.1930d444"
-                 :metric 42}))))
+(def reply-event
+  {:timestamp   1663577804242
+   :transaction "uid-82a9dda829"
+   :service     "webserver-reply"
+   :host        "192.168.1.1"})
 ```
 
-So kann man erstmal nur einzelne Funtkionen testen. Möchte man Tests für das Event-Processing schreiben, müssen zusätzlich *tap's* in der Pipeline definiert werden, die es erlauben die Events an dieser Stelle abzugreifen.
+Der Webserver verknüpft Anfrage und Antwort mit einer eindeutigen
+Transaktions-ID im Feld `:transaction`.
 
-So gehts:
+[^1]: Zum Beispiel eignet sich [Logstash](https://www.elastic.co/logstash/) um Logdateien einzulesen,
+    aufzubereiten und an Riemann weiterzuleiten.
+
+## Transaktionszeit bestimmen
+
+Für unseren Anwendungsfall interessiert uns, wie lange der Webserver braucht, um
+eine Anfrage zu beantworten.  Diese Metrik wollen wir messen und festhalten, um
+die Performance des Webservers überwachen zu können.  Das bedeutet, dass wir die
+verstrichene Zeit zwischen den Events der Anfrage und der Antwort einer
+Transaktion ermitteln müssen und zur Aufbewahrung, späteren Visualisierung oder
+gegebenenfalls auch für Alarme in unsere InfluxDB schreiben.  Wenn wir die
+Zeitstempel aus den `:timestamp`-Feldern voneinander abziehen, erhalten wir die
+Transaktionszeit in Millisekunden.  Für unser Beispiel ergibt sich eine
+Transaktionszeit von 116 Millisekunden.
+
+Entscheidend dabei ist, dass wir nur den Abstand der zusammengehörenden
+Logeinträge berechnen, also die Logeinträge finden müssen, die dieselbe
+Transaktions-ID haben.  Konkret bedeutet das, dass wir uns die Anfragen so lange
+merken müssen, bis wir die passende Antwort sehen, sprich die Antwort mit
+derselben Transaktions-ID wie die Anfrage.  Sich etwas zu merken bedeutet
+Zustand.  Riemann bringt in Form eines *Index* Unterstützung für das Speichern
+von Zuständen mit.
+
+## Index
+
+Der Index ist ein in Riemann eingebauter Speicher für Events.  Riemann speichert
+für jedes Tupel aus `:host` und `:service` das jeweils letzte gesehene Event.
+Diese Events können wir vom Index abfragen, außerdem haben die Events im Index
+ein Verfallsdatum: Das Feld `:ttl` legt die "time-to-live" für ein Event im
+Index in Sekunden fest.  Und wir können festlegen, in welchen Abständen
+gestorbene Events gelöscht werden.  Riemann löscht diese Events nicht nur,
+sondern informiert auch noch über diese abgelaufenen Events -- diese Information
+können wir für unser Vorhaben auch sinnvoll nutzen.
+
+Wir initialisieren unseren Index wie folgt:
 
 ```clojure
-; Creates InfluxDB sinks for an specific database and optional tags (and a tap)
-(defn influx-sink [database & tags]
-    (tap :influx
-        (let [cfg (merge influx-config {:db database})
-            withtags (if (empty? tags) cfg (assoc cfg :tag-fields (set tags)))]
-            (influxdb withtags))))
+(def default-ttl 60)
+
+(def index
+  (do
+    (periodically-expire (/ default-ttl 10))
+    (index)))
+
+(def index-stream
+  (sdo
+   (tap :index identity)
+   (default :ttl default-ttl index)))
 ```
 
-Und jetzt noch Tests für unsere drei beispiele oben:
+Zunächst definieren wir unsere Standard-Verfallszeit `default-ttl` auf 60
+Sekunden; einen neuen Index binden wir an den Namen `index` und definieren mit
+`periodically-expire`, dass Riemann alle sechs Sekunden nach abgelaufenen Events
+schauen soll.  Den neuen Index verpacken wir in einen Stream mit dem Namen
+`index-stream`.  Genaugenommen ist unser `index-stream` eine `sdo`-Komposition
+von zwei Streams, sprich ein ankommendes Event durchläuft die Streams `(tap
+:index identity)` und `(default :ttl default-ttl index)`.
+
+Der Stream `(tap :index identity)` ist nur dazu da, um unseren Index-Stream für
+unsere Unit-Tests belauschen zu können.
+
+Der Stream `(default :ttl default-ttl index)` versieht jedes Event, das noch
+kein Feld `:ttl` enthält, mit einem Standardwert für das Feld `:ttl`, und zwar
+mit dem Wert unserer definierten Standard-Lebenszeit und gibt diese Events dann
+weiter an den Index, um sie dort abzuspeichern.
+
+## In den Index schreiben
+
+Wir brauchen einen Stream, der ein Anfrage-Event in den Index schreibt.  Wir
+nennen den Stream `store-request-stream`:
+
+```
+(def store-requests-stream
+  (smap (fn [request]
+          (clojure.set/rename-keys request {:transaction :service}))
+        index-stream))
+```
+
+Der Stream benutzt einen `smap`-Stream, um die angegebene Funktion auf jedes
+Event -- sprich auf jede Anfrage -- anzuwenden und das Ergebnis dann in den
+`index-stream` weiterzuschicken.  Die Funktion, die `smap` anwendet, baut eine
+Anfrage so um, dass der Index sie auch richtig speichern kann: Wie oben erwähnt,
+speichert der Index ein Event pro Tupel aus `:host` und `:service`.  Damit wir
+wirklich alle Events speichern können, benennen wir in der Anfrage einfach das
+Feld `:transaction` in `:service` um und haben so die eindeutige Transaktions-ID
+mit als Teil des Schlüssels im Index.  Der ursprüngliche Wert von `:service`
+interessiert uns nicht weiter.  Ein indiziertes Event sieht zum Beispiel so aus:
+
 ```clojure
-(tests
-
-    ; ...
-    ; weitere Tests
-
-    (deftest filesystem
-        (let [in {:service "filesystem./boot.iavail"
-                  :time 1474461001
-                  :metric 124628}
-              out {:host "myhost"
-                   :service "filesystem"
-                   :mountpoint "/boot"
-                   :iavail 124628
-                   :ttl 60
-                   :time 1474461001}]
-            (is (= (inject! [in]) {:influx [out]}))))
-
-    (deftest postgres
-        (let [in {:service "myhost.postgres.SyncDb.world_graph_edges.seq_scan"
-                  :time 1474461001
-                  :metric 234}
-              out {:host "myhost"
-                   :service "postgres"
-                   :database "SyncDb"
-                   :table "world_graph_edges"
-                   :seq_scan 234
-                   :ttl 60
-                   :time 1474461001}]
-            (is (= (inject! [in]) {:influx [out]}))))
-
-    (deftest management
-        (let [in {:service "myhost.management.uigen.DbCache1.CountVar"
-                  :time 1557387906
-                  :metric 16}
-              out {:host "b-charite-70"
-                   :service "management"
-                   :program "uigen"
-                   :variable "DbCache1.CountVar"
-                   :metric 16
-                   :ttl 60
-                   :time 1557387906}]
-            (is (= (inject! [in]) {:influx [out]})))))
+(def request-event
+  {:timestamp   1663577804126
+   :method      "GET"
+   :request     "/index.html"
+   :requestor   "192.168.1.23"
+   :service     "uid-82a9dda829"
+   :host        "192.168.1.1"
+   :time        1})
 ```
 
+## Aus dem Index lesen
+
+Das Dual vom Schreiben ist das Lesen aus dem Index.  Diesen Stream nennen wir
+`lookup-requests-and-calculate-metric-stream`; der Stream erwartet
+Antwort-Events:
+
+```
+(def lookup-requests-and-calculate-metric-stream
+  (smap (fn [reply]
+          (when-let [request (riemann.index/lookup index
+                                                   (:host reply)
+                                                   (:transaction reply))]
+            (riemann.index/delete index request)
+            (make-webserver-transaction-metric (- (:timestamp reply)
+                                                  (:timestamp request)))))
+        reinject))
+```
+
+Dieser Stream benutzt ebenfalls einen `smap`-Stream, um eine Funktion auf jedes
+Antwort-Event aufzurufen und dann mittels des `reinject`-Streams das Ergebnis
+davon wieder in unsere Streams zu reinjizieren, also wieder vorne in unsere
+Streams hineinzuschieben.
+
+Im Rumpf dieser Funktion passiert einiges: Eine möglicherweise gespeicherte
+Anfrage versucht `riemann.index/lookup` anhand der Felder `:host` und
+`:transaction` der Antwort zu finden.  Wenn das glückt, entfernt die Funktion
+das gefundene Event aus dem Index, damit es später nicht ablaufen kann -- es ist
+ja schließlich schon verarbeitet.  Das Ergebnis dieser Funktion ist eine Metrik,
+die wir mit `make-webserver-transaction-metric` erzeugen und die als Wert die
+Differenz der Zeitstempel zwischen Anfrage und Antwort berechnet.  Ist eine
+passende Anfrage nicht im Index, zum Beispiel weil wir unser Programm gestartet
+haben, nachdem diese Anfrage gekommen wäre, gibt die Funktion `nil` zurück.  Das
+hat dann den beabsichtigten Effekt, dass dieses `nil` eben nicht reinjiziert
+wird, da `smap` den Wert `nil` nicht an die Streams weitergibt.
+
+## Den Index sauberhalten
+
+Damit sich keine Anfragen ansammeln, zu denen der Webserver -- aus welchen
+Gründen auch immer -- nie eine Antwort rausgeschickt hat, haben wir jede Anfrage
+im Index mit einer maximalen Lebenszeit versehen.  Wenn Riemann solche
+abgelaufenen Anfragen aus dem Index entfernt, reinjiziert es eine Information
+darüber in die Streams, in Form der Anfrage, aber zusätzlich mit einem Feld
+`:state` mit dem Wert `expired` markiert.  Mit dem Prädikat `(state "expired")`
+kann Riemann diese Events filtern -- und wir können diese Information nutzen.
+
+Im Falle eines solchen Timeouts wollen wir eine Metrik ausgeben, deren Wert sehr
+groß sein soll, sprich also `Double/MAX_VALUE` in unserem Zahlenraum.  Die
+Metrik nennen wir `timeout-metric`:
+
+```clojure
+(def timeout-metric
+  (make-webserver-transaction-metric Double/MAX_VALUE))
+```
+
+Den Stream dafür nennen wir `emit-timeout-metric-stream`:
+
+```clojure
+(def emit-timeout-metric-stream
+  (smap (constantly timeout-metric) reinject))
+```
+
+Der `smap`-Stream reinjiziert für jeden eingehenden Wert, unabhängig von der Art
+des Werts, eine Metrik mit `Double/MAX_VALUE` in die Streams.
+
+## Nicht die Ströme kreuzen
+
+Damit haben wir alle Bestandteile zusammen, nun können wir unseren
+ursprünglichen Stream um ein paar Weichen ergänzen, um auf unsere gewünschte
+Funktionaltität zu kommen:
+
+```clojure
+(streams
+ (where
+  (metric nil)
+  (sdo
+   (where (not (state "expired")) elasticsearch-stream)
+   (split
+    (service "webserver-request") store-requests-stream
+    (service "webserver-reply") lookup-replies-and-calculate-metric-stream
+    (state "expired") emit-timeout-metric-stream))
+  (else
+   influxdb-stream)))
+```
+
+Der Fall für Metriken bleibt unverändert.  Der Fall von Events, die keine Metrik
+sind, wird komplizierter, das `sdo` markiert, dass die Events an mehrere Streams
+weitergegeben werden sollen.  Zum einen an den Stream, der ans Elasticsearch
+weiterschickt, allerdings wollen wir die Informationen über die abgelaufenen
+Anfragen nicht dort sehen, daher filtern wir die mit `(not (state "expired"))`
+aus.  Ansonsten sollen alle Anfragen und alle Antworten im Elasticsearch landen.
+
+Der nächste Stream implementiert die Berechnung der Transaktions-Metriken.  Wir
+spalten in einem `split`-Stream den Eventstrom in Anfragen mit dem Prädikat
+`(service "webserver-request")`, in Antworten mit dem Prädikat `(service
+"webserver-reply")` und in abgelaufene Events mit dem Prädikat `(state
+"expired")`auf.  Die Anfragen landen über den oben definierten
+`store-requests-stream` im Index, die Antworten führen via
+`lookup-replies-and-calculate-metric-stream` und den zuvor im Index
+gespeicherten Anfragen zu Metriken und die abgelaufenen Anfragen führen zu
+Metriken, die den Timeout markieren.
+
+### "Wieso nicht?" -- "Das wäre schlecht!"
+
+Zwei Unit-Tests sollen unsere Implementierung absichern.  Der Erste ist für eine
+komplette Transaktion bestehend aus Anfrage und Antwort:
+
+```clojure
+(deftest transaction-test
+  (let [actual (inject! [request-event reply-event])]
+    (is (= [request-event reply-event]
+           (:elasticsearch-stream actual)))
+    (is (= [indexed-event]
+           (:index actual)))
+    (is (= [example-metric]
+           (:influxdb-stream actual)))))
+```
+
+Der Test injiziert unsere Beispielevents für Anfrage `request-event` und Antwort
+`reply-event`.  Wir erwarten, dass beide an Elasticsearch geschickt werden;
+darüber hinaus erwarten wir, dass die Anfrage in abgewandelter Form als
+indiziertes Event `indexed-event` im Index landet, und wir erwarten, dass die
+berechnete Metric `example-metric` die InfluxDB erreicht.
+
+Der zweite Test überprüft das Verhalten im Timeout-Fall:
+
+```clojure
+(deftest transaction-expired-test
+  (let [actual (do
+                 (inject! [request-event])
+                 (riemann.time.controlled/advance! (* 2 default-ttl))
+                 (inject! [reply-event]))]
+    (is (= [request-event reply-event]
+           (:elasticsearch-stream actual)))
+    (is (= [indexed-event]
+           (:index actual)))
+    (is (= [timeout-metric]
+           (:influxdb-stream actual)))))
+```
+
+Hier injizieren wir zunächst nur die Anfrage `request-event` und stellen dann
+für diesen Test die Uhr mit `riemann.time.controlled/advance!` so weit vor, dass
+die Anfrage im Index auf jeden Fall abgelaufen ist.  Erst dann schicken wir die
+Antwort `reply-event`, die dann aber keine passende Anfrage mehr findet.  Daher
+sehen wir zwar im Elasticsearch sowohl Anfrage- als auch Antwort-Event, und auch
+im Index kam mal das indizierte Antwort-Event vorbei, aber die einzige Metrik,
+die es in die InfluxDB geschafft hat, ist die Timeout-Metrik `timeout-metric`.
+Zusätzlich zum Verhalten im Timeout-Fall deckt dieser Unit-Test sogar das
+Verhalten in dem Fall ab, wenn für ein Antwort-Event keine Anfrage im Index
+vorhanden ist.
+
+Damit haben wir alle Zweige unserer Streams abgetestet und haben das Ziel
+erreicht: Wir haben mit Riemann Metriken aus eingehenden Events abgeleitet.
+
+## Fazit
+
+Riemann ist performant und effizient in der Ausführung -- unsere produktiv
+laufenden Systeme verarbeiten trotz großer und komplizierter Stream-Logik
+mehrere tausend Events pro Sekunde.
+
+Und Riemann ist elegant zu programmieren: Mit der umfangreichen
+Stream-Processing-Sprache lassen sich die typischen Aufgaben in der
+Eventverarbeitung wie Filtern, Anreichern, Kombinieren, Aggregieren und
+Projizieren einfach erledigen.  Und für alle weiteren Aufgaben können wir die
+Stream-Processing-Sprache flexibel erweitern.
+
+### "Totale Protonenumkehr!"
+
+<!-- more end -->
