@@ -258,7 +258,7 @@ durchläuft ein ankommendes Event die Streams `(tap :index identity)` und
 Wir brauchen einen Stream, der ein Anfrage-Event in den Index schreibt.  Wir
 nennen den Stream `store-requests-stream`:
 
-```
+```clojure
 (def store-requests-stream
   (smap (fn [request]
           (clojure.set/rename-keys request {:transaction :service}))
