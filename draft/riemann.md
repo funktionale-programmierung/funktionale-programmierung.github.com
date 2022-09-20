@@ -240,7 +240,8 @@ Sekunden; einen neuen Index binden wir an den Namen `index` und definieren mit
 `periodically-expire`, dass Riemann alle sechs Sekunden nach abgelaufenen Events
 schauen soll.  Den neuen Index verpacken wir in einen Stream mit dem Namen
 `index-stream`.  Genaugenommen ist unser `index-stream` eine `sdo`-Komposition
-von zwei Streams, sprich ein ankommendes Event durchläuft die Streams `(tap
+von zwei Streams: `sdo` ist `do` für Streams, also fließen Events in alle
+Streams im Rumpf.  Hier durchläuft ein ankommendes Event die Streams `(tap
 :index identity)` und `(default :ttl default-ttl index)`:
 
 - Der Stream `(tap :index identity)` ist nur dazu da, um unseren Index-Stream
@@ -286,9 +287,9 @@ interessiert uns nicht weiter.  Ein indiziertes Event sieht zum Beispiel so aus:
 
 ## Aus dem Index lesen
 
-Das Dual vom Schreiben ist das Lesen aus dem Index.  Diesen Stream nennen wir
-`lookup-requests-and-calculate-metric-stream`; der Stream erwartet
-Antwort-Events:
+Kommen Antwort-Events an, müssen wir zugehörige Anfragen aus dem Index lesen.
+Diesen Stream nennen wir `lookup-requests-and-calculate-metric-stream`; der
+Stream erwartet Antwort-Events:
 
 ```
 (def lookup-requests-and-calculate-metric-stream
@@ -379,11 +380,15 @@ Der nächste Stream implementiert die Berechnung der Transaktions-Metriken.  Wir
 spalten in einem `split`-Stream den Eventstrom in Anfragen mit dem Prädikat
 `(service "webserver-request")`, in Antworten mit dem Prädikat `(service
 "webserver-reply")` und in abgelaufene Events mit dem Prädikat `(state
-"expired")`auf.  Die Anfragen landen über den oben definierten
-`store-requests-stream` im Index, die Antworten führen via
-`lookup-replies-and-calculate-metric-stream` und die zuvor im Index
-gespeicherten Anfragen zu Metriken und die abgelaufenen Anfragen führen zu
-Metriken, die den Timeout markieren.
+"expired")`auf:
+
+- Die Anfragen landen über den oben definierten `store-requests-stream` im
+  Index.
+
+- Die Antworten führen via `lookup-replies-and-calculate-metric-stream` und die
+  zuvor im Index gespeicherten Anfragen zu Metriken.
+
+- Die abgelaufenen Anfragen führen zu Metriken, die den Timeout markieren.
 
 ### "Wieso nicht?" -- "Das wäre schlecht!"
 
