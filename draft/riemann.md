@@ -15,9 +15,9 @@ Dabei nutzen wir Riemann zur Aufbereitung von Events und zum Weiterleiten an
 Langzeitspeichersysteme wie
 [Elasticsearch](https://www.elastic.co/elasticsearch/), in denen diese Events
 wiederum durch Benutzeroberflächen wie [Kibana](https://www.elastic.co/kibana/)
-komfortabel durchforstet werden können.  Oder Riemann kann Metriken in
-Zeitreihendatenbanken wie [InfluxDB](https://www.influxdata.com/) schreiben;
-diese Zeitreihen können dann durch Benutzeroberflächen wie
+komfortabel durchforstet werden können.  Außerdem nutzen wir Riemann, um
+Metriken in Zeitreihendatenbanken wie [InfluxDB](https://www.influxdata.com/) zu
+schreiben; diese Zeitreihen können dann durch Benutzeroberflächen wie
 [Grafana](https://grafana.com/) visualisiert werden oder können auch benutzt
 werden, um bei Fehlern und Problemen zu alarmieren.
 
@@ -238,11 +238,12 @@ Wir initialisieren unseren Index wie folgt:
 Zunächst definieren wir unsere Standard-Verfallszeit `default-ttl` auf 60
 Sekunden; einen neuen Index binden wir an den Namen `index` und definieren mit
 `periodically-expire`, dass Riemann alle sechs Sekunden nach abgelaufenen Events
-schauen soll.  Den neuen Index verpacken wir in einen Stream mit dem Namen
-`index-stream`.  Genaugenommen ist unser `index-stream` eine `sdo`-Komposition
-von zwei Streams: `sdo` ist `do` für Streams, also fließen Events in alle
-Streams im Rumpf.  Hier durchläuft ein ankommendes Event die Streams `(tap
-:index identity)` und `(default :ttl default-ttl index)`:
+schauen soll.  Dann erzeugen wir mit dem Aufruf `(index)` einen neuen Index.
+Den neuen Index verpacken wir in einen Stream mit dem Namen `index-stream`.
+Genaugenommen ist unser `index-stream` eine `sdo`-Komposition von zwei Streams:
+`sdo` ist `do` für Streams, also fließen Events in alle Streams im Rumpf.  Hier
+durchläuft ein ankommendes Event die Streams `(tap :index identity)` und
+`(default :ttl default-ttl index)`:
 
 - Der Stream `(tap :index identity)` ist nur dazu da, um unseren Index-Stream
   für unsere Unit-Tests belauschen zu können.
@@ -291,7 +292,7 @@ Kommen Antwort-Events an, müssen wir zugehörige Anfragen aus dem Index lesen.
 Diesen Stream nennen wir `lookup-requests-and-calculate-metric-stream`; der
 Stream erwartet Antwort-Events:
 
-```
+```clojure
 (def lookup-requests-and-calculate-metric-stream
   (smap (fn [reply]
           (when-let [request (riemann.index/lookup index
