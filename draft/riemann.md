@@ -96,9 +96,8 @@ Die Definitionen von `elasticsearch-stream` und `influxdb-stream` sehen so aus:
   (tap :influxdb-stream influxdb))
 ```
 
-Das `tap` in jeder dieser Definitionen ist ein Konstrukt, um Events abzugreifen,
-um sie für die Testfälle zu inspizieren.  Davon werden wir gleich Gebrauch
-machen.
+Das `tap` in jeder dieser Definitionen ist ein Konstrukt, um Events für
+Testfälle abzugreifen.  Davon werden wir gleich Gebrauch machen.
 
 Die tatsächlichen Definitionen von `elasticsearch` und `influxdb` würden diesen
 Blogartikel sprengen, daher verlassen wir uns einfach auf Wunschdenken und gehen
@@ -238,12 +237,12 @@ Wir initialisieren unseren Index wie folgt:
 Zunächst definieren wir unsere Standard-Verfallszeit `default-ttl` auf 60
 Sekunden; einen neuen Index binden wir an den Namen `index` und definieren mit
 `periodically-expire`, dass Riemann alle sechs Sekunden nach abgelaufenen Events
-schauen soll.  Dann erzeugen wir mit dem Aufruf `(index)` einen neuen Index.
-Den neuen Index verpacken wir in einen Stream mit dem Namen `index-stream`.
-Genaugenommen ist unser `index-stream` eine `sdo`-Komposition von zwei Streams:
-`sdo` ist `do` für Streams, also fließen Events in alle Streams im Rumpf.  Hier
-durchläuft ein ankommendes Event die Streams `(tap :index identity)` und
-`(default :ttl default-ttl index)`:
+schauen soll.  Dann erzeugen wir mit dem Aufruf der Riemann-Funktion `(index)`
+einen neuen Index.  Den neuen Index verpacken wir in einen Stream mit dem Namen
+`index-stream`.  Genaugenommen ist unser `index-stream` eine `sdo`-Komposition
+von zwei Streams: `sdo` ist `do` für Streams, also fließen Events in alle
+Streams im Rumpf.  Hier durchläuft ein ankommendes Event die Streams `(tap
+:index identity)` und `(default :ttl default-ttl index)`:
 
 - Der Stream `(tap :index identity)` ist nur dazu da, um unseren Index-Stream
   für unsere Unit-Tests belauschen zu können.
