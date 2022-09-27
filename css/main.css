@@ -22,8 +22,6 @@ p,h1,h2,h3,h4,h5,h6,ul,ol,li,div,td,th,address,blockquote,nobr,b,i
   font-weight: 400;
 }
 
-p,ul,ol,li,div,td,th,address,nobr,b,i { font-size:15px; }
-
 p {
     margin-bottom: 1.5ex;
     line-height: 3.3ex;
