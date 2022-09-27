@@ -63,9 +63,29 @@ es keine Einschränkung, welche Felder und Werte ein Event enthalten kann.
 
 ## Streams
 
-Ein einfacher Stream, der zum Beispiel Logevents von Metriken trennt und
+Wie bereits erwähnt, ist ein Stream in Riemann eine Funktion, die ein Event
+akzeptiert.  In Riemann bedeutet "Stream" also nicht eine Sequenz von
+Datenelementen, was man unter diesen Begriff üblicherweise in den meisten
+Kontexten versteht.  Vielleicht wäre "Event-Prozessor" ein besserer Name für
+das, was ein Stream in Riemann tatsächlich ist: Ein Callback, der Events
+akzeptiert und diese Events wiederum an andere Event-Prozessor-Callbacks
+weitergibt.  Wir bleiben im Folgenden aber beim Begriff Stream, da dies die
+gebräuchliche Bezeichnung in Riemann ist.
+
+Ein einfacher Stream ist zum Beispiel ein `where`-Stream, der in Riemann
+eingebaut ist:
+
+```clojure
+(where <condition> <stream>)
+```
+
+Ein `where`-Stream ist selbst ein Event-Prozessor, der ein Event annimmt,
+überprüft ob die angegebene Bedingung stimmt und dann den Event-Prozessor
+`<stream>` mit dem Event aufruft.
+
+Damit bauen wir einen Stream, der zum Beispiel Logevents von Metriken trennt und
 Logevents zur Langzeitspeicherung an einen Elasticsearch-Server und Metriken an
-eine InfluxDB-Zeitreihendatenbank weiterleitet, sieht so aus:
+eine InfluxDB-Zeitreihendatenbank weiterleitet:
 
 ```clojure
 (streams
@@ -76,12 +96,12 @@ eine InfluxDB-Zeitreihendatenbank weiterleitet, sieht so aus:
       influxdb-stream)))
 ```
 
-Ein `where`-Stream überprüft, ob durchfließende Events auf bestimmte Prädikate
-passen, hier bedeutet das Prädikat `(metric nil)`, dass ein Event kein Feld
-`:metric` enthält, was in unserem Beispiel wiederum bedeutet, dass ein Event
-keine Metrik ist (die Event-Taxonomie von Riemann nimmt an, dass sich Metriken
-durch die Existenz des Felds `:metric` von anderen Eventtypen unterscheiden).
-In diesem Fall fließt das Event an einen `elasticsearch-stream` weiter, der es
+Der `where`-Stream überprüft, ob durchfließende Events auf das Prädikat `(metric
+nil)` passen.  Das Prädikat `(metric nil)` bedeutet, dass ein Event kein Feld
+`:metric` enthält, was in unserem Beispiel wiederum besagt, dass ein Event keine
+Metrik ist (die Event-Taxonomie von Riemann nimmt an, dass sich Metriken durch
+die Existenz des Felds `:metric` von anderen Eventtypen unterscheiden).  In
+diesem Fall fließt das Event an einen `elasticsearch-stream` weiter, der es
 schließlich an den Elasticsearch-Server schickt.  Im `else`-Zweig finden sich
 nur noch Metriken, die Riemann dann über den `influxdb-stream` an die InfluxDB
 weiterleitet.
