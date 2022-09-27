@@ -27,7 +27,6 @@ p,ul,ol,li,div,td,th,address,nobr,b,i { font-size:15px; }
 p {
     margin-bottom: 1.5ex;
     line-height: 3.3ex;
-    font-size: 1.1em;
 }
 
 p + p {
@@ -229,7 +228,6 @@ img { border: 0 }
     margin-bottom: 3ex;
 }
 .post-content > ul > li {
-    font-size: 16px;
     line-height: 3.0ex;
     margin-bottom: 1.3ex;
 }
