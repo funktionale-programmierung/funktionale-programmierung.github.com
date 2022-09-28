@@ -40,12 +40,12 @@ erwarten:
 - [Pretty-Printing II: Laziness FTW](/2022/05/30/prettier-printer-2.html)
 - [Komponierbare UI-Komponenten](/2022/06/30/composable-components.html)
 - [Higher-Kinded Data für Konfigurationen in Haskell](/2022/07/29/higher-kinded-data.html)
+- [Type-Lambdas in Scala 3](/2022/01/09/scala3-type-lambdas.html)
+- [Eventstreaming-Systeme mit Riemann](/2022/09/28/riemann.html)
 - Deep Learning mit ConCat
-- Type-Lambdas in Scala 3
 - Nix
 - Return of the DES, mit Polysemy
 - Effektvoll serviert: Polysemy und Servant
-- Eventstreaming-Systeme mit Riemann
 
 Wir sind gespannt und freuen uns darauf, diese Reihe und vielleicht
 noch mehr umzusetzen.
