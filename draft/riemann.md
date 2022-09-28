@@ -69,8 +69,8 @@ Datenelementen, was man unter diesen Begriff üblicherweise in den meisten
 Kontexten versteht.  Vielleicht wäre "Event-Prozessor" ein besserer Name für
 das, was ein Stream in Riemann tatsächlich ist: Ein Callback, der Events
 akzeptiert und diese Events wiederum an andere Event-Prozessor-Callbacks
-weitergibt.  Wir bleiben im Folgenden aber beim Begriff Stream, da dies die
-gebräuchliche Bezeichnung in Riemann ist.
+weitergibt (und keinen Rückgabewert hat).  Wir bleiben im Folgenden aber beim
+Begriff Stream, da dies die gebräuchliche Bezeichnung in Riemann ist.
 
 Ein einfacher Stream ist zum Beispiel ein `where`-Stream, der in Riemann
 eingebaut ist:
@@ -83,9 +83,9 @@ Ein `where`-Stream ist selbst ein Event-Prozessor, der ein Event annimmt,
 überprüft ob die angegebene Bedingung stimmt und dann den Event-Prozessor
 `<stream>` mit dem Event aufruft.
 
-Damit bauen wir einen Stream, der zum Beispiel Logevents von Metriken trennt und
-Logevents zur Langzeitspeicherung an einen Elasticsearch-Server und Metriken an
-eine InfluxDB-Zeitreihendatenbank weiterleitet:
+Damit bauen wir einen Stream, der Logevents von Metriken trennt: Logevents
+sollen zur Langzeitspeicherung an einen Elasticsearch-Server und Metriken an
+eine InfluxDB-Zeitreihendatenbank weitergeleitet werden.
 
 ```clojure
 (streams
