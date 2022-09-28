@@ -129,7 +129,7 @@ denkbar? Mit HTML-Elementen können zum Beispiel zwei Komponenten
 
 ```jsx
 function cdiv(c1, c2) {
-  function (value, onChange) = {
+  return function (value, onChange) {
     return <div>{c1(value, onChange)}{c2(value, onChange)}</div>;
   }
 }
