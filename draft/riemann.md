@@ -236,7 +236,8 @@ ein Verfallsdatum: Das Feld `:ttl` legt die "time-to-live" für ein Event im
 Index in Sekunden fest.  Und wir können festlegen, in welchen Abständen
 gestorbene Events gelöscht werden.  Riemann löscht diese Events nicht nur,
 sondern informiert auch noch über diese abgelaufenen Events -- diese Information
-können wir für unser Vorhaben auch sinnvoll nutzen.
+können wir für unser Vorhaben, die Transaktionszeit zu bestimmen, auch sinnvoll
+nutzen.
 
 Wir initialisieren unseren Index wie folgt:
 
@@ -455,7 +456,7 @@ für diesen Test die Uhr mit `riemann.time.controlled/advance!` so weit vor, das
 die Anfrage im Index auf jeden Fall abgelaufen ist.  Erst dann schicken wir die
 Antwort `reply-event`, die dann aber keine passende Anfrage mehr findet.  Daher
 sehen wir zwar im Elasticsearch sowohl Anfrage- als auch Antwort-Event, und auch
-im Index kam mal das indizierte Antwort-Event vorbei, aber die einzige Metrik,
+im Index kam mal das indizierte Anfrage-Event vorbei, aber die einzige Metrik,
 die es in die InfluxDB geschafft hat, ist die Timeout-Metrik `timeout-metric`.
 Zusätzlich zum Verhalten im Timeout-Fall deckt dieser Unit-Test sogar das
 Verhalten in dem Fall ab, dass für ein Antwort-Event keine Anfrage im Index
