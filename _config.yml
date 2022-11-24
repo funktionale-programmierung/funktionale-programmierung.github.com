@@ -154,6 +154,11 @@ authors:
     name: Felix Leitz
     href: 
     about: 'Felix Leitz ist Software-Architekt bei der <a href="https://www.active-group.de/">Active Group GmbH</a> in Tübingen. Sein besonderes Interesse gilt der funktionalen Programmierung.'
+  raoul-schlotterbeck:
+    name: Raoul Schlotterbeck
+    href:
+    image: /author/raoul-schlotterbeck.jpg
+    about: 'Raoul Schlotterbeck ist Softwarearchitekt bei der <a href="https://www.active-group.de/">Active Group GmbH</a> mit Schwerpunkt Datenanalytik. Er ist ausgebildeter Physiker. Bei der Active Group verbindet er robuste mathematische Theorie mit industrieller Anwendung.'
   fp-staff:
     name: Team
     href: "https://funktionale-programmierung.de"
