@@ -137,7 +137,7 @@ def __call__(self, xs):
     ...
 ```
 
-den wichtigen Hinweis `transpose_b=True` weglässt, erhält man beim ausführen des 
+den wichtigen Hinweis `transpose_b=True` weglässt, erhält man beim Ausführen des 
 Netzes folgende Fehlermeldung
 
 ```python
