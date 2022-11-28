@@ -127,7 +127,18 @@ verdeutlichen:
 - Das ganze ist sehr anfällig für Fehler, die erst zur Laufzeit (teils kryptische) 
   Meldungen produzieren
 
-Man sieht z.B. folgender Fehlermeldung...
+Wenn man z.B. in obiger Definition der call-Methode...
+
+```python
+def __call__(self, xs):
+    ...
+    out = tf.matmul(self.weights[0], 
+                        inputs, transpose_b=True) + self.biases[0]
+    ...
+```
+
+den wichtigen Hinweis `transpose_b=True` weglässt, erhält man beim ausführen des 
+Netzes folgende Fehlermeldung
 
 ```python
 >>> import simple_neural_network as nn
@@ -146,18 +157,8 @@ ValueError: in user code:
 
     ValueError: Dimensions must be equal, but are 4 and 1 for '{{node MatMul}} = MatMul[T=DT_FLOAT, transpose_a=false, transpose_b=false](MatMul/ReadVariableOp, Const)' with input shapes: [4,4], [1,4].
 ```
-nicht direkt an, dass die Ursache darin lag, dass in obiger Definition der call-
-Methode...
-
-```python
-def __call__(self, xs):
-    ...
-    out = tf.matmul(self.weights[0], 
-                        inputs, transpose_b=True) + self.biases[0]
-    ...
-```
-
-der wichtige Hinweis `transpose_b=True` fehlte. 
+Das ist in diesem Fall noch einfach zu beheben, derartige Fehler können aber 
+ziemlich schnell in tagelange Fehlersuche ausarten.
 
 ## Deep Learning mit ConCat ##
 
@@ -191,7 +192,7 @@ verdeutlichen:
 - Das Neuronale Netz ist eine pure, ganz normale Haskell-Funktion, die das, und nur das 
   macht, was ein Neuronales Netz so macht. 
 - Die API für das Neuronale Netz ist demnach einfach Haskell, was es deutlicher 
-  einfacher macht, das Netz in anderen Teilen eines Programms zu nuntzen.
+  einfacher macht, das Netz in anderen Teilen eines Programms zu nutzen.
 - Die Typen sind generisch gehalten.[^generics]
 - Das Neuronale Netz lässt sich leicht testen.
 - Die meisten Fehler werden schon beim Kompilieren gefunden; insbesondere weist GHC
@@ -210,7 +211,7 @@ einem späteren Blogpost an.
 
 [^generics]: `(--+)` ist ein Typ-Alias, das lediglich ein paar Operatoren aus 
     GHC.Generics benutzt, wo auch `(:*:)` herkommt; der Kombinator für die Schichten 
-    des Netzes ist folgendermaßen definiert:
+    eines Netzes ist folgendermaßen definiert:
     ```haskell
     (@.) :: (q s -> b -> c) -> (p s -> a -> b) -> ((q :*: p) s -> a -> c)
     (g @. f) (q :*: p) = g q . f p
