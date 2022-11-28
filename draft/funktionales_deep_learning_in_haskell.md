@@ -171,18 +171,11 @@ der wichtige Hinweis `transpose_b=True` fehlte.
 
 ## Deep Learning mit ConCat ##
 
-In einem Satz beschrieben nutzt ConCat die Isomorphie zwischen kartesisch 
-abgeschlossenen Kategorien und Lambdakalkülen und greift damit in GHCs 
-Kompilierprozess ein, um die Lambda-Ausdrücke der Kompilierersprache in andere
-Kategorien zu transformieren.
-
-![ConCat Pipeline](/files/funktionales-deep-learning-in-haskell/concat-pipeline.png)
-
-Eine solche Kategorie ist die Kategorie der *Reverse Mode Automatic Differentation* 
-(`RAD`). Die rückwärtsläufige Ableitung einer Funktion `f :: a -> b` wird durch 
-einen Aufruf der Form `toCcc f :: RAD a b` erzeugt, der dem Plugin sagt, dass `f`
-in die Kategorie `RAD` transformiert werden soll. Das Ergebnis ist ein gewöhnlicher 
-Haskell-Datentyp hinter dem sich eine gewöhnliche Haskell-Funktion verbirgt.
+Grob gesagt abstrahiert ConCat Haskells Funktionspfeil und nutzt Kategorientheorie, 
+um `->` auf verschiedene Weisen zu interpretieren. So können wir eine Funktion z.B. 
+in ihre rückwärtsläufige Ableitung transformieren. Das schöne dabei ist, dass das 
+ganze in GHCs Kompilierprozess passiert - sowohl die Funktion als auch ihre 
+Ableitung (nachdem sie transformiert wurde) sind dabei ganz normale Haskell-Funktionen. Ein Gradient-Tape müssen wir weder generieren noch verwalten.
 
 Mit ConCat könnte man daher obigen Autoencoder so implementieren:
 
@@ -218,12 +211,3 @@ wie macht man denn Deep Learning mit ConCat eigentlich? Das schauen wir uns in e
 späteren Blogpost an.
 
 <!-- more end -->
-
-<!-- 
-Mike:
-  - mit Autoencoder anfangen
-  - das ist natürlich nur der Autoencoder, wir brauchen noch Gradienten
-  - ConCat ersetzt normalen FUnktionspfeil durch einen Pfeil, der statt der eigentlichen Funktion die Ableitung ausrechnet (mit Hilfe von Kategorientheorie)
-  - vielleicht erwähnen, dass es nicht so ein komplizierter Tape-Algorithmus ist
-  - wie das genau aussieht, schreiben wir in einem zukünftigen Post
- -->
