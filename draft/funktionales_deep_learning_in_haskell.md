@@ -25,7 +25,7 @@ Im Rahmen dieses Blogposts reicht es, sich ein Neuronales Netz als eine Funktion
 vielen Parametern vorzustellen. Während des sogennanten *Trainings* sollen die 
 Parameter so eingestellt werden, dass das Netz auf einem gegebenen Datensatz 
 möglichst "gute" Ausgaben produziert. Wie gut eine Ausgabe ist, wird dabei anhand 
-einer Fehlerfunktion beurteilt, die in den meisten Fällen die Ausgabe des Netzes 
+einer *Fehlerfunktion* beurteilt, die in den meisten Fällen die Ausgabe des Netzes 
 mit einer vorgegebenen, gewünschten Ausgabe vergleicht und daraus eine Zahl 
 berechnet. Wir haben es hier also mit einem Optimierungsproblem zu tun, bei dem die 
 eben erwähnte Zahl minimiert werden soll.
@@ -46,7 +46,7 @@ Komposition vieler Teilableitungen. Da Funktionskomposition assoziativ ist, steh
 uns frei, in welcher Reihenfolge wir die Komponenten auswerten. Wie sich 
 herausstellt, ist dabei der Rechenaufwand bei rechtsassoziativer Auswertung 
 (vorwärts) abhängig von der Eingangsdimension - das ist in diesem Fall die Anzahl 
-der Parameter - und für den linksassoziativer Fall (rückwärts) von der 
+der Parameter - und für den linksassoziativen Fall (rückwärts) von der 
 Ausgangsdimension - in diesem Fall 1, da die Fehlerfunktion ja eine Zahl ausgibt. Es 
 wundert daher auch nicht, dass Deep Learning Bibliotheken linksassoziativ arbeiten. 
 
@@ -124,11 +124,20 @@ verdeutlichen:
   um zu überprüfen, ob das Netz korrekte Werte ausgibt, muss man den ganzen Graphen
   laufen lassen.
 - Manche Teile von Python sind kompatibel mit dem TensorFlow-Graph, andere nicht.
-- Das ganze ist sehr anfällig für Fehler, die zur Laufzeit kryptische Meldungen 
-  produzieren
+- Das ganze ist sehr anfällig für Fehler, die zur Laufzeit teils kryptische 
+  Meldungen produzieren
 - ...
 
-Man sieht z. B. folgender Fehlermeldung
+<!-- 
+- Was dabei im Hintergrund passiert, wissen wir nicht wirklich und können wir auch nicht kontrollieren.
+- Manche Teile von Python sind verträglich damit, andere nicht.
+- Dabei werden seher spezialisierte, TensorFlow-interne Typen benutzt
+- Das alles wirkt sich äußerst ungünstig auf Konzepte wie Abstraktion, Generalisierung, Kompositionalität und Testbarkeit aus
+- ... und führt sehr leicht zu teils kryptischen Fehlermeldungen zur Laufzeit.
+ Wir haben hier offenbar mit genau der Art von Code zu tun, die wir als funktionale Programmierer aus gutem Grund möglichst weit an den Rand unserer Anwendung drücken wollen. Hier geht es aber um Funktionalität, die eigentlich im Kern unserer Anwendung liegt.
+ -->
+
+Man sieht z.B. folgender Fehlermeldung...
 
 ```python
 >>> import autoencoder as ae
@@ -148,7 +157,7 @@ ValueError: in user code:
     ValueError: Dimensions must be equal, but are 4 and 1 for '{{node MatMul}} = MatMul[T=DT_FLOAT, transpose_a=false, transpose_b=false](MatMul/ReadVariableOp, Const)' with input shapes: [4,4], [1,4].
 ```
 nicht direkt an, dass die Ursache darin lag, dass in obiger Definition der call-
-Methode
+Methode...
 
 ```python
 def __call__(self, xs):
@@ -204,9 +213,17 @@ verdeutlichen:
   zusammenpassen.
 - ...
 
-Nachdem wir nun wissen, warum man Deep Learning lieber mit ConCat betrieben sollte,
-werden wir uns in einem späteren Blogpost dann aber tatsächlich anschauen, wie man
-das denn so macht.
+Jetzt wissen wir schon mal, dass wir für Deep Learning lieber ConCat benutzen. Aber 
+wie macht man denn Deep Learning mit ConCat eigentlich? Das schauen wir uns in einem 
+späteren Blogpost an.
 
 <!-- more end -->
 
+<!-- 
+Mike:
+  - mit Autoencoder anfangen
+  - das ist natürlich nur der Autoencoder, wir brauchen noch Gradienten
+  - ConCat ersetzt normalen FUnktionspfeil durch einen Pfeil, der statt der eigentlichen Funktion die Ableitung ausrechnet (mit Hilfe von Kategorientheorie)
+  - vielleicht erwähnen, dass es nicht so ein komplizierter Tape-Algorithmus ist
+  - wie das genau aussieht, schreiben wir in einem zukünftigen Post
+ -->
