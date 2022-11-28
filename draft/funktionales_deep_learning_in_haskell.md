@@ -14,7 +14,7 @@ Elliots GHC-Plugin
 <a href="https://github.com/compiling-to-categories/concat" target="_blank">ConCat</a>
 fündig geworden. Im ersten Teil dieser Reihe schauen wir uns an, warum es ein wahrer 
 Hochgenuss ist, gängige Bibliotheken wie TensorFlow oder PyTorch zu Gunsten von 
-ConCat über Bord zu werfen, und geben einen ersten groben Einblick in die
+ConCat über Bord zu werfen[^concat], und geben einen ersten groben Einblick in die
 funktionsweise von Deep Learning mit ConCat. 
 
 <!-- more start -->
@@ -78,14 +78,14 @@ Maschinerie übersetzt werden muss. Interessierte LeserInnen mögen versuchen, z
 verstehen, was TensorFlow z.B aus 
 einem harmlosen `+` <a href="https://github.com/tensorflow/tensorflow/blob/v2.11.0/tensorflow/python/ops/math_ops.py#L3926-L4004" target="_blank"> so alles macht </a>.
 
-### Beispiel: Simpler Autoencoder in TensorFlow ###
+### Beispiel: Simples Neuronales Netz in TensorFlow ###
 
 In etwa folgendermaßen könnte man in TensorFlow ein simples Neuronales Netz 
 implementieren, das aus vier *Schichten* (d.i. im Wesentlichen eine 
 Matrixmultiplikation) besteht, jeweils gefolgt von einer *Aktivierungsfunktion*.
 
 ```python
-class Autoencoder:
+class SimpleNeuralNetwork:
 
     def __init__(self, dim):
         self.dims = [dim, dim, dim // 2, dim // 2, dim]
@@ -118,31 +118,21 @@ verdeutlichen:
 - Der Code ist sehr unübersichtlich und kompliziert.
 - Große Teile des Codes haben gar nichts mit dem eigentlichen Netz zu tun, sondern 
   mit dem TensorFlow-Graphen.
-- Der Code ist sehr spezialisiert auf TensorFlow interne Typen. Generalisierung und 
+- Der Code ist sehr spezialisiert auf TensorFlow-interne Typen. Generalisierung und 
   Abstraktion ist in diesem Kontext kaum noch möglich.
 - Die einzelnen Teile des Graphen lassen sich überhaupt nicht mehr separat testen; 
   um zu überprüfen, ob das Netz korrekte Werte ausgibt, muss man den ganzen Graphen
   laufen lassen.
 - Manche Teile von Python sind kompatibel mit dem TensorFlow-Graph, andere nicht.
-- Das ganze ist sehr anfällig für Fehler, die zur Laufzeit teils kryptische 
+- Das ganze ist sehr anfällig für Fehler, die erst zur Laufzeit (teils kryptische) 
   Meldungen produzieren
-- ...
-
-<!-- 
-- Was dabei im Hintergrund passiert, wissen wir nicht wirklich und können wir auch nicht kontrollieren.
-- Manche Teile von Python sind verträglich damit, andere nicht.
-- Dabei werden seher spezialisierte, TensorFlow-interne Typen benutzt
-- Das alles wirkt sich äußerst ungünstig auf Konzepte wie Abstraktion, Generalisierung, Kompositionalität und Testbarkeit aus
-- ... und führt sehr leicht zu teils kryptischen Fehlermeldungen zur Laufzeit.
- Wir haben hier offenbar mit genau der Art von Code zu tun, die wir als funktionale Programmierer aus gutem Grund möglichst weit an den Rand unserer Anwendung drücken wollen. Hier geht es aber um Funktionalität, die eigentlich im Kern unserer Anwendung liegt.
- -->
 
 Man sieht z.B. folgender Fehlermeldung...
 
 ```python
->>> import autoencoder as ae
->>> encoder = ae.Autoencoder(4)
->>> encoder([1,2,3,4])
+>>> import simple_neural_network as nn
+>>> simple_nn = nn.SimpleNerualNetwork(4)
+>>> simple_nn([1,2,3,4])
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
   File "/nix/store/2l3cr4ksxsz96ixz1dl2gdxg50byl45l-python3-3.10.4-env/lib/python3.10/site-packages/tensorflow/python/util/traceback_utils.py", line 153, in error_handler
@@ -151,7 +141,7 @@ Traceback (most recent call last):
     raise e.ag_error_metadata.to_exception(e)
 ValueError: in user code:
 
-    File "/Users/raoulschlotterbeck/Downloads/tensorfun/autoencoder.py", line 19, in __call__  *
+    File ".../simple_neural_network.py", line 19, in __call__  *
         out = tf.matmul(self.weights[0], tf.convert_to_tensor([x], dtype=tf.float32)) + self.biases[0]
 
     ValueError: Dimensions must be equal, but are 4 and 1 for '{{node MatMul}} = MatMul[T=DT_FLOAT, transpose_a=false, transpose_b=false](MatMul/ReadVariableOp, Const)' with input shapes: [4,4], [1,4].
@@ -173,41 +163,56 @@ der wichtige Hinweis `transpose_b=True` fehlte.
 
 Grob gesagt abstrahiert ConCat Haskells Funktionspfeil und nutzt Kategorientheorie, 
 um `->` auf verschiedene Weisen zu interpretieren. So können wir eine Funktion z.B. 
-in ihre rückwärtsläufige Ableitung transformieren. Das schöne dabei ist, dass das 
+in ihre rückwärtsläufige Ableitung uminterpretieren. Das schöne dabei ist, dass das 
 ganze in GHCs Kompilierprozess passiert - sowohl die Funktion als auch ihre 
-Ableitung (nachdem sie transformiert wurde) sind dabei ganz normale Haskell-Funktionen. Ein Gradient-Tape müssen wir weder generieren noch verwalten.
+Ableitung (nachdem sie uminterpretiert wurde) sind dabei ganz normale Haskell-Funktionen. 
+Ein Gradient-Tape müssen wir weder generieren noch verwalten.
 
-Mit ConCat könnte man daher obigen Autoencoder so implementieren:
+Mit ConCat könnte man daher obiges Neuronales Netz so implementieren:
 
 ```haskell
-type AutoencoderPars (f :: Nat -> * -> *) n m =
+type SimpleNeuralNetworkPars (f :: Nat -> * -> *) n m =
   ( (f m --+ f n)
       :*: (f m --+ f m)
       :*: (f n --+ f m)
       :*: (f n --+ f n)
   )
 
-autoencoder ::
+simpleNeuralNetwork ::
   (KnownNat n, KnownNat m, Additive numType, Floating numType, Ord numType) =>
-  AutoencoderPars f n m numType -> f n numType -> f n numType
-autoencoder = affine @. affTanh @. affRelu @. affTanh
+  SimpleNeuralNetworkPars f n m numType -> f n numType -> f n numType
+simpleNeuralNetwork = affine @. affTanh @. affRelu @. affTanh
 ```
 
 Ohne weiter in Details zu gehen, lassen sich hieran schon einige Vorteile 
 verdeutlichen:
 
 - Der Code ist auf die Wesentlichen Konzepte reduziert.
-- Der Autoencoder ist eine pure, ganz normale Haskell-Funktion, die das, und nur das 
-  macht, was ein Autoencoder so macht.
-- Die Typen sind generisch gehalten.
-- Der Autoencoder lässt sich leicht testen.
-- Durch Verwendung von Datentypen, die Informationen über ihre Dimension enthalten,
-  weist GHC schon beim Kompilieren darauf hin, wenn irgendwo Dimensionen nicht 
-  zusammenpassen.
-- ...
+- Das Neuronale Netz ist eine pure, ganz normale Haskell-Funktion, die das, und nur das 
+  macht, was ein Neuronales Netz so macht. 
+- Die API für das Neuronale Netz ist demnach einfach Haskell, was es deutlicher 
+  einfacher macht, das Netz in anderen Teilen eines Programms zu nuntzen.
+- Die Typen sind generisch gehalten.[^generics]
+- Das Neuronale Netz lässt sich leicht testen.
+- Die meisten Fehler werden schon beim Kompilieren gefunden; insbesondere weist GHC
+  durch Verwendung von Datentypen, die Informationen über ihre Dimension enthalten,
+  darauf hin, wenn irgendwo Dimensionen nicht zusammenpassen
 
-Jetzt wissen wir schon mal, dass wir für Deep Learning lieber ConCat benutzen. Aber 
-wie macht man denn Deep Learning mit ConCat eigentlich? Das schauen wir uns in einem 
-späteren Blogpost an.
+Jetzt wissen wir schon mal, warum wir für Deep Learning lieber ConCat benutzen. Aber 
+wie macht man denn jetzt Deep Learning mit ConCat eigentlich? Das schauen wir uns in 
+einem späteren Blogpost an.
 
+## Fußnoten ##
+
+[^concat]: Es sei darauf hingewiesen, dass ConCat keine Deep Learning Bibliothek, 
+    sondern Deep Learning nur ein Anwendungsbespiel für ConCat ist; eine 
+    ausgewachsene Deep Learning Bibliothek gibt es hierfür noch nicht.
+
+[^generics]: `(--+)` ist ein Typ-Alias, das lediglich ein paar Operatoren aus 
+    GHC.Generics benutzt, wo auch `(:*:)` herkommt; der Kombinator für die Schichten 
+    des Netzes ist folgendermaßen definiert:
+    ```haskell
+    (@.) :: (q s -> b -> c) -> (p s -> a -> b) -> ((q :*: p) s -> a -> c)
+    (g @. f) (q :*: p) = g q . f p
+    ```
 <!-- more end -->
