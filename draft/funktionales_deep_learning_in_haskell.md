@@ -14,8 +14,8 @@ Elliots GHC-Plugin
 <a href="https://github.com/compiling-to-categories/concat" target="_blank">ConCat</a>
 fündig geworden. Im ersten Teil dieser Reihe schauen wir uns an, warum es ein wahrer 
 Hochgenuss ist, gängige Bibliotheken wie TensorFlow oder PyTorch zu Gunsten von 
-ConCat über Bord zu werfen[^concat], und geben einen ersten groben Einblick in die
-funktionsweise von Deep Learning mit ConCat. 
+ConCat über Bord zu werfen, und geben einen ersten groben Einblick in die
+funktionsweise von Deep Learning mit ConCat.[^concat] 
 
 <!-- more start -->
 
@@ -207,7 +207,8 @@ einem späteren Blogpost an.
 
 [^concat]: Es sei darauf hingewiesen, dass ConCat keine Deep Learning Bibliothek, 
     sondern Deep Learning nur ein Anwendungsbespiel für ConCat ist; eine 
-    ausgewachsene Deep Learning Bibliothek gibt es hierfür noch nicht.
+    ausgewachsene Deep Learning Bibliothek gibt es hierfür noch nicht. Wir arbeiten 
+    aber daran.
 
 [^generics]: `(--+)` ist ein Typ-Alias, das lediglich ein paar Operatoren aus 
     GHC.Generics benutzt, wo auch `(:*:)` herkommt; der Kombinator für die Schichten 
