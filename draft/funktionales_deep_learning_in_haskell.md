@@ -22,7 +22,7 @@ funktionsweise von Deep Learning mit ConCat.
 ## Was macht eigentlich so eine Deep Learning Bibliothek? ##
 
 Im Rahmen dieses Blogposts reicht es, sich ein Neuronales Netz als eine Funktion mit
-vielen Parametern vorzustellen. Während des sogennanten *Trainings* sollen die 
+vielen Parametern vorzustellen. Während des sogenannten *Trainings* sollen die 
 Parameter so eingestellt werden, dass das Netz auf einem gegebenen Datensatz 
 möglichst "gute" Ausgaben produziert. Wie gut eine Ausgabe ist, wird dabei anhand 
 einer *Fehlerfunktion* beurteilt, die in den meisten Fällen die Ausgabe des Netzes 
@@ -45,10 +45,10 @@ Teilfunktionen ist die Ableitung eines Neuronalen Netzes nach der Kettenregel ei
 Komposition vieler Teilableitungen. Da Funktionskomposition assoziativ ist, steht 
 uns frei, in welcher Reihenfolge wir die Komponenten auswerten. Wie sich 
 herausstellt, ist dabei der Rechenaufwand bei rechtsassoziativer Auswertung 
-(vorwärts) abhängig von der Eingangsdimension - das ist in diesem Fall die Anzahl 
-der Parameter - und für den linksassoziativen Fall (rückwärts) von der 
-Ausgangsdimension - in diesem Fall 1, da die Fehlerfunktion ja eine Zahl ausgibt. Es 
-wundert daher auch nicht, dass Deep Learning Bibliotheken linksassoziativ arbeiten. 
+(vorwärts) abhängig von der Eingangsdimension – das ist in diesem Fall die Anzahl 
+der Parameter – und für den linksassoziativen Fall (rückwärts) von der 
+Ausgangsdimension – in diesem Fall 1, da die Fehlerfunktion ja eine Zahl ausgibt. Es 
+wundert daher auch nicht, dass Deep-Learning-Bibliotheken linksassoziativ arbeiten. 
 
 Wie folgendes Beispiel zeigt 
 
@@ -61,7 +61,7 @@ gibt es dabei ein ziemlich kniffliges Problem: Um `g'(f(x))` auszuwerten, müsse
 mal vorwärts auswertet, sich dabei alle Zwischenergebnisse und die Operationen, die 
 diese erzeugt haben, merkt und diese Informationen in der rückwärtsläufigen 
 Berechnung der Ableitung wieder abgreift. All diese Informationen werden in einem 
-sogennanten *Wengert-* oder *Gradient-Tape* gespeichert und die Generierung und 
+sogenannten *Wengert-* oder *Gradient-Tape* gespeichert und die Generierung und 
 Verwaltung eines solchen Tapes ist das, was Deep Learning Bibliotheken eigentlich so 
 machen.
 
@@ -113,7 +113,7 @@ class SimpleNeuralNetwork:
 ```
 
 Ohne weiter in Details zu gehen, lassen sich hieran schon einige Probleme 
-verdeutlichen:
+erkennen:
 
 - Der Code ist sehr unübersichtlich und kompliziert.
 - Große Teile des Codes haben gar nichts mit dem eigentlichen Netz zu tun, sondern 
@@ -124,7 +124,7 @@ verdeutlichen:
   um zu überprüfen, ob das Netz korrekte Werte ausgibt, muss man den ganzen Graphen
   laufen lassen.
 - Manche Teile von Python sind kompatibel mit dem TensorFlow-Graph, andere nicht.
-- Das ganze ist sehr anfällig für Fehler, die erst zur Laufzeit (teils kryptische) 
+- Das Ganze ist sehr anfällig für Fehler, die erst zur Laufzeit (teils kryptische) 
   Meldungen produzieren
 
 Wenn man z.B. in obiger Definition der call-Methode...
@@ -164,12 +164,12 @@ ziemlich schnell in tagelange Fehlersuche ausarten.
 
 Grob gesagt abstrahiert ConCat Haskells Funktionspfeil und nutzt Kategorientheorie, 
 um `->` auf verschiedene Weisen zu interpretieren. So können wir eine Funktion z.B. 
-in ihre rückwärtsläufige Ableitung uminterpretieren. Das schöne dabei ist, dass das 
-ganze in GHCs Kompilierprozess passiert - sowohl die Funktion als auch ihre 
+in ihre rückwärtsläufige Ableitung uminterpretieren. Das Schöne dabei ist, dass das 
+Ganze in GHCs Kompilierprozess passiert – sowohl die Funktion als auch ihre 
 Ableitung (nachdem sie uminterpretiert wurde) sind dabei ganz normale Haskell-Funktionen. 
 Ein Gradient-Tape müssen wir weder generieren noch verwalten.
 
-Mit ConCat könnte man daher obiges Neuronales Netz so implementieren:
+Mit ConCat könnte man daher das obige Neuronale Netz so implementieren:
 
 ```haskell
 type SimpleNeuralNetworkPars (f :: Nat -> * -> *) n m =
@@ -188,7 +188,7 @@ simpleNeuralNetwork = affine @. affTanh @. affRelu @. affTanh
 Ohne weiter in Details zu gehen, lassen sich hieran schon einige Vorteile 
 verdeutlichen:
 
-- Der Code ist auf die Wesentlichen Konzepte reduziert.
+- Der Code ist auf die wesentlichen Konzepte reduziert.
 - Das Neuronale Netz ist eine pure, ganz normale Haskell-Funktion, die das, und nur das 
   macht, was ein Neuronales Netz so macht. 
 - Die API für das Neuronale Netz ist demnach einfach Haskell, was es deutlicher 
@@ -197,7 +197,7 @@ verdeutlichen:
 - Das Neuronale Netz lässt sich leicht testen.
 - Die meisten Fehler werden schon beim Kompilieren gefunden; insbesondere weist GHC
   durch Verwendung von Datentypen, die Informationen über ihre Dimension enthalten,
-  darauf hin, wenn irgendwo Dimensionen nicht zusammenpassen
+  darauf hin, wenn irgendwo Dimensionen nicht zusammenpassen.
 
 Jetzt wissen wir schon mal, warum wir für Deep Learning lieber ConCat benutzen. Aber 
 wie macht man denn jetzt Deep Learning mit ConCat eigentlich? Das schauen wir uns in 
