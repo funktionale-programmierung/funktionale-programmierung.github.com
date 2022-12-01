@@ -15,7 +15,7 @@ Elliots GHC-Plugin
 fündig geworden. Im ersten Teil dieser Reihe schauen wir uns an, warum es ein wahrer 
 Hochgenuss ist, gängige Bibliotheken wie TensorFlow oder PyTorch zu Gunsten von 
 ConCat über Bord zu werfen, und geben einen ersten groben Einblick in die
-funktionsweise von Deep Learning mit ConCat.[^concat] 
+Funktionsweise von Deep Learning mit ConCat.[^concat] 
 
 <!-- more start -->
 
@@ -57,9 +57,9 @@ Wie folgendes Beispiel zeigt
 ```
 
 gibt es dabei ein ziemlich kniffliges Problem: Um `g'(f(x))` auszuwerten, müssen wir 
-`f(x)` kennen. Wir brauchen daher ein Programm, welches das gesamte Neuronale Netz ein 
-mal vorwärts auswertet, sich dabei alle Zwischenergebnisse und die Operationen, die 
-diese erzeugt haben, merkt und diese Informationen in der rückwärtsläufigen 
+`f(x)` kennen. Wir brauchen daher ein Programm, welches das gesamte Neuronale Netz 
+einmal vorwärts auswertet, sich dabei alle Zwischenergebnisse und die Operationen, 
+die diese erzeugt haben, merkt und diese Informationen in der rückwärtsläufigen 
 Berechnung der Ableitung wieder abgreift. All diese Informationen werden in einem 
 sogenannten *Wengert-* oder *Gradient-Tape* gespeichert und die Generierung und 
 Verwaltung eines solchen Tapes ist das, was Deep Learning Bibliotheken eigentlich so 
@@ -100,7 +100,7 @@ class SimpleNeuralNetwork:
                 )
     
     def __call__(self, x):
-        tf.convert_to_tensor([x], dtype=tf.float32)
+        inputs = tf.convert_to_tensor([x], dtype=tf.float32)
         out = tf.matmul(self.weights[0], 
                         inputs, transpose_b=True) + self.biases[0]
         out = tf.tanh(out)
@@ -117,13 +117,15 @@ erkennen:
 
 - Der Code ist sehr unübersichtlich und kompliziert.
 - Große Teile des Codes haben gar nichts mit dem eigentlichen Netz zu tun, sondern 
-  mit dem TensorFlow-Graphen.
+  mit dem TensorFlow-Graphen. Z.B. die Konvertierung der Parameter und des Inputs
+  sowie indirekt alle Funktionen, die aus TensorFlow kommen (s. obige Bermekung zu 
+  `+`).
 - Der Code ist sehr spezialisiert auf TensorFlow-interne Typen. Generalisierung und 
   Abstraktion ist in diesem Kontext kaum noch möglich.
 - Die einzelnen Teile des Graphen lassen sich überhaupt nicht mehr separat testen; 
   um zu überprüfen, ob das Netz korrekte Werte ausgibt, muss man den ganzen Graphen
   laufen lassen.
-- Manche Teile von Python sind kompatibel mit dem TensorFlow-Graph, andere nicht.
+- Manche Teile von Python sind kompatibel mit dem TensorFlow-Graphen, andere nicht.
 - Das Ganze ist sehr anfällig für Fehler, die erst zur Laufzeit (teils kryptische) 
   Meldungen produzieren
 
@@ -191,7 +193,7 @@ verdeutlichen:
 - Der Code ist auf die wesentlichen Konzepte reduziert.
 - Das Neuronale Netz ist eine pure, ganz normale Haskell-Funktion, die das, und nur das 
   macht, was ein Neuronales Netz so macht. 
-- Die API für das Neuronale Netz ist demnach einfach Haskell, was es deutlicher 
+- Die API für das Neuronale Netz ist demnach einfach Haskell, was es deutlich 
   einfacher macht, das Netz in anderen Teilen eines Programms zu nutzen.
 - Die Typen sind generisch gehalten.[^generics]
 - Das Neuronale Netz lässt sich leicht testen.
