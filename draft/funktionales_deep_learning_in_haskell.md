@@ -12,10 +12,10 @@ Python unbestritten die alles dominierende Sprache in Sachen Deep Learning ist,
 haben wir natürlich nach einer funktionaleren Lösung gesucht und sind dabei in Conal 
 Elliots GHC-Plugin 
 <a href="https://github.com/compiling-to-categories/concat" target="_blank">ConCat</a>
-fündig geworden. Im ersten Teil dieser Reihe schauen wir uns an, warum es ein wahrer 
-Hochgenuss ist, gängige Bibliotheken wie TensorFlow oder PyTorch zu Gunsten von 
-ConCat über Bord zu werfen, und geben einen ersten groben Einblick in die
-Funktionsweise von Deep Learning mit ConCat.[^concat] 
+fündig geworden. Im ersten Teil dieser Reihe schauen wir uns an, warum ConCat eine 
+attraktive Alternative zu gängigen Bibliotheken wie TensorFlow oder PyTorch ist, und
+geben einen ersten groben Einblick in die Funktionsweise von Deep Learning mit 
+ConCat.[^concat]
 
 <!-- more start -->
 
@@ -34,8 +34,8 @@ Für Neuronale Netze funtioniert das erfahrungsgemäß am Besten mit dem
 <a href="https://de.wikipedia.org/wiki/Gradientenverfahren" target="_blank"> Gradientenverfahren</a>.
 Dabei wird zunächst eine zu optimierende Funktion nach ihren 
 Parametern abgeleitet. Die Ableitung zeigt in Richtung des steilsten Anstiegs. 
-Werden die Parameter nun entlang (entgegen) ihrer Ableitung angepasst, stehen die 
-Chancen gut, dass die Funktion mit den angepassten Parametern höhere (niedrigere) 
+Werden die Parameter nun entlang oder entgegen ihrer Ableitung angepasst, stehen die 
+Chancen gut, dass die Funktion mit den angepassten Parametern höhere bzw. niedrigere 
 Werte produziert als vorher (sofern man dabei keinen zu großen Schritt gemacht hat).
 
 Es wundert daher nicht, dass die Kernkompetenz von Deep Learning Bibliotheken das 
@@ -70,7 +70,15 @@ machen.
 In TensorFlow kann man sich dieses Tape (etwas lose aufgefasst) sogar anschauen. Das 
 sieht z.B. so aus:
 
-<img src="/files/funktionales-deep-learning-in-haskell/gradients.overview.png" width="400">
+<figure>
+  <img src="/files/funktionales-deep-learning-in-haskell/gradients.overview.png" width="400">
+  <figcaption>
+    Beispiel eines TensorFlow Graphen: Der Pfad von MatMul bis add_3 bildet das
+    Neuronale Netz. Alle Knoten dieses Pfades sind mit gradients verbunden, wo die
+    Berechnung der Ableitung stattfindet. In Adam wird schließlich eine Variante des 
+    Gradientenverfahren ausgeführt.
+  </figcaption>
+</figure>
 
 Dieser Tape- oder Graphenbasierte Ansatz bringt leider mit sich, dass alles, was wir 
 in TensorFlow machen, im Hintergrund in einen Teil einer ziemlich komplizierten 
@@ -112,24 +120,24 @@ class SimpleNeuralNetwork:
         return tf.matmul(self.weights[3], out) + self.biases[3]
 ```
 
-Ohne weiter in Details zu gehen, lassen sich hieran schon einige Probleme 
-erkennen:
+Ohne zu sehr in Details zu gehen, lassen sich hieran schon einige Probleme erkennen:
 
 - Der Code ist sehr unübersichtlich und kompliziert.
 - Große Teile des Codes haben gar nichts mit dem eigentlichen Netz zu tun, sondern 
-  mit dem TensorFlow-Graphen. Z.B. die Konvertierung der Parameter und des Inputs
-  sowie indirekt alle Funktionen, die aus TensorFlow kommen (s. obige Bermekung zu 
-  `+`).
-- Der Code ist sehr spezialisiert auf TensorFlow-interne Typen. Generalisierung und 
-  Abstraktion ist in diesem Kontext kaum noch möglich.
+  mit dem TensorFlow-Graphen. Z.B. die Konvertierung der Parameter (`tf.Variable`) 
+  und des Inputs (`tf.convert_to_tensor`) sowie indirekt alle Funktionen, die aus 
+  TensorFlow kommen (s. obige Bermekung zu `+`).
+- Der Code ist sehr spezialisiert auf TensorFlow-interne Typen (`dtype=tf.float32` 
+  und eben erwähnte Konvertierungen). Generalisierung und Abstraktion ist in diesem 
+  Kontext kaum noch möglich.
 - Die einzelnen Teile des Graphen lassen sich überhaupt nicht mehr separat testen; 
   um zu überprüfen, ob das Netz korrekte Werte ausgibt, muss man den ganzen Graphen
   laufen lassen.
 - Manche Teile von Python sind kompatibel mit dem TensorFlow-Graphen, andere nicht.
-- Das Ganze ist sehr anfällig für Fehler, die erst zur Laufzeit (teils kryptische) 
-  Meldungen produzieren
 
-Wenn man z.B. in obiger Definition der call-Methode...
+Außerdem ist das Ganze ist sehr anfällig für Fehler, die erst zur Laufzeit (teils 
+kryptische) Meldungen produzieren. Wenn man z.B. in obiger Definition der 
+call-Methode...
 
 ```python
 def __call__(self, xs):
@@ -187,7 +195,7 @@ simpleNeuralNetwork ::
 simpleNeuralNetwork = affine @. affTanh @. affRelu @. affTanh
 ```
 
-Ohne weiter in Details zu gehen, lassen sich hieran schon einige Vorteile 
+Diesmal lassen sich ohne zu sehr in Details zu gehen schon einige Vorteile 
 verdeutlichen:
 
 - Der Code ist auf die wesentlichen Konzepte reduziert.
@@ -197,13 +205,14 @@ verdeutlichen:
   einfacher macht, das Netz in anderen Teilen eines Programms zu nutzen.
 - Die Typen sind generisch gehalten.[^generics]
 - Das Neuronale Netz lässt sich leicht testen.
-- Die meisten Fehler werden schon beim Kompilieren gefunden; insbesondere weist GHC
-  durch Verwendung von Datentypen, die Informationen über ihre Dimension enthalten,
-  darauf hin, wenn irgendwo Dimensionen nicht zusammenpassen.
 
-Jetzt wissen wir schon mal, warum wir für Deep Learning lieber ConCat benutzen. Aber 
-wie macht man denn jetzt Deep Learning mit ConCat eigentlich? Das schauen wir uns in 
-einem späteren Blogpost an.
+Außerdem werden die meisten Fehler schon beim Kompilieren gefunden. Insbesondere 
+weist GHC durch Verwendung von Datentypen, die Informationen über ihre Dimension 
+enthalten, darauf hin, wenn irgendwo Dimensionen nicht zusammenpassen.
+
+Jetzt wissen wir schon mal, warum wir für Deep Learning vielleicht lieber ConCat 
+benutzen. Aber wie macht man denn jetzt Deep Learning mit ConCat eigentlich? Das 
+schauen wir uns in einem späteren Blogpost an.
 
 ## Fußnoten ##
 
