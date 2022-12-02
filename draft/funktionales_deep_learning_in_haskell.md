@@ -19,7 +19,7 @@ Funktionsweise von Deep Learning mit ConCat.[^concat]
 
 <!-- more start -->
 
-## Was macht eigentlich so eine Deep Learning Bibliothek? ##
+## Was macht eigentlich so eine Deep Learning-Bibliothek? ##
 
 Fürs Verständnis dieses Blogposts genügt es, sich ein Neuronales Netz als eine
 Funktion mit vielen Parametern vorzustellen. Während des sogenannten
@@ -39,7 +39,7 @@ Werden die Parameter nun entlang oder entgegen ihrer Ableitung angepasst, stehen
 Chancen gut, dass die Funktion mit den angepassten Parametern höhere bzw. niedrigere 
 Werte produziert als vorher (sofern man dabei keinen zu großen Schritt gemacht hat).
 
-Es wundert daher nicht, dass die Kernkompetenz von Deep Learning Bibliotheken das 
+Es wundert daher nicht, dass die Kernkompetenz von Deep Learning-Bibliotheken das 
 <a href="https://de.wikipedia.org/wiki/Automatisches_Differenzieren" target="_blank"> 
 automatische Berechnen von Ableitungen</a> ist. Als Komposition vieler 
 Teilfunktionen ist die Ableitung eines Neuronalen Netzes nach der Kettenregel eine 
@@ -49,7 +49,7 @@ herausstellt, ist dabei der Rechenaufwand bei rechtsassoziativer Auswertung
 (vorwärts) abhängig von der Eingangsdimension – das ist in diesem Fall die Anzahl 
 der Parameter – und für den linksassoziativen Fall (rückwärts) abhängig von der 
 Ausgangsdimension – in diesem Fall 1, da die Fehlerfunktion ja eine Zahl ausgibt. Es 
-wundert daher auch nicht, dass Deep-Learning-Bibliotheken linksassoziativ arbeiten. 
+wundert daher auch nicht, dass Deep Learning-Bibliotheken linksassoziativ arbeiten. 
 
 Wie folgendes Beispiel zeigt 
 
@@ -63,7 +63,7 @@ einmal vorwärts auswertet, sich dabei alle Zwischenergebnisse und die Operation
 die diese erzeugt haben, merkt und diese Informationen in der rückwärtsläufigen 
 Berechnung der Ableitung wieder abgreift. All diese Informationen werden in einem 
 sogenannten *Wengert-* oder *Gradient-Tape* gespeichert und die Generierung und 
-Verwaltung eines solchen Tapes ist das, was Deep Learning Bibliotheken eigentlich so 
+Verwaltung eines solchen Tapes ist das, was Deep Learning-Bibliotheken eigentlich so 
 machen.
 
 ## Deep Learning mit TensorFlow ##
