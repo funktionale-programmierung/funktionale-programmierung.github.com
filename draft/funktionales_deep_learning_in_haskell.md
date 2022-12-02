@@ -220,7 +220,7 @@ schauen wir uns in einem späteren Blogpost an.
 ## Fußnoten ##
 
 [^concat]: Es sei darauf hingewiesen, dass ConCat keine Deep Learning-Bibliothek, 
-    sondern Deep Learning nur eins von vielen Anwendungsbeispiel für ConCat ist; eine 
+    sondern Deep Learning nur eins von vielen Anwendungsbeispielen für ConCat ist; eine 
     ausgewachsene Deep Learning-Bibliothek gibt es hierfür noch nicht. Wir arbeiten 
     aber daran.
 
