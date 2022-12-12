@@ -168,7 +168,7 @@ ValueError: in user code:
     File ".../simple_neural_network.py", line 19, in __call__  *
         out = tf.matmul(self.weights[0], tf.convert_to_tensor([x], dtype=tf.float32)) + self.biases[0]
 
-    ValueError: Dimensions must be equal, but are 4 and 1 for '{{node MatMul}} = MatMul[T=DT_FLOAT, transpose_a=false, transpose_b=false](MatMul/ReadVariableOp, Const)' with input shapes: [4,4], [1,4].
+    ValueError: Dimensions must be equal, but are 4 and 1 for '{node MatMul} = MatMul[T=DT_FLOAT, transpose_a=false, transpose_b=false](MatMul/ReadVariableOp, Const)' with input shapes: [4,4], [1,4].
 ```
 Das ist in diesem Fall noch einfach zu beheben; derartige Fehler können aber 
 ziemlich schnell in tagelange Fehlersuche ausarten.
