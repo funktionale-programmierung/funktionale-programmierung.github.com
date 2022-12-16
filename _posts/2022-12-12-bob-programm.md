@@ -71,8 +71,10 @@ Konkrete Technologien sind vertreten mit
 [Elixir](https://bobkonf.de/2023/allix-zilci.html), genauso wie in
 [Makros in Scheme](https://bobkonf.de/2023/nieper-wisskirchen.html),
 [Funktionale Entwicklung mit
-Kotlin](https://bobkonf.de/2023/fink.html) und [Software-Beweise in
-Agda](https://bobkonf.de/2023/maguire.html).
+Kotlin](https://bobkonf.de/2023/fink.html), 
+[Software-Beweise in Agda](https://bobkonf.de/2023/maguire.html),
+[Web-Anwendungen mit Haskell](https://bobkonf.de/2023/lutz.html) 
+und die [Observability-Plattform OpenTelemetry](https://bobkonf.de/2023/vaknin.html).
 
 Aber auch Architekturthemen sind dabei, darunter [Domain
 Storytelling](https://bobkonf.de/2023/schwentner.html) und [Hexagonale
