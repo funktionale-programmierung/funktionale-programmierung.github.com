@@ -21,7 +21,7 @@ funktioniert.
 
 Mein Kollege Marco Schneider hatte schon in einem [früheren
 Post](https://funktionale-programmierung.de/2022/04/26/validierung-mit-applikativen-funktoren.html)
-über Abstraktionen dafür in Haskell präsentiert.
+über Abstraktionen dafür in Haskell geschrieben.
 
 Die gleichen Ideen sind auch - mit Abstrichen - nach Kotlin
 übertragbar.  In diesem Post rollen wir das Thema noch einmal neu auf,
@@ -90,7 +90,7 @@ Objektcode für die `Position`-Klasse überträgt, wo sie vom Validator
 zur Laufzeit ausgelesen werden.  Zum Beispiel bedeutet die
 `@field:Min`-Annotation, dass der Wert des Felds `anzahl` mindestens 1
 betragen muss.  Die Annotation `@field:Valid` verweist auf die
-Validierungs-äAnnotationen, die in der `Preis`- beziehungsweise der
+Validierungs-Annotationen, die in der `Preis`- beziehungsweise der
 `Produkt`-Klasse stehen.
 
 Der Validator wird erst aktiv, wenn er explizit auf einem
@@ -112,7 +112,7 @@ Funktionalen Programmierys stellen sich bei diesem Vorgehen die
 Nackenhaare auf.  Warum denn ein invalides Objekt überhaupt erzeugen?
 Wir fühlen uns da an die Szene in
 [Alien](https://www.imdb.com/title/tt0078748/?ref_=fn_al_tt_1)
-erinnert, wo das Alien erstmal ins Raumschiff gelassen wird und erst
+erinnert, wo das Alien ins Raumschiff gelassen wird und erst
 *dann* untersucht wird.  (Es geht nicht gut aus.)
 
 Die "Validator-Methode" macht auch ein paar ganz konkrete Probleme:
