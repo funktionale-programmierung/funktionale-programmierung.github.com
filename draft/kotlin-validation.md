@@ -6,7 +6,7 @@ author: michael-sperber
 tags: ["Kotlin", "funktor", "functor", "applikativ", "applicative", "validierung", "validation"]
 ---
 
-Dieser Post ist der Beginn eine Reihe über *funktionale
+Dieser Post ist der Beginn einer Reihe über *funktionale
 Softwarearchitektur in Kotlin*.  Sie entstammt ursprünglich einer
 Zusammenarbeit der Active Group mit
 [Blume2000](https://www.blume2000.de/), die wir bei der Entwicklung
@@ -21,9 +21,9 @@ funktioniert.
 
 Mein Kollege Marco Schneider hatte schon in einem [früheren
 Post](https://funktionale-programmierung.de/2022/04/26/validierung-mit-applikativen-funktoren.html)
-über Abstraktionen dafür in Haskell geschrieben.
+ Abstraktionen dafür in Haskell präsentiert.
 
-Die gleichen Ideen sind auch - mit Abstrichen - nach Kotlin
+Die gleichen Ideen sind auch – mit Abstrichen – nach Kotlin
 übertragbar.  In diesem Post rollen wir das Thema noch einmal neu auf,
 und zwar wie wir aus objektorientierter Sicht mit funktionalen
 Techniken helfen können. Es ist also nicht notwendig, das
@@ -63,8 +63,8 @@ mindestens zwei Probleme:
 
 * Er wirft eine Exception, wenn ein Problem auftritt.  Stilistisch ist
   es aber sinnvoll, Exceptions primär für Situationen zu benutzen, in
-  denen etwas unerwartetes und unabwendbares in der Umgebung der
-  Softare passiert ("Datei nicht gefunden").  Hier geht es aber um
+  denen etwas Unerwartetes und Unabwendbares in der Umgebung der
+  Software passiert ("Datei nicht gefunden").  Hier geht es aber um
   zwar unangenehme aber *erwartbare* Situationen.
 
 * Schwerer wiegt, dass die Methode auf *mehrere* mögliche Probleme
@@ -165,11 +165,11 @@ class Position {
   }
 ```
 
-Wenn wir nicht - wie in Martin Fowlers abschreckendem Beispiel - im
+Wenn wir nicht – wie in Martin Fowlers abschreckendem Beispiel – im
 `else`-Fall eine Exception werfen wollen, müssen wir das Ergebnis der
 Validierung im Rückgabetyp von `of` unterbringen.  Zu diesem Zweck
 verwenden wir die Kotlin-FP-Library [Arrow](https://arrow-kt.io/), die
-allerlei nützliche funktionale Abstraktionen enthält - insbesondere
+allerlei nützliche funktionale Abstraktionen enthält – insbesondere
 den Typ
 [`Validated`](https://arrow-kt.io/docs/apidocs/arrow-core/arrow.core/-validated/).
 (Die Dokumentation von Arrow ist leider zum Zeitpunkt der Drucklegung
@@ -196,7 +196,7 @@ fun of(anzahl: Int, preis: Preis, produkt: Produkt)
       Invalid(listOf(MinViolation(preis, 1)))
 ```
 
-Der Typ `ValidationErrorDescription` ist hier nicht aufgelistet - er
+Der Typ `ValidationErrorDescription` ist hier nicht aufgelistet – er
 enthält Klassen mit Beschreibungen möglicher Validierungsfehler.  Wir
 benutzen hier eine ganze Liste davon, weil ja bei der Konstruktion
 eines einzigen komplexen Objekts *mehrere* Validierungsfehler
@@ -228,7 +228,7 @@ fun of(anzahl: Int, preis: Preis, produkt: Produkt)
 
 (Ich persönlich finde das verwirrend.)
 
-Des weiteren enthalten die meisten Benutzungen von `Validated` im
+Des Weiteren enthalten die meisten Benutzungen von `Validated` im
 Fehlerfall eine Liste, genauer gesagt eine nichtleere Liste.  Dafür
 hält Arrow einen Convenience-Typalias bereit:
 
@@ -267,9 +267,9 @@ when (Position.of(anzahl, preis, produkt)) {
 (`Validated` hat auch noch eine `fold`-Methode, die aber der
 Lesbarkeit nicht unbedingt dienlich ist.)
 
-Wer tiefer in Arrow hineinschaut, sieht, dass - in Anlehung an das
+Wer tiefer in Arrow hineinschaut, sieht, dass – in Anlehnung an das
 Haskell-Package
-[`validation`](https://hackage.haskell.org/package/validation) - es
+[`validation`](https://hackage.haskell.org/package/validation) – es
 möglich ist, eine beliebige Halbgruppe für den Typ `E` zu benutzen.
 Das ist aber in Kotlin für die Praxis zu umständlich, da die
 Halbgruppe nicht automatisch inferiert wird.  Außerdem reicht in aller
@@ -304,7 +304,7 @@ jeweils `ValidatedNel<..., Preis>` und `ValidatedNel<..., Produkt>`
 nimmt.  Schließlich müssen Preis und Produkt wahrscheinlich auch
 validiert werden.  Das ist allerdings nicht nötig, da wir ja dem Credo
 folgen, invalide `Preis`- und `Produkt`-Objekte gar nicht erst zu
-erzeugen - `Preis` und `Produkt` *sind* also implizit bereits
+erzeugen – `Preis` und `Produkt` *sind* also implizit bereits
 validiert.
 
 Trotzdem müssen wir uns was überlegen, wie wir die Validierungen für
@@ -328,11 +328,11 @@ class Produkt {
 ```
 
 Um jetzt ein `Preis`- und ein `Produkt`-Objekt so parallel zu
-validieren, dass etwaige Fehler zu kombinieren, stellt Arrow ein Reihe
-von "Extension Functions" namens `zip`.  Jede von denen akzeptiert
-eine bestimmte Anzahl von `Validated`-Werten und wendet eine Funktion
-auf die Ergebnisse an, falls möglich.  Zum Beispiel hier das
-dreistellige `zip`:
+validieren, dass etwaige Fehler kombiniert werden, stellt Arrow eine
+Reihe von "Extension Functions" namens `zip`. Jede von denen
+akzeptiert eine bestimmte Anzahl von `Validated`-Werten und wendet
+eine Funktion auf die Ergebnisse an, falls möglich. Zum Beispiel hier
+das dreistellige `zip`:
 
 ```kotlin
 public inline fun <E, A, B, C, Z> ValidatedNel<E, A>.zip
@@ -388,7 +388,7 @@ validate(Preis.of(...), Produkt.of(...))
 (Die `validate`-Funktion hat den zusätzlichen Vorteil, anders als
 `zip` symmetrisch zu sein.)
 
-Zu beachten ist bei `andThen` - genau wie in Haskell auch - dass diese
+Zu beachten ist bei `andThen` – genau wie in Haskell auch – dass diese
 Funktion zwar die gleiche Signatur hat wie ein monadisches `bind`
 beziehungsweise `flatMap`, aber damit keine Monade gebildet wird:
 `andThen` akkumuliert die Fehler nicht.
@@ -396,9 +396,9 @@ beziehungsweise `flatMap`, aber damit keine Monade gebildet wird:
 # Fazit
 
 Funktionale Validierung benötigt nur einen einfachen Datentyp und ein
-paar Methoden darauf und kommt ohne DSL oder Annotationen auf.  Da
+paar Methoden darauf und kommt ohne DSL oder Annotationen aus.  Da
 "valide" und "invalide" durch unterschiedliche Objekte ausgedrückt
-wird, könnte man sie auch "objektorientierter Validierung" nennen.
+wird, könnte man sie auch "objektorientierte Validierung" nennen.
 Eine gute Idee ist sie allemal.
 
 In Kotlin bringt Arrow die richtigen Abstraktionen mit, einzig an
