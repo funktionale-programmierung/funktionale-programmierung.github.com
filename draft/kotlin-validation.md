@@ -276,7 +276,7 @@ Halbgruppe nicht automatisch inferiert wird.  Außerdem reicht in aller
 Regel eh `ValidatedNel`.
 
 Um Tests zu schreiben, bei denen man schon weiß, dass die Objekte
-valide sind, benutzen wir in der Regel eine Convience-Funktion wie
+valide sind, benutzen wir in der Regel eine Convenience-Funktion wie
 diese hier:
 
 ```kotlin
