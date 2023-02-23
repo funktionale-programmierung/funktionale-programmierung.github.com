@@ -27,7 +27,7 @@ Kombination von Linsen und Records ist besonders hilfreich.
 
 ## Datenstrukturen
 
-Jedes Programm verarbeitet Daten, die Strukturierung dieser Daten und das Finden
+Jedes Programm verarbeitet Daten. Die Strukturierung dieser Daten und das Finden
 von geeigneten Datenmodellen gehört zu den wichtigsten Aufgaben guter und
 erfolgreicher Softwareentwicklung.  Datenstrukturen möchten wir in unseren
 Programmen zu Typen machen, für zusammengesetzte Daten eignen sich Records.
@@ -367,7 +367,7 @@ verschränkte Rekursion müssen wir uns bei der Umwandlung in EDN nicht anders
 kümmern, als wir es in Clojure eh tun müssen.  In unserer `bookmark->edn`-Linse
 nehmen wir Bezug auf einen noch zu definierenden Wert `edn->folder`, daher
 müssen wir den Namen `edn->folder` vorher deklarieren und die Auswertung des
-Werts mit der Linse `defer` verzögern, `edn->folder` übergeben wir dann as
+Werts mit der Linse `defer` verzögern, `edn->folder` übergeben wir dann als
 Clojure-Variablenobjekt:
 
 ```clojure
@@ -415,7 +415,7 @@ Und damit haben wir alle Teile zusammen, um die Projektionslinse des
                                         (lens/mapl edn->bookmarks-with-folders))))
 ```
 
-Das können wir ausprobieren, umwandeln in EDN und zurück in die
+Das können wir ausprobieren: Umwandeln in EDN und zurück in die
 Record-Datenrepräsentation liefert den Ausgangswert:
 
 ```clojure
