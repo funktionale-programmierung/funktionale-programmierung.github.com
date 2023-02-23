@@ -10,7 +10,7 @@ Linsen sind ein wichtiges Konzept in der funktionalen Programmierung mit großem
 praktischen Nutzen.  Vor einigen Jahren haben wir [funktionale
 Linsen](https://funktionale-programmierung.de/2014/10/15/funktionale-linsen.html)
 hier im Blog bereits vorgestellt.  Seitdem haben wir die Benutzung von Linsen in
-unseren täglichen Arbeit stets ausgebaut.  Heute wollen wir zeigen, wie wir
+unserer täglichen Arbeit stets ausgebaut.  Heute wollen wir zeigen, wie wir
 Linsen als bidirektionale Transformationen nutzen und wie sie uns dadurch beim
 Umwandeln von Datenrepräsentationen unterstützen.
 
@@ -74,8 +74,8 @@ zurück.
 
 Tatsächlich sind die Selektoren aber nicht nur einfache Funktionen, welche die
 Werte der Felder liefern, sie sind Linsen, die diese Werte fokussieren.  Aus
-Linsen kann man mit `yank` den fokussierten Wert auslesen, also kann man obigen
-Zugriff auch
+Linsen kann man mit `yank` den fokussierten Wert auslesen, also kann man für den 
+obigen Zugriff auch
 
 ```clojure
 (lens/yank url-1 url-host)
@@ -83,7 +83,7 @@ Zugriff auch
 
 schreiben.  Da jede Linse ein implizites `lens/yank` macht, wenn man sie auf ein
 Argument anwendet (nämlich der Datenstruktur), werden wir im Folgenden auch für
-alle anderen Linsen `lens/yank` weglassen und die kompaktere und wohl klarere
+alle anderen Linsen `lens/yank` weglassen und die kompaktere,  klarere
 Selektor-Schreibweise benutzen.
 
 Mit Linsen kann man die fokussierten Werte in Datenstrukturen auch mit `shove`
@@ -94,7 +94,7 @@ verändern:
 ```
 
 Obiger Ausdruck liefert einen URL-Record zurück, der auf die Homepage der Active
-Group zeigt.
+Group zeigt. (das Objekt/der Wert `url-1` wird dabei nicht verändert).
 
 Analog zu `yank` gibt es auch für `shove` eine kompaktere Schreibweise für
 Linsen.  Dafür wendet man eine Linse auf zwei Argumente an: Die Datenstruktur und
@@ -119,7 +119,7 @@ Lesezeichen ist ein Link, der aus einer Beschreibung und einer URL besteht:
    url link-url])
 ```
 
-Und unsere Leszeichenverwaltung besteht aus einer Liste aller unserer
+Und unsere Lesezeichenverwaltung besteht aus einer Liste aller unserer
 Lesezeichen:
 
 ```clojure
@@ -332,7 +332,7 @@ anwendet.[^2]
 
 [^2]: Durch die Möglichkeit, beliebige Linsenkombinatoren zu benutzen, ist der
     tatsächlichen Konvertierung keine Grenze gesetzt.  Ein weiterer in der
-    Praxis nützlicher Linsenkombinator `lens/xmap`, damit ist es zum Beispiel
+    Praxis nützlicher Linsenkombinator `lens/xmap`, damit ist es beispielsweise
     möglich, Werte in andere Repräsentationen und zurück zu transformieren, zum
     Beispiel verschiedene Datums- und Uhrzeit-Formate.
 
@@ -364,10 +364,10 @@ wiederrum Ordner sein, also haben wir es hier mit einer gemischten und
 verschränkt rekursiven Datendefinition zu tun.  Für den Umgang mit gemischten
 Daten gibt es einen eingebauten Linsenkombinator `alt->edn`.  Und um die
 verschränkte Rekursion müssen wir uns bei der Umwandlung in EDN nicht anders
-kümmern, als wir es in Clojure eh tun müssen.  In unserer `bookmark->edn`-Linse
+kümmern, als wir es in Clojure sowieso tun müssen.  In unserer `bookmark->edn`-Linse
 nehmen wir Bezug auf einen noch zu definierenden Wert `edn->folder`, daher
 müssen wir den Namen `edn->folder` vorher deklarieren und die Auswertung des
-Werts mit der Linse `defer` verzögern, `edn->folder` übergeben wir dann as
+Werts mit der Linse `defer` verzögern, `edn->folder` übergeben wir dann das
 Clojure-Variablenobjekt:
 
 ```clojure
@@ -415,7 +415,7 @@ Und damit haben wir alle Teile zusammen, um die Projektionslinse des
                                         (lens/mapl edn->bookmarks-with-folders))))
 ```
 
-Das können wir ausprobieren, umwandeln in EDN und zurück in die
+Das können wir nun ausprobieren: umwandeln in EDN und zurück in die
 Record-Datenrepräsentation liefert den Ausgangswert:
 
 ```clojure
