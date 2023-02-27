@@ -30,7 +30,9 @@ Kombination von Linsen und Records ist besonders hilfreich.
 Jedes Programm verarbeitet Daten. Die Strukturierung dieser Daten und das Finden
 von geeigneten Datenmodellen gehört zu den wichtigsten Aufgaben guter und
 erfolgreicher Softwareentwicklung.  Datenstrukturen möchten wir in unseren
-Programmen zu Typen machen, für zusammengesetzte Daten eignen sich Records.
+Programmen zu Typen machen, für zusammengesetzte Daten eignen sich Records,
+siehe dazu auch [ein älteres
+Blogposting](https://funktionale-programmierung.de/2015/04/27/clojure-records.html).
 Betrachten wir als Beispiel eine Datendefinition für eine Lesezeichen-Verwaltung
 eines Webbrowsers, die Beschreibungen mit URLs verknüpft.  Eine URL besteht aus
 einem Protokoll, einem Hostnamen, einer optionalen Portnummer und einem Pfad:
