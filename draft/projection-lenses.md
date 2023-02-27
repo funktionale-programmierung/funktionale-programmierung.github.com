@@ -95,8 +95,9 @@ verändern:
 (lens/shove url-1 url-host "active-group.de")
 ```
 
-Obiger Ausdruck liefert einen URL-Record zurück, der auf die Homepage der Active
-Group zeigt.
+Obiger Ausdruck liefert einen neuen URL-Record zurück, der auf die Homepage der
+Active Group zeigt (`shove` mutiert also nicht den alten URL-Record und hat
+daher keinen Seitenffekt).
 
 Analog zu `yank` gibt es auch für `shove` eine kompaktere Schreibweise für
 Linsen.  Dafür wendet man eine Linse auf zwei Argumente an: Die Datenstruktur und
