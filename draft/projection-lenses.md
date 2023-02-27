@@ -362,7 +362,7 @@ Ein Ordner besteht aus einem Namen und einer Liste von Lesezeichen:
 Auch innerhalb eines Ordners können alle Lesezeichen entweder Links und
 wiederrum Ordner sein, also haben wir es hier mit einer gemischten und
 verschränkt rekursiven Datendefinition zu tun.  Für den Umgang mit gemischten
-Daten gibt es einen eingebauten Linsenkombinator `alt->edn`.  Und um die
+Daten gibt es einen eingebauten Linsenkombinator `union-vector`.  Und um die
 verschränkte Rekursion müssen wir uns bei der Umwandlung in EDN nicht anders
 kümmern, als wir es in Clojure eh tun müssen.  In unserer `bookmark->edn`-Linse
 nehmen wir Bezug auf einen noch zu definierenden Wert `edn->folder`, daher
@@ -374,11 +374,11 @@ Clojure-Variablenobjekt:
 (declare edn->folder)
 
 (def bookmark->edn
-  (lens/alt->edn [link? (lens/invert edn->link)]
-                 [folder? (lens/invert (lens/defer #'edn->folder))]))
+  (lens/union-vector [link? (lens/invert edn->link)]
+                     [folder? (lens/invert (lens/defer #'edn->folder))]))
 ```
 
-Als Argumente bekommt `lens/alt->edn` eine Liste von Alternativen, wobei eine
+Als Argumente bekommt `lens/union-vector` eine Liste von Alternativen, wobei eine
 Alternative ein Paar aus einem Prädikat und einer Linse ist, die zu dem
 Datenformat passt, auf welches das Prädikat passt.  Die angegebene Linse benutzt
 also eine Projektionslinse `link->edn` für Links, wenn das Prädikat `link?`
