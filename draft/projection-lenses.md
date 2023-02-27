@@ -47,10 +47,10 @@ einem Protokoll, einem Hostnamen, einer optionalen Portnummer und einem Pfad:
    path url-path])
 ```
 
-Obige Recorddefinition liefert einen Konstruktor mit namen `make-url`, der als
+Obige Recorddefinition liefert einen Konstruktor namens `make-url`, der als
 Argumente Werte für die vier Felder `protocol`, `host`, `port`, und `path`
 erwartet.  Außerdem liefert die Recorddefinition ein Prädikat `url?`, das
-überprüft, ob ein Argument vom Typ `URL` ist und Selektoren für die vier Felder
+überprüft, ob ein Argument vom Typ `URL` ist und für die vier Felder die Selektoren
 `url-protocol`, `url-host`, `url-port` und `url-path`.  So bindet der Ausdruck
 
 ```clojure
@@ -99,8 +99,8 @@ Obiger Ausdruck liefert einen neuen URL-Record zurück, der auf die Homepage der
 Active Group zeigt (`shove` mutiert nicht den alten URL-Record und hat daher
 keinen Seitenffekt).
 
-Analog zu `yank` gibt es auch für `shove` eine kompaktere Schreibweise für
-Linsen.  Dafür wendet man eine Linse auf zwei Argumente an: Die Datenstruktur und
+Analog zu `yank` gibt es auch für `shove` eine kompaktere Schreibweise.
+Dafür wendet man eine Linse auf zwei Argumente an: Die Datenstruktur und
 den neuen Wert:
 
 ```clojure
@@ -146,7 +146,7 @@ Damit können wir uns folgende Lesezeichen definieren:
 
 Datenkonvertierung nennt man das Umwandeln von strukturierten Daten in ein
 anderes Datenformat, üblicherweise in ein einfacher serialisierbares Format, das
-sich besser zur Übertragung oder zur Speicherung eignet.  Das braucht man beim
+sich besser zur Übertragung oder zur Speicherung eignet.  Datenkonvertierung braucht man beim
 Schreiben von Programmen sehr häufig.  Bei der heutzutage weit verbreiteten
 Client-Server-Architektur ist ständige Kommunikation und Datenübertragung
 zwischen Client und Server nötig, daher ist man als Softwareentwickly in der
@@ -154,7 +154,7 @@ täglichen Arbeit ständig damit beschäftigt, Datenrepräsentationen umzuwandel
 Das ist oft nervig, bedeutet viel Tipparbeit und ist fehleranfällig.
 
 Für unsere Lesezeichenverwaltung eignet sich zum Beispiel [Extensible Data
-Notation (kurz: EDN)](https://github.com/edn-format/edn) als geeignetes
+Notation (kurz: EDN)](https://github.com/edn-format/edn) als 
 Datenformat für das Speichern oder Übertragen der Informationen.  Das könnte so
 aussehen:
 
@@ -175,10 +175,10 @@ aussehen:
 
 Viel einfacher wird die Implementierung von Datenkonvertierungen mit
 *Projektionslinsen*.  Projektionslinsen sind Linsen, die zwei Linsen miteinander
-verbinden und so Werte in verschiedenen Datenformaten miteinander verbinden
+verbinden und so Werte in verschiedenen Datenformaten miteinander verknüpfen
 können.  Ein einfaches Beispiel hilft für das Verständnis dieser Idee:
 
-Nehmen wir zwei einfache EDN-Datenstrukturen:
+Nehmen wir zunächst zwei einfache EDN-Datenstrukturen:
 
 - eine Map
 
@@ -194,13 +194,13 @@ Nehmen wir zwei einfache EDN-Datenstrukturen:
 ```
 
 Die Keywords `:a` und `:b` sind gleichzeitig Linsen, die in der Beispielmap die
-jeweiligen Werte fokussieren; Linsen auf die Elemente des Vektors gehen über den
-Index im Vektor, also hier `(lens/at-index 0)` für das erste und `(lens/at-index
-1)` für das zweite Element.
+jeweiligen Werte fokussieren; um Linsen auf die Elemente des Vektors zu
+erhalten, können wir den Index im Vektor verwenden, also hier `(lens/at-index
+0)` für das erste und `(lens/at-index 1)` für das zweite Element.
 
 Eine Projektionslinse, die den Wert der Map für den Schlüssel `:a` an die erste
 Stelle des Vektors und den Wert für `:b` an die zweite Stelle des Vektors
-projiziert verbindet die entsprechenden Linsen und sieht so aus:
+projiziert, verbindet die entsprechenden Linsen und sieht so aus:
 
 ```clojure
 (def map->vector
@@ -334,8 +334,8 @@ Linsen-Kombinator der die übergebene Linse auf alle Elemente einer Liste
 anwendet.[^2]
 
 [^2]: Durch die Möglichkeit, beliebige Linsenkombinatoren zu benutzen, ist der
-    tatsächlichen Konvertierung keine Grenze gesetzt.  Ein weiterer in der
-    Praxis nützlicher Linsenkombinator `lens/xmap`, damit ist es beispielsweise
+    tatsächlichen Konvertierung keine Grenze gesetzt.  Ein weiterer, in der
+    Praxis nützlicher Linsenkombinator ist `lens/xmap`.  Damit ist es zum Beispiel
     möglich, Werte in andere Repräsentationen und zurück zu transformieren, zum
     Beispiel verschiedene Datums- und Uhrzeit-Formate.
 
@@ -363,7 +363,7 @@ Ein Ordner besteht aus einem Namen und einer Liste von Lesezeichen:
 ```
 
 Auch innerhalb eines Ordners können alle Lesezeichen entweder Links und
-wiederrum Ordner sein, also haben wir es hier mit einer gemischten und
+wiederum Ordner sein, also haben wir es hier mit einer gemischten und
 verschränkt rekursiven Datendefinition zu tun.  Für den Umgang mit gemischten
 Daten gibt es einen eingebauten Linsenkombinator `union-vector`.  Und um die
 verschränkte Rekursion müssen wir uns bei der Umwandlung in EDN nicht anders
@@ -399,7 +399,7 @@ Projektionslinsen invertieren:
 
 Die Linse `edn->link` bleibt unverändert zu oben, die Linse `edn->folder` fehlt
 noch.  Dafür brauchen wir noch eine weitere Konvertierung, da in einem Ordner ja
-wiederrum Lesezeichen aus Links und Ordnern sein können.  Deswegen definieren
+wiederum Lesezeichen aus Links und Ordnern sein können.  Deswegen definieren
 wir zuerst eine Projektion dafür:
 
 ```clojure
@@ -451,7 +451,7 @@ J. Kennedy](https://www.microsoft.com/en-us/research/wp-content/uploads/2004/01/
 
 Die vorgestellten Record-Projektionslinsen eignen sich auch hervorragend für die
 Interaktion mit den Linsen in unserer Bibliothek für Konfigurationen
-`active.clojure.config`.  Das werden wir in einem anderen Blogeintrag
+`active.clojure.config`.  Das werden wir in einem weiteren Blogeintrag
 vorstellen.
 
 <!-- more end -->
