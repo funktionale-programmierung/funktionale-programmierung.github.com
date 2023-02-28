@@ -107,7 +107,10 @@ den neuen Wert:
 (url-host url-1 "active-group.de")
 ```
 
-ist synonym zum obigen `shove`-Ausdruck.
+ist synonym zum obigen `shove`-Ausdruck[^3].
+
+[^3]: Die kompaktere Schreibweise funktioniert nicht mit Keywords, die als
+    Linsen benutzt werden.
 
 ### Lesezeichen
 
@@ -455,4 +458,3 @@ Interaktion mit den Linsen in unserer Bibliothek für Konfigurationen
 vorstellen.
 
 <!-- more end -->
-
