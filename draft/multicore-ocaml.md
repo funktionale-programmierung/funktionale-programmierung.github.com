@@ -6,7 +6,7 @@ author: michael-sperber
 tags: ["OCaml", "Nebenläufigkeit", "Parallelität]
 ---
 
-In diesem Post geht es endlich mal wieder mal um
+In diesem Post geht es endlich mal wieder um
 [OCaml](https://ocaml.org/), eine großartige funktionale Sprache, die
 es schon seit 1996 gibt.  (Wenn man den Vorgänger Caml mitzählt sogar
 schon seit 1985.)
@@ -18,7 +18,7 @@ zunehmend auch in industriellen Projekten im Einsatz, zum Beispiel bei
 Street](https://blog.janestreet.com/why-ocaml/) und
 [Bloomberg](https://www.bloomberg.com/company/preqss/open-source-at-bloomberg-introducing-bucklescript/).
 
-Zum Erfolg von OCaml haben vor das elegante Modulsystem, die
+Zum Erfolg von OCaml haben allem vor das elegante Modulsystem, die
 ergonomische Syntax, der schnelle Byte-Code- und der effiziente
 Native-Code-Compiler beigetragen.  Ein Manko plagte aber die
 OCaml-Programmierung seit den Anfangstagen: OCaml unterstützte bis
@@ -60,7 +60,7 @@ sehr unterschiedliche Dinge:
   und deren Scheduling von der Laufzeitumgebung der Programmiersprache
   erledigt wird.
   
-Warum überlässt man nicht beides dem Betriebssystem?
+Warum braucht man Green Threads?
 Betriebssystem-Threads sind oft vergleichsweise teuer, was den
 Platzverbrauch und den Zeitaufwand beim Start betrifft.  (Weshalb es
 dann zum Beispiel in Java "Thread Pools" gibt, um die teuer erzeugten
@@ -77,12 +77,12 @@ ganzer oft komplex und intransparent und nicht für alle Anwendungen
 passend.
 
 OCaml geht einen anderen Weg und gibt Programmierys direkten,
-transparenten Zugriff auf die Betriebssystems-Threads.  Das OCaml-Team
+transparenten Zugriff auf die Betriebssystem-Threads.  Das OCaml-Team
 hat dabei besonders großen Wert darauf gelegt, dass alter Code ohne
 nennenswerten Laufzeitverlust auch auf Multicore-OCaml läuft.
 
 Multicore OCaml kommt außerdem mit einem "Green Thread Construction
-Kit": Man kann sich Green Threads selber bauen, gegebenenfalls
+Kit": Man kann sich "Green Threads" selber bauen, gegebenenfalls
 maßgeschneidert für einen bestimmten Anwendungszweck.  Darüber mehr,
 wie gesagt, in einem zukünftigen Blog-Post.
 
@@ -106,7 +106,7 @@ Ein OCaml-Modul kann also unter dem Damen `Domain.t` auf diesen Typ zugreifen.
 Der Typparameter `'a` ist der Typ des Ergebnisses.
 
 Die beiden wesentlichen Funktionen zu Domains erlauben, eine Domain
-zu starten und auf dessen Beendigung zu  warten:
+zu starten und auf deren Beendigung zu  warten:
 
 ```ocaml
 val spawn : (unit -> 'a) -> 'a t
@@ -160,8 +160,8 @@ val make_bounded : int -> 'a t
 ```
 
 Diese Funktion macht einen Channel mit einem Puffer fester Größe.
-Läuft er voll, blockiert `send` so langer, bis wieder Platz ist.  Es
-ist möglich, einen *synchronen* Channel zu machen - mit Puffergröße 0.
+Läuft er voll, blockiert `send` so lange, bis wieder Platz ist.  Es
+ist möglich, einen *synchronen* Channel zu machen – mit Puffergröße 0.
 Dieser blockiert bei `send` immer, bis ein `recv` erfolgt,
 beziehungsweise umgekehrt.
 
@@ -169,7 +169,7 @@ beziehungsweise umgekehrt.
 val make_unbounded : unit -> 'a t
 ```
 
-Diese Funktion macht einen Puffer unbeschränkter Größe - `send` kann
+Diese Funktion macht einen Puffer unbeschränkter Größe – `send` kann
 hier gar nicht blockieren.
 
 Von `send` und `receive` gibt es auch Varianten, die "pollen", also
@@ -190,7 +190,7 @@ Nachricht wartete, sonst `None`.
 Um die Funktionalität von Multicore OCaml zu demonstrieren, nehmen wir
 uns das
 [Philosophenproblem](https://de.wikipedia.org/wiki/Philosophenproblem)
-vor - ein Klassiker der nebenläufigen Programmierung, ursprünglich
+vor – ein Klassiker der nebenläufigen Programmierung, ursprünglich
 formuliert von Edsger W. Dijkstra.
 
 Wikipedia beschreibt es so:
@@ -213,10 +213,10 @@ die folgendermaßen funktioniert:
 - Wenn einer der Philosophen essen will, müssen sie eine Anfrage an
   den entsprechenden Nachbarn schicken.
 - Wenn ein Philosoph mit einer Gabel eine Anfrage bekommt, beantwortet
-  er diese, sobald die Gabel schmutzig ist - dann macht er sie
+  er diese, sobald die Gabel schmutzig ist – dann macht er sie
   zunächst sauber und gibt sie dann dem Anfragenden.
-- Wenn ein Philosoph zwei saubere Gabeln hat, isst er und macht die
-  Gabeln so beide schmutzig.
+- Wenn ein Philosoph zwei saubere Gabeln hat, isst er und macht beide
+  Gabeln so schmutzig.
   
 Wir erledigen erstmal die Domänenmodellierung.  Bei den Gabeln wird
 zwischen linker und rechter Gabel unterschieden:
@@ -256,7 +256,7 @@ Zur Bedeutung der Nachrichten:
   Philosophen B die Gabel, und zwar mit den Links-/Rechts-Seiten von
   Philosoph B.
 - Mit der `Want_fork`-Nachricht schickt Philosoph A einem Philosophen
-  B, wenn er eine Gabel braucht - auch hier mit den
+  B, wenn er eine Gabel braucht – auch hier mit den
   Links-/Rechts-Seiten von Philosoph B.  In die Nachricht steckt
   Philosoph A außerdem sein eigenes Objekt.
   
@@ -269,7 +269,7 @@ let make_philosopher number =
 ```
 
 Kommen wir nun zur eigentlichen Lebensführung der Philosophen bei
-Tisch - diese erledigt die Funktion `run_philosopher`.  Der geben wir
+Tisch – diese erledigt die Funktion `run_philosopher`.  Der geben wir
 den "aktuellen" Philosophen mit, den linken und den rechten Nachbarn,
 sowie die Anfangszustände der beiden Hände:
 
@@ -338,7 +338,7 @@ Nachbar will sie:
 ```
 
 Jetzt fehlt noch die Gegenseite, wo dem Philosophen die linke oder
-rechte Gabel fehlt - dann schickt der Philosoph eine
+rechte Gabel fehlt – dann schickt der Philosoph eine
 `Want_fork`-Anfrage an den entsprechenden Nachbarn:
 
 ```ocaml
@@ -437,7 +437,7 @@ let run_philosopher (print: string -> unit)
 ```
 
 Um die `print`-Funktion zu realisieren, erledigen wir das Ausdrucken
-in einer separaten Domain, dem wir über einen Channel die zu
+in einer separaten Domain, der wir über einen Channel die zu
 druckenden Texte übermitteln:
 
 ```ocaml
@@ -458,7 +458,7 @@ let start_print_domain () =
 (Warum `make_unbounded`, fragen Sie vielleicht.  Dazu gleich.)
 
 Jetzt können wir die fünf Philosophen starten.  Dabei müssen wir
-darauf achten, dass die Zustände keinen Zyklus bilden - sonst werden
+darauf achten, dass die Zustände keinen Zyklus bilden – sonst werden
 immer nur Gabeln herumgereicht und jeder hat immer nur eine.  Darum
 bekommt der erste Philosophen zwei Gabeln und der letzte keine:
 
@@ -479,7 +479,7 @@ let philosophers_5 () =
   ()
 ```
 
-Allerdings hat das Problem immer noch ein Manko: Es terminiert nicht.
+Allerdings hat das Programm noch ein Manko: Es terminiert nicht.
 Das ist im Philosophenproblem durchaus so angelegt, aber irgendwann
 reicht's auch.  Wir lösen das so, dass wir die `print`-Funktion
 begrenzen, so dass sie nach einer bestimmten Anzahl von Ausgaben
@@ -504,7 +504,7 @@ let start_print_domain (n: int) =
 ```
 
 Jetzt können wir darauf warten, dass die `print`-Domain fertig ist,
-dann die ganzen Philosophen töten und warten, bis sie auch gestorben
+dann töten wir die ganzen Philosophen und warten, bis sie auch gestorben
 sind:
 
 ```ocaml
@@ -534,7 +534,7 @@ let philosophers_5 () =
 
 Ach so: Ich wollte noch schreiben, warum der Puffer in
 `start_print_domain` mit `make_unbounded` erzeugt wird: Nehmen wir an,
-dass er es nicht ist - dann würden die `print`-Aufrufe der Philosophen
+dass er es nicht ist – dann würden die `print`-Aufrufe der Philosophen
 blockieren und sie kämen nie dazu, die `Die`-Nachricht zu verarbeiten.
 
 Um es nochmal zusammenfassen:
@@ -547,6 +547,6 @@ Um es nochmal zusammenfassen:
 - Nebenläufigkeit und "Green Threads" werden mit Hilfe von "effect
   handlers" unterstützt, zu denen wir noch separat schreiben werden.
 
-Das war's jetzt aber - viel Vergnügen mit Multicore OCaml!
+Das war's jetzt aber – viel Vergnügen mit Multicore OCaml!
 
 <!-- more end -->
