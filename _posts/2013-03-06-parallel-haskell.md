@@ -3,7 +3,7 @@ layout: post
 description: Parallele Programmierung mit Haskell
 title: "Parallele Programmierung mit Haskell"
 author: stefan-wehr
-tags: ["parallel", "Haskell"]
+tags: ["Parallelität", "Haskell"]
 ---
 
 Computerprozessoren werden heutzutage nicht mehr mit jeder neue Generation

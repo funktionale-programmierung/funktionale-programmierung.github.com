@@ -3,7 +3,7 @@ layout: post
 description: Multicore-Programmierung mit OCaml 5
 title: "Multicore-Programmierung mit OCaml 5"
 author: michael-sperber
-tags: ["OCaml", "parallel"]
+tags: ["OCaml", "Nebenläufigkeit", "Parallelität]
 ---
 
 In diesem Post geht es endlich mal wieder mal um
@@ -26,8 +26,8 @@ vor kurzem keine Multicore-Implementierung, zumindest nicht direkt.
 
 Mit dem Release von [OCaml 5.0.0](https://ocaml.org/news/ocaml-5.0) im
 Dezember 2022 ist das Problem allerdings ausgeräumt:
-Multicore-Programmierung sowie Nebenläufigkeit werden unterstützt, und
-zwar auf elegante und innovative Art und Weise.  Das Multicore-OCaml-Team um
+Multicore-Programmierung sowie Nebenläufigkeit werden unterstützt.
+Das Multicore-OCaml-Team um
 [KC Sivaramakrishnan](https://kcsrk.info/) hat sich viel Zeit
 gelassen, um wirklich alles richtig zu machen.
 
@@ -81,20 +81,19 @@ transparenten Zugriff auf die Betriebssystems-Threads.  Das OCaml-Team
 hat dabei besonders großen Wert darauf gelegt, dass alter Code ohne
 nennenswerten Laufzeitverlust auch auf Multicore-OCaml läuft.
 
-"Green Threads" unterstützt Multicore OCaml auch, liefert sie aber
-nicht direkt mit: Stattdessen ist die Infrastruktur dabei, um Green
-Threads zu bauen, gegebenenfalls maßgeschneidert für einen bestimmten
-Anwendungszweck.  Darüber mehr, wie gesagt, in einem zukünftigen
-Blog-Post.
+Multicore OCaml kommt außerdem mit einem "Green Thread Construction
+Kit": Man kann sich Green Threads selber bauen, gegebenenfalls
+maßgeschneidert für einen bestimmten Anwendungszweck.  Darüber mehr,
+wie gesagt, in einem zukünftigen Blog-Post.
 
 In diesem Post geht es also um Betriebssystem-Threads in Multicore
 OCaml.  Rudimentäre OCaml-Kenntnisse setzen wir voraus.
 
 ## Domains = Betriebssystem-Threads
 
-Um Begriffskonfusion zu vermeiden, heißen die OCaml-Schnittstelle zu
+Um Begriffskonfusion zu vermeiden, heißt die OCaml-Schnittstelle zu
 Betriebssystem-Threads
-[Domains](https://v2.ocaml.org/api/Domain.html).  Ein Domain ist eine
+["Domains"](https://v2.ocaml.org/api/Domain.html).  Eine Domain ist eine
 Berechnung, die in einem Betriebsystem-Thread abläuft und ein Ergebnis
 produziert.  Das`Domain`-Modul definiert entsprechend einen Typ für
 Domains:
@@ -103,9 +102,10 @@ Domains:
 type 'a t
 ```
 
+Ein OCaml-Modul kann also unter dem Damen `Domain.t` auf diesen Typ zugreifen.
 Der Typparameter `'a` ist der Typ des Ergebnisses.
 
-Die beiden wesentlichen Funktionen zu Domains erlauben, einen Domain
+Die beiden wesentlichen Funktionen zu Domains erlauben, eine Domain
 zu starten und auf dessen Beendigung zu  warten:
 
 ```ocaml
@@ -113,7 +113,7 @@ val spawn : (unit -> 'a) -> 'a t
 val join : 'a t -> 'a
 ```
 
-Der Code in einem Domain kann mit anderen Domains über
+Der Code in einer Domain kann mit anderen Domains über
 Standard-Mechanismen der parallelen Programmierung kommunizieren -
 über geteilten Zustand sowie
 [Mutexe](https://v2.ocaml.org/api/Mutex.html) und
@@ -215,7 +215,7 @@ die folgendermaßen funktioniert:
 - Wenn ein Philosoph mit einer Gabel eine Anfrage bekommt, beantwortet
   er diese, sobald die Gabel schmutzig ist - dann macht er sie
   zunächst sauber und gibt sie dann dem Anfragenden.
-- Wenn ein Philosoph zwei saubere Gabeln hat, ist er und macht die
+- Wenn ein Philosoph zwei saubere Gabeln hat, isst er und macht die
   Gabeln so beide schmutzig.
   
 Wir erledigen erstmal die Domänenmodellierung.  Bei den Gabeln wird
@@ -326,7 +326,7 @@ schickt der Philosoph sie ihm mit einer `Heres_fork`-Nachricht:
           end
 ```
 
-Hier der umgekehrte Fall - rechte Gabel schmutzig und der rechte
+Andersherum: Die rechte Gabel ist schmutzig und der rechte
 Nachbar will sie:
 
 ```ocaml
@@ -437,7 +437,7 @@ let run_philosopher (print: string -> unit)
 ```
 
 Um die `print`-Funktion zu realisieren, erledigen wir das Ausdrucken
-in einem separaten Domain, dem wir über einen Channel die zu
+in einer separaten Domain, dem wir über einen Channel die zu
 druckenden Texte übermitteln:
 
 ```ocaml
@@ -503,7 +503,7 @@ let start_print_domain (n: int) =
   (domain, fun text -> Domainslib.Chan.send chan text)
 ```
 
-Jetzt können wir darauf warten, dass der `print`-Domain fertig ist,
+Jetzt können wir darauf warten, dass die `print`-Domain fertig ist,
 dann die ganzen Philosophen töten und warten, bis sie auch gestorben
 sind:
 
@@ -532,10 +532,20 @@ let philosophers_5 () =
   end
 ```
 
-Ach so: Wir wollen noch schreiben, warum der Puffer in
+Ach so: Ich wollte noch schreiben, warum der Puffer in
 `start_print_domain` mit `make_unbounded` erzeugt wird: Nehmen wir an,
 dass er es nicht ist - dann würden die `print`-Aufrufe der Philosophen
 blockieren und sie kämen nie dazu, die `Die`-Nachricht zu verarbeiten.
+
+Um es nochmal zusammenfassen:
+
+- Seit Version 5.0 unterstützt OCaml Multicore-Programmierung.
+- Existierende OCaml-Programme laufen unverändert, ohne
+  Performance-Verlust.
+- OCaml unterstützt Parallelität mit Domains, die
+  Betriebssystem-Threads abbilden.
+- Nebenläufigkeit und "Green Threads" werden mit Hilfe von "effect
+  handlers" unterstützt, zu denen wir noch separat schreiben werden.
 
 Das war's jetzt aber - viel Vergnügen mit Multicore OCaml!
 
