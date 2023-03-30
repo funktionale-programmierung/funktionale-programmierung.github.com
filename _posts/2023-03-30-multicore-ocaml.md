@@ -22,7 +22,7 @@ Zum Erfolg von OCaml haben allem vor das elegante Modulsystem, die
 ergonomische Syntax, der schnelle Byte-Code- und der effiziente
 Native-Code-Compiler beigetragen.  Ein Manko plagte aber die
 OCaml-Programmierung seit den Anfangstagen: OCaml unterstützte bis
-vor kurzem keine Multicore-Implementierung, zumindest nicht direkt.
+vor kurzem keine Multicore-Programmierung, zumindest nicht direkt.
 
 Mit dem Release von [OCaml 5.0.0](https://ocaml.org/news/ocaml-5.0) im
 Dezember 2022 ist das Problem allerdings ausgeräumt:
