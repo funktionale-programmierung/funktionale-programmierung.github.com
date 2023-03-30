@@ -3,7 +3,7 @@ layout: post
 description: Multicore-Programmierung mit OCaml 5
 title: "Multicore-Programmierung mit OCaml 5"
 author: michael-sperber
-tags: ["OCaml", "Nebenläufigkeit", "Parallelität]
+tags: ["OCaml", "Nebenläufigkeit", "Parallelität"]
 ---
 
 In diesem Post geht es endlich mal wieder um
