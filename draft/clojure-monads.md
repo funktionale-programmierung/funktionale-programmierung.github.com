@@ -149,8 +149,8 @@ wählt `get` noch die erste Adresse dieser Liste mit `first` aus:
 
 ### Adressbuch-Datenbank
 
-Wir können die aufgeführten Funktionen jetzt direkt so implementieren, dass sie
-über einen Datenbank-Treiber direkt in eine Datenbanktabelle schreiben.  Für die
+Wir können die aufgeführten Funktionen jetzt so implementieren, dass sie über
+einen Datenbank-Treiber direkt in eine Datenbanktabelle schreiben.  Für die
 Kommunikation mit der Datenbank verwenden wir
 [Clojure-JDBC](https://github.com/clojure/java.jdbc).  Das sieht dann so aus:
 
@@ -457,10 +457,10 @@ Kommandos tatsächlich interpretieren zu lassen und andere zu mocken.
 
 ### Test-Interpreter
 
-Anstatt die Adressen tatsächlich in eine externe Datenbank zu schreiben, können
-wir auch andere Backends benutzen.  Und für Tests der Business-Logik würde ein
-einfacher Interpreter ausreichen, der die Adressen zum Beispiel im
-Monadenzustand speichert.  So ein Interpreter könnte so aussehen:
+Anstatt die Adressen in eine externe Datenbank zu schreiben, können wir auch
+andere Backends benutzen.  Und für Tests der Business-Logik würde ein einfacher
+Interpreter ausreichen, der die Adressen zum Beispiel im Monadenzustand
+speichert.  So ein Interpreter könnte so aussehen:
 
 ```clojure
 (defn state-run-command
