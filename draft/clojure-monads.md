@@ -22,10 +22,10 @@ für unsere monadischen Programme angeben können.
 <!-- more start -->
 ## Clojure
 
-Clojure ist eine funktionale Programmiersprache, deren Syntax sich aus den aus
+Clojure ist eine funktionale Programmiersprache, deren Syntax aus den aus
 Lisp bekannten geklammerten Ausdrücken besteht.  Clojure kompiliert nach
 Java-Bytecode und läuft auf der Java Virtual Machine.  Wir verwenden Clojure in
-der Praxis in sehr vielen unserer Projekte und haben über die letzen Jahre eine
+der Praxis in sehr vielen unserer Projekte und haben über die letzten Jahre eine
 umfangreiche und frei verfügbare Clojure-Bibliothek namens [Active
 Clojure](https://github.com/active-group/active-clojure) entwickelt, die wir in
 unseren Projekten verwenden.  Die Funktionalität aus dieser Bibliothek benutzen
@@ -38,7 +38,7 @@ Adressen enthält.
 
 ### Adressen
 
-Eine Adresse besteht der einfachheit halber nur aus ID[^1], Name und Stadt, auf
+Eine Adresse besteht der Einfachheit halber nur aus ID[^1], Name und Stadt, auf
 Details wie Straße und PLZ oder andere Einschränkungen verzichten wir, damit das
 Beispiel übersichtlich bleibt.  Wir implementieren Adressen als zusammengesetzte
 Daten mit Hilfe eines [Records aus unserer
@@ -72,10 +72,10 @@ die Bestandteile einer Adresse zugreifen können.  Zum Beispiel liefert
 (address-town (make-address 23 "Marcus" "Tübingen"))
 ```
 
-als Stadt die Zeichenkette `"Tübingen"` unserer Tübinger Beispieladresse.
+die Zeichenkette `"Tübingen"`, die Stadt unserer Tübinger Beispieladresse.
 
 [^1]: Dass unsere Adressen eine eindeutige ID benötigen, ergibt sich aus
-      praktischen Gesichtspunkten: Es kann sein, dass wir ausversehen doppelte
+      praktischen Gesichtspunkten: Es kann sein, dass wir aus Versehen doppelte
       Adressen in unserem Adressbuch abgespeichert haben.  Wenn wir dann diese
       doppelten Adressen aufräumen wollen, können wir nicht einfach alle
       Adressen mit einem bestimmten Namen und einem bestimmten Ort löschen, weil
@@ -116,7 +116,7 @@ bestimmtes Prädikat passen, also einen Filter für Adressen:
 
 Diese Funktion liefert eine Liste von Adressen, die auf das Pädikat
 `<predicate?>` passen.  Ein Prädikat ist eine einstellige Funktion, die `true`
-oder `false` zurück gibt.  Zum Beispiel ist dies ein Prädikat, dass `true`
+oder `false` zurück gibt.  Zum Beispiel ist dies ein Prädikat, das `true`
 ergibt, wenn die Adresse in Tübingen ist, ansonsten liefert es `false`:
 
 ```clojure
@@ -195,8 +195,8 @@ CREATE TABLE addresses (
 
 Die Funktion `put-address` fügt also via `jdbc/insert!` eine Adresse in die
 Datenbanktabelle `adresses` ein, `delete-address` löscht sie via `jdbc/delete!`
-wieder, `get-address` gibt die Adresse via `jdbc/query` zurück, die zur
-übergebenen ID passt und `filter-addresses` selektiert alle Adressen via
+wieder, `get-address` gibt die Adresse, die zur übergebenen ID passt, via 
+`jdbc/query` zurück und `filter-addresses` selektiert alle Adressen via
 `jdbc/query` und filtert sie mit der in Clojure eingebauen `filter`-Funktion
 anhand des übergebenen Prädikats.
 
@@ -214,7 +214,7 @@ beschrieben sind:
   unterschiedliche Ergebnisse.
 
 - Die Schnittstelle ist zu speziell, da das Datenbank-Verbindungs-Objekt
-  existieren muss und immer mitgegeben werden muss.
+  existieren und immer mitgegeben werden muss.
 
 Die Kopplung zur Datenbank behindert die Entwicklung und zukünftige Anpassungen
 und muss weg.
@@ -296,7 +296,7 @@ Das Programm bindet zunächst das Ergebnis der monadischen Berechnung von
 `(filter-addresses in-tübingen?)` an die Variable `tübinger`, `tübinger` enthält
 also eine Liste aller Tübinger Adressen.  Die letzte Zeile iteriert dann mit
 `map` über die Liste aller Tübinger Adressen und nutzt `delete-address`, um die
-Adresse zu löschen.  Da `delete-adress` selbst wieder eine monadische Operation
+Adressen zu löschen.  Da `delete-adress` selbst wieder eine monadische Operation
 ist, ist das Ergebnis eine Liste von monadischen Operationen, die wir mit dem
 eingebauten Kommando `monad/sequ` auswerten können.
 
@@ -315,7 +315,7 @@ Dieses Programm können wir in eine Funktion einbauen:
 
 Wir haben nun also eine Repräsentation für Operationen, Zwischenergebnisse und
 Abstraktionen.  Was noch fehlt, ist die Ausführung.  Dazu benötigen wir einen
-Interpreter, der ein monadisches Programm entgegen nimmt und alle Operationen
+Interpreter, der ein monadisches Programm entgegennimmt und alle Operationen
 des Programms ausführt.  Oben haben wir ja bereits eine direkte
 Datenbank-Implementierung geschrieben.  Diese Implementierung nutzen wir nun im
 Interpreter für unsere Adressbuch-Monade:
@@ -368,8 +368,8 @@ Dieser Interpreter erwartet das Datenbank-Verbindungs-Objekt in der Umgebung
 `env` und gibt es an die Datenbank-Implementierung weiter.  Dieses
 Datenbank-Verbindungs-Objekt müssen wir in der initialen Umgebung zur Verfügung
 stellen, dann kümmert sich der Interpreter aber selbst darum, dass es an alle
-Datenbank-Funktionen weitergegeben wird --- unser monadisches Programm muss sich
-nicht darüm kümmern.
+Datenbank-Funktionen weitergegeben wird -- unser monadisches Programm muss sich
+nicht darum kümmern.
 
 In der Active-Clojure-Monade ist eine *Monaden-Kommando-Konfiguration* eine
 Abstraktion für eine Interpreter-Funktion[^2] zusammen mit der zugehörigen
@@ -385,7 +385,7 @@ das so aus:
                                    {}))
 ```
 
-[^2]: Die monadischen Kommandos, die von dieser Monaden-Kommand-Konfiguration
+[^2]: Die monadischen Kommandos, die von dieser Monaden-Kommando-Konfiguration
     abgedeckt sind, sind in dieser Repräsentation implizit durch die Fälle der
     Interpreter-Funktion beschrieben.
 
@@ -414,11 +414,11 @@ diesem Blog-Posting nicht weiter eingehen werden.
 
 Die monadischen Kommandos als Indirektion vor der komplizierten
 Datenbank-Implementierung bieten uns jetzt verschiedene Möglichkeiten, unsere
-Programme --- also unsere Businesslogik --- zu testen, ohne dass wir die
-Datenbank --- oder andere integrierte Umgebungen --- aufwändig dafür
+Programme -- also unsere Businesslogik -- zu testen, ohne dass wir die
+Datenbank -- oder andere integrierte Umgebungen -- aufwändig dafür
 berücksichtigen müssen.  Zwei Möglichkeiten schauen wir uns an:
 
-1. die monadischen Kommandos mocken
+1. monadische Kommandos mocken
 
 2. Test-Interpreter, der keine Datenbank benutzt
 
@@ -426,12 +426,12 @@ berücksichtigen müssen.  Zwei Möglichkeiten schauen wir uns an:
 
 Die Active-Clojure-Bibliothek stellt zum Testen von monadischen Programmen einen
 einfachen Testinterpreter bereit, der die ausgeführten Operationen lediglich
-aufzeichnet und mit einer Liste von erwarteten Operationen abgleicht --- und die
+aufzeichnet und mit einer Liste von erwarteten Operationen abgleicht -- und die
 Ergebnisse der Operationen mocken kann.
 
 `mock/mock-run-command` bekommt als erstes Argument eine Liste der erwarteten
-Operationen --- repräsentiert als Mock-Ergebnisse --- und als zweites Argument
-dem monadischen Programm.  Ein Mock-Ergebnis besteht aus dem erwarteten
+Operationen -- repräsentiert als Mock-Ergebnisse -- und als zweites Argument
+das monadische Programm.  Ein Mock-Ergebnis besteht aus dem erwarteten
 monadischen Kommando und dem Rückgabewert, mit dem das Programm weitermachen
 soll.  Hier ist ein Beispiel dafür:
 
@@ -489,13 +489,13 @@ speichert.  So ein Interpreter könnte so aussehen:
 ```
 
 Hier repräsentieren wir unsere Adressen-Datenbank als Clojure-Map im
-Monadenzustand --- und die Monadenimplementierung kümmert sich darum, dass der
-Zustand von Auswertungsschritt zu Auswertungsschritt weitergegeben wird, darum
+Monadenzustand -- und die Monadenimplementierung kümmert sich darum, dass der
+Zustand von Auswertungsschritt zu Auswertungsschritt weitergegeben wird; darum
 müssen wir uns nicht selbst kümmern.
 
 Damit haben unsere Testfälle überhaupt keine Abhängigkeiten in die
 Infrastruktur.  Allerdings besteht die Gefahr, dass der Test-Interpreter und der
-Datenbank-Interpreter sich abweichend verhalten --- aber das könnten wir mit
+Datenbank-Interpreter sich abweichend verhalten -- aber das könnten wir mit
 Tests auf anderer Ebene abdecken.  Und unsere eigentliche Business-Logik
 ausgiebig ohne die Datenbank testen.
 
