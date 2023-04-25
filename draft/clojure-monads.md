@@ -14,10 +14,9 @@ wie freie Monaden in Scala eingesetzt werden können, um die Ausführung eines
 Programmes von dessen Beschreibung zu entkoppeln.
 
 Hier werden wir die Fallstudie aus diesem Artikel aufgreifen und zeigen, wie wir
-die Ausführung eines Programms mit Hilfe von Monaden in Clojure von der
-Beschreibung entkoppeln.  Dabei zeigen wir, wie wir das nutzen können, um
-Testfälle zu schreiben; und wir werden zeigen, wie wir ganz einfach Mock-Tests
-für unsere monadischen Programme angeben können.
+in Clojure die Entkopplung mit Monaden erreichen können.  Dabei zeigen wir, wie
+wir das nutzen können, um Testfälle zu schreiben; und wir werden zeigen, wie wir
+ganz einfach Mock-Tests für unsere monadischen Programme angeben können.
 
 <!-- more start -->
 ## Clojure
