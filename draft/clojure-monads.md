@@ -206,7 +206,7 @@ ausführlicher in [diesem
 Artikel](https://funktionale-programmierung.de/2018/01/22/freie-monade.html)
 beschrieben sind:
 
-- Das Programm ist schwer testbar, da man keine Unit-Tests schreiben kann und
+- Das Programm ist schwer testbar, da man nur schwer Unit-Tests schreiben kann und
   auch für einfache Integrationstests ein Datenbank-Backend braucht.
 
 - Die Seiteneffekte werden sofort ausgeführt und Mehrfachausführungen liefern
