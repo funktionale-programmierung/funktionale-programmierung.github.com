@@ -10,44 +10,38 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        ruby = pkgs.ruby;
-        env = pkgs.bundlerEnv {
-          name = "fp-blog";
-          inherit ruby;
-          gemfile = ./Gemfile;
-          lockfile = ./Gemfile.lock;
-          gemset = ./gemset.nix;
-        };
-        fp-blog-bin = pkgs.writeScriptBin "fp-blog" ''
-          exec ${env}/bin/jekyll $@
-        '';
+        myRubyPackages = pkgs.rubyPackages_2_7;
+        myGithubPages = myRubyPackages.github-pages;
       in {
-        # nix develop -c bash -c 'jekyll serve -c --watch'
         packages = {
-          fp-blog = pkgs.stdenv.mkDerivation {
-            name = "fp-blog";
-            src = ./.;
-            buildInputs = [ env ];
-            nativeBuildInputs = [ fp-blog-bin ];
+          default = self.packages.${system}.buildBlog;
+          buildBlog = pkgs.stdenv.mkDerivation {
+            name = "build-blog";
+            src = pkgs.lib.cleanSource ./.;
+            buildInputs = [ myGithubPages ];
+            buildPhase = ''
+              set -x
+              jekyll build
+            '';
             installPhase = ''
               mkdir -p $out
-              cp -r $src $out
+              cp -r . $out
             '';
           };
+          serveBlog = pkgs.writeShellScriptBin "serve-blog.sh"
+            ''
+               ${pkgs.lib.getExe myRubyPackages.jekyll} serve -c --watch
+            '';
         };
+
         apps = {
-          default = {
-            type = "app";
-            program = "exec ${
-                self.packages.${system}.fp-blog
-              }/bin/fp-blog serve -w --incremental";
-          };
+          default = flake-utils.lib.mkApp { drv = self.packages.${system}.serveBlog; };
         };
 
         devShells = {
           default = pkgs.mkShell {
             nativeBuildInputs =
-              [ env fp-blog-bin pkgs.bundler pkgs.ruby pkgs.bundix ];
+              [ myGithubPages self.packages.${system}.serveBlog ];
           };
         };
       });

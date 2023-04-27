@@ -1,19 +1,16 @@
-Schreiben von Artikeln
-==
+# Schreiben von Artikeln
 
-Entwürfe
-===
+## Entwürfe
 
 Der Entwurf eines neuen Artikels landet erstmal im Unterverzeichnis
-`draft`. Dort gibt es auch einen Template für einen neuen Artikel. Bitte
-das Template kopieren und eine sinnvollen Dateinamen für den neuen Artikel
-vergeben. Der Dateiname für den Artikel muss mit `.md` enden. Für einen
-Artikel in `draft/foobar.md` ist nach einem entsprechenden `git commit` und
-`git push` der Artikel unter http://funktionale-programmierung.de/draft/foobar.html
+`draft`. Dort gibt es auch einen Template für einen neuen Artikel. Bitte das
+Template kopieren und eine sinnvollen Dateinamen für den neuen Artikel
+vergeben. Der Dateiname für den Artikel muss mit `.md` enden. Für einen Artikel
+in `draft/foobar.md` ist nach einem entsprechenden `git commit` und `git push`
+der Artikel unter http://funktionale-programmierung.de/draft/foobar.html
 einsehbar.
 
-Header
-=== 
+## Header
 
 Hier ein Beispiel für einen Post-Header:
 
@@ -26,24 +23,24 @@ Hier ein Beispiel für einen Post-Header:
 	  Mehrzeiliger Text bei dem der Whitespace entfernt wird.
 	page_title: "Einführung rein funktionale Programmierung 2"
 
-Zu beachten besonders die Syntax für den Tags-Eintrag:  Es
-funktionieren auch Leerzeichen-separierte Wortlisten, aber Kommata
-landen dann beispielsweise im Tag selbst.
+Zu beachten besonders die Syntax für den Tags-Eintrag: Es funktionieren auch
+Leerzeichen-separierte Wortlisten, aber Kommata landen dann beispielsweise im
+Tag selbst.
 
 Zum Feld `author` siehe Abschnitt "Autoren".
 
-Das Feld meta-description ist auch sehr wichtig, es enthält eine Zusammenfassung für Suchmachschinen.
+Das Feld meta-description ist auch sehr wichtig, es enthält eine Zusammenfassung
+für Suchmachschinen.
 
-Das Feld `page_title` ermöglicht die Angabe eines anderen Textes für
-den HTML-Titel der Seite; ohne diese Angabe wird das Feld `title`
-verwendet, das aber oft zu lang für den Seitentitel ist. Der Text
-"Funktionale Programmierung - " wird dem Titel immer noch voran
-gestellt.
+Das Feld `page_title` ermöglicht die Angabe eines anderen Textes für den
+HTML-Titel der Seite; ohne diese Angabe wird das Feld `title` verwendet, das
+aber oft zu lang für den Seitentitel ist. Der Text "Funktionale Programmierung -
+" wird dem Titel immer noch voran gestellt.
 
-Verkürzung des Artikels für die Übersicht
-===
+## Verkürzung des Artikels für die Übersicht
 
-Das Verkürzen muß manuell passieren, und geschieht mithilfe von eines HTML-Kommentars im Artikel:
+Das Verkürzen muß manuell passieren, und geschieht mithilfe von eines
+HTML-Kommentars im Artikel:
 
     <h1>Mein Artikel</h1>
 
@@ -53,73 +50,59 @@ Das Verkürzen muß manuell passieren, und geschieht mithilfe von eines HTML-Kom
 
     Die Details sind folgende...
 
-Der Teil nach dem Kommentar erscheint dann nicht auf der Übersichtsseite, sondern stattdessen ein "Weiterlesen"-Button.
+Der Teil nach dem Kommentar erscheint dann nicht auf der Übersichtsseite,
+sondern stattdessen ein "Weiterlesen"-Button.
 
-Autoren
-==
+# Autoren
 
-Der Autor eines Artikels muß im Header-Feld `author` mit einem
-Bezeichner, wie z.B. "michael-sperber" angegeben werden.
+Der Autor eines Artikels muß im Header-Feld `author` mit einem Bezeichner, wie
+z.B. "michael-sperber" angegeben werden.
 
 Für jeden Autor muß in der Dateien
 
     _config.yml
 
-im Mapping 'authors' ein Name und eine URL für den Anfang eines
-Artikels, bzw. eine Kurzbeschreibung für das Ende des Artikels
-definiert sein. Außerdem kann ein kleines Bild unter
+im Mapping 'authors' ein Name und eine URL für den Anfang eines Artikels,
+bzw. eine Kurzbeschreibung für das Ende des Artikels definiert sein. Außerdem
+kann ein kleines Bild unter
 
     author/...
 
-abgelegt werden und die URL in obigem Mapping unter 'image' definiert
-werden.
+abgelegt werden und die URL in obigem Mapping unter 'image' definiert werden.
 
-Search-Engine-Optimization
-==
+# Search-Engine-Optimization
 
 Artikel dazu:
 
 http://blog.shareaholic.com/2012/01/how-to-optimize-your-blog-posts-for-seo/
 http://www.seomoz.org/blog/perfecting-keyword-targeting-on-page-optimization
 
-Blog lokal anschauen
-==
+# Blog lokal anschauen
 
-Um das Blog lokal zu erzeugen benötigst du jekyll in Version 3.8.0 oder neuer.. Installationsanleitung gibt es hier: https://jekyllrb.com/docs/installation/
+Um das Blog lokal zu erzeugen benötigst du jekyll in Version 3.8.0 oder
+neuer.. Installationsanleitung gibt es hier:
+https://jekyllrb.com/docs/installation/
 
-Sobald jekyll installiert ist, kannst du aus dem Toplevel-Verzeichnis mittels `./run-local-server.sh` das Blog generieren und einen Webserver starten. Das Blog ist dann über http://127.0.0.1:4000 verfügbar.
+Sobald jekyll installiert ist, kannst du aus dem Toplevel-Verzeichnis mittels
+`./run-local-server.sh` das Blog generieren und einen Webserver starten. Das
+Blog ist dann über http://127.0.0.1:4000 verfügbar.
 
-*Hinweis*: Es gibt auch eine auf `nix` basierende Variante den Blog zu
-bauen.  Diese hängt nicht von anderen auf eurem System installierten
-Paketen (außer natürlich von `nix`) selbst ab.
+## Nix
 
-# Nix
+Wenn du `nix` installiert hast, kannst du den Blog jetzt auch mit `nix` bauen,
+d. h. ohne lokal von irgendwelchen globalen Paketen abhängig zu sein, Du
+brauchst nur `nix` selbst (mit eingeschaltetem Flakes-Feature).
 
-Wenn du `nix` installiert hast, kannst du den Blog jetzt auch mit
-`nix` bauen, d. h. ohne lokal von irgendwelchen globalen Paketen
-abhängig zu sein.
-
-Dazu einfach im Rootverzeichnis der Projekts `nix-shell` aufrufen.
-Das sollte dazu führen, dass alles notwendige in der `nix-shell` zur
-Verfügung steht und der Blog auch direkt gebaut wird und aktualisiert
-wird.
+Dazu einfach im Rootverzeichnis des Projekts `nix run` aufrufen um den Blog
+direkt zu bauen und zu aktualisieren.
 
 *Achtung*: Beim ersten Aufruf kann es gerne mal einige Zeit dauern,
 bis alles gebaut ist.  In folgenden Sessions sollte es -- wenn sich am
 Gemset nichts ändert, schnell gehen.
 
-## Aktualisierungen der Pakete
-
-Die nix-Umgebung benutzt das generierte `gemset.nix`.  Um das zu
-aktualisieren, liegt im Wurzelverzeichnis das
-`make-gemlock.sh`-Skript.  Die daraus generierten Dateien
-(`gemset.nix` und `Gemfile.lock`) gehören zur Versionskontrolle des
-Blogs und müssen daher immer eingecheckt werden.
-
-Veröffentlichen
-==
+# Veröffentlichen
 
 Zum Veröffentlichen wird der Artikel auf dem `draft` Verzeichnis in das
 `_posts` Verzeichnis bewegt. Dabei wird das Veröffentlichungsdatum dem
-Dateinamen vorangestellt. Vor dem Veröffentlichen bitte unbedingt mit 
+Dateinamen vorangestellt. Vor dem Veröffentlichen bitte unbedingt mit
 den Verantwortlichen des Blogs Kontakt aufnehmen.
