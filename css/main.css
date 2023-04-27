@@ -366,3 +366,7 @@ hr.post-divider {
     padding-top: 20px;
     border-top: 1px solid #eee;
 }
+
+.err {
+    border: 0px !important;
+}
