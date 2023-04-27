@@ -30,7 +30,7 @@
           };
           serveBlog = pkgs.writeShellScriptBin "serve-blog.sh"
             ''
-               ${pkgs.lib.getExe myRubyPackages.jekyll} serve -c --watch
+               ${pkgs.lib.getExe myRubyPackages.jekyll} serve --watch
             '';
         };
 
