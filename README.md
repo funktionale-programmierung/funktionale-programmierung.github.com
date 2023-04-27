@@ -79,30 +79,31 @@ http://www.seomoz.org/blog/perfecting-keyword-targeting-on-page-optimization
 
 # Blog lokal anschauen
 
-Um das Blog lokal zu erzeugen benötigst du jekyll in Version 3.8.0 oder
-neuer.. Installationsanleitung gibt es hier:
+Um den Blog lokal zu erzeugen, benötigst du `jekyll` in Version 3.8.0
+oder neuer. Installationsanleitung gibt es hier:
 https://jekyllrb.com/docs/installation/
 
-Sobald jekyll installiert ist, kannst du aus dem Toplevel-Verzeichnis mittels
-`./run-local-server.sh` das Blog generieren und einen Webserver starten. Das
-Blog ist dann über http://127.0.0.1:4000 verfügbar.
+Sobald `jekyll` installiert ist, kannst du aus dem
+Toplevel-Verzeichnis mittels `./run-local-server.sh` den Blog
+generieren und einen Webserver starten. Der Blog ist dann über
+http://127.0.0.1:4000 verfügbar.
 
 ## Nix
 
-Wenn du `nix` installiert hast, kannst du den Blog jetzt auch mit `nix` bauen,
-d. h. ohne lokal von irgendwelchen globalen Paketen abhängig zu sein, Du
-brauchst nur `nix` selbst (mit eingeschaltetem Flakes-Feature).
+Wenn du `nix` installiert hast, kannst du den Blog jetzt auch mit
+`nix` bauen, d. h. ohne lokal von irgendwelchen globalen Paketen
+abhängig zu sein; du brauchst nur `nix` selbst (mit eingeschaltetem
+Flakes-Feature).
 
-Dazu einfach im Rootverzeichnis des Projekts `nix run` aufrufen um den Blog
-direkt zu bauen und zu aktualisieren.
+Dazu einfach im Rootverzeichnis des Projekts `nix run` aufrufen, um
+den Blog direkt zu bauen und zu aktualisieren.
 
 *Achtung*: Beim ersten Aufruf kann es gerne mal einige Zeit dauern,
-bis alles gebaut ist.  In folgenden Sessions sollte es -- wenn sich am
-Gemset nichts ändert, schnell gehen.
+bis alles gebaut ist.
 
 # Veröffentlichen
 
-Zum Veröffentlichen wird der Artikel auf dem `draft` Verzeichnis in das
-`_posts` Verzeichnis bewegt. Dabei wird das Veröffentlichungsdatum dem
-Dateinamen vorangestellt. Vor dem Veröffentlichen bitte unbedingt mit
-den Verantwortlichen des Blogs Kontakt aufnehmen.
+Zum Veröffentlichen wird der Artikel aus dem `draft`-Verzeichnis in
+das `_posts`-Verzeichnis bewegt. Dabei wird das Veröffentlichungsdatum
+dem Dateinamen vorangestellt. Vor dem Veröffentlichen bitte unbedingt
+mit den Verantwortlichen des Blogs Kontakt aufnehmen.
