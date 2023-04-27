@@ -19,23 +19,19 @@
             name = "build-blog";
             src = pkgs.lib.cleanSource ./.;
             buildInputs = [ myGithubPages ];
-            buildPhase = ''
-              set -x
-              jekyll build
-            '';
+            buildPhase = "jekyll build";
             installPhase = ''
               mkdir -p $out
               cp -r . $out
             '';
           };
           serveBlog = pkgs.writeShellScriptBin "serve-blog.sh"
-            ''
-               ${pkgs.lib.getExe myRubyPackages.jekyll} serve --watch
-            '';
+            "${pkgs.lib.getExe myRubyPackages.jekyll} serve --watch";
         };
 
         apps = {
-          default = flake-utils.lib.mkApp { drv = self.packages.${system}.serveBlog; };
+          default =
+            flake-utils.lib.mkApp { drv = self.packages.${system}.serveBlog; };
         };
 
         devShells = {
