@@ -55,20 +55,29 @@ sondern stattdessen ein "Weiterlesen"-Button.
 
 # Autoren
 
-Der Autor eines Artikels muß im Header-Feld `author` mit einem Bezeichner, wie
-z.B. "michael-sperber" angegeben werden.
-
-Für jeden Autor muß in der Dateien
+Für jeden Autor muss in der Datei
 
     _config.yml
 
-im Mapping 'authors' ein Name und eine URL für den Anfang eines Artikels,
-bzw. eine Kurzbeschreibung für das Ende des Artikels definiert sein. Außerdem
-kann ein kleines Bild unter
+im Mapping `authors` unter einem frei wählbaren Bezeichner ein Name,
+eine URL (`href`) für den Anfang eines Artikels, optional ein Bild,
+sowie eine Kurzbeschreibung für das Ende des Artikels definiert
+sein. Beispiel:
 
-    author/...
+    authors:
+      michael-sperber:
+        name: Michael Sperber
+        image: /author/michael-sperber.jpg
+        href: "http://www.example.com"
+        about: 'Kurzbeschreibung hier, kann auch HTML enthalten'
 
-abgelegt werden und die URL in obigem Mapping unter 'image' definiert werden.
+Falls `image` gesetzt wurde, muss in [author](./author) eine
+entsprechende Datei abgelegt werden:
+
+    author/michael-sperber.jpg
+
+Der Autor eines Artikels muss im Header-Feld `author` mit dem vorher
+vergebenen Bezeichner referenziert werden.
 
 # Search-Engine-Optimization
 
