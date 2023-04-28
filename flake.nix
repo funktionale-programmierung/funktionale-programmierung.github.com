@@ -10,35 +10,19 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        myRubyPackages = pkgs.rubyPackages_2_7;
-        myGithubPages = myRubyPackages.github-pages;
+        myGithubPages = pkgs.rubyPackages_2_7.github-pages;
       in {
-        packages = {
-          default = self.packages.${system}.buildBlog;
-          buildBlog = pkgs.stdenv.mkDerivation {
-            name = "build-blog";
-            src = pkgs.lib.cleanSource ./.;
-            buildInputs = [ myGithubPages ];
-            buildPhase = "jekyll build";
-            installPhase = ''
-              mkdir -p $out
-              cp -r . $out
-            '';
-          };
-          serveBlog = pkgs.writeShellScriptBin "serve-blog.sh"
-            "${pkgs.lib.getExe myRubyPackages.jekyll} serve --watch";
+        packages.default = pkgs.stdenv.mkDerivation {
+          name = "build-blog";
+          src = pkgs.lib.cleanSource ./.;
+          buildInputs = [ myGithubPages ];
+          installPhase = ''
+            mkdir -p $out
+            cp -r . $out
+          '';
         };
 
-        apps = {
-          default =
-            flake-utils.lib.mkApp { drv = self.packages.${system}.serveBlog; };
-        };
-
-        devShells = {
-          default = pkgs.mkShell {
-            nativeBuildInputs =
-              [ myGithubPages self.packages.${system}.serveBlog ];
-          };
-        };
+        devShells.default =
+          pkgs.mkShell { nativeBuildInputs = [ myGithubPages ]; };
       });
 }

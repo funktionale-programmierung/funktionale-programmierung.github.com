@@ -79,27 +79,19 @@ http://www.seomoz.org/blog/perfecting-keyword-targeting-on-page-optimization
 
 # Blog lokal anschauen
 
-Um den Blog lokal zu erzeugen, benötigst du `jekyll` in Version 3.8.0
-oder neuer. Installationsanleitung gibt es hier:
+Um den Blog lokal zu erzeugen, benötigst du `jekyll` in Version
+3.9. Installationsanleitung gibt es hier:
 https://jekyllrb.com/docs/installation/
 
 Sobald `jekyll` installiert ist, kannst du aus dem
-Toplevel-Verzeichnis mittels `./run-local-server.sh` den Blog
-generieren und einen Webserver starten. Der Blog ist dann über
-http://127.0.0.1:4000 verfügbar.
+Toplevel-Verzeichnis mittels `make serve` den Blog generieren und
+einen Webserver starten. Der Blog ist dann über http://127.0.0.1:4000
+verfügbar.
 
 ## Nix
 
-Wenn du `nix` installiert hast, kannst du den Blog jetzt auch mit
-`nix` bauen, d. h. ohne lokal von irgendwelchen globalen Paketen
-abhängig zu sein; du brauchst nur `nix` selbst (mit eingeschaltetem
-Flakes-Feature).
-
-Dazu einfach im Rootverzeichnis des Projekts `nix run` aufrufen, um
-den Blog direkt zu bauen und zu aktualisieren.
-
-*Achtung*: Beim ersten Aufruf kann es gerne mal einige Zeit dauern,
-bis alles gebaut ist.
+Wenn du `nix` installiert hast, bringt dich `nix develop` in eine
+Entwicklungsumgebung, in der du `make serve` aufrufen kannst.
 
 # Veröffentlichen
 
