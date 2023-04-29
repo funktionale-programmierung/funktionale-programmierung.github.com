@@ -99,8 +99,9 @@ verfügbar.
 
 ## Nix
 
-Wenn du `nix` installiert hast, bringt dich `nix develop` in eine
-Entwicklungsumgebung, in der du `make serve` aufrufen kannst.
+Wenn du `nix` installiert hast, kannst du den Blog lokal mittels `nix
+run` hosten.  Alternativ bringt dich `nix develop` in eine Umgebung,
+in der du `jekyll` direkt verwenden kannst.
 
 # Veröffentlichen
 
