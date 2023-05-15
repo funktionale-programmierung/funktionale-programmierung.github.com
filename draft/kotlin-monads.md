@@ -6,17 +6,17 @@ author: michael-sperber
 tags: ["Kotlin", "monad", "Monade", "continuation", "Continuation", "DSL"]
 ---
 
-Dieser Post ist der Beginn einer Reihe über *funktionale
+Dieser Post ist ein Teil der Reihe über *funktionale
 Softwarearchitektur in Kotlin*.  Im ersten ging es um [funktionale
 Validierung](https://funktionale-programmierung.de/2023/01/19/kotlin-validation.html),
 in diesem Teil geht es um *Monaden*.  Diese sind in Kotlin vor allem
 praktisch, wenn es um die Beschreibung von Abläufen in der Domäne
 geht, die von technischer Logik zur Ausführung dieser Abläufe getrennt
-werden soll - und zwar unter Verwendung von kleinen
+werden soll – und zwar unter Verwendung von kleinen
 domänenspezifischen Sprachen (DSLs).
 
 In dieser Folge geht es darum, wie Monaden überhaupt funktionieren.
-Kotlin hat nämlich - wie viele funktionale Sprachen auch - eine
+Kotlin hat nämlich – wie viele funktionale Sprachen auch – eine
 spezielle Syntax dafür, auch wenn man sie nicht unter dem "M-Wort" in
 der Dokumentation findet.  Sie versteckt sich hinter dem Schlüsselwort
 `suspend`.
@@ -35,7 +35,7 @@ liefert, manchmal aber auch nicht.
 Wir bauen den Typ einfach selber, damit wir zeigen können, wie wir auf
 Grundlage einer Typdefinition die dazu passende Monade definieren
 können.  Wir bauen ihn als kleine Typhierarchie mit einem Interface
-und den obligatorischen zwei Fälle – `Some`, falls ein Wert da ist und
+und den obligatorischen zwei Fällen – `Some`, falls ein Wert da ist und
 `None`, falls nicht:
 
 ```kotlin
@@ -124,15 +124,15 @@ versteckt in einem Mechanismus, der
 Dokumentation lässt das Lesy glauben, dass es bei Coroutinen primär um
 "asynchrone" beziehungsweise nebenläufige Programmierung geht, aber
 dahinter steckt ein allgemeiner Mechanismus, der bei Funktionen
-aktiviert ist, deren Definition die mit dem Schlüsselwort `suspend`
-markiert ist.  Die versetzt den Compiler in einen anderen Modus, der
+aktiviert ist, deren Definition mit dem Schlüsselwort `suspend`
+markiert ist.  Dieses versetzt den Compiler in einen anderen Modus, der
 daraufhin eine sogenannte
 [CPS-Transformation](https://de.wikipedia.org/wiki/Continuation-Passing_Style)
 durchführt.
 
 "CPS" steht für *Continuation-Passing Style* und ist eine bestimmte
 Art, Funktionen zu schreiben.  Normalerweise schreiben wir ja
-Programme "verschachtelt", indem dass das Ergebnis eines Funktionsaufrufs
+Programme "verschachtelt", indem das Ergebnis eines Funktionsaufrufs
 zurückgegeben wird.
 
 ```kotlin
@@ -141,7 +141,7 @@ f(g(h(x)))
 
 Bei CPS geht es niemals zurück: Wenn eine Funktion fertig ist, gibt
 sie kein Ergebnis "zurück", sondern ruft stattdessen eine Funktion
-auf, die weitermacht - eben die Continuation, englisch für
+auf, die weitermacht – eben die Continuation, englisch für
 "Fortsetzung".   In CPS sieht der obige geschachtelte Funktionsaufruf
 so aus:
 
@@ -149,7 +149,7 @@ so aus:
 h(x) { g(it) { gr -> f(it) { ... } } }
 ```
 
-Das Programm wird also linearisiert - die Funktionsaufrufe stehen in
+Das Programm wird also linearisiert – die Funktionsaufrufe stehen in
 der Reihenfolge, in der sie auch zur Laufzeit passieren.  Außerdem
 bekommt jedes Zwischenergebnis einen Namen.  Das und die geschweiften
 Klammern hat schonmal gewisse Ähnlichkeit zu den Aufrufen von `bind`
@@ -165,8 +165,8 @@ anderes machen könnte, wenn eine Berechnung blockieren würde und sie
 dann reaktiviert, wenn das I/O fertig ist.  Dafür müsste das Programm
 speichern, wo es weitergeht.
 
-Normalerweise repräsentiert weiß die JVM, wo es nach einem
-Methodenaufruf weitergeht, indem es den *Stack* konsultiert, ein
+Normalerweise weiß die JVM, wo es nach einem
+Methodenaufruf weitergeht, indem sie den *Stack* konsultiert, ein
 implizites Ding, welches ein Java-Programm nicht direkt manipulieren
 kann.  In CPS jedoch ist "wie es nach einem Methodenaufruf weitergeht"
 eine Continuation, also ein *Objekt*, das gespeichert und benutzt
@@ -186,6 +186,9 @@ ein monadisches Programm zu machen.
 
 Das ist eine ziemliche Frickelei, aber es geht -
 [hier](https://github.com/active-group/kotlin-free-monad/blob/main/src/main/kotlin/de/activegroup/FreeMonad.kt)
+
+404 File not found
+
 ist der Code in unserer kleinen Library, die wir für den Zweck
 geschrieben haben.  Sie stellt ein Objekt `MonaDSL` zur Verfügung mit
 einigen hilfreichen Funktionen, deren Definition wir aber gerade wegen
@@ -241,7 +244,7 @@ optionally {
 }
 ```
 
-Herauskommt `Some(12)` - und fertig ist die `Option`-Monade inklusive
+Herauskommt `Some(12)` – und fertig ist die `Option`-Monade inklusive
 schöner Syntax!
 
 Um größere Monaden und welche Rolle sie in der Software-Architektur
