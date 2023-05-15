@@ -185,10 +185,7 @@ einzuschmuggeln und so aus einer "ganz normalen" `suspend`-Funktion
 ein monadisches Programm zu machen.
 
 Das ist eine ziemliche Frickelei, aber es geht -
-[hier](https://github.com/active-group/kotlin-free-monad/blob/main/src/main/kotlin/de/activegroup/FreeMonad.kt)
-
-404 File not found
-
+[hier](https://github.com/active-group/kotlin-free-monad/blob/main/src/main/kotlin/de/activegroup/MonadDSL.kt)
 ist der Code in unserer kleinen Library, die wir für den Zweck
 geschrieben haben.  Sie stellt ein Objekt `MonaDSL` zur Verfügung mit
 einigen hilfreichen Funktionen, deren Definition wir aber gerade wegen
