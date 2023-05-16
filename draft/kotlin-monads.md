@@ -187,7 +187,7 @@ ein monadisches Programm zu machen.
 Das ist eine ziemliche Frickelei, aber es geht -
 [hier](https://github.com/active-group/kotlin-free-monad/blob/main/src/main/kotlin/de/activegroup/MonadDSL.kt)
 ist der Code in unserer kleinen Library, die wir für den Zweck
-geschrieben haben.  Sie stellt ein Objekt `MonaDSL` zur Verfügung mit
+geschrieben haben.  Sie stellt ein Objekt `MonadDSL` zur Verfügung mit
 einigen hilfreichen Funktionen, deren Definition wir aber gerade wegen
 dieser Frickeligkeit hier weglassen.
 
