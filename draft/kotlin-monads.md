@@ -222,10 +222,10 @@ von der Klasse `OptionDSL` erbt, also dessen Funktionen benutzen
 kann.  Außerdem bekommen sie automatisch ein `suspend` angehängt und
 werden damit vom Kotlin-Compiler CPS-transformiert.
 
-Diese Klasse `OptionDSL` enthält nur eine einzige Operation:
+Das Objekt `OptionDSL` enthält nur eine einzige Operation:
 
 ```kotlin
-class OptionDSL() {
+object OptionDSL {
     suspend fun  <A> pure(result: A): A = MonadDSL.pure(result) { Some(it) }
 }
 ```
