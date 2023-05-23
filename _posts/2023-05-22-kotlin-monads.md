@@ -16,8 +16,8 @@ werden soll – und zwar unter Verwendung von kleinen
 domänenspezifischen Sprachen (DSLs).
 
 In dieser Folge geht es darum, wie Monaden überhaupt funktionieren.
-Kotlin hat nämlich – wie viele funktionale Sprachen auch – eine
-spezielle Syntax dafür, auch wenn man sie nicht unter dem "M-Wort" in
+Kotlin hat nämlich – wie viele funktionale Sprachen auch – dafür eine
+spezielle Syntax, auch wenn man sie nicht unter dem "M-Wort" in
 der Dokumentation findet.  Sie versteckt sich hinter dem Schlüsselwort
 `suspend`.
 
