@@ -51,7 +51,7 @@ von Osher Vaknin. In den Vortragsräumen referierte derweil Julian Kirsten Arni 
 Die Talks waren gut besucht und die Tutorials ebenfalls gut gefüllt;
 der "first come first serve"-Listenansatz führte dazu, dass FIXME.
 Die Stimmung war gut, viele freuten sich, wieder von Angesicht zu
-Angesicht mit den anderen Teilnehmer:inen sprechen zu können.
+Angesicht mit den anderen Teilnehmer:innen sprechen zu können.
 Aufgrund der anhaltenden Pandemielage kam  ein ausführliches
 Hygienekonzept zu Tragen, dass von den allermeisten Teilnehmer:innen
 gut angenommen und auch vereinzelt ausdrücklich positiv kommentiert
@@ -63,5 +63,11 @@ Verweilmöglichkeiten im Innenhof und auf dem Vorplatz nicht nur von
 den Raucher:innen gern genutzt wurden, um sich auszutauschen und
 zwischen den Vorträgen die Beine zu vertreten.
 
-An dieser Stelle auch noch einmal herzlichen Dank an unsere Sponsor:innen WellTyped und TNG Technology Consulting, deren freundliche Unterstützung es wieder möglich machte, finanziell schwächer gestellten Teilnehmer:innen stark reduzierte oder ganz kostenlose Tickets anzubieten.
+An dieser Stelle auch noch einmal herzlichen Dank an unsere
+Sponsor:innen WellTyped und TNG Technology Consulting, deren
+freundliche Unterstützung es wieder möglich machte, finanziell
+schwächer gestellten Teilnehmer:innen stark reduzierte oder ganz
+kostenlose Tickets anzubieten.
+
+Wir freuen uns schon auf die nächste BOB und hoffen, viele Teilnehmer:innen und Sprecher:innen 2024 wieder begrüßen zu dürfen.
 
