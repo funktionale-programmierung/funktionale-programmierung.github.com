@@ -14,18 +14,17 @@ Berlin zusammen.
 
 Aufgrund der anhaltenden Pandemielage wurde ein ausführliches
 Hygienekonzept angewendet, dass von den allermeisten Teilnehmer:innen
-gut angenommen und auch ausdrücklich positiv kommentiert wurde. Insbesondere die FFP2-Masken mit BOB-Logo kamen gut an.
+gut angenommen und auch ausdrücklich positiv kommentiert
+wurde. Insbesondere die FFP2-Masken mit BOB-Logo kamen gut an.
 
 <!-- more start -->
 
-Die Konferenz begann mit der Keynote ["Re-thinking Modules for the Web"](https://bobkonf.de/2023/startsev.html) von Yulia Startsev,
-
-(FIXME Kollegys um Hilfe zu den Details bitten)
+Die Konferenz begann mit der Keynote ["Re-thinking Modules for the Web"](https://bobkonf.de/2023/startsev.html) von Yulia Startsev, die eindrucksvoll erläuterte, wie die Standardisierung der Modularisierung von Javascript bei Mozilla vorangetrieben wird und welche sozialen Prozesse zur Konsensbildung im Rahmen dieser Standardisierung genutzt werden.
 
 Direkt im Anschluss an die Keynote begannen die ersten beiden
 Tutorials: Pierre Allix und İlke Zilci erklärten in ["Building highly
 available systems with Elixir: an
-introduction"](https://bobkonf.de/2023/allix-zilci.html), wie FIXME???????,
+introduction"](https://bobkonf.de/2023/allix-zilci.html), wie FIXME,
 und Henning Schwentner gab in ["Domain
 Storytelling"](https://bobkonf.de/2023/schwentner.html) eine
 Einführung in die gleichnamige Kommunikationstechnik.
@@ -36,13 +35,12 @@ Talks-Track #2 ging es mit ["Digitalisierung unter pandemischen
 Bedingungen"](https://bobkonf.de/2023/kastl.html) von Bianca Kastl
 los.
 
-Weiter ging es mit ["What a computer game taught me about software architecture"](https://bobkonf.de/2023/thoma.html) von Franz Thoma, ?????, und parallel hielt Markus Hettich mit ["Softwareentwicklung ist kein Hexenwerk"](https://bobkonf.de/2023/hettich.html) einen Vortrag darüber, wie FIXME?????.
+Weiter ging es mit ["What a computer game taught me about software architecture"](https://bobkonf.de/2023/thoma.html) von Franz Thoma FIXME, und parallel hielt Markus Hettich mit ["Softwareentwicklung ist kein Hexenwerk"](https://bobkonf.de/2023/hettich.html) einen Vortrag darüber, wie FIXME.
 
 Im Anschluss sprach Marijn Haverbeke über ["State Transitions in Complex Systems"](https://bobkonf.de/2023/haverbeke.html) und Raoul Schlotterbek gab einen Einblick in ["Funktionales Deep Learning in Haskell"](https://bobkonf.de/2023/schlotterbek.html).
 
 Nach der Mittagspause, wunderbar gecatered mit Fingerfood von John Catering GmbH,
-ging es weiter mit FIXME in ["Getting recursive definitions off their bottoms"](https://bobkonf.de/2023/breitner.html) von Joachim Breitner, und auf Track B präsentierte Josefine (FIXME--Nachnamen nennen oder nicht?) 
-["Web Accessibility DeepDive"](https://bobkonf.de/2023/josefine.html) einen Überblick über Richtlinien und Werkzeuge zur Erstellung barrierearmer Websites.
+ging es weiter mit FIXME in ["Getting recursive definitions off their bottoms"](https://bobkonf.de/2023/breitner.html) von Joachim Breitner, und auf Track B präsentierte Josefine in ["Web Accessibility DeepDive"](https://bobkonf.de/2023/josefine.html) einen Überblick über Richtlinien und Werkzeuge zur Erstellung barrierearmer Websites.
 
 Danach sprach Heinrich Apfelmus über ["Delta encodings help separate business logic from database operations"](https://bobkonf.de/2023/apfelmus.html) (FIXME Inhalt), und Pierre-Étienne Meunier schaltete sich remote aus Frankreich mit ["Version control in the age of distributed computing"](https://bobkonf.de/2023/meunier.html) dazu.
 
@@ -57,6 +55,7 @@ von Osher Vaknin. In den Vortragsräumen referierte derweil Julian Kirsten Arni 
 
 Die Talks  waren gut besucht und die Tutorials
 ebenfalls gut gefüllt; der "first come first serve"-Listenansatz führte dazu, dass FIXME.
-Stimmung? Inhalte? aaah
+Das Wetter war leider eher kühl, aber trocken, sodass auch die Sitz- und Verweilmöglichkeiten im Innenhof und auf dem Vorplatz nicht nur von den Raucher:innen gern genutzt wurden, um sich auszutauschen und zwischen den Vorträgen die Beine zu vertreten.
+
 An dieser Stelle auch noch einmal herzlichen Dank an unsere Sponsor:innen WellTyped und TNG Technology Consulting, deren freundliche Unterstützung es wieder möglich machte, finanziell schwächer gestellten Teilnehmer:innen stark reduzierte oder ganz kostenlose Tickets anzubieten.
 
