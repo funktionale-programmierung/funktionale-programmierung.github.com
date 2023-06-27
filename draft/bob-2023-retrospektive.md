@@ -42,56 +42,21 @@ Weiter ging es mit ["What a computer game taught me about software architecture"
 Im Anschluss sprach Marijn Haverbeke über ["State Transitions in Complex Systems"](https://bobkonf.de/2023/haverbeke.html) und Raoul Schlotterbek gab einen Einblick in ["Funktionales Deep Learning in Haskell"](https://bobkonf.de/2023/schlotterbek.html).
 
 Nach der Mittagspause, wunderbar gecatered mit Fingerfood von John Catering GmbH,
-ging es weiter mit ["Getting recursive definitions off their bottoms"](https://bobkonf.de/2023/breitner.html)
-Joachim Breitner
-	
-["Web Accessibility DeepDive"](https://bobkonf.de/2023/josefine.html)
-Josefine
+ging es weiter mit FIXME in ["Getting recursive definitions off their bottoms"](https://bobkonf.de/2023/breitner.html) von Joachim Breitner, und auf Track B präsentierte Josefine (FIXME--Nachnamen nennen oder nicht?) 
+["Web Accessibility DeepDive"](https://bobkonf.de/2023/josefine.html) einen Überblick über Richtlinien und Werkzeuge zur Erstellung barrierearmer Websites.
+
+Danach sprach Heinrich Apfelmus über ["Delta encodings help separate business logic from database operations"](https://bobkonf.de/2023/apfelmus.html) (FIXME Inhalt), und Pierre-Étienne Meunier schaltete sich remote aus Frankreich mit ["Version control in the age of distributed computing"](https://bobkonf.de/2023/meunier.html) dazu.
+
+Parallel zu diesen vier Vorträgen liefen die Workshops ["Sechseckige Webseiten? Hexagonale Frontend-Architektur!"](https://bobkonf.de/2023/emrich.html) von Marco Emrich und Sophia Cook sowie ["An Introduction to Doing Software Proofs in Agda"](https://bobkonf.de/2023/maguire.html) von Sandy Maguire. Hier nochmals einen besonderen Dank an Sandy, der sich wegen großen Andrangs bereiterklärte, den Workshop im letzten Block noch ein zweites Mal abzuhalten.
 
 
-["Delta encodings help separate business logic from database operations"](https://bobkonf.de/2023/apfelmus.html)
-Heinrich Apfelmus
-	
-["Version control in the age of distributed computing"](https://bobkonf.de/2023/meunier.html)
-Pierre-Étienne Meunier
-
-
-["Sechseckige Webseiten? Hexagonale Frontend-Architektur!"](https://bobkonf.de/2023/emrich.html)
-Marco Emrich, Sophia Cook
-	
-["An Introduction to Doing Software Proofs in Agda"](https://bobkonf.de/2023/maguire.html)
-Sandy Maguire
-
-
-Im letzten Block des Tages
-
- 	
-["Cloud, done the nix way"](https://bobkonf.de/2023/arni.html)
-Julian Kirsten Arni
-	
-["Structuring effectful programs"](https://bobkonf.de/2023/loeh.html)
-Andres Löh
-
-
-["When testing just doesn't cut it"](https://bobkonf.de/2023/hupel.html)
-Lars Hupel
-
-["Functional programming for CNC machines"](https://bobkonf.de/2023/quchen.html)
-quchen
-
-
+Im letzten Block des Tages gab es außerdem die Workshops 
 ["Einführung in das Haskell-Web-Framework IHP"](https://bobkonf.de/2023/lutz.html)
-Bianca Lutz
-	
-["OpenTelemetry Workshop"](https://bobkonf.de/2023/vaknin.html)
-Osher Vaknin
-
-Sandy Maguire reloaded
+von Bianca Lutz und ["OpenTelemetry Workshop"](https://bobkonf.de/2023/vaknin.html)
+von Osher Vaknin. In den Vortragsräumen referierte derweil Julian Kirsten Arni dazu, wie man ["Cloud, done the nix way"](https://bobkonf.de/2023/arni.html) organisiert; Andres Löh erklärte in ["Structuring effectful programs"](https://bobkonf.de/2023/loeh.html), wie FIXME, Lars Hupel sprach in ["When testing just doesn't cut it"](https://bobkonf.de/2023/hupel.html) über FIXME, und quchen gab einen Einblick in ["Functional programming for CNC machines"](https://bobkonf.de/2023/quchen.html).
 
 
-(Anpassen an 2023: Die Talks waren gut besucht und die Tutorials
-profitierten von reger Beteiligung. Darüber hinaus fanden auch dieses
-Jahr wieder viele Gespräche auf den virtuellen Gängen statt. Die
-Q&A-Segmente nach den einzelnen Talks funktionierten sehr gut, da sich
-selbst bei fehlenden Fragen aus dem Publikum immer ein spannendes
-Gespräch zwischen Moderator:in und Sprecher:in entwickelte.)
+Die Talks  waren gut besucht und die Tutorials
+ebenfalls gut gefüllt; der "first come first serve"-Listenansatz führte dazu, dass FIXME.
+Stimmung? Inhalte? aaah
+
