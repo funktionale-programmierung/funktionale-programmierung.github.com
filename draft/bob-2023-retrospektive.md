@@ -55,7 +55,7 @@ von Osher Vaknin. In den Vortragsräumen referierte derweil Julian Kirsten Arni 
 
 Die Talks  waren gut besucht und die Tutorials
 ebenfalls gut gefüllt; der "first come first serve"-Listenansatz führte dazu, dass FIXME.
-Das Wetter war leider eher kühl, aber trocken, sodass auch die Sitz- und Verweilmöglichkeiten im Innenhof und auf dem Vorplatz nicht nur von den Raucher:innen gern genutzt wurden, um sich auszutauschen und zwischen den Vorträgen die Beine zu vertreten.
+Die Stimmung war gut, viele freuten sich, wieder von Angesicht zu Angesicht mit den anderen Teilnehmer:inen sprechen zu können. In den Kaffeepausen sorgte Lohmann und Birkner für Heiß- und Kaltgetränke sowie für Kleinigkeiten gegen den Hunger zwischendurch. Das Wetter war leider eher kühl, aber trocken, sodass auch die Sitz- und Verweilmöglichkeiten im Innenhof und auf dem Vorplatz nicht nur von den Raucher:innen gern genutzt wurden, um sich auszutauschen und zwischen den Vorträgen die Beine zu vertreten.
 
 An dieser Stelle auch noch einmal herzlichen Dank an unsere Sponsor:innen WellTyped und TNG Technology Consulting, deren freundliche Unterstützung es wieder möglich machte, finanziell schwächer gestellten Teilnehmer:innen stark reduzierte oder ganz kostenlose Tickets anzubieten.
 
