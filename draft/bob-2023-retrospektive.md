@@ -12,11 +12,6 @@ zwei reinen Onlineveranstaltungen fanden wir uns diesmal wieder vor
 Ort in den Räumen von Lohmann und Birkner Healthcare Services in
 Berlin zusammen.
 
-Aufgrund der anhaltenden Pandemielage wurde ein ausführliches
-Hygienekonzept angewendet, dass von den allermeisten Teilnehmer:innen
-gut angenommen und auch ausdrücklich positiv kommentiert
-wurde. Insbesondere die FFP2-Masken mit BOB-Logo kamen gut an.
-
 <!-- more start -->
 
 Die Konferenz begann mit der Keynote ["Re-thinking Modules for the Web"](https://bobkonf.de/2023/startsev.html) von Yulia Startsev, die eindrucksvoll erläuterte, wie die Standardisierung der Modularisierung von Javascript bei Mozilla vorangetrieben wird und welche sozialen Prozesse zur Konsensbildung im Rahmen dieser Standardisierung genutzt werden.
@@ -53,9 +48,20 @@ von Bianca Lutz und ["OpenTelemetry Workshop"](https://bobkonf.de/2023/vaknin.ht
 von Osher Vaknin. In den Vortragsräumen referierte derweil Julian Kirsten Arni dazu, wie man ["Cloud, done the nix way"](https://bobkonf.de/2023/arni.html) organisiert; Andres Löh erklärte in ["Structuring effectful programs"](https://bobkonf.de/2023/loeh.html), wie FIXME, Lars Hupel sprach in ["When testing just doesn't cut it"](https://bobkonf.de/2023/hupel.html) über FIXME, und quchen gab einen Einblick in ["Functional programming for CNC machines"](https://bobkonf.de/2023/quchen.html).
 
 
-Die Talks  waren gut besucht und die Tutorials
-ebenfalls gut gefüllt; der "first come first serve"-Listenansatz führte dazu, dass FIXME.
-Die Stimmung war gut, viele freuten sich, wieder von Angesicht zu Angesicht mit den anderen Teilnehmer:inen sprechen zu können. In den Kaffeepausen sorgte Lohmann und Birkner für Heiß- und Kaltgetränke sowie für Kleinigkeiten gegen den Hunger zwischendurch. Das Wetter war leider eher kühl, aber trocken, sodass auch die Sitz- und Verweilmöglichkeiten im Innenhof und auf dem Vorplatz nicht nur von den Raucher:innen gern genutzt wurden, um sich auszutauschen und zwischen den Vorträgen die Beine zu vertreten.
+Die Talks waren gut besucht und die Tutorials ebenfalls gut gefüllt;
+der "first come first serve"-Listenansatz führte dazu, dass FIXME.
+Die Stimmung war gut, viele freuten sich, wieder von Angesicht zu
+Angesicht mit den anderen Teilnehmer:inen sprechen zu können.
+Aufgrund der anhaltenden Pandemielage kam  ein ausführliches
+Hygienekonzept zu Tragen, dass von den allermeisten Teilnehmer:innen
+gut angenommen und auch vereinzelt ausdrücklich positiv kommentiert
+wurde. Insbesondere die FFP2-Masken mit BOB-Logo kamen gut an.  In den
+Kaffeepausen sorgte Lohmann und Birkner für Heiß- und Kaltgetränke
+sowie für Kleinigkeiten gegen den Hunger zwischendurch. Das Wetter war
+leider eher kühl, aber trocken, sodass auch die Sitz- und
+Verweilmöglichkeiten im Innenhof und auf dem Vorplatz nicht nur von
+den Raucher:innen gern genutzt wurden, um sich auszutauschen und
+zwischen den Vorträgen die Beine zu vertreten.
 
 An dieser Stelle auch noch einmal herzlichen Dank an unsere Sponsor:innen WellTyped und TNG Technology Consulting, deren freundliche Unterstützung es wieder möglich machte, finanziell schwächer gestellten Teilnehmer:innen stark reduzierte oder ganz kostenlose Tickets anzubieten.
 
