@@ -7,15 +7,14 @@ tags: ["BOBkonf", "konferenz",]
 ---
 
 Am 17.03.2023 fand die BOB, unsere alljährliche
-Entwickler:innenkonferenz, zum mittlerweile neunten Mal statt, nach
-zwei reinen Onlineveranstaltungen diesmal wieder vor Ort in den Räumen
-von Lohmann und Birkner Healthcare Services in Berlin.
+Entwickler:innenkonferenz, zum mittlerweile neunten Mal statt. Nach
+zwei reinen Onlineveranstaltungen fanden wir uns diesmal wieder vor
+Ort in den Räumen von Lohmann und Birkner Healthcare Services in
+Berlin zusammen.
 
 Aufgrund der anhaltenden Pandemielage wurde ein ausführliches
 Hygienekonzept angewendet, dass von den allermeisten Teilnehmer:innen
-gut angenommen und zum Teil auch ausdrücklich positiv kommentiert
-wurde.
-Unsere Sponsor:innen WellTyped und TNG Technology Consulting ...
+gut angenommen und auch ausdrücklich positiv kommentiert wurde. Insbesondere die FFP2-Masken mit BOB-Logo kamen gut an.
 
 <!-- more start -->
 
@@ -59,4 +58,5 @@ von Osher Vaknin. In den Vortragsräumen referierte derweil Julian Kirsten Arni 
 Die Talks  waren gut besucht und die Tutorials
 ebenfalls gut gefüllt; der "first come first serve"-Listenansatz führte dazu, dass FIXME.
 Stimmung? Inhalte? aaah
+An dieser Stelle auch noch einmal herzlichen Dank an unsere Sponsor:innen WellTyped und TNG Technology Consulting, deren freundliche Unterstützung es wieder möglich machte, finanziell schwächer gestellten Teilnehmer:innen stark reduzierte oder ganz kostenlose Tickets anzubieten.
 
