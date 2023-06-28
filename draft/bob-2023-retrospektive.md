@@ -35,17 +35,27 @@ Weiter ging es mit ["What a computer game taught me about software architecture"
 Im Anschluss sprach Marijn Haverbeke über ["State Transitions in Complex Systems"](https://bobkonf.de/2023/haverbeke.html) und Raoul Schlotterbek gab einen Einblick in ["Funktionales Deep Learning in Haskell"](https://bobkonf.de/2023/schlotterbek.html).
 
 Nach der Mittagspause, wunderbar gecatered mit Fingerfood von John Catering GmbH,
-ging es weiter mit FIXME in ["Getting recursive definitions off their bottoms"](https://bobkonf.de/2023/breitner.html) von Joachim Breitner, und auf Track B präsentierte Josefine in ["Web Accessibility DeepDive"](https://bobkonf.de/2023/josefine.html) einen Überblick über Richtlinien und Werkzeuge zur Erstellung barrierearmer Websites.
+ging es weiter mit FIXME in ["Getting recursive definitions off their bottoms"](https://bobkonf.de/2023/breitner.html) von Joachim Breitner, und auf Track B präsentierte Josefine in ["Web Accessibility DeepDive"](https://bobkonf.de/2023/josefine.html) einen Überblick über Richtlinien und Werkzeuge, deren Anwendung helfen kann, das Internet mit kleinen Tricks für mehr Menschen zugänglich machen.
 
 Danach sprach Heinrich Apfelmus über ["Delta encodings help separate business logic from database operations"](https://bobkonf.de/2023/apfelmus.html) (FIXME Inhalt), und Pierre-Étienne Meunier schaltete sich remote aus Frankreich mit ["Version control in the age of distributed computing"](https://bobkonf.de/2023/meunier.html) dazu.
 
 Parallel zu diesen vier Vorträgen liefen die Workshops ["Sechseckige Webseiten? Hexagonale Frontend-Architektur!"](https://bobkonf.de/2023/emrich.html) von Marco Emrich und Sophia Cook sowie ["An Introduction to Doing Software Proofs in Agda"](https://bobkonf.de/2023/maguire.html) von Sandy Maguire. Hier nochmals einen besonderen Dank an Sandy, der sich wegen großen Andrangs bereiterklärte, den Workshop im letzten Block noch ein zweites Mal abzuhalten.
 
 
-Im letzten Block des Tages gab es außerdem die Workshops 
-["Einführung in das Haskell-Web-Framework IHP"](https://bobkonf.de/2023/lutz.html)
-von Bianca Lutz und ["OpenTelemetry Workshop"](https://bobkonf.de/2023/vaknin.html)
-von Osher Vaknin. In den Vortragsräumen referierte derweil Julian Kirsten Arni dazu, wie man ["Cloud, done the nix way"](https://bobkonf.de/2023/arni.html) organisiert; Andres Löh erklärte in ["Structuring effectful programs"](https://bobkonf.de/2023/loeh.html), wie FIXME, Lars Hupel sprach in ["When testing just doesn't cut it"](https://bobkonf.de/2023/hupel.html) über FIXME, und quchen gab einen Einblick in ["Functional programming for CNC machines"](https://bobkonf.de/2023/quchen.html).
+Im letzten Block des Tages gab es außerdem die Workshops ["Einführung
+in das Haskell-Web-Framework IHP"](https://bobkonf.de/2023/lutz.html)
+von Bianca Lutz und ["OpenTelemetry
+Workshop"](https://bobkonf.de/2023/vaknin.html) von Osher Vaknin, eine
+hands-on Einführung in OpenTelemetry mit vielen kleinen angeleiteten
+Aufgaben zum Finden von Fehler im System durch Monitoring. In den
+Vortragsräumen referierte derweil Julian Kirsten Arni dazu, wie man
+["Cloud, done the nix way"](https://bobkonf.de/2023/arni.html)
+organisiert; Andres Löh erklärte in ["Structuring effectful
+programs"](https://bobkonf.de/2023/loeh.html), wie FIXME, Lars Hupel
+sprach in ["When testing just doesn't cut
+it"](https://bobkonf.de/2023/hupel.html) über FIXME, und quchen gab
+einen Einblick in ["Functional programming for CNC
+machines"](https://bobkonf.de/2023/quchen.html).
 
 
 Die Talks waren gut besucht und die Tutorials ebenfalls gut gefüllt;
