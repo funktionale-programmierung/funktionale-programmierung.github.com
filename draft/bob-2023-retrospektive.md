@@ -14,7 +14,12 @@ Berlin zusammen.
 
 <!-- more start -->
 
-Die Konferenz begann mit der Keynote ["Re-thinking Modules for the Web"](https://bobkonf.de/2023/startsev.html) von Yulia Startsev, die eindrucksvoll erläuterte, wie die Standardisierung der Modularisierung von Javascript bei Mozilla vorangetrieben wird und welche sozialen Prozesse zur Konsensbildung im Rahmen dieser Standardisierung genutzt werden.
+Die Konferenz begann mit der Keynote ["Re-thinking Modules for the
+Web"](https://bobkonf.de/2023/startsev.html) von Yulia Startsev, die
+eindrucksvoll erläuterte, wie die Standardisierung der Modularisierung
+von Javascript bei Mozilla vorangetrieben wird und welche sozialen
+Prozesse zur Konsensbildung im Rahmen dieser Standardisierung genutzt
+werden.
 
 Direkt im Anschluss an die Keynote begannen die ersten beiden
 Tutorials: Pierre Allix und İlke Zilci erklärten in ["Building highly
@@ -25,21 +30,48 @@ Storytelling"](https://bobkonf.de/2023/schwentner.html) eine
 Einführung in die gleichnamige Kommunikationstechnik.
 
 Der Talks-Track #1 begann mit ["Web Assembly for the Rest of
-us"](https://bobkonf.de/2023/wingo.html), einer Erläuterung zu den Entwicklungen im Bereich Managed Memory in Browsern und was das für die Zukunft von WebAssembly bedeutet, von Andy Wingo.  Auf
-Talks-Track #2 ging es mit ["Digitalisierung unter pandemischen
+us"](https://bobkonf.de/2023/wingo.html), einer Erläuterung zu den
+Entwicklungen im Bereich Managed Memory in Browsern und was das für
+die Zukunft von WebAssembly bedeutet, von Andy Wingo.  Auf Talks-Track
+#2 ging es mit ["Digitalisierung unter pandemischen
 Bedingungen"](https://bobkonf.de/2023/kastl.html) von Bianca Kastl
 los, die darüber referierte, FIXME
 
-Weiter ging es mit ["What a computer game taught me about software architecture"](https://bobkonf.de/2023/thoma.html) von Franz Thoma FIXME, und parallel hielt Markus Hettich mit ["Softwareentwicklung ist kein Hexenwerk"](https://bobkonf.de/2023/hettich.html) einen Vortrag darüber, wie FIXME.
+Weiter ging es mit ["What a computer game taught me about software
+architecture"](https://bobkonf.de/2023/thoma.html) von Franz Thoma
+FIXME, und parallel hielt Markus Hettich mit ["Softwareentwicklung ist
+kein Hexenwerk"](https://bobkonf.de/2023/hettich.html) einen Vortrag
+darüber, wie FIXME.
 
-Im Anschluss sprach Marijn Haverbeke über ["State Transitions in Complex Systems"](https://bobkonf.de/2023/haverbeke.html) und Raoul Schlotterbek gab einen Einblick in ["Funktionales Deep Learning in Haskell"](https://bobkonf.de/2023/schlotterbek.html) und zeigte uns, dass man keine Graphen braucht, um neuronale Netze zu trainieren.
+Im Anschluss sprach Marijn Haverbeke über ["State Transitions in
+Complex Systems"](https://bobkonf.de/2023/haverbeke.html) und Raoul
+Schlotterbek gab einen Einblick in ["Funktionales Deep Learning in
+Haskell"](https://bobkonf.de/2023/schlotterbek.html) und zeigte uns,
+dass man keine Graphen braucht, um neuronale Netze zu trainieren.
 
-Nach der Mittagspause, wunderbar gecatered mit Fingerfood von John Catering GmbH,
-ging es weiter mit FIXME in ["Getting recursive definitions off their bottoms"](https://bobkonf.de/2023/breitner.html) von Joachim Breitner, und auf Track B präsentierte Josefine in ["Web Accessibility DeepDive"](https://bobkonf.de/2023/josefine.html) einen Überblick über Richtlinien und Werkzeuge, deren Anwendung helfen kann, das Internet mit kleinen Tricks für mehr Menschen zugänglich machen.
+Nach der Mittagspause, wunderbar gecatered mit Fingerfood von John
+Catering GmbH, ging es weiter mit FIXME in ["Getting recursive
+definitions off their bottoms"](https://bobkonf.de/2023/breitner.html)
+von Joachim Breitner, und auf Track B präsentierte Josefine in ["Web
+Accessibility DeepDive"](https://bobkonf.de/2023/josefine.html) einen
+Überblick über Richtlinien und Werkzeuge, deren Anwendung helfen kann,
+das Internet mit kleinen Tricks für mehr Menschen zugänglich machen.
 
-Danach sprach Heinrich Apfelmus über ["Delta encodings help separate business logic from database operations"](https://bobkonf.de/2023/apfelmus.html) (FIXME Inhalt), und Pierre-Étienne Meunier schaltete sich remote aus Frankreich mit ["Version control in the age of distributed computing"](https://bobkonf.de/2023/meunier.html) dazu.
+Danach sprach Heinrich Apfelmus über ["Delta encodings help separate
+business logic from database
+operations"](https://bobkonf.de/2023/apfelmus.html) (FIXME Inhalt),
+und Pierre-Étienne Meunier schaltete sich remote aus Frankreich mit
+["Version control in the age of distributed
+computing"](https://bobkonf.de/2023/meunier.html) dazu.
 
-Parallel zu diesen vier Vorträgen liefen die Workshops ["Sechseckige Webseiten? Hexagonale Frontend-Architektur!"](https://bobkonf.de/2023/emrich.html) von Marco Emrich und Sophia Cook sowie ["An Introduction to Doing Software Proofs in Agda"](https://bobkonf.de/2023/maguire.html) von Sandy Maguire. Hier nochmals einen besonderen Dank an Sandy, der sich wegen großen Andrangs bereiterklärte, den Workshop im letzten Block noch ein zweites Mal abzuhalten.
+Parallel zu diesen vier Vorträgen liefen die Workshops ["Sechseckige
+Webseiten? Hexagonale
+Frontend-Architektur!"](https://bobkonf.de/2023/emrich.html) von Marco
+Emrich und Sophia Cook sowie ["An Introduction to Doing Software
+Proofs in Agda"](https://bobkonf.de/2023/maguire.html) von Sandy
+Maguire. Hier nochmals einen besonderen Dank an Sandy, der sich wegen
+großen Andrangs bereiterklärte, den Workshop im letzten Block noch ein
+zweites Mal abzuhalten.
 
 
 Im letzten Block des Tages gab es außerdem die Workshops ["Einführung
@@ -79,5 +111,6 @@ freundliche Unterstützung es wieder möglich machte, finanziell
 schwächer gestellten Teilnehmer:innen stark reduzierte oder ganz
 kostenlose Tickets anzubieten.
 
-Wir freuen uns schon auf die nächste BOB und hoffen, viele Teilnehmer:innen und Sprecher:innen 2024 wieder begrüßen zu dürfen.
+Wir freuen uns schon auf die nächste BOB und hoffen, viele
+Teilnehmer:innen und Sprecher:innen 2024 wieder begrüßen zu dürfen.
 
