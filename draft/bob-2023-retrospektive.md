@@ -25,14 +25,14 @@ Storytelling"](https://bobkonf.de/2023/schwentner.html) eine
 Einführung in die gleichnamige Kommunikationstechnik.
 
 Der Talks-Track #1 begann mit ["Web Assembly for the Rest of
-us"](https://bobkonf.de/2023/wingo.html) von Andy Wingo.  Auf
+us"](https://bobkonf.de/2023/wingo.html), einer Erläuterung zu den Entwicklungen im Bereich Managed Memory in Browsern und was das für die Zukunft von WebAssembly bedeutet, von Andy Wingo.  Auf
 Talks-Track #2 ging es mit ["Digitalisierung unter pandemischen
 Bedingungen"](https://bobkonf.de/2023/kastl.html) von Bianca Kastl
-los.
+los, die darüber referierte, FIXME
 
 Weiter ging es mit ["What a computer game taught me about software architecture"](https://bobkonf.de/2023/thoma.html) von Franz Thoma FIXME, und parallel hielt Markus Hettich mit ["Softwareentwicklung ist kein Hexenwerk"](https://bobkonf.de/2023/hettich.html) einen Vortrag darüber, wie FIXME.
 
-Im Anschluss sprach Marijn Haverbeke über ["State Transitions in Complex Systems"](https://bobkonf.de/2023/haverbeke.html) und Raoul Schlotterbek gab einen Einblick in ["Funktionales Deep Learning in Haskell"](https://bobkonf.de/2023/schlotterbek.html).
+Im Anschluss sprach Marijn Haverbeke über ["State Transitions in Complex Systems"](https://bobkonf.de/2023/haverbeke.html) und Raoul Schlotterbek gab einen Einblick in ["Funktionales Deep Learning in Haskell"](https://bobkonf.de/2023/schlotterbek.html) und zeigte uns, dass man keine Graphen braucht, um neuronale Netze zu trainieren.
 
 Nach der Mittagspause, wunderbar gecatered mit Fingerfood von John Catering GmbH,
 ging es weiter mit FIXME in ["Getting recursive definitions off their bottoms"](https://bobkonf.de/2023/breitner.html) von Joachim Breitner, und auf Track B präsentierte Josefine in ["Web Accessibility DeepDive"](https://bobkonf.de/2023/josefine.html) einen Überblick über Richtlinien und Werkzeuge, deren Anwendung helfen kann, das Internet mit kleinen Tricks für mehr Menschen zugänglich machen.
