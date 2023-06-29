@@ -35,7 +35,9 @@ Entwicklungen im Bereich Managed Memory in Browsern und was das für
 die Zukunft von WebAssembly bedeutet, von Andy Wingo.  Auf Talks-Track
 #2 ging es mit ["Digitalisierung unter pandemischen
 Bedingungen"](https://bobkonf.de/2023/kastl.html) von Bianca Kastl
-los, die darüber referierte, FIXME
+los, die einene Einblick gab, was bei einem großen
+Digitalisierungsprojekt in einem Gesundheitsamth besser lief als
+erwartet und wo (auch unerwartet) Verbesserungsbedarf besteht.
 
 Weiter ging es mit ["What a computer game taught me about software
 architecture"](https://bobkonf.de/2023/thoma.html), einem Vortrag über
@@ -54,10 +56,11 @@ zweiten Workshoprunden des Tages.
 
 Im letzten Block vor dem Mittagessen sprach Marijn Haverbeke über
 ["State Transitions in Complex
-Systems"](https://bobkonf.de/2023/haverbeke.html) FIXME Details??, während Raoul
-Schlotterbek einen Einblick in ["Funktionales Deep Learning in
-Haskell"](https://bobkonf.de/2023/schlotterbek.html) gab und zeigte
-uns, dass man keine Graphen braucht, um neuronale Netze zu trainieren.
+Systems"](https://bobkonf.de/2023/haverbeke.html) und stellte den
+Editor ColdMirror vor, während im Nebenraum Raoul Schlotterbek einen
+Einblick in ["Funktionales Deep Learning in
+Haskell"](https://bobkonf.de/2023/schlotterbek.html) gab und zeigte,
+dass man keine Graphen braucht, um neuronale Netze zu trainieren.
 
 Nach der Mittagspause, wunderbar gecatered mit Fingerfood von John
 Catering GmbH, ging es weiter mit FIXME in ["Getting recursive
