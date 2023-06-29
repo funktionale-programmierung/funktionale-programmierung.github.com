@@ -38,16 +38,26 @@ Bedingungen"](https://bobkonf.de/2023/kastl.html) von Bianca Kastl
 los, die darüber referierte, FIXME
 
 Weiter ging es mit ["What a computer game taught me about software
-architecture"](https://bobkonf.de/2023/thoma.html) von Franz Thoma
-FIXME, und parallel hielt Markus Hettich mit ["Softwareentwicklung ist
-kein Hexenwerk"](https://bobkonf.de/2023/hettich.html) einen Vortrag
-darüber, wie FIXME.
+architecture"](https://bobkonf.de/2023/thoma.html), einem Vortrag über
+Teams, Projekte, Monolithen, Microservices und Wartungskosten, von
+Franz Thoma, und parallel plädierte Markus Hettich mit
+["Softwareentwicklung ist kein
+Hexenwerk"](https://bobkonf.de/2023/hettich.html) dafür, dass manche
+Probleme in der Softwareentwicklung sich mit bodenständigen Werkzeugen
+besser lösen lassen als mit komplexen. Gleichzeitig begannen mit
+["Extending a Language - Writing Powerful Macros in
+Scheme](https://bobkonf.de/2023/nieper-wisskirchen.html) von Marc
+Nieper-Wißkirchen und ["Functional Development with
+Kotlin"](https://bobkonf.de/2023/fink.html) von Torsten Fink die
+zweiten Workshoprunden des Tages.
 
-Im Anschluss sprach Marijn Haverbeke über ["State Transitions in
-Complex Systems"](https://bobkonf.de/2023/haverbeke.html) und Raoul
-Schlotterbek gab einen Einblick in ["Funktionales Deep Learning in
-Haskell"](https://bobkonf.de/2023/schlotterbek.html) und zeigte uns,
-dass man keine Graphen braucht, um neuronale Netze zu trainieren.
+
+Im letzten Block vor dem Mittagessen sprach Marijn Haverbeke über
+["State Transitions in Complex
+Systems"](https://bobkonf.de/2023/haverbeke.html) FIXME Details??, während Raoul
+Schlotterbek einen Einblick in ["Funktionales Deep Learning in
+Haskell"](https://bobkonf.de/2023/schlotterbek.html) gab und zeigte
+uns, dass man keine Graphen braucht, um neuronale Netze zu trainieren.
 
 Nach der Mittagspause, wunderbar gecatered mit Fingerfood von John
 Catering GmbH, ging es weiter mit FIXME in ["Getting recursive
