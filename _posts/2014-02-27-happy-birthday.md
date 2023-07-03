@@ -172,7 +172,7 @@ zeigt, wie man erweiterbare Programme in funktionalen Sprachen schreibt.
 
 ## Veranstaltungen ##
 
-Auch im zurückliegenden Jahr gab es eine [Vielzahl von Events](/event-archive.html) mit dem Thema
+Auch im zurückliegenden Jahr gab es eine Vielzahl von Events mit dem Thema
 "Funktionale Programmierung". Wir haben in diesem Blog nur über einen Bruchteile dieser Veranstaltungen
 berichtet, und zwar über die, an denen wir selbst beteiligt waren. So gibt es einen Artikel über
 den [Zurich FP Afternoon / Haskell-Hackathon](http://funktionale-programmierung.de/2013/08/15/haskell-hackathon.html),
