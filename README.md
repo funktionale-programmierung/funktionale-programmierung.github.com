@@ -3,9 +3,9 @@
 ## Entwürfe
 
 Der Entwurf eines neuen Artikels landet erstmal im Unterverzeichnis
-`draft`. Dort gibt es auch einen Template für einen neuen Artikel. Bitte das
-Template kopieren und eine sinnvollen Dateinamen für den neuen Artikel
-vergeben. Der Dateiname für den Artikel muss mit `.md` enden. Für einen Artikel
+`draft`. Dort gibt es auch ein Template für einen neuen Artikel. Bitte das
+Template kopieren und einen sinnvollen Dateinamen für den neuen Artikel
+vergeben. Der Dateiname für den Artikel muss auf `.md` enden. Für einen Artikel
 in `draft/foobar.md` ist nach einem entsprechenden `git commit` und `git push`
 der Artikel unter http://funktionale-programmierung.de/draft/foobar.html
 einsehbar.
@@ -27,10 +27,10 @@ Zu beachten besonders die Syntax für den Tags-Eintrag: Es funktionieren auch
 Leerzeichen-separierte Wortlisten, aber Kommata landen dann beispielsweise im
 Tag selbst.
 
-Zum Feld `author` siehe Abschnitt "Autoren".
+Zum Feld `author` siehe [Autoren](#autoren).
 
-Das Feld meta-description ist auch sehr wichtig, es enthält eine Zusammenfassung
-für Suchmachschinen.
+Das Feld `meta_description` ist auch sehr wichtig; es enthält eine
+Zusammenfassung für Suchmaschinen.
 
 Das Feld `page_title` ermöglicht die Angabe eines anderen Textes für den
 HTML-Titel der Seite; ohne diese Angabe wird das Feld `title` verwendet, das
@@ -39,7 +39,7 @@ aber oft zu lang für den Seitentitel ist. Der Text "Funktionale Programmierung 
 
 ## Verkürzung des Artikels für die Übersicht
 
-Das Verkürzen muß manuell passieren, und geschieht mithilfe von eines
+Das Verkürzen muss manuell passieren, und geschieht mithilfe eines
 HTML-Kommentars im Artikel:
 
     <h1>Mein Artikel</h1>
@@ -50,18 +50,16 @@ HTML-Kommentars im Artikel:
 
     Die Details sind folgende...
 
-Der Teil nach dem Kommentar erscheint dann nicht auf der Übersichtsseite,
-sondern stattdessen ein "Weiterlesen"-Button.
+Der Teil nach dem Kommentar erscheint dann nicht auf der
+Übersichtsseite, sondern wird durch einen "Weiterlesen"-Button
+ersetzt.
 
 # Autoren
 
-Für jeden Autor muss in der Datei
-
-    _config.yml
-
-im Mapping `authors` unter einem frei wählbaren Bezeichner ein Name,
-eine URL (`href`) für den Anfang eines Artikels, optional ein Bild,
-sowie eine Kurzbeschreibung für das Ende des Artikels definiert
+Für jeden Autor muss in der Datei [_config.yml](./_config.yml) im
+Mapping `authors` unter einem frei wählbaren Bezeichner ein Name, eine
+URL (`href`) für den Anfang eines Artikels, optional ein Bild, sowie
+eine Kurzbeschreibung für das Ende des Artikels definiert
 sein. Beispiel:
 
     authors:
