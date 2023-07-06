@@ -13,9 +13,9 @@ Teamkolleg:innen und Kund:innen.
 
 <!-- more start -->
 
-Dafür möchte ich einige Aspekte aus tatsächlichen Projekten beleuchten, die mir
-uns unseren Teams immer wieder zu schaffen machen und zeigen, was ein ganz
-einfacher Newsletter daran geändert hat.
+Dafür möchte ich Beispiele aus tatsächlichen Projekten beleuchten, die mir und
+unseren Teams immer wieder zu schaffen machen und zeigen, was ein ganz einfacher
+Newsletter daran geändert hat.
 
 # "Was ist denn der Stand?"
 
@@ -23,13 +23,13 @@ Es soll wohl eine perfekte Welt geben, in der Entwicklungsteams, POs,
 Projektmanager:innen und Kund:innen eine perfekte Kommunkationssymbiose
 eingehen.  Die Regeltermine sind produktiv, Fragen werden schnell beantwortet,
 der Stand des Projekts ist zu jedem Zeitpunkt allen klar.  Das mag für
-lehrbuchwerte Projekte der Fall sein.  Meine Erfahrung ist, dass das seltener
-der Fall ist, als man hofft.  Häufig ist es doch so: Ihr arbeitet an mehreren
-Projekten und kennt nicht immer den aktuellen Stand.  Eure Kund:innen sind
-ebenfalls an vielen Baustellen beschäftigt und können schlicht nicht ständig den
-Issuetracker verfolgen.
+lehrbuchwerte Projekte der Fall sein.  Meine Erfahrung ist, dass das eher
+seltener tatsächlich der Fall ist.  Häufig ist es doch so: Ihr arbeitet an
+mehreren Projekten und kennt nicht immer den aktuellen Stand.  Eure Kund:innen
+sind ebenfalls an vielen Baustellen beschäftigt und können schlicht nicht
+ständig den Issuetracker verfolgen.
 
-In meiner Realität sehe ich mich häufig mit diesen Fragen konfrontiert:
+Ich sehe mich häufig mit diesen Fragen konfrontiert:
 
 - Was ist denn der Stand?
 - Wie viele Stunden sind noch auf dem Stundenkonto?
@@ -58,10 +58,10 @@ detaillierte Timeline der Projektabschnitte, jeweils mit
 - Pflichten (was haben wir konkret angeboten)
 - Auslieferungsdatum
 - Abnahmedatum (wann hat der Kunde signalisiert, dass es keine Beanstandungen
-  gibt, gegebenenfalls durch Unterlassung)
+  gibt, gegebenenfalls durch nichts tun)
 
 Da wir alle vernünftige Menschen sind, konnten wir anhand der Timeline
-feststellen, dass in diesem konkreten Fall uns keine Schuld zukommt.  Das Ende
+feststellen, dass uns in diesem konkreten Fall keine Schuld zukommt.  Das Ende
 vom Lied war, dass wir uns einigen konnten.  Wunderbar.
 
 Allerdings: Auch hier handelt es sich gewissermaßen wieder um "Pull-basierte"
@@ -91,7 +91,7 @@ Ich hoffe, dass ich zeigen konnte, dass Pull-Kommunikation zumindest in
 bestimmten Fällen zu Problemen führt.  Mir ist natürlich klar, dass es da
 draußen viele Methoden gibt, die dem entgegenwirken sollen.  Aber seien wir mal
 ehrlich: Die Chance, dass der Projektethos auf beiden Seiten einer Beauftragung
-gleich ist, konvergieren gegen null.  Klar, wir können unseren Prozessen Namen
+gleich ist, konvergieren gegen Null.  Klar, wir können unseren Prozessen Namen
 geben, zum Beispiel uns auf "agile Arbeit" verständigen.  Wenn der Projektethos
 der Kunden intern aber trotzdem eher dem Wasserfallmodell gleicht, bringt es
 letztlicht nicht viel, an der "Schnittstelle" zwischen Kunde und Dienstleister
@@ -108,36 +108,36 @@ wöchentlichen Projekt-Newsletter!  Der sieht ungefähr so aus:
 > `Cc: team@dienstleister, chef@dienstleiter, vorgesetzter@kunde.de`
 > `Subject: [news] Weekly Newsletter KW-<N>`
 
-> Liebe:r <Name/n>,
+> Liebe:r `name/n`,
 
 > diese Woche haben wir die Arbeit an folgenden Tickets abgeschlossen:
 
-> - <Ticketbeschreibung> (<Link zum Issuetracker>)
+> - `ticketbeschreibung` (`link-zum-issuetracker`)
 > - ...
 
 > Weiter sind folgende Tickets aktuell in Arbeit:
 
-> - <Ticketbeschreibung> (<Link zum Issuetracker>)
+> - `ticketbeschreibung` (`link-zum-issuetracker`)
 > - ...
 
 > Neuigkeiten diese Woche:
 
-> - Headsup: <Name> ist vom 10. bis einschließlich 15. Juli im Urlaub.  Wenn es
->   etwas gibt, dass nur <Name> beantworten kann, wendet euch bitte bis dahin
+> - Headsup: `name` ist vom 10. bis einschließlich 15. Juli im Urlaub.  Wenn es
+>   etwas gibt, dass nur `name` beantworten kann, wendet euch bitte bis dahin
 >   noch an sie.
-> - Die Notizen zu unserem Weekly findet ihr [hier](link).
+> - Die Notizen zu unserem Weekly findet ihr hier (`link-zu-den-note`).
 > - ...
   
 > Folgende Punkte sind offen geblieben:
 
-> - Wir hatten letzte Woche Probleme mit <X>.  Es hat sich in Zusammenarbeit mit
->   <Name> herausgestellt, dass das nur ein Symptom für <Y> war.  Admin <Name>
->   hat das jetzt auf dem Schirm und kümmert sich darum.
+> - Wir hatten letzte Woche Probleme mit `x`.  Es hat sich in Zusammenarbeit mit
+>   `name` herausgestellt, dass das nur ein Symptom für `y` war.  `admin` hat
+>   das jetzt auf dem Schirm und kümmert sich darum.
 > - ...
 
-> Auf dem Stundenkontingent haben wir Stand heute noch circa _ Stunden übrig.
-> Das entspricht etwas über _ Tagen.  Ich empfehle, dass wir da bald etwas neues
-> beauftragen, da wir in circa _ Woches das Kontingent erschöpft haben.
+> Auf dem Stundenkontingent haben wir Stand heute noch circa `n` Stunden übrig.
+> Das entspricht etwas über `m` Tagen.  Ich empfehle, dass wir da bald etwas
+> neues beauftragen, da wir in circa `l` Woches das Kontingent erschöpft haben.
 
 > Beste Grüße und ein schönes Wochenende
 
@@ -149,7 +149,7 @@ prompt von allen beteiligten positive Rückmeldung bekommen.  Warum?
   vielleicht überflüssig, weil "steht ja im Issuetracker".  Aber nicht alle
   können oder wollen ständig in den Tracker schauen!  Gerade `chef` und
   `vorgesetzter` haben vielleicht besseres zu tun und eventuell nur an Problemen
-  oder der buchhalterischen Seite interessiert.
+  oder der buchhalterischen Seite interessiert ("Was kann abgerechnet werden?")
 - Neuigkeiten wie Urlaube sind etwas, das häufig per Flurfunk abläuft.  Lange
   genug (und vor allem ohne nachfragen zu müssen) noch mal schriftlich darüber
   informiert zu werden hilft sowohl Team als auch Kund:in.
@@ -157,12 +157,17 @@ prompt von allen beteiligten positive Rückmeldung bekommen.  Warum?
   gesponnen" ist vielleicht etwas, was ein Teammitglied und ein Admin gemeinsam
   angeschaut haben und lösen konnten.  Da ist die Gefahr hoch, dass
   
-  1. das Teammitglied erst mal eine Woche nach der richtigen Person suchen musste
+  1. das Teammitglied erst mal eine Woche nach der richtigen Person suchen
+     musste
   1. niemand davon etwas mitbekommt
   2. das Problem wieder auftaucht und die suche von 1. von vorne losgeht
-  
+
   Stattdessen haben es hier alle schriftlich und können auf zukünftig aus
   gemeinsames Wissen zugreifen.
+- Auch ganz toll: Neue Kolleg:innen im Projekt können sehen, was in der
+  Vergangenheit passiert ist.  Und zwar nicht nur technisch sondern auch
+  "kulturell" ("wie wird im Projekt kommuniziert", "wer ist am Projekt auch
+  beteiligt" außer denen, die offiziell dabei sind).
 
 Besonders reizvoll für mich ist noch, dass dadurch auch die Timeline ganz von
 selbst entsteht.  Man mag entgegnen, dass es für all diese Themen auch Werkzeuge
@@ -170,7 +175,8 @@ gibt, die das besser lösen.  Ich sage: ein Newsletter ist
 
 - leicht zu schreiben
 - enthält hochkonzentrierte Informationen
-- ist asynchron und von allen überall lesbar
+- ist asynchron und von allen überall lesbar: E-Mail ist ein extrem
+  niederschwelliges Medium das alle benutzen können
 - und erzählt eine nachvollziehbare Projektgeschichte abseits von den rein
   technischen Fragen
 
