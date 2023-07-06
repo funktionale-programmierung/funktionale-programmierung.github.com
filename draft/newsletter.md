@@ -8,7 +8,7 @@ tags: ["tag1", "tag2", "tag3"]
 Wer hätte das erwartet: Der gute alte Newsletter hat still und heimlich seinen
 Weg zurück in mein Leben gefunden.  Aus diesem Anlass wollen wir heute mal die
 funktionale Progammierung beiseite lassen und uns einen Aspekt der
-Softwareentwicklung anschauen, der uns alle angeht: Kommunkation mit
+Softwareentwicklung anschauen, der uns alle angeht: Kommunikation mit
 Teamkolleg:innen und Kund:innen.
 
 <!-- more start -->
@@ -20,7 +20,7 @@ Newsletter daran geändert hat.
 # "Was ist denn der Stand?"
 
 Es soll wohl eine perfekte Welt geben, in der Entwicklungsteams, POs,
-Projektmanager:innen und Kund:innen eine perfekte Kommunkationssymbiose
+Projektmanager:innen und Kund:innen eine perfekte Kommunikationssymbiose
 eingehen.  Die Regeltermine sind produktiv, Fragen werden schnell beantwortet,
 der Stand des Projekts ist zu jedem Zeitpunkt allen klar.  Das mag für
 lehrbuchwerte Projekte der Fall sein.  Meine Erfahrung ist, dass das eher
@@ -35,7 +35,7 @@ Ich sehe mich häufig mit diesen Fragen konfrontiert:
 - Wie viele Stunden sind noch auf dem Stundenkonto?
 - Wann bist du noch mal im Urlaub?
 
-Man könnte sagen, dass diese Art von Kommunkation "Pull-basiert" ist.  Kund:in
+Man könnte sagen, dass diese Art von Kommunikation "Pull-basiert" ist.  Kund:in
 fragt nach und bekommt eine Antwort.
 
 # "Das ist aber nicht so, wie wir uns das vorgestellt haben"
@@ -58,14 +58,14 @@ detaillierte Timeline der Projektabschnitte, jeweils mit
 - Pflichten (was haben wir konkret angeboten)
 - Auslieferungsdatum
 - Abnahmedatum (wann hat der Kunde signalisiert, dass es keine Beanstandungen
-  gibt, gegebenenfalls durch nichts tun)
+  gibt, gegebenenfalls durch Nichtstun)
 
 Da wir alle vernünftige Menschen sind, konnten wir anhand der Timeline
 feststellen, dass uns in diesem konkreten Fall keine Schuld zukommt.  Das Ende
 vom Lied war, dass wir uns einigen konnten.  Wunderbar.
 
 Allerdings: Auch hier handelt es sich gewissermaßen wieder um "Pull-basierte"
-Kommunkation.
+Kommunikation.
 
 # Gemeinsamkeiten
 
@@ -85,22 +85,22 @@ nachgefragt wurde.  Der Pull ist gewissermaßen ausgelassen worden, sodass im
 entscheidenden Moment -- nämlich im Moment der Abnahme -- die richtige
 Information gefehlt hat.
 
-# Pull-Kommunkation als Problemherd
+# Pull-Kommunikation als Problemherd
 
 Ich hoffe, dass ich zeigen konnte, dass Pull-Kommunikation zumindest in
 bestimmten Fällen zu Problemen führt.  Mir ist natürlich klar, dass es da
 draußen viele Methoden gibt, die dem entgegenwirken sollen.  Aber seien wir mal
 ehrlich: Die Chance, dass der Projektethos auf beiden Seiten einer Beauftragung
-gleich ist, konvergieren gegen Null.  Klar, wir können unseren Prozessen Namen
+gleich ist, konvergiert gegen Null.  Klar, wir können unseren Prozessen Namen
 geben, zum Beispiel uns auf "agile Arbeit" verständigen.  Wenn der Projektethos
 der Kunden intern aber trotzdem eher dem Wasserfallmodell gleicht, bringt es
-letztlicht nicht viel, an der "Schnittstelle" zwischen Kunde und Dienstleister
+letztlich nicht viel, an der "Schnittstelle" zwischen Kunde und Dienstleister
 so zu tun, als sei man "agil".
 
 # Unerwartete Lösung
 
 Wie gesagt sind das hier echte Probleme, die ich im vergangenen Jahr erlebt
-habe.  Sicher kennt ihr selbst solche Fälle.  Die Lösung für unser Pull-problem
+habe.  Sicher kennt ihr selbst solche Fälle.  Die Lösung für unser Pull-Problem
 ist genau so simpel wie unerwartet: Wir schreiben seit einiger Zeit einen
 wöchentlichen Projekt-Newsletter!  Der sieht ungefähr so aus:
 
@@ -137,7 +137,7 @@ wöchentlichen Projekt-Newsletter!  Der sieht ungefähr so aus:
 
 > Auf dem Stundenkontingent haben wir Stand heute noch circa `n` Stunden übrig.
 > Das entspricht etwas über `m` Tagen.  Ich empfehle, dass wir da bald etwas
-> neues beauftragen, da wir in circa `l` Woches das Kontingent erschöpft haben.
+> neues beauftragen, da wir in circa `l` Wochen das Kontingent erschöpft haben.
 
 > Beste Grüße und ein schönes Wochenende
 
@@ -148,7 +148,7 @@ prompt von allen beteiligten positive Rückmeldung bekommen.  Warum?
   bearbeitet wurden und was noch in Arbeit ist.  Für uns Entwickler:innen
   vielleicht überflüssig, weil "steht ja im Issuetracker".  Aber nicht alle
   können oder wollen ständig in den Tracker schauen!  Gerade `chef` und
-  `vorgesetzter` haben vielleicht besseres zu tun und eventuell nur an Problemen
+  `vorgesetzter` haben vielleicht Besseres zu tun und eventuell nur an Problemen
   oder der buchhalterischen Seite interessiert ("Was kann abgerechnet werden?")
 - Neuigkeiten wie Urlaube sind etwas, das häufig per Flurfunk abläuft.  Lange
   genug (und vor allem ohne nachfragen zu müssen) noch mal schriftlich darüber
@@ -162,7 +162,7 @@ prompt von allen beteiligten positive Rückmeldung bekommen.  Warum?
   1. niemand davon etwas mitbekommt
   2. das Problem wieder auftaucht und die suche von 1. von vorne losgeht
 
-  Stattdessen haben es hier alle schriftlich und können auf zukünftig aus
+  Stattdessen haben es hier alle schriftlich und können zukünftig auf
   gemeinsames Wissen zugreifen.
 - Auch ganz toll: Neue Kolleg:innen im Projekt können sehen, was in der
   Vergangenheit passiert ist.  Und zwar nicht nur technisch sondern auch
@@ -185,5 +185,5 @@ gibt, die das besser lösen.  Ich sage: ein Newsletter ist
 Ich würde gerne allen ans Herz legen, den Projekt-Newsletter mal selbst
 auszuprobieren.  Schreibt ihn am besten immer schon während der Woche und checkt
 ihn in ein Versionskontrollsystem ein.  Macht es euch einfach und macht ein
-Template, das ihr nur noch ausfüllt.  Ich glaube, dass vielen Projekten gut tun
+Template, das ihr nur noch ausfüllt.  Ich glaube, dass das vielen Projekten gut tun
 wird!
