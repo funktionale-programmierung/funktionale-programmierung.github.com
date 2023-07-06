@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Projektkommunikationsperlen: Der Newsletter"
+title: "'Was ist denn gerade der Stand?' und andere Fragen, die der Newsletter beantworten kann"
 author: marco-schneider
 tags: ["tag1", "tag2", "tag3"]
 ---
