@@ -13,9 +13,22 @@ Teamkolleg:innen und Kund:innen.
 
 <!-- more start -->
 
-Dafür möchte ich Beispiele aus tatsächlichen Projekten beleuchten, die mir und
-unseren Teams immer wieder zu schaffen machen und zeigen, was ein ganz einfacher
-Newsletter daran geändert hat.
+Möglicherweise haben Sie es schon bemerkt:
+[funtionale-programmierung.de](https://funktionale-programmierung.de) wird schon
+seit geraumer Zeit im Wesentlichen von der [Active Group
+GmbH](https://www.active-group.de) betrieben.  Um dem Rechnung zu tragen, werden
+wir hier nach und nach ein paar Änderungen vornehmen.  Zentral ist, dass das
+Blog zukünftig auch ganz offiziell unser Firmenblog sein wird.  Für Sie als
+Leser:in wird sich nichts grundlegendes ändern: Wir werden weiterhin gut
+informierte Artikel zum Thema "Funktionale Programmierung" verfassen.
+Allerdings wollen wir diese Veränderung auch dazu nutzen, neben der Technik auch
+unsere Arbeitsweise und soziotechnische Aspekte unserer Arbeit mit Ihnen zu
+teilen.  In diesem Sinne ist das hier der erste Post, der sich explizit *nicht*
+mit Softwaretechnik beschäftigt.
+
+Als Aufschlag möchte ich heute Beispiele aus tatsächlichen Projekten beleuchten,
+die mir und unseren Teams immer wieder zu schaffen machen und zeigen, was ein
+ganz einfacher Newsletter daran geändert hat.
 
 # "Was ist denn der Stand?"
 
