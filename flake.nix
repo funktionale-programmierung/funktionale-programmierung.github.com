@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Commands for developing the funktionale-programmierung.de website";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs";
