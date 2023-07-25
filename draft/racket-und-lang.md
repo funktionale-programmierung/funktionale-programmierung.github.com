@@ -229,7 +229,8 @@ Das fertige Makro sieht so aus:
 Mit `...` im `syntax-parse`-Makro beim Pattern-Matching können wir
 angeben, dass sich die letzte Variable beliebig oft wiederholen kann.
 Im Weiteren nehmen wir uns diese beliebig lange `statement`-Liste her
-und iterieren über sie mit unserem schon von oben bekannten Code.
+und iterieren über sie mit `map`; der Body der anonymen Funktion ist
+unser von oben schon bekannter Code.
 
 Damit können wir nun folgenden Ausdruck in unserer eDSL schreiben:
 
