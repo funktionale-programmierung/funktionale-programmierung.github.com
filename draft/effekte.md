@@ -236,7 +236,7 @@ können wir sehr leicht Effekte hinzufügen (oder wegnehmen) und müssen dabei v
 weniger anfassen.  Auch haben wir so die Möglichkeit beispielsweise
 Defaulteffekthandler zu bauen, denn: Nicht "gefangene" Effekte blubbern wie
 Exceptions weiter nach "oben".  Umgekehrt gibt mir das sogar die Möglichkeit,
-Effekte lokal anderes zu interpretieren also "weiter oben".
+Effekte lokal anderes zu interpretieren als "weiter oben".
 
 ## Fazit
 
