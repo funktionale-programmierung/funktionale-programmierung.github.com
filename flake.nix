@@ -27,7 +27,7 @@
             '';
           };
           serveBlog = pkgs.writeShellScriptBin "serve-blog"
-            "${pkgs.lib.getExe jekyllFull} serve --watch --incremental";
+            "${pkgs.lib.getExe jekyllFull} serve --watch";
         };
 
         apps.default =
