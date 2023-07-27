@@ -64,7 +64,7 @@ ermöglicht, via `(infix (2 + 3))`:
  (2 + 3))`, also eine Liste mit zwei Elementen. Im Rumpf benutzen wir
  das Makro `syntax-parse`, das zahlreiche Erleichterungen für das
  Makroschreiben bereitstellt. Unter anderem kann die Form via
- Pattern-Mattching komfortabel zerlegt werden, sodass wir die
+ Pattern-Matching komfortabel zerlegt werden, sodass wir die
  einzelnen Elemente nicht umständlich mit `first` und `rest`
  herausholen müssen. `syntax-parse` erlaubt mehrere Patterns auf
  `form`, wir benötigen aber nur das eine, und schreiben nun noch, wie
