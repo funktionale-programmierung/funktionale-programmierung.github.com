@@ -117,12 +117,13 @@ img { border: 0 }
   padding-bottom: 12px;
   margin-bottom: 0;
   background-color: #ffffff;
+  border-bottom: 14px solid #214c63;
 
 }
 .navbar-fp .navbar-inner {
 	background: transparent;
-	border: 0;	
-  box-shadow: none;
+	box-shadow: none;
+	border: 0px;
   padding: 5px 0px;
 
     /* factis mint grün: #91aa9d, factis hellrot #ff5400 */
