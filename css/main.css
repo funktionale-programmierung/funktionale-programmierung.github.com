@@ -2,7 +2,7 @@
 body {
   font-family: 'Source Sans Pro', Helvetica, arial, sans-serif;
   margin-left: 0;
-  background: #ecf0f5;
+  background: #Ecf0f5;
   font-size: 16px;
 }
 
@@ -96,7 +96,8 @@ h6 { font-size:0.7em; color:#000000; font-weight:normal; }
 }
 
 .navbar-fp .nav > li > a:hover {
-	color: #a5cde2;
+    /* alt: #a5cde2 */
+	color: rgb(110,45,42);
 }
 a:hover {
     color: rgb(110,45,42);
@@ -110,11 +111,12 @@ img { border: 0 }
 	margin-bottom: 30px;
 }
 .navbar-fp {
+    /* alt bg-color  #214c63 */
 	//border-bottom: 5px solid rgb(110,45,42);
   padding-top: 20px;
   padding-bottom: 12px;
   margin-bottom: 0;
-  background-color: #214c63;
+  background-color: #ffffff;
 
 }
 .navbar-fp .navbar-inner {
@@ -140,8 +142,9 @@ img { border: 0 }
 }
 
 .navbar-fp .nav > li > a {
+    /* old colour:  #f2f2f2; */
     text-shadow: none;
-    color: #f2f2f2;
+    color: #2596be;
     font-size: 17px;
     margin-top: 0px;
     line-height: 130%;
