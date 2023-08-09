@@ -2,10 +2,9 @@
 layout: post
 title: "'Was ist denn gerade der Stand?' und andere Fragen, die der Newsletter beantworten kann"
 author: marco-schneider
-tags: ["tag1", "tag2", "tag3"]
 ---
 
-Wer hätte das erwartet: Der gute alte Newsletter hat still und heimlich seinen
+Wer hätte das gedacht: Der gute alte Newsletter hat still und heimlich seinen
 Weg zurück in mein Leben gefunden.  Aus diesem Anlass wollen wir heute mal die
 funktionale Progammierung beiseite lassen und uns einen Aspekt der
 Softwareentwicklung anschauen, der uns alle angeht: Kommunikation mit
@@ -14,8 +13,8 @@ Teamkolleg:innen und Kund:innen.
 <!-- more start -->
 
 Möglicherweise haben Sie es schon bemerkt:
-[funtionale-programmierung.de](https://funktionale-programmierung.de) wird schon
-seit geraumer Zeit im Wesentlichen von der [Active Group
+[funktionale-programmierung.de](https://funktionale-programmierung.de) wird
+schon seit geraumer Zeit im Wesentlichen von der [Active Group
 GmbH](https://www.active-group.de) betrieben.  Um dem Rechnung zu tragen, werden
 wir hier nach und nach ein paar Änderungen vornehmen.  Zentral ist, dass das
 Blog zukünftig auch ganz offiziell unser Firmenblog sein wird.  Für Sie als
@@ -26,21 +25,21 @@ unsere Arbeitsweise und soziotechnische Aspekte unserer Arbeit mit Ihnen zu
 teilen.  In diesem Sinne ist das hier der erste Post, der sich explizit *nicht*
 mit Softwaretechnik beschäftigt.
 
-Als Aufschlag möchte ich heute Beispiele aus tatsächlichen Projekten beleuchten,
-die mir und unseren Teams immer wieder zu schaffen machen und zeigen, was ein
-ganz einfacher Newsletter daran geändert hat.
+Als Aufschlag möchte ich heute Situationen aus tatsächlichen Projekten
+beleuchten, die mir und unseren Teams immer wieder zu schaffen machen und
+zeigen, was ein ganz einfacher Newsletter daran geändert hat.
 
 # "Was ist denn der Stand?"
 
 Es soll wohl eine perfekte Welt geben, in der Entwicklungsteams, POs,
 Projektmanager:innen und Kund:innen eine perfekte Kommunikationssymbiose
 eingehen.  Die Regeltermine sind produktiv, Fragen werden schnell beantwortet,
-der Stand des Projekts ist zu jedem Zeitpunkt allen klar.  Das mag für
-lehrbuchwerte Projekte der Fall sein.  Meine Erfahrung ist, dass das eher
-seltener tatsächlich der Fall ist.  Häufig ist es doch so: Ihr arbeitet an
-mehreren Projekten und kennt nicht immer den aktuellen Stand.  Eure Kund:innen
-sind ebenfalls an vielen Baustellen beschäftigt und können schlicht nicht
-ständig den Issuetracker verfolgen.
+der Stand des Projekts ist zu jedem Zeitpunkt allen klar.  Das mag für Projekte
+wie aus dem Lehrbuch so sein.  Meine Erfahrung ist, dass das eher selten
+tatsächlich der Fall ist.  Häufig ist es doch so: Sie arbeiten an mehreren
+Projekten und kennen nicht immer den aktuellen Stand.  Ihre Kund:innen sind
+ebenfalls an vielen Baustellen beschäftigt und können schlicht nicht ständig den
+Issuetracker verfolgen.
 
 Ich sehe mich häufig mit diesen Fragen konfrontiert:
 
@@ -56,13 +55,13 @@ fragt nach und bekommt eine Antwort.
 Das ist aber noch nicht alles.  Achtung, jetzt kommen die Dinge, die sich leider
 oft nicht technisch argumentieren oder strukturell vollständig lösen lassen!
 
-Ein Beispiel: Wir haben vor einiger Zeit ein Feature gebaut und der Kunde hat es
-abgenommen.  Der Projektabschnitt wurde zum Festpreis angeboten und die fertige
-Software vom Kunden auch so abgenommen.  Ein dreiviertel Jahr später regt sich
-aber Unmut.  Das Feature ist doch nicht so, wie es sein sollte.  Der Kunde
-erwartet Nachbesserung, wir sind der Meinung, dass das abgenommene Feature lange
-genug Zeit hatte, beanstandet zu werden und hier auch keine Kulanz mehr drin
-ist.  Was tut man in so einer Situation?
+Ein Beispiel: Wir haben vor einiger Zeit ein Feature gebaut und ausgeliefert.
+Der Projektabschnitt wurde zum Festpreis angeboten und die fertige Software vom
+Kunden auch so abgenommen.  Ein dreiviertel Jahr später regt sich aber Unmut.
+Das Feature ist doch nicht so, wie es sein sollte.  Der Kunde erwartet
+Nachbesserung, wir sind der Meinung, dass das abgenommene Feature lange genug
+Zeit hatte, beanstandet zu werden und hier auch keine Kulanz mehr drin ist.  Was
+tut man in so einer Situation?
 
 Ganz konkret konnten wir die Situation damals so auflösen: Ich erstellte eine
 detaillierte Timeline der Projektabschnitte, jeweils mit
@@ -87,7 +86,7 @@ man als "Pull-basiert" bezeichnen könnte.  Warum?
 
 Im ersten Fall ist es klar.  Kund:in fragt nach einer bestimmten Information und
 wir liefern sie.  Das ist an sich in Ordnung, kann aber über die Zeit
-problematisch werden.  Warum sehen wir an Fall zwei.
+problematisch werden.  Das *Warum* sehen wir an Fall zwei.
 
 Hier haben wir es schon mit einem waschechten Problem zu tun.  Die:der Kund:in
 ist verständlicherweise nicht glücklich, da sie eine Software bekommen haben,
@@ -107,13 +106,16 @@ ehrlich: Die Chance, dass der Projektethos auf beiden Seiten einer Beauftragung
 gleich ist, konvergiert gegen Null.  Klar, wir können unseren Prozessen Namen
 geben, zum Beispiel uns auf "agile Arbeit" verständigen.  Wenn der Projektethos
 der Kunden intern aber trotzdem eher dem Wasserfallmodell gleicht, bringt es
-letztlich nicht viel, an der "Schnittstelle" zwischen Kunde und Dienstleister
-so zu tun, als sei man "agil".
+letztlich nicht viel, an der "Schnittstelle" zwischen Kunde und Dienstleister so
+zu tun, als sei man "agil".  Wenn es beim Kunden keine "Abnahmekultur" gibt,
+weil Projekte zwar in Paketen bestellt, eigentlich aber immer erst am Schluss
+als Ganzes abgenommen werden, hilft das auch nicht -- und das kennen Sie sicher
+auch.
 
-# Unerwartete Lösung
+# Eine unerwartete Lösung
 
 Wie gesagt sind das hier echte Probleme, die ich im vergangenen Jahr erlebt
-habe.  Sicher kennt ihr selbst solche Fälle.  Die Lösung für unser Pull-Problem
+habe.  Sicher kennen Sie selbst solche Fälle.  Die Lösung für unser Pull-Problem
 ist genau so simpel wie unerwartet: Wir schreiben seit einiger Zeit einen
 wöchentlichen Projekt-Newsletter!  Der sieht ungefähr so aus:
 
@@ -138,7 +140,7 @@ wöchentlichen Projekt-Newsletter!  Der sieht ungefähr so aus:
 > - Headsup: `name` ist vom 10. bis einschließlich 15. Juli im Urlaub.  Wenn es
 >   etwas gibt, dass nur `name` beantworten kann, wendet euch bitte bis dahin
 >   noch an sie.
-> - Die Notizen zu unserem Weekly findet ihr hier (`link-zu-den-note`).
+> - Die Notizen zu unserem Weekly findet ihr hier (`link-zu-den-notizen`).
 > - ...
   
 > Folgende Punkte sind offen geblieben:
@@ -154,10 +156,11 @@ wöchentlichen Projekt-Newsletter!  Der sieht ungefähr so aus:
 
 > Beste Grüße und ein schönes Wochenende
 
-Die ersten Newsletter habe ich den Newsletter kommentarlos abgeschickt und
-prompt von allen beteiligten positive Rückmeldung bekommen.  Warum?
+Die ersten Newsletter habe ich den Newsletter kommentarlos und ohne Vorwarnung
+abgeschickt und prompt von allen beteiligten positive Rückmeldung bekommen.
+Warum?  Ich glaube die Gründe sind:
 
-- Ohne Nachzufragen, wissen wirklich alle Beteiligten ganz genau, welche Tickets
+- Ohne Nachzufragen wissen wirklich alle Beteiligten ganz genau, welche Tickets
   bearbeitet wurden und was noch in Arbeit ist.  Für uns Entwickler:innen
   vielleicht überflüssig, weil "steht ja im Issuetracker".  Aber nicht alle
   können oder wollen ständig in den Tracker schauen!  Gerade `chef` und
@@ -176,11 +179,11 @@ prompt von allen beteiligten positive Rückmeldung bekommen.  Warum?
   2. das Problem wieder auftaucht und die suche von 1. von vorne losgeht
 
   Stattdessen haben es hier alle schriftlich und können zukünftig auf
-  gemeinsames Wissen zugreifen.
+  gemeinsames Wissen zugreifen, das sonst nirgends aufgeschrieben worden wäre.
 - Auch ganz toll: Neue Kolleg:innen im Projekt können sehen, was in der
   Vergangenheit passiert ist.  Und zwar nicht nur technisch sondern auch
-  "kulturell" ("wie wird im Projekt kommuniziert", "wer ist am Projekt auch
-  beteiligt" außer denen, die offiziell dabei sind).
+  "kulturell" (wie wird im Projekt kommuniziert, wer ist am Projekt auch
+  beteiligt außer denen, die offiziell dabei sind, und so weiter).
 
 Besonders reizvoll für mich ist noch, dass dadurch auch die Timeline ganz von
 selbst entsteht.  Man mag entgegnen, dass es für all diese Themen auch Werkzeuge
