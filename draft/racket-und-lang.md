@@ -79,7 +79,7 @@ ermöglicht, via `(infix (2 + 3))`:
 ```
  
 Wir tauschen einfach die zwei ersten Elemente! Unbekannt ist noch
-``#```. Mit ``#``` (sprich: hash quasiquote) können wir ein Syntax-Objekt
+`` #` ``. Mit `` #` `` (sprich: hash quasiquote) können wir ein Syntax-Objekt
 erstellen. In Racket sind die Forms bei der Makroexpansionszeit nicht
 bare Listen, sie sind in Syntax-Objekts gewrappt. Ein Syntax-Objekt
 hält Informationen zum Kontext des Makro-Aufrufes bereit, unter
