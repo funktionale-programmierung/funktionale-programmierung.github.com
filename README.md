@@ -105,5 +105,6 @@ in der du `jekyll` direkt verwenden kannst.
 
 Zum Veröffentlichen wird der Artikel aus dem `draft`-Verzeichnis in
 das `_posts`-Verzeichnis bewegt. Dabei wird das Veröffentlichungsdatum
-dem Dateinamen vorangestellt. Vor dem Veröffentlichen bitte unbedingt
-mit den Verantwortlichen des Blogs Kontakt aufnehmen.
+dem Dateinamen vorangestellt (Bindestrich dazwischen, z. B.
+`2023-09-25-mein-blogpost.md`). Vor dem Veröffentlichen bitte
+unbedingt mit den Verantwortlichen des Blogs Kontakt aufnehmen.
