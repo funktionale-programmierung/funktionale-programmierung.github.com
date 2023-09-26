@@ -81,7 +81,7 @@ ermöglicht, via `(infix (2 + 3))`:
 Wir tauschen einfach die zwei ersten Elemente! Unbekannt ist noch
 `` #` ``. Mit `` #` `` (sprich: hash quasiquote) können wir ein Syntax-Objekt
 erstellen. In Racket sind die Forms bei der Makroexpansionszeit nicht
-bare Listen, sie sind in Syntax-Objekts gewrappt. Ein Syntax-Objekt
+bare Listen, sie sind in Syntax-Objekte gewrappt. Ein Syntax-Objekt
 hält Informationen zum Kontext des Makro-Aufrufes bereit, unter
 anderem in welchem Modul und in welcher Zeile dieser Aufruf geschehen
 ist. Beispielsweise erhalten wir hier
@@ -167,7 +167,7 @@ vier Patterns:
 Nun müssen nur noch die Ellipsen ausgefüllt werden, mit dem Code, der
 das jeweilige Pattern in der Makroexpansionszeit ersetzen soll. Das
 ist für die ersten drei Fälle denkbar einfach, wir benutzen unsere
-obig definierten Hilfsfunktionen (und achten darauf, Syntax-Objekts
+obig definierten Hilfsfunktionen (und achten darauf, Syntax-Objekte
 zurückzugeben):
 
 ```racket
