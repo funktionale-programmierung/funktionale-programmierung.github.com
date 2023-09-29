@@ -18,7 +18,7 @@ Domäne entsprechende Sprache mit angepasster Syntax, entwickelt
 werden.
 
 Racket geht den Weg der DSLs noch ein Stück weiter: Hier können wir
-die DSLs ganz ohne Racket-Code drum herum verwenden; wie aus einer
+die DSLs ganz ohne Racket-Code drum herum verwenden. Wie aus einer
 eDSL eine DSL wird schauen wir uns heute an!
 
 <!-- more start -->
@@ -60,11 +60,12 @@ ermöglicht, via `(infix (2 + 3))`:
 ```
 
 `define-syntax` bekommt als erstes Argument den Namen des Makros und
- eine sogenannte Form. Diese Form ist der komplette Aufrufwert `(infix
+ eine sogenannte Form. Diese Form ist der komplette Aufruf `(infix
  (2 + 3))`, also eine Liste mit zwei Elementen. Im Rumpf benutzen wir
- das Makro `syntax-parse`, das zahlreiche Erleichterungen für das
- Makroschreiben bereitstellt. Unter anderem kann die Form via
- Pattern-Matching komfortabel zerlegt werden, sodass wir die
+ `syntax-parse`, das uns ermöglicht, die Form 
+ auseinanderzunehmen und mit Templating den Code zu generieren, der
+ seinen Platz annimmt. Das Auseinandernehmen erfolgt komfortabel mit
+ Pattern-Matching, so dass wir die
  einzelnen Elemente nicht umständlich mit `first` und `rest`
  herausholen müssen. `syntax-parse` erlaubt mehrere Patterns auf
  `form`, wir benötigen aber nur das eine, und schreiben nun noch, wie
@@ -78,9 +79,9 @@ ermöglicht, via `(infix (2 + 3))`:
 ```
  
 Wir tauschen einfach die zwei ersten Elemente! Unbekannt ist noch
-``#```. Mit ``#``` (sprich: hash quasiquote) können wir ein Syntax Object
+`` #` ``. Mit `` #` `` (sprich: hash quasiquote) können wir ein Syntax-Objekt
 erstellen. In Racket sind die Forms bei der Makroexpansionszeit nicht
-bare Listen, sie sind in Syntax Objects gewrappt. Ein Syntax Object
+bare Listen, sie sind in Syntax-Objekte gewrappt. Ein Syntax-Objekt
 hält Informationen zum Kontext des Makro-Aufrufes bereit, unter
 anderem in welchem Modul und in welcher Zeile dieser Aufruf geschehen
 ist. Beispielsweise erhalten wir hier
@@ -90,7 +91,7 @@ infix.rkt> #`"Hallo"
 #<syntax:infix.rkt:3:2 "Hallo">
 ```
 
-ein Syntax Object mit der Information, dass der Aufruf von `#"Hallo"`
+ein Syntax-Objekt mit der Information, dass der Aufruf von `#"Hallo"`
 (aus der REPL) im Namespace `infix.rkt` in Zeile 3 geschehen ist.
 
 # Eine Datenbank-DSL
@@ -166,7 +167,7 @@ vier Patterns:
 Nun müssen nur noch die Ellipsen ausgefüllt werden, mit dem Code, der
 das jeweilige Pattern in der Makroexpansionszeit ersetzen soll. Das
 ist für die ersten drei Fälle denkbar einfach, wir benutzen unsere
-obig definierten Hilfsfunktionen (und achten darauf, Syntax Objects
+obig definierten Hilfsfunktionen (und achten darauf, Syntax-Objekte
 zurückzugeben):
 
 ```racket
@@ -182,7 +183,7 @@ zurückzugeben):
      #`(define var (get-it name))]))
 ```
 
-Im vierten Fall erzeugen wir ein Syntax Object, das das übergebene
+Im vierten Fall erzeugen wir ein Syntax-Objekt, das das übergebene
 Symbol `var` an das Value bindet.
 
 Jetzt können wir bereits Folgendes machen:
