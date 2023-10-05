@@ -46,16 +46,16 @@ minimalen Logging-Levels der Applikation, das auf den Wert `:info` gesetzt ist;
 außerdem die Section `:webserver` für die Konfiguration der Eigenschaften für
 den Webserver.  Die Section `:webserver` ist wieder eine Konfigurations-Map mit
 Settings `:host` für den Listen-Host (hier ist der Webserver durch die Angabe
-von `"0.0.0.0"` von außerhalb erreichbar) und den Listen-Port, hier der
+von `"0.0.0.0"` von außerhalb erreichbar) und den Listen-Port, nämlich der
 Standard-HTTP-Port `80`.
 
 Hier kann man jetzt schon einen möglichen Fallstrick mit Konfigurationen
 erahnen: Eine Applikation erwartet in der Regel ganz bestimmte konfigurierte
-Werte, die sie dann interpretiert und passend darauf reagiert.  In unserem
+Werte, die sie dann interpretiert und entsprechend darauf reagiert.  In unserem
 Beispiel geht die Applikation also davon aus, dass der Wert für das
-Logging-Levels tatsächlich ein Keyword wie zum Beispiel `:info` ist und nicht
-zum Beispiel eine Zeichenkette `"info"` oder `"INFO"`.  Und der Webserver-Port
-soll eine Zahl `80` sein und nicht eine Zeichenkette `"80"` und so weiter.
+Logging-Level tatsächlich ein Keyword wie zum Beispiel `:info` ist und nicht
+etwa eine Zeichenkette `"info"` oder `"INFO"`.  Und der Webserver-Port soll eine
+Zahl `80` sein und nicht eine Zeichenkette `"80"` und so weiter.
 
 Und genau solche Einschränkungen können Programmiery mit unserer Bibliothek
 festlegen und Konfigurationen dann auf diese Einschränkungen überprüfen und so
@@ -70,7 +70,7 @@ definieren wir mal der Reihe nach die Settings, Sections und dann das Schema fü
 die obige Beispielkonfiguration.  Wir gehen in den Codebeispielen davon aus,
 dass der Namespace `active.clojure.config` als `config` importiert ist.
 
-Starten wir mit der Definition des Logging-Levels-Settings:
+Starten wir mit der Definition des Logging-Level-Settings:
 
 ```clojure
 (def log-level-setting
@@ -84,17 +84,18 @@ Starten wir mit der Definition des Logging-Levels-Settings:
 Der Aufruf von `config/setting` erwartet als erstes Argument das Keyword der
 Einstellung, hier ist das `:log-level`.  Dann folgt verpflichtend eine
 Zeichenkette zur Dokumentation der Einstellung -- verständliche Beschreibungen
-hier sind sehr hilfreich wenn die Konfiguration Fehler verursacht.  Und als
-drittes Argument legen wir den gültigen Wertebereich der Einstellung fest -- in
-unserer Bibliothek heißt ein Wertebereich *Range*.  Der Wertebereich für das
-Loglevel ist eine `one-of-range`, also ist ein gültiger Wert dafür eines der
-angegebenen Schlüsselwörter `:trace`, `:debug`, `:info`, `:warn`, `:error`, oder
-`:fatal`.  Zusätzlich erlaubt die Range die Angabe einer Voreinstellung, wenn
-das Setting nicht ausdrücklich konfiguriert ist.  Hier ist das `:error` -- in
-der Dokumentation ist diese Tatsache auch hilfreich beschrieben.
+hier sind sehr hilfreich zum Nachlesen, was Benutzy denn alles konfigurieren
+können und wenn die Konfiguration Fehler verursacht.  Und als drittes Argument
+legen wir den gültigen Wertebereich der Einstellung fest -- in unserer
+Bibliothek heißt ein Wertebereich *Range*.  Der Wertebereich für das Loglevel
+ist eine `one-of-range`, also ist ein gültiger Wert dafür eines der angegebenen
+Schlüsselwörter `:trace`, `:debug`, `:info`, `:warn`, `:error`, oder `:fatal`.
+Zusätzlich erlaubt die Range die Angabe einer Voreinstellung, wenn das Setting
+nicht ausdrücklich konfiguriert ist.  Hier ist das `:error` -- im
+Beschreibungstext ist diese Tatsache auch hilfreich beschrieben.
 
-Nach demselben Muster schreiben wir jetzt die Einstellungen, die der Webserver
-braucht.  Zuerst für den Host:
+Nach demselben Muster schreiben wir jetzt die Einstellungen für den Webserver.
+Zuerst für den Host:
 
 ```clojure
 (def webserver-host-setting
@@ -105,9 +106,9 @@ braucht.  Zuerst für den Host:
 ```
 
 Die Einstellung für den Webserver-Host soll eine Zeichenkette sein, also eine
-/String-Range/, und hier eine, die zusätzlich die Angabe einer Voreinstellung
+*String-Range*, und hier eine, die zusätzlich die Angabe einer Voreinstellung
 `"0.0.0.0"` erlaubt, daher benutzen wir `default-string-range` um das
-festzulegen.  Unsere Bibliothek enthält bereits eine vielzahl von Ranges für
+festzulegen.  Unsere Bibliothek enthält bereits eine Vielzahl von Ranges für
 häufig gebraucht Wertebereiche und es ist einfach, eigene Ranges für speziellere
 Wertebereiche zu definieren.  Eine weitere eingebaute Range sehen wir bei der
 nächsten Konfigurationseinstellung.
@@ -122,16 +123,16 @@ Die Definition der Konfigurationseinstellung für den Port sieht so aus:
    (config/integer-between-range 0 65535 3000)))
 ```
 
-Den Port erwartet die Konfiguration als ganze Zahl, also eine /Integer-Range/;
+Den Port erwartet die Konfiguration als ganze Zahl, also eine *Integer-Range*;
 aber es gibt in TCP-Netzwerken nur eine beschränkte Anzahl von Ports, nämlich
 von 0 bis 65535, daher schränken wir den möglichen Wertebereich gleich darauf
 mit `integer-between-range` ein.  Das dritte Argument für
 `integer-between-range` ist die Voreinstellung, falls die Einstellung nicht
-explizit gemacht wurde.  Hier benutzt unsere Applikation in diesem Fall den Port
-3000.
+explizit getroffen wurde.  Hier benutzt unsere Applikation in diesem Fall den
+Port `3000`.
 
-Diese zwei Einstellungen machen nun den Webserver-Abschnitt aus -- daher bündeln
-wir sie in einem Schema zusammen mit einer passenden Beschreibung:
+Diese zwei Einstellungen machen den Webserver-Abschnitt aus -- daher bündeln wir
+sie in einem Schema zusammen mit einer passenden Beschreibung:
 
 ```clojure
 (def webserver-schema
@@ -141,7 +142,7 @@ wir sie in einem Schema zusammen mit einer passenden Beschreibung:
   webserver-port-setting))
 ```
 
-Und mit diesem Schema können wir nun die Webserver-Section definieren:
+Und mit diesem Schema können wir nun den Webserver-Abschnitt definieren:
 
 ```clojure
 (def webserver-section
@@ -189,7 +190,7 @@ Aufruf
   {:webserver {:host "0.0.0.0"}})
 ```
 
-liefert die vervollständigte Konfiguration
+liefert die vervollständigte Konfiguration mit den definierten Voreinstellungen:
 
 ```clojure
 {:log-level :error
@@ -206,8 +207,8 @@ Und eine fehlerhafte Konfiguration
 ```
 
 liefert eine Datenstruktur namens `RangeError`, die den Fehler in der
-Konfiguration mittels Pfad zur fehlerhaften Konfigurationseinstellung, den
-falschen Wert und den eigentlich erwarteten Wertebereich beschreibt.  Und so dem
+Konfiguration mittels Pfad zur fehlerhaften Konfigurationseinstellung, dem
+falschen Wert und dem eigentlich erwarteten Wertebereich beschreibt.  Und so einem
 Benutzy die Möglichkeit gibt, das Problem zu verstehen und zu beheben.
 
 ## Zugriff auf Konfigurationseinstellungen
@@ -225,7 +226,7 @@ zugreifen, sondern wir wollen sicherere Mechanismen dafür nutzen, die es in
 unserer Bibliothek gibt:
 
 - Wir hantieren nicht mit der Map direkt, sondern mit einem speziellen Datentyp
-  namens /Configuration/.
+  namens *Configuration*.
 
 - Wir benutzen die an Variablen gebundenen Settings und Sections, um auf die
   Werte zuzugreifen -- damit bemerkt schon der Kompiler mögliche Tippfehler.
@@ -233,7 +234,7 @@ unserer Bibliothek gibt:
 - Wir benutzen Funktionen für den Zugriff, die eine validierte Konfiguration
   sicherstellen.
 
-Praktisch sieht das wie folgt aus, zunächst binden wir unsere
+Wie das praktisch aussieht, zeigen wir gleich.  Zunächst binden wir unsere
 Beispiel-Configuration an einen Namen für unsere nächsten Versuche und
 Erklärungen:
 
@@ -242,12 +243,12 @@ Erklärungen:
   (config/make-configuration
     schema
     {:log-level :info
-   :webserver {:host "0.0.0.0"
-               :port 80}}))
+     :webserver {:host "0.0.0.0"
+                 :port 80}}))
 ```
 
-Auf diese Configuration können wir nun mit Hilfe von `access` Werte zu
-Einstellungen auslesen:
+Aus dieser Configuration können wir nun mit Hilfe der Funktion `access` die
+Werte zu den Einstellungen auslesen:
 
 ```clojure
 (config/access c log-level-setting)
@@ -263,7 +264,7 @@ Und aus verschachtelte Konfigurationen auslesen geht so:
 
 Dieser Aufruf liefert `80`.
 
-Es gibt auch die Möglichkeit, eine ganze Section herauszulösen und damit die
+Es gibt auch die Möglichkeit, eine ganze Section herauszulösen und daraus die
 Werte auszulesen:
 
 ```clojure
@@ -280,21 +281,22 @@ zu große Kopplung.
 spiele in unserer täglichen Arbeit -- und daher auch in diesem Blog -- eine
 große Rolle, weil sie einen großen praktischen Nutzen haben.  Daher weiß
 natürlich auch unsere Konfigurations-Bibliothek mit Linsen umzugehen, zum
-Beispiel für den Zugriff auf Einstellungen:
+Beispiel für den Zugriff auf Einstellungen.  Der Code
 
 ```clojure
 (let [log-level-lens (config/access-lens log-level-setting)]
   (log-level-lens c))
 ```
 
-liefert wie oben der direkte Zugriff auch `:info`.  Die Linse können wir ohne
-die Konfiguration konstruieren -- eine sehr elegante Art, Selektoren zu
-schreiben.
+liefert wie oben der direkte Zugriff auch `:info`.  Beachtenswert ist, dass wir
+die Linse ohne die Konfiguration konstruieren können -- eine sehr elegante Art,
+Selektoren zu schreiben.
 
 Analog geht das auch für verschachtelte Konfigurationen:
 
 ```clojure
-(let [webserver-port-lens (config/access-lens webserver-port-setting webserver-section)]
+(let [webserver-port-lens (config/access-lens webserver-port-setting
+                                              webserver-section)]
   (webserver-port-lens c))
 ```
 
@@ -304,21 +306,23 @@ Das liefert wie zu erwarten `80`.
 
 Kopplung vermeiden oder zumindest verringern ist das wichtigste Mantra für gute
 Software.  Eine Methode zur Entkopplung sind verschiedene Datenstrukturen für
-verschiedene Bereiche der Applikation, auch wenn sie sehr ähnlich sind.[^2]
+verschiedene Bereiche der Applikation zu verwenden, auch wenn sie sehr ähnlich
+sind.[^2]
 
 [^2]: Aber da Software wächst und Anforderungen sich ändern, bleiben
     Ähnlichkeiten oft nicht erhalten.
 
-Daher lohnt es sich in einer Software, die /Einstellungen/ von der
-/Konfiguration/ zu trennen -- in dem man zum Beispiel eine Datenstruktur
-einführt, die die Einstellungen repräsentiert, die aber nicht das
-/Configuration/-Objekt ist.  Unsere Bibliothek macht uns das einfach durch ein
-Zusammenspiel von
+Daher lohnt es sich in einer Software, die *Einstellungen* von der
+*Konfiguration* zu trennen -- in dem man zum Beispiel eine Datenstruktur
+einführt, die die Einstellungen repräsentiert, die aber nicht die
+*Configuration*-Datenstruktur ist.  Unsere Bibliothek macht uns das einfach
+durch ein Zusammenspiel von
 [Records](https://funktionale-programmierung.de/2015/04/27/clojure-records.html)
 und
 [Projektionslinsen](https://funktionale-programmierung.de/2023/02/28/projection-lenses.html).
 
-Wir können nämlich die Einstellungs-Datenstruktur als Record definieren:
+Wir können nämlich die Einstellungs-Datenstruktur, die wir in unserer
+Applikation verwenden wollen, als Record definieren:
 
 ```clojure
 (define-record-type Settings
@@ -347,16 +351,17 @@ Mit dieser kompakten Definition können wir nun eine Konfiguration in Settings
 (configuration->settings c)
 ```
 
-[^3]: Das geht sogar in die andere Richtung, wenn zum Beispiel die Applikation
-    den Benutzys Änderungen an den Settings ermöglicht und diese wieder als
-    Konfiguration in der Konfigurationsdatei persistieren will.
+[^3]: Das geht sogar in die andere Richtung, da Projektionslinsen bidirektional
+    sind.  Wenn also zum Beispiel die Applikation den Benutzys Änderungen an den
+    Settings ermöglicht und diese dann als Konfiguration in der
+    Konfigurationsdatei persistieren will.
 
 ## Profile
 
 Ein weiteres nützliches Feature ist die Unterstützung von Profilen.  Oft gibt es
-Varianten in einer Konfiguration, die einer bestimmten Umgebung oder einem
-bestimmten Deployment geschuldet sind.  Dabei hilft unsere Bibliothek.  Zum
-Beispiel können wir ein Profil für Testumgebungen konfigurieren, das einige
+Varianten einer Konfiguration, die einer bestimmten Umgebung oder einem
+bestimmten Deployment geschuldet sind.  Auch dabei hilft unsere Bibliothek.  Zum
+Beispiel können wir ein *Profil* für Testumgebungen konfigurieren, das einige
 Aspekte im Vergleich zur Produktivumgebung anpasst.  Dazu fügen wir in unserer
 Beispielkonfiguration unter `:profiles` ein Profil namens `:test` hinzu.  Die
 vollständige Konfiguration sieht dann so aus:
@@ -369,12 +374,13 @@ vollständige Konfiguration sieht dann so aus:
  {:test {:log-level :debug}}}
 ```
 
-Wir wollen auch Debugging-Logs in der Testumgebung sehen.
+Im Test-Profil ist konfiguriert, dass wir in der Testumgebung also auch
+Debugging-Logs sehen wollen.
 
 Beim Einlesen der Konfiguration können wir dann die Einstellungen für dieses
 Profil "reinmischen", die Profil-spezifischen Einstellungen überschreiben dann
-die allgemeinen Einstellungen.  Wir rufen `normalize&check-config-object` noch
-mit einer Liste von zu berücksichtigenden Profilen auf:
+die allgemeinen Einstellungen.  Dazu rufen wir `normalize&check-config-object`
+zusätzlich mit einer Liste von zu berücksichtigenden Profilen auf:
 
 ```clojure
 (config/normalize&check-config-object
@@ -387,7 +393,8 @@ mit einer Liste von zu berücksichtigenden Profilen auf:
    {:test {:log-level :debug}}})
 ```
 
-Das liefert dann die vervollständigte Konfiguration für die Testumgebung:
+Das liefert dann die vervollständigte Konfiguration für die Testumgebung mit
+Logging-Level `:debug`:
 
 ```clojure
 {:log-level :debug
@@ -398,8 +405,8 @@ Das liefert dann die vervollständigte Konfiguration für die Testumgebung:
 ## Fazit
 
 Eine wichtige Grundlage von flexiblen Applikationen sind robuste
-Konfigurationen.  Die vorgestellte Bibliothek kümmert sich um den robusten
-Umgang mit Konfigurationen.  Sie ist bei uns in allen unseren produktiven
+Konfigurationen.  Die vorgestellte Bibliothek ermöglicht diesen robusten Umgang
+mit Konfigurationen.  Die Bibliothek ist bei uns in allen unseren produktiven
 Clojure-Projekten seit vielen Jahren erfolgreich im Einsatz.
 
 <!-- more end -->
