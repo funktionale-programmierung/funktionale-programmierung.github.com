@@ -23,7 +23,7 @@ und in diesem Artikel vorstellen.
 
 ## Konfiguration
 
-Nach typischer Clojure-Art sind Konfigurationen für uns verschachtelte
+Nach typischer Clojure-Art repräsentieren wir Konfigurationen als verschachtelte
 Key-Value-Maps.[^1] Solche Konfigurations-Maps bestehen aus Einstellungen
 *Settings* und Abschnitten *Sections*.  Hier ein einfaches Beispiel für eine
 Konfiguration einer Applikation mit einem Webserver:
