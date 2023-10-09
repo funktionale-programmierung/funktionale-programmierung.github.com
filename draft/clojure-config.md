@@ -5,12 +5,14 @@ author: marcus-crestani
 tags: ["Konfiguration", "Clojure", "ClojureScript"]
 ---
 
-Software muss konfigurierbar sein, um flexibel zu sein.  Aber wie stellen wir
-sicher, dass eine Konfiguration vollständig und gültig ist?  Also dass alle
-Aspekte, die konfiguriert werden müssen, auch konfiguriert sind?  Dass es
-sinnvolle Voreinstellungen gibt für nicht explizit konfigurierte Werte?  Und
-dass die Werte, die in der Konfiguration eingetragen sind, auch sinnvolle Werte
-sind?
+Software muss konfigurierbar sein, um flexibel zu sein.  Eine *Konfiguration*
+legt Parameter und Einstellungen für eine Software fest.  Meist sind die
+Einstellungen in einer Konfigurationsdatei gespeichert, welche die Software
+einliest.  Aber wie stellen wir sicher, dass eine Konfiguration vollständig und
+gültig ist?  Also dass alle Aspekte, die konfiguriert werden müssen, auch
+konfiguriert sind?  Dass es sinnvolle Voreinstellungen gibt für nicht explizit
+konfigurierte Werte?  Und dass die Werte, die in der Konfiguration eingetragen
+sind, auch sinnvolle Werte sind?
 
 Um diese Fragen nicht für jedes Projekt neu zu beantworten, haben wir für
 [Clojure](http://clojure.org/) und [ClojureScript](http://clojurescript.org/),
