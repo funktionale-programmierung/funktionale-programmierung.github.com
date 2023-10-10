@@ -210,8 +210,13 @@ Und eine fehlerhafte Konfiguration
 
 liefert eine Datenstruktur namens `RangeError`, die den Fehler in der
 Konfiguration mittels Pfad zur fehlerhaften Konfigurationseinstellung, dem
-falschen Wert und dem eigentlich erwarteten Wertebereich beschreibt.  Und so einem
-Benutzy die Möglichkeit gibt, das Problem zu verstehen und zu beheben.
+falschen Wert und dem eigentlich erwarteten Wertebereich beschreibt.  Und so
+einem Benutzy die Möglichkeit gibt, das Problem zu verstehen und zu beheben.
+Die mit `str` ausgedruckte Repräsentation des obigen `RangeError`s sieht so aus:
+
+```
+"Range error at path [:webserver :port]: value \"80\" is not in range integer between 0 and 65535"
+```
 
 ## Zugriff auf Konfigurationseinstellungen
 
