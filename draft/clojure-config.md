@@ -5,15 +5,17 @@ author: marcus-crestani
 tags: ["Konfiguration", "Clojure", "ClojureScript"]
 ---
 
-Software muss konfigurierbar sein, um flexibel zu sein.  Aber wie stellen wir
-sicher, dass eine Konfiguration vollständig und gültig ist?  Also dass alle
-Aspekte, die konfiguriert werden müssen, auch konfiguriert sind?  Dass es
-sinnvolle Voreinstellungen gibt für nicht explizit konfigurierte Werte?  Und
-dass die Werte, die in der Konfiguration eingetragen sind, auch sinnvolle Werte
-sind?
+Software muss konfigurierbar sein, um flexibel zu sein.  Eine *Konfiguration*
+legt Parameter und Einstellungen für eine Software fest.  Meist sind die
+Einstellungen in einer Konfigurationsdatei gespeichert, welche die Software
+einliest.  Aber wie stellen wir sicher, dass eine Konfiguration vollständig und
+gültig ist?  Also dass alle Aspekte, die konfiguriert werden müssen, auch
+konfiguriert sind?  Dass es sinnvolle Voreinstellungen gibt für nicht explizit
+konfigurierte Werte?  Und dass die Werte, die in der Konfiguration eingetragen
+sind, auch sinnvolle Werte sind?
 
 Um diese Fragen nicht für jedes Projekt neu zu beantworten, haben wir für
-[Clojure](http://clojure.org/) und [ClojureScript](http://clojurescript.org/),
+[Clojure](http://clojure.org/) und [ClojureScript](http://clojurescript.org/)
 eine [Bibliothek für
 Konfigurationen](https://github.com/active-group/active-clojure#configuration)
 entwickelt, die wir seit vielen Jahren in der Praxis erfolgreich einsetzen --
@@ -65,7 +67,7 @@ Konfiguration erhält.
 ## Konfigurationsschema
 
 Die Applikation definiert dafür ein Konfiugrationsschema, welches sie erwartet.
-So ein Konfigurationsschema heisst *Schema* in unserer Bibliothek.  Jetzt
+So ein Konfigurationsschema heißt *Schema* in unserer Bibliothek.  Jetzt
 definieren wir mal der Reihe nach die Settings, Sections und dann das Schema für
 die obige Beispielkonfiguration.  Wir gehen in den Codebeispielen davon aus,
 dass der Namespace `active.clojure.config` als `config` importiert ist.
@@ -84,7 +86,7 @@ Starten wir mit der Definition des Logging-Level-Settings:
 Der Aufruf von `config/setting` erwartet als erstes Argument das Keyword der
 Einstellung, hier ist das `:log-level`.  Dann folgt verpflichtend eine
 Zeichenkette zur Dokumentation der Einstellung -- verständliche Beschreibungen
-hier sind sehr hilfreich zum Nachlesen, was Benutzy denn alles konfigurieren
+hier sind sehr hilfreich zum Nachlesen, was Benutzys denn alles konfigurieren
 können und wenn die Konfiguration Fehler verursacht.  Und als drittes Argument
 legen wir den gültigen Wertebereich der Einstellung fest -- in unserer
 Bibliothek heißt ein Wertebereich *Range*.  Der Wertebereich für das Loglevel
@@ -109,7 +111,7 @@ Die Einstellung für den Webserver-Host soll eine Zeichenkette sein, also eine
 *String-Range*, und hier eine, die zusätzlich die Angabe einer Voreinstellung
 `"0.0.0.0"` erlaubt, daher benutzen wir `default-string-range` um das
 festzulegen.  Unsere Bibliothek enthält bereits eine Vielzahl von Ranges für
-häufig gebraucht Wertebereiche und es ist einfach, eigene Ranges für speziellere
+häufig gebrauchte Wertebereiche und es ist einfach, eigene Ranges für speziellere
 Wertebereiche zu definieren.  Eine weitere eingebaute Range sehen wir bei der
 nächsten Konfigurationseinstellung.
 
@@ -208,8 +210,13 @@ Und eine fehlerhafte Konfiguration
 
 liefert eine Datenstruktur namens `RangeError`, die den Fehler in der
 Konfiguration mittels Pfad zur fehlerhaften Konfigurationseinstellung, dem
-falschen Wert und dem eigentlich erwarteten Wertebereich beschreibt.  Und so einem
-Benutzy die Möglichkeit gibt, das Problem zu verstehen und zu beheben.
+falschen Wert und dem eigentlich erwarteten Wertebereich beschreibt.  Und so
+einem Benutzy die Möglichkeit gibt, das Problem zu verstehen und zu beheben.
+Die mit `str` ausgedruckte Repräsentation des obigen `RangeError`s sieht so aus:
+
+```
+"Range error at path [:webserver :port]: value \"80\" is not in range integer between 0 and 65535"
+```
 
 ## Zugriff auf Konfigurationseinstellungen
 
@@ -217,7 +224,7 @@ Jetzt könnten wir die Einstellungen mit Hilfe der Settings-Keywords aus der
 verschachtelten Konfigurations-Map auslesen.  Aber das ist keine besonders
 robuste Vorgehensweise, da dem Clojure-Kompiler mögliche Tippfehler in den
 Keywords gar nicht auffallen -- im Zweifel liefert so ein Zugriff auf einen
-nicht-existenten Key einfach `nil` zurück.  Und das wiederrum könnte unsere
+nicht-existenten Key einfach `nil` zurück.  Und das wiederum könnte unsere
 Applikation missverstehen oder durcheinander bringen -- was wir durch robuste
 Konfiguration ja verhindern wollen.
 
@@ -229,7 +236,7 @@ unserer Bibliothek gibt:
   namens *Configuration*.
 
 - Wir benutzen die an Variablen gebundenen Settings und Sections, um auf die
-  Werte zuzugreifen -- damit bemerkt schon der Kompiler mögliche Tippfehler.
+  Werte zuzugreifen -- damit bemerkt schon der Compiler mögliche Tippfehler.
 
 - Wir benutzen Funktionen für den Zugriff, die eine validierte Konfiguration
   sicherstellen.
@@ -278,7 +285,7 @@ zu große Kopplung.
 ### Linsen auf Konfigurationseinstellungen
 
 [Linsen](https://funktionale-programmierung.de/2014/10/15/funktionale-linsen.html)
-spiele in unserer täglichen Arbeit -- und daher auch in diesem Blog -- eine
+spielen in unserer täglichen Arbeit -- und daher auch in diesem Blog -- eine
 große Rolle, weil sie einen großen praktischen Nutzen haben.  Daher weiß
 natürlich auch unsere Konfigurations-Bibliothek mit Linsen umzugehen, zum
 Beispiel für den Zugriff auf Einstellungen.  Der Code
