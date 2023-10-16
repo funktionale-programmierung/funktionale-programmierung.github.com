@@ -311,7 +311,7 @@ Bei zwei `Get`s hintereinander ziehen wir das `>>>` nach innen:
 
 {% highlight clojure %}
    ;; get >>> get
-   (and (instance? Get sp1) (instance? Get sp1))
+   (and (instance? Get sp1) (instance? Get sp2))
    (Get. (fn [i] (>>> ((:consume sp1) i) sp2)))
 {% endhighlight %}
 
