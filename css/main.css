@@ -1,4 +1,3 @@
-
 body {
   font-family: 'Source Sans Pro', Helvetica, arial, sans-serif;
   margin-left: 0;
@@ -111,8 +110,7 @@ img { border: 0 }
 	margin-bottom: 30px;
 }
 .navbar-fp {
-    /* alt bg-color  #214c63 */
-	//border-bottom: 5px solid rgb(110,45,42);
+  /* alt bg-color  #214c63 */
   padding-top: 20px;
   padding-bottom: 12px;
   margin-bottom: 0;
@@ -125,9 +123,6 @@ img { border: 0 }
 	box-shadow: none;
 	border: 0px;
   padding: 5px 0px;
-
-    /* factis mint grün: #91aa9d, factis hellrot #ff5400 */
-    //background: #193441;
 }
 .navbar-fp .navbar-inner .nav-pills {
 	height: auto;
@@ -288,8 +283,6 @@ img { border: 0 }
 }
 
 .post-title {
-    //border-left: 4px solid #994844;
-    //padding-left: 10px;
     font-weight: bold;
     font-size: 2.5em;
     line-height: 1.2em;
