@@ -16,7 +16,7 @@ title: Blog Archiv
         {% assign year = currentyear %}
       {% endif %}
         <li class="archive-post">
-          <span class="post-date">{{ post.date | date:"%d.%m.%Y" }}</span>&nbsp;&ndash;&nbsp;<a href="{{ post.url }}">{{ post.title }}</a>
+          <span class="post-date">{{ post.date | date: "%d.%m.%Y" }}</span>&nbsp;&ndash;&nbsp;<a href="{{ post.url }}">{{ post.title }}</a>
         </li>
       {% if forloop.last %}</ul>{% endif %}
     {% endfor %}
