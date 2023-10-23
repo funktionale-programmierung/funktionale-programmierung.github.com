@@ -4,27 +4,20 @@ title: Tag Archive
 ---
 
 <div class="content-box">
-    <h1>Tags</h1>
-    <div id="articles">
-        <dl>
-            {% for tag_ in site.tags %}
-            {% capture tag %}{{ tag_ | first }}{% endcapture %}
-            <dt>{{ tag }}
-                <a name="{{ tag }}" class="anchor">&nbsp;</a>
-            </dt>
-            <dd>
-                <ul>
-                    {% for post in site.posts %}
-                    {% if post.tags contains tag %}
-                    <li>{{ post.date | date: '%Y-%m-%d' }}&nbsp;-&nbsp;
-                        <a href="{{ post.url }}">{{ post.title }}</a>
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-            </dd>
-            {% endfor %}
-        </dl>
-    </div>
+  <h1>Tags</h1>
+  <div id="articles">
+    <dl>
+      {% for tag_ in site.tags %}
+      {% capture tag %}{{ tag_ | first }}{% endcapture %}
+      <h3>{{ tag }} <a name="{{ tag }}" class="anchor">&nbsp;</a></h3>
+      <ul>
+        {% for post in site.posts %}
+          {% if post.tags contains tag %}
+            <li class="archive-post">{{ post.date | date: "%d.%m.%Y" }}&nbsp;&ndash;&nbsp;<a href="{{ post.url }}">{{ post.title }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      {% endfor %}
+    </dl>
+  </div>
 </div>
-
