@@ -5,7 +5,7 @@ title: Blog Archiv
 
 <div class="content-box">
   <h1>Archiv</h1>
-  Nach Datum sortiert &nbsp; | &nbsp; <a href="author-archive.html">Nach Autoren sortiert</a>
+  Gruppiert nach Jahr &nbsp; | &nbsp; <a href="author-archive.html">Gruppiert nach Autor</a>
   <div>
     {% for post in site.posts %}
       {% assign currentyear = post.date | date: "%Y" %}
