@@ -5,25 +5,20 @@ title: Blog Archiv
 
 <div class="content-box">
   <h1>Archiv</h1>
-  Nach Datum sortiert | <a href="author-archive.html">Nach Autoren sortiert</a>
+  Nach Datum sortiert &nbsp; | &nbsp; <a href="author-archive.html">Nach Autoren sortiert</a>
   <div>
     {% for post in site.posts %}
-
-    {% unless post.next %}
-    <h3>{{ post.date | date: '%Y' }}</h3>
-    {% else %}
-    {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-    {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
-    {% if year != nyear %}
-    <h3>{{ post.date | date: '%Y' }}</h3>
-    {% endif %}
-    {% endunless %}
-
-    <ul>
-      <li>
-        <span class="post-date">{{ post.date | date:"%d.%m.%Y" }}</span>&nbsp;-&nbsp;<a href="{{ post.url }}">{{ post.title }}</a>
-      </li>
-    </ul>
+      {% assign currentyear = post.date | date: "%Y" %}
+      {% if currentyear != year %}
+        {% unless forloop.first %}</ul>{% endunless %}
+        <h3>{{ currentyear }}</h3>
+        <ul>
+        {% assign year = currentyear %}
+      {% endif %}
+        <li class="archive-post">
+          <span class="post-date">{{ post.date | date:"%d.%m.%Y" }}</span>&nbsp;&ndash;&nbsp;<a href="{{ post.url }}">{{ post.title }}</a>
+        </li>
+      {% if forloop.last %}</ul>{% endif %}
     {% endfor %}
   </div>
 </div>

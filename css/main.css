@@ -281,7 +281,6 @@ img { border: 0 }
 
 .post-date {
   float: left;
-  margin-right: 1em;
 }
 
 .post-title {
@@ -367,4 +366,8 @@ hr.post-divider {
 
 .err {
   border: 0px !important;
+}
+
+li.archive-post {
+  margin-top: 5px;
 }
