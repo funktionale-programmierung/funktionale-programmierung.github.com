@@ -129,7 +129,7 @@ müssen.  So wird das nichts.
 Allerdings -- denke ich -- haben wir etwas darüber gelernt, was wir
 eigentlich wollen:
 
-1. Wir wollen jede Validierungen für sich durchführen können
+1. Wir wollen jede Validierung für sich durchführen können
 2. Wir wollen mehrere Validierungen kombinieren können
 3. Wir wollen eine Validierungsfunktion schreiben, die genau dann ein
    validiertes Ergebnis zurückgibt, wenn alles in Ordnung ist
@@ -499,7 +499,7 @@ ihn weiter oben schon entdeckt.  In Haskell schreibt man ihn als
 Typklasse so auf:
 
 ```haskell
-class Funktor f where
+class Functor f where
   fmap :: (a -> b) -> f a -> f b
 ```
 
