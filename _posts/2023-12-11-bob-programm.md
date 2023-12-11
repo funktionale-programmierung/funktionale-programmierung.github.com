@@ -28,7 +28,7 @@ Danach gibt es das gewohnte Format vier Tracks - zwei Tracks mit
 jeweils sieben Vorträgen und zwei Tracks mit jeweils vier Tutorials.
 
 Die [Anmeldung](https://bobkonf.de/2024/registration.html) ist
-eröffnet - der Early-Bird-Rabatt läuft noch bis 31. Januar 2024.
+eröffnet - der Early-Bird-Rabatt läuft noch bis 30. Januar 2024.
 
 <!-- more start -->
 
