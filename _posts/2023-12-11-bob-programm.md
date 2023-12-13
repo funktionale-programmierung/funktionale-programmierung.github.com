@@ -6,7 +6,7 @@ author: michael-sperber
 tags: ["BOB", "Konferenz"]
 ---
 
-![BOB 2024](https://bobkonf.de/images/2024/bobkonf_header_2024_date_2to1.png)
+![BOB 2024](https://bobkonf.de/images/2024/bobkonf_header_2024_2to1.png)
 
 Das Programm der [BOB 2024](http://bobkonf.de/2024/) steht: Am
 Freitag, dem 15.3.2024, findet die elfte BOB statt.
