@@ -86,7 +86,7 @@ Die dritte Hälfte des Buchs nennt sich "Anschauungsmaterial" und
 enthält ein Tutorial für QuickCheck und QuickSpec sowie eine
 Zusammenfassung gemeiner algebraischer Gesetze.
 
-### 3. Zielgruppe ###
+### Zielgruppe ###
 
 Die erste Hälfte des Buchs legt das Augenmerk sorgfältig auf die
 allgemeine Beschreibung Kombinatorenmodelle und ihrer
@@ -101,7 +101,7 @@ Materials erfordert bessere Haskellkenntnisse sowie ein grundlegendes
 Verständnis der dar Konzepte, auf denen zum Beispiel die `Functor`- oder
 `Applicative`-Typklassen aufbauen.
 
-### 4. Bewertung
+### Bewertung
 
 Maguires Buch sammelt Ideen, die schon seit langem in der Gemeinschaft
 der funktionalen Programmierung herumschwirren, und fasst sie in einer
@@ -136,11 +136,9 @@ Zur Schatzsuche erwähnt Maguire ein echtes, ähnliches Projekt, das
 "angemessenes Konzept, das alle Anforderungen erfüllte und
 gleichzeitig einfach zu benutzen war" hervorbrachte. Zu wissen, was für Rewrites das waren und warum sie fehlschlugen würde das Argument dieses Buchs stützen. Zwangsläufig würden sich Kombinatorenmodelle auch radikal anders als objektorientierte Modelle herausstellen statt nur als etwas das "man so macht".
 
-### 5. Produktion ###
-
 Die Darstellung ist gut organisiert und baut die Konzepte nach und nach auf. Die Sprache des Buchs ist informell, aber präzise und leicht verständlich. Der Code (der einen erheblichen Teil des Buchs einnimmt) baut sich ebenfalls nach und nach von einfachen Kombinatoren zu fortgeschrittenen Konzepten auf und ist als [Github-Repositorium](https://github.com/isovector/algebra-driven-design) erhältlich.
 
-### 6. Fazit ###
+### Fazit ###
 
 Maguires Buch ist ein wichtiger Beitrag dazu, den Mangel an
 Literatur darüber zu beheben, wie komplexe Probleme aus der echten Welt mit funktionaler
