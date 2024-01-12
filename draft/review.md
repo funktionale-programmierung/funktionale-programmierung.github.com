@@ -1,20 +1,9 @@
 ---
 layout: post
-title: "Buchrezension"
+title: "Rezension von Sandy Maguire: Algebra-Driven Design"
 author: michael-sperber
 tags: []
 ---
-
-Eine Rezension von Sandy Maguire, Algebra- Driven Design (Leanpub,
-2020) für das Journal of Functional Programming. Ich bin Sandy Maguire
-unlängst als SIGPLAN-Mentor zugewiesen worden. Diese Rezension
-entstand vor dieser Beziehung, es besteht also kein
-Interessenkonflikt.
-
-<blockquote>- Michael Sperber<br/>
-Active Group</blockquote>
-
-### 1. Kontext ###
 
 Maguires Buch handelt von Domänenmodellierung mit Algebra und
 funktionaler Programmierung, oder, anders gesagt, vom konzipieren von
@@ -50,7 +39,7 @@ Es ist deutlich zugänglicher geschrieben als die mesiten ICFP-Paper zu
 Kombinatoren und damit ein wichtiger Beitrag dazu, dieses Versäumnis
 der Gemeinschaft der funktionalen Programmierung anzugehen.
 
-### 2. Übersicht ###
+### Übersicht ###
 
 Das Buch beginnt mit einem Vorwort, das erklärt, wie sinnvoll es ist,
 verständliche Abstraktionen auf algebraischen Gesetzen aufzubauen und
@@ -66,8 +55,8 @@ Schatzsuchenspiel unterstützen soll.
 Mit "tiles" beginnt das Buch mit den üblichen Kombinatoren zur
 Rotation und zum Spiegeln, ergänzt ihre Typsignaturen mit
 algebraischen Gesetzen und führt nach und nach fortgeschrittene
-Kombinatoren, was schließlich zu einem TK ??? anwendbaren Funktor
-führt. TK ? Die Darstellung wird sorgfältig als gleichwertige
+Kombinatoren, was schließlich zu einem applikativen Funktor
+führt. Die Darstellung wird sorgfältig als gleichwertige
 Beobachtung wiedergegeben.
 
 Eine Schatzssuche ist ein Spiel, das von (echten) Menschen gespielt
@@ -80,12 +69,12 @@ der Domäne nach und nach herausstellen, erarbeitet.
 
 Die zweite Hälfte des Buchs beschäftigt sich mit der Ableitung von
 Implementierungen und nutzt dafür wieder die beiden Beispiele der
-ersten Hälfte. Sie beginnt mit einer ersten TK Enkodierung ("deep
+ersten Hälfte. Sie beginnt mit einer ersten Codierung ("deep
 embedding") und simplistischer Implementierung des "tile"-Beispiels,
 die sie dann mit einer allgemeineren, effizienteren funktionalen
 Repräsentation ersetzt. Desweiteren zeigt das Buch, wie man Gesetze in
-QuickCheck-Test überführt und angemessenen Generatoren schreibt, damit
-diese TK effektiv sind. Dankenswerterweise führt sie auch aus, wie
+QuickCheck-Test überführt und passende Generatoren schreibt, damit
+die Tests effektiv werden. Dankenswerterweise führt sie auch aus, wie
 QuickSpec automatisch viele der Gesetze entdecken kann, die in der
 ersten Hälfte des Buches "händisch" konstruiert wurden.
 
@@ -112,7 +101,7 @@ Materials erfordert bessere Haskellkenntnisse sowie ein grundlegendes
 Verständnis der dar Konzepte, auf denen zum Beispiel die `Functor`- oder
 `Applicative`-Typklassen aufbauen.
 
-### 4. TK Ideenbewertung
+### 4. Bewertung
 
 Maguires Buch sammelt Ideen, die schon seit langem in der Gemeinschaft
 der funktionalen Programmierung herumschwirren, und fasst sie in einer
@@ -128,7 +117,7 @@ Goldgrube an Lehrmaterialien und -ideen.
 Ein
 [Reddit-Thread](https://www.reddit.com/r/haskell/comments/uunhic/how_broadly_applicable_is_algebradriven_design/)
 zu dem Buch beginnt mit der Frage "Wird sich dies in irgendeiner Art
-auf meine alltägliche TK Enterprise-Software-Entwicklung auswirken?"
+auf meine alltägliche Enterprise-Software-Entwicklung auswirken?"
 (“Will this have any bearing on my day-to-day development of
 enterprise software?”). Algebra-basierte Kombinatorenmodelle finden in
 vielen Domänen Anwendung und können Eckpfeiler einer flexiblem
@@ -136,16 +125,16 @@ Softwarearchitekture sein, die zukünftige Anforderungen vorausahnt.
 Doch obwohl diese schon lange anwendbar sind, werden sie selten
 implementiert. Leider heißt das, dass die Antwort auf die oben
 genannte Frage "kommt drauf an" lauten muss: Wenn Sie sich in einer
-Position befinden, in der Sie Einfluss auf die Architektur einer TK
+Position befinden, in der Sie Einfluss auf die Architektur einer
 Enterprise-Software nehmen können, wird die im Buch dargelegte
 Methodik massive Auswirkungen auf die alltägliche Entwicklung haben.
 Wenn nicht, dann vermutlich nicht. Folglich wünschte ich, das Buch
 ginge noch weiter und würde Algebra-basierte Konstruktionskonzepte mit
 traditionellen, objektorientierten Konstruktionskonzepten vergleichen.
 Zur Schatzsuche erwähnt Maguire ein echtes, ähnliches Projekt, das
-TK "viermal umgeschrieben" werden musste und trotzdem nie ein
+"viermal umgeschrieben" werden musste und trotzdem nie ein
 "angemessenes Konzept, das alle Anforderungen erfüllte und
-gleichzeitig einfach zu benutzen war" hervorbrachte. Zu wissen, was für TK Rewrites das waren und warum sie fehlschlugen würde das Argument dieses Buchs stützen. Zwangsläufig würden sich Kombinatorenmodelle auch radikal anders als objektorientierte Modelle herausstellen statt nur als etwas das "man so macht".
+gleichzeitig einfach zu benutzen war" hervorbrachte. Zu wissen, was für Rewrites das waren und warum sie fehlschlugen würde das Argument dieses Buchs stützen. Zwangsläufig würden sich Kombinatorenmodelle auch radikal anders als objektorientierte Modelle herausstellen statt nur als etwas das "man so macht".
 
 ### 5. Produktion ###
 
@@ -153,9 +142,9 @@ Die Darstellung ist gut organisiert und baut die Konzepte nach und nach auf. Die
 
 ### 6. Fazit ###
 
-Maguires Buch ist ein wichtiger Beitrag dazu, den TK [Mangel an
-Literatur], die komplexe Probleme aus der echten Welt mit funktionalen
-Programmierung löst, zu beheben. Durch den informellen Stil und die
+Maguires Buch ist ein wichtiger Beitrag dazu, den Mangel an
+Literatur darüber zu beheben, wie komplexe Probleme aus der echten Welt mit funktionaler
+Programmierung gelöst werden können. Durch den informellen Stil und die
 sorgfältige Darstellung eignet sich die erste Hälfte des Buchs auch
 für Leser, denen funktionale Programmierung neu ist. Und selbst wenn Sie sich mit Haskell, Kombinatorenmodellen und Algebra auskennen, wird Maguires Buch Ihnen ermöglichen, diese Ideen effektiver auf Probleme in der echten Welt anzuwenden. Unbedingt lesen.
 
