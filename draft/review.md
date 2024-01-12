@@ -149,7 +149,7 @@ gleichzeitig einfach zu benutzen war" hervorbrachte. Zu wissen, was für TK Rewr
 
 ### 5. Produktion ###
 
-Die Darstellung ist gut organisiert und baut die Konzepte nach und nach auf. Die Sprache des Buchs ist informell, aber präzise und leicht verständlich. Der Code (der einen erheblichen Teil des Buchs einnimmt) baut sich ebenfalls nach und nach von einfachen Kombinatoren zu fortgeschrittenen Konzepten auf und ist als Github-Repositorium erhältlich.
+Die Darstellung ist gut organisiert und baut die Konzepte nach und nach auf. Die Sprache des Buchs ist informell, aber präzise und leicht verständlich. Der Code (der einen erheblichen Teil des Buchs einnimmt) baut sich ebenfalls nach und nach von einfachen Kombinatoren zu fortgeschrittenen Konzepten auf und ist als [Github-Repositorium](https://github.com/isovector/algebra-driven-design) erhältlich.
 
 ### 6. Fazit ###
 
