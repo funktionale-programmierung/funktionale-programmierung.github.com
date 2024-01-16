@@ -133,7 +133,7 @@ traditionellen, objektorientierten Konstruktionskonzepten vergleichen.
 Zur Schatzsuche erwähnt Maguire ein echtes, ähnliches Projekt, das
 "viermal umgeschrieben" werden musste und trotzdem nie ein
 "angemessenes Konzept, das alle Anforderungen erfüllte und
-gleichzeitig einfach zu benutzen war" hervorbrachte. Zu wissen, was für Rewrites das waren und warum sie fehlschlugen würde das Argument dieses Buchs stützen. Zwangsläufig würden sich Kombinatorenmodelle auch radikal anders als objektorientierte Modelle herausstellen statt nur als etwas das "man so macht".
+gleichzeitig einfach zu benutzen war" hervorbrachte. Zu wissen, was für Rewrites das waren und warum sie fehlschlugen, würde das Argument dieses Buchs stützen. Zwangsläufig würden sich Kombinatorenmodelle auch radikal anders als objektorientierte Modelle herausstellen statt nur als etwas das "man so macht".
 
 Die Darstellung ist gut organisiert und baut die Konzepte nach und nach auf. Die Sprache des Buchs ist informell, aber präzise und leicht verständlich. Der Code (der einen erheblichen Teil des Buchs einnimmt) baut sich ebenfalls nach und nach von einfachen Kombinatoren zu fortgeschrittenen Konzepten auf und ist als [Github-Repositorium](https://github.com/isovector/algebra-driven-design) erhältlich.
 
