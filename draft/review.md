@@ -9,13 +9,12 @@ Maguires Buch handelt von Domänenmodellierung mit Algebra und
 funktionaler Programmierung, oder, anders gesagt, vom konzipieren von
 Kombinatorenbibliotheken. Dieses Thema ist bereits in zahllosen Papers
 gut untersucht worden, angefangen mit (vermutlich) Peter Hendersons
-funktionaler Geometrie [Henderson(1982)]. Und tatsächlich schrieben
+*Functional Geometry* [Henderson(1982)](https://dl.acm.org/doi/10.1145/800068.802148). Und tatsächlich schrieben
 Simon Peyton Jones und Jean-Marc Eber im Jahr 2008:
 
 <ul><blockquote>Zu diesem Zeitpunkt sollte jeder funktionale
 Programmierer, der etwas auf sich hält, anfangen, vor Wut zu schäumen
-und "Bau eine Kombinatorenbibliothek!" zu schreien.</blockquote> -- [Peyton
-Jones et al.(2000)Peyton Jones, Eber, & Seward]</ul>
+und "Bau eine Kombinatorenbibliothek!" zu schreien.</blockquote> -- [<a href="https://dl.acm.org/doi/10.1145/351240.351267">Peyton Jones et al.(2000) Peyton Jones, Eber, & Seward</a>]</ul>
 
 Wenn also "jeder funktionale Programmierer, der etwas auf sich hält"
 bereits vor zwanzig Jahren davon wusste, warum schreibt man jetzt ein
