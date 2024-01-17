@@ -7,10 +7,48 @@ tags: []
 
 Maguires Buch handelt von Domänenmodellierung mit Algebra und
 funktionaler Programmierung, oder, anders gesagt, vom konzipieren von
-Kombinatorbibliotheken. Dieses Thema ist bereits in zahllosen Papers
+*Kombinatormodellen*.  Dieses Thema ist bereits in zahllosen Papers
 gut untersucht worden, angefangen mit (vermutlich) Peter Hendersons
-*Functional Geometry* [Henderson(1982)](https://dl.acm.org/doi/10.1145/800068.802148). Und tatsächlich schrieben
-Simon Peyton Jones und Jean-Marc Eber im Jahr 2008:
+*Functional Geometry*
+[Henderson(1982)](https://dl.acm.org/doi/10.1145/800068.802148). 
+
+### Kombinatormodelle
+
+Worum geht's?  Kombinatormodelle sind Domänenmodelle, in dem
+Domänenobjekte durch Kombination oder Veränderung schon bestehender
+Domänenobjekte entstehen.  In *Functional Geometry* gibt es einen
+Datentyp für Bilder namens `Picture`.  Henderson konstruiert zunächst
+das Bild einer menschlichen Figur, genannt `man` durch Striche.  Dann
+definiert er Funktionen wie `flip` und `overlay`, hier mit
+Haskell-Typsignaturen:
+
+```haskell
+flip :: Picture -> Picture
+overlay :: Picture -> Picture -> Picture
+```
+
+Die `flip`-Funktion spiegelt ein Bild an der horizontalen Achse,
+`overlay` legt zwei Bilder aufeinander - *kombiniert* sie also.  Bei
+Kombinatormodelle gelten häufig Gleichungen wie zum Beispiel, dass
+zweimal hintereinander spiegeln wieder das ursprüngliche Bild erzeugt:
+
+```haskell
+flip (flip p) == p
+```
+
+Für `overlay` gilt ein Assoziativgesetz:
+
+```haskell
+overlay a (overlay b c) == overlay (overlay a b) c
+```
+
+Die Lehre der Gleichungen in der Mathematik heißt *Algebra* -
+entsprechend heißt das Entwerfen von Kombinatormodelle zusammen mit
+algebraischen Gleichungen *algebra-driven design*, das Thema von
+Maguires Buch.
+
+Simon Peyton Jones und Jean-Marc Eber schrieben schon im im
+Jahr 2000:
 
 <ul><blockquote>Zu diesem Zeitpunkt sollte jeder funktionale
 Programmierer, der etwas auf sich hält, anfangen, vor Wut zu schäumen
@@ -19,7 +57,7 @@ und "Bau eine Kombinatorbibliothek!" zu schreien.</blockquote> -- [<a href="http
 Wenn also "jeder funktionale Programmierer, der etwas auf sich hält"
 bereits vor zwanzig Jahren davon wusste, warum schreibt man jetzt ein
 Buch darüber? Nun ja, Kombinatorbibliotheken (beziehungsweise die
-durch sie bereitgestellten *Kombinatormodelle*) haben die
+durch sie bereitgestellten Kombinatormodelle) haben die
 Softwareentwicklungswelt nicht gerade im Sturm erobert, und zwar aus
 mindestens zwei Gründen:
 
