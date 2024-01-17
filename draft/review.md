@@ -7,18 +7,19 @@ tags: []
 
 Maguires Buch handelt von Domänenmodellierung mit Algebra und
 funktionaler Programmierung, oder, anders gesagt, vom konzipieren von
-Kombinatorenbibliotheken. Dieses Thema ist bereits in zahllosen Papers
+Kombinatorbibliotheken. Dieses Thema ist bereits in zahllosen Papers
 gut untersucht worden, angefangen mit (vermutlich) Peter Hendersons
 *Functional Geometry* [Henderson(1982)](https://dl.acm.org/doi/10.1145/800068.802148). Und tatsächlich schrieben
 Simon Peyton Jones und Jean-Marc Eber im Jahr 2008:
 
 <ul><blockquote>Zu diesem Zeitpunkt sollte jeder funktionale
 Programmierer, der etwas auf sich hält, anfangen, vor Wut zu schäumen
-und "Bau eine Kombinatorenbibliothek!" zu schreien.</blockquote> -- [<a href="https://dl.acm.org/doi/10.1145/351240.351267">Peyton Jones et al.(2000) Peyton Jones, Eber, & Seward</a>]</ul>
+und "Bau eine Kombinatorbibliothek!" zu schreien.</blockquote> -- [<a href="https://dl.acm.org/doi/10.1145/351240.351267">Peyton Jones et al.(2000) Peyton Jones, Eber, & Seward</a>]</ul>
 
 Wenn also "jeder funktionale Programmierer, der etwas auf sich hält"
 bereits vor zwanzig Jahren davon wusste, warum schreibt man jetzt ein
-Buch darüber? Nun ja, Kombinatorenbibliotheken haben die
+Buch darüber? Nun ja, Kombinatorbibliotheken (beziehungsweise die
+durch sie bereitgestellten *Kombinatormodelle*) haben die
 Softwareentwicklungswelt nicht gerade im Sturm erobert, und zwar aus
 mindestens zwei Gründen:
 
@@ -26,14 +27,14 @@ mindestens zwei Gründen:
 <li>Es wurden zwar zahllose Paper geschrieben, diese waren aber
 vor allem Experten der funktionalen Programmierung zugänglich, nicht
 der breiten Allgemeinheit der Softwareentwickler.</li>
-<li>Es haben zwar viele Paper Kombinatorenbibliotheken vorgestellt, aber
+<li>Es haben zwar viele Paper Kombinatormodelle vorgestellt, aber
 meist war keine Erklärung dabei, nach welcher Methodik die Autoren die
 jeweiligen Bibliotheken entwickelt hatten.</li></ul>
 
-Damit wurden Kombinatorenbibliotheken effektiv zur Folklore verbannt; sie
+Damit wurden Kombinatormodelle effektiv zur Folklore verbannt; sie
 sind abseits der funktionalen Programmierung nach wie vor
 weitestgehend unbekannt. Maguires Buch erklärt, wie man
-Kombinatorenbibliotheken nach algebraischen Prinzipien konzipieren kann.
+Kombinatormodelle nach algebraischen Prinzipien konzipieren kann.
 Es ist deutlich zugänglicher geschrieben als die meisten ICFP-Paper zu
 Kombinatoren und damit ein wichtiger Beitrag dazu, dieses Versäumnis
 der Gemeinschaft der funktionalen Programmierung anzugehen.
@@ -65,7 +66,7 @@ hinterlegen und dafür Punkte bekommen. Dies ist ein deutlich
 umfangreicheres Beispiel. Die zugehörige Konzeption wird dabei nicht
 bloß in ihrer finalen Fassung vorgestellt. Der Autor zeichnet mithilfe
 mehrerer Revisionen den Werdegang der Konzeption nach. Jede Revision
-bringt die Kombinatorenlogik der Fachlichkeit ein Stück weiter an die
+bringt die Kombinatorlogik der Fachlichkeit ein Stück weiter an die
 Oberfläche.
 
 Die zweite Hälfte des Buchs beschäftigt sich mit der Ableitung von
@@ -90,7 +91,7 @@ Zusammenfassung allgemeiner algebraischer Gesetze.
 ### Zielgruppe ###
 
 Die erste Hälfte des Buchs legt das Augenmerk sorgfältig auf die
-allgemeine Beschreibung von Kombinatorenmodellen und deren
+allgemeine Beschreibung von Kombinatormodellen und deren
 Gesetzmäßigkeiten. Die kurze Einführung in die Programmiersprache
 Haskell aus dem Vorwort sollte ausreichen, um diesen Teil auch für
 Menschen mit nur wenig Haskell- oder gar funktionalen
@@ -121,7 +122,7 @@ Ein
 zu dem Buch beginnt mit der Frage "Wird sich dies in irgendeiner Art
 auf meine alltägliche Enterprise-Software-Entwicklung auswirken?"
 (“Will this have any bearing on my day-to-day development of
-enterprise software?”). Algebra-basierte Kombinatorenmodelle finden in
+enterprise software?”). Algebra-basierte Kombinatormodelle finden in
 vielen Domänen Anwendung und können Eckpfeiler einer flexiblen
 Softwarearchitektur sein, die zukünftige Anforderungen vorausahnt.
 Doch obwohl diese schon lange anwendbar sind, werden sie selten
@@ -138,7 +139,7 @@ Zur Schatzsuche erwähnt Maguire ein echtes, ähnliches Projekt, das
 "angemessenes Konzept, das alle Anforderungen erfüllte und
 gleichzeitig einfach zu benutzen war" hervorbrachte. Zu wissen, was
 für Rewrites das waren und warum sie fehlschlugen, würde das Argument
-dieses Buchs stützen. Zwangsläufig würden sich Kombinatorenmodelle
+dieses Buchs stützen. Zwangsläufig würden sich Kombinatormodelle
 auch radikal anders als objektorientierte Modelle herausstellen statt
 nur als etwas das "man so macht".
 
@@ -157,7 +158,7 @@ darüber zu beheben, wie komplexe Probleme aus der echten Welt mit
 funktionaler Programmierung gelöst werden können. Durch den
 informellen Stil und die sorgfältige Darstellung eignet sich die erste
 Hälfte des Buchs auch für Leser, denen funktionale Programmierung neu
-ist. Und selbst wenn Sie sich mit Haskell, Kombinatorenmodellen und
+ist. Und selbst wenn Sie sich mit Haskell, Kombinatormodellen und
 Algebra auskennen, wird Maguires Buch Ihnen ermöglichen, diese Ideen
 effektiver auf Probleme in der echten Welt anzuwenden. Unbedingt
 lesen.
