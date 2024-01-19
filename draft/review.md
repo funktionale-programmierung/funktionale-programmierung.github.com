@@ -79,9 +79,9 @@ der FP-Community anzugehen.
 
 ### Übersicht ###
 
-Das Buch beginnt mit einem Vorwort, das erklärt, wie sinnvoll es ist,
+Das Buch beginnt mit einem Vorwort, das erklärt, warum es sinnvoll ist,
 verständliche Abstraktionen auf algebraischen Gesetzen aufzubauen und
-das die Notationskonventionen für den folgenden Haskellcode angibt.
+das die Notationskonventionen für den folgenden Haskell-Code angibt.
 
 Die erste Hälfte des Buchs handelt von der Gestaltung von
 Abstraktionen sowie den Gesetzen, die deren Semantik beschreiben. Sie
@@ -94,23 +94,29 @@ Mit "tiles" beginnt das Buch mit den üblichen Kombinatoren zur
 Rotation und zum Spiegeln, ergänzt ihre Typsignaturen mit
 algebraischen Gesetzen und führt nach und nach fortgeschrittene
 Kombinatoren ein, was schließlich zu einem applikativen Funktor
-führt. Die Darstellung wird sorgfältig als gleichwertige Beobachtung
-wiedergegeben.
+führt.
+
+Ein Thema, das oft bei Erklärungen von Kombinator-Modellen vergessen
+wird, ist die Gleichheit von Domänenobjekten: Wenn Bilder durch
+wiederholte Aufrufe von Kombinatoren entstehen, dann sind zwei Bilder
+sinnvollerweise dann gleich, wenn sie gleich *aussehen*, auch wenn sie
+möglicherweise von unterschiedlichen Aufrufe von Kombinatoren erzeugt
+wurden.  Maguire behandelt das Thema sorgfältig und führt den Begriff
+der *Beobachtung* (*observation*) ein, um diese Idee umzusetzen.
 
 Eine Schatzssuche ist ein Spiel, das von (echten) Menschen gespielt
 wird, die durch die Stadt laufen, Aufgaben lösen (gelegentlich
 mithilfe von Hinweisen), Nachweise über erledigte Aufgaben im System
 hinterlegen und dafür Punkte bekommen. Dies ist ein deutlich
-umfangreicheres Beispiel. Die zugehörige Konzeption wird dabei nicht
-bloß in ihrer finalen Fassung vorgestellt. Der Autor zeichnet mithilfe
-mehrerer Revisionen den Werdegang der Konzeption nach. Jede Revision
-bringt die Kombinatorlogik der Fachlichkeit ein Stück weiter an die
-Oberfläche.
+umfangreicheres Beispiel.  Glücklicherweise beschreibt Maguire nicht
+nur das Endprodukt, sondern seinen Werdegang entlang mehrerer
+Revisionen. Jede Revision bringt die Kombinator-Affinität der Fachlichkeit
+ein Stück weiter an die Oberfläche.
 
 Die zweite Hälfte des Buchs beschäftigt sich mit der Ableitung von
 Implementierungen und nutzt dafür wieder die beiden Beispiele der
 ersten Hälfte. Sie beginnt mit einer ersten Codierung ("deep
-embedding") und simplistischer Implementierung des "tile"-Beispiels,
+embedding") und einfachen Implementierung des "tile"-Beispiels,
 die sie dann mit einer allgemeineren, effizienteren funktionalen
 Repräsentation ersetzt. Desweiteren zeigt das Buch, wie man Gesetze in
 QuickCheck-Test überführt und passende Generatoren schreibt, damit
@@ -165,11 +171,15 @@ vielen Domänen Anwendung und können Eckpfeiler einer flexiblen
 Softwarearchitektur sein, die zukünftige Anforderungen vorausahnt.
 Doch obwohl diese schon lange anwendbar sind, werden sie selten
 implementiert. Leider heißt das, dass die Antwort auf die oben
-genannte Frage "kommt drauf an" lauten muss: Wenn Sie sich in einer
+genannte Frage "kommt drauf an" lauten muss: 
+
+Wenn Sie sich in einer
 Position befinden, in der Sie Einfluss auf die Architektur einer
 Enterprise-Software nehmen können, wird die im Buch dargelegte
 Methodik massive Auswirkungen auf die alltägliche Entwicklung haben.
-Wenn nicht, dann vermutlich nicht. Folglich wünschte ich, das Buch
+Wenn nicht, dann vermutlich nicht. 
+
+Folglich wünschte ich, das Buch
 ginge noch weiter und würde Algebra-basierte Konstruktionskonzepte mit
 traditionellen, objektorientierten Konstruktionskonzepten vergleichen.
 Zur Schatzsuche erwähnt Maguire ein echtes, ähnliches Projekt, das
