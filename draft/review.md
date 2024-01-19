@@ -10,7 +10,7 @@ funktionaler Programmierung, oder, anders gesagt, vom konzipieren von
 *Kombinatormodellen*.  Dieses Thema ist bereits in zahllosen Papers
 gut untersucht worden, angefangen mit (vermutlich) Peter Hendersons
 *Functional Geometry*
-[Henderson(1982)](https://dl.acm.org/doi/10.1145/800068.802148). 
+[[Henderson(1982)](https://dl.acm.org/doi/10.1145/800068.802148)]. 
 
 ### Kombinatormodelle
 
@@ -50,7 +50,7 @@ Maguires Buch.
 Simon Peyton Jones und Jean-Marc Eber schrieben schon im im
 Jahr 2000:
 
-<ul><blockquote>Zu diesem Zeitpunkt sollte jeder funktionale
+<ul><blockquote>Zu diesem Zeitpunkt sollte jede funktionale
 Programmierer, der etwas auf sich hält, anfangen, vor Wut zu schäumen
 und "Bau eine Kombinatorbibliothek!" zu schreien.</blockquote> -- [<a href="https://dl.acm.org/doi/10.1145/351240.351267">Peyton Jones et al.(2000) Peyton Jones, Eber, & Seward</a>]</ul>
 
@@ -63,10 +63,10 @@ mindestens zwei Gründen:
 
 <ul>
 <li>Es wurden zwar zahllose Paper geschrieben, diese waren aber
-vor allem Experten der funktionalen Programmierung zugänglich, nicht
-der breiten Allgemeinheit der Softwareentwickler.</li>
+vor allem Expert:innen der funktionalen Programmierung zugänglich, nicht
+der breiten Allgemeinheit der Softwareentwickler:innen.</li>
 <li>Es haben zwar viele Paper Kombinatormodelle vorgestellt, aber
-meist war keine Erklärung dabei, nach welcher Methodik die Autoren die
+meist war keine Erklärung dabei, nach welcher Methodik die Autor:innen die
 jeweiligen Bibliotheken entwickelt hatten.</li></ul>
 
 Damit wurden Kombinatormodelle effektiv zur Folklore verbannt; sie
@@ -75,7 +75,7 @@ weitestgehend unbekannt. Maguires Buch erklärt, wie man
 Kombinatormodelle nach algebraischen Prinzipien konzipieren kann.
 Es ist deutlich zugänglicher geschrieben als die meisten ICFP-Paper zu
 Kombinatoren und damit ein wichtiger Beitrag dazu, dieses Versäumnis
-der Gemeinschaft der funktionalen Programmierung anzugehen.
+der FP-Community anzugehen.
 
 ### Übersicht ###
 
@@ -195,10 +195,8 @@ Maguires Buch ist ein wichtiger Beitrag dazu, den Mangel an Literatur
 darüber zu beheben, wie komplexe Probleme aus der echten Welt mit
 funktionaler Programmierung gelöst werden können. Durch den
 informellen Stil und die sorgfältige Darstellung eignet sich die erste
-Hälfte des Buchs auch für Leser, denen funktionale Programmierung neu
+Hälfte des Buchs auch für Leser:innen, denen funktionale Programmierung neu
 ist. Und selbst wenn Sie sich mit Haskell, Kombinatormodellen und
 Algebra auskennen, wird Maguires Buch Ihnen ermöglichen, diese Ideen
 effektiver auf Probleme in der echten Welt anzuwenden. Unbedingt
 lesen.
-
-<small>Aus dem Englischen von Sibylle Hasse.</small>
