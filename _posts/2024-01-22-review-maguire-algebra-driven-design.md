@@ -8,7 +8,7 @@ tags: []
 Maguires Buch handelt von Domänenmodellierung mit Algebra und
 funktionaler Programmierung, oder, anders gesagt, vom konzipieren von
 *Kombinatormodellen*.  Dieses Thema ist bereits in zahllosen Papers
-gut untersucht worden, angefangen mit (vermutlich) Peter Hendersons
+gut untersucht worden, angefangen (vermutlich) mit Peter Hendersons
 *Functional Geometry*
 [[Henderson(1982)](https://dl.acm.org/doi/10.1145/800068.802148)]. 
 
@@ -42,10 +42,10 @@ Für `overlay` gilt ein Assoziativgesetz:
 overlay a (overlay b c) == overlay (overlay a b) c
 ```
 
-Die Lehre der Gleichungen in der Mathematik heißt *Algebra* -
-entsprechend heißt das Entwerfen von Kombinatormodelle zusammen mit
-algebraischen Gleichungen *algebra-driven design*, das Thema von
-Maguires Buch.
+Die Lehre der Gleichungen in der Mathematik heißt
+*Algebra*—entsprechend heißt das Entwerfen von Kombinatormodelle
+zusammen mit algebraischen Gleichungen *algebra-driven design*, das
+Thema von Maguires Buch.
 
 Simon Peyton Jones und Jean-Marc Eber schrieben schon im im
 Jahr 2000:
@@ -104,7 +104,7 @@ möglicherweise von unterschiedlichen Aufrufe von Kombinatoren erzeugt
 wurden.  Maguire behandelt das Thema sorgfältig und führt den Begriff
 der *Beobachtung* (*observation*) ein, um diese Idee umzusetzen.
 
-Eine Schatzssuche ist ein Spiel, das von (echten) Menschen gespielt
+Eine Schatzsuche ist ein Spiel, das von (echten) Menschen gespielt
 wird, die durch die Stadt laufen, Aufgaben lösen (gelegentlich
 mithilfe von Hinweisen), Nachweise über erledigte Aufgaben im System
 hinterlegen und dafür Punkte bekommen. Dies ist ein deutlich
