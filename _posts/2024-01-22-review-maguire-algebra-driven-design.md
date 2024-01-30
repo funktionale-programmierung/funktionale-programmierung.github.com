@@ -12,6 +12,8 @@ gut untersucht worden, angefangen (vermutlich) mit Peter Hendersons
 *Functional Geometry*
 [[Henderson(1982)](https://dl.acm.org/doi/10.1145/800068.802148)]. 
 
+<!-- more start -->
+
 ### Kombinatormodelle
 
 Worum geht's?  Kombinatormodelle sind Domänenmodelle, in dem
