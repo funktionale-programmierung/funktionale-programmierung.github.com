@@ -62,28 +62,28 @@ natürlichen Zahlen. Die Sechs ist eine natürliche Zahl. Diese kann ich
 auf unterschiedliche Arten repräsentieren: "110" in binär, "VI" als
 römisches Numeral etc. Alle diese unterschiedlichen Repräsentationen
 (Numerale) _meinen_ dieselbe Zahl. Mit einem einfachen
-Gleichungssystem kann eine Bedeutungsfunktion `mu`, die Numerale auf
+Gleichungssystem kann eine Bedeutungsfunktion `μ`, die Numerale auf
 natürliche Zahlen abbildet, definiert werden. Für binäre Numerale:
 
 ```
-mu(0) = 0
-mu(1) = 1
-mu(x0) = 2 * mu(x)
-mu(x1) = 2 * mu(x) + 1
+𝛍(0) = 0
+𝛍(1) = 1
+𝛍(x0) = 2 * 𝛍(x)
+𝛍(x1) = 2 * 𝛍(x) + 1
 ```
 
-Die Bedeutungsfunktion `mu` beschreibt jetzt, was wir mit binären
+Die Bedeutungsfunktion `𝛍` beschreibt jetzt, was wir mit binären
 Numeralen "eigentlich meinen." An diesen Gleichungen sind einige
 Punkte bemerkenswert:
 
-1. Die Bedeutungsfunktion `mu` bildet Numerale auf natürliche Zahlen
+1. Die Bedeutungsfunktion `𝛍` bildet Numerale auf natürliche Zahlen
    ab. Die `0`, die in den Klammern steht und die `0`, die auf der
    rechten Seite steht, sind also unterschiedliche Objekte.
 2. Das `x` ist kein Element der Numeralsprache, sondern eine Variable,
    die für beliebige Numeral(-teile) steht. Die dritte Gleichung und
    die vierte Gleichung beschreiben also eigentlich eine ganze Klasse
    von Gleichungen.
-3. Diese Definition von `mu` hat einige Operationen als
+3. Diese Definition von `𝛍` hat einige Operationen als
    Voraussetzung. Auf der Seite der Numerale setzen wir voraus, dass
    es möglich ist, einzelne Ziffern aneinanderzukleben (`x0`). Auf der
    Seite der Zahlen gehen wir davon aus, dass wir multiplizieren und
@@ -99,8 +99,8 @@ Zahlen entsprechen. Wir könnten das als Bedingung an korrekte
 Implementierungen formulieren:
 
 ```
-mu(x + y) = mu(x) + mu(y)
-mu(x * y) = mu(x) * mu(y)
+𝛍(x + y) = 𝛍(x) + 𝛍(y)
+𝛍(x * y) = 𝛍(x) * 𝛍(y)
 ```
 
 Hier sagen wir, dass sich die Addition/Multiplikation auf Numeralen
@@ -112,11 +112,11 @@ Anhand der einfacheren Inkrementieroperation `inc` können wir das
 Ganze durchspielen. Die Gleichung, die die Korrektheit regelt, lautet:
 
 ```
-mu(inc(x)) = mu(x) + 1
+𝛍(inc(x)) = 𝛍(x) + 1
 ```
 
 Achtung: `inc` ist eine ganz normale Operation auf Numeralen, bildet
-also Numeral auf Numeral ab. `mu` ist wie oben beschrieben eine
+also Numeral auf Numeral ab. `𝛍` ist wie oben beschrieben eine
 besondere Funktion, die jedes Numeral auf eine natürliche Zahl
 abbildet. Wir können diesen Zusammenhang anhand eines Diagramms
 illustrieren.
@@ -150,25 +150,25 @@ Behauptung. Diese Behauptung müssen wir noch beweisen, z.B. durch
 Induktion. Es gibt zwei Induktionsanfänge:
 
 ```
-mu(inc(0)) = mu(1) = 1 = mu(0) + 1
-mu(inc(1)) = mu(10) = mu(1) * 2 = 2 = mu(1) + 1
+𝛍(inc(0)) = 𝛍(1) = 1 = 𝛍(0) + 1
+𝛍(inc(1)) = 𝛍(10) = 𝛍(1) * 2 = 2 = 𝛍(1) + 1
 ```
 
 Das passt. Weiter geht's mit dem Induktionsschritt:
 
 ```
-// gegeben: mu(inc(x)) = mu(x) + 1
+// gegeben: 𝛍(inc(x)) = 𝛍(x) + 1
 
-mu(inc(x0)) = mu(x1)
-            = 2 * mu(x) + 1
-            = mu(x0) + 1
+𝛍(inc(x0)) = 𝛍(x1)
+           = 2 * 𝛍(x) + 1
+           = 𝛍(x0) + 1
 
-mu(inc(x1)) = mu(inc(x)0)
-            = 2 * mu(inc(x))
-            = 2 * (mu(x) + 1)
-            = 2 * mu(x) + 2
-            = 2 * mu(x) + 1 + 1
-            = mu(x1) + 1
+𝛍(inc(x1)) = 𝛍(inc(x)0)
+           = 2 * 𝛍(inc(x))
+           = 2 * (𝛍(x) + 1)
+           = 2 * 𝛍(x) + 2
+           = 2 * 𝛍(x) + 1 + 1
+           = 𝛍(x1) + 1
 ```
 
 Nun _wissen_ wir, dass sich `inc` verhält wie `+ 1`. Dieses Wissen hat
@@ -189,7 +189,7 @@ so simpel sind, dass sie auf einen Blick offensichtlich richtig
 sind.
 
 Als Gedankenexperiment könnten wir ja einfach mal definieren, dass
-unsere Bedeutungsfunktion `mu` die Identitätsfunktion ist, `mu(x) =
+unsere Bedeutungsfunktion `𝛍` die Identitätsfunktion ist, `𝛍(x) =
 x`. Damit würde jede Datenstruktur und jede Funktion für sich selbst
 stehen und alles wäre trivialerweise korrekt implementiert. So richtig
 vorwärtsgekommen sind wir dann aber nicht, denn der letzte Schritt
