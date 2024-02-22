@@ -17,11 +17,9 @@ Menschen. Die Programmiercommunity fokussiert sich gern auf den
 Gesichtspunkt der Performance. Dieser ist durchaus wichtig, denn ohne
 Performance taugt die beste Software nichts. Etwas in Vergessenheit
 geraten ist dabei aber, dass es sich bei jeder Software lediglich um
-die Abbildung einer abstrakten Idee handelt. In diesem Artikel wollen
-wir uns diesen abstrakten Ideen -- wir sagen dazu oft: Modelle -- und
-deren Verhältnis zum Computer widmen.
-
-<!-- more start -->
+die Abbildung einer abstrakten Idee handelt. In dieser Artikelreihe
+wollen wir uns diesen abstrakten Ideen -- wir sagen dazu oft: Modelle
+-- und deren Verhältnis zum Computer widmen.
 
 Das abstrakte Modell kommt spätestens immer dann zum Einsatz, wenn
 Bugs in der Software auftreten. Ein Bug, also ein Defekt in einem
@@ -57,7 +55,7 @@ natürlichen Zahlen. Die Sechs ist eine natürliche Zahl. Diese kann ich
 auf unterschiedliche Arten repräsentieren: "110" in binär, "VI" als
 römisches Numeral etc. Alle diese unterschiedlichen Repräsentationen
 (Numerale) _meinen_ dieselbe Zahl. Mit einem einfachen
-Gleichungssystem kann eine Bedeutungsfunktion, die Numerale auf
+Gleichungssystem kann eine Bedeutungsfunktion `mu`, die Numerale auf
 natürliche Zahlen abbildet, definiert werden. Für binäre Numerale:
 
 ```
@@ -72,7 +70,7 @@ Numeralen "eigentlich meinen." An diesen Gleichungen sind einige
 Punkte bemerkenswert:
 
 1. Die Bedeutungsfunktion `mu` bildet Numerale auf natürliche Zahlen
-   ab. Die "0", die in den Klammern steht und die "0", die auf der
+   ab. Die `0`, die in den Klammern steht und die `0`, die auf der
    rechten Seite steht, sind also unterschiedliche Objekte.
 2. Das `x` ist kein Element der Numeralsprache, sondern eine Variable,
    die für beliebige Numeral(-teile) steht. Die dritte Gleichung und
