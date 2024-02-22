@@ -21,6 +21,8 @@ die Abbildung einer abstrakten Idee handelt. In diesem Artikel wollen
 wir uns diesen abstrakten Ideen -- wir sagen dazu oft: Modelle -- und
 deren Verhältnis zum Computer widmen.
 
+<!-- more start -->
+
 Das abstrakte Modell kommt spätestens immer dann zum Einsatz, wenn
 Bugs in der Software auftreten. Ein Bug, also ein Defekt in einem
 vorliegenden Programm, kann nur dann identifiziert werden, wenn man
@@ -34,7 +36,7 @@ die nachfolgende Implementierung leiten kann.
 ## Denotationale Semantik
 
 In der Programmiersprachenforschung werden Programmiersprachen oft
-entland der Semantik von Programmbausteinen studiert. Eine mögliches
+entlang der Semantik von Programmbausteinen studiert. Eine mögliches
 semantisches Werkzeug ist die Denotationale Semantik. Hierbei weist
 man jedem Datentyp eine mathematische Bedeutung zu, also einen Wert in
 der abstrakten Sprache der Mathematik: Mengen, Funktionen, Zahlen,
