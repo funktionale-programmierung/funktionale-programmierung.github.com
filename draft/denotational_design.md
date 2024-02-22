@@ -1,4 +1,9 @@
-# Eine Einführung in Denotational Design anhand der Frage "Was ist eine Zeitreihe?"
+---
+layout: post
+title: "Eine Einführung in Denotational Design anhand der Frage 'Was ist eine Zeitreihe?'"
+author: markus-schlegel
+tags: ["Praxis", "Denotational Design", "Modelling"]
+---
 
 Beim Programmieren wird viel Text produziert und dennoch [ist
 Programmieren nicht gleich
@@ -13,8 +18,8 @@ Gesichtspunkt der Performance. Dieser ist durchaus wichtig, denn ohne
 Performance taugt die beste Software nichts. Etwas in Vergessenheit
 geraten ist dabei aber, dass es sich bei jeder Software lediglich um
 die Abbildung einer abstrakten Idee handelt. In diesem Artikel wollen
-wir uns diesen abstrakten Ideen und deren Verhältnis zum Computer
-widmen.
+wir uns diesen abstrakten Ideen -- wir sagen dazu oft: Modelle -- und
+deren Verhältnis zum Computer widmen.
 
 Das abstrakte Modell kommt spätestens immer dann zum Einsatz, wenn
 Bugs in der Software auftreten. Ein Bug, also ein Defekt in einem
@@ -39,19 +44,19 @@ Bedeutungen der Resultate.
 
 Klingt abstrakt und ist es auch. Dahinter steckt aber wieder nur die
 Idee, dass jedes Programm eigentlich bloß eine konkrete Repräsentation
-einer abstrakten Idee ist. Die abstrakte Idee kann auch außerhalb des
-Computers existieren, z.B. in unseren Köpfen oder auf Papier. Die
-zugehörige konkrete Repräsentation ist maßgeschneidert auf den
-Computer.
+einer abstrakten Idee ist. Die abstrakte Idee existiert in unseren
+Köpfen außerhalb des Computers. Die zugehörige konkrete Repräsentation
+ist maßgeschneidert auf den Computer.
 
-Das Original-Paper erklärt diesen Gedanken anhand des Unterschieds
-zwischen Numeralen und natürlichen Zahlen. Die Sechs ist eine
-natürliche Zahl. Diese kann ich auf unterschiedliche Arten
-repräsentieren: "110" in binär, "VI" als römisches Numeral etc. Alle
-diese unterschiedlichen Repräsentationen (Numerale) _meinen_ dieselbe
-Zahl. Mit einem einfachen Gleichungssystem kann eine
-Bedeutungsfunktion, die Numerale auf natürliche Zahlen abbildet,
-definiert werden. Für binäre Numerale:
+Das [Original-Paper zur denotationalen
+Semantik](https://dl.acm.org/doi/pdf/10.1145/360303.360308) erklärt
+diesen Gedanken anhand des Unterschieds zwischen Numeralen und
+natürlichen Zahlen. Die Sechs ist eine natürliche Zahl. Diese kann ich
+auf unterschiedliche Arten repräsentieren: "110" in binär, "VI" als
+römisches Numeral etc. Alle diese unterschiedlichen Repräsentationen
+(Numerale) _meinen_ dieselbe Zahl. Mit einem einfachen
+Gleichungssystem kann eine Bedeutungsfunktion, die Numerale auf
+natürliche Zahlen abbildet, definiert werden. Für binäre Numerale:
 
 ```
 mu(0) = 0
@@ -60,15 +65,17 @@ mu(x0) = 2 * mu(x)
 mu(x1) = 2 * mu(x) + 1
 ```
 
-An diesen Gleichungen sind einige Punkte bemerkenswert:
+Die Bedeutungsfunktion `mu` beschreibt jetzt, was wir mit binären
+Numeralen "eigentlich meinen." An diesen Gleichungen sind einige
+Punkte bemerkenswert:
 
 1. Die Bedeutungsfunktion `mu` bildet Numerale auf natürliche Zahlen
    ab. Die "0", die in den Klammern steht und die "0", die auf der
-   rechten Seite steht, sind also unterschiedliche Objekte. Da die
-   Mathematik nicht im Computer stattfindet, kann `mu` keine Software
-   sein.
+   rechten Seite steht, sind also unterschiedliche Objekte.
 2. Das `x` ist kein Element der Numeralsprache, sondern eine Variable,
-   die für beliebige Numeral(-teile) steht.
+   die für beliebige Numeral(-teile) steht. Die dritte Gleichung und
+   die vierte Gleichung beschreiben also eigentlich eine ganze Klasse
+   von Gleichungen.
 3. Diese Definition von `mu` hat einige Operationen als
    Voraussetzung. Auf der Seite der Numerale setzen wir voraus, dass
    es möglich ist, einzelne Ziffern aneinanderzukleben (`x0`). Auf der
@@ -108,6 +115,19 @@ abbildet. Wir können diesen Zusammenhang anhand eines Diagramms
 illustrieren.
 
 // Kommutierendes Diagramm hier einfügen
+
+Dieses Diagramm können wir auf zwei Arten lesen: 1. `+1` soll der
+Gegenspieler unserer Implementierung `inc` sein. D.h. für alle Paare
+von Numeralen, die `inc` als Eingabe und Ausgabe miteinander in
+Beziehung setzt, soll eine entsprechende Beziehung auch über `+1`
+gelten, wenn man die Ein- und Ausgaben durch die Bedeutungsfunktion
+schickt. 2. Für alle Numerale als Eingabe für `inc` soll gelten: Es
+kommt am Ende die selbe Zahl raus, egal, ob man zunächst das
+Eingabenumeral in eine Zahl übersetzt und dann dort `+1` rechnet, oder
+ob man zunächst `inc` anwendet und dann mithilfe der
+Bedeutungsfunktion diese Ausgabe in eine Zahl übersetzt. In jedem Fall
+ist dieses sog. kommutierende Diagramm ein Desiderat: Es _soll_
+gelten, damit wir sagen können, dass `inc` korrekt[^1] ist.
 
 Eine mögliche korrekte Implementierung für `inc` wäre jetzt:
 
@@ -150,6 +170,29 @@ kennen. Mit ausreichend vielen Tests (und im besten Fall sogar mit
 einigen Property Tests) können wir uns relativ sicher sein, dass
 unsere Implementierung korrekt ist. Hier wissen wir's.
 
+Das ist ein subtiler Punkt, mit dem die ganze Angelegenheit aber steht
+und fällt. Was wissen wir denn genau? Dass sich `inc` auf den binären
+Numeralen so verhält wie `+ 1` auf den natürlichen Zahlen. Unter der
+Voraussetzung -- aber _nur_ unter der Voraussetzung -- dass `+ 1`
+wirklich das ist, was wir implementieren wollten, ist unsere Software
+also korrekt. Das lässt noch offen, ob wir wirklich `+ 1` meinten,
+oder nicht doch `+ 2` oder was ganz anderes. Diesen letzten Schritt
+können wir nicht beweisen. Deshalb ist es wichtig, dass die Semantiken
+so simpel sind, dass sie auf einen Blick offensichtlich richtig
+sind.
+
+Als Gedankenexperiment könnten wir ja einfach mal definieren, dass
+unsere Bedeutungsfunktion `mu` die Identitätsfunktion ist, `mu(x) =
+x`. Damit würde jede Datenstruktur und jede Funktion für sich selbst
+stehen und alles wäre trivialerweise korrekt implementiert. So richtig
+vorwärtsgekommen sind wir dann aber nicht, denn der letzte Schritt
+heißt: Sei dir sicher, dass die Bedeutung auch das ist, was du
+ausdrücken willst. Das ist hier schwer möglich, denn Implementierungen
+sind meistens sehr komplex -- berechtigterweise, denn eine
+Implementierung muss sich eben noch um andere Aspekte außer
+Korrektheit scheren: Performance, Portierbarkeit, überhaupt
+Lauffähigkeit auf realer Hardware etc.
+
 ## Denotational Design
 
 Die Denotationale Semantik entstand wie gesagt zur Erforschung von
@@ -165,9 +208,10 @@ Datenservice, welcher eine Fassade vor einer Menge von Sensoren
 bildet. Die Dateninhalte sind im Wesentlichen Zeitreihen. Wir werden
 später sehen, dass das nicht ganz präzise ist, aber für den Moment
 können wir so darüber nachdenken. Unser System erlaubt dem Nutzer die
-Beschreibung und Visualisierung von Transformationen auf diesen
-Zeitreihen. Aus der Domäne kommen nun einige Anforderungen, welche
-Transformationen auf den Zeitreihen möglich sein sollen:
+Visualisierung von Zeitreihen und die Beschreibung von
+Transformationen von Zeitreihen. Aus der Domäne kommen nun einige
+Anforderungen, welche Transformationen auf den Zeitreihen möglich sein
+sollen:
 
 * Einlesen vom Datenservice
 * Einstellige Operationen wie abs/log/exp/...
@@ -225,9 +269,10 @@ lookup _ _ = Nothing
 
 Korrekt wäre diese Implementierung insofern, dass das Programm
 erfolgreich kompilierbar wäre. Die Implementierung ist aber alles
-andere als korrekt im Bezug auf unsere Idee, wie sich `lookup` zu
-verhalten hat. Beim herkömmlichen Programmieren geben wir uns damit
-zufrieden: Wir behalten die Idee im Hinterkopf und programmieren
+andere als korrekt im Bezug auf unsere Idee, wie sich `lookup`
+_funktionieren_ soll. Wir müssten den Code korrigieren auf Basis
+unserer Idee. Beim herkömmlichen Programmieren geben wir uns damit
+zufrieden: Wir behalten die Idee im Hinterkopf und programmieren daran
 entlang. Denotational Design zeigt eine alternative Vorgehensweise
 auf: Wenn es diese abstrakte Idee gibt, dann können wir doch mal
 versuchen, diese auch formal aufzuschreiben. Die Denotationale
@@ -235,3 +280,50 @@ Semantik gibt uns das Werkzeug, um diese Formulierung zu
 bewerkstelligen: Wir müssen eine mathematische Struktur finden und
 jede Operation auf eine entsprechende Operation in dieser Struktur
 abbilden.
+
+Ein erster Wurf könnte so aussehen:
+
+```
+newtype TimeSeries a = TS [(Time, a)]
+mu :: TimeSeries a -> Set of tuples (Time, a) where all left
+components are distinct
+mu (TS xs) = foldl (\(t, v) s -> if \exists v, (t, v) \elem s
+                                   then s
+                                   else s \union (t, v))
+                   empty
+                   xs
+
+mu(lookup t ts) = if \exists v, (mu(t), v) \elem mu(ts)
+                    then mu(Just) v
+                    else mu(Nothing)
+```
+
+Hier wird's schon wilder als bei den Numeralen. Am Anfang steht jetzt
+nicht nur eine Typdefinition, sondern zusätzlich ein
+Typkonstruktor. Diesen Typkonstruktor können wir mit einer Liste von
+`(Time, a)`-Tupeln füttern und erhalten einen Wert unseres `TimeSeries a` Typs.
+Die Bedeutungsfunktion, die darunter definiert wird, bildet
+die Werte auf eine mathemtische Struktur ab, die sehr ähnlich aussieht
+wie der Typ des Haskell-Typ-Konstruktors. Ähnlich ist nicht gleich:
+Listen haben eine Reihenfolge, Mengen nicht. Die Einschränkung, die
+wir auf der rechten Seite machen -- alle Zeitpunkte müssen
+unterschiedlich sein -- machen wir auf der linken Seite nicht. Das hat
+Auswirkungen auf die Definition von `mu`.
+
+
+## Konsequenzen
+
+1. Wirklich fearless refactoring
+ -- es ist nicht so schlimm, mal scheißcode hinzurotzen. wenn das
+ interface stimmt und die implementierung das richtige tut.
+ 
+2. Outsourcing
+
+3. decouled by default
+
+[^1] Es lohnt sich, noch einmal scharf darüber nachzudenken, was
+Korrektheit hier bedeutet. Es wäre vielleicht präziser zu sagen: die
+Berechnungsvorschrift ist so korrekt wie möglich. Bei der
+_Durchführung_ der Berechnung können immer noch Fehler auftreten: Der
+Speicher geht aus, kosmische Strahlung flippt ein paar Bits, jemand
+wirft den Computer in einen See etc.
