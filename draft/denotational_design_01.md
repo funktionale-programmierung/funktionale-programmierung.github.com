@@ -121,7 +121,9 @@ besondere Funktion, die jedes Numeral auf eine natürliche Zahl
 abbildet. Wir können diesen Zusammenhang anhand eines Diagramms
 illustrieren.
 
-// Kommutierendes Diagramm hier einfügen
+<img
+  src="/files/denotational-design/diagramm-numerals.png"
+  alt="Kommutierendes Diagramm für Numerale und natürliche Zahlen" />
 
 Dieses Diagramm können wir auf zwei Arten lesen: 1. `+1` soll der
 Gegenspieler unserer Implementierung `inc` sein. D.h. für alle Paare
