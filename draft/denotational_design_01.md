@@ -211,14 +211,6 @@ Industrieprojekt aus unserer täglichen Arbeit. Ihr dürft also gespannt
 sein auf ein praxisnahes Fallbeispiel.
 
 
-[^1] Falls man _das_ Modell nicht explizit aufschreibt, gibt es davon
-sogar meistens mehrere unterschiedliche. Jeder Nutzer, jeder
-Softwareentwickler, jeder Product Owner etc. hat sein eigenes Modell
-im Kopf und diese Modelle können sich teilweise widersprechen.
+[^1]: Falls man _das_ Modell nicht explizit aufschreibt, gibt es davon sogar meistens mehrere unterschiedliche. Jeder Nutzer, jeder Softwareentwickler, jeder Product Owner etc. hat sein eigenes Modell im Kopf und diese Modelle können sich teilweise widersprechen.
 
-[^2] Es lohnt sich, noch einmal scharf darüber nachzudenken, was
-Korrektheit hier bedeutet. Es wäre vielleicht präziser zu sagen: die
-Berechnungsvorschrift ist so korrekt wie möglich. Bei der
-_Durchführung_ der Berechnung können immer noch Fehler auftreten: Der
-Speicher geht aus, kosmische Strahlung flippt ein paar Bits, jemand
-wirft den Computer in einen See etc.
+[^2]: Es lohnt sich, noch einmal scharf darüber nachzudenken, was Korrektheit hier bedeutet. Es wäre vielleicht präziser zu sagen: die Berechnungsvorschrift ist so korrekt wie möglich. Bei der _Durchführung_ der Berechnung können immer noch Fehler auftreten: Der Speicher geht aus, kosmische Strahlung flippt ein paar Bits, jemand wirft den Computer in einen See etc.
