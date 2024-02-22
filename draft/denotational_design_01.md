@@ -36,7 +36,7 @@ vergleicht. Dass es diese abstrakte Idee -- das Modell -- hinter der
 Software also geben muss, sollte unstrittig sein.[^1] Die Disziplin des
 Denotational Design rückt das Modell wieder in den Fokus und zeigt,
 wie dieses präzise beschrieben werden kann und wie diese Beschreibung
-die nachfolgende Implementierung leiten kann.
+in Einklang mit der Implementierung gebracht werden kann.
 
 ## Denotationale Semantik
 
