@@ -149,7 +149,7 @@ inc(x1) = inc(x)0
 
 Dass diese Implementierung korrekt ist, das ist bisher nur eine
 Behauptung. Diese Behauptung müssen wir noch beweisen, z.B. durch
-Induktion. Es gibt zwei Induktionsanfänge:
+Induktion. Wir beginnen mit den beiden Basisfällen:
 
 ```
 𝛍(inc(0)) = 𝛍(1) = 1 = 𝛍(0) + 1
