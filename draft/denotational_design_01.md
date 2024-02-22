@@ -33,7 +33,7 @@ Bugs in der Software auftreten. Ein Bug, also ein Defekt in einem
 vorliegenden Programm, kann nur dann identifiziert werden, wenn man
 ein Idealbild vorm inneren Auge hat, mit dem man das defekte Programm
 vergleicht. Dass es diese abstrakte Idee -- das Modell -- hinter der
-Software also geben muss, sollte unstrittig sein. Die Disziplin des
+Software also geben muss, sollte unstrittig sein.[^1] Die Disziplin des
 Denotational Design rückt das Modell wieder in den Fokus und zeigt,
 wie dieses präzise beschrieben werden kann und wie diese Beschreibung
 die nachfolgende Implementierung leiten kann.
@@ -134,7 +134,7 @@ Eingabenumeral in eine Zahl übersetzt und dann dort `+1` rechnet, oder
 ob man zunächst `inc` anwendet und dann mithilfe der
 Bedeutungsfunktion diese Ausgabe in eine Zahl übersetzt. In jedem Fall
 ist dieses sog. kommutierende Diagramm ein Desiderat: Es _soll_
-gelten, damit wir sagen können, dass `inc` korrekt[^1] ist.
+gelten, damit wir sagen können, dass `inc` korrekt[^2] ist.
 
 Eine mögliche korrekte Implementierung für `inc` wäre jetzt:
 
@@ -211,7 +211,12 @@ Industrieprojekt aus unserer täglichen Arbeit. Ihr dürft also gespannt
 sein auf ein praxisnahes Fallbeispiel.
 
 
-[^1] Es lohnt sich, noch einmal scharf darüber nachzudenken, was
+[^1] Falls man _das_ Modell nicht explizit aufschreibt, gibt es davon
+sogar meistens mehrere unterschiedliche. Jeder Nutzer, jeder
+Softwareentwickler, jeder Product Owner etc. hat sein eigenes Modell
+im Kopf und diese Modelle können sich teilweise widersprechen.
+
+[^2] Es lohnt sich, noch einmal scharf darüber nachzudenken, was
 Korrektheit hier bedeutet. Es wäre vielleicht präziser zu sagen: die
 Berechnungsvorschrift ist so korrekt wie möglich. Bei der
 _Durchführung_ der Berechnung können immer noch Fehler auftreten: Der
