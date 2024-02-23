@@ -83,7 +83,9 @@ Punkte bemerkenswert:
    die für beliebige Numeral(-teile) steht. Die dritte Gleichung und
    die vierte Gleichung beschreiben also eigentlich eine ganze Klasse
    von Gleichungen.
-3. Diese Definition von `𝛍` hat einige Operationen als
+3. Die Definition von `𝛍` ist rekursiv, bezieht sich also für die
+   Übersetzung eines Symbols rekursiv auf die Übersetzung eines Teilsymbols.
+4. Diese Definition von `𝛍` hat einige Operationen als
    Voraussetzung. Auf der Seite der Numerale setzen wir voraus, dass
    es möglich ist, einzelne Ziffern aneinanderzukleben (`x0`). Auf der
    Seite der Zahlen gehen wir davon aus, dass wir multiplizieren und
