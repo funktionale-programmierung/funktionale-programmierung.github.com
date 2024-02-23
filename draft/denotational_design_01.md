@@ -52,8 +52,8 @@ Bedeutungen der Resultate.
 Klingt abstrakt und ist es auch. Dahinter steckt aber wieder nur die
 Idee, dass jedes Programm eigentlich bloß eine konkrete Repräsentation
 einer abstrakten Idee ist. Die abstrakte Idee existiert in unseren
-Köpfen außerhalb des Computers. Die zugehörige konkrete Repräsentation
-ist maßgeschneidert auf den Computer.
+Köpfen. Die zugehörige konkrete Repräsentation ist maßgeschneidert auf
+den Computer.
 
 Das [Original-Paper zur denotationalen
 Semantik](https://www.researchgate.net/publication/237107559_Towards_a_Mathematical_Semantics_for_Computer_Languages) erklärt
