@@ -137,8 +137,10 @@ kommt am Ende die selbe Zahl raus, egal, ob man zunächst das
 Eingabenumeral in eine Zahl übersetzt und dann dort `+1` rechnet, oder
 ob man zunächst `inc` anwendet und dann mithilfe der
 Bedeutungsfunktion diese Ausgabe in eine Zahl übersetzt. In jedem Fall
-ist dieses sog. kommutierende Diagramm ein Desiderat: Es _soll_
-gelten, damit wir sagen können, dass `inc` korrekt[^2] ist.
+handelt es sich bei diesen Überlegungen um ein Desiderat. Man spricht
+im Fall der Geltung dann von obigem Schaubild auch von einem
+_kommutierenden Diagramm_ und von der Implementierung von `inc` als
+_korrekt_[^2].
 
 Eine mögliche korrekte Implementierung für `inc` wäre jetzt:
 
