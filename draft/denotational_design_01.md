@@ -56,7 +56,7 @@ Köpfen außerhalb des Computers. Die zugehörige konkrete Repräsentation
 ist maßgeschneidert auf den Computer.
 
 Das [Original-Paper zur denotationalen
-Semantik](https://dl.acm.org/doi/pdf/10.1145/360303.360308) erklärt
+Semantik](https://www.researchgate.net/publication/237107559_Towards_a_Mathematical_Semantics_for_Computer_Languages) erklärt
 diesen Gedanken anhand des Unterschieds zwischen Numeralen und
 natürlichen Zahlen. Die Sechs ist eine natürliche Zahl. Diese kann ich
 auf unterschiedliche Arten repräsentieren: "110" in binär, "VI" als
