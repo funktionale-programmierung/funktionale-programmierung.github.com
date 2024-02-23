@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Einführung in Denotational Design, Teil I: Denotationale Semantik"
+title: "Einführung in Denotational Design, Teil I: Denotationelle Semantik"
 author: markus-schlegel
-tags: ["Denotational Design", "Modelling", "Formale Methoden", "Praxis"]
+tags: ["Denotational Design", "Modelling", "Formale Methoden", "Praxis", "Semantik"]
 ---
 
 Dieser Artikel ist der Beginn einer Reihe über _Denotational
-Design_. In diesem Artikel geht es um die Denotationale Semantik. Im
+Design_. In diesem Artikel geht es um die denotationelle Semantik. Im
 nächsten Artikel wenden wir die hier dargestellte Theorie auf ein
 Praxisbeispiel an.
 
@@ -38,11 +38,11 @@ Denotational Design rückt das Modell wieder in den Fokus und zeigt,
 wie dieses präzise beschrieben werden kann und wie diese Beschreibung
 in Einklang mit der Implementierung gebracht werden kann.
 
-## Denotationale Semantik
+## Denotationelle Semantik
 
 In der Programmiersprachenforschung werden Programmiersprachen oft
 entlang der Semantik von Programmbausteinen studiert. Eine mögliches
-semantisches Werkzeug ist die Denotationale Semantik. Hierbei weist
+semantisches Werkzeug ist die denotationelle Semantik. Hierbei weist
 man jedem Datentyp eine mathematische Bedeutung zu, also einen Wert in
 der abstrakten Sprache der Mathematik: Mengen, Funktionen, Zahlen,
 Tupel etc. Operationen in der Programmiersprache werden definiert als
@@ -55,7 +55,7 @@ einer abstrakten Idee ist. Die abstrakte Idee existiert in unseren
 Köpfen. Die zugehörige konkrete Repräsentation ist maßgeschneidert auf
 den Computer.
 
-Das [Original-Paper zur denotationalen
+Das [Original-Paper zur denotationellen
 Semantik](https://www.researchgate.net/publication/237107559_Towards_a_Mathematical_Semantics_for_Computer_Languages) erklärt
 diesen Gedanken anhand des Unterschieds zwischen Numeralen und
 natürlichen Zahlen. Die Sechs ist eine natürliche Zahl. Diese kann ich
@@ -210,7 +210,7 @@ Lauffähigkeit auf realer Hardware etc.
 
 ## Denotational Design
 
-Die Denotationale Semantik entstand wie gesagt zur Erforschung von
+Die denotationelle Semantik entstand wie gesagt zur Erforschung von
 Programmiersprachen. Dieselbe Methode lässt sich aber ganz einfach auf
 beliebige zusammengesetzte Programmelemente übertragen. Wir wollen
 dies im nächsten Teil der Blogpostserie anhand von Zeitreihen
