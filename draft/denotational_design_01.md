@@ -142,7 +142,7 @@ im Fall der Geltung dann von obigem Schaubild auch von einem
 _kommutierenden Diagramm_ und von der Implementierung von `inc` als
 _korrekt_[^2].
 
-Eine mögliche korrekte Implementierung für `inc` wäre jetzt:
+Eine möglicherweise korrekte Implementierung für `inc` wäre jetzt:
 
 ```
 inc(0) = 1
