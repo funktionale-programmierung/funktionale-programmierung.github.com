@@ -139,8 +139,8 @@ ob man zunächst `inc` anwendet und dann mithilfe der
 Bedeutungsfunktion diese Ausgabe in eine Zahl übersetzt. In jedem Fall
 handelt es sich bei diesen Überlegungen um ein Desiderat. Man spricht
 im Fall der Geltung dann von obigem Schaubild auch von einem
-_kommutierenden Diagramm_ und von der Implementierung von `inc` als
-_korrekt_[^2].
+_kommutierenden Diagramm_ und `inc` wäre eine "korrekte
+Implementierung" von `+1`[^2].
 
 Eine möglicherweise korrekte Implementierung für `inc` wäre jetzt:
 
