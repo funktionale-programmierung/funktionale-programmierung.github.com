@@ -176,7 +176,7 @@ Das passt. Weiter geht's mit dem Induktionsschritt:
 Nun _wissen_ wir, dass sich `inc` verhält wie `+ 1`. Dieses Wissen hat
 eine ganz andere Qualität als die Sicherheit, die wir aus Tests
 kennen. Mit ausreichend vielen Tests (und im besten Fall sogar mit
-einigen Property Tests) können wir uns relativ sicher sein, dass
+einigen [Property Tests](https://funktionale-programmierung.de/2013/07/10/randomisierte-tests-mit-quickcheck.html)) können wir uns relativ sicher sein, dass
 unsere Implementierung korrekt ist. Hier wissen wir's.
 
 Das ist ein subtiler Punkt, mit dem die ganze Angelegenheit aber steht
@@ -217,6 +217,6 @@ Industrieprojekt aus unserer täglichen Arbeit. Ihr dürft also gespannt
 sein auf ein praxisnahes Fallbeispiel.
 
 
-[^1]: Falls man _das_ Modell nicht explizit aufschreibt, gibt es davon sogar meistens mehrere unterschiedliche. Jeder Nutzer, jeder Softwareentwickler, jeder Product Owner etc. hat sein eigenes Modell im Kopf und diese Modelle können sich teilweise widersprechen.
+[^1]: Falls man _das_ Modell nicht explizit aufschreibt, gibt es davon sogar meistens mehrere unterschiedliche. Jede Nutzerin, jede Softwareentwicklerin, jede Product Owner etc. hat ihr eigenes Modell im Kopf und diese Modelle können sich teilweise widersprechen.
 
 [^2]: Es lohnt sich, noch einmal scharf darüber nachzudenken, was Korrektheit hier bedeutet. Es wäre vielleicht präziser zu sagen: die Berechnungsvorschrift ist so korrekt wie möglich. Bei der _Durchführung_ der Berechnung können immer noch Fehler auftreten: Der Speicher geht aus, kosmische Strahlung flippt ein paar Bits, jemand wirft den Computer in einen See etc.
