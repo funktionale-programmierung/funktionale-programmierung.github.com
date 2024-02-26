@@ -194,22 +194,6 @@ können wir nicht beweisen. Deshalb ist es wichtig, dass die Semantiken
 so simpel sind, dass sie auf einen Blick offensichtlich richtig
 sind.
 
-(Der folgende Absatz stimmt nicht ganz. Die "Identitätsfunktion" macht
-nicht so richtig Sinn, weil die nicht in die Sprache der Mathematik
-abbilden würde. Soll ich den Absatz einfach weglassen?)
-
-Als Gedankenexperiment könnten wir ja einfach mal definieren, dass
-unsere Bedeutungsfunktion `𝛍` die Identitätsfunktion ist, `𝛍(x) =
-x`. Damit würde jede Datenstruktur und jede Funktion für sich selbst
-stehen und alles wäre trivialerweise korrekt implementiert. So richtig
-vorwärtsgekommen sind wir dann aber nicht, denn der letzte Schritt
-heißt: Sei dir sicher, dass die Bedeutung auch das ist, was du
-ausdrücken willst. Das ist hier schwer möglich, denn Implementierungen
-sind meistens sehr komplex -- berechtigterweise, denn eine
-Implementierung muss sich eben noch um andere Aspekte außer
-Korrektheit scheren: Performance, Portierbarkeit, überhaupt
-Lauffähigkeit auf realer Hardware etc.
-
 ## Denotational Design
 
 Die denotationelle Semantik entstand wie gesagt zur Erforschung von
