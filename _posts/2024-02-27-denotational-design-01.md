@@ -41,7 +41,7 @@ in Einklang mit der Implementierung gebracht werden kann.
 ## Denotationelle Semantik
 
 In der Programmiersprachenforschung werden Programmiersprachen oft
-entlang der Semantik von Programmbausteinen studiert. Eine mögliches
+entlang der Semantik von Programmbausteinen studiert. Ein mögliches
 semantisches Werkzeug ist die denotationelle Semantik. Hierbei weist
 man jedem Datentyp eine mathematische Bedeutung zu, also einen Wert in
 der abstrakten Sprache der Mathematik: Mengen, Funktionen, Zahlen,
