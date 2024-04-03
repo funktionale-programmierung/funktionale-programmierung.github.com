@@ -5,9 +5,15 @@ author: markus-schlegel
 tags: ["Denotational Design", "Modelling", "Formale Methoden", "Praxis"]
 ---
 
+Dieser Artikel ist der zweite einer Serie von Artikeln über
+Denotational Design.  Im [vorherigen Teil dieser Reihe][dd1] hatten
+wir die theoretische Grundlage von Denotational Design kennen gelernt:
+Die denotationelle Semantik. In diesem Artikel wollen wir dieses
+Werkzeug nutzen, um eine konkrete Fachlichkeit zu spezifizieren.
+
 ## Denotational Design
 
-Die Denotationale Semantik entstand wie gesagt zur Erforschung von
+Die denotationelle Semantik entstand wie gesagt zur Erforschung von
 Programmiersprachen. Dieselbe Methode lässt sich aber ganz einfach auf
 beliebige zusammengesetzte Programmelemente übertragen. Wir wollen
 dies im Folgenden anhand von Zeitreihen illustrieren. Das Beispiel
