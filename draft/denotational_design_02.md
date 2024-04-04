@@ -86,9 +86,9 @@ dies eine korrekte Implementierung:
 lookup _ _ = Nothing
 ```
 
-Korrekt wäre diese Implementierung insofern, dass das Programm
+Korrekt wäre diese Implementierung insofern, als das Programm
 erfolgreich kompilierbar wäre. Die Implementierung ist aber alles
-andere als korrekt im Bezug auf unsere Idee, wie `lookup`
+andere als korrekt in Bezug auf unsere Idee, wie `lookup`
 _funktionieren_ soll. Wir müssten den Code korrigieren auf Basis
 unserer Idee. Beim herkömmlichen Programmieren geben wir uns damit
 zufrieden: Wir behalten die Idee im Hinterkopf und programmieren daran
@@ -191,13 +191,13 @@ mu (lookup t ts) = if ∃ v, (mu(t), v) ∈ mu(ts)
                      else mu(Nothing)
 ```
 
-Hier wird's schon wilder als bei den Numeralen aus dem vorerigen
+Hier wird's schon wilder als bei den Numeralen aus dem vorherigen
 Artikel. Am Anfang steht jetzt nicht nur eine Typdefinition, sondern
 zusätzlich ein Typkonstruktor. Diesen Typkonstruktor können wir mit
 einer Liste von `(Time, a)`-Tupeln füttern und erhalten einen Wert
 unseres `TimeSeries a` Typs.  Die Bedeutungsfunktion, die in den
 folgenden Zeilen definiert wird, bildet die Werte auf eine
-mathemtische Struktur ab, die sehr ähnlich aussieht wie der Typ des
+mathematische Struktur ab, die sehr ähnlich aussieht wie der Typ des
 Haskell-Typ-Konstruktors. Ähnlich ist jedoch nicht gleich: Listen
 haben eine Reihenfolge, Mengen nicht. Die Einschränkung, die wir auf
 der rechten Seite machen -- alle Zeitpunkte müssen unterschiedlich
@@ -214,7 +214,7 @@ also `mu(ts)` haben wir oben gesehen. Die Bedeutung eines Zeitstempels
 mathematischen Welt. In diesem Artikel sparen wir uns diesen
 Schritt. Es sei nur so viel gesagt: Auch diese Übersetzung ist nicht
 ganz trivial. Der Haskell-Typ `UTCTime` hat keine unendliche
-Präzision. Für unsere mathamtische Modellwelt setzen wir im folgenden
+Präzision. Für unsere mathematische Modellwelt setzen wir im Folgenden
 aber oft implizit unendliche Präzision voraus. Die Bedeutungen
 `mu(Just)` und `mu(Nothing)` sind wiederum recht einfach, diese können
 wir mit Singleton-Menge und leerer Menge abbilden.
@@ -270,7 +270,7 @@ lookup :: TimeFunction a -> UTCTime -> a
 mu (lookup t ts) = mu(ts)(t)
 ```
 
-`lookup` macht auch für Zeitfunktionen Sinn und die Definition ist
+`lookup` ergibt auch für Zeitfunktionen Sinn und die Definition ist
 wiederum bloß Funktionsapplikation. Zeitfunktionen können wir auch
 addieren und jetzt ist die punktweise Addition die offensichtlich
 richtige Definition. Wir benutzen dazu direkt die naheliegende
