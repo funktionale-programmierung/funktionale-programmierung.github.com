@@ -22,22 +22,12 @@ Abschluss ein Ask-Me-Anything mit Dr. Michael Sperber.
 <!-- Das ist auch die Syntax für Kommentare, die im HTML nachher
 auftauchen. -->
 
-## Überschriften ##
- 
-Code: `f(a,b)`. Als Block:
+## Programm ##
 
-    <-- vier Leerzeichen eingerückt
 
-Codebeispiele einer Programmiersprache:
+## Anmeldung ##
 
-{% highlight scheme %}
-(repl)
-{% endhighlight %}
-
-Links mit [Text](http://URL).
-
-Hervorhebungen *mit Stern* oder _Unterstrich_.  **Doppelt** für mehr
-__Druck__.  Geht auch mitt*endr*in in einem Wort.
+Teilnahme kostet 10€ für den ganzen Tag. Anmelden kann man sich hier: [Pretix](https://pretix.eu/activegroupgmbh/tutorialtag2024/)
 
 <!-- more end -->
 
