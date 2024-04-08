@@ -142,8 +142,8 @@ addTS [(t1, 4), (t2, 7)] [(t1, 9), (t3, 42)]
 -- => [(t1, 13)]
 ```
 
-Oder wir könnten die Punkte ohne Gegenspieler as-is mit ins Ergebnis
-aufnehmen.
+Oder wir könnten die Punkte ohne Gegenspieler unverändert mit ins
+Ergebnis aufnehmen.
 
 ```haskell
 addTS [(t1, 4), (t2, 7)] [(t1, 9), (t3, 42)]
@@ -178,17 +178,16 @@ Ein erster Wurf könnte so aussehen:
 
 ```
 type TimeSeries a = [(Time, a)]
-mu :: TimeSeries a -> Set of tuples (Time, a) where all left
-components are distinct
-mu [] = ∅
-mu (t, v):xs = let s be mu(xs)
-                in if ∃ v such that (t, v) ∈ s
-                     then s
-                     else s ∪ {(t, v)}
+𝛍 :: TimeSeries a -> Set of tuples (Time, a) where all left components are distinct
+𝛍 [] = ∅
+𝛍 (t, v):xs = let s be 𝛍(xs)
+               in if ∃ v such that (t, v) ∈ s
+                    then s
+                    else s ∪ {(t, v)}
 
-mu (lookup t ts) = if ∃ v, (mu(t), v) ∈ mu(ts)
-                     then mu(Just) v
-                     else mu(Nothing)
+𝛍 (lookup t ts) = if ∃ v, (𝛍(t), v) ∈ 𝛍(ts)
+                    then 𝛍(Just) v
+                    else 𝛍(Nothing)
 ```
 
 Hier wird's schon wilder als bei den Numeralen aus dem vorerigen
@@ -202,22 +201,23 @@ Haskell-Typ-Konstruktors. Ähnlich ist jedoch nicht gleich: Listen
 haben eine Reihenfolge, Mengen nicht. Die Einschränkung, die wir auf
 der rechten Seite machen -- alle Zeitpunkte müssen unterschiedlich
 sein -- machen wir auf der linken Seite nicht. Das hat Auswirkungen
-auf die Definition von `mu`. Dort müssen wir beispielsweise bestimmen,
+auf die Definition von `𝛍`. Dort müssen wir beispielsweise bestimmen,
 welche Werte bei überlappenden Zeitstempeln gewinnen: In obiger
 Definition sticht das letzte Tupel.
 
 Darunter spezifizieren wir die Bedeutung von `lookup t ts` und zwar
-mithilfe der Bedeutungen von `t` und `ts`. Die Bedeutung von `ts`,
-also `mu(ts)` haben wir oben gesehen. Die Bedeutung eines Zeitstempels
-`t :: UTCTime` müssten wir streng genommen noch angeben; immerhin ist
+mithilfe der Bedeutungen von `t` und `ts`. Wir haben uns erlaubt, `𝛍`
+als überladene Funktion anzunehmen. Die Bedeutung von `ts`, also
+`𝛍(ts)` haben wir oben gesehen. Die Bedeutung eines Zeitstempels `t :: UTCTime`
+müssten wir streng genommen noch angeben; immerhin ist
 `UTCTime` ein Haskell-Typ und kein Objekt unserer reinen
 mathematischen Welt. In diesem Artikel sparen wir uns diesen
 Schritt. Es sei nur so viel gesagt: Auch diese Übersetzung ist nicht
 ganz trivial. Der Haskell-Typ `UTCTime` hat keine unendliche
 Präzision. Für unsere mathamtische Modellwelt setzen wir im folgenden
 aber oft implizit unendliche Präzision voraus. Die Bedeutungen
-`mu(Just)` und `mu(Nothing)` sind wiederum recht einfach, diese können
-wir mit Singleton-Menge und leerer Menge abbilden.
+`𝛍(Just)` und `𝛍(Nothing)` sind wiederum recht einfach -- diese können
+wir mit der einelementigen Menge und der leeren Menge abbilden.
 
 Die auffälligste "Operation" in den obigen Definitionen der
 Bedeutungen ist `∃`. Der Existenzquantor erledigt auf der
@@ -235,26 +235,26 @@ In einem späteren Artikel werden wir uns ums automatische Beweisen
 unserer Implementierungen kümmern. In diesem Artikel kümmern wir uns
 um den Modellierungsaspekt. Unser erster Wurf oben ist nämlich noch
 nicht so einfach wie er sein könnte. Zunächst können wir ein paar
-einfache Umbenennungen machen. Eine Menge von Zweier-Tupeln `(x, y)`
+triviale Umbenennungen machen. Eine Menge von Zweier-Tupeln `(x, y)`
 ist nämlich nichts anderes als eine _Relation_. Relationen, bei denen
 die linke Komponente eindeutig ist, nennt man
 _rechtseindeutig_. Rechtseindeutige Relationen sind partielle
 Funktionen und partielle Funktionen können wir mit `Maybe` kodieren
 (wir erlauben uns für einen kurzen Moment auch in unserer
-Spezifikationswelt mit Maybe zu programmieren).
+Spezifikationswelt mit Maybe zu hantieren).
 
 ```haskell
 type TimeSeries a = [(Time, a)]
-mu :: TimeSeries a -> (Time -> Maybe a)
-mu = ...
+𝛍 :: TimeSeries a -> (Time -> Maybe a)
+𝛍 = ...
 
-mu (lookup t ts) = mu(ts)(t)
+𝛍 (lookup t ts) = 𝛍(ts)(t)
 ```
 
 Diese Spezifikation ist schon deutlich einfacher. `lookup` ist damit
 lediglich eine Variante von Funktionsapplikation. Einen kleinen
-Vereinfachungsschritt können wir uns aber noch gönnen. `Time -> Maybe
-a` ist ganz gut, aber `Time -> a` wäre noch einfacher und
+Vereinfachungsschritt können wir uns aber noch gönnen. `Time -> Maybe a`
+ist ganz gut, aber `Time -> a` wäre noch einfacher und
 allgemeiner. Vielleicht sollten wir also von unserer Idee von
 Zeitreihen ablassen und stattdessen über Zeitfunktionen sprechen.
 
@@ -262,19 +262,19 @@ Zeitreihen ablassen und stattdessen über Zeitfunktionen sprechen.
 data TimeFunction a where
   TimeSeries :: [(Time, a)] -> TimeFunction (Maybe a)
   
-mu :: TimeFunction a -> (Time -> a)
-mu (TimeSeries ...) = ...
+𝛍 :: TimeFunction a -> (Time -> a)
+𝛍 (TimeSeries ...) = ...
 
 lookup :: TimeFunction a -> UTCTime -> a
 
-mu (lookup t ts) = mu(ts)(t)
+𝛍 (lookup t ts) = 𝛍(ts)(t)
 ```
 
 `lookup` macht auch für Zeitfunktionen Sinn und die Definition ist
 wiederum bloß Funktionsapplikation. Zeitfunktionen können wir auch
 addieren und jetzt ist die punktweise Addition die offensichtlich
 richtige Definition. Wir benutzen dazu direkt die naheliegende
-Abstraktion.
+Abstraktion. Damit können wir auch Subtraktion und Multiplikation ausdrücken.
 
 ```haskell
 liftTF :: (a -> b -> c) -> TimeFunction a -> TimeFunction b -> TimeFunction c
@@ -282,11 +282,37 @@ mu(liftTF f x y) = \t -> f (mu x t) (mu y t)
 
 addTF :: TimeFunction Float -> TimeFunction Float -> TimeFunction Float
 addTF = liftTF (+)
+
+subTF :: TimeFunction Float -> TimeFunction Float -> TimeFunction Float
+subTF = liftTF (-)
+
+mulTF :: TimeFunction Float -> TimeFunction Float -> TimeFunction Float
+mulTF = liftTF (*)
 ```
 
-`liftTF`
+`liftTF` ist das zentrale Element unseres Modells, also unserer
+Programmierschnittstelle, die wir anderen zur Verfügung stellen
+können. Damit kann ein Benutzer dieser Schnittstelle selbst
+entscheiden, welche Funktion er in die Domäne der Zeitfunktionen heben
+möchte. Bislang haben wir unser ursprüngliches Problem -- Addition von
+Zeitreihen -- noch nicht gelöst. Die Verantwortung für die korrekte
+Auswahl der Addition legen wir jetzt einfach in die Hand des
+Nutzers. Beispielsweise:
+
+```haskell
+-- TimeSeries a ist jetzt TimeFunction (Maybe a)
+addTS1 :: TimeFunction (Maybe Float) -> TimeFunction (Maybe Float) -> TimeFunction (Maybe Float)
+addTS1 = liftTF (liftA2 (+))
+
+addTS2 :: TimeFunction (Maybe Float) -> TimeFunction (Maybe Float) -> TimeFunction (Maybe Float)
+addTS2 = liftTF (\x y -> case (x, y) of
+                           (Just x', Just y') -> Just (x' + y')
+                           (Just x', Nothing) -> Just x'
+                           (Nothing, Just y') -> Just y'
+                           (Nothing, Nothing) -> Nothing)
+```
 
 
 
-[dd1]: <https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html>
-[haskell-weak]: Im allgemeinen ist Haskell leider zu schwach, um ordentliche Spezifikationen ausdrücken zu können. Wir werden in einem späteren Artikel sehen, wie Programmiersprachen wie Lean oder Agda uns erlauben, sowohl Spezifikation als auch Implementierung in ein und derselben Sprache aufzuschreiben und die Deckung zu gewährleisten.
+[^dd1]: <https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html>
+[^haskell-weak]: Im allgemeinen ist Haskell leider zu schwach, um ordentliche Spezifikationen ausdrücken zu können. Wir werden in einem späteren Artikel sehen, wie Programmiersprachen wie Lean oder Agda uns erlauben, sowohl Spezifikation als auch Implementierung in ein und derselben Sprache aufzuschreiben und die Deckung zu gewährleisten.
