@@ -39,17 +39,17 @@ auftauchen. -->
   <tbody>
     <tr>
       <td>9:00 - 10:30</td>
-      <td><a title="Einführung in Scala" href="scala/">Einführung in Scala</a></td>
-      <td><a title="Einführung in Clojure" href="clojure/">Einführung in Clojure</a></td>
-      <td><a title="Einführung in Elixir" href="elixir/">Einführung in Elixir</a></td>
-      <td><a title="Isabelle/HOL" href="isabelle/">Isabelle/HOL</a></td>
+      <td><a title="Einführung in Scala" href="https://www.active-group.de/tutorialtag/2024/scala/">Einführung in Scala</a></td>
+      <td><a title="Einführung in Clojure" href="https://www.active-group.de/tutorialtag/2024/clojure/">Einführung in Clojure</a></td>
+      <td><a title="Einführung in Elixir" href="https://www.active-group.de/tutorialtag/2024/elixir/">Einführung in Elixir</a></td>
+      <td><a title="Isabelle/HOL" href="https://www.active-group.de/tutorialtag/2024/isabelle/">Isabelle/HOL</a></td>
     </tr>
     <tr>
       <td>11:00 - 12:30</td>
-      <td><a title="Einführung in Haskell" href="haskell/">Einführung in Haskell</a></td>
-      <td><a title="Daten in Clojure" href="clojure-data/">Daten in Clojure</a></td>
-      <td><a title="Elixir und das Phoenix-Framework" href="elixir-phoenix/">Elixir und das Phoenix-Framework</a></td>
-      <td><a title="Nix from Scratch" href="nix/">Nix from Scratch</a></td>
+      <td><a title="Einführung in Haskell" href="https://www.active-group.de/tutorialtag/2024/haskell/">Einführung in Haskell</a></td>
+      <td><a title="Daten in Clojure" href="https://www.active-group.de/tutorialtag/2024/clojure-data/">Daten in Clojure</a></td>
+      <td><a title="Elixir und das Phoenix-Framework" href="https://www.active-group.de/tutorialtag/2024/elixir-phoenix/">Elixir und das Phoenix-Framework</a></td>
+      <td><a title="Nix from Scratch" href="https://www.active-group.de/tutorialtag/2024/nix/">Nix from Scratch</a></td>
     </tr>
     <tr>
       <td>14:00 - 15:30</td>
