@@ -25,6 +25,47 @@ auftauchen. -->
 ## Programm ##
 
 
+<table>
+  <thead>
+    <tr>
+      <td style="width: 12%"></td>
+      <td style="width: 22%">Track 1</td>
+      <td style="width: 22%">Track 2</td>
+      <td style="width: 22%">Track 3</td>
+      <td style="width: 22%">Track 4</td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>9:00 - 10:30</td>
+      <td><a title="Einführung in Scala" href="scala/">Einführung in Scala</a></td>
+      <td><a title="Einführung in Clojure" href="clojure/">Einführung in Clojure</a></td>
+      <td><a title="Einführung in Elixir" href="elixir/">Einführung in Elixir</a></td>
+      <td><a title="Isabelle/HOL" href="isabelle/">Isabelle/HOL</a></td>
+    </tr>
+    <tr>
+      <td>11:00 - 12:30</td>
+      <td><a title="Einführung in Haskell" href="haskell/">Einführung in Haskell</a></td>
+      <td><a title="Daten in Clojure" href="clojure-data/">Daten in Clojure</a></td>
+      <td><a title="Elixir und das Phoenix-Framework" href="elixir-phoenix/">Elixir und das Phoenix-Framework</a></td>
+      <td><a title="Nix from Scratch" href="nix/">Nix from Scratch</a></td>
+    </tr>
+    <tr>
+      <td>14:00 - 15:30</td>
+      <td><a title="Einführung in F-Sharp" href="fsharp/">Einführung in F#</a></td>
+      <td><a title="Funktionale User Interfaces" href="ui/">Funktionale User Interfaces</a></td>
+      <td><a title="Funktionale Programmierung mit Kotlin" href="kotlin/">Funktionale Programmierung mit Kotlin</a></td>
+      <td><a title="Funktionale Programmierung vs. Domain-Driven-Design" href="ddd/">Funktionale Programmierung vs. Domain-Driven-Design</a></td>
+    </tr>
+    <tr>
+      <td>16:00 - 17:30</td>
+      <td colspan="4" style="text-align: center;"><a title="Ask-Me-Anything mit Dr. Michael Sperber" href="ama/">Ask-Me-Anything mit Dr. Michael Sperber</a></td>
+    </tr>
+  </tbody>
+</table>
+
+
 ## Anmeldung ##
 
 Teilnahme kostet 10€ für den ganzen Tag. Anmelden kann man sich hier: [Pretix](https://pretix.eu/activegroupgmbh/tutorialtag2024/)
