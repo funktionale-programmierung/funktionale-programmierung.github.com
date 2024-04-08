@@ -53,14 +53,14 @@ auftauchen. -->
     </tr>
     <tr>
       <td>14:00 - 15:30</td>
-      <td><a title="Einführung in F-Sharp" href="fsharp/">Einführung in F#</a></td>
-      <td><a title="Funktionale User Interfaces" href="ui/">Funktionale User Interfaces</a></td>
-      <td><a title="Funktionale Programmierung mit Kotlin" href="kotlin/">Funktionale Programmierung mit Kotlin</a></td>
-      <td><a title="Funktionale Programmierung vs. Domain-Driven-Design" href="ddd/">Funktionale Programmierung vs. Domain-Driven-Design</a></td>
+      <td><a title="Einführung in F-Sharp" href="https://www.active-group.de/tutorialtag/2024/fsharp/">Einführung in F#</a></td>
+      <td><a title="Funktionale User Interfaces" href="https://www.active-group.de/tutorialtag/2024/ui/">Funktionale User Interfaces</a></td>
+      <td><a title="Funktionale Programmierung mit Kotlin" href="https://www.active-group.de/tutorialtag/2024/kotlin/">Funktionale Programmierung mit Kotlin</a></td>
+      <td><a title="Funktionale Programmierung vs. Domain-Driven-Design" href="https://www.active-group.de/tutorialtag/2024/ddd/">Funktionale Programmierung vs. Domain-Driven-Design</a></td>
     </tr>
     <tr>
       <td>16:00 - 17:30</td>
-      <td colspan="4" style="text-align: center;"><a title="Ask-Me-Anything mit Dr. Michael Sperber" href="ama/">Ask-Me-Anything mit Dr. Michael Sperber</a></td>
+      <td colspan="4" style="text-align: center;"><a title="Ask-Me-Anything mit Dr. Michael Sperber" href="https://www.active-group.de/tutorialtag/2024/ama/">Ask-Me-Anything mit Dr. Michael Sperber</a></td>
     </tr>
   </tbody>
 </table>
