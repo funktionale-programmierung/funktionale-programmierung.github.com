@@ -6,7 +6,7 @@ tags: ["Denotational Design", "Modelling", "Formale Methoden", "Praxis"]
 ---
 
 Dieser Artikel ist der zweite einer Serie von Artikeln über
-Denotational Design.  Im [vorherigen Teil dieser Reihe][^dd1] hatten
+Denotational Design.  Im vorherigen Teil dieser Reihe[^dd1] hatten
 wir die theoretische Grundlage von Denotational Design kennen gelernt:
 Die denotationelle Semantik. In diesem Artikel wollen wir dieses
 Werkzeug nutzen, um eine konkrete Fachlichkeit zu spezifizieren.
@@ -229,7 +229,7 @@ zu beurteilen, wenn man einen konkreten Wert als Beweis der Existenz
 in der Hand hält. Der Weg, um zu diesem Wert zu gelangen -- also die
 Implementierung -- ist sehr viel aufwendiger. Die Gewährleistung der
 Übereinstimmung von Spezifikation und Implementierung ist aber ein
-Problem, das sich mit Technik lösen lässt^[haskell-weak].
+Problem, das sich mit Technik lösen lässt[^haskell-weak].
 
 In einem späteren Artikel werden wir uns ums automatische Beweisen
 unserer Implementierungen kümmern. In diesem Artikel kümmern wir uns
