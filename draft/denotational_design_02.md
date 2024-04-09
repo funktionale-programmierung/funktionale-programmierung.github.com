@@ -6,7 +6,7 @@ tags: ["Denotational Design", "Modelling", "Formale Methoden", "Praxis"]
 ---
 
 Dieser Artikel ist der zweite einer Serie von Artikeln über
-Denotational Design.  Im [vorherigen Teil dieser Reihe][dd1] hatten
+Denotational Design.  Im [vorherigen Teil dieser Reihe][^dd1] hatten
 wir die theoretische Grundlage von Denotational Design kennen gelernt:
 Die denotationelle Semantik. In diesem Artikel wollen wir dieses
 Werkzeug nutzen, um eine konkrete Fachlichkeit zu spezifizieren.
@@ -267,7 +267,7 @@ data TimeFunction a where
 
 lookup :: TimeFunction a -> UTCTime -> a
 
-𝛍 (lookup t ts) = 𝛍(ts)(t)
+𝛍 (lookup t ts) = 𝛍 ts t
 ```
 
 `lookup` ergibt auch für Zeitfunktionen Sinn und die Definition ist
@@ -278,7 +278,7 @@ Abstraktion. Damit können wir auch Subtraktion und Multiplikation ausdrücken.
 
 ```haskell
 liftTF :: (a -> b -> c) -> TimeFunction a -> TimeFunction b -> TimeFunction c
-mu(liftTF f x y) = \t -> f (mu x t) (mu y t)
+𝛍 (liftTF f x y) = \t -> f (𝛍 x t) (𝛍 y t)
 
 addTF :: TimeFunction Float -> TimeFunction Float -> TimeFunction Float
 addTF = liftTF (+)
@@ -312,6 +312,18 @@ addTS2 = liftTF (\x y -> case (x, y) of
                            (Nothing, Nothing) -> Nothing)
 ```
 
+## Zusammenfassung
+
+Wir haben angefangen mit einer eher vagen Idee von unserer Domäne:
+Zeitreihen. Wir sind mit der ersten Modellierung allerdings auf
+Probleme gestoßen. Eine einfache Operation wie die Addition ließ sich
+nur ungelenk abbilden. Wir haben uns deshalb überlegt, was ein
+geeignetes mathematisches Modell für Zeitreihen sein könnte. Wir haben
+dieses Modell nach und nach vereinfacht und sind dabei zu der Einsicht
+gelangt, dass Zeitreihen nur ein Sonderfall eines allgemeineren
+Konzepts sind: Zeitfunktionen. Mit Zeitfunktionen konnten wir unser
+Modell so mächtig gestalten, dass Detailfragen einfach der Nutzer
+selbst beantworten kann.
 
 
 [^dd1]: <https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html>
