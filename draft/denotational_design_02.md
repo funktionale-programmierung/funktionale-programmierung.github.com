@@ -243,7 +243,7 @@ mindestens einen kleinen Vereinfachungsschritt bei der Modellierung
 können wir uns noch gönnen. `Time -> Maybe a` ist ganz gut, aber `Time
 -> a` wäre noch einfacher und allgemeiner.
 
-### Zweiter Versuch: ~Zeitreihen~ Zeitfunktionen
+### Zweiter Versuch: ~~Zeitreihen~~ Zeitfunktionen
 
 Vielleicht sollten wir also von unserer Idee von Zeitreihen ablassen
 und stattdessen über Zeitfunktionen sprechen.
