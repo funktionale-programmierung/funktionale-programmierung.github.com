@@ -53,16 +53,27 @@ Software schreiben möchte? In diesem Impetus deckt sich Denotational
 Design noch mit der herkömmlichen funktionalen Programmierung, bei der
 wir auch bestrebt sind, Objekte der Wirklichkeit als Daten und
 Zusammenhänge als Funktionen zu modellieren. Für Zeitreihen könnten
-wir einen solchen Versuch wagen und mit dieser Modellierung starten:
+wir einen solchen Versuch wagen und mit folgender Modellierung
+starten. Unser Zeitreihen-Modul besteht aus einem Typ für Zeitreihen,
+einer Menge von Konstruktoren, einer Menge von Kombinatoren und einer
+Menge von Accessoren.
 
 ```haskell
 type TimeSeries :: * -> *
+
+-- Ein Konstruktor
+fromDataService :: [(Time, a)] -> TimeSeries a
+
+-- Ein Kombinator
+addTS :: TimeSeries Float -> TimeSeries Float
+
+-- Ein Accessor
 lookup :: UTCTime -> TimeSeries a -> a
 ```
 
-`TimeSeries` ist also ein simpler Typkonstruktur und `lookup` ist eine
+`TimeSeries` ist also ein simpler Typkonstruktur und `lookup` ist eine (von mehreren)
 Funktion, die diesen Typkonstruktur verwendet. Nach kurzem Nachdenken
-kommen wir aber drauf, dass diese Modellierung nicht ganz richtig sein
+kommen wir aber drauf, dass die Signatur für `lookup` nicht ganz richtig sein
 kann. Zeitreihe, das klingt doch so, als gäbe es da nur an bestimmten
 Zeitpunkten zugeordnete Werte. Die Signatur von `lookup` legt aber
 nahe, dass wir für jeden beliebigen Zeitpunkt (`UTCTime`) einen Wert
@@ -100,26 +111,79 @@ bewerkstelligen: Wir müssen eine mathematische Struktur finden und
 jede Operation auf eine entsprechende Operation in dieser Struktur
 abbilden.
 
-Um die Denotational-Design-Methode weiter zu motivieren, gehen wir
-aber zunächst klassisch vor: Wir beginnen mit einer konkreten
-Repräsentation unseres `TimeSeries a` Typen.
+### Erster Versuch
+
+Die erste Idee für eine solche mathematische Struktur ist selten die
+richtige, doch irgendwo müssen wir beginnen. Wir beginnen für unsere
+Zeitreihen deshalb mit der naheliegenden Betrachtung: Zeitreihen, das
+sind Listen[^list] von Zeit-Wert-Tupeln. Das klingt schon stark nach
+Implementierung und tatsächlich könnten wir dieses Modell von
+Zeitreihen ebenfalls mit Listen von Tupeln implementieren. Es kann
+also durchaus sein, dass Modell und Implementierung nah
+beieinanderliegen. Wir sollten uns in jedem Fall nicht davor scheuen,
+diese beiden Welten im Laufe der Evolution unserer Software
+auseinanderlaufen zu lassen, denn die beiden Welten haben
+unterschiedlichen Anforderungen zu genügen.
 
 ```haskell
-type TimeSeries a = [(Time, a)]
+type TimeSeries a -- Modell: Liste von (Zeit, a)-Tupeln.
 ```
 
-Neben der Operation `lookup` ist eine Anforderung, dass wir Zeitreihen
-addieren (oder subtrahieren oder multiplizieren) möchten. Wir
-deklarieren also einen entsprechenden Zeitreihenkombinator:
+Jetzt müssen wir die oben genannten Funktionen beschreiben, indem wir
+ihre Bedeutung in der Sprache von Zeitreihen als Listen von
+Zeit-Wert-Tupeln ausdrücken. Der Konstruktor `fromDataService` scheint
+trivial.
 
 ```haskell
-addTS :: TimeSeries Float -> TimeSeries Float -> TimeSeries Float
+𝛍(fromDataService xs) = xs
 ```
 
-Spätestens bei der Implementierung dieser Funktion fällt aber auf,
-dass noch gar nicht ganz klar ist, was eine solche Addition überhaupt
-bedeuten soll. In dem Fall, dass sich die beiden Eingangszeitreihen in
-ihren Zeitstempeln decken, sollen wohl die Punkte addiert werden:
+Nun haben wir aber schon einen kleinen Salat: Die Listen `[(t1, x),
+(t2, y)]` und `[(t2, y), (t1, x)]` sind natürlich nicht gleich, obwohl
+sie _eigentlich_ dieselben Informationen ausdrücken. Das _Eigentlich_
+ist der Knackpunkt. Immer, wenn wir uns ein _Eigentlich_ denken, ist
+das ein Hinweis, dass unser Modell noch nicht ganz treffend ist. Was
+wir uns bei den Listen von Zeit-Wert-Tupeln eigentlich gedacht haben,
+sind wahrscheinlich Mengen von Zeit-Wert-Tupeln, wobei es für jeden
+Zeitpunkt maximal ein Tupel gibt:
+
+```haskell
+type TimeSeries a -- Modell: Mengen von (Zeit, a)-Tupeln, wobei die Zeitpunkte eindeutig sind.
+```
+
+Mengen von Tupeln sind schlicht _Relationen_ und Relationen, wo die
+linke Komponente eindeutig ist (sog. Rechtseindeutigkeit) nennt man
+_partielle Funktionen_. Partielle Funktionen können wir in
+Haskell mit `Maybe` im Ergebnistyp ausdrücken. Diesen Trick nutzen wir
+auch in unserer mathematischen Modellierung.[^maybe]
+
+```haskell
+type TimeSeries a -- Modell: Time -> Maybe a
+```
+
+Dieses Modell drückt jetzt eher das aus, was wir mit Zeitreihe meinen. Der Konstruktor `fromDataService` wird etwas komplexer:
+
+```haskell
+𝛍 (fromDataService []) = λ _ . Nothing
+𝛍 (fromDataService (t1, v):xs) = λ t2 . if t1 == t2
+                                          then Just v
+                                          else 𝛍(fromDataService xs) t2
+```
+
+Die beiden Ausdrücke `fromDataService [(t1, x), (t2, y)]` und
+`fromDataService [(t2, y), (t1, x)]` führen jetzt zu demselben
+Ergebnis -- unser Modell ist sozusagen schlanker geworden.
+
+Die Accessor-Funktion `lookup` ist jetzt einfach Funktionsapplikation.
+
+```haskell
+𝛍(lookup t ts) = 𝛍 ts t
+```
+
+Jetzt fehlt noch `addTS`. Bevor wir die Bedeutung aufschreiben,
+schauen wir uns einige Beispiele an. In dem Fall, dass sich die beiden
+Eingangszeitreihen in ihren Zeitstempeln decken, sollen wohl die
+Punkte addiert werden:
 
 ```haskell
 addTS [(t1, 4), (t2, 7)] [(t1, 9), (t2, 14)]
@@ -169,15 +233,77 @@ ein. Unumstößlich und ausschließlich richtig ist keine der
 Optionen. Alle haben ihre Berechtigung. Eine funktional vollständige
 Programmierschnittstelle müsste also entweder alle oben genannten
 Optionen mitliefern oder wir müssten noch nach einer passenden
-Abstraktion suchen. Wir möchten den letzteren Weg beschreiten. Anstatt
-die Abstraktion an der Oberfläche der oben angedeuteten Signaturen und
-Implementierungen zu orientieren, wollen wir einen Schritt zurückgehen
-und über die Bedeutung von Zeitreihen nachdenken.
+Abstraktion suchen. Wir möchten den letzteren Weg beschreiten, denn
+mindestens einen kleinen Vereinfachungsschritt bei der Modellierung
+können wir uns noch gönnen. `Time -> Maybe a` ist ganz gut, aber `Time
+-> a` wäre noch einfacher und allgemeiner. Vielleicht sollten wir also
+von unserer Idee von Zeitreihen ablassen und stattdessen über
+Zeitfunktionen sprechen.
+
+### Zweiter Versuch: ~Zeitreihen~ Zeitfunktionen
+
+```haskell
+type TimeFunction a -- Modell: Time -> a
+
+fromDataService :: [(Time, a)] -> TimeFunction (Maybe a)
+𝛍 (fromDataService []) = λ _ . Nothing
+𝛍 (fromDataService (t1, v):xs) = λ t2 . if t1 == t2
+                                          then Just v
+                                          else 𝛍(fromDataService xs) t2
+
+lookup :: TimeFunction a -> UTCTime -> a
+𝛍 (lookup t ts) = 𝛍 ts t
+```
+
+`fromDataService` und `lookup` ergeben auch für Zeitfunktionen Sinn
+und die Definitionen sind dieselben wie zuvor. Zeitfunktionen können
+wir auch addieren und jetzt ist die punktweise Addition die
+offensichtlich richtige Definition. Wir benutzen dazu direkt die
+naheliegende Abstraktion. Damit können wir auch Subtraktion und
+Multiplikation ausdrücken.
+
+```haskell
+liftTF :: (a -> b -> c) -> TimeFunction a -> TimeFunction b -> TimeFunction c
+𝛍 (liftTF f x y) = \t -> f (𝛍 x t) (𝛍 y t)
+
+addTF :: TimeFunction Float -> TimeFunction Float -> TimeFunction Float
+addTF = liftTF (+)
+
+subTF :: TimeFunction Float -> TimeFunction Float -> TimeFunction Float
+subTF = liftTF (-)
+
+mulTF :: TimeFunction Float -> TimeFunction Float -> TimeFunction Float
+mulTF = liftTF (*)
+```
+
+`liftTF` ist das zentrale Element unseres Modells, also unserer
+Programmierschnittstelle, die wir anderen zur Verfügung stellen
+können. Damit kann ein Benutzer dieser Schnittstelle selbst
+entscheiden, welche Funktion er in die Domäne der Zeitfunktionen heben
+möchte. Bislang haben wir unser ursprüngliches Problem -- Addition von
+Zeitreihen -- noch nicht gelöst. Die Verantwortung für die korrekte
+Auswahl der Addition legen wir jetzt einfach in die Hand des
+Nutzers. Beispielsweise:
+
+```haskell
+-- TimeSeries a ist jetzt TimeFunction (Maybe a)
+addTS1 :: TimeFunction (Maybe Float) -> TimeFunction (Maybe Float) -> TimeFunction (Maybe Float)
+addTS1 = liftTF (liftA2 (+))
+
+addTS2 :: TimeFunction (Maybe Float) -> TimeFunction (Maybe Float) -> TimeFunction (Maybe Float)
+addTS2 = liftTF (\x y -> case (x, y) of
+                           (Just x', Just y') -> Just (x' + y')
+                           (Just x', Nothing) -> Just x'
+                           (Nothing, Just y') -> Just y'
+                           (Nothing, Nothing) -> Nothing)
+```
+
+------------------------------------------------------------------------------
 
 Ein erster Wurf könnte so aussehen:
 
 ```
-type TimeSeries a = [(Time, a)]
+type TimeSeries a
 𝛍 :: TimeSeries a -> Set of tuples (Time, a) where all left components are distinct
 𝛍 [] = ∅
 𝛍 (t, v):xs = let s be 𝛍(xs)
