@@ -25,7 +25,7 @@ steht unser System. Dieses speist sich mit Inhalten aus einem
 Datenservice, welcher eine Fassade vor einer Menge von Sensoren
 bildet. Die Dateninhalte sind im Wesentlichen Zeitreihen. Wir werden
 später sehen, dass das nicht ganz präzise ist, aber für den Moment
-können wir so darüber nachdenken. Unser System erlaubt dem Nutzer die
+können wir so darüber nachdenken. Unser System erlaubt den Nutzer:innen die
 Visualisierung von Zeitreihen und die Beschreibung von
 Transformationen von Zeitreihen. Aus der Domäne kommen nun einige
 Anforderungen, welche Operationen auf und mit den Zeitreihen möglich
@@ -74,7 +74,7 @@ lookup :: UTCTime -> TimeSeries a -> a
 `TimeSeries` ist also ein simpler Typkonstruktur und `lookup` ist eine
 (von mehreren) Funktion, die diesen Typkonstruktur verwendet. Nach
 kurzem Nachdenken kommen wir aber drauf, dass die Signatur für
-`lookup` nicht ganz richtig sein kann. Zeitreihe, das klingt doch so,
+`lookup` nicht ganz richtig sein kann. "Zeitreihe" klingt doch so,
 als gäbe es da nur an bestimmten Zeitpunkten zugeordnete Werte. Die
 Signatur von `lookup` legt aber nahe, dass wir für jeden beliebigen
 Zeitpunkt (`UTCTime`) einen Wert rausbekommen könnten. Mit einer
@@ -291,7 +291,7 @@ möchte.
 Bislang haben wir unser ursprüngliches Problem -- Addition von
 Zeitreihen -- noch nicht gelöst. Die Verantwortung für die korrekte
 Auswahl der Addition können wir dank `liftTF` jetzt einfach in die
-Hand des Nutzers legen. Beispielsweise:
+Hand der Nutzer:innen legen. Beispielsweise:
 
 ```haskell
 -- TimeSeries a ist jetzt TimeFunction (Maybe a)
@@ -334,8 +334,8 @@ geeignetes mathematisches Modell für Zeitreihen sein könnte. Wir haben
 dieses Modell nach und nach vereinfacht und sind dabei zu der Einsicht
 gelangt, dass Zeitreihen nur ein Sonderfall eines allgemeineren
 Konzepts sind: Zeitfunktionen. Mit Zeitfunktionen konnten wir unser
-Modell so mächtig gestalten, dass Detailfragen einfach der Nutzer
-selbst beantworten kann.
+Modell so mächtig gestalten, dass Detailfragen einfach die Nutzer:innen
+selbst beantworten können.
 
 
 [^dd1]: <https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html>
