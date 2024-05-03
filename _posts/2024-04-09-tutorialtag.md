@@ -1,7 +1,7 @@
 ---
 layout: post
-description: "Tutorialtag: einen Tag voll funktionaler Programmierung mit der AG"
-title:  "Tutorialtag: einen Tag voll funktionaler Programmierung mit der AG"
+description: "Tutorialtag: einen Tag voll funktionaler Programmierung mit der Active Group"
+title:  "Tutorialtag: einen Tag voll funktionaler Programmierung mit der Active Group"
 author: sibylle-hasse
 tags: ["tag1", "tag2", "tag3"]
 ---
