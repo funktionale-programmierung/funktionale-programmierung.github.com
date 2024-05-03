@@ -71,13 +71,14 @@ addTS :: TimeSeries Float -> TimeSeries Float
 lookup :: UTCTime -> TimeSeries a -> a
 ```
 
-`TimeSeries` ist also ein simpler Typkonstruktur und `lookup` ist eine (von mehreren)
-Funktion, die diesen Typkonstruktur verwendet. Nach kurzem Nachdenken
-kommen wir aber drauf, dass die Signatur für `lookup` nicht ganz richtig sein
-kann. Zeitreihe, das klingt doch so, als gäbe es da nur an bestimmten
-Zeitpunkten zugeordnete Werte. Die Signatur von `lookup` legt aber
-nahe, dass wir für jeden beliebigen Zeitpunkt (`UTCTime`) einen Wert
-rausbekommen könnten. Mit einer kleinen Korrektur landen wir bei:
+`TimeSeries` ist also ein simpler Typkonstruktur und `lookup` ist eine
+(von mehreren) Funktion, die diesen Typkonstruktur verwendet. Nach
+kurzem Nachdenken kommen wir aber drauf, dass die Signatur für
+`lookup` nicht ganz richtig sein kann. Zeitreihe, das klingt doch so,
+als gäbe es da nur an bestimmten Zeitpunkten zugeordnete Werte. Die
+Signatur von `lookup` legt aber nahe, dass wir für jeden beliebigen
+Zeitpunkt (`UTCTime`) einen Wert rausbekommen könnten. Mit einer
+kleinen Korrektur landen wir bei:
 
 ```haskell
 lookup :: UTCTime -> TimeSeries a -> Maybe a
