@@ -309,13 +309,17 @@ Wir könnten auch einen neuen Zeitfunktionskombinator `interpolate`
 einführen und dann `addTF` nutzen.
 
 ```haskell
-interpolate :: TimeFunction (Maybe a) -> TimeFunction a
+interpolate :: a -> TimeFunction (Maybe a) -> TimeFunction a
+𝛍 (interpolate dflt tf) = λ t . let tl be the largest timestamp such that tl <= t and 𝛍 tf tl == Just v
+                                  if such a tl exists
+                                    then v
+                                    else dflt
 ```
 
 Die Bedeutungsfunktion von `interpolate` nutzt Quantoren und scheut
 nicht vor der Unendlichkeit zurück. Spätestens hier wird klar, dass
 die Bedeutungsebene nicht mehr mit der Implementierung in eins
-fällt. Im einem der nächsten Artikel werden wir sehen, wie wir dennoch
+fällt. Im einem der nächsten Artikel werden wir sehen, wie wir
 gewährleisten können, dass Implementierungen ihre Bedeutung
 (Spezifikation) einhalten.
 
