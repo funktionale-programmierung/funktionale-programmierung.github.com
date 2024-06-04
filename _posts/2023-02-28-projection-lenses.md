@@ -292,7 +292,7 @@ die Record-Datenrepräsentation:
 und `shove` in die leere Map konvertiert den Record zurück in das EDN-Format:
 
 ```clojure
-(edn->url {} (make-record "https" "funktionale-programmierung.de" 443 "/"))
+(edn->url {} (make-url "https" "funktionale-programmierung.de" 443 "/"))
 ```
 
 Das alles geht natürlich auch für verschachtelte Datenstrukturen.  Hier sind die
