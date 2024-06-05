@@ -147,19 +147,15 @@ Damit können wir uns folgende Lesezeichen definieren:
 
 ## Datenkonvertierung
 
-Datenkonvertierung nennt man das Umwandeln von strukturierten Daten in ein
-anderes Datenformat, üblicherweise in ein einfacher serialisierbares Format, das
-sich besser zur Übertragung oder zur Speicherung eignet.  Datenkonvertierung braucht man beim
-Schreiben von Programmen sehr häufig.  Bei der heutzutage weit verbreiteten
-Client-Server-Architektur ist ständige Kommunikation und Datenübertragung
-zwischen Client und Server nötig, daher ist man als Softwareentwickly in der
-täglichen Arbeit ständig damit beschäftigt, Datenrepräsentationen umzuwandeln.
-Das ist oft nervig, bedeutet viel Tipparbeit und ist fehleranfällig.
+Datenkonvertierung nennt man das Umwandeln von strukturierten Daten in
+ein anderes Datenformat -- üblicherweise in ein einfacher
+serialisierbares Format, das sich besser zur Übertragung oder zur
+Speicherung eignet.
 
-Für unsere Lesezeichenverwaltung eignet sich zum Beispiel [Extensible Data
-Notation (kurz: EDN)](https://github.com/edn-format/edn) als 
-Datenformat für das Speichern oder Übertragen der Informationen.  Das könnte so
-aussehen:
+Für unsere Lesezeichenverwaltung eignet sich zum Beispiel [Extensible
+Data Notation (kurz: EDN)](https://github.com/edn-format/edn) als
+Datenformat für das Speichern oder Übertragen der Informationen.  Das
+könnte so aussehen:
 
 ```clojure
 {:bookmarks [{:description "Größter deutschsprachiger FP-Blog"
@@ -173,6 +169,15 @@ aussehen:
                             :port     443
                             :path     "/"}}]}
 ```
+
+Datenkonvertierung braucht man beim Schreiben von Programmen sehr
+häufig.  Bei der heutzutage weit verbreiteten
+Client-Server-Architektur ist ständige Kommunikation und
+Datenübertragung zwischen Client und Server nötig, daher ist man als
+Softwareentwickly in der täglichen Arbeit andauernd damit beschäftigt,
+Datenrepräsentationen umzuwandeln.  Das ist oft nervig, bedeutet viel
+Tipparbeit und ist fehleranfällig.
+
 
 ## Projektionslinsen
 
