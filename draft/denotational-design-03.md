@@ -7,17 +7,20 @@ tags: ["Denotational Design", "Modelling", "Formale Methoden", "Agda", "Semantik
 
 Dieser Artikel ist der dritte einer Reihe über _Denotational
 Design_. In diesem Artikel lernen wir die Programmiersprache Agda
-kennen. Wir legen uns das Binärzahlenbeispiel aus dem ersten Artikel
-vor und formalisieren es in Agda. Im nächsten Artikel wenden wir die
-hier dargestellten Inhalte auf unser Praxisbeispiel mit den Zeitreihen
-an.
+kennen. Wir legen uns das Binärzahlenbeispiel aus dem [ersten
+Artikel](https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html)
+vor und formalisieren es in
+[Agda](https://agda.readthedocs.io/en/v2.6.4.3-r1/overview.html). Im
+nächsten Artikel wenden wir die hier dargestellten Inhalte auf unser
+Praxisbeispiel mit den Zeitreihen an.
 
 <!-- more start -->
 
-Im ersten Artikel dieser Reihe hatten wir die natürlichen Zahlen
-untersucht. Genauer: Wir hatten gesehen, wie wir Numerale -- reine
-Symbole, zusammengesetzt aus Nullen und Einsen -- in die natürlichen
-Zahlen übersetzen können und wie wir sicherstellen können, dass diese
+Im [ersten Artikel](https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html)
+dieser Reihe hatten wir die natürlichen Zahlen untersucht. Genauer:
+Wir hatten gesehen, wie wir binäre Numerale -- reine Symbole,
+zusammengesetzt aus Nullen und Einsen -- in die natürlichen Zahlen
+übersetzen können und wie wir sicherstellen können, dass diese
 Übersetzung verträglich ist mit unserer intuitiven Vorstellung, was
 denn die natürlichen Zahlen eigentlich bedeuten. Unsere Übersetzung
 hatten wir durch folgendes Gleichungssystem beschrieben:
@@ -34,7 +37,7 @@ Symbole ohne Bedeutung. Die Zeichen `0`, `1` und `2` auf der rechten
 Seite bedeuten die natürlichen Zahlen. Was wir in unserem ersten
 Artikel dogmatisch vorausgesetzt haben -- die Existenz und
 Funktionsweise der natürlichen Zahlen -- wollen wir in diesem Artikel
-weiter formalisieren.
+zunächst weiter formalisieren.
 
 ## Eine Formalisierung der natürlichen Zahlen
 
