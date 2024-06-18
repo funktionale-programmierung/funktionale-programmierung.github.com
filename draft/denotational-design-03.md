@@ -219,10 +219,14 @@ data === (x : Nat) : Nat -> Set where
   refl : ((=== x) x)
 ```
 
-Der einzige Konstruktor `refl` ist dabei gar kein Wert vom Typ `(=== x)`,
-was eine Funktion wäre, sondern die Typenfunktion wird direkt
-wieder auf `x` angewendet. Das heißt, ein Anwender kann zwar immer
-noch einen Typen wie `(=== (+ one one) three)` hinschreiben. Behaupten
-kann man alles. Es ist jetzt bloß nicht mehr möglich, auch einen Wert
-von diesem Typen zu erzeugen, denn `(+ one one)` normalisiert zu `(suc (suc zero))`
-und `three` ist `(suc (suc (suc zero)))`.
+Der einzige Konstruktor `refl` ist dabei gar kein Wert vom Typ `(===
+x)`, was eine Funktion wäre, sondern die Typenfunktion wird direkt
+wieder auf `x` angewendet. Der Typ `(=== x)` beschreibt die
+sog. "Familie" von Beweisen, dass ein Wert gleich `x` ist. Diese
+Familie ist nur "inhabited" am Typindex `x`, also es ist nur `x`
+gleich `x` und der Beweis davon ist `refl`. Das heißt, ein Anwender
+kann zwar immer noch einen Typen wie `(=== (+ one one) three)`
+hinschreiben. Behaupten kann man alles. Es ist jetzt bloß nicht mehr
+möglich, auch einen Wert von diesem Typen zu erzeugen, denn `(+ one one)`
+normalisiert zu `(suc (suc zero))` und `three` ist `(suc (suc
+(suc zero)))`.
