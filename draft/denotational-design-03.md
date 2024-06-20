@@ -308,6 +308,287 @@ hinschreiben. Behaupten kann man alles. Es ist jetzt bloß nicht mehr
 möglich, auch einen Wert von diesem Typen zu erzeugen, denn `(+ one one)`
 normalisiert zu `(suc (suc zero))` und `three` ist `(suc (suc (suc zero)))`.
 
+Jetzt können wir endlich unser Korrektheitskriterium für `inc` ausdrücken:
+
+```agda
+inc===+1 : (x : Bin) -> (=== (𝛍 (inc x)) (+ (𝛍 x) one))
+inc===+1 = ?
+```
+
+`inc===+1` ist ein ganz gewöhnlicher Name. Namen in Agda können fast
+alles sein. Wir sagen hier, dass `inc===+1` vom Typen `(x : Bin) ->
+(=== (𝛍 (inc x)) (+ (𝛍 x) one))` ist, d.h. es ist eine Funktion von
+einem beliebigen binären Numeral zu einem Beweisobjekt, das bezeugt,
+dass eine Gleichheit besteht zwischen `(𝛍 (inc x))` und `(+ (𝛍 x)
+one)`. Es gibt nur einen einzigen Konstruktor, der eine solche Gleichheit bezeugen könnte, nämlich `refl`. Trotzdem wird die folgende Implementierung noch nicht funktionieren.
+
+```agda
+inc===+1 : (x : Bin) -> (=== (𝛍 (inc x)) (+ (𝛍 x) one))
+inc===+1 = refl
+```
+
+Agda gibt diese Fehlermeldung aus:
+
+```
+𝛍 (inc x) != + (𝛍 x) one of type Nat
+when checking that the expression refl has type
+=== (𝛍 (inc x)) (+ (𝛍 x) one)
+```
+
+`!=` ist dabei nicht die Negation unseres
+`===`-Vergleichsoperators. Die Fehlermeldung sagt also nicht direkt,
+dass unser Beweisunterfangen zum Scheitern verurteilt ist. Die
+Fehlermeldung sagt nur, dass `refl` nicht als Beweisobjekt taugt, denn
+dazu müssten beide Seiten zu dem selben Wert normalisieren, d.h. dass
+nach Einsetzung aller Definitionen derselbe Wert auf beiden Seiten von
+`===` entsteht. Zumindest taugt `refl` nicht _im Allgemeinen_ als ein
+solches Beweisobjekt. Für konkretere Aussagen klappt das schon:
+
+```
+inc10b : (=== (𝛍 (inc 10b)) (+ (𝛍 10b) one))
+inc10b = refl
+```
+
+Hier haben wir das `x` in `inc===+1` durch `10b` konkretisiert. Wenn
+wir alle Funktionsanwendungen nach Definition auflösen (z.B. `inc 10b`
+= `inc (at-0 1b)` = `at-1 1b`), erhalten wir auf beiden Seiten des
+`===` das Ergebnis `suc (suc (suc zero))`. Der Konstruktor `refl` ist
+also anwendbar. Das gilt auch für die ersten drei Fälle im allgemeinen `inc===+1`:
+
+```agda
+inc===+1 : (x : Bin) -> (=== (𝛍 (inc x)) (+ (𝛍 x) one))
+inc===+1 0b = refl
+inc===+1 1b = refl
+inc===+1 (at-0 x) = refl
+inc===+1 (at-1 x) = ?
+```
+
+Nur im letzten Fall kann Agda den Beweis nicht automatisch führen. Das
+liegt daran, dass wir keine Informationen über `x` haben und deshalb
+die Normalisierung -- das Einsetzen von Definitionen -- stecken
+bleibt. Wir können uns von Agda an der Stelle des Fragezeichens das
+Beweisziel anzeigen lassen:
+
+```
+Goal: === (+ (𝛍 (inc x)) (+ (𝛍 (inc x)) zero))
+          (+ (+ (+ (𝛍 x) (+ (𝛍 x) zero)) one) one)
+```
+
+Das sieht kompliziert aus. Nachdem wir uns vom ersten Schock erholt
+haben, sehen wir aber, dass dort ganz offensichtlich zu vereinfachende
+Terme stehen: `(+ (𝛍 (inc x)) zero)` sollte sich ja wohl zu `(𝛍 (inc x))`
+vereinfachen lassen. Wir erhalten dann:
+
+```
+Goal: === (+ (𝛍 (inc x)) (𝛍 (inc x)))
+          (+ (+ (+ (𝛍 x) (𝛍 x)) one) one)
+```
+
+Nun machen wir hier ja Induktion, d.h. wir können voraussetzen, dass
+die Aussage `(=== (𝛍 (inc x)) (+ (𝛍 x) one))` für das `x` hier schon
+bewiesen ist. Diese Gleichheit können wir oben einsetzen und erhalten:
+
+```
+Goal: === (+ (+ (𝛍 x) one) (+ (𝛍 x) one))
+          (+ (+ (+ (𝛍 x) (𝛍 x)) one) one)
+```
+
+Jetzt stehen links und rechts des `===` schon dieselben Terme mit `+`
+verbunden, nur noch in unterschiedlicher Reihenfolge und
+Klammerung. Wir wissen aber, dass für Addition auf den unären Zahlen
+das Assoziativ- und Kommutativgesetz gelten.
+
+Als Menschen sind wir also von der Geltung unserer Behauptung
+überzeugt. Agda ist es noch nicht. Das liegt daran, dass die Regeln,
+die wir eben angewandt haben, gar nicht bekannt sind. Die erste dieser
+Regeln -- vielleicht die subtilste -- ist die, dass wir aus einer
+Gleichheit von `x` und `y` und einer Gleichheit von `y` und `z` eine
+Gleichheit von `x` und `z` folgern können -- dass `===` also transitiv
+ist. Wir nennen diese Regel `trans` und anstatt sie als Axiom zu
+bestimmen, beweisen wir sie:
+
+```agda
+trans : (x : Nat) -> (y : Nat) -> (z : Nat) -> (=== x y) -> (=== y z) -> (=== x z)
+trans x y z refl refl = refl
+```
+
+Der Beweis ist trivial, aber `trans` trotzdem ein wichtiges Hilfsmittel.
+
+Die nächste Regel, die wir oben verwendet haben, ist, dass `zero` ein
+neutrales Element der Addition ist, also dass gilt: `(x : Nat) -> (=== (+ x zero) x)`.
+
+```agda
+zeroneutral : (x : Nat) -> (=== (+ x zero) x)
+zeroneutral zero = refl
+zeroneutral (suc x) = ?
+```
+
+Der Fall, dass `x` gleich `zero` ist, ist trivial bewiesen nach
+Normalisierung. Der Fall, dass `x` gleich `suc x` ist, erfordert den
+Beweis, dass `(suc (+ x zero))` gleich `(suc x)` ist. Wir wissen nach
+Induktionsvoraussetzung, dass `(+ x zero)` gleich `x` ist, aber im
+Beweisziel sind beide Seiten noch durch ein `suc` eingewickelt. Wir
+brauchen eine weitere Regel, die besagt, dass aus einer Gleichheit von
+`x` und `y` auch eine Gleichheit von `f x` und `f y` folgt für
+beliebige Funktionen `f`. Diese Regel heißt Kongruenz und wir nennen
+sie `cong`.
+
+```agda
+cong : (f : Nat -> Nat) -> (x : Nat) -> (y : Nat) -> (=== x y) -> (=== (f x) (f y))
+cong f x y refl = refl
+```
+
+Im Beweis für `zeroneutral (suc x)` müssen wir jetzt nur noch einsetzen.
+
+```agda
+zeroneutral : (x : Nat) -> (=== (+ x zero) x)
+zeroneutral zero = refl
+zeroneutral (suc x) = cong suc (+ x zero) x (zeroneutral x)
+```
+
+Nun fehlen noch das Assoziativgesetz ...
+
+```agda
++assoc : (x : Nat) -> (y : Nat) -> (z : Nat) -> (=== (+ x (+ y z)) (+ (+ x y) z))
++assoc zero y z = refl
++assoc (suc x) y z = cong suc (+ x (+ y z)) (+ (+ x y) z) (+assoc x y z)
+```
+
+... und Kommutativgesetz.
+
+```agda
++commut : (x : Nat) -> (y : Nat) -> (=== (+ x y) (+ y x))
++commut x y = ?
+```
+
+Hierbei begegnet uns allerdings noch eine Subtilität. Wir machen einen
+Induktionsbeweis über `x`. Im `zero` Fall ist unser Beweisziel `=== y (+ y zero)`.
+Das haben wir doch scheinbar schon gezeigt mit
+`zeroneutral`, wenn auch anders herum. Wir brauchen also auch noch das
+Kommutativgesetz für `===`. Das wird gern `sym` genannt, da es die Symmetrie von `===` zeigt.
+
+```agda
+sym : (x : Nat) -> (y : Nat) -> (=== x y) -> (=== y x)
+sym x y refl = refl
+```
+
+Jetzt können wir die ersten Fälle für `+commut` implementieren.
+
+```agda
++commut : (x : Nat) -> (y : Nat) -> (=== (+ x y) (+ y x))
++commut zero y = sym (+ y zero) y (zeroneutral y)
++commut (suc x) zero = cong suc (+ x zero) x (zeroneutral x)
++commut (suc x) (suc y) = ?
+```
+
+Das Beweisziel für den zweiten Fall ist `(=== (suc (+ x y)) (+ y (suc x)))`.
+Wir gönnen uns noch einen letzten kleinen Helfer, der die
+Vertauschbarkeit von `+` und `suc` zeigt.
+
+```agda
++suclr : (x : Nat) -> (y : Nat) -> (=== (+ x (suc y)) (+ (suc x) y))
++suclr zero y = refl
++suclr (suc x) y = cong suc (+ x (suc y)) (+ (suc x) y) (suclr x y)
+```
+
+Für den letzen Fall von `+commut` setzen wir nur noch alles zusammen.
+
+```agda
++commut : (x : Nat) -> (y : Nat) -> (=== (+ x y) (+ y x))
++commut zero y = sym (+ y zero) y (zeroneutral y)
++commut (suc x) zero = cong suc (+ x zero) x (zeroneutral x)
++commut (suc x) (suc y) = cong
+                            suc
+                            (+ x (suc y))
+                            (+ y (suc x))
+                            (trans
+                              (+ x (suc y))
+                              (+ (suc x) y)
+                              (+ y (suc x))
+                              (+suclr x y)
+                              (+commut (suc x) y))
+```
+
+## Implizite Parameter
+
+Ay caramba! Wir haben endlich bewiesen, dass das Kommutativgesetz für
+die Addition gilt. Dieser Beweis ist schon recht komplex und wir sind
+noch lang nicht bei unserem eigentlichen Beweisziel `inc===+1`
+angekommen. Bevor wir uns diesem widmen, refaktorisieren wir unseren
+Kommutativitätsbeweis noch ein wenig. Bisher haben wir nämlich aus
+didaktischen Gründen jeden Beweis bis ins kleinste von Hand selbst
+durchgeführt. Agda kann aber oft selbst triviale Einsetzungen selbst
+vornehmen. Den Beweis für `+commut` oben können wir mit sog. Holes
+vereinfachen:
+
+```agda
++commut2 : (x : Nat) -> (y : Nat) -> (=== (+ x y) (+ y x))
++commut2 zero y = sym _ _ (zeroneutral y)
++commut2 (suc x) zero = cong suc _ _ (zeroneutral x)
++commut2 (suc x) (suc y) = cong
+                             suc
+                             _
+                             _
+                             (trans
+                               _
+                               _
+                               _
+                               (+suclr _ _)
+                               (+commut2 (suc x) y))
+```
+
+Ein Hole weist Agda an: Füll hier -- wenn möglich -- die einzige
+mögliche Lösung ein. Dank Typinferenz lässt sich diese Vereinfachung
+im Code oft anwenden. Wir können diese Vereinfachung sogar an der
+Definitionsstelle veranlassen, indem wir manche Parameter als implizit
+markieren. Dazu schreiben wir die Parameter nicht in normalen, runden
+Klammern, sondern in geschweiften. Anwendungen von `trans`, `cong`,
+etc. werden dadurch deutlich kürzer und damit lesbarer.
+
+```agda
+trans2 : {x : Nat} -> {y : Nat} -> {z : Nat} -> (=== x y) -> (=== y z) -> (=== x z)
+trans2 refl refl = refl
+
+cong2 : {x : Nat} -> {y : Nat} -> (f : Nat -> Nat) -> (=== x y) -> (=== (f x) (f y))
+cong2 f refl = refl
+
+sym2 : {x : Nat} -> {y : Nat} -> (=== x y) -> (=== y x)
+sym2 refl = refl
+
++commut2 : (x : Nat) -> (y : Nat) -> (=== (+ x y) (+ y x))
++commut2 zero y = sym2 (zeroneutral y)
++commut2 (suc x) zero = cong2 suc (zeroneutral x)
++commut2 (suc x) (suc y) = cong2
+                             suc
+                             (trans2
+                               (+suclr _ _)
+                               (+commut2 (suc x) y))
+```
+
+## Der finale Beweis
+
+Etwas grundsätzlich neues kommt beim Beweis von `inc===+1` nicht
+mehr. Wir setzen lediglich `trans`, `cong`, `sym` etc. zusammen. Der finale Beweis ist dann ein ziemliches Monstrum:
+
+```agda
+inc==+1 : {x : Nml} -> μ(inc(x)) == ((μ x) + 1n)
+inc==+1 {0b} = refl
+inc==+1 {1b} = refl
+inc==+1 {at-0 x} = refl
+inc==+1 {at-1 x} = trans (+assoc (μ (inc x)) (μ (inc x)) zero)
+                         (trans (+identityr ((μ (inc x)) + (μ (inc x))))
+                                (trans (cong (λ y → y + μ (inc x))
+                                             (inc==+1 {x}))
+                                       (trans (cong (λ y → μ x + 1n + y)
+                                                    (inc==+1 {x}))
+                                              (trans (+assoc ((μ x) + 1n) (μ x) 1n)
+                                                     (cong (λ y → y + 1n)
+                                                           (trans (+commut (μ x + 1n) (μ x))
+                                                                  (trans (+assoc (μ x) (μ x) 1n)
+                                                                         (cong (λ y → y + 1n)
+                                                                               (cong (λ y → μ x + y)
+                                                                                     (sym (+identityr (μ x))))))))))))
+```
 
 
 
