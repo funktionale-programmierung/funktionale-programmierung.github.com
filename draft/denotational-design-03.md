@@ -34,10 +34,12 @@ hatten wir durch folgendes Gleichungssystem beschrieben:
 
 Hier sind die Zeichen `0` und `1` auf der linken Seite ledigliche
 Symbole ohne Bedeutung. Die Zeichen `0`, `1` und `2` auf der rechten
-Seite bedeuten die natürlichen Zahlen. Was wir in unserem ersten
-Artikel dogmatisch vorausgesetzt haben -- die Existenz und
-Funktionsweise der natürlichen Zahlen -- wollen wir in diesem Artikel
-zunächst weiter formalisieren.
+Seite der Gleichheitszeichen bedeuten die natürlichen Zahlen. `x0`
+bzw. `x1` auf der linken Seite bedeutet, dass für ein beliebiges
+Numeral `x` rechts eine Null bzw. Eins angehängt wird. Was wir in
+unserem ersten Artikel dogmatisch vorausgesetzt haben -- die Existenz
+und Funktionsweise der natürlichen Zahlen -- wollen wir in diesem
+Artikel zunächst weiter formalisieren.
 
 ## Eine Formalisierung der natürlichen Zahlen
 
@@ -64,8 +66,8 @@ nicht greifbar. Man könnte sagen, dass der Begriff der natürlichen
 Zahlen das Gemeinsame aller verschiedenen Repräsentationen ist.
 
 Wir sind also dazu verdammt, mit konkreten Repräsentation der
-natürlichen Zahlen zu arbeiten. Es ist damit aber nicht alles
-verloren. Immerhin gibt es ungeschickte und geschicktere
+natürlichen Zahlen zu arbeiten. Es ist damit aber nicht gleich alles
+egal. Immerhin gibt es ungeschickte und geschicktere
 Repräsentationen. Die römischen Zahlen sind eine sehr komplizierte
 Repräsentation der natürlichen Zahlen (ohne die Null), die
 Dezimalzahlen oder Binärzahlen sind da schon deutlich nützlicher für
@@ -153,25 +155,99 @@ so trivial, dass uns diese Sicherheit nicht schwer fällt. Hätten wir
 eine binäre Kodierung als Grundlage der natürlichen Zahlen verwendet,
 sähe das schon anders aus.
 
-Bevor wir gleich auf ähnliche Weise die natürlichen Zahlen in
-Binärrepräsentation definieren, basteln wir uns noch ein paar
-Werkzeuge, um Aussagen über unseren Code treffen zu können. Die
-einfachste Art von Aussage, die wir treffen können, ist, dass zwei
-Codeschnipsel "äquivalent" sind. Da wir daran interessiert sind, dass
-Agda uns statisch sagen kann, ob unser Code gleich ist, kann diese
-Äquivalenz aber nicht die einfache Laufzeit-Gleichheit `==` wie in
-Haskell sein. Nein, wir brauchen eine Gleichheit auf dem Typlevel.
+## Die Binärzahlen
+
+Die oben beschriebene Definition der binären Numerale lässt sich fast wortwörtlich in Agda übersetzen.
+
+```agda
+data Bin : Set where
+  0b : Bin
+  1b : Bin
+  at-0 : Bin -> Bin
+  at-1 : Bin -> Bin
+```
+
+Die Datendefinition der unären Zahlen hatte nur zwei Fälle; hier haben
+wir vier. Allein dadurch sieht man schon, dass diese Repräsentation
+der natürlichen Zahlen deutlich aufwendiger ist. Auch bei der
+Definition einiger erster konkreter Zahlen müssen wir uns ein wenig
+mehr anstrengen:
+
+```agda
+10b : Bin
+10b = at-0 1b
+
+11b : Bin
+11b = at-1 1b
+
+100b : Bin
+100b = at-0 (at-0 1b)
+```
+
+Im ersten Blogartikel hatten wir noch eine simple Operation auf den
+binären Numeralen definiert: Das Hochzählen.
+
+```agda
+inc : Bin -> Bin
+inc 0b = 1b
+inc 1b = 10b
+inc (at-0 x) = at-1 x
+inc (at-1 x) = at-0 (inc x)
+```
+
+Das ist zwar verständlicher Code, aber bei weitem nicht so trivial wie
+das Hochzählen in der unären Repräsentation. Dort wäre `+1` bloß ein
+Synonym für den `suc`-Konstruktor.
+
+Im ersten Blogartikel hatten wir dann bewiesen, dass `inc` auf den
+binären Numeralen genau diesem `+1` auf den natürlichen Zahlen
+entspricht. Dazu benötigten wir eine Übersetzung der beiden
+Welten. Diese nannten wir die Denotation oder Bedeutungsfunktion `𝛍`.
+
+```
+𝛍(0) = 0
+𝛍(1) = 1
+𝛍(x0) = 2 * 𝛍(x)
+𝛍(x1) = 2 * 𝛍(x) + 1
+```
+
+Auch diese Definition können wir in Agda beinahe Eins-zu-Eins übernehmen.[^1]
+
+```agda
+𝛍 : Bin -> Nat
+𝛍 0b = zero
+𝛍 1b = one
+𝛍 (at-0 x) = (* two (𝛍 x))
+𝛍 (at-1 x) = (+ (* two (𝛍 x)) one)
+```
+
+Diese Bedeutungsfunktion ist wieder einer dieser Codeblöcke über deren
+Korrektheit wir uns schlicht sicher sein müssen. Kein Computer kann
+uns sagen, dass das wirklich das ist, was wir mit binären Numeralen
+meinen. Erst beim nächsten Schritt können wir uns maschinelle
+Untestützung erwarten.
+
+## inc==+1
+
+Bevor wir gleich die semantische Übereinstimmung von `inc` und `+ one`
+beweisen, basteln wir uns noch ein paar Werkzeuge, um überhaupt
+Aussagen über unseren Code treffen zu können. Die einfachste Art von
+Aussage, die wir treffen können, ist, dass zwei Codeschnipsel
+"äquivalent" sind. Da wir daran interessiert sind, dass Agda uns
+statisch sagen kann, ob unser Code gleich ist, kann diese Äquivalenz
+aber nicht die einfache Laufzeit-Gleichheit `==` wie in Haskell
+sein. Nein, wir brauchen eine Gleichheit auf dem Typlevel.
 
 Zur Erinnerung: Aussagen folgender Spielart möchten wir prüfen.
 
 ```
-forall x . (=== (𝛍 (inc x)) (+ x one))
-forall x y . (=== (𝛍 (+b x y)) (+ x y))
 (=== (+ one two) three)
+forall x y . (=== (+ x y) (+ y x))
+forall x . (=== (𝛍 (inc x)) (+ x one))
 ```
 
-Diese drei Aussagen wollen wir in Typen überführen. Damit ist klar,
-dass `===` ein zweistelliger Typkonstruktor sein muss. Erster
+Derartige Aussagen wollen wir in Typen überführen. Damit ist klar,
+dass `===` ein zweistelliger Typkonstruktor sein muss. Ein erster
 (scheiternder) Versuch:
 
 ```agda
@@ -201,7 +277,9 @@ weird = construct
 Das ist zwar folgerichtig; es ist aber nicht das, was wir erreichen
 wollten. Wir möchten nur wahre Aussagen konstruieren können. Oder
 anders ausgedrückt: Die obige Definition von `===` ist noch nicht das,
-was wir mit Gleichheit meinen. Wir möchten stattdessen nur Werte
+was wir mit Gleichheit meinen -- wir wollen nicht nur, dass gleiche
+Werte als gleich angesehen werden, sondern auch, dass ungleiche Werte
+nicht als gleich angesehen werden. Wir möchten also nur Werte
 konstruieren können, die Zeuge davon sind, dass `x` und `y` auch
 wirklich gleich sind. Das klingt nach einem endlosen Regress, deshalb
 versuchen wir's noch mal anders: Es kann überhaupt nur die Gleichheit
@@ -219,14 +297,20 @@ data === (x : Nat) : Nat -> Set where
   refl : ((=== x) x)
 ```
 
-Der einzige Konstruktor `refl` ist dabei gar kein Wert vom Typ `(===
-x)`, was eine Funktion wäre, sondern die Typenfunktion wird direkt
+Der einzige Konstruktor `refl` ist dabei gar kein Wert vom Typ `(=== x)`,
+was eine Funktion wäre, sondern die Typenfunktion wird direkt
 wieder auf `x` angewendet. Der Typ `(=== x)` beschreibt die
 sog. "Familie" von Beweisen, dass ein Wert gleich `x` ist. Diese
-Familie ist nur "inhabited" am Typindex `x`, also es ist nur `x`
+Familie ist nur "inhabited" -- hat also nur Werte -- am Typindex `x`, also es ist nur `x`
 gleich `x` und der Beweis davon ist `refl`. Das heißt, ein Anwender
 kann zwar immer noch einen Typen wie `(=== (+ one one) three)`
 hinschreiben. Behaupten kann man alles. Es ist jetzt bloß nicht mehr
 möglich, auch einen Wert von diesem Typen zu erzeugen, denn `(+ one one)`
-normalisiert zu `(suc (suc zero))` und `three` ist `(suc (suc
-(suc zero)))`.
+normalisiert zu `(suc (suc zero))` und `three` ist `(suc (suc (suc zero)))`.
+
+
+
+
+
+
+[^1]: Agda erlaubt sogar die Definition von Infix- oder Mixfix-Operatoren. Damit könnten wir die Agda-Definition noch mehr der Papier-Mathematik angleichen. Der konzeptuellen Einfachheit verzichten wir in diesem Artikel auf diese Notationswerkzeuge und verwenden eine Syntax, die eher an S-Expressions erinnert.
