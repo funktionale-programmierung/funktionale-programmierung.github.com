@@ -412,7 +412,7 @@ trans : (x : Nat) -> (y : Nat) -> (z : Nat) -> (=== x y) -> (=== y z) -> (=== x 
 trans x y z refl refl = refl
 ```
 
-Der Beweis ist trivial, aber `trans` trotzdem ein wichtiges Hilfsmittel.
+Der Beweis ist trivial, aber `trans` ist trotzdem ein wichtiges Hilfsmittel.
 
 Die nächste Regel, die wir oben verwendet haben, ist, dass `zero` ein
 neutrales Element der Addition ist, also dass gilt: `(x : Nat) -> (=== (+ x zero) x)`.
