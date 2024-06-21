@@ -57,9 +57,9 @@ spätestens dann müssen wir ein Verständnis entwickeln, wie die
 natürlichen Zahlen in Agda repräsentiert sind. Es lohnt sich also,
 dass wir diese natürlichen Zahlen selbst definieren.
 
-Unser Vorhaben mag aussichtslos scheinen. Wir wollen die _eine_
-Repräsentation der natürlichen Zahlen (binäre Numerale) auf eine
-andere Repräsentation überführen. Mehr können wir formal auch gar
+Unser Vorhaben mag aussichtslos scheinen. Wir wollen die _eine
+Repräsentation_ der natürlichen Zahlen (binäre Numerale) auf eine
+_andere Repräsentation_ überführen. Mehr können wir formal auch gar
 nicht erreichen. Um über die natürlichen Zahlen nachzudenken,
 benötigen wir immer eine konkrete Repräsentation dieser. Die reinen,
 abstrakten natürlichen Zahlen sind ohne konkrete Repräsentation gar
