@@ -146,7 +146,7 @@ Die Multiplikation ist nicht viel komplexer:
 ```agda
 * : Nat -> Nat -> Nat
 * zero m = zero
-* suc n m = (+ m (* n m))
+* (suc n) m = (+ m (* n m))
 ```
 
 Diese drei Codeblöcke -- die Datendefinition, die Addition und die
