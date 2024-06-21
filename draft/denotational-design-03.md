@@ -256,7 +256,7 @@ data === (x : Nat) (y : Nat) : Set where
 ```
 
 Hier sagen wir, dass `===` ein zweistelliger Typkonstruktor ist, der
-zwei Werte `x` und `y` vom Typen `Nat` nimmt und einen Typen (`Set`)
+zwei Dinge `x` und `y` vom Typen `Nat` nimmt und einen Typen (`Set`)
 zurückgibt. Hier sehen wir zum ersten Mal den Einsatz von Dependent
 Types. Das `x` könnte nämlich so was sein wie `zero` oder `suc zero`,
 also Werte und das ist schließlich auch das, was wir wollen, wenn wir
