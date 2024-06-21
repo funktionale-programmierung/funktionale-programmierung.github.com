@@ -127,16 +127,16 @@ sym2 refl = refl
 inc0b : (=== (μ (inc 0b)) (+ (μ 0b) one))
 inc0b = refl
 
-inc===+1 : {x : Bin} -> === (μ (inc x)) (+ (μ x) one)
-inc===+1 {0b} = refl
-inc===+1 {1b} = refl
-inc===+1 {at-0 x} = refl
-inc===+1 {at-1 x} = trans2 (+assoc (μ (inc x)) (μ (inc x)) zero)
+inc===+1 : (x : Bin) -> === (μ (inc x)) (+ (μ x) one)
+inc===+1 0b = refl
+inc===+1 1b = refl
+inc===+1 (at-0 x) = refl
+inc===+1 (at-1 x) = trans2 (+assoc (μ (inc x)) (μ (inc x)) zero)
                            (trans2 (zeroneutral (+ (μ (inc x)) (μ (inc x))))
                                    (trans2 (cong2 (λ y → (+ y (μ (inc x))))
-                                                  (inc===+1 {x}))
+                                                  (inc===+1 x))
                                            (trans2 (cong2 (λ y → (+ (+ (μ x) one) y))
-                                                          (inc===+1 {x}))
+                                                          (inc===+1 x))
                                                    (trans2 (+assoc (+ (μ x) one) (μ x) one)
                                                            (cong2 (λ y → (+ y one))
                                                                   (trans2 (+commut2 (+ (μ x) one) (μ x))
