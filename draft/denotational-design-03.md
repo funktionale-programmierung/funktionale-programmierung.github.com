@@ -227,7 +227,7 @@ uns sagen, ob das wirklich das ist, was wir mit binären Numeralen
 meinen. Erst beim nächsten Schritt können wir uns maschinelle
 Untestützung erwarten.
 
-## inc==+1
+## inc===+1
 
 Bevor wir gleich die semantische Übereinstimmung von `inc` und `+ one`
 beweisen, basteln wir uns noch ein paar Werkzeuge, um überhaupt
