@@ -6,7 +6,7 @@ tags: ["Denotational Design", "Modelling", "Formale Methoden", "Praxis"]
 ---
 
 Dieser Artikel ist der zweite einer Serie von Artikeln über
-Denotational Design.  Im vorherigen Teil dieser Reihe[^dd1] hatten
+Denotational Design.  Im [vorherigen Teil dieser Reihe](https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html) hatten
 wir die theoretische Grundlage von Denotational Design kennen gelernt:
 Die denotationelle Semantik. In diesem Artikel wollen wir dieses
 Werkzeug nutzen, um eine konkrete Fachlichkeit zu spezifizieren.
@@ -338,7 +338,6 @@ Modell so mächtig gestalten, dass Detailfragen einfach die Nutzer:innen
 selbst beantworten können.
 
 
-[^dd1]: <https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html>
 [^haskell-weak]: Im allgemeinen ist Haskell leider zu schwach, um ordentliche Spezifikationen ausdrücken zu können. Wir werden in einem späteren Artikel sehen, wie Programmiersprachen wie Lean oder Agda uns erlauben, sowohl Spezifikation als auch Implementierung in ein und derselben Sprache aufzuschreiben und die Deckung zu gewährleisten.
 [^overload]: Wir gehen im Fortgang des Artikels stets davon aus, dass `𝛍` überladen ist -- hier bspw. für Listen, Tuple, `UTCTime` und `a`.
 [^list]: Listen sind sozusagen keine nativen mathematischen Objekte. Wir basteln uns mathematische Listen mit dem Null-Tupel `()` und dem Zweier-Tupel `(Wert, Restliste)` als `Cons`.
