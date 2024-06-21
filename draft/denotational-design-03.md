@@ -304,7 +304,7 @@ sog. "Familie" von Beweisen, dass ein Wert gleich `x` ist. Diese
 Familie ist nur "inhabited" -- hat also nur Werte -- am Typindex `x`, also es ist nur `x`
 gleich `x` und der Beweis davon ist `refl`. Das heißt, ein Anwender
 kann zwar immer noch einen Typen wie `(=== (+ one one) three)`
-hinschreiben. Behaupten kann man alles. Es ist jetzt bloß nicht mehr
+hinschreiben -- behaupten kann man alles --, es ist jetzt bloß nicht mehr
 möglich, auch einen Wert von diesem Typen zu erzeugen, denn `(+ one one)`
 normalisiert zu `(suc (suc zero))` und `three` ist `(suc (suc (suc zero)))`.
 
