@@ -223,7 +223,7 @@ Auch diese Definition können wir in Agda beinahe Eins-zu-Eins übernehmen.[^1]
 
 Diese Bedeutungsfunktion ist wieder einer dieser Codeblöcke über deren
 Korrektheit wir uns schlicht sicher sein müssen. Kein Computer kann
-uns sagen, dass das wirklich das ist, was wir mit binären Numeralen
+uns sagen, ob das wirklich das ist, was wir mit binären Numeralen
 meinen. Erst beim nächsten Schritt können wir uns maschinelle
 Untestützung erwarten.
 
