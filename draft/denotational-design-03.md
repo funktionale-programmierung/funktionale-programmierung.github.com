@@ -36,10 +36,11 @@ Hier sind die Zeichen `0` und `1` auf der linken Seite lediglich
 Symbole ohne Bedeutung. Die Zeichen `0`, `1` und `2` auf der rechten
 Seite der Gleichheitszeichen bedeuten die natürlichen Zahlen. `x0`
 bzw. `x1` auf der linken Seite bedeutet, dass für ein beliebiges
-Numeral `x` rechts eine Null bzw. Eins angehängt wird. Was wir in
-unserem ersten Artikel dogmatisch vorausgesetzt haben -- die Existenz
-und Funktionsweise der natürlichen Zahlen -- wollen wir in diesem
-Artikel zunächst weiter formalisieren.
+Numeral `x` rechts eine Null bzw. Eins angehängt wird.
+
+Was wir in unserem ersten Artikel dogmatisch vorausgesetzt haben --
+nämlich die Existenz und Funktionsweise der natürlichen Zahlen --
+wollen wir in diesem Artikel zunächst weiter formalisieren.
 
 ## Eine Formalisierung der natürlichen Zahlen
 
