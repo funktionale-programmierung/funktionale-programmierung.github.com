@@ -8,7 +8,7 @@ tags: ["Denotational Design", "Modelling", "Formale Methoden", "Agda", "Semantik
 Dieser Artikel ist der dritte einer Reihe über _Denotational
 Design_. In diesem Artikel lernen wir die [Programmiersprache
 Agda](https://agda.readthedocs.io/en/v2.6.4.3-r1/overview.html)
-kennen. Wir legen uns das Binärzahlenbeispiel aus dem [ersten
+kennen. Wir legen uns das Beispiel mit den binären Numeralen aus dem [ersten
 Artikel](https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html)
 vor und formalisieren es in Agda. Im nächsten Artikel wenden wir die
 hier dargestellten Inhalte auf unser Praxisbeispiel mit den Zeitreihen
@@ -32,7 +32,7 @@ hatten wir durch folgendes Gleichungssystem beschrieben:
 𝛍(x1) = 2 * 𝛍(x) + 1
 ```
 
-Hier sind die Zeichen `0` und `1` auf der linken Seite ledigliche
+Hier sind die Zeichen `0` und `1` auf der linken Seite lediglich
 Symbole ohne Bedeutung. Die Zeichen `0`, `1` und `2` auf der rechten
 Seite der Gleichheitszeichen bedeuten die natürlichen Zahlen. `x0`
 bzw. `x1` auf der linken Seite bedeutet, dass für ein beliebiges
