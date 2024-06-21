@@ -590,8 +590,57 @@ inc===+1 (at-1 x) = trans2 (+assoc (μ (inc x)) (μ (inc x)) zero)
                                                                                                 (sym2 (zeroneutral (μ x))))))))))))
 ```
 
+## Zusammenfassung
 
+Dieser letzte Beweis ist wieder recht komplex. Wir könnten diesen
+Beweis noch vereinfachen und in eine deutlich verständlichere Form
+bringen. Die Agda-Standardbibliothek bringt bspw. Werkzeuge für
+sog. Equational-Reasoning mit. Diese Werkzeuge werden wir in einem der
+nächsten Artikel kennen lernen.
 
+Auch wenn der finale Beweis einigermaßen komplex ist, hält sich der
+Gesamtaufwand für unser Unterfangen doch in Grenzen -- zumindest in
+Anbetracht der Garantien, die wir bekommen. Die Definition der unären
+natürlichen Zahlen und die Definition von `===` haben wir oben nur aus
+didaktischen Gründen selbst programmiert. Normalerweise würden wir
+diese auch der Standardbibliothek entnehmen. Die Beweishilfsmittel,
+die wir selbst definiert haben, beziehen sich alle auf das
+Zusammenspiel von natürlichen Zahlen und `===`. Auch diese Hilfsmittel
+sind in der Standardbibliothek bereits enthalten. Dann bleibt als
+eigentlicher neuer Code nur folgendes übrig:
 
+```agda
+data Bin : Set where
+  0b : Bin
+  1b : Bin
+  at-0 : Bin -> Bin
+  at-1 : Bin -> Bin
+
+μ : Bin -> Nat
+μ 0b = zero
+μ 1b = one
+μ (at-0 x) = (* two (μ x))
+μ (at-1 x) = (+ (* two (μ x)) one)
+
+inc : Bin -> Bin
+inc 0b = 1b
+inc 1b = 10b
+inc (at-0 x) = at-1 x
+inc (at-1 x) = at-0 (inc x)
+
+inc===+1 : (x : Bin) -> === (μ (inc x)) (+ (μ x) one)
+inc===+1 0b = refl
+inc===+1 1b = refl
+inc===+1 (at-0 x) = refl
+inc===+1 (at-1 x) = ...
+```
+
+Das ist doch gar nicht schlecht. Die Definitionen für `Bin` und `inc`
+sind zwingend notwendig, wenn überhaupt etwas laufen soll. Die
+Denotation `μ` kann man in den meisten Programmiersprachen auch
+ausdrücken, um dann bspw. Unit-Tests formulieren zu können. In Agda
+gehen wir mit `inc===+1` noch einen Schritt weiter und beweisen
+tatsächlich, dass sich unser `inc` wie `+1` verhält. Mehr
+Verlässlichkeit geht nicht.
 
 [^1]: Agda erlaubt sogar die Definition von Infix- oder Mixfix-Operatoren. Damit könnten wir die Agda-Definition noch mehr der Papier-Mathematik angleichen. Der konzeptuellen Einfachheit verzichten wir in diesem Artikel auf diese Notationswerkzeuge und verwenden eine Syntax, die eher an S-Expressions erinnert.
