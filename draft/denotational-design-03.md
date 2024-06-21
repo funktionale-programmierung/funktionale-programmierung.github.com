@@ -571,23 +571,23 @@ Etwas grundsätzlich neues kommt beim Beweis von `inc===+1` nicht
 mehr. Wir setzen lediglich `trans`, `cong`, `sym` etc. zusammen. Der finale Beweis ist dann ein ziemliches Monstrum:
 
 ```agda
-inc==+1 : {x : Nml} -> μ(inc(x)) == ((μ x) + 1n)
-inc==+1 {0b} = refl
-inc==+1 {1b} = refl
-inc==+1 {at-0 x} = refl
-inc==+1 {at-1 x} = trans (+assoc (μ (inc x)) (μ (inc x)) zero)
-                         (trans (+identityr ((μ (inc x)) + (μ (inc x))))
-                                (trans (cong (λ y → y + μ (inc x))
-                                             (inc==+1 {x}))
-                                       (trans (cong (λ y → μ x + 1n + y)
-                                                    (inc==+1 {x}))
-                                              (trans (+assoc ((μ x) + 1n) (μ x) 1n)
-                                                     (cong (λ y → y + 1n)
-                                                           (trans (+commut (μ x + 1n) (μ x))
-                                                                  (trans (+assoc (μ x) (μ x) 1n)
-                                                                         (cong (λ y → y + 1n)
-                                                                               (cong (λ y → μ x + y)
-                                                                                     (sym (+identityr (μ x))))))))))))
+inc===+1 : {x : Bin} -> === (μ (inc x)) (+ (μ x) one)
+inc===+1 {0b} = refl
+inc===+1 {1b} = refl
+inc===+1 {at-0 x} = refl
+inc===+1 {at-1 x} = trans2 (+assoc (μ (inc x)) (μ (inc x)) zero)
+                           (trans2 (zeroneutral (+ (μ (inc x)) (μ (inc x))))
+                                   (trans2 (cong2 (λ y → (+ y (μ (inc x))))
+                                                  (inc===+1 {x}))
+                                           (trans2 (cong2 (λ y → (+ (+ (μ x) one) y))
+                                                          (inc===+1 {x}))
+                                                   (trans2 (+assoc (+ (μ x) one) (μ x) one)
+                                                           (cong2 (λ y → (+ y one))
+                                                                  (trans2 (+commut2 (+ (μ x) one) (μ x))
+                                                                          (trans2 (+assoc (μ x) (μ x) one)
+                                                                                  (cong2 (λ y → (+ y one))
+                                                                                         (cong2 (λ y → (+ (μ x) y))
+                                                                                                (sym2 (zeroneutral (μ x))))))))))))
 ```
 
 
