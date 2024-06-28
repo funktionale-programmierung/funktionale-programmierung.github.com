@@ -11,7 +11,7 @@ wir die theoretische Grundlage von Denotational Design kennen gelernt:
 Die denotationelle Semantik. In diesem Artikel wollen wir dieses
 Werkzeug nutzen, um eine konkrete Fachlichkeit zu spezifizieren.
 
-<!-- More start -->
+<!-- more start -->
 
 ## Denotational Design
 
