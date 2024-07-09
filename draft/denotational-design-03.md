@@ -6,9 +6,14 @@ tags: ["Denotational Design", "Modelling", "Formale Methoden", "Agda", "Semantik
 ---
 
 Dieser Artikel ist der dritte einer Reihe über _Denotational
-Design_. In diesem Artikel lernen wir die [Programmiersprache
-Agda](https://agda.readthedocs.io/en/v2.6.4.3-r1/overview.html)
-kennen. Wir legen uns das Beispiel mit den binären Numeralen aus dem [ersten
+Design_. In diesem Artikel lernen wir
+[Agda](https://agda.readthedocs.io/en/v2.6.4.3-r1/overview.html)
+kennen. Agda ist eine Programmiersprache mit einem sehr
+ausdrucksstarken Typsystem. Es lassen sich mit Agda fast beliebige
+formale Aussagen als Typen ausdrücken. Implementierungen -- Werte
+dieser Typen -- werden dadurch zu Beweisen, die zeigen, dass diese
+Aussagen auch zutreffend sind. Wir legen uns im folgenden das Beispiel
+mit den binären Numeralen aus dem [ersten
 Artikel](https://funktionale-programmierung.de/2024/02/27/denotational-design-01.html)
 vor und formalisieren es in Agda. Im nächsten Artikel wenden wir die
 hier dargestellten Inhalte auf unser Praxisbeispiel mit den Zeitreihen
