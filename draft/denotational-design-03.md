@@ -87,8 +87,8 @@ ist IIII und so weiter. Diese Bierdeckelnotation wollen wir zur
 Grundlage unserer Formalisierung nehmen. Wir verwenden die
 Programmiersprache Agda, um dieses Vorhaben umzusetzen. Agda ist eine
 Programmiersprache mit sog. Dependent Types. Das Typsystem von Agda
-lässt uns fast alle denkbaren Konstruktionen ausdrücken -- auch
-Aussagen über die Korrektheit unseres Codes.
+lässt uns fast alle denkbaren Konstruktionen ausdrücken --
+insbesondere detaillierte Aussagen über die Korrektheit unseres Codes.
 
 In Agda führen wir einen neuen Datentyp ähnlich wie in Haskell mit dem
 Schlüsselwort `data` ein. Wir definieren zwei Konstruktoren: Anstatt
@@ -163,7 +163,8 @@ sähe das schon anders aus.
 
 ## Die Binärzahlen
 
-Die oben beschriebene Definition der binären Numerale lässt sich fast wortwörtlich in Agda übersetzen.
+Die eingangs beschriebene Definition der binären Numerale lässt sich
+fast wortwörtlich in Agda übersetzen.
 
 ```agda
 data Bin : Set where
@@ -266,7 +267,7 @@ zwei Dinge `x` und `y` vom Typen `Nat` nimmt und einen Typen (`Set`)
 zurückgibt. Hier sehen wir zum ersten Mal den Einsatz von Dependent
 Types. Das `x` könnte nämlich so was sein wie `zero` oder `suc zero`,
 also Werte und das ist schließlich auch das, was wir wollen, wenn wir
-einen Typen wie `one + two === three` konstruieren:
+einen Typen wie `=== (+ one two) three` konstruieren:
 
 ``` agda
 yes : (=== (+ one two) three)
