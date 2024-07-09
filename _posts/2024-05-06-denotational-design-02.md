@@ -11,6 +11,8 @@ wir die theoretische Grundlage von Denotational Design kennen gelernt:
 Die denotationelle Semantik. In diesem Artikel wollen wir dieses
 Werkzeug nutzen, um eine konkrete Fachlichkeit zu spezifizieren.
 
+<!-- more start -->
+
 ## Denotational Design
 
 Die denotationelle Semantik entstand wie gesagt zur Erforschung von
@@ -342,3 +344,5 @@ selbst beantworten können.
 [^overload]: Wir gehen im Fortgang des Artikels stets davon aus, dass `𝛍` überladen ist -- hier bspw. für Listen, Tuple, `UTCTime` und `a`.
 [^list]: Listen sind sozusagen keine nativen mathematischen Objekte. Wir basteln uns mathematische Listen mit dem Null-Tupel `()` und dem Zweier-Tupel `(Wert, Restliste)` als `Cons`.
 [^maybe]: Auch `Maybe` findet sich nicht unmittelbar in der Standardbibliothek der Mengentheorie (auf welcher wir hier aufbauen). Wir können `Nothing` mit dem Null-Tupel `()` ausdrücken und `Just x` ist das Einer-Tupel `(x)`.
+
+<!-- more end -->
