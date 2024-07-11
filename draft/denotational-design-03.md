@@ -90,10 +90,12 @@ Programmiersprache mit sog. Dependent Types. Das Typsystem von Agda
 lässt uns fast alle denkbaren Konstruktionen ausdrücken --
 insbesondere detaillierte Aussagen über die Korrektheit unseres Codes.
 
-In Agda führen wir einen neuen Datentyp ähnlich wie in Haskell mit dem
-Schlüsselwort `data` ein. Wir definieren zwei Konstruktoren: Anstatt
-bei der Eins beginnen wir bei der Null und anstatt einer unendlichen
-Menge von Symbolen definieren wir einen Hochzähl-Kombinator.
+In Agda führen wir einen neuen Datentyp mit `data` ein. Die Syntax ist
+sehr ähnlich zu der von
+[GADTs](https://en.wikipedia.org/wiki/Generalized_algebraic_data_type)
+in Haskell. Wir definieren zwei Konstruktoren: Anstatt bei der Eins
+beginnen wir bei der Null und anstatt einer unendlichen Menge von
+Symbolen definieren wir einen Hochzähl-Kombinator.
 
 ```agda
 data Nat : Set where
