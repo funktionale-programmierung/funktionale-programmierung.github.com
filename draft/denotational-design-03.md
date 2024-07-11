@@ -333,7 +333,7 @@ one)`. Es gibt nur einen einzigen Konstruktor, der eine solche Gleichheit bezeug
 
 ```agda
 inc===+1 : (x : Bin) -> (=== (𝛍 (inc x)) (+ (𝛍 x) one))
-inc===+1 = refl
+inc===+1 x = refl
 ```
 
 Agda gibt diese Fehlermeldung aus:
