@@ -348,10 +348,10 @@ when checking that the expression refl has type
 `===`-Vergleichsoperators. Die Fehlermeldung sagt also nicht direkt,
 dass unser Beweisunterfangen zum Scheitern verurteilt ist. Die
 Fehlermeldung sagt nur, dass `refl` nicht als Beweisobjekt taugt, denn
-dazu müssten beide Seiten zu dem selben Wert normalisieren, d.h. dass
-nach Einsetzung aller Definitionen derselbe Wert auf beiden Seiten von
-`===` entsteht. Zumindest taugt `refl` nicht _im Allgemeinen_ als ein
-solches Beweisobjekt. Für konkretere Aussagen klappt das schon:
+dazu müssten beide Seiten zu dem selben Term normalisieren, d.h.  nach
+Einsetzung aller Definitionen müsste derselbe Term auf beiden Seiten
+von `===` stehen. Zumindest taugt `refl` nicht _im Allgemeinen_ als
+ein solches Beweisobjekt. Für konkretere Aussagen klappt das schon:
 
 ```
 inc10b : (=== (𝛍 (inc 10b)) (+ (𝛍 10b) one))
