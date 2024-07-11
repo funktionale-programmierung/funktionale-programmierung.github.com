@@ -344,11 +344,11 @@ when checking that the expression refl has type
 === (𝛍 (inc x)) (+ (𝛍 x) one)
 ```
 
-`!=` ist dabei nicht die Negation unseres
+`!=` ist dabei _nicht_ die Negation unseres
 `===`-Vergleichsoperators. Die Fehlermeldung sagt also nicht direkt,
 dass unser Beweisunterfangen zum Scheitern verurteilt ist. Die
 Fehlermeldung sagt nur, dass `refl` nicht als Beweisobjekt taugt, denn
-dazu müssten beide Seiten zu dem selben Term normalisieren, d.h.  nach
+dazu müssten beide Seiten zu dem selben Term normalisieren, d.h. nach
 Einsetzung aller Definitionen müsste derselbe Term auf beiden Seiten
 von `===` stehen. Zumindest taugt `refl` nicht _im Allgemeinen_ als
 ein solches Beweisobjekt. Für konkretere Aussagen klappt das schon:
@@ -362,7 +362,7 @@ Hier haben wir das `x` in `inc===+1` durch `10b` konkretisiert. Wenn
 wir alle Funktionsanwendungen nach Definition auflösen (z.B. `inc 10b`
 = `inc (at-0 1b)` = `at-1 1b`), erhalten wir auf beiden Seiten des
 `===` das Ergebnis `suc (suc (suc zero))`. Der Konstruktor `refl` ist
-also anwendbar. Das gilt auch für die ersten drei Fälle im allgemeinen `inc===+1`:
+also anwendbar. Das gilt auch für die ersten beiden Fälle für `inc===+1`.
 
 ```agda
 inc===+1 : (x : Bin) -> (=== (𝛍 (inc x)) (+ (𝛍 x) one))
@@ -372,9 +372,28 @@ inc===+1 (at-0 x) = refl
 inc===+1 (at-1 x) = ?
 ```
 
-Nur im letzten Fall kann Agda den Beweis nicht automatisch führen. Das
-liegt daran, dass wir keine Informationen über `x` haben und deshalb
-die Normalisierung -- das Einsetzen von Definitionen -- stecken
+Überraschenderweise ist der dritte Fall `inc===+1 (at-0 x)` ebenfalls
+unmittelbar erfüllbar, obwohl `x` dort als freie Variable
+vorkommt. Das liegt daran, dass auch hier die Normalisierung denselben
+Term liefert:
+
+```
+(𝛍 (inc (at-0 x))) =
+(𝛍 (at-1 x)) =
+(+ (* two (𝛍 x)) one)
+```
+
+... auf der linken Seite und ...
+
+```
+(+ (𝛍 (at-0 x)) one) =
+(+ (* two (𝛍 x)) one)
+```
+
+... auf der rechten Seite.
+
+Nur im letzten Fall kann Agda den Beweis nicht automatisch führen,
+weil die Normalisierung -- das Einsetzen von Definitionen -- stecken
 bleibt. Wir können uns von Agda an der Stelle des Fragezeichens das
 Beweisziel anzeigen lassen:
 
@@ -383,10 +402,11 @@ Goal: === (+ (𝛍 (inc x)) (+ (𝛍 (inc x)) zero))
           (+ (+ (+ (𝛍 x) (+ (𝛍 x) zero)) one) one)
 ```
 
-Das sieht kompliziert aus. Nachdem wir uns vom ersten Schock erholt
-haben, sehen wir aber, dass dort ganz offensichtlich zu vereinfachende
-Terme stehen: `(+ (𝛍 (inc x)) zero)` sollte sich ja wohl zu `(𝛍 (inc x))`
-vereinfachen lassen. Wir erhalten dann:
+Hier sehen wir die zwei steckgebliebenen Terme. Das sieht kompliziert
+aus. Nachdem wir uns vom ersten Schock erholt haben, sehen wir aber,
+dass dort ganz offensichtlich zu vereinfachende Terme stehen: `(+ (𝛍 (inc x)) zero)`
+sollte sich ja wohl zu `(𝛍 (inc x))` vereinfachen
+lassen. Wir erhalten dann:
 
 ```
 Goal: === (+ (𝛍 (inc x)) (𝛍 (inc x)))
