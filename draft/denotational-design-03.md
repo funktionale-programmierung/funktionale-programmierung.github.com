@@ -111,13 +111,13 @@ one : Nat
 one = suc zero
 
 two : Nat
-two = suc two
+two = suc one
 
 three : Nat
 three = suc two
 ```
 
-Die Bedeutung dieser ansich bedeutungslosen Konstruktionen kommt erst
+Die Bedeutung dieser an sich bedeutungslosen Konstruktionen kommt erst
 dann richtig zum Tragen, wenn wir ein paar Operationen auf den
 natürlichen Zahlen definieren. Wir wollen beispielsweise zwei Zahlen
 addieren.
