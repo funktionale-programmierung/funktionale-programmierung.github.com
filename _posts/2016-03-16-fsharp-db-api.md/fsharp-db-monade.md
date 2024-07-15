@@ -3,7 +3,7 @@ layout: post
 description: db-Monade in F#
 title: "Zusammensetzbare Datenbank-API in F#"
 author: andreas-bernauer
-tags: ["API", "zusammensetzbar", "fsharp", "f#"]
+tags: ["F#"]
 ---
 
 Für den Programmierer bietet der Einsatz einer Datenbank viele Fallstricke: Unabhängigkeit von einer bestimmten Datenbank-Implementierung, Fehlerbehandlung, verschachtelte Transaktionen, Testbarkeit, um nur ein paar zu nennen.
