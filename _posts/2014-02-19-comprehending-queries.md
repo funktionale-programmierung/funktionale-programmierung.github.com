@@ -3,7 +3,7 @@ layout: post
 description: "Monoid-Comprehensions und Anfragesprachen für Datenbanksysteme"
 title: "Comprehending Queries"
 author: torsten-grust
-tags: ["Datenbankanfragen", "SQL", "Comprehensions", "Monoid", "Monaden", "Haskell"]
+tags: ["SQL", "Monoide", "Monaden", "Haskell"]
 ---
 
 Mit dem *Haskell 98 Report* kam im Dezember 2002 ein langwieriger

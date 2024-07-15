@@ -3,7 +3,7 @@ layout: post
 description: 
 title: "MyOwnSafe - Funktionale Programmierung in der Praxis - Teil 2"
 author: david-frese
-tags: ["Praxis", "OCaml", "XML", "Pattern-Matching"]
+tags: ["OCaml"]
 ---
 
 Die [Active Group](http://www.active-group.de/) hat die Webanwendung

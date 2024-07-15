@@ -3,7 +3,7 @@ layout: post
 description: Buildsysteme mit Haskell
 title: "Buildsysteme mit Haskell"
 author: stefan-wehr
-tags: ["build system", "make", "shake", "Haskell"]
+tags: ["Haskell"]
 ---
 
 Willkommen im Neuen Jahr! Der Blog *Funktionale Programmierung* startet direkt

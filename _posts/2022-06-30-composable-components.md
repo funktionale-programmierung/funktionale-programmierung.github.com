@@ -3,7 +3,7 @@ layout: post
 description: Ein Modell für Komponierbare Webkomponenten basierend auf React
 title: "Komponierbare Komponenten"
 author: david-frese
-tags: ["ClojureScript", "JavaScript", "Clojure", "Web", "Webkomponenten", "Reacl", "Reacl-c"]
+tags: ["ClojureScript", "JavaScript", "Web"]
 ---
 
 Dieser Artikel stellt ein Modell für wirklich _komponierbare

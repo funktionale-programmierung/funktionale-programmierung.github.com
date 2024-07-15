@@ -18,14 +18,14 @@ Hier ein Beispiel für einen Post-Header:
 	description: Rein funktionale Programmierung - Teil 2
 	title: "Eine kleine Einführung in die rein funktionale Programmierung - Teil 2"
 	author: michael-sperber
-	tags: ["rein funktional", "Racket", "Schneckenwelt"]
+	tags: ["Racket"]
 	meta_description: >
 	  Mehrzeiliger Text bei dem der Whitespace entfernt wird.
 	page_title: "Einführung rein funktionale Programmierung 2"
 
 Zu beachten besonders die Syntax für den Tags-Eintrag: Es funktionieren auch
 Leerzeichen-separierte Wortlisten, aber Kommata landen dann beispielsweise im
-Tag selbst.
+Tag selbst. Verwendet am besten ausschließlich bereits existierende Tags.
 
 Zum Feld `author` siehe [Autoren](#autoren).
 

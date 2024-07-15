@@ -3,7 +3,7 @@ layout: post
 description: Wir entwickeln F#-Anwendungen für Windows ohne Windows als Entwicklungssystem einzusetzen.
 title: "F# ohne Windows mit Visual Studio Code"
 author: tim-digel
-tags: ["F#", "F Sharp", "Visual Studio Code", "VS Code", "Einführung", "Erste Schritte", "Projekt", "Start"]
+tags: ["F#"]
 ---
 
 In [Einstieg in Visual Studio mit F#](/2020/01/23/f-sharp-visual-studio-erste-schritte.html) haben wir im Schnelldurchgang die ersten Schritte im Zusammenhang mit Anwendungen in F# kennen gelernt. Dabei haben wir auf Visual Studio zurückgegriffen und uns somit auf Windows oder MacOS beschränkt.  

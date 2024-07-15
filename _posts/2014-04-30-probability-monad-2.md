@@ -3,7 +3,7 @@ layout: post
 description: "DSLs ohne Nahtstelle mit Kontrollabstraktion"
 title: "DSLs ohne Nahtstelle mit Kontrollabstraktion"
 author: michael-sperber
-tags: ["Racket", "Monaden", "Continuations"]
+tags: ["Racket", "Monaden"]
 ---
 
 In einem [vorherigen Posting]({% post_url 2014-04-10-probability-monad %}) haben wir uns mit einer Monade

@@ -3,7 +3,7 @@ layout: post
 description: "Einführung in Scala 3. Syntax im Detail."
 title: "Scala 3: Scala im neuen Gewand" 
 author: simon-haerer
-tags: ["scala", "3", "syntax"]
+tags: ["Scala", "Scala 3"]
 ---
 
 Nach 8 Jahren, 28000 Commits und 7400 Pull-Requests war es am 14. Mai 2021

@@ -3,7 +3,7 @@ layout: post
 description: Java und Scala in einem Projekt
 title: "Gemeinsame Verwendung von Scala und Java in einem Projekt"
 author: helmut-dobretzberger
-tags: ["Scala", "Java", "SBT", "EQUALS"]
+tags: ["Scala", "Java"]
 page_title: "Java und Scala in einem Projekt"
 ---
 

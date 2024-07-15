@@ -2,7 +2,7 @@
 layout: post
 title: "Continuations in der Praxis"
 author: stefan-wehr
-tags: ["continuations", "Haskell", "Konzepte", "Praxis"]
+tags: ["Continuations", "Haskell"]
 ---
 
 Gewisse Konzepte, die in der funktionalen Programmierung häufig vorkommen,

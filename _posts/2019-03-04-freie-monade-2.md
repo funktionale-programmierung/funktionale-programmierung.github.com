@@ -3,7 +3,7 @@ layout: post
 description: "Freie Monaden selbst gemacht"
 title: "Uhrwerk Freie Monade: Hinter den Kulissen" 
 author: simon-haerer
-tags: ["Praxis", "freie", "Monade", "Scala"]
+tags: ["Monaden", "Scala"]
 ---
 
 Im Artikel ["Freie Monaden oder: Wie ich lernte, die Unabhängigkeit zu lieben"](https://funktionale-programmierung.de/2018/01/22/freie-monade.html) wurde gezeigt,

@@ -3,7 +3,7 @@ layout: post
 description: "Clojure Makros"
 title: "Makros in Clojure - 3 - Das Record-Makro"
 author: kaan-sahin
-tags: ["Clojure", "Makro", "macro", "defmacro", "quote", "defrecord", "record"]
+tags: ["Clojure", "Makros"]
 ---
 
 Nachdem wir in den beiden Blogposts [Makros in

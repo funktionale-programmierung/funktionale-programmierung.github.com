@@ -3,7 +3,7 @@ layout: post
 description: Beschreibung
 title: "Funktionales Deep Learning in Haskell - Teaser"
 author: raoul-schlotterbeck
-tags: ["Funktionale Programmierung", "Deep Learning", "Neuronale Netze", "Haskell", "ConCat"]
+tags: ["Haskell", "Machine Learning"]
 ---
 
 Bei der Active Group entwickeln wir für Siemens eine App, die mithilfe

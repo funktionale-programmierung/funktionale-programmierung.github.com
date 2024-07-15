@@ -2,7 +2,7 @@
 layout: post
 title: "Freie Monaden in Clojure"
 author: marcus-crestani
-tags: ["Praxis", "freie", "Monade", "Clojure", "mocks", "mock-tests"]
+tags: ["Monaden", "Clojure", "Testing"]
 ---
 
 Monaden sind ein wichtiges Konzept in der funktionalen Programmierung mit

@@ -2,7 +2,7 @@
 layout: post
 title: "Effekte in Ocaml 5"
 author: marco-schneider
-tags: ["Praxis", "Effekte", "Effects", "Ocaml"]
+tags: ["Effekte", "OCaml"]
 ---
 
 Nach langer Arbeit landete in Version 5 von Ocaml endlich auch die Unterstützung

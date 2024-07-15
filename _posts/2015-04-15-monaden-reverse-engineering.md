@@ -3,7 +3,7 @@ layout: post
 description: Monaden für's Reverse Engineering
 title: "Monaden für's Reverse Engineering"
 author: joachim-breitner
-tags: ["Haskell", "Monaden", "Praxis"]
+tags: ["Haskell", "Monaden"]
 ---
 
 Der Spieleverlag Ravensburger hat in seinem Programm den „Tiptoi-Stift“, der mit einer Kamera in der Spitze und einem Lautsprecher ausgestattet Kinderbücher zum Sprechen bringt. Die Logik für den eingebauten Prozessor steckt dabei in einer Datei im GME-Format, die man sich auf der Webseite von Ravensburger herunterlädt und auf den Stift kopiert.

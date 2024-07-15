@@ -3,7 +3,7 @@ layout: post
 description: "Conditional Restarts in Clojure"
 title: "Ein alter Hut: Conditional Restarts" 
 author: simon-haerer
-tags: ["common lisp", "conditional", "restarts", "conditional restarts", "effekte", "fehler", "clojure"]
+tags: ["Common Lisp", "Clojure", "Effekte"]
 ---
 
 Viele unserer Blogposts beschäftigen sich damit, wie effektbehaftete Programme

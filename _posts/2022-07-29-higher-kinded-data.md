@@ -3,7 +3,7 @@ layout: post
 description: Beschreibung
 title: "Higher-Kinded Data für Konfigurationen in Haskell"
 author: felix-leitz
-tags: ["higher-kinded data","haskell"]
+tags: ["Haskell"]
 ---
 
 Viele Anwendungen verwenden Konfigurationen, um ihr Verhalten zur Laufzeit

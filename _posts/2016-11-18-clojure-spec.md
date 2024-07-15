@@ -3,7 +3,7 @@ layout: post
 description: ""
 title: "Spezifikation von Clojure-Datentypen mit clojure.spec"
 author: marcus-crestani
-tags: ["Clojure", "Spezifikation", "Datentypen", "clojure.spec"]
+tags: ["Clojure"]
 ---
 
 Clojure ist eine dynamische Programmiersprache, was unter anderem

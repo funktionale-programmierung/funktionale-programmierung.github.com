@@ -2,7 +2,7 @@
 layout: post
 title: "Datenkonvertierung mit Linsen"
 author: marcus-crestani
-tags: ["Praxis", "Linsen", "Records", "EDN", "Transformation", "Konvertierung", "bidirektional"]
+tags: ["Clojure"]
 
 ---
 

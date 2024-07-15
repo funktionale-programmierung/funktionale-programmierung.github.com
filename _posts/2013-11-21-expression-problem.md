@@ -3,7 +3,7 @@ layout: post
 description: Das 'Expression Problem' und einige Lösungen.
 title: "Was ist das 'Expression Problem'?"
 author: david-frese
-tags: ["Expression Problem", Haskell, Scala, Clojure]
+tags: [Haskell, Scala, Clojure]
 ---
 
 Das sogenannte 'Expression Problem' ist das Problem, dass sich

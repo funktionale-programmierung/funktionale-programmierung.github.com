@@ -2,7 +2,7 @@
 layout: post
 title: "Einführung in Denotational Design, Teil I: Denotationelle Semantik"
 author: markus-schlegel
-tags: ["Denotational Design", "Modelling", "Formale Methoden", "Praxis", "Semantik"]
+tags: ["Denotational Design", "Modelling", "Formale Methoden", "Semantik"]
 ---
 
 Dieser Artikel ist der Beginn einer Reihe über _Denotational

@@ -3,7 +3,7 @@ layout: post
 description: Projekterstellung, F# Interactive, Haltepunkte, Tests und vieles mehr
 title: "Einstieg in Visual Studio mit F#"
 author: tim-digel
-tags: ["F#", "F Sharp", "Visual Studio", "Einführung", "Erste Schritte", "Projekt", "Start"]
+tags: ["F#"]
 ---
 
 F# (F Sharp) ist eine von Microsoft entwickelte funktionale Programmiersprache im _.NET_-Universum. Die Syntax erinnert sehr stark an _OCaml_. Microsoft bietet mit _Visual Studio_ eine komplette Entwicklungsumgebung an, die neben F# auch mit vielen weiteren Sprachen zurecht kommt. In diesem Blogpost sehen wir uns erste Schritte im Zusammenspiel von F# mit Visual Studio an und erläutern einige ungewöhnliche Eigenarten. Erklärungen zur Syntax von F# lassen wir weitestgehend außer acht. Dafür verweisen wir auf einen zeitnah erscheinenden Blogartikel zum Kennenlernen von F#.  

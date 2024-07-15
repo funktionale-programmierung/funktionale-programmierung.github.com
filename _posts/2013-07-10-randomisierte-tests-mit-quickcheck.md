@@ -3,7 +3,7 @@ layout: post
 description: Randomisierte Tests
 title: "Randomisierte Tests mit QuickCheck"
 author: andreas-bernauer
-tags: ["QuickCheck", "Randomisierte Tests", "Racket"]
+tags: ["Testing", "Racket"]
 ---
 
 

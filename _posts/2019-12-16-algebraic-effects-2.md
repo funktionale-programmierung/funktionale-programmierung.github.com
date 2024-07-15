@@ -3,7 +3,7 @@ layout: post
 description: "Algebraische-Effekte-2"
 title: "Weihnachtswichteln mit algebraischen Effekten"
 author: simon-haerer
-tags: ["algebraische Effekte", "Effekte", "algebraische", "weihnachten", "wichteln", "Koka", "Monadentransformer", "Seiteneffekt", "Seiteneffekte", "algebraic effects", "algebraic", "effects"]
+tags: ["Effekte", "Koka"]
 ---
 
 Weihnachten steht vor der Tür und der Geschenkewahnsinn beginnt. Viele

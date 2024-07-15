@@ -3,7 +3,7 @@ layout: post
 description: Scala 3 Union- & Intersection-Types
 title: "Scala 3: Über Vereinigungen und Schnittmengen"
 author: simon-haerer
-tags: ["Scala", "Scala 3", "union", "intersection", "types", "type", "with"]
+tags: ["Scala", "Scala 3"]
 ---
 
 

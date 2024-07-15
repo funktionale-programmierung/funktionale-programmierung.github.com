@@ -3,7 +3,7 @@ layout: post
 description: Funktionale Validierung in Kotlin
 title: "Funktionale Validierung in Kotlin"
 author: michael-sperber
-tags: ["Kotlin", "funktor", "functor", "applikativ", "applicative", "validierung", "validation"]
+tags: ["Kotlin", "Validierung"]
 ---
 
 Dieser Post ist der Beginn einer Reihe über *funktionale

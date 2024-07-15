@@ -3,7 +3,7 @@ layout: post
 description: Mehr über Software Transactional Memory
 title: "Mehr über Software Transactional Memory"
 author: stefan-wehr
-tags: ["Nebenläufigkeit", "Haskell", "STM"]
+tags: ["Nebenläufigkeit", "Haskell"]
 ---
 
 Vor kurzem war

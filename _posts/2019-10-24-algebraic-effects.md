@@ -3,7 +3,7 @@ layout: post
 description: "Algebraische-Effekte"
 title: "Einführung in algebraische Effekte"
 author: simon-haerer
-tags: ["algebraische Effekte", "Effekte", "algebraische", "Koka", "Monadentransformer", "Seiteneffekt", "Seiteneffekte", "algebraic effects", "algebraic", "effects"]
+tags: ["Effekte", "Koka"]
 ---
 
 Algebraische Effekte ermöglichen es, Seiteneffekte elegant auszudrücken und

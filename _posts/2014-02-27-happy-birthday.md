@@ -3,7 +3,7 @@ layout: post
 description: Jahresrückblick
 title: "Jahresrückblick"
 author: stefan-wehr
-tags: ["Rückblick"]
+tags: []
 ---
 
 Vor ziemlich genau einem Jahr haben wir das Blog "Funktionale Programmierung" gestartet.

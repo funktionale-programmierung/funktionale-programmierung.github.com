@@ -3,7 +3,7 @@ layout: post
 description: Haskell FFI
 title: "Haskell FFI"
 author: johannes-weiss
-tags: ["Haskell", "FFI", "C"]
+tags: ["Haskell", "C"]
 ---
 
 Obwohl für Haskell auf [Hackage](http://hackage.haskell.org/) eine sehr große

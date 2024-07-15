@@ -3,7 +3,7 @@ layout: post
 description: Rein funktionale Programmierung
 title: "Eine kleine Einführung in die rein funktionale Programmierung"
 author: michael-sperber
-tags: ["rein funktional", "Racket", "Schneckenwelt"]
+tags: ["Racket"]
 ---
 
 In Verbindung mit der funktionalen Programmierung taucht oft der
@@ -27,7 +27,7 @@ Videospiel), in der sich *Schnecken* bewegen, entlehnt einer
 [Live-Coding-Session von der OOP 2013](http://www.sigs-datacom.de/oop2013/konferenz/sessiondetails.html?tx_mwconferences_pi1[showUid]=1101&tx_mwconferences_pi1[anchor]=#Ndo3&tx_mwconferences_pi1[s]=0).
 Die Schneckenwelt ist zweidimensional, und wir fangen mit sehr sturen
 Schnecken an, die sich stets in die gleiche Richtung bewegen und sich
-nicht davon abhalten lassen.  
+nicht davon abhalten lassen.
 
 In diesem Posting kümmern wir uns erst einmal um die individuellen
 Schnecken, die wir in einem späteren Posting dann in der Schneckenwelt
@@ -37,8 +37,7 @@ Schleimspuren anderer Schnecken ("die stinken") ausweichen.  Das ganze
 visualisieren wir dann dergestalt, daß es so aussieht:
 
 <div id="center">
-<img src="/files/rein-funktional/snailworld.gif">
-</img>
+<img src="/files/rein-funktional/snailworld.gif" />
 </div>
 
 Wir programmieren das

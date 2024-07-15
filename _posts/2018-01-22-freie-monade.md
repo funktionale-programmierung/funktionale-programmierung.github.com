@@ -3,7 +3,7 @@ layout: post
 description: "Einführung in freie Monaden"
 title: "Freie Monaden oder: Wie ich lernte, die Unabhängigkeit zu lieben"
 author: simon-haerer
-tags: ["Praxis", "freie", "Monade", "Scala"]
+tags: ["Monaden", "Scala"]
 ---
 
 Eine enge Kopplung der Beschreibung von Programmteilen und deren Ausführung führt unweigerlich

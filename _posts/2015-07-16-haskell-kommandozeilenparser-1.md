@@ -3,7 +3,7 @@ layout: post
 description: Beschreibung
 title: "Kommandozeilenparser in Haskell - Teil 1"
 author: emin-karayel
-tags: ["haskell"]
+tags: ["Haskell"]
 ---
 
 In diesem Artikel lernen wir wie Kommandozeilenoptionen in Haskell-Programmen mit der Bibliothek [System.Console.GetOpt](https://hackage.haskell.org/package/base-4.8.0.0/docs/System-Console-GetOpt.html) geparst werden können und wie die geparsten Optionen in einen Record-Type (Tupel mit Datenfeldern) zur typsicheren Weiterverarbeitung im Programm umgerechnet werden können.

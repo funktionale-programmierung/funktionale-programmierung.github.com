@@ -3,7 +3,7 @@ layout: post
 description: 
 title: "MyOwnSafe - Funktionale Programmierung in der Praxis"
 author: david-frese
-tags: ["Praxis", "MyOwnSafe", "OCaml", "HTML 5", "NoSQL"]
+tags: ["OCaml"]
 ---
 
 Die Active Group hat die Webanwendung

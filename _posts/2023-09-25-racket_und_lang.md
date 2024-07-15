@@ -2,7 +2,7 @@
 layout: post
 title: "Racket und #lang"
 author: kaan-sahin
-tags: ["racket", "lisp", "makro", "dsl"]
+tags: ["Racket", "Makros", "DSLs"]
 ---
 
 Racket steht -- wie allen Lisp-Dialekten -- das mächtige Werkzeug

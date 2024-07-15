@@ -3,7 +3,7 @@ layout: post
 description: Moderne Webanwendungen mit Haskell und Javascript clientseitige Implementierung
 title: "Moderne Webanwendungen mit Haskell und Javascript: clientseitige Implementierung"
 author: alexander-thiemann
-tags: ["web", "Haskell", "JavaScript", "SOY", "HTTP", "PHP"]
+tags: ["Web", "Haskell", "JavaScript"]
 ---
 
 Im [ersten Teil](http://funktionale-programmierung.de/2013/04/04/webanwendung-haskell.html) des Artikels haben wir in Haskell einen einfachen Server mit Rest-API 

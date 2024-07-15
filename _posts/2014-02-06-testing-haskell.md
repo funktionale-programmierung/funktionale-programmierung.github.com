@@ -3,7 +3,7 @@ layout: post
 description: Testen mit Haskell
 title: "Testen mit Haskell"
 author: stefan-wehr
-tags: ["Tests", "Haskell", "QuickCheck", "Unit-Tests"]
+tags: ["Testing", "Haskell"]
 ---
 
 Tests sind für gute Softwarequalität unerlässlich. Obwohl wir hier

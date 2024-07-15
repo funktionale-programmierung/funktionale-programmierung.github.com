@@ -3,7 +3,7 @@ layout: post
 description: Wie man sich Daten für Tests zurecht legen kann
 title: "Testen in Elixir mit Beispieldaten"
 author: tim-digel
-tags: ["Elixir", "Erlang", "Test", "Testing", "ExUnit", "Mix", "Setup", "Context", "Describe"]
+tags: ["Elixir", "Testing"]
 ---
 
 Elixir bietet uns eine einfache Möglichkeit, Testdaten übergreifend zu nutzen. Mit sogenannten Kontexten können wir eine Startbasis an Daten definieren, die unsere Tests komplett oder in Teilen verwenden können. Wir lernen das Konstrukt `setup` kennen. Neben Beispieldaten können wir auch Funktionsaufrufe mit Seiteneffekten im Setup ausführen, z. B. Löschen von vorherigen Testerzeugnissen auf der Festplatte oder Starten von externen Diensten.  

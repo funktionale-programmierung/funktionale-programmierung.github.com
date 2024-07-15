@@ -3,7 +3,7 @@ layout: post
 description: "Makros in Clojure"
 title: "Makros in Clojure"
 author: kaan-sahin
-tags: ["Clojure", "Makro", "macro", "defmacro", "quote", "unquote", "backquote", "quasiquote"]
+tags: ["Clojure", "Makros"]
 ---
 
 *If you give someone Fortran, he has Fortran. If you give someone Lisp, he has any language he pleases.*

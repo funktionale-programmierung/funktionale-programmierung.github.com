@@ -3,7 +3,7 @@ layout: post
 description: "Erfahrungsbericht zu Eclipse Xtend"
 title: "Eclipse Xtend"
 author: david-frese
-tags: ["Eclipse", "Xtend", "Java"]
+tags: ["Xtend", "Java"]
 ---
 
 Wir haben gerade ein Kundenprojekt im [Eclipse](http://eclipse.org/)-

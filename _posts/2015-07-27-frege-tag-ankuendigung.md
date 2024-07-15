@@ -3,7 +3,7 @@ layout: post
 description: Ankündigung für den Frege Tag in Basel am 11. September 2015
 title: "Frege Tag in Basel: Haskell für die JVM"
 author: dierk-koenig
-tags: ["Haskell", "Frege", "Ankündigung", "Veranstaltung"]
+tags: ["Haskell", "Frege", "Konferenz"]
 ---
 
 

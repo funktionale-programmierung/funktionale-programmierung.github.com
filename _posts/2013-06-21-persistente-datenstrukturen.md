@@ -3,7 +3,7 @@ layout: post
 description: Zeitreisen mit persistenten Datenstrukturen
 title: "Zeitreisen mit persistenten Datenstrukturen"
 author: niklas-baumstark
-tags: ["persistente Datenstrukturen", "C++"]
+tags: ["C++"]
 ---
 
 # Zeitreisen mit persistenten Datenstrukturen

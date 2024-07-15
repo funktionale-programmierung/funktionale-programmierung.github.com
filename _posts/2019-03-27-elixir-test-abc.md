@@ -3,7 +3,7 @@ layout: post
 description: Tests schreiben und ausführen mit Elixir
 title: "Test-ABC mit Elixir"
 author: tim-digel
-tags: ["Elixir", "Erlang", "Test", "Testing", "ExUnit", "Mix"]
+tags: ["Elixir", "Testing"]
 ---
 
 In der Regel schreibt niemand gerne Tests. Es ist einfacher mit etwas Selbstsicherheit zu behaupten, dass man das Programm gleich richtig schreibt und sich Tests sparen kann.  

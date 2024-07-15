@@ -3,7 +3,7 @@ layout: post
 description: "A prettier printer - implementation details"
 title: "Pretty-Printing II - Laziness FTW"
 author: kaan-sahin
-tags: ["pretty", "printing", "haskell", "wadler", "laziness", "lazy"]
+tags: ["Haskell", "DSLs"]
 ---
 
 Um ein (verschachteltes) Objekt komfortabel untersuchen zu können, wird eine

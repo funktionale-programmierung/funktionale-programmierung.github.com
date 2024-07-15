@@ -3,7 +3,7 @@ layout: post
 description: "Tail Calls und ihre Bedeutung in der funktionalen Programmierung"
 title: "Tail Calls"
 author: michael-sperber
-tags: ["Endrekursion", "tail calls", "Schleifen"]
+tags: ["Tail Calls"]
 ---
 
 Wer mit funktionalen Programmierern über die Programmierung an sich

@@ -3,7 +3,7 @@ layout: post
 description: Ein kurze Einführung in Elixirs Patter Matching
 title: "Pattern Matching in Elixir"
 author: marco-schneider
-tags: ["elixir", "pattern matching", "json"]
+tags: ["Elixir"]
 ---
 
 Die funktionale Programmiersprache Elixir bietet hervorragende Möglichkeiten zum Einsatz von Pattern Matching.

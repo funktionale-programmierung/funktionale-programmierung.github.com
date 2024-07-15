@@ -3,7 +3,7 @@ layout: post
 description: Facebook setzt auf Haskell
 title: "Facebook setzt auf Haskell"
 author: stefan-wehr
-tags: ["Haskell", "Praxis"]
+tags: ["Haskell"]
 ---
 
 Vor kurzem haben wir hier in diesem Blog die Veranstaltung

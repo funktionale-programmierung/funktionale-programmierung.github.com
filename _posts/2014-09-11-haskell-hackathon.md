@@ -3,7 +3,7 @@ layout: post
 description: Haskell-Hackathon in Berlin
 title: "Haskell-Hackathon in Berlin"
 author: stefan-wehr
-tags: ["Haskell", "Hackathon"]
+tags: ["Haskell", "Konferenz"]
 ---
 
 In gut zwei Wochen findet vom 26. bis zum 28. September in Berlin der

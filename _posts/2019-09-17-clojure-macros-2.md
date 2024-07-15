@@ -3,7 +3,7 @@ layout: post
 description: "Clojure-Makros"
 title: "Makros in Clojure - 2"
 author: kaan-sahin
-tags: ["Clojure", "Makro", "macro", "defmacro", "quote", "syntaxquote", "gensym"]
+tags: ["Clojure", "Makros"]
 ---
 
 Dieser Blogpost ist eine Fortführung von [Makros in

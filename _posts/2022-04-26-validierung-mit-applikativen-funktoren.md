@@ -3,7 +3,7 @@ layout: post
 description: Validierung mit applikativen Funktoren
 title: "Funktionale Programmierung in der Praxis: Validierung mit applikativen Funktoren"
 author: marco-schneider
-tags: ["praxis", "haskell", "funktor", "functor", "applikativ", "applicative", "validierung", "validation",]
+tags: ["Haskell", "Validierung"]
 ---
 
 Unser erster Artikel in der Reihe "Funktionale Programmierung in der

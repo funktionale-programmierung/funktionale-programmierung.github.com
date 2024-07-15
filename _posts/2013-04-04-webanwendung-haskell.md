@@ -3,7 +3,7 @@ layout: post
 description: Moderne Webanwendungen mit Haskell
 title: "Moderne Webanwendungen mit Haskell"
 author: alexander-thiemann
-tags: ["web", "Haskell", "JavaScript", "SOY", "HTTP", "PHP"]
+tags: ["Web", "Haskell", "JavaScript"]
 ---
 Derzeit sind viele Webanwendungen in PHP geschrieben. Die Gründe dafür liegen auf der Hand: Die Entwicklung geht meist sehr schnell,
 PHP ist einfach zu erlernen und fast alle Webhoster haben mittlerweile Webserver mit PHP-Unterstützung installiert. Allerdings bringt die Verwendung

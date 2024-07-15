@@ -2,7 +2,7 @@
 layout: post
 title: "Eine Einführung in Denotational Design Teil II: Zeitreihen"
 author: markus-schlegel
-tags: ["Denotational Design", "Modelling", "Formale Methoden", "Praxis"]
+tags: ["Denotational Design", "Modelling", "Formale Methoden"]
 ---
 
 Dieser Artikel ist der zweite einer Serie von Artikeln über

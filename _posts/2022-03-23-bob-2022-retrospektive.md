@@ -3,7 +3,7 @@ layout: post
 description: BOB 2022 - Retrospektive
 title: "BOB 2022 – Retrospektive"
 author: markus-schlegel
-tags: ["BOBkonf", "konferenz",]
+tags: ["BOB"]
 ---
 
 Am 11.03.2022 fand wieder die BOB, unsere alljährliche

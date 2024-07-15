@@ -3,7 +3,7 @@ layout: post
 description: "DSLs ganz einfach mit Clojure"
 title: "DSLs ganz einfach mit Clojure"
 author: michael-sperber
-tags: ["Clojure", "DSL"]
+tags: ["Clojure", "DSLs"]
 ---
 
 Clojure hat sich als alternative Programmiersprache auf der JVM fest

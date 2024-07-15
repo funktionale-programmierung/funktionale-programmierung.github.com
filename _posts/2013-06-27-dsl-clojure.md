@@ -3,7 +3,7 @@ layout: post
 description: DSL-Entwicklung mit Clojure
 title: "Systematisch eingebettete DSLs entwickeln in Clojure"
 author: michael-sperber
-tags: ["Clojure", "DSL", "EDSL"]
+tags: ["Clojure", "DSLs"]
 ---
 
 In letzter Zeit sind in der Software-Entwicklung [domänenspezifische

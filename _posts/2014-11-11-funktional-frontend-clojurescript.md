@@ -3,7 +3,7 @@ layout: post
 description: "Funktionale Frontend-Entwicklung: ClojureScript in Desktopanwendungen einsetzen."
 title: "Funktionale Frontend-Entwicklung: ClojureScript in Desktopanwendungen"
 author: helmut-dobretzberger
-tags: ["Scala", "Reacl", "ClojureScript", "JavaFX", "EQUALS"] 
+tags: ["Scala", "ClojureScript"] 
 page_title: "Funktionale Frontend-Entwicklung: ClojureScript in Desktopanwendungen"
 ---
 

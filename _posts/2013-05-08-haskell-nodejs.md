@@ -3,7 +3,7 @@ layout: post
 description: Haskell schlägt node.js
 title: "Haskell schlägt node.js"
 author: stefan-wehr
-tags: ["Performance", "Haskell", "NodeJS", "Netzwerk", "Sockets"]
+tags: ["Performance", "Haskell"]
 ---
 
 Das Javascript-Framework [node.js](http://nodejs.org/) ist eine auf Googles

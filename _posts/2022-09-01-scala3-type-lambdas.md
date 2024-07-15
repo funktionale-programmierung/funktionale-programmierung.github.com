@@ -3,7 +3,7 @@ layout: post
 description: Typ-Lambdas in Scala 3
 title: "Scala 3: Typ-Lambdas"
 author: michael-sperber
-tags: ["Scala", "types", "type"]
+tags: ["Scala", "Scala 3"]
 ---
 
 Nach 8 Jahren, 28000 Commits und 7400 Pull-Requests war es am 14. Mai

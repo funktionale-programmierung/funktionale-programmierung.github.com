@@ -2,7 +2,7 @@
 layout: post
 title: "Einfache Datentypen mit Objective-C"
 author: stefan-wehr
-tags: ["Objective-C", "Datentypen"]
+tags: ["Objective-C"]
 ---
 
 Heute geht's mal wieder darum zu zeigen, dass sich die Beschäftigung mit funktionaler 

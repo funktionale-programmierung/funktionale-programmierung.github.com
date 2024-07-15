@@ -2,7 +2,7 @@
 layout: post
 title: "Bibliothek für Konfigurationen"
 author: marcus-crestani
-tags: ["Konfiguration", "Clojure", "ClojureScript"]
+tags: ["Clojure", "ClojureScript"]
 ---
 
 Software muss konfigurierbar sein, um flexibel zu sein.  Eine *Konfiguration*

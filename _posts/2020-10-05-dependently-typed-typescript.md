@@ -3,7 +3,7 @@ layout: post
 description: Ein Blick in die Untiefen eines Typsystems für JavaScript
 title: "Dependently-Typed TypeScript"
 author: lars-hupel
-tags: ["typescript", "javascript"]
+tags: ["TypeScript"]
 ---
 
 TypeScript ist eine Programmiersprache mit einigen Besonderheiten:

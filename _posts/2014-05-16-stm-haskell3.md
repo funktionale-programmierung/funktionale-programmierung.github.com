@@ -3,7 +3,7 @@ layout: post
 description: Noch mehr über Software Transactional Memory
 title: "Noch mehr über Software Transactional Memory"
 author: stefan-wehr
-tags: ["Haskell", "STM"]
+tags: ["Haskell"]
 ---
 
 Heute geht's nochmal um Software Transactional Memory (STM), eine schöne

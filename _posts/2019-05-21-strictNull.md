@@ -3,7 +3,7 @@ layout: post
 description: Keine Fehler wegen Null oder Undefined mit Typescript
 title: "Keine Fehler wegen Null oder Undefined mit Typescript"
 author: stefan-wehr
-tags: ["null", "undefined", "strictNull", "strict", "typescript"]
+tags: ["TypeScript"]
 ---
 
 Jeder Javascript Programmierer ist bestimmt schon mal über den Laufzeitfehler

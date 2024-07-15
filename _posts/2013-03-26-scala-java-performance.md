@@ -3,7 +3,7 @@ layout: post
 description: Eine Java-Performance-Challenge zum Anlass für übersichtlichen und doch performanten Java-Code
 title: "Übersichtlicher und Performanter Code mit Scala"
 author: andreas-bernauer
-tags: Scala Java Performance Übersichtlichkeit
+tags: ["Scala", "Java"]
 meta_description: Dieser Artikel vergleicht Java-Code mit seinem Scala-Pendant.
 page_title: "Übersichtlicher und Performanter Code mit Scala"
 ---
@@ -11,7 +11,7 @@ page_title: "Übersichtlicher und Performanter Code mit Scala"
 Auf der [OOP](http://www.sigs-datacom.de/konferenzen/oop.html) hat die
 Firma
 [dynatrace](http://www.compuware.com/application-performance-management/dynatrace-enterprise.html),
-welche sich auf die Analyse von Java Performance spezialisiert hat,
+welche sich auf die Analyse von Java-Performance spezialisiert hat,
 eine "Java Performance Challenge" abgehalten: welcher von zwei
 dargestellten Stück Java-Code läuft schneller?
 

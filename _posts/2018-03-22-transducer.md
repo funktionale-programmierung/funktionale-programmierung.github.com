@@ -3,7 +3,7 @@ layout: post
 description: "Transducer: Komposition, Abstraktion, Performance"
 title: "Transducer: Komposition, Abstraktion, Performance"
 author: marco-schneider
-tags: ["Clojure", "Transducer", "Abstraktion", "Performance"]
+tags: ["Clojure"]
 ---
 
 Funktionen höherer Ordnung wie `map`, `fold`, `filter` sind aus keinem funktionalen Programm wegzudenken.

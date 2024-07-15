@@ -3,7 +3,7 @@ layout: post
 description:
 title: "Medizinische Datenverarbeitung mit funktionaler Programmierung - Ein Beispiel aus der Praxis"
 author: stefan-wehr
-tags: ["Haskell", "Medizin", "Praxis", "kommerziell", "Scala", "funktional"]
+tags: ["Haskell", "Scala"]
 ---
 
 Funktionale Programmierung ist längst den Kinderschuhen entwachsen.

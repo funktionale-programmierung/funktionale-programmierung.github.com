@@ -3,7 +3,7 @@ layout: post
 description: Schleifen in Scala
 title: "Schleifen in Scala"
 author: andreas-bernauer
-tags: ["Scala", "Schleifen", "Endrekursion"]
+tags: ["Scala", "Tail Calls"]
 ---
 
 Wer mit funktionaler Programmierung beginnt und sich Code-Beispiele

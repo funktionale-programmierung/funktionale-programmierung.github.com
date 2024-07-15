@@ -3,7 +3,7 @@ layout: post
 description: Beschreibung
 title: "Kommandozeilenparser in Haskell - Teil 2"
 author: emin-karayel
-tags: ["haskell"]
+tags: ["Haskell"]
 ---
 
 Im [ersten Teil des Artikels](/2015/07/16/haskell-kommandozeilenparser-1.html) haben wir Kommandozeilenoptionen mit der Bibliothek [System.Console.GetOpt](https://hackage.haskell.org/package/base-4.7.0.1/docs/System-Console-GetOpt.html) verarbeitet.

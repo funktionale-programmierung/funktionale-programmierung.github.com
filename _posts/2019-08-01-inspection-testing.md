@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Testen von Generiertem Code in Haskell"
+title: "Testen von generiertem Code in Haskell"
 author: timo-vonholtz
-tags: ["Haskell","Optimierung","Inspection Testing"]
+tags: ["Haskell", "Testing"]
 ---
 
 Funktionale Tests, also Tests die das Ergebnis einer Berechnung überprüfen, und Benchmarks sind fester Bestandteil moderner Softwareentwicklung. Manchmal möchte man jedoch sicherstellen, dass der Compiler bestimmte Optimierungen durchführt oder zeigen, dass der generierte Code genau so ist wie erwartet.

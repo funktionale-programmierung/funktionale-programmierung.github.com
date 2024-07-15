@@ -2,7 +2,7 @@
 layout: post
 title: "Funktional Programmieren am konkreten Beispiel (Ant)"
 author: david-frese
-tags: Scala Einführung
+tags: Scala
 meta_description: >
   Dieser Artikel veranschaulicht die Vorteile der funktionalen Programmierung
   anhand eines konkreten Beispiels aus dem Java-Programm Ant.

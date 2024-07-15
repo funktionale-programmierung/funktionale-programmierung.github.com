@@ -3,7 +3,7 @@ layout: post
 description: Beschreibung
 title: "Checkpad sucht Softwareentwicklerinnen und Softwareentwickler"
 author: stefan-wehr
-tags: ["Job", "haskell", "Checkpad"]
+tags: ["Stellenanzeige"]
 ---
 
 Wir von Checkpad suchen eine Softwareentwicklerin oder einen

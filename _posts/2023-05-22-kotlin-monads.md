@@ -3,7 +3,7 @@ layout: post
 description: Monaden in Kotlin
 title: "Monaden in Kotlin"
 author: michael-sperber
-tags: ["Kotlin", "monad", "Monade", "continuation", "Continuation", "DSL"]
+tags: ["Kotlin", "Monaden", "DSLs"]
 ---
 
 Dieser Post ist ein Teil der Reihe über *funktionale
@@ -204,7 +204,7 @@ sealed interface Option<out A> {
 ```
 
 Diese Methode benutzen wir nun, um eine kleine DSL zu definieren.
-"DSL" heißt in Kotlin in der Regel, dass wir für einen Lambda-Ausdruck
+"DSLs" heißt in Kotlin in der Regel, dass wir für einen Lambda-Ausdruck
 einen Satz Funktionen lokal zur Verfügung stellen, indem wir einen
 [Funktionstyp "with receiver
 type"](https://kotlinlang.org/docs/lambdas.html#function-types)

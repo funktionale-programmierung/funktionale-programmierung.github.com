@@ -3,7 +3,7 @@ layout: post
 description: Beschreibung
 title: "Funktionale Programmiererinnen und Programmierer gesucht"
 author: stefan-wehr
-tags: ["funktional", "Job", "Stellenanzeige", "Haskell", "Freiburg"]
+tags: ["Stellenanzeige"]
 ---
 
 Wir von factis research suchen

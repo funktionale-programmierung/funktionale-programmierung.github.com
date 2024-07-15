@@ -3,7 +3,7 @@ layout: post
 description: "A prettier printer"
 title: "Aufgehübscht! - Pretty-Printing"
 author: kaan-sahin
-tags: ["pretty", "printer", "printing", "haskell", "dsl", "wadler"]
+tags: ["Haskell", "DSLs"]
 ---
 
 Um ein (verschachteltes) Objekt komfortabel untersuchen zu können, wird eine
