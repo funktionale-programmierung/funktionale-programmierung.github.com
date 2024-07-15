@@ -344,7 +344,7 @@ hr.post-divider {
 
 /* Remove some elements on printouts */
 @media print {
-  #sidebar, .navbar-row, .post-sharing, .pager, #disqus_thread {
+  #sidebar, .navbar-row, .post-sharing, .pager {
     display:none;
   }
   .post-tags a[href]:after {
