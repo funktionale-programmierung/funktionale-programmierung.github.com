@@ -2,7 +2,7 @@
 layout: post
 title: "Rezension von Sandy Maguire: Algebra-Driven Design"
 author: michael-sperber
-tags: []
+tags: ["Buchbesprechung"]
 ---
 
 Maguires Buch handelt von Domänenmodellierung mit Algebra und

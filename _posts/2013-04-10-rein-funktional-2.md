@@ -3,7 +3,7 @@ layout: post
 description: Rein funktionale Programmierung - Teil 2
 title: "Eine kleine Einführung in die rein funktionale Programmierung - Teil 2"
 author: michael-sperber
-tags: ["Racket"]
+tags: ["Racket", "Überblick"]
 ---
 
 In 

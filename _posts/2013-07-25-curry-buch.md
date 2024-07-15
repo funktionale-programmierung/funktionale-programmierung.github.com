@@ -3,7 +3,7 @@ layout: post
 description: "Buchbesprechung: Das Curry-Buch"
 title: "Buchbesprechung: Das Curry-Buch"
 author: michael-sperber
-tags: ["JavaScript"]
+tags: ["JavaScript", "Buchbesprechung"]
 ---
 
 Vor einigen Tagen schickte mir netterweise [Hannes
