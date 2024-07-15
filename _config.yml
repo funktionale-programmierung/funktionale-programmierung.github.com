@@ -1,7 +1,10 @@
+url: "https://funktionale-programmierung.de"
 markdown: kramdown
 encoding: UTF-8
 permalink: date
-plugins: [jekyll-paginate]
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
 paginate: 5
 highlighter: rouge
 lsi: false
